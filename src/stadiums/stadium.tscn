@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ck0l4s1mjs6uy"]
+
+[ext_resource type="PackedScene" uid="uid://dh2vbswo7vlyj" path="res://assets/models/stadium/stadium.blend" id="1_3nxyr"]
+
+[node name="Stadium" type="Node3D"]
+
+[node name="stadium" parent="." instance=ExtResource("1_3nxyr")]
