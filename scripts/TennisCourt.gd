@@ -1,6 +1,6 @@
 class_name TennisCourt extends Node
 
-var court_dimensions: Vector3 = Vector3(23.77, 0, 8.23)  # Tennis court dimensions in meters
+var court_dimensions: Vector3 = Vector3(23.77, 0, 8.23) # Tennis court dimensions in meters
 
 
 func is_in_bounds(ball_position: Vector3) -> bool:

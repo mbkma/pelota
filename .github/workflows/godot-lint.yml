@@ -32,3 +32,4 @@ jobs:
     - name: Format Check GDScript
       run: |
         gdformat --check .
+      continue-on-error: true

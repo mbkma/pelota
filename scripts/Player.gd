@@ -12,7 +12,7 @@ var is_rallying: bool = false
 # Input mappings
 var move_direction: Vector3 = Vector3.ZERO
 
-@onready var ball: Ball = get_tree().root.get_node("Game/Ball") # Adjust path if necessary
+@onready var ball: Ball = get_tree().root.get_node("Game/Ball")  # Adjust path if necessary
 
 
 func _ready():
