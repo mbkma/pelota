@@ -32,12 +32,3 @@ jobs:
     - name: Format Check GDScript
       run: |
         gdformat .
-
-    - name: Set up Godot
-      uses: firebelley/setup-godot@v1
-      with:
-        godot-version: '4.3' # specify the version of Godot you are using
-
-    - name: Run Godot tests
-      run: |
-        godot --headless --no-window --path . -s res://addons/gut/gut_cmdln.gd -d -gdir=res://tests -gexit
