@@ -1,0 +1,33 @@
+Pelota/
+│
+├── assets/
+│   ├── 3d_models/
+│   ├── animations/
+│   ├── textures/
+│   ├── sounds/
+│   └── fonts/
+│
+├── scenes/
+│   ├── main/
+│   ├── players/
+│   ├── environment/
+│   ├── ball/
+│   └── ui/
+│
+├── scripts/
+│   ├── game/
+│   ├── players/
+│   ├── ball/
+│   ├── environment/
+│   └── ui/
+│
+├── shaders/
+│
+├── addons/
+│
+├── docs/
+│
+├── assets.gd
+├── game.gd
+├── main.tscn
+└── project.godot

@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://2eqhvupsit6w"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_wmwlo"]
+[ext_resource type="PackedScene" uid="uid://cma4ax84pdkcu" path="res://assets/player.blend" id="2_n10ej"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vtcv1"]
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_wmwlo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_vtcv1")
+
+[node name="player" parent="." instance=ExtResource("2_n10ej")]

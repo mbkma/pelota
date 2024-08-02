@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://djgus0k580pu0"]
+
+[ext_resource type="Script" path="res://scripts/Game.gd" id="1_u1bv8"]
+[ext_resource type="PackedScene" uid="uid://2eqhvupsit6w" path="res://scenes/Player.tscn" id="2_y5ged"]
+[ext_resource type="PackedScene" uid="uid://co2y53fvjj5n4" path="res://scenes/Ball.tscn" id="3_hwp1q"]
+[ext_resource type="PackedScene" uid="uid://y0lhdwgs8op7" path="res://scenes/UI.tscn" id="4_g82ku"]
+[ext_resource type="PackedScene" uid="uid://cxpalyinmasoj" path="res://scenes/TennisCourt.tscn" id="5_fe2sr"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_u1bv8")
+
+[node name="Player1" parent="." instance=ExtResource("2_y5ged")]
+
+[node name="Player2" parent="." instance=ExtResource("2_y5ged")]
+
+[node name="Ball" parent="." instance=ExtResource("3_hwp1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+
+[node name="Ui" parent="." instance=ExtResource("4_g82ku")]
+
+[node name="TennisCourt" parent="." instance=ExtResource("5_fe2sr")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.946311, 0.323257, 0, -0.323257, 0.946311, 0, 4.04545, 18.9984)

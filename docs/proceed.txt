@@ -1,0 +1,41 @@
+1. Planning
+
+	Define game features: player control, AI opponents, ball physics, scoring, UI, and sound.
+	Create a roadmap with milestones and deadlines.
+
+2. Tools
+
+	Godot 4.x: Game engine for developing and scripting the game.
+	Blender: For creating and animating 3D models.
+	Git: Version control system for collaboration.
+
+3. Directory Structure
+	see directory_structure.txt
+
+4. Creating Assets in Blender
+
+	Players: Model and rig tennis players. Create animations for idle, running, hitting, and serving.
+	Environment: Model the tennis court, net, and surrounding environment.
+	Ball: Model the tennis ball with proper textures.
+
+5. Importing Assets into Godot
+
+	Export models from Blender as .glb or .obj files.
+	Import models into Godot, set up materials, and apply textures.
+	Configure animations using the AnimationPlayer or AnimationTree nodes.
+
+6. Scripting the Game in Godot
+
+	Player Movement: Implement player control and animation blending.
+	Ball Physics: Create realistic ball physics using RigidBody nodes and custom scripts.
+	AI Opponent: Develop basic AI for opponent movements and decision-making.
+	Scoring and UI: Implement scoring logic and create UI elements.
+
+7. Directory Details
+
+	assets/: Contains all 3D models, textures, animations, sounds, and fonts.
+	scenes/: Contains all scene files organized by game elements.
+	scripts/: Contains all GDScript files, organized by game elements.
+	shaders/: Contains custom shader files.
+	addons/: Contains any third-party addons or plugins used.
+	docs/: Contains documentation and design notes.

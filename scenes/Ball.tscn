@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://co2y53fvjj5n4"]
+
+[ext_resource type="Script" path="res://scripts/Ball.gd" id="1_3og32"]
+[ext_resource type="PackedScene" uid="uid://co7brirxggto3" path="res://assets/ball.blend" id="2_7sxjm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7s03t"]
+radius = 0.07
+
+[node name="Ball" type="RigidBody3D"]
+script = ExtResource("1_3og32")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_7s03t")
+
+[node name="ball" parent="." instance=ExtResource("2_7sxjm")]
