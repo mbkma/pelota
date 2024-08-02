@@ -12,7 +12,7 @@ var is_rallying: bool = false
 # Input mappings
 var move_direction: Vector3 = Vector3.ZERO
 
-@onready var ball: Ball = get_tree().root.get_node("Game/Ball")  # Adjust path if necessary
+@onready var ball: Ball = get_tree().root.get_node("Game/Ball") # Adjust path if necessary
 
 
 func _ready():
@@ -57,7 +57,8 @@ func handle_racket_swing():
 
 func check_ball_interaction():
 	if ball and is_rallying:
-		if global_transform.origin.distance_to(ball.global_transform.origin) < 2.0:  # Adjust distance as needed
+		# Adjust distance as needed
+		if global_transform.origin.distance_to(ball.global_transform.origin) < 2.0:
 			# Logic for hitting the ball or interacting with it
 			pass
 

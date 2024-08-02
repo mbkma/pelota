@@ -1,4 +1,4 @@
-name: Godot Lint and Test
+name: Godot Lint
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint-and-test:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,4 +31,4 @@ jobs:
 
     - name: Format Check GDScript
       run: |
-        gdformat .
+        gdformat --check .
