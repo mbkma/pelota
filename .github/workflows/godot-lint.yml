@@ -1,0 +1,43 @@
+name: Godot Lint and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10' # specify your preferred Python version
+
+    - name: Install gdtoolkit
+      run: |
+        pip install gdtoolkit
+
+    - name: Lint GDScript
+      run: |
+        gdlint .
+
+    - name: Format Check GDScript
+      run: |
+        gdformat .
+
+    - name: Set up Godot
+      uses: firebelley/setup-godot@v1
+      with:
+        godot-version: '4.3' # specify the version of Godot you are using
+
+    - name: Run Godot tests
+      run: |
+        godot --headless --no-window --path . -s res://addons/gut/gut_cmdln.gd -d -gdir=res://tests -gexit
