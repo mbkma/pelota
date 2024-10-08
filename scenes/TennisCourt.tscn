@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/TennisCourt.gd" id="1_0pd0l"]
 [ext_resource type="PackedScene" uid="uid://bx7lq0neyiebg" path="res://assets/tennisCourt.blend" id="2_d20kd"]
 
-[node name="TennisCourt" type="Node"]
+[node name="TennisCourt" type="Node3D"]
 script = ExtResource("1_0pd0l")
 
 [node name="tennisCourt" parent="." instance=ExtResource("2_d20kd")]

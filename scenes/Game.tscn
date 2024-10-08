@@ -1,24 +1,56 @@
-[gd_scene load_steps=6 format=3 uid="uid://djgus0k580pu0"]
+[gd_scene load_steps=10 format=3 uid="uid://djgus0k580pu0"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_u1bv8"]
-[ext_resource type="PackedScene" uid="uid://2eqhvupsit6w" path="res://scenes/Player.tscn" id="2_y5ged"]
 [ext_resource type="PackedScene" uid="uid://co2y53fvjj5n4" path="res://scenes/Ball.tscn" id="3_hwp1q"]
 [ext_resource type="PackedScene" uid="uid://y0lhdwgs8op7" path="res://scenes/UI.tscn" id="4_g82ku"]
+[ext_resource type="PackedScene" uid="uid://c75s2m6eic1vo" path="res://scenes/Player/Player.tscn" id="5_7f08c"]
 [ext_resource type="PackedScene" uid="uid://cxpalyinmasoj" path="res://scenes/TennisCourt.tscn" id="5_fe2sr"]
 
-[node name="Game" type="Node2D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1b11k"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_c34qk"]
+sky_material = SubResource("ProceduralSkyMaterial_1b11k")
+
+[sub_resource type="Environment" id="Environment_oarg1"]
+background_mode = 2
+sky = SubResource("Sky_c34qk")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_raras"]
+size = Vector3(100, 1, 100)
+
+[node name="Game" type="Node3D"]
 script = ExtResource("1_u1bv8")
 
-[node name="Player1" parent="." instance=ExtResource("2_y5ged")]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_oarg1")
 
-[node name="Player2" parent="." instance=ExtResource("2_y5ged")]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 8.21338, 0)
+shadow_enabled = true
 
 [node name="Ball" parent="." instance=ExtResource("3_hwp1q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59094, 1, 0)
 
 [node name="Ui" parent="." instance=ExtResource("4_g82ku")]
 
 [node name="TennisCourt" parent="." instance=ExtResource("5_fe2sr")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.946311, 0.323257, 0, -0.323257, 0.946311, 0, 4.04545, 18.9984)
+transform = Transform3D(1, 0, 0, 0, 0.985636, 0.168885, 0, -0.168885, 0.985636, 0, 4.04545, 23.2902)
+fov = 22.4
+
+[node name="Player1" parent="." instance=ExtResource("5_7f08c")]
+transform = Transform3D(-0.998085, 0, 0.0618498, 0, 1, 0, -0.0618498, 0, -0.998085, 0, 0.653987, 5.15493)
+
+[node name="Player2" parent="." instance=ExtResource("5_7f08c")]
+transform = Transform3D(-0.998085, 0, 0.0618498, 0, 1, 0, -0.0618498, 0, -0.998085, 0, 0, 3.80839)
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_raras")

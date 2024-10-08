@@ -19,7 +19,7 @@ func start_game():
 	state = "playing"
 	score_p1 = 0
 	score_p2 = 0
-	reset_ball()
+	#reset_ball()
 	ui.update_score(score_p1, score_p2)
 
 
