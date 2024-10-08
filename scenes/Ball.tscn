@@ -4,9 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://co7brirxggto3" path="res://assets/ball.blend" id="2_7sxjm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7s03t"]
-radius = 0.07
+radius = 0.05
 
 [node name="Ball" type="RigidBody3D"]
+mass = 0.057
 script = ExtResource("1_3og32")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

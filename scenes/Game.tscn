@@ -33,7 +33,8 @@ transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -
 shadow_enabled = true
 
 [node name="Ball" parent="." instance=ExtResource("3_hwp1q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59094, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59094, 1.90355, 0)
+start_velocity = Vector3(0, 20, 0)
 
 [node name="Ui" parent="." instance=ExtResource("4_g82ku")]
 
