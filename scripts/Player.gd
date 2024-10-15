@@ -5,6 +5,12 @@ class_name Player extends CharacterBody3D
 @onready var animation_tree = get_node(PlayerAnimationTree)
 @onready var playback = animation_tree.get("parameters/playback")
 
+
+# Stroke Types
+enum StrokeType { FOREHAND, BACKHAND, SLICE }
+var stroke_type: StrokeType = StrokeType.FOREHAND
+
+
 # Allows to pick your chracter's mesh from the inspector
 @export_node_path("Node3D") var PlayerCharacterMesh: NodePath
 @onready var player_mesh = get_node(PlayerCharacterMesh)
@@ -15,6 +21,7 @@ class_name Player extends CharacterBody3D
 @export var walk_speed = 1.3
 @export var run_speed = 5.5
 @export var dash_power = 12  # Controls roll and big attack speed boosts
+@export var player_strength: float = 1.0  # 1.0 represents average strength
 
 var is_serving: bool = false
 var is_rallying: bool = false
@@ -23,19 +30,16 @@ var is_rallying: bool = false
 @onready var ball: Ball = get_tree().root.get_node("Game/Ball")  # Adjust path if necessary
 
 # Animation node names
-var roll_node_name = "Roll"
 var idle_node_name = "Idle"
 var walk_node_name = "Walk"
 var run_node_name = "Run"
 var jump_node_name = "Jump"
-var attack1_node_name = "Attack1"
-var attack2_node_name = "Attack2"
-var bigattack_node_name = "BigAttack"
-var rollattack_node_name = "RollAttack"
+var forehand_node_name = "Forehand"
+var backhand_node_name = "Backhand"
+
 
 # Condition States
-var is_attacking = bool()
-var is_rolling = bool()
+var is_hitting = bool()
 var is_walking = bool()
 var is_running = bool()
 
@@ -58,82 +62,34 @@ func _input(event):  # All major mouse and button input events
 	if event is InputEventMouseMotion:
 		aim_turn = -event.relative.x * 0.015  # animates player with mouse movement while aiming
 
-	if event.is_action_pressed("aim"):  # Aim button triggers a strafe walk and camera mechanic
-		direction = $Camroot/h.global_transform.basis.z
+	# Stroke type selection based on input
+	if Input.is_action_pressed("forehand"):
+		stroke_type = StrokeType.FOREHAND
+		hit_ball()
+	elif Input.is_action_pressed("backhand"):
+		stroke_type = StrokeType.BACKHAND
+		hit_ball()
+	elif Input.is_action_pressed("slice"):
+		stroke_type = StrokeType.SLICE
+		hit_ball()
 
 
-func sprint_and_roll():
-## Dodge button input with dash and interruption to basic actions
-	if Input.is_action_just_pressed("sprint"):
-		if (
-			!roll_node_name in playback.get_current_node()
-			and !jump_node_name in playback.get_current_node()
-			and !bigattack_node_name in playback.get_current_node()
-		):
-			$DashTimer.start()
-
-	if Input.is_action_just_released("sprint") and !$DashTimer.is_stopped():
-		$DashTimer.stop()
-		playback.start(roll_node_name)  #"start" not "travel" to speedy teleport to the roll!
-		horizontal_velocity = direction * dash_power
-		is_rolling = true
-
-
-func attack1():  # If not doing other things, start attack1
-	if (
-		(
-			idle_node_name in playback.get_current_node()
-			or walk_node_name in playback.get_current_node()
-		)
-		and is_on_floor()
-	):
-		if Input.is_action_just_pressed("attack"):
-			if is_attacking == false:
-				playback.travel(attack1_node_name)
-
-
-func attack2():  # If attack1 is animating, combo into attack 2
-	if attack1_node_name in playback.get_current_node():  # Big Attack if sprinting, adds a dash
-		if Input.is_action_just_pressed("attack"):
-			playback.travel(attack2_node_name)
-
-
-func attack3():  # If attack2 is animating, combo into attack 3. This is a template.
-	if attack1_node_name in playback.get_current_node():
-		if Input.is_action_just_pressed("attack"):
-			pass  #no current animation, but add it's playback here!
-
-
-func rollattack():  # If attack pressed while rolling, do a special attack afterwards.
-	if roll_node_name in playback.get_current_node():
-		if Input.is_action_just_pressed("attack"):
-			playback.travel(rollattack_node_name)  #change this animation for a different attack
-
-
-func bigattack():  # If attack pressed while springing, do a special attack
-	if run_node_name in playback.get_current_node():  # Big Attack if sprinting, adds a dash
-		if Input.is_action_just_pressed("attack"):
-			horizontal_velocity = direction * dash_power
-			playback.travel(bigattack_node_name)  #Add and Change this animation node for a different attack
+func handle_animation():
+	match stroke_type:
+		StrokeType.FOREHAND:
+			if forehand_node_name in playback.get_current_node():
+				playback.travel(forehand_node_name)	
+		StrokeType.BACKHAND:
+			pass
+		StrokeType.SLICE:
+			pass
 
 
 func _physics_process(delta):
-	rollattack()
-	bigattack()
-	attack1()
-	attack2()
-	attack3()
-	sprint_and_roll()
 	handle_movement(delta)
+	handle_animation()
 	#handle_racket_swing()
 	#check_ball_interaction()
-
-
-func handle_racket_swing():
-	# Placeholder for racket swing logic, like animation or ball hitting
-	if Input.is_action_just_pressed("swing_racket"):
-		# Implement racket swing logic here
-		pass
 
 
 func check_ball_interaction():
@@ -157,6 +113,43 @@ func start_rally():
 func end_rally():
 	is_rallying = false
 
+### Stroke Logic
+# General method to hit the ball
+func hit_ball():
+	var stroke_power: float = 10.0 * player_strength  # Base power, scaled by player strength
+	var stroke_direction: Vector3 = get_stroke_direction()
+	
+	match stroke_type:
+		StrokeType.FOREHAND:
+			hit_forehand(stroke_direction, stroke_power)
+		StrokeType.BACKHAND:
+			hit_backhand(stroke_direction, stroke_power)
+		StrokeType.SLICE:
+			hit_slice(stroke_direction, stroke_power)
+
+# Helper function to get the direction of the stroke based on player input
+func get_stroke_direction() -> Vector3:
+	return (ball.global_transform.origin - global_transform.origin).normalized()
+
+# Forehand stroke logic
+func hit_forehand(direction: Vector3, power: float):
+	var forehand_spin = Vector3(0, 0, power * 0.2)  # Add topspin to the forehand
+	ball.linear_velocity = direction * power
+	ball.spin = forehand_spin
+
+
+# Backhand stroke logic
+func hit_backhand(direction: Vector3, power: float):
+	var backhand_spin = Vector3(0, 0, power * 0.15)  # Less spin on backhand
+	ball.linear_velocity = direction * power * 0.9  # Backhand might be slightly weaker
+	ball.spin = backhand_spin
+
+# Slice stroke logic
+func hit_slice(direction: Vector3, power: float):
+	var slice_spin = Vector3(0, -power * 0.3, 0)  # Add underspin to the slice
+	ball.linear_velocity = direction * power * 0.7  # Slice is slower and has underspin
+	ball.spin = slice_spin
+
 
 func handle_movement(delta):
 	var on_floor = is_on_floor()  # State control for is jumping/falling/landing
@@ -175,36 +168,14 @@ func handle_movement(delta):
 
 	# Defining attack state: Add more attacks animations here as you add more!
 	if (
-		(attack1_node_name in playback.get_current_node())
-		or (attack2_node_name in playback.get_current_node())
-		or (rollattack_node_name in playback.get_current_node())
-		or (bigattack_node_name in playback.get_current_node())
+		(forehand_node_name in playback.get_current_node())
+		or (backhand_node_name in playback.get_current_node())
 	):
-		is_attacking = true
+		is_hitting = true
 	else:
-		is_attacking = false
+		is_hitting = false
 
-	# Giving BigAttack some Slide
-	if bigattack_node_name in playback.get_current_node():
-		acceleration = 3
-
-	# Defining Roll state and limiting movment during rolls
-	if roll_node_name in playback.get_current_node():
-		is_rolling = true
-		acceleration = 2
-		angular_acceleration = 2
-	else:
-		is_rolling = false
-
-#	Jump input and Mechanics
-	if (
-		Input.is_action_just_pressed("jump")
-		and ((is_attacking != true) and (is_rolling != true))
-		and is_on_floor()
-	):
-		vertical_velocity = Vector3.UP * jump_force
-
-	# Movement input, state and mechanics. *Note: movement stops if attacking
+	# Movement input, state and mechanics. *Note: movement stops if hitting
 	if (
 		Input.is_action_pressed("forward")
 		|| Input.is_action_pressed("backward")
@@ -219,31 +190,20 @@ func handle_movement(delta):
 		direction = direction.rotated(Vector3.UP, h_rot).normalized()
 		is_walking = true
 
-		# Sprint input, dash state and movement speed
-		if Input.is_action_pressed("sprint") and $DashTimer.is_stopped() and (is_walking == true):
-			movement_speed = run_speed
-			is_running = true
-		else:  # Walk State and speed
-			movement_speed = walk_speed
-			is_running = false
+		movement_speed = walk_speed
+		is_running = false
 	else:
 		is_walking = false
 		is_running = false
 
-	if Input.is_action_pressed("aim"):  # Aim/Strafe input and  mechanics
-		player_mesh.rotation.y = lerp_angle(
-			player_mesh.rotation.y, $Camroot/h.rotation.y, delta * angular_acceleration
-		)
-
-	else:  # Normal turn movement mechanics
-		player_mesh.rotation.y = lerp_angle(
-			player_mesh.rotation.y,
-			atan2(direction.x, direction.z) - rotation.y,
-			delta * angular_acceleration
-		)
+	player_mesh.rotation.y = lerp_angle(
+		player_mesh.rotation.y,
+		atan2(direction.x, direction.z) - rotation.y,
+		delta * angular_acceleration
+	)
 
 	# Movment mechanics with limitations during rolls/attacks
-	if (is_attacking == true) or (is_rolling == true):
+	if (is_hitting == true):
 		horizontal_velocity = horizontal_velocity.lerp(
 			direction.normalized() * .01, acceleration * delta
 		)

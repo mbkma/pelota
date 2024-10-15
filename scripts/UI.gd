@@ -4,8 +4,11 @@ class_name UI extends CanvasLayer
 @onready var menu = $Menu
 
 
-func update_score(score_p1: int, score_p2: int):
-	score_label.text = "Player 1: %d - Player 2: %d" % [score_p1, score_p2]
+func update_score(score: String):
+	score_label.text = score
+
+func update_sets(sets: String):
+	score_label.text = "%s" % [sets]
 
 
 func show_menu():
