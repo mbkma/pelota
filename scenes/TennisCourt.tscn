@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxpalyinmasoj"]
 
 [ext_resource type="Script" path="res://scripts/TennisCourt.gd" id="1_0pd0l"]
-[ext_resource type="PackedScene" uid="uid://bx7lq0neyiebg" path="res://assets/tennisCourt.blend" id="2_d20kd"]
+[ext_resource type="PackedScene" uid="uid://c04ao1xk4x4fb" path="res://assets/tennisCourt/tennisCourt.blend" id="2_d20kd"]
 
 [node name="TennisCourt" type="Node3D"]
 script = ExtResource("1_0pd0l")

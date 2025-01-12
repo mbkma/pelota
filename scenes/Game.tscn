@@ -34,7 +34,7 @@ shadow_enabled = true
 
 [node name="Ball" parent="." instance=ExtResource("3_hwp1q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.59094, 1.90355, 0)
-start_velocity = Vector3(0, 20, 0)
+start_velocity = Vector3(0, 50, 0)
 
 [node name="Ui" parent="." instance=ExtResource("4_g82ku")]
 
@@ -48,7 +48,7 @@ fov = 22.4
 transform = Transform3D(-0.998085, 0, 0.0618498, 0, 1, 0, -0.0618498, 0, -0.998085, 0, 0.653987, 5.15493)
 
 [node name="Player2" parent="." instance=ExtResource("5_7f08c")]
-transform = Transform3D(-0.998085, 0, 0.0618498, 0, 1, 0, -0.0618498, 0, -0.998085, 0, 0, 3.80839)
+transform = Transform3D(0.996595, 0, 0.082443, 0, 1, 0, -0.082443, 0, 0.996595, 0, 0, 0.458041)
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)

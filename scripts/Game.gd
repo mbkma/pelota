@@ -20,9 +20,9 @@ func _ready():
 func start_game():
 	state = "playing"
 	score.best_of_sets = 5  # Set to best of 5 (or 3 as needed)
-	reset_ball()
+	#reset_ball()
 	ui.update_score(score.get_scores_as_string())
-	place_players()
+	#place_players()
 
 # End the game
 func end_game():
