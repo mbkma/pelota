@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=4 uid="uid://ck5ehjwxiv8my"]
 
-[ext_resource type="PackedScene" uid="uid://fxunw1katyno" path="res://assets/Player/glb/player.glb" id="1_wrid3"]
+[ext_resource type="PackedScene" uid="uid://fxunw1katyno" path="res://assets/Player/glb/player.glb" id="1_833xp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jy3ak"]
 resource_name = "Frame"
@@ -82,7 +82,7 @@ shadow_mesh = SubResource("ArrayMesh_j6w4d")
 
 [node name="player_mesh" type="Node3D"]
 
-[node name="player_model" parent="." instance=ExtResource("1_wrid3")]
+[node name="player_model" parent="." instance=ExtResource("1_833xp")]
 
 [node name="RacquetMario_obj_cleaner_materialmerger_gles" type="Node3D" parent="."]
 transform = Transform3D(0.0753558, 0, 0, 0, -2.69493e-08, 0.0753558, 0, -0.0753558, -2.69493e-08, -0.547638, 0.807698, 0.0546736)
