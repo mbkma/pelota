@@ -54,7 +54,7 @@ var acceleration = int()
 
 # Signals for stroke detection
 signal ball_hit
-@onready var racket_hitting_area: Area3D = $player/Human_rigify/Skeleton3D/Object_3/Object_3/RacketHittingArea
+@onready var racket_hitting_area: Area3D = $RacketHittingArea
 
 func _ready():  # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
@@ -91,9 +91,6 @@ func get_stroke_direction() -> Vector3:
 	elif Input.is_action_pressed("aim_right"):
 		base_direction.x += 0.5
 	return base_direction
-
-
-
 
 
 func _input(event):  # All major mouse and button input events
@@ -242,7 +239,7 @@ func handle_movement(delta):
 		delta * angular_acceleration
 	)
 
-	# Movment mechanics with limitations during rolls/attacks
+	# Movment mechanics with limitations
 	if is_hitting == true:
 		horizontal_velocity = horizontal_velocity.lerp(
 			direction.normalized() * .01, acceleration * delta
