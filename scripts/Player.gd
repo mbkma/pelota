@@ -5,11 +5,9 @@ class_name Player extends CharacterBody3D
 @onready var animation_tree = get_node(PlayerAnimationTree)
 @onready var playback = animation_tree.get("parameters/playback")
 
-
 # Stroke Types
 enum StrokeType { FOREHAND, BACKHAND, SLICE }
 var stroke_type: StrokeType = StrokeType.FOREHAND
-
 
 # Allows to pick your chracter's mesh from the inspector
 @export_node_path("Node3D") var PlayerCharacterMesh: NodePath
@@ -22,6 +20,8 @@ var stroke_type: StrokeType = StrokeType.FOREHAND
 @export var run_speed = 5.5
 @export var dash_power = 12  # Controls roll and big attack speed boosts
 @export var player_strength: float = 1.0  # 1.0 represents average strength
+
+@export var active_camera: Camera3D
 
 var is_serving: bool = false
 var is_rallying: bool = false
@@ -36,7 +36,6 @@ var run_node_name = "Run"
 var jump_node_name = "Jump"
 var forehand_node_name = "Forehand"
 var backhand_node_name = "Backhand"
-
 
 # Condition States
 var is_hitting = bool()
@@ -53,9 +52,48 @@ var movement_speed = int()
 var angular_acceleration = int()
 var acceleration = int()
 
+# Signals for stroke detection
+signal ball_hit
+@onready var racket_hitting_area: Area3D = $player/Human_rigify/Skeleton3D/Object_3/Object_3/RacketHittingArea
 
 func _ready():  # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
+	racket_hitting_area.body_entered.connect(_on_ball_entered)
+
+func _on_ball_entered(body):
+	# Ensure the body is the tennis ball and a swing is active
+	if body.name == "TennisBall" and is_swing_active():
+		emit_signal("ball_hit", body)
+		apply_hit_force(body)
+
+
+func is_swing_active() -> bool:
+	# Check if the player is pressing any stroke-related input
+	return Input.is_action_pressed("swing")
+
+
+func apply_hit_force(ball):
+	# Determine the force and direction based on input
+	var direction = get_stroke_direction()
+	var force = 15  # Adjust this value based on the desired ball speed
+	ball.apply_impulse(Vector3.ZERO, direction.normalized() * force)
+
+
+func get_stroke_direction() -> Vector3:
+	# Example: Adjust direction based on player input (e.g., forehand/backhand)
+	var base_direction = Vector3(1, 0.5, 1)  # Default direction
+	if Input.is_action_pressed("aim_up"):
+		base_direction.y += 0.5
+	elif Input.is_action_pressed("aim_down"):
+		base_direction.y -= 0.5
+	if Input.is_action_pressed("aim_left"):
+		base_direction.x -= 0.5
+	elif Input.is_action_pressed("aim_right"):
+		base_direction.x += 0.5
+	return base_direction
+
+
+
 
 
 func _input(event):  # All major mouse and button input events
@@ -78,7 +116,7 @@ func handle_animation():
 	match stroke_type:
 		StrokeType.FOREHAND:
 			if forehand_node_name in playback.get_current_node():
-				playback.travel(forehand_node_name)	
+				playback.travel(forehand_node_name)
 		StrokeType.BACKHAND:
 			pass
 		StrokeType.SLICE:
@@ -113,12 +151,13 @@ func start_rally():
 func end_rally():
 	is_rallying = false
 
+
 ### Stroke Logic
 # General method to hit the ball
 func hit_ball():
 	var stroke_power: float = 10.0 * player_strength  # Base power, scaled by player strength
 	var stroke_direction: Vector3 = get_stroke_direction()
-	
+
 	match stroke_type:
 		StrokeType.FOREHAND:
 			hit_forehand(stroke_direction, stroke_power)
@@ -127,9 +166,6 @@ func hit_ball():
 		StrokeType.SLICE:
 			hit_slice(stroke_direction, stroke_power)
 
-# Helper function to get the direction of the stroke based on player input
-func get_stroke_direction() -> Vector3:
-	return (ball.global_transform.origin - global_transform.origin).normalized()
 
 # Forehand stroke logic
 func hit_forehand(direction: Vector3, power: float):
@@ -143,6 +179,7 @@ func hit_backhand(direction: Vector3, power: float):
 	var backhand_spin = Vector3(0, 0, power * 0.15)  # Less spin on backhand
 	ball.linear_velocity = direction * power * 0.9  # Backhand might be slightly weaker
 	ball.spin = backhand_spin
+
 
 # Slice stroke logic
 func hit_slice(direction: Vector3, power: float):
@@ -163,7 +200,6 @@ func handle_movement(delta):
 	if not is_on_floor():
 		vertical_velocity += Vector3.DOWN * gravity * 2 * delta
 	else:
-		#vertical_velocity = -get_floor_normal() * gravity / 3
 		vertical_velocity = Vector3.DOWN * gravity / 10
 
 	# Defining attack state: Add more attacks animations here as you add more!
@@ -182,12 +218,16 @@ func handle_movement(delta):
 		|| Input.is_action_pressed("left")
 		|| Input.is_action_pressed("right")
 	):
+		var cam_transform = active_camera.global_transform
+		var forward = -cam_transform.basis.z.normalized()
+		var right = -cam_transform.basis.x.normalized()
+
 		direction = Vector3(
 			Input.get_action_strength("left") - Input.get_action_strength("right"),
 			0,
 			Input.get_action_strength("forward") - Input.get_action_strength("backward")
 		)
-		direction = direction.rotated(Vector3.UP, h_rot).normalized()
+		direction = (forward * direction.z + right * direction.x).normalized()
 		is_walking = true
 
 		movement_speed = walk_speed
@@ -203,7 +243,7 @@ func handle_movement(delta):
 	)
 
 	# Movment mechanics with limitations during rolls/attacks
-	if (is_hitting == true):
+	if is_hitting == true:
 		horizontal_velocity = horizontal_velocity.lerp(
 			direction.normalized() * .01, acceleration * delta
 		)

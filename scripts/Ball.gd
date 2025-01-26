@@ -15,9 +15,11 @@ var is_rolling: bool = false  # State to determine if the ball is rolling
 @onready var game: Game = get_tree().root.get_node("Game")  # Adjust if necessary
 @onready var net: StaticBody3D = get_tree().root.get_node("Net")  # Adjust if necessary
 
+
 func _ready():
 	# Set the initial velocity of the ball when the scene starts
 	linear_velocity = start_velocity
+
 
 func _integrate_forces(state: PhysicsDirectBodyState3D):
 	var dt: float = state.step
@@ -42,17 +44,26 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 	if is_out_of_bounds():
 		game.check_point(global_transform.origin)
 
+
 func apply_physics_forces(state: PhysicsDirectBodyState3D):
 	var velocity: Vector3 = state.linear_velocity
 	var g: Vector3 = Vector3(0, -9.81, 0)  # Gravitational acceleration (m/s²)
 
 	var gravity_force: Vector3 = g * ball_mass
 	var area: float = PI * ball_radius * ball_radius
-	var drag_force: Vector3 = -0.5 * drag_coefficient * air_density * velocity.length_squared() * area * velocity.normalized()
+	var drag_force: Vector3 = (
+		-0.5
+		* drag_coefficient
+		* air_density
+		* velocity.length_squared()
+		* area
+		* velocity.normalized()
+	)
 	var magnus_force: Vector3 = magnus_coefficient * spin.cross(velocity)
 
 	var total_force: Vector3 = gravity_force + drag_force + magnus_force
 	state.apply_central_force(total_force)
+
 
 # Handle ball bouncing when it hits the ground
 func handle_bounce(state: PhysicsDirectBodyState3D):
@@ -77,17 +88,22 @@ func handle_bounce(state: PhysicsDirectBodyState3D):
 	state.linear_velocity = velocity
 	state.angular_velocity = ang_velocity
 
+
 # Handle rolling motion after the ball stops bouncing
 func handle_rolling(state: PhysicsDirectBodyState3D):
 	var velocity: Vector3 = state.linear_velocity
 	var ang_velocity: Vector3 = state.angular_velocity
 
 	# Match linear velocity to angular velocity to simulate rolling without slipping
-	var target_angular_velocity: Vector3 = velocity / ball_radius if velocity.length() > 0 else Vector3.ZERO
+	var target_angular_velocity: Vector3 = (
+		velocity / ball_radius if velocity.length() > 0 else Vector3.ZERO
+	)
 	ang_velocity = ang_velocity.lerp(target_angular_velocity, 0.1)
 
 	# Apply gradual rolling friction
-	var rolling_friction_factor = 1.0 - rolling_friction * (get_rolling_speed_factor(velocity.length()))
+	var rolling_friction_factor = (
+		1.0 - rolling_friction * (get_rolling_speed_factor(velocity.length()))
+	)
 	velocity.x *= rolling_friction_factor
 	velocity.z *= rolling_friction_factor
 
@@ -101,9 +117,11 @@ func handle_rolling(state: PhysicsDirectBodyState3D):
 		state.angular_velocity = Vector3.ZERO
 		is_rolling = false
 
+
 # Function to determine how much to reduce speed based on rolling velocity
 func get_rolling_speed_factor(speed: float) -> float:
 	return clamp(speed / 5.0, 0.0, 1.0)  # Reduce more at higher speeds
+
 
 # Handle player collisions
 func handle_player_collision(state: PhysicsDirectBodyState3D):
@@ -123,6 +141,7 @@ func handle_player_collision(state: PhysicsDirectBodyState3D):
 			is_rolling = false  # Reset rolling state after hitting a player
 			return
 
+
 # Handle court collision (net, boundaries, etc.)
 func handle_court_collision(state: PhysicsDirectBodyState3D):
 	var velocity: Vector3 = state.linear_velocity
@@ -140,13 +159,16 @@ func handle_court_collision(state: PhysicsDirectBodyState3D):
 				state.linear_velocity = velocity
 				return
 
+
 # Detect if ball is on the ground (based on radius and small tolerance)
 func is_on_ground(state: PhysicsDirectBodyState3D) -> bool:
 	return global_transform.origin.y <= ball_radius + 0.02
 
+
 # Detect if ball is out of bounds
 func is_out_of_bounds() -> bool:
 	return global_transform.origin.y <= 0  # Assuming y = 0 is the ground level
+
 
 # Detect boundary collision (stub function, adjust based on your court layout)
 func is_boundary_collision(collider: Object) -> bool:

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg2gvmisfjv46"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ebch4"]
+size = Vector3(0.345703, 0.148315, 0.316406)
+
+[node name="RacketHittingArea" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5134e-08, 0.496222)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, -6.85453e-07, 1, -1.49012e-08, -3.27826e-07, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_ebch4")

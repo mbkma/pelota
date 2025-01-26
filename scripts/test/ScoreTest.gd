@@ -3,10 +3,12 @@ extends Node
 # Instance of Score class to test
 var score: Score
 
+
 func _ready():
 	# Create a new Score instance before each test
 	score = Score.new()
 	run_tests()
+
 
 func run_tests():
 	test_point_scoring()
@@ -15,6 +17,7 @@ func run_tests():
 	#test_match_winning_best_of_three()
 	#test_match_winning_best_of_five()
 	print("All tests passed!")
+
 
 # Test point scoring
 func test_point_scoring():

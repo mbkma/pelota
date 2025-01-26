@@ -1,5 +1,6 @@
 extends Control
 
+
 # Called when the scene is loaded
 func _ready():
 	# Connect button signals
@@ -7,17 +8,21 @@ func _ready():
 	$VBoxContainer/Settings.pressed.connect(self._on_settings_button_pressed)
 	$VBoxContainer/ExitButton.pressed.connect(self._on_exit_button_pressed)
 
+
 # Start a new game
 func _on_new_game_button_pressed():
 	get_tree().change_scene_to_file("res://scenes/Game.tscn")  # Replace with the path to your Game scene
+
 
 # Show the settings screen
 func _on_settings_button_pressed():
 	show_settings()
 
+
 # Exit the game
 func _on_exit_button_pressed():
 	get_tree().quit()
+
 
 # Function to show settings (you can extend this as needed)
 func show_settings():

@@ -15,9 +15,8 @@ var h_acceleration = 10
 var v_acceleration = 10
 var joyview = Vector2()
 
-
 #func _ready():
-	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func _input(event):

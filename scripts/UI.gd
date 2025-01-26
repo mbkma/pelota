@@ -7,6 +7,7 @@ class_name UI extends CanvasLayer
 func update_score(score: String):
 	score_label.text = score
 
+
 func update_sets(sets: String):
 	score_label.text = "%s" % [sets]
 

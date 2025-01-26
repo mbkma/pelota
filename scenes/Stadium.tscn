@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://7ue55up1oq2n"]
+
+[ext_resource type="PackedScene" uid="uid://c0ulkmu23tm1s" path="res://assets/Stadium/Stadium.blend" id="1_lo0cg"]
+[ext_resource type="PackedScene" uid="uid://cxpalyinmasoj" path="res://scenes/TennisCourt.tscn" id="1_rqwo3"]
+
+[node name="Stadium" type="Node3D"]
+
+[node name="TennisCourt" parent="." instance=ExtResource("1_rqwo3")]
+
+[node name="Stadium" parent="." instance=ExtResource("1_lo0cg")]
