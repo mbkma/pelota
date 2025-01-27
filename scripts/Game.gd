@@ -18,13 +18,17 @@ func _ready():
 	start_game()
 
 
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("score"):
+		update_score(1)
+
 # Start a new game
 func start_game():
 	state = "playing"
 	score.best_of_sets = 5  # Set to best of 5 (or 3 as needed)
 	#reset_ball()
 	ui.update_score(score.get_scores_as_string())
-	#place_players()
+	place_players()
 
 
 # End the game

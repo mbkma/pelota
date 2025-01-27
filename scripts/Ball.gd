@@ -13,7 +13,7 @@ var rolling_friction: float = 0.02  # Friction coefficient for rolling on the gr
 var is_rolling: bool = false  # State to determine if the ball is rolling
 
 @onready var game: Game = get_tree().root.get_node("Game")  # Adjust if necessary
-@onready var net: StaticBody3D = get_tree().root.get_node("Net")  # Adjust if necessary
+#@onready var net: StaticBody3D = get_tree().root.get_node("Net")  # Adjust if necessary
 
 
 func _ready():
@@ -149,15 +149,15 @@ func handle_court_collision(state: PhysicsDirectBodyState3D):
 	for i in range(state.get_contact_count()):
 		var contact_collider: Object = state.get_contact_collider_object(i)
 
-		if contact_collider == net:
-			state.linear_velocity = Vector3.ZERO
-			return
-		elif contact_collider is StaticBody3D:
-			var contact_normal: Vector3 = state.get_contact_local_normal(i)
-			if is_boundary_collision(contact_collider):
-				velocity = velocity.bounce(contact_normal) * restitution
-				state.linear_velocity = velocity
-				return
+		#if contact_collider == net:
+			#state.linear_velocity = Vector3.ZERO
+			#return
+		#elif contact_collider is StaticBody3D:
+			#var contact_normal: Vector3 = state.get_contact_local_normal(i)
+			#if is_boundary_collision(contact_collider):
+				#velocity = velocity.bounce(contact_normal) * restitution
+				#state.linear_velocity = velocity
+				#return
 
 
 # Detect if ball is on the ground (based on radius and small tolerance)

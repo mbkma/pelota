@@ -97,11 +97,15 @@ func is_match_over() -> bool:
 func get_scores_as_string() -> String:
 	return (
 		"Player 1: "
+		+ str(points_p1)
+		+ " points, "
 		+ str(sets_p1)
 		+ " sets, "
 		+ str(games_per_set["Player 1"])
 		+ " games\n"
 		+ "Player 2: "
+		+ str(points_p2)
+		+ " points, "
 		+ str(sets_p2)
 		+ " sets, "
 		+ str(games_per_set["Player 2"])

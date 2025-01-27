@@ -1,6 +1,7 @@
 class_name TennisCourt extends Node
 
-var court_dimensions: Vector3 = Vector3(23.77, 0, 8.23)  # Tennis court dimensions in meters
+var court_dimensions: Vector3 = Vector3(10.97, 0, 23.77)  # Tennis court dimensions in meters
+
 var serve_positions: Dictionary = {
 	1:
 	[
@@ -9,20 +10,20 @@ var serve_positions: Dictionary = {
 	],
 	2:
 	[
-		Vector3(-court_dimensions.x / 4, 0, court_dimensions.z / 2),
-		Vector3(court_dimensions.x / 4, 0, court_dimensions.z / 2)
+		Vector3(court_dimensions.x / 4, 0, court_dimensions.z / 2),
+		Vector3(-court_dimensions.x / 4, 0, court_dimensions.z / 2)
 	]
 }
 var return_positions: Dictionary = {
 	1:
 	[
-		Vector3(-court_dimensions.x / 4, 0, court_dimensions.z / 2),
-		Vector3(court_dimensions.x / 4, 0, court_dimensions.z / 2)
+		Vector3(-court_dimensions.x / 4, 0, -court_dimensions.z / 2),
+		Vector3(court_dimensions.x / 4, 0, -court_dimensions.z / 2)
 	],
 	2:
 	[
-		Vector3(-court_dimensions.x / 4, 0, -court_dimensions.z / 2),
-		Vector3(court_dimensions.x / 4, 0, -court_dimensions.z / 2)
+		Vector3(court_dimensions.x / 4, 0, court_dimensions.z / 2),
+		Vector3(-court_dimensions.x / 4, 0, court_dimensions.z / 2)
 	]
 }
 

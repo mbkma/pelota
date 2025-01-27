@@ -6,12 +6,14 @@ class_name Player extends CharacterBody3D
 @onready var playback = animation_tree.get("parameters/playback")
 
 # Stroke Types
-enum StrokeType { FOREHAND, BACKHAND, SLICE }
-var stroke_type: StrokeType = StrokeType.FOREHAND
+enum StrokeType { NONE, FOREHAND, BACKHAND, SLICE }
+var stroke_type: StrokeType = StrokeType.NONE
 
 # Allows to pick your chracter's mesh from the inspector
 @export_node_path("Node3D") var PlayerCharacterMesh: NodePath
 @onready var player_mesh = get_node(PlayerCharacterMesh)
+
+@export var id = 1
 
 # Gamplay mechanics and Inspector tweakables
 @export var gravity = 9.8
@@ -55,11 +57,14 @@ var acceleration = int()
 # Signals for stroke detection
 signal ball_hit
 @onready var racket_hitting_area: Area3D = $RacketHittingArea
+@onready var id_label: Label3D = $IdLabel
+
 
 func _ready():  # Camera based Rotation
 	direction = Vector3.BACK.rotated(Vector3.UP, $Camroot/h.global_transform.basis.get_euler().y)
 	racket_hitting_area.body_entered.connect(_on_ball_entered)
-
+	id_label.text = "Player " + str(id)
+	
 func _on_ball_entered(body):
 	# Ensure the body is the tennis ball and a swing is active
 	if body.name == "TennisBall" and is_swing_active():
@@ -82,14 +87,14 @@ func apply_hit_force(ball):
 func get_stroke_direction() -> Vector3:
 	# Example: Adjust direction based on player input (e.g., forehand/backhand)
 	var base_direction = Vector3(1, 0.5, 1)  # Default direction
-	if Input.is_action_pressed("aim_up"):
-		base_direction.y += 0.5
-	elif Input.is_action_pressed("aim_down"):
-		base_direction.y -= 0.5
-	if Input.is_action_pressed("aim_left"):
-		base_direction.x -= 0.5
-	elif Input.is_action_pressed("aim_right"):
-		base_direction.x += 0.5
+	#if Input.is_action_pressed("aim_up"):
+		#base_direction.y += 0.5
+	#elif Input.is_action_pressed("aim_down"):
+		#base_direction.y -= 0.5
+	#if Input.is_action_pressed("aim_left"):
+		#base_direction.x -= 0.5
+	#elif Input.is_action_pressed("aim_right"):
+		#base_direction.x += 0.5
 	return base_direction
 
 
@@ -101,6 +106,7 @@ func _input(event):  # All major mouse and button input events
 	if Input.is_action_pressed("forehand"):
 		stroke_type = StrokeType.FOREHAND
 		hit_ball()
+		print("forehand")
 	elif Input.is_action_pressed("backhand"):
 		stroke_type = StrokeType.BACKHAND
 		hit_ball()
@@ -112,8 +118,11 @@ func _input(event):  # All major mouse and button input events
 func handle_animation():
 	match stroke_type:
 		StrokeType.FOREHAND:
-			if forehand_node_name in playback.get_current_node():
+			print(playback.get_current_node())
+			if forehand_node_name:
+				print("forehand anim")
 				playback.travel(forehand_node_name)
+			stroke_type = StrokeType.NONE
 		StrokeType.BACKHAND:
 			pass
 		StrokeType.SLICE:

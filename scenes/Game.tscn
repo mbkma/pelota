@@ -52,6 +52,7 @@ active_camera = NodePath("../Camera3D")
 
 [node name="Player2" parent="." node_paths=PackedStringArray("active_camera") instance=ExtResource("5_7f08c")]
 transform = Transform3D(0.996595, 0, 0.082443, 0, 1, 0, -0.082443, 0, 0.996595, 0, 0, 0.458041)
+id = 2
 active_camera = NodePath("../Camera3D2")
 
 [node name="Ground" type="StaticBody3D" parent="."]
