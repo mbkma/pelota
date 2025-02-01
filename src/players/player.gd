@@ -55,10 +55,10 @@ func setup(data: PlayerData, input_scene, ai_controlled: bool) -> void:
 	if ai_controlled:
 		$Label3D.text += " (CPU)"
 
-	var mesh := $"Model/Rig/Human_rigify/Skeleton3D/shirt" as MeshInstance3D
-	var new_mat = mesh.get_active_material(0).duplicate()
-	new_mat.albedo_color = Color(randf(), randf(), randf())
-	mesh.set_surface_override_material(0, new_mat)
+	#var mesh := $"Model/v3player/Rig/Skeleton3D/shirt" as MeshInstance3D
+	#var new_mat = mesh.get_active_material(0).duplicate()
+	#new_mat.albedo_color = Color(randf(), randf(), randf())
+	#mesh.set_surface_override_material(0, new_mat)
 
 
 func setup_singles_match(sm: SinglesMatch):
@@ -121,8 +121,9 @@ func cancel_stroke() -> void:
 var friction := 0.3
 var acceleration := 0.1
 var move_vel := Vector3.ZERO
-func apply_movement(move_direction: Vector3, delta: float) -> void:
 
+
+func apply_movement(move_direction: Vector3, delta: float) -> void:
 #	uncomment the following for smooth roation in move direction
 #	if move_direction != Vector3.ZERO:
 #		model.rotation.y = lerp_angle(model.rotation.y, sign(position.z)*atan2(-move_direction.x, -move_direction.z), 15*delta)
@@ -132,7 +133,7 @@ func apply_movement(move_direction: Vector3, delta: float) -> void:
 	if move_direction.length() > 1.0:
 		move_direction = move_direction.normalized()
 
-	skin.set_move_direction(sign(position.z)*move_direction)
+	skin.set_move_direction(sign(position.z) * move_direction)
 
 	vel.x = move_direction.x * move_speed
 	vel.z = move_direction.z * move_speed
@@ -157,6 +158,8 @@ func apply_racket_input() -> void:
 
 func prepare_serve() -> void:
 	emit_signal("ready_to_serve")
+
+
 #	root_state_machine.travel("serve-dribble-ball-loop")
 #	await get_tree().create_timer(3).timeout
 #	root_state_machine.travel("before-serve-loop")
@@ -191,7 +194,13 @@ func respawn_ball() -> void:
 	get_tree().call_group("Player", "set_active_ball", ball)
 
 	await get_tree().create_timer(1).timeout
-	var vel = GlobalPhysics.get_velocity_stroke_from_to(ball.position, active_stroke.to, -sign(position.z)*active_stroke.pace, active_stroke.spin, active_stroke.height)
+	var vel = GlobalPhysics.get_velocity_stroke_from_to(
+		ball.position,
+		active_stroke.to,
+		-sign(position.z) * active_stroke.pace,
+		active_stroke.spin,
+		active_stroke.height
+	)
 	hit_ball(ball as Ball, vel, active_stroke.spin)
 	emit_signal("just_served")
 
@@ -207,11 +216,13 @@ func _on_RacketArea_body_entered(body: Ball) -> void:
 	var vel = GlobalPhysics.get_velocity_stroke_from_to(
 		body.position,
 		active_stroke.to,
-		-sign(position.z)*active_stroke.pace,
+		-sign(position.z) * active_stroke.pace,
 		active_stroke.spin,
-		active_stroke.height)
+		active_stroke.height
+	)
 
 	hit_ball(body, vel, active_stroke.spin)
+
 
 #
 #func ready_to_receive() -> void:
@@ -220,8 +231,8 @@ func _on_RacketArea_body_entered(body: Ball) -> void:
 
 
 func _modify_active_stroke() -> void:
-	var rand_factor = (player_data.stats.control + ball.velocity.length()*3.6) / 100
-	active_stroke.to += rand_factor*Vector3(randf_range(-1,1),0, randf_range(-1,1))
+	var rand_factor = (player_data.stats.control + ball.velocity.length() * 3.6) / 100
+	active_stroke.to += rand_factor * Vector3(randf_range(-1, 1), 0, randf_range(-1, 1))
 
 
 func hit_ball(ball: Ball, vel: Vector3, spin: float) -> void:
@@ -229,7 +240,7 @@ func hit_ball(ball: Ball, vel: Vector3, spin: float) -> void:
 	_play_stroke_sound()
 
 	emit_signal("ball_hit")
-	print("ball_hit. speed: ", vel.length()*3.6, "km/h")
+	print("ball_hit. speed: ", vel.length() * 3.6, "km/h")
 	cancel_stroke()
 	player_data.set_stat("endurance", player_data.stats.endurance - randf_range(2, 5))
 

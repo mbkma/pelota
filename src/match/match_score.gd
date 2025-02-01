@@ -56,7 +56,6 @@ func add_tiebreak_point(index):
 
 
 func add_point(index):
-
 	if is_tiebreak:
 		add_tiebreak_point(index)
 		return
@@ -86,4 +85,8 @@ func add_point(index):
 
 
 func is_points_diff_even() -> bool:
-	return (abs(_score.points[0] - _score.points[1]) == 0) or (abs(_score.points[0] - _score.points[1]) == 30) or (abs(_score.points[0] - _score.points[1]) == 25)
+	return (
+		(abs(_score.points[0] - _score.points[1]) == 0)
+		or (abs(_score.points[0] - _score.points[1]) == 30)
+		or (abs(_score.points[0] - _score.points[1]) == 25)
+	)

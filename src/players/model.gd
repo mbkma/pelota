@@ -5,9 +5,13 @@ extends Node3D
 # # It has a signal connected to the player state machine, and uses the resulting
 # state names to translate them into the states for the animation tree.
 
-
-enum States {MOVE, STROKE}
-enum Strokes {BACKHAND, BACKHAND_SLICE, FOREHAND, SERVE, }
+enum States { MOVE, STROKE }
+enum Strokes {
+	BACKHAND,
+	BACKHAND_SLICE,
+	FOREHAND,
+	SERVE,
+}
 
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var _playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")

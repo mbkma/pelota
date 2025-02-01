@@ -7,7 +7,7 @@ extends Panel
 func _ready() -> void:
 	animation_player.play("fade_in")
 	timer.start(5)
-	timer.connect("timeout",Callable(self,"on_timer_timeout"))
+	timer.connect("timeout", Callable(self, "on_timer_timeout"))
 
 
 func initialize(song):

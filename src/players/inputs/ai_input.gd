@@ -6,9 +6,11 @@ var sm: SinglesMatch
 var player: BasePlayer
 var tactics = {
 	"DefaultTactics": "res://src/players/inputs/tactics/default.gd",
-	"ServeAndVolley": "res://src/players/inputs/tactics/serve_and_volley.gd"}
+	"ServeAndVolley": "res://src/players/inputs/tactics/serve_and_volley.gd"
+}
 
-var current_tactic = preload("res://src/players/inputs/tactics/default.gd").new(): set = set_current_tactic
+var current_tactic = preload("res://src/players/inputs/tactics/default.gd").new():
+	set = set_current_tactic
 var pivot_point := Vector3.ZERO
 
 
@@ -21,7 +23,6 @@ func setup(_sm: SinglesMatch) -> void:
 	sm.state_changed.connect(on_SinglesMatch_state_changed)
 	sm.get_opponent(player).just_served.connect(on_Opponent_just_served)
 #	player.connect("just_served",Callable(self,"on_Player_just_served"))
-
 
 	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
 	sm.get_opponent(player).ball_hit.connect(on_Opponent_ball_hit)
@@ -59,6 +60,8 @@ func on_Player_ball_hit():
 
 func on_Opponent_ready_to_serve():
 	pass
+
+
 #	player.ready_to_receive()
 
 
@@ -77,7 +80,10 @@ func move_to_serve_receive():
 
 
 func on_SinglesMatch_state_changed(old_state, new_state):
-	if new_state == GlobalUtils.MatchStates.IDLE or new_state == GlobalUtils.MatchStates.SECOND_SERVE:
+	if (
+		new_state == GlobalUtils.MatchStates.IDLE
+		or new_state == GlobalUtils.MatchStates.SECOND_SERVE
+	):
 		# cancel all player movement orders
 		player.cancel_movement()
 		player.cancel_stroke()
@@ -94,6 +100,8 @@ func on_SinglesMatch_state_changed(old_state, new_state):
 
 
 var pred
+
+
 func on_Opponent_ball_hit():
 	if not player.ball:
 		return
@@ -112,7 +120,10 @@ func on_Opponent_ball_hit():
 	# second, compute how to move in order to do the stroke
 
 	# if ball outside of comfort zone
-	if ball_pos_prediction.y < player.skin.forehand_down_point.y or ball_pos_prediction.y > player.skin.forehand_up_point.y:
+	if (
+		ball_pos_prediction.y < player.skin.forehand_down_point.y
+		or ball_pos_prediction.y > player.skin.forehand_up_point.y
+	):
 		pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
 
 	if not pred:

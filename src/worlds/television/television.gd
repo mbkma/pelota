@@ -8,7 +8,8 @@ signal active_camera_changed(camera)
 @onready var director = $Director
 @onready var television_hud: Control = $TelevisionHUD
 
-var active_camera: Camera3D: set = set_active_camera
+var active_camera: Camera3D:
+	set = set_active_camera
 var active_player_camera_index := 0
 var active_follow_target = null
 
@@ -33,6 +34,8 @@ func setup_singles_match(singles_match):
 func _physics_process(delta: float) -> void:
 	if !active_follow_target or !active_camera:
 		return
+
+
 #	active_camera.rotation.y = deg_to_rad(active_follow_target.position.x)
 
 

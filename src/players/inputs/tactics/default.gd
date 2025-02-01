@@ -10,7 +10,7 @@ func setup(_player) -> void:
 
 func compute_next_stroke(pred) -> Dictionary:
 	var r = randf()
-	if sign(player.position.z)*(pred.pos.x - player.position.x) > 0:
+	if sign(player.position.z) * (pred.pos.x - player.position.x) > 0:
 		if r < 0.3:
 			return player.strokes.forehand_longline()
 		else:
@@ -37,4 +37,4 @@ func compute_serve() -> Dictionary:
 
 
 func on_Player_ball_hit():
-	player.move_to(Vector3(sign(player.position.x)*2, 0, player.position.z))
+	player.move_to(Vector3(sign(player.position.x) * 2, 0, player.position.z))

@@ -10,6 +10,7 @@ extends Control
 @onready var points_label = $MarginContainer2/HBoxContainer12/Panel2/Points
 @onready var serve_indicator = $MarginContainer/HBoxContainer11/ServeIndicator
 
+
 func set_score(score, index):
 	var points = score.points
 	var games = score.games

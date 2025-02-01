@@ -1,6 +1,5 @@
 extends Node3D
 
-
 var current_match: SinglesMatch
 
 
@@ -13,7 +12,7 @@ func setup_singles_match(sm: SinglesMatch) -> void:
 func _on_MatchScore_state_changed(old_state, new_state):
 	if (new_state == GlobalUtils.MatchStates.FAULT) and current_match.get_fault_reason() == "out":
 		get_node("Sounds/out").play()
-	elif (new_state == GlobalUtils.MatchStates.SECOND_SERVE):
+	elif new_state == GlobalUtils.MatchStates.SECOND_SERVE:
 		get_node("Sounds/second_serve").play()
 
 

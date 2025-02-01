@@ -12,15 +12,15 @@ signal stats_changed
 @export var backhand := 2
 @export var rank := 1
 @export var stats := {
- "endurance": 100,
- "speed": 100,
- "control": 100,
- "strength": 100,
- "serve_pace": 35,
- "forehand_pace": 25,
- "forehand_spin": 5,
- "backhand_pace": 25,
- "backhand_spin": 5,
+	"endurance": 100,
+	"speed": 100,
+	"control": 100,
+	"strength": 100,
+	"serve_pace": 35,
+	"forehand_pace": 25,
+	"forehand_spin": 5,
+	"backhand_pace": 25,
+	"backhand_spin": 5,
 }
 @export var sounds := {
 	"grunt_flat": [],
@@ -32,4 +32,3 @@ signal stats_changed
 func set_stat(stat, value):
 	stats[stat] = value
 	emit_signal("stats_changed")
-

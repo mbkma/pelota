@@ -28,6 +28,7 @@ func _ready() -> void:
 	await get_tree().create_timer(2).timeout
 	stroke_input_blocked = false
 
+
 func setup(singles_match):
 	player = get_parent()
 	#player.timing.show()
@@ -69,10 +70,10 @@ func _physics_process(delta: float) -> void:
 
 static func get_input_direction() -> Vector3:
 	return Vector3(
-			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-			0,
-			Input.get_action_strength("move_back") - Input.get_action_strength("move_front")
-		)
+		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+		0,
+		Input.get_action_strength("move_back") - Input.get_action_strength("move_front")
+	)
 
 
 func get_stroke_input(delta: float):
@@ -88,7 +89,14 @@ func get_stroke_input(delta: float):
 
 
 func set_stroke_input() -> void:
-	if player.is_serving and (sm.state == GlobalUtils.MatchStates.IDLE or sm.state == GlobalUtils.MatchStates.SERVE or sm.state == GlobalUtils.MatchStates.SECOND_SERVE):
+	if (
+		player.is_serving
+		and (
+			sm.state == GlobalUtils.MatchStates.IDLE
+			or sm.state == GlobalUtils.MatchStates.SERVE
+			or sm.state == GlobalUtils.MatchStates.SECOND_SERVE
+		)
+	):
 		player.prepare_serve()
 		player.set_active_stroke(stroke, Vector3.ZERO, 0)
 		player.serve()
@@ -115,10 +123,10 @@ func _show_stroke_feedback():
 		elif timing_score > 2:
 			player.timing.text = "Too Early! (Score: " + str(timing_score) + ")"
 			player.timing.modulate = Color(0, 0, 0.5)
-		else: # > 1 and < 2
+		else:  # > 1 and < 2
 			player.timing.text = "Perfect! (Score: " + str(timing_score) + ")"
 			player.timing.modulate = Color(0, 1, 0)
-	else: # timing_score < 0.0
+	else:  # timing_score < 0.0
 		player.timing.text = "To Late! (Score: " + str(timing_score) + ")"
 		player.timing.modulate = Color(1, 0, 0)
 
@@ -132,7 +140,13 @@ func clear_stroke_input():
 func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 	var to := Vector3.ZERO
 	var default_aim := Vector3(0, 0, -sign(player.position.z) * 9)
-	if player.is_serving and (sm.state == GlobalUtils.MatchStates.IDLE or sm.state == GlobalUtils.MatchStates.SECOND_SERVE):
+	if (
+		player.is_serving
+		and (
+			sm.state == GlobalUtils.MatchStates.IDLE
+			or sm.state == GlobalUtils.MatchStates.SECOND_SERVE
+		)
+	):
 		default_aim = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5)
 
 	to.z = default_aim.z + sign(player.position.z) * (mouse_to - mouse_from).y / 100
@@ -142,17 +156,47 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 
 
 func _construct_stroke_from_input(aim: Vector3, pace: float) -> Dictionary:
-	if player.is_serving and (sm.state == GlobalUtils.MatchStates.IDLE or sm.state == GlobalUtils.MatchStates.SECOND_SERVE):
-		return {"anim_id": player.skin.Strokes.SERVE, "pace": player.stats.serve_pace + randf_range(10, 20), "to": aim, "spin": 0, "height": 1.1}
+	if (
+		player.is_serving
+		and (
+			sm.state == GlobalUtils.MatchStates.IDLE
+			or sm.state == GlobalUtils.MatchStates.SECOND_SERVE
+		)
+	):
+		return {
+			"anim_id": player.skin.Strokes.SERVE,
+			"pace": player.stats.serve_pace + randf_range(10, 20),
+			"to": aim,
+			"spin": 0,
+			"height": 1.1
+		}
 
 	assert(pred != null)
 	if sign(player.position.z) * (pred.pos.x - player.position.x) > 0:
-		return {"anim_id": player.skin.Strokes.FOREHAND, "pace": player.stats.forehand_pace + pace, "to": aim, "spin": player.stats.backhand_spin, "height": 1 + player.stats.backhand_spin * 0.1}
+		return {
+			"anim_id": player.skin.Strokes.FOREHAND,
+			"pace": player.stats.forehand_pace + pace,
+			"to": aim,
+			"spin": player.stats.backhand_spin,
+			"height": 1 + player.stats.backhand_spin * 0.1
+		}
 	else:
 		if Input.is_action_pressed("slice"):
-			return {"anim_id": player.skin.Strokes.BACKHAND_SLICE, "pace": 20, "to": aim, "spin": - 5, "height": 1.3}
+			return {
+				"anim_id": player.skin.Strokes.BACKHAND_SLICE,
+				"pace": 20,
+				"to": aim,
+				"spin": -5,
+				"height": 1.3
+			}
 		else:
-			return {"anim_id": player.skin.Strokes.BACKHAND, "pace": player.stats.backhand_pace + pace, "to": aim, "spin": player.stats.backhand_spin, "height": 1 + player.stats.backhand_spin * 0.1}
+			return {
+				"anim_id": player.skin.Strokes.BACKHAND,
+				"pace": player.stats.backhand_pace + pace,
+				"to": aim,
+				"spin": player.stats.backhand_spin,
+				"height": 1 + player.stats.backhand_spin * 0.1
+			}
 
 
 func _on_Player_ball_hit():
@@ -166,7 +210,10 @@ func _on_SinglesMatch_state_changed(old_state, new_state):
 		clear_stroke_input()
 		await get_tree().create_timer(1).timeout
 		stroke_input_blocked = false
-	if new_state == GlobalUtils.MatchStates.IDLE or new_state == GlobalUtils.MatchStates.SECOND_SERVE:
+	if (
+		new_state == GlobalUtils.MatchStates.IDLE
+		or new_state == GlobalUtils.MatchStates.SECOND_SERVE
+	):
 		move_input_blocked = false
 
 
@@ -178,7 +225,10 @@ func _on_Opponent_ball_hit():
 	var ball_pos_prediction = pred.pos
 
 	# if ball outside of comfort zone
-	if ball_pos_prediction.y < player.skin.forehand_down_point.y or ball_pos_prediction.y > player.skin.forehand_up_point.y:
+	if (
+		ball_pos_prediction.y < player.skin.forehand_down_point.y
+		or ball_pos_prediction.y > player.skin.forehand_up_point.y
+	):
 		# predict where ball is in comfort zone
 		pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
 

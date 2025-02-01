@@ -36,14 +36,8 @@ func init_scene(init_data: Dictionary):
 	television = world.television
 
 	match_data = init_data.match_data as MatchData
-	players.append(GlobalGameData.create_player(
-		match_data.player0,
-		false)
-		)
-	players.append(GlobalGameData.create_player(
-		match_data.player1,
-		true)
-		)
+	players.append(GlobalGameData.create_player(match_data.player0, false))
+	players.append(GlobalGameData.create_player(match_data.player1, true))
 
 	active_player_index = 0
 	players[0].team_index = 0
@@ -83,8 +77,10 @@ func set_state(new_state):
 	if state == GlobalUtils.MatchStates.FAULT:
 		print("Fault! Reason: ", fault_reason)
 
+
 func get_fault_reason() -> String:
 	return fault_reason
+
 
 func on_Player_ready_to_serve():
 	if state == GlobalUtils.MatchStates.IDLE:
@@ -102,7 +98,10 @@ func on_Player_ball_hit():
 			valid_side = GlobalUtils.get_opposite_side(valid_side)
 		ground_contacts = 0
 
+
 var last_ball_ground_pos: Vector3
+
+
 func on_Ball_on_ground():
 	if not ball_in_play:
 		return
@@ -140,7 +139,12 @@ func on_Ball_on_ground():
 		# we got an invalid contact
 		else:
 			if court.is_inside(_active_ball.position):
-				fault_reason = "Wrong Side! Valid Side: " + str(valid_side) + " Actual Side: " + str(sign(_active_ball.position.z))
+				fault_reason = (
+					"Wrong Side! Valid Side: "
+					+ str(valid_side)
+					+ " Actual Side: "
+					+ str(sign(_active_ball.position.z))
+				)
 			else:
 				fault_reason = "out"
 			set_state(GlobalUtils.MatchStates.FAULT)
@@ -154,6 +158,7 @@ func on_Ball_on_ground():
 		set_state(GlobalUtils.MatchStates.IDLE)
 		world.stadium.start_serve_clocks()
 	debug_print()
+
 
 func is_in_valid_side(ball_pos: Vector3) -> bool:
 	# Example of very bad code:
@@ -184,6 +189,8 @@ func on_Player_ball_spawned(ball: Ball):
 
 func on_only_points_changed(score):
 	pass
+
+
 #	valid_side = GlobalUtils.get_opposite_side(valid_side)
 
 

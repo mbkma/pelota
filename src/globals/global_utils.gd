@@ -24,15 +24,16 @@ enum MatchStates {
 
 const DEBUGGING = false
 
+
 func get_filepaths_in_directory(directory_path: String, ending: String = "") -> Array:
 	var filepaths := []
 	var dir = DirAccess.open(directory_path)
-	
+
 	# Open the directory
 	if dir != null:
 		# List files and directories, including hidden ones
 		dir.list_dir_begin()
-		
+
 		var file_name = dir.get_next()
 		while file_name != "":
 			# Skip the current directory (".") and parent directory ("..")
@@ -52,10 +53,8 @@ func get_filepaths_in_directory(directory_path: String, ending: String = "") -> 
 		dir.list_dir_end()  # End directory listing
 	else:
 		print("An error occurred when trying to access the path.")
-	
+
 	return filepaths
-
-
 
 
 func spin_to_gravity(spin: float) -> float:

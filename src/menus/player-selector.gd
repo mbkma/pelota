@@ -16,6 +16,7 @@ const SPRITE_PATH: String = "res://assets/textures/players/"
 @export var player_selected = false
 @export var player_index: int = 0
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	next_button.pressed.connect(on_button_pressed.bind("Button_Next"))
@@ -53,10 +54,11 @@ func on_button_pressed(button_name):
 		player_selected = false
 		emit_signal("selection_changed")
 
+
 func on_input_select_button_pressed(id):
-	if id == 0: # keyboard
+	if id == 0:  # keyboard
 		input_select_button.text = "Keyboard"
-	elif id == 1: # controller
+	elif id == 1:  # controller
 		input_select_button.text = "Controller"
-	elif id == 2: # cpu
+	elif id == 2:  # cpu
 		input_select_button.text = "CPU"

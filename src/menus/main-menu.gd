@@ -17,8 +17,10 @@ signal level_changed(level_name, init_data)
 var world = preload("res://src/worlds/us_open/us_open.tscn")
 var match_data
 
+
 func init_scene(init_data):
 	pass
+
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -30,6 +32,7 @@ func _ready():
 
 	for p in player_selectors:
 		p.selection_changed.connect(on_selection_changed)
+
 
 #	MusicPlayer.play_playlist(GlobalUtils.get_filepaths_in_directory("res://assets/music/", ".ogg"))
 
@@ -74,7 +77,11 @@ func _on_Play_pressed() -> void:
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	print({"match_data": match_data, "world": world})
-	emit_signal("level_changed", load("res://src/match/singles_match.tscn"), {"match_data": match_data, "world": world})
+	emit_signal(
+		"level_changed",
+		load("res://src/match/singles_match.tscn"),
+		{"match_data": match_data, "world": world}
+	)
 
 
 func _on_Tournament_pressed() -> void:

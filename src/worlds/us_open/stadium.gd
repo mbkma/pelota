@@ -4,14 +4,14 @@ extends Node3D
 @onready var serve_speed_panels := [$ServeSpeedPanel, $ServeSpeedPanel2]
 var sm
 @onready var positions := {
-		"serve_deuce0": $Positions/ServeDeuce0.position,
-		"serve_ad0": $Positions/ServeAd0.position,
-		"receive_deuce0": $Positions/ReceiveDeuce0.position,
-		"receive_ad0": $Positions/ReceiveAd0.position,
-		"serve_deuce1": $Positions/ServeDeuce1.position,
-		"serve_ad1": $Positions/ServeAd1.position,
-		"receive_deuce1": $Positions/ReceiveDeuce1.position,
-		"receive_ad1": $Positions/ReceiveAd1.position,
+	"serve_deuce0": $Positions/ServeDeuce0.position,
+	"serve_ad0": $Positions/ServeAd0.position,
+	"receive_deuce0": $Positions/ReceiveDeuce0.position,
+	"receive_ad0": $Positions/ReceiveAd0.position,
+	"serve_deuce1": $Positions/ServeDeuce1.position,
+	"serve_ad1": $Positions/ServeAd1.position,
+	"receive_deuce1": $Positions/ReceiveDeuce1.position,
+	"receive_ad1": $Positions/ReceiveAd1.position,
 }
 @onready var serve_clocks := $ServeClocks.get_children()
 
@@ -22,6 +22,7 @@ var timer := Timer.new()
 func _ready() -> void:
 	add_child(timer)
 	timer.timeout.connect(_on_ServeClocks_timeout)
+
 
 func setup_singles_match(singles_match):
 	sm = singles_match

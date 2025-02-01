@@ -5,6 +5,7 @@ var player_data: Array = []
 
 const player_scene = preload("res://src/players/player.tscn")
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
@@ -24,10 +25,13 @@ func load_players():
 	for p in paths:
 		player_data.append(load(p))
 	print(paths)
-	player_data.sort_custom(Callable(MyCustomSorter,"sort_ascending_by_rank"))
+	player_data.sort_custom(Callable(MyCustomSorter, "sort_ascending_by_rank"))
+
 
 var ai_input = preload("res://src/players/inputs/ai_input.tscn")
 var human_input = preload("res://src/players/inputs/human_input.tscn")
+
+
 func create_player(player_data, ai_controlled: bool):
 	var player = player_scene.instantiate()
 	var input = ai_input if ai_controlled else human_input

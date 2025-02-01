@@ -12,5 +12,6 @@ func _ready() -> void:
 	$Desc.text = label
 	$Cont.text = text
 
+
 func _process(delta: float) -> void:
 	right.text = text

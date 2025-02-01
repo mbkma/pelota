@@ -7,14 +7,16 @@ const DAMP := 0.7
 
 var spin := 0.0
 
+
 func spin_to_gravity(spin: float) -> float:
 	return 10 + spin
+
 
 func _physics_process(delta: float) -> void:
 	var gravity := spin_to_gravity(spin)
 	velocity.y += -gravity * delta
 
-	var prev_velocity = velocity  
+	var prev_velocity = velocity
 	move_and_slide()
 	if get_slide_collision_count() > 0:
 		var col := get_slide_collision(0)
@@ -27,6 +29,7 @@ func _physics_process(delta: float) -> void:
 
 	#rotation = spin*velocity
 	velocity = velocity.lerp(Vector3.ZERO, 0.001)
+
 
 func apply_stroke(velocity: Vector3, _spin: float) -> void:
 	#print(predict_trajectory())
@@ -47,7 +50,7 @@ func predict_trajectory(steps: int = 100, time_step: float = 0.016) -> Array:
 	for i in range(steps):
 		# Simulate physics step
 		ghost_ball.velocity.y += -ghost_ball.spin_to_gravity(ghost_ball.spin) * time_step
-		
+
 		var prev_velocity = ghost_ball.velocity
 		ghost_ball.position += ghost_ball.velocity * time_step  # Update position
 

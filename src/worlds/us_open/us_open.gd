@@ -10,7 +10,6 @@ extends Node3D
 @onready var challenge_cam: Camera3D = $ChallengeCam
 @onready var hud: Control = $Hud
 
-
 var current_match: SinglesMatch
 
 
@@ -27,6 +26,7 @@ func setup_singles_match(sm: SinglesMatch):
 		player.ball_hit.connect(_on_Player_ball_hit)
 		player.challenged.connect(_on_Player_challenged)
 	stadium.start_serve_clocks()
+
 
 func _on_Player_challenged():
 	await get_tree().create_timer(2).timeout
