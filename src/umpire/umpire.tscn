@@ -1,0 +1,116 @@
+[gd_scene load_steps=22 format=3 uid="uid://dnkjfx5fk78c1"]
+
+[ext_resource type="AudioStream" uid="uid://bbqseutn38dai" path="res://src/umpire/sounds/30-30.ogg" id="1"]
+[ext_resource type="PackedScene" uid="uid://dsk78p2mdakba" path="res://assets/models/umpire_chair/umpire_chair.glb" id="2"]
+[ext_resource type="AudioStream" uid="uid://ghfwfyno385x" path="res://assets/sounds/out.wav" id="3"]
+[ext_resource type="AudioStream" uid="uid://ei1r0h8av4hv" path="res://src/umpire/sounds/advantage.ogg" id="4"]
+[ext_resource type="AudioStream" uid="uid://dw3dk5rijt2ey" path="res://src/umpire/sounds/40-40.ogg" id="5"]
+[ext_resource type="AudioStream" uid="uid://ddnps5yngc7ai" path="res://src/umpire/sounds/40-0.ogg" id="6"]
+[ext_resource type="Script" path="res://src/umpire/umpire.gd" id="7"]
+[ext_resource type="AudioStream" uid="uid://dxbmnv4ofonya" path="res://src/umpire/sounds/0-30.ogg" id="8"]
+[ext_resource type="AudioStream" uid="uid://24q3i36ef37e" path="res://src/umpire/sounds/15-0.ogg" id="9"]
+[ext_resource type="AudioStream" uid="uid://doaw66g8nwcey" path="res://src/umpire/sounds/30-0.ogg" id="10"]
+[ext_resource type="AudioStream" uid="uid://ct2pjmgyh6esx" path="res://src/umpire/sounds/0-40.ogg" id="11"]
+[ext_resource type="AudioStream" uid="uid://dt3xd6iqydbf1" path="res://src/umpire/sounds/0-15.ogg" id="12"]
+[ext_resource type="AudioStream" uid="uid://bx2k242xw6w3g" path="res://src/umpire/sounds/15-15.ogg" id="13"]
+[ext_resource type="AudioStream" uid="uid://cvonpl75stb7o" path="res://src/umpire/sounds/second_serve.ogg" id="14"]
+[ext_resource type="AudioStream" uid="uid://0q70t68hex4s" path="res://src/umpire/sounds/30-40.ogg" id="16"]
+[ext_resource type="AudioStream" uid="uid://wv2dpw77keu7" path="res://src/umpire/sounds/40-15.ogg" id="17"]
+[ext_resource type="AudioStream" uid="uid://c2ex7irmrjsw2" path="res://src/umpire/sounds/40-30.ogg" id="18"]
+[ext_resource type="AudioStream" uid="uid://6bcdjlt0ib2g" path="res://src/umpire/sounds/15-40.ogg" id="19"]
+[ext_resource type="AudioStream" uid="uid://bsnukbfkytqem" path="res://src/umpire/sounds/15-30.ogg" id="20"]
+[ext_resource type="AudioStream" uid="uid://3t6nfchf0fru" path="res://src/umpire/sounds/30-15.ogg" id="21"]
+
+[sub_resource type="BoxShape3D" id="4"]
+size = Vector3(1.20747, 2.9555, 1.21453)
+
+[node name="Umpire" type="Node3D"]
+script = ExtResource("7")
+
+[node name="umpire_chair" parent="." instance=ExtResource("2")]
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="0-15" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("12")
+bus = &"Umpire"
+
+[node name="0-30" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("8")
+bus = &"Umpire"
+
+[node name="0-40" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("11")
+bus = &"Umpire"
+
+[node name="15-0" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("9")
+bus = &"Umpire"
+
+[node name="30-0" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("10")
+bus = &"Umpire"
+
+[node name="40-0" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("6")
+bus = &"Umpire"
+
+[node name="15-15" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("13")
+bus = &"Umpire"
+
+[node name="30-30" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("1")
+bus = &"Umpire"
+
+[node name="40-40" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("5")
+bus = &"Umpire"
+
+[node name="40-15" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("17")
+bus = &"Umpire"
+
+[node name="40-30" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("18")
+bus = &"Umpire"
+
+[node name="15-30" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("20")
+bus = &"Umpire"
+
+[node name="15-40" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("19")
+bus = &"Umpire"
+
+[node name="30-40" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("16")
+bus = &"Umpire"
+
+[node name="30-15" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("21")
+bus = &"Umpire"
+
+[node name="advantage" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("4")
+bus = &"Umpire"
+
+[node name="second_serve" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("14")
+volume_db = 24.0
+bus = &"Umpire"
+
+[node name="out" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("3")
+bus = &"Umpire"
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49691, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47242, -2.39926)
+
+[editable path="umpire_chair"]

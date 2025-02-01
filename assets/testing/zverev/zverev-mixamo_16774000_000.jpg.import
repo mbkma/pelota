@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://nip73w4kltde"
+path.s3tc="res://.godot/imported/zverev-mixamo_16774000_000.jpg-7ab3924e5f415afa0dea55844e7e74a4.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "7ae4552cb64515f8073a238ceeb1ef71"
+}
+
+[deps]
+
+source_file="res://assets/testing/zverev/zverev-mixamo_16774000_000.jpg"
+dest_files=["res://.godot/imported/zverev-mixamo_16774000_000.jpg-7ab3924e5f415afa0dea55844e7e74a4.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

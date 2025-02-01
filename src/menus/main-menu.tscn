@@ -1,0 +1,130 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3yiwgabkh58o"]
+
+[ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1"]
+[ext_resource type="Script" path="res://src/menus/main-menu.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://src/menus/player-selector.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://d0ihbnragjhar" path="res://assets/textures/roger-federer-backhand-rochvanh-.jpg" id="4"]
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("2")
+level_name = "MainMenuLevel"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("4")
+expand_mode = 1
+
+[node name="Title_Label" type="Label" parent="."]
+offset_left = 199.0
+offset_right = 738.0
+offset_bottom = 86.0
+theme = ExtResource("1")
+text = "Pelota"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenu" type="HBoxContainer" parent="."]
+offset_left = 61.0
+offset_top = 437.0
+offset_right = 961.0
+offset_bottom = 506.0
+theme = ExtResource("1")
+alignment = 1
+
+[node name="Start" type="Button" parent="MainMenu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Start Game"
+
+[node name="Tournament" type="Button" parent="MainMenu"]
+layout_mode = 2
+text = "Tournament"
+
+[node name="Career" type="Button" parent="MainMenu"]
+layout_mode = 2
+text = "Career"
+
+[node name="Settings" type="Button" parent="MainMenu"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" type="Button" parent="MainMenu"]
+layout_mode = 2
+text = "Quit"
+
+[node name="StartMenu" type="VBoxContainer" parent="."]
+visible = false
+offset_left = 91.0
+offset_top = 69.0
+offset_right = 639.0
+offset_bottom = 429.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu"]
+layout_mode = 2
+
+[node name="PlayerSelector" parent="StartMenu/HBoxContainer" instance=ExtResource("3")]
+layout_mode = 2
+
+[node name="PlayerSelector2" parent="StartMenu/HBoxContainer" instance=ExtResource("3")]
+layout_mode = 2
+player_index = 1
+
+[node name="Actions" type="HBoxContainer" parent="StartMenu"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="StartMenu/Actions"]
+layout_mode = 2
+text = "Back"
+
+[node name="Play" type="Button" parent="StartMenu/Actions"]
+layout_mode = 2
+text = "Play"
+
+[node name="SettingsMenu" type="VBoxContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 725.0
+offset_top = 289.0
+offset_right = -185.0
+offset_bottom = -195.0
+
+[node name="Resolution" type="HBoxContainer" parent="SettingsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsMenu/Resolution"]
+layout_mode = 2
+text = "Resolution"
+
+[node name="OptionButton" type="OptionButton" parent="SettingsMenu/Resolution"]
+layout_mode = 2
+
+[node name="Fullscreen" type="HBoxContainer" parent="SettingsMenu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsMenu/Fullscreen"]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="CheckBox" type="CheckBox" parent="SettingsMenu/Fullscreen"]
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="SettingsMenu"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="SettingsMenu/Actions"]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="pressed" from="MainMenu/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="MainMenu/Tournament" to="." method="_on_Tournament_pressed"]
+[connection signal="pressed" from="MainMenu/Career" to="." method="_on_Career_pressed"]
+[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="StartMenu/Actions/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="StartMenu/Actions/Play" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="SettingsMenu/Actions/Back" to="." method="_on_Back_pressed"]

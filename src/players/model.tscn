@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5t7f8r1backb"]
+
+[ext_resource type="Script" path="res://src/players/model.gd" id="1_8ddow"]
+[ext_resource type="PackedScene" uid="uid://cqfrp4jx5s7s4" path="res://assets/models/player/player-2/v2player.glb" id="2_c5p83"]
+
+[sub_resource type="BoxShape3D" id="50"]
+size = Vector3(0.715122, 2.0368, 0.655806)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fr23v"]
+animation = &"idle_ready"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_thupr"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="43"]
+states/End/position = Vector2(709, 206)
+states/Start/position = Vector2(279, 126)
+states/idle_ready/node = SubResource("AnimationNodeAnimation_fr23v")
+states/idle_ready/position = Vector2(443, 126)
+transitions = ["Start", "idle_ready", SubResource("AnimationNodeStateMachineTransition_thupr")]
+
+[node name="Model" type="Node3D"]
+script = ExtResource("1_8ddow")
+
+[node name="RacketForehand" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.89747, 1.21593, -0.0874602)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RacketForehand"]
+shape = SubResource("50")
+
+[node name="RacketBackhand" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.676815, 1.21593, -0.0874602)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RacketBackhand"]
+shape = SubResource("50")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Rig")
+tree_root = SubResource("43")
+anim_player = NodePath("../Rig/AnimationPlayer")
+
+[node name="Points" type="Node3D" parent="."]
+
+[node name="BallServePoint" type="Marker3D" parent="Points"]
+transform = Transform3D(-0.785385, -0.618182, 0.0319754, 0.123958, -0.207672, -0.970312, 0.60647, -0.758102, 0.239734, 0.0693186, 2.72487, -0.612221)
+
+[node name="BallTossPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.151763, 1.93189, -0.490733)
+
+[node name="BackhandDownPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.666439, 0.68066, -0.490733)
+
+[node name="BackhandSliceDownPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.666439, 0.491877, -0.490733)
+
+[node name="BackhandSliceUpPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03961, 1.62896, -0.490733)
+
+[node name="BackhandUpPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.657659, 1.54555, -0.490733)
+
+[node name="ForehandDownPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.886059, 0.662953, -0.422848)
+
+[node name="ForehandUpPoint" type="Marker3D" parent="Points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.908688, 1.91882, -0.422848)
+
+[node name="Rig" parent="." instance=ExtResource("2_c5p83")]
+
+[node name="racket" parent="Rig/Human_rigify/Skeleton3D" index="0"]
+transform = Transform3D(1, 3.70666e-07, -2.40281e-07, -3.70666e-07, 1, -3.8743e-07, 1.80677e-07, 4.17232e-07, 1, -0.475958, 0.994877, 0.575808)
+
+[editable path="Rig"]

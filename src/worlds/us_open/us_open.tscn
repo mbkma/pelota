@@ -1,0 +1,175 @@
+[gd_scene load_steps=21 format=3 uid="uid://c80dkx83gt6sf"]
+
+[ext_resource type="Script" path="res://src/worlds/us_open/us_open.gd" id="1"]
+[ext_resource type="Script" path="res://src/worlds/television/television.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://fw4mlawx8kkn" path="res://src/hud/hud.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://src/umpire/umpire.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://src/worlds/television/television-hud.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://src/crowd/crowd_block.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://2hon8r2k00rj" path="res://src/crowd/crowd.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/worlds/us_open/stadium.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://src/hud/debug_hud.tscn" id="11"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mjdmi"]
+
+[sub_resource type="Sky" id="Sky_qjppd"]
+sky_material = SubResource("ProceduralSkyMaterial_mjdmi")
+
+[sub_resource type="Environment" id="Environment_341du"]
+background_mode = 2
+sky = SubResource("Sky_qjppd")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="7"]
+
+[sub_resource type="Animation" id="2"]
+resource_name = "games_changed_broadcast"
+length = 20.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("USOpen/Television/StaticEastCam:current")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="3"]
+resource_name = "start_broadcast"
+length = 10.0
+
+[sub_resource type="Animation" id="8"]
+resource_name = "start_match"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("USOpen/Television/StaticSouthCam:current")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("USOpen/Television/StaticSouthCam:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [35.3, 29.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pt0wb"]
+_data = {
+"games_changed_broadcast": SubResource("2"),
+"start_broadcast": SubResource("3"),
+"start_match": SubResource("8")
+}
+
+[sub_resource type="CylinderMesh" id="9"]
+
+[sub_resource type="CylinderMesh" id="11"]
+
+[node name="USOpen" type="Node3D"]
+script = ExtResource("1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.638768, 0.457656, -0.618487, 0, 0.803857, 0.594823, 0.769399, 0.379954, -0.513478, 0, 7.83431, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_341du")
+
+[node name="Crowd" parent="." instance=ExtResource("8")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(398.014, 0, 0, 0, 2.2935, 0, 0, 0, 1299.25, 0, -0.05, 0)
+mesh = SubResource("7")
+
+[node name="Television" type="Node3D" parent="."]
+script = ExtResource("2")
+
+[node name="FlyingCam" type="Camera3D" parent="Television"]
+transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
+fov = 30.0
+far = 8192.0
+
+[node name="StaticEastCam" type="Camera3D" parent="Television"]
+transform = Transform3D(-0.253251, 0, 0.967401, 0, 1, 0, -0.967401, 0, -0.253251, 10.9755, 1.78039, 0)
+fov = 24.4
+
+[node name="StaticSouthCam" type="Camera3D" parent="Television"]
+transform = Transform3D(1, 0, 0, 0, 0.974217, 0.225615, 0, -0.225615, 0.974217, 0, 6.95591, 30.6839)
+current = true
+fov = 17.3
+size = 97.38
+
+[node name="StaticNorthCam" type="Camera3D" parent="Television"]
+transform = Transform3D(-1, 1.97238e-08, -8.51687e-08, 0, 0.974217, 0.225614, 8.74228e-08, 0.225614, -0.974217, 0, 6.956, -30.684)
+fov = 17.3
+size = 97.38
+
+[node name="Director" type="AnimationPlayer" parent="Television"]
+root_node = NodePath("../../..")
+libraries = {
+"": SubResource("AnimationLibrary_pt0wb")
+}
+
+[node name="TelevisionHUD" parent="Television" instance=ExtResource("5")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DebugHud" parent="." instance=ExtResource("11")]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Hud" parent="." instance=ExtResource("3")]
+
+[node name="BallAimHuman" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.1, 0, -3.01992e-08, 0, 0.05, 0, 3.01992e-08, 0, 0.1, 0, 1.23585, 0)
+visible = false
+mesh = SubResource("9")
+skeleton = NodePath("../BallMark")
+
+[node name="BallMark" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.05, 0, 0, 0, 0.00347034, 0, 0, 0, 0.05, 0, 1.177, 0)
+visible = false
+mesh = SubResource("11")
+
+[node name="ChallengeCam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.23105, 0)
+
+[node name="Stadium" parent="." instance=ExtResource("10")]
+
+[node name="Court" parent="Stadium" instance=ExtResource("9")]
+
+[node name="Umpire" parent="Stadium" instance=ExtResource("4")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.36976, 0, 0)
+
+[node name="CrowdBlock" parent="." instance=ExtResource("7")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.7438, 0, -8.51666)
+
+[node name="CrowdBlock2" parent="." instance=ExtResource("7")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.7438, 0, -5.38179)
+
+[node name="CrowdBlock3" parent="." instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56151, 1.59512, -22.1274)
+
+[node name="CrowdBlock4" parent="." instance=ExtResource("7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53452, 1.59512, -22.1274)

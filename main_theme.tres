@@ -1,0 +1,31 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bxqcmd2k7v707"]
+
+[ext_resource type="FontFile" uid="uid://koyy3418d5e4" path="res://main_font.tres" id="1"]
+
+[sub_resource type="StyleBoxTexture" id="3"]
+region_rect = Rect2(0, 0, 100, 100)
+modulate_color = Color(0.411765, 0.411765, 0.411765, 1)
+
+[sub_resource type="StyleBoxTexture" id="2"]
+region_rect = Rect2(0, 0, 190, 49)
+
+[sub_resource type="StyleBoxTexture" id="1"]
+region_rect = Rect2(0, 0, 100, 100)
+
+[sub_resource type="StyleBoxTexture" id="4"]
+region_rect = Rect2(0, 0, 190, 45)
+
+[resource]
+default_font = ExtResource("1")
+Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_color_disabled = Color(0, 0, 0, 1)
+Button/colors/font_color_focus = Color(0, 0, 0, 1)
+Button/colors/font_color_hover = Color(0, 0, 0, 1)
+Button/colors/font_color_pressed = Color(0, 0, 0, 1)
+Button/styles/disabled = SubResource("3")
+Button/styles/hover = SubResource("2")
+Button/styles/normal = SubResource("1")
+Button/styles/pressed = SubResource("4")
+TabContainer/constants/label_valign_bg = 1
+TabContainer/constants/label_valign_fg = -1
+TabContainer/constants/side_margin = -1

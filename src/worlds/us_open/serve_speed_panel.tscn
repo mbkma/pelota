@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0fek2dc3mv3s"]
+
+[ext_resource type="FontFile" uid="uid://bkyrq2b8hve32" path="res://assets/fonts/Outfit-Regular.otf" id="1"]
+[ext_resource type="Script" path="res://src/worlds/us_open/serve_speed_panel.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bghbf40ufir3h" path="res://assets/models/stadium/serve_speed_panel/serve_speed_panel.glb" id="3"]
+
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+
+[node name="ServeSpeedPanel" type="Node3D"]
+script = ExtResource("2")
+
+[node name="serve_speed_panel" parent="." instance=ExtResource("3")]
+
+[node name="Speed" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.155899, 0.506548, 0.112209)
+font = SubResource("1")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.563, 0.367, 0.1)
+text = "MPH"
+
+[node name="Label3D2" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.158, 0.143, 0.1)
+text = "SERVE SPEED"

@@ -1,0 +1,162 @@
+[gd_scene load_steps=12 format=3 uid="uid://d237t32p1sgei"]
+
+[ext_resource type="PackedScene" uid="uid://b24agklale4yp" path="res://assets/models/stadium/stadium.glb" id="1"]
+[ext_resource type="Texture2D" uid="uid://cbkssgevclev0" path="res://assets/textures/numbers/0.png" id="2"]
+[ext_resource type="Script" path="res://src/worlds/us_open/stadium.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://bxf55j2umhpw8" path="res://assets/textures/numbers/colon.png" id="4"]
+[ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/worlds/us_open/serve_speed_panel.tscn" id="5"]
+[ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
+
+[sub_resource type="BoxShape3D" id="1"]
+size = Vector3(38.3846, 2, 46.8104)
+
+[sub_resource type="BoxShape3D" id="2"]
+size = Vector3(30.0088, 12.7414, 2)
+
+[sub_resource type="BoxShape3D" id="3"]
+size = Vector3(2, 12.186, 38.508)
+
+[sub_resource type="BoxShape3D" id="4"]
+size = Vector3(33.5164, 2, 44.3764)
+
+[sub_resource type="FontFile" id="5"]
+fallbacks = Array[Font]([ExtResource("6")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/32/0/ascent = 0.0
+cache/0/32/0/descent = 0.0
+cache/0/32/0/underline_position = 0.0
+cache/0/32/0/underline_thickness = 0.0
+cache/0/32/0/scale = 1.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+
+[node name="Stadium" type="Node3D"]
+script = ExtResource("3")
+
+[node name="stadium" parent="." instance=ExtResource("1")]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("1")
+
+[node name="WallNord" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, -20.5244)
+
+[node name="CollisionShape2" type="CollisionShape3D" parent="WallNord"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0450077)
+shape = SubResource("2")
+
+[node name="WallEast" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8566, 6.05442, -0.262106)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586548, 0)
+shape = SubResource("3")
+
+[node name="WallWest" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8512, 6.05442, -0.262106)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586548, 0)
+shape = SubResource("3")
+
+[node name="WallSouth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, 20.7466)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth"]
+shape = SubResource("2")
+
+[node name="GroundArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.891512, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundArea"]
+shape = SubResource("4")
+
+[node name="ServeSpeedPanel2" parent="." instance=ExtResource("5")]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 5.762, 0, 19.7)
+
+[node name="ServeSpeedPanel" parent="." instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.762, 0, -19.7)
+
+[node name="TimePanel" type="Node3D" parent="."]
+transform = Transform3D(0.591664, 0, 0, 0, 0.554529, 0, 0, 0, 1.21236, 6.52847, 0.51641, -19.4584)
+
+[node name="Digit2" type="Sprite3D" parent="TimePanel"]
+transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0, 0, 0)
+modulate = Color(1, 0.960784, 0, 1)
+texture = ExtResource("2")
+
+[node name="Colon" type="Sprite3D" parent="TimePanel"]
+transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0.283484, 0, 0)
+modulate = Color(1, 0.960784, 0, 1)
+texture = ExtResource("4")
+
+[node name="Digit0" type="Sprite3D" parent="TimePanel"]
+transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0.986412, 0, 0)
+modulate = Color(1, 0.960784, 0, 1)
+texture = ExtResource("2")
+
+[node name="Digit1" type="Sprite3D" parent="TimePanel"]
+transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0.544481, 0, 0)
+modulate = Color(1, 0.960784, 0, 1)
+texture = ExtResource("2")
+
+[node name="Positions" type="Node3D" parent="."]
+
+[node name="ServeDeuce0" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 12)
+
+[node name="ServeAd0" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 12)
+
+[node name="ReceiveDeuce0" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 13)
+
+[node name="ReceiveAd0" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 13)
+
+[node name="ServeDeuce1" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -12)
+
+[node name="ServeAd1" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -12)
+
+[node name="ReceiveDeuce1" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
+
+[node name="ReceiveAd1" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -13)
+
+[node name="ServeClocks" type="Node3D" parent="."]
+
+[node name="ServeClock" type="Label3D" parent="ServeClocks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.63603, 1.41341, -19.7699)
+text = "25
+Serve Clock"
+font = SubResource("5")
+
+[node name="ServeClock2" type="Label3D" parent="ServeClocks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.42196, 1.41341, -19.7699)
+text = "25
+Serve Clock"
+font = SubResource("5")
+
+[node name="ServeClock3" type="Label3D" parent="ServeClocks"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 9.422, 1.413, 19.77)
+text = "25
+Serve Clock"
+font = SubResource("5")
+
+[node name="ServeClock4" type="Label3D" parent="ServeClocks"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.413, 19.77)
+text = "25
+Serve Clock"
+font = SubResource("5")

@@ -1,0 +1,32 @@
+[gd_scene load_steps=7 format=3 uid="uid://vrr1xblypjx1"]
+
+[sub_resource type="AnimationNodeAnimation" id="9"]
+animation = &"idle-loop"
+
+[sub_resource type="AnimationNodeAnimation" id="10"]
+animation = &"walk-loop"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="11"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="12"]
+xfade_time = 0.3
+
+[sub_resource type="AnimationNodeStateMachine" id="4"]
+states/idle-loop/node = SubResource("9")
+states/idle-loop/position = Vector2(325, 117)
+states/walk-loop/node = SubResource("10")
+states/walk-loop/position = Vector2(523, 104)
+transitions = ["idle-loop", "walk-loop", SubResource("11"), "walk-loop", "idle-loop", SubResource("12")]
+
+[sub_resource type="CapsuleShape3D" id="6"]
+radius = 0.149
+height = 1.567
+
+[node name="BasicCharacter" type="CharacterBody3D"]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.928079, 0)
+shape = SubResource("6")

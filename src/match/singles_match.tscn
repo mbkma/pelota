@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1vhgpjxkj3ty"]
+
+[ext_resource type="Script" path="res://src/match/singles_match.gd" id="5"]
+
+[node name="SinglesMatch" type="Node"]
+script = ExtResource("5")

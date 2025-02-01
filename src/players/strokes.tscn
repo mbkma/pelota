@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://cdvh84r2x52du"]
+
+[ext_resource type="Script" path="res://src/players/strokes.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://7ulnk6wumimm" path="res://assets/sounds/flat_stroke3.wav" id="2"]
+[ext_resource type="AudioStream" uid="uid://bffa2ad0odjrc" path="res://assets/sounds/slice_stroke3.wav" id="3"]
+[ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/flat_stroke1.wav" id="4"]
+[ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/flat_stroke2.wav" id="5"]
+
+[node name="Strokes" type="Node"]
+script = ExtResource("1")
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="Flat" type="Node" parent="Sounds"]
+
+[node name="Flat1" type="AudioStreamPlayer" parent="Sounds/Flat"]
+stream = ExtResource("4")
+
+[node name="Flat2" type="AudioStreamPlayer" parent="Sounds/Flat"]
+stream = ExtResource("5")
+
+[node name="Flat3" type="AudioStreamPlayer" parent="Sounds/Flat"]
+stream = ExtResource("2")
+
+[node name="Slice" type="Node" parent="Sounds"]
+
+[node name="Slice1" type="AudioStreamPlayer" parent="Sounds/Slice"]
+stream = ExtResource("3")

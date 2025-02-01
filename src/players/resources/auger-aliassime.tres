@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://src/players/resources/player_data.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+first_name = "Felix"
+last_name = "Auger-Aliassime"
+age = 21
+country = "Canada"
+height = 193
+hand = "R"
+backhand = 2
+rank = 9
+stats = {
+"backhand_pace": 20,
+"backhand_spin": 5,
+"control": 100,
+"endurance": 100,
+"forehand_pace": 20,
+"forehand_spin": 5,
+"serve_pace": 35,
+"speed": 100,
+"strength": 100
+}
