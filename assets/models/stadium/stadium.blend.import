@@ -31,8 +31,55 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
-blender/nodes/visible=0
+_subresources={
+"materials": {
+"JP-Morgan-logo": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/JP-Morgan-logo.tres"
+},
+"black": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/black.tres"
+},
+"blue": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/blue.tres"
+},
+"dark_blue": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/dark_blue.tres"
+},
+"glass": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/glass.tres"
+},
+"green": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/green.tres"
+},
+"ibm": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/ibm.tres"
+},
+"rolex": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/rolex.tres"
+},
+"rolex-green": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/rolex-green.tres"
+},
+"us_open_logo": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/us_open_logo.tres"
+},
+"white-gray": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/stadium/white-gray.tres"
+}
+}
+}
+blender/nodes/visible=1
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true
 blender/nodes/cameras=true

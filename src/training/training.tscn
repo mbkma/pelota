@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://drrxciscdtoof"]
+[gd_scene load_steps=8 format=3 uid="uid://drrxciscdtoof"]
 
 [ext_resource type="Script" path="res://src/training/training.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://blld3hbrvik01" path="res://src/worlds/training_center/training_center.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://fw4mlawx8kkn" path="res://src/hud/hud.tscn" id="2_ufiry"]
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://src/hud/debug_hud.tscn" id="3_5ulux"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://src/players/player.tscn" id="3_tpokc"]
-[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://src/players/resources/djokovic.tres" id="4_wt3hs"]
 [ext_resource type="PackedScene" uid="uid://c6vym6k113onc" path="res://src/hud/player_debug_hud.tscn" id="4_y5e1b"]
 [ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://src/ball.tscn" id="7_gqgi1"]
 
@@ -14,7 +13,6 @@ script = ExtResource("1")
 
 [node name="Player" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("3_tpokc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.831926, 0.718666, 12.2681)
-player_data = ExtResource("4_wt3hs")
 camera = NodePath("../TrainingCenter/StaticSouthCam")
 is_serving = true
 

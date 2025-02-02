@@ -88,7 +88,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.762, 0, -19.7)
 transform = Transform3D(0.591664, 0, 0, 0, 0.554529, 0, 0, 0, 1.21236, 6.52847, 0.51641, -19.4584)
 
 [node name="Label3D" type="Label3D" parent="TimePanel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 modulate = Color(1, 1, 0, 1)
 text = "0:00"
 font_size = 179
@@ -144,3 +143,5 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.
 text = "25
 Serve Clock"
 font = SubResource("5")
+
+[editable path="stadium"]

@@ -15,9 +15,7 @@ func _ready() -> void:
 	add_entry("OS:", OS.get_name())
 	fps_entry = add_entry("FPS:", "")
 
-	if sm:
-		valid_side_entry = add_entry("Valid Side:", "")
-		ball_in_play_entry = add_entry("Ball In Play:", "")
+
 
 
 func _init() -> void:
@@ -37,7 +35,9 @@ func setup_singles_match(singles_match: SinglesMatch):
 	sm = singles_match
 	sm.connect("state_changed", Callable(self, "on_SinglesMatch_state_changed"))
 	state_entry = add_entry("State:", str(sm.state))
-
+	if sm:
+		valid_side_entry = add_entry("Valid Side:", "")
+		ball_in_play_entry = add_entry("Ball In Play:", "")
 
 func on_SinglesMatch_state_changed(old_state, new_state):
 	state_entry.text = str(new_state)

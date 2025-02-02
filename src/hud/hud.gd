@@ -8,16 +8,16 @@ var regenerates_stamina := false
 
 
 func _ready() -> void:
-	player.player_data.stats_changed.connect(_on_PlayerData_stats_changed)
-	player.input_node.pace_changed.connect(_on_PlayerInput_pace_changed)
-	player.ball_hit.connect(_on_Player_ball_hit)
-	#sm.state_changed.connect(on_sm_state_changed)
-	stamina.max_value = player.player_data.stats.endurance
-	#add_child(drawing)
-
-
+	if player:
+		player.player_data.stats_changed.connect(_on_PlayerData_stats_changed)
+		player.input_node.pace_changed.connect(_on_PlayerInput_pace_changed)
+		player.ball_hit.connect(_on_Player_ball_hit)
+		#sm.state_changed.connect(on_sm_state_changed)
+		stamina.max_value = player.player_data.stats.endurance
 #	set_process(true)
 
+func setup_singles_match(a):
+	pass
 
 func _on_PlayerData_stats_changed():
 	stamina.value = player.player_data.stats.endurance
