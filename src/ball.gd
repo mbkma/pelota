@@ -7,6 +7,13 @@ const DAMP := 0.7
 
 var spin := 0.0
 
+@export var initial_velocity: Vector3
+
+
+func _ready() -> void:
+	#velocity = initial_velocity
+	apply_stroke(initial_velocity, 0)
+
 
 func spin_to_gravity(spin: float) -> float:
 	return 10 + spin
@@ -31,10 +38,10 @@ func _physics_process(delta: float) -> void:
 	velocity = velocity.lerp(Vector3.ZERO, 0.001)
 
 
-func apply_stroke(velocity: Vector3, _spin: float) -> void:
+func apply_stroke(vel: Vector3, _spin: float) -> void:
 	#print(predict_trajectory())
 	spin = _spin
-	velocity = velocity
+	velocity = vel
 
 
 func predict_trajectory(steps: int = 100, time_step: float = 0.016) -> Array:

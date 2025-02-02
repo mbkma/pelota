@@ -1,9 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://d237t32p1sgei"]
+[gd_scene load_steps=10 format=3 uid="uid://d237t32p1sgei"]
 
-[ext_resource type="Texture2D" uid="uid://cbkssgevclev0" path="res://assets/textures/numbers/0.png" id="2"]
 [ext_resource type="PackedScene" uid="uid://dt3o07tt1qdgd" path="res://assets/models/stadium/stadium.blend" id="2_07d71"]
 [ext_resource type="Script" path="res://src/worlds/us_open/stadium.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://bxf55j2umhpw8" path="res://assets/textures/numbers/colon.png" id="4"]
 [ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/worlds/us_open/serve_speed_panel.tscn" id="5"]
 [ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
 
@@ -89,25 +87,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.762, 0, -19.7)
 [node name="TimePanel" type="Node3D" parent="."]
 transform = Transform3D(0.591664, 0, 0, 0, 0.554529, 0, 0, 0, 1.21236, 6.52847, 0.51641, -19.4584)
 
-[node name="Digit2" type="Sprite3D" parent="TimePanel"]
-transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0, 0, 0)
-modulate = Color(1, 0.960784, 0, 1)
-texture = ExtResource("2")
-
-[node name="Colon" type="Sprite3D" parent="TimePanel"]
-transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0.283484, 0, 0)
-modulate = Color(1, 0.960784, 0, 1)
-texture = ExtResource("4")
-
-[node name="Digit0" type="Sprite3D" parent="TimePanel"]
-transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0.986412, 0, 0)
-modulate = Color(1, 0.960784, 0, 1)
-texture = ExtResource("2")
-
-[node name="Digit1" type="Sprite3D" parent="TimePanel"]
-transform = Transform3D(0.126521, 0, 0, 0, 0.126521, 0, 0, 0, 0.126521, 0.544481, 0, 0)
-modulate = Color(1, 0.960784, 0, 1)
-texture = ExtResource("2")
+[node name="Label3D" type="Label3D" parent="TimePanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+modulate = Color(1, 1, 0, 1)
+text = "0:00"
+font_size = 179
 
 [node name="Positions" type="Node3D" parent="."]
 

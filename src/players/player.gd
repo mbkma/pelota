@@ -1,4 +1,4 @@
-class_name BasePlayer
+class_name Player
 extends CharacterBody3D
 
 signal ball_hit
@@ -11,33 +11,33 @@ signal ball_spawned(ball)
 signal input_changed(timing)
 
 @onready var ball_scene := preload("res://src/ball.tscn")
-@onready var skin: Node3D = $Model
+@onready var model: Model = $Model
 @onready var strokes: Node = $Strokes
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 var ai_input = "res://src/players/inputs/ai_input.tscn"
-var human_input = "res://src/players/inputs/human_input.tscn"
+var human_input = "res://src/players/inputs/keyboard_input.tscn"
 enum InputType { KEYBOARD, CONTROLLER, AI }
 @export var input: InputType
 
 var input_node
 var ai_controlled := false
 
-var animation_hit_time := 0.37
-
 @export var player_data: PlayerData
 @export var stats: Dictionary
 @export var camera: Camera3D
-var ball: Ball
+@export var ball: Ball
+@export var move_speed := 5.0
+@export var is_serving := false
+@export var team_index: int
 
+var animation_hit_time := 0.37
 var active_stroke = null
-var move_speed := 5.0
-var is_serving := false
 var vel := Vector3.ZERO
-var team_index: int
 
 const DISTANCE_THRESHOLD := 0.01
 var path := []
+@onready var ball_aim_marker: MeshInstance3D = $BallAimMarker
 
 
 func _ready() -> void:
@@ -46,11 +46,10 @@ func _ready() -> void:
 	if ai_controlled:
 		$Label3D.text += " (CPU)"
 	input_node = load(ai_input).instantiate() if ai_controlled else load(human_input).instantiate()
-	input_node.set
 	add_child(input_node)
 	strokes.setup(self)
-	skin.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
-	skin.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
+	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
+	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
 
 
 func setup(data: PlayerData, ai_controlled: bool) -> void:
@@ -104,7 +103,7 @@ func cancel_movement() -> void:
 
 
 func set_active_stroke(stroke: Dictionary, pos: Vector3, time: float) -> void:
-	if stroke.anim_id == skin.Strokes.SERVE:
+	if stroke.anim_id == model.Strokes.SERVE:
 		active_stroke = stroke
 		return
 
@@ -113,8 +112,8 @@ func set_active_stroke(stroke: Dictionary, pos: Vector3, time: float) -> void:
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
-	skin.set_stroke(stroke.anim_id, pos)
-	skin.transition_to(skin.States.STROKE)
+	model.set_stroke("forehand", pos)
+	model.transition_to(model.States.STROKE)
 
 
 func cancel_stroke() -> void:
@@ -126,21 +125,28 @@ var acceleration := 0.1
 var move_vel := Vector3.ZERO
 
 
-func apply_movement(move_direction: Vector3, delta: float) -> void:
+func apply_movement(direction: Vector3, delta: float) -> void:
 #	uncomment the following for smooth roation in move direction
 #	if move_direction != Vector3.ZERO:
 #		model.rotation.y = lerp_angle(model.rotation.y, sign(position.z)*atan2(-move_direction.x, -move_direction.z), 15*delta)
 #	else:
 #		model.rotation.y = lerp_angle(model.rotation.y, 0, 15*delta)
 
-	if move_direction.length() > 1.0:
-		move_direction = move_direction.normalized()
+	var cam_transform = camera.global_transform
+	var forward = -cam_transform.basis.z.normalized()
+	var right = cam_transform.basis.x.normalized()
 
-	skin.set_move_direction(sign(position.z) * move_direction)
+	direction = (forward * direction.z + right * direction.x).normalized()
 
-	vel.x = move_direction.x * move_speed
-	vel.z = move_direction.z * move_speed
-	vel.y = 0
+	model.set_move_direction(direction)
+
+	if not is_on_floor():
+		vel.y += -GlobalPhysics.DEFAULT_GRAVITY * 2 * delta
+	else:
+		vel.y = -GlobalPhysics.DEFAULT_GRAVITY / 10
+
+	vel.x = direction.x * move_speed
+	vel.z = direction.z * move_speed
 
 	# If there's input, accelerate to the input vel
 	if vel.length() > 0:
@@ -149,8 +155,7 @@ func apply_movement(move_direction: Vector3, delta: float) -> void:
 		# If there's no input, slow down to (0, 0)
 		move_vel = move_vel.lerp(Vector3.ZERO, friction)
 
-	set_velocity(move_vel)
-	set_up_direction(Vector3.UP)
+	velocity = move_vel
 	move_and_slide()
 	move_vel = vel
 
@@ -173,8 +178,8 @@ func challenge() -> void:
 
 
 func serve() -> void:
-	skin.set_stroke(skin.Strokes.SERVE, Vector3.ZERO)
-	skin.transition_to(skin.States.STROKE)
+	model.set_stroke("serve")
+	model.transition_to(model.States.STROKE)
 	respawn_ball()
 
 
@@ -189,7 +194,7 @@ func respawn_ball() -> void:
 		ball.queue_free()
 
 	ball = ball_scene.instantiate()
-	ball.position = position + skin.toss_point
+	ball.position = position + model.toss_point
 	get_parent().add_child(ball)
 	ball.set_velocity(Vector3(0, 6, 0))  # throw the ball up
 	emit_signal("ball_spawned", ball)
@@ -243,13 +248,13 @@ func hit_ball(ball: Ball, vel: Vector3, spin: float) -> void:
 	_play_stroke_sound()
 
 	emit_signal("ball_hit")
-	print("ball_hit. speed: ", vel.length() * 3.6, "km/h")
+	print("ball_hit. speed: ", vel.length() * 3.6, "km/h vel: ", vel)
 	cancel_stroke()
 	player_data.set_stat("endurance", player_data.stats.endurance - randf_range(2, 5))
 
 
 func _play_stroke_sound() -> void:
-	if active_stroke.anim_id == skin.Strokes.BACKHAND_SLICE:
+	if active_stroke.anim_id == model.Strokes.BACKHAND_SLICE:
 		strokes.sounds_slice[randi() % strokes.sounds_slice.size()].play()
 	else:
 		var grunts = player_data.sounds.grunt_flat

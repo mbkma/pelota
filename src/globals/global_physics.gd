@@ -1,7 +1,7 @@
 extends Node
 
 var DAMP := 0.7
-var DEFAULT_GRAVITY := 10.0
+var DEFAULT_GRAVITY := 9.8
 
 
 func get_velocity_stroke_from_to(

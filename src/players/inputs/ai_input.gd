@@ -3,7 +3,7 @@ class_name AiInput
 extends Node
 
 var sm: SinglesMatch
-var player: BasePlayer
+var player: Player
 var tactics = {
 	"DefaultTactics": "res://src/players/inputs/tactics/default.gd",
 	"ServeAndVolley": "res://src/players/inputs/tactics/serve_and_volley.gd"
@@ -121,8 +121,8 @@ func on_Opponent_ball_hit():
 
 	# if ball outside of comfort zone
 	if (
-		ball_pos_prediction.y < player.skin.forehand_down_point.y
-		or ball_pos_prediction.y > player.skin.forehand_up_point.y
+		ball_pos_prediction.y < player.model.forehand_down_point.y
+		or ball_pos_prediction.y > player.model.forehand_up_point.y
 	):
 		pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
 
@@ -131,10 +131,10 @@ func on_Opponent_ball_hit():
 
 	var stroke = current_tactic.compute_next_stroke(pred)
 	var x_offset = 0
-	if stroke.anim_id == player.skin.Strokes.FOREHAND:
-		x_offset = player.skin.forehand_up_point.x
+	if stroke.anim_id == player.model.Strokes.FOREHAND:
+		x_offset = player.model.forehand_up_point.x
 	else:
-		x_offset = player.skin.backhand_up_point.x
+		x_offset = player.model.backhand_up_point.x
 	var final_move_pos = pred.pos - x_offset * player.transform.basis.x
 	final_move_pos.y = 0
 	player.move_to(final_move_pos)

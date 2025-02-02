@@ -13,20 +13,24 @@ var state_entry
 func _ready() -> void:
 	add_entry("Godot version:", Engine.get_version_info()["string"])
 	add_entry("OS:", OS.get_name())
-	valid_side_entry = add_entry("Valid Side:", "")
 	fps_entry = add_entry("FPS:", "")
-	ball_in_play_entry = add_entry("Ball In Play:", "")
+
+	if sm:
+		valid_side_entry = add_entry("Valid Side:", "")
+		ball_in_play_entry = add_entry("Ball In Play:", "")
+
+
+func _init() -> void:
+	if Input.is_action_just_pressed("toggle"):
+		visible = not visible
 
 
 func _process(delta: float) -> void:
-	if not sm:
-		return
-	valid_side_entry.text = str(sm.valid_side)
-	ball_in_play_entry.text = str(sm.ball_in_play)
-	fps_entry.text = str(Engine.get_frames_per_second())
+	if sm:
+		valid_side_entry.text = str(sm.valid_side)
+		ball_in_play_entry.text = str(sm.ball_in_play)
 
-	if Input.is_action_just_pressed("toggle"):
-		visible = not visible
+	fps_entry.text = str(Engine.get_frames_per_second())
 
 
 func setup_singles_match(singles_match: SinglesMatch):

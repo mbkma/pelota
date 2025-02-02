@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhwqx67o5iry8"]
+
+[ext_resource type="Script" path="res://src/players/inputs/keyboard_input.gd" id="1_lhbt4"]
+
+[node name="HumanInput" type="Node"]
+script = ExtResource("1_lhbt4")

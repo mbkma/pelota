@@ -4,7 +4,6 @@ signal level_changed(level_name, init_data)
 
 @onready var world = $TrainingCenter
 @onready var court: Court = world.court
-@onready var indicator = $indicator
 
 var _active_ball = null
 

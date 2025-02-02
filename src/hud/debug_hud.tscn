@@ -4,19 +4,23 @@
 [ext_resource type="Script" path="res://src/hud/debug_hud.gd" id="2"]
 
 [node name="DebugHud" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 theme = ExtResource("1")
 script = ExtResource("2")
 
 [node name="Panel" type="Panel" parent="."]
+layout_mode = 0
 offset_right = 219.0
 offset_bottom = 228.0
-minimum_size = Vector2(100, 200)
 
 [node name="Title" type="Label" parent="."]
+layout_mode = 0
 theme = ExtResource("1")
 text = "Debug Display"
 
 [node name="List" type="VBoxContainer" parent="."]
+layout_mode = 0
 offset_left = 4.0
 offset_top = 25.0
 offset_right = 100.0

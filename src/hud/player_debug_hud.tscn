@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6vym6k113onc"]
+
+[ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1_covqw"]
+[ext_resource type="Script" path="res://src/hud/player_debug_hud.gd" id="2_652a3"]
+
+[node name="DebugHud" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_covqw")
+script = ExtResource("2_652a3")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 219.0
+offset_bottom = 228.0
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+theme = ExtResource("1_covqw")
+text = "Player Debug Display"
+
+[node name="List" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 25.0
+offset_right = 100.0
+offset_bottom = 198.0

@@ -15,7 +15,7 @@ func setup(player_) -> void:
 
 func backhand_stop():
 	return {
-		"anim_id": player.skin.Strokes.BACKHAND,
+		"anim_id": player.model.Strokes.BACKHAND,
 		"pace": 10,
 		"to": Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 4),
 		"spin": -2,
@@ -25,7 +25,7 @@ func backhand_stop():
 
 func backhand_slice_cross():
 	return {
-		"anim_id": player.skin.Strokes.BACKHAND_SLICE,
+		"anim_id": player.model.Strokes.BACKHAND_SLICE,
 		"pace": 20,
 		"to": Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length),
 		"spin": -5,
@@ -35,7 +35,7 @@ func backhand_slice_cross():
 
 func backhand_slice_longline():
 	return {
-		"anim_id": player.skin.Strokes.BACKHAND_SLICE,
+		"anim_id": player.model.Strokes.BACKHAND_SLICE,
 		"pace": 20,
 		"to": Vector3(sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length),
 		"spin": -5,
@@ -45,7 +45,7 @@ func backhand_slice_longline():
 
 func backhand_cross():
 	return {
-		"anim_id": player.skin.Strokes.BACKHAND,
+		"anim_id": player.model.Strokes.BACKHAND,
 		"pace": player.stats.backhand_pace,
 		"to": Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length),
 		"spin": player.stats.backhand_spin,
@@ -55,7 +55,7 @@ func backhand_cross():
 
 func backhand_longline():
 	return {
-		"anim_id": player.skin.Strokes.BACKHAND,
+		"anim_id": player.model.Strokes.BACKHAND,
 		"pace": player.stats.backhand_pace,
 		"to": Vector3(sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length),
 		"spin": player.stats.backhand_spin,
@@ -65,7 +65,7 @@ func backhand_longline():
 
 func forehand_cross():
 	return {
-		"anim_id": player.skin.Strokes.FOREHAND,
+		"anim_id": player.model.Strokes.FOREHAND,
 		"pace": player.stats.forehand_pace,
 		"to": Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length),
 		"spin": player.stats.forehand_spin,
@@ -75,7 +75,7 @@ func forehand_cross():
 
 func forehand_longline():
 	return {
-		"anim_id": player.skin.Strokes.FOREHAND,
+		"anim_id": player.model.Strokes.FOREHAND,
 		"pace": player.stats.forehand_pace,
 		"to": Vector3(sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length),
 		"spin": player.stats.forehand_spin,
@@ -85,7 +85,7 @@ func forehand_longline():
 
 func serve_wide():
 	return {
-		"anim_id": player.skin.Strokes.SERVE,
+		"anim_id": player.model.Strokes.SERVE,
 		"pace": player.stats.serve_pace,
 		"to": Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5),
 		"spin": 0,
@@ -95,7 +95,7 @@ func serve_wide():
 
 func serve_body():
 	return {
-		"anim_id": player.skin.Strokes.SERVE,
+		"anim_id": player.model.Strokes.SERVE,
 		"pace": player.stats.serve_pace,
 		"to": Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5),
 		"spin": 0,
@@ -105,7 +105,7 @@ func serve_body():
 
 func serve_t():
 	return {
-		"anim_id": player.skin.Strokes.SERVE,
+		"anim_id": player.model.Strokes.SERVE,
 		"pace": player.stats.serve_pace,
 		"to": Vector3(-sign(player.position.x) * 1, 0, -sign(player.position.z) * 5),
 		"spin": 0,

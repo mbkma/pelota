@@ -4,11 +4,6 @@ extends Node3D
 var field_width
 var field_length
 
-@onready var ne_t_field_overlay = $NE_T_FIELD_Overlay
-@onready var nw_t_field_overlay = $NW_T_FIELD_Overlay
-@onready var se_t_field_overlay = $SE_T_FIELD_Overlay
-@onready var sw_t_field_overlay = $SW_T_FIELD_Overlay
-
 
 func _ready():
 	field_width = $NorthSide/p14.position.x - $NorthSide/p11.position.x

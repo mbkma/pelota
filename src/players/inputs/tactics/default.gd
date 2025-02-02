@@ -1,7 +1,7 @@
 class_name DefaultTactics
 extends Node
 
-var player: BasePlayer
+var player: Player
 
 
 func setup(_player) -> void:

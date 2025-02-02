@@ -32,3 +32,6 @@ signal stats_changed
 func set_stat(stat, value):
 	stats[stat] = value
 	emit_signal("stats_changed")
+
+#func to_string():
+#return first_name+last_name+country

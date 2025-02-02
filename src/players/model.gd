@@ -1,15 +1,11 @@
 class_name Model
 extends Node3D
-# Controls the animation tree's transitions for this animated character.
-
-# # It has a signal connected to the player state machine, and uses the resulting
-# state names to translate them into the states for the animation tree.
 
 enum States { MOVE, STROKE }
 enum Strokes {
+	FOREHAND,
 	BACKHAND,
 	BACKHAND_SLICE,
-	FOREHAND,
 	SERVE,
 }
 
@@ -35,33 +31,33 @@ func _ready() -> void:
 
 
 func set_move_direction(direction: Vector3) -> void:
-	var dir := Vector2(direction.x, -direction.z)
+	var dir := Vector2(direction.x, direction.z)
 	#animation_tree["parameters/move/blend_position"] = dir
 
 
 func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
 	var point_down := Vector3.ZERO
 	var point_up := Vector3.ZERO
-	match stroke_id:
-		Strokes.FOREHAND:
-			point_down = forehand_down_point
-			point_up = forehand_up_point
-		Strokes.BACKHAND:
-			point_down = backhand_down_point
-			point_up = backhand_up_point
-		Strokes.BACKHAND_SLICE:
-			point_down = backhandslice_up_point
-			point_up = backhandslice_down_point
+	#match stroke_id:
+	#Strokes.FOREHAND:
+	#point_down = forehand_down_point
+	#point_up = forehand_up_point
+	#Strokes.BACKHAND:
+	#point_down = backhand_down_point
+	#point_up = backhand_up_point
+	#Strokes.BACKHAND_SLICE:
+	#point_down = backhandslice_up_point
+	#point_up = backhandslice_down_point
 
 	return (stroke_pos - point_down) / (point_up - point_down)
 
 
-func set_stroke(stroke_id: int, stroke_pos: Vector3) -> void:
+func set_stroke(stroke_name: String, stroke_pos := Vector3.ZERO) -> void:
 	#var point := get_stroke_blend_position(stroke_id, stroke_pos)
 	#animation_tree["parameters/stroke/forehand/blend_position"] = point.y
 	#animation_tree["parameters/stroke/backhand/blend_position"] = point.y
 	#animation_tree["parameters/stroke/backhand_slice/blend_position"] = point.y
-	#animation_tree["parameters/stroke/Transition/current_state"] = str(stroke_id)
+	animation_tree["parameters/stroke/Transition/transition_request"] = stroke_name
 	pass
 
 
@@ -71,5 +67,5 @@ func transition_to(state_id: int) -> void:
 			_playback.travel("move")
 		States.STROKE:
 			_playback.travel("stroke")
-		_:
-			_playback.travel("move")
+		#_:
+		#_playback.travel("move")
