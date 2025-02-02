@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://ds5ryhspuxtpf"]
 
-[ext_resource type="PackedScene" uid="uid://dy6wf5f435hho" path="res://assets/models/crowd/crowd-ready/crowd-ready-test.glb" id="1"]
+[ext_resource type="PackedScene" uid="uid://tbwcrfbncqfk" path="res://assets/models/crowd/anim-crowd-ready-test.blend" id="1_ga41u"]
 
 [node name="CrowdBlock" type="Node3D"]
 
-[node name="crowd-ready-test" parent="." instance=ExtResource("1")]
+[node name="anim-crowd-ready-test" parent="." instance=ExtResource("1_ga41u")]

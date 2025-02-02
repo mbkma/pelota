@@ -28,14 +28,9 @@ func load_players():
 	player_data.sort_custom(Callable(MyCustomSorter, "sort_ascending_by_rank"))
 
 
-var ai_input = preload("res://src/players/inputs/ai_input.tscn")
-var human_input = preload("res://src/players/inputs/human_input.tscn")
-
-
 func create_player(player_data, ai_controlled: bool):
 	var player = player_scene.instantiate()
-	var input = ai_input if ai_controlled else human_input
-	player.setup(player_data, input, ai_controlled)
+	player.setup(player_data, ai_controlled)
 	return player
 
 

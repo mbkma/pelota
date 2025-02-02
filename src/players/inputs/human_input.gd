@@ -25,12 +25,12 @@ var input_pace := 0.0
 
 
 func _ready() -> void:
+	player = get_parent()
 	await get_tree().create_timer(2).timeout
 	stroke_input_blocked = false
 
 
 func setup(singles_match):
-	player = get_parent()
 	#player.timing.show()
 	sm = singles_match
 

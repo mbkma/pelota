@@ -22,7 +22,7 @@ func setup(_sm: SinglesMatch) -> void:
 
 	sm.state_changed.connect(on_SinglesMatch_state_changed)
 	sm.get_opponent(player).just_served.connect(on_Opponent_just_served)
-#	player.connect("just_served",Callable(self,"on_Player_just_served"))
+	#player.connect("just_served",Callable(self,"on_Player_just_served"))
 
 	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
 	sm.get_opponent(player).ball_hit.connect(on_Opponent_ball_hit)

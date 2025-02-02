@@ -14,20 +14,12 @@ var players: Array
 
 func init_scene(init_data: Dictionary):
 	var match_data = init_data.match_data as MatchData
-	players.append(
-		GlobalGameData.create_player(
-			match_data.player0, false
-		)
-	)
-	players.append(
-		GlobalGameData.create_player(
-			match_data.player1, true
-		)
-	)
+	players.append(GlobalGameData.create_player(match_data.player0, false))
+	players.append(GlobalGameData.create_player(match_data.player1, true))
 	for player in players:
 		add_child(player)
 		player.setup_training(self)
-		player.ball_spawned.connect(on_Player_ball_spawned)
+		#player.ball_spawned.connect(on_Player_ball_spawned)
 
 	players[0].camera = world.player_cameras[0]
 	players[1].camera = world.player_cameras[1]

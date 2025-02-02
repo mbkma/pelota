@@ -15,16 +15,19 @@ signal input_changed(timing)
 @onready var strokes: Node = $Strokes
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-var input_script = null
-var input
+var ai_input = "res://src/players/inputs/ai_input.tscn"
+var human_input = "res://src/players/inputs/human_input.tscn"
+enum InputType { KEYBOARD, CONTROLLER, AI }
+@export var input: InputType
 
+var input_node
 var ai_controlled := false
 
 var animation_hit_time := 0.37
 
-var player_data: PlayerData
-var stats: Dictionary
-var camera: Camera3D
+@export var player_data: PlayerData
+@export var stats: Dictionary
+@export var camera: Camera3D
 var ball: Ball
 
 var active_stroke = null
@@ -38,22 +41,22 @@ var path := []
 
 
 func _ready() -> void:
-	add_child(input)
+	stats = player_data.stats
+	$Label3D.text = player_data.last_name
+	if ai_controlled:
+		$Label3D.text += " (CPU)"
+	input_node = load(ai_input).instantiate() if ai_controlled else load(human_input).instantiate()
+	input_node.set
+	add_child(input_node)
 	strokes.setup(self)
 	skin.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	skin.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
 
 
-func setup(data: PlayerData, input_scene, ai_controlled: bool) -> void:
+func setup(data: PlayerData, ai_controlled: bool) -> void:
 	player_data = data
-	stats = data.stats
-	self.ai_controlled = ai_controlled
-	assert(data.stats.size() == 9)
-	input = input_scene.instantiate()
 
-	$Label3D.text = player_data.last_name
-	if ai_controlled:
-		$Label3D.text += " (CPU)"
+	self.ai_controlled = ai_controlled
 
 	#var mesh := $"Model/v3player/Rig/Skeleton3D/shirt" as MeshInstance3D
 	#var new_mat = mesh.get_active_material(0).duplicate()
@@ -62,7 +65,7 @@ func setup(data: PlayerData, input_scene, ai_controlled: bool) -> void:
 
 
 func setup_singles_match(sm: SinglesMatch):
-	input.setup(sm)
+	input_node.setup(sm)
 
 
 func setup_training(training):

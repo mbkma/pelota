@@ -1,0 +1,5 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://duh7pbrhhi4o"]
+
+[resource]
+resource_name = "lambert2SG"
+albedo_color = Color(0.331662, 0.579995, 0.330602, 1)

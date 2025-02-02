@@ -14,10 +14,10 @@ var regenerates_stamina := false
 
 func setup_singles_match(sm: SinglesMatch):
 	player = sm.players[0]
-	player.player_data.connect("stats_changed", Callable(self, "_on_PlayerData_stats_changed"))
-	player.input.connect("pace_changed", Callable(self, "_on_PlayerInput_pace_changed"))
-	player.connect("ball_hit", Callable(self, "_on_Player_ball_hit"))
-	sm.connect("state_changed", Callable(self, "on_sm_state_changed"))
+	player.player_data.stats_changed.connect(_on_PlayerData_stats_changed)
+	player.input_node.pace_changed.connect(_on_PlayerInput_pace_changed)
+	player.ball_hit.connect(_on_Player_ball_hit)
+	sm.state_changed.connect(on_sm_state_changed)
 	stamina.max_value = player.player_data.stats.endurance
 	#add_child(drawing)
 

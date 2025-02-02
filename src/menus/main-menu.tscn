@@ -39,6 +39,11 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Start Game"
 
+[node name="Training" type="Button" parent="MainMenu"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Training"
+
 [node name="Tournament" type="Button" parent="MainMenu"]
 layout_mode = 2
 text = "Tournament"
@@ -121,6 +126,7 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="pressed" from="MainMenu/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="MainMenu/Training" to="." method="_on_training_pressed"]
 [connection signal="pressed" from="MainMenu/Tournament" to="." method="_on_Tournament_pressed"]
 [connection signal="pressed" from="MainMenu/Career" to="." method="_on_Career_pressed"]
 [connection signal="pressed" from="MainMenu/Settings" to="." method="_on_Settings_pressed"]

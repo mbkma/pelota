@@ -95,3 +95,7 @@ func hide_all_menus() -> void:
 
 func _on_Career_pressed() -> void:
 	emit_signal("level_changed", load("res://src/career/new_career.tscn"), null)
+
+
+func _on_training_pressed() -> void:
+	emit_signal("level_changed", load("res://src/training/training.tscn"), null)

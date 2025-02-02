@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://d237t32p1sgei"]
 
-[ext_resource type="PackedScene" uid="uid://b24agklale4yp" path="res://assets/models/stadium/stadium.glb" id="1"]
 [ext_resource type="Texture2D" uid="uid://cbkssgevclev0" path="res://assets/textures/numbers/0.png" id="2"]
+[ext_resource type="PackedScene" uid="uid://dt3o07tt1qdgd" path="res://assets/models/stadium/stadium.blend" id="2_07d71"]
 [ext_resource type="Script" path="res://src/worlds/us_open/stadium.gd" id="3"]
 [ext_resource type="Texture2D" uid="uid://bxf55j2umhpw8" path="res://assets/textures/numbers/colon.png" id="4"]
 [ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/worlds/us_open/serve_speed_panel.tscn" id="5"]
@@ -38,7 +38,7 @@ cache/0/16/0/scale = 1.0
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
 
-[node name="stadium" parent="." instance=ExtResource("1")]
+[node name="stadium" parent="." instance=ExtResource("2_07d71")]
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)

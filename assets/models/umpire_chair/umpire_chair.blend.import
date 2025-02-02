@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cdacr12b1vmyo"
-valid=false
+path="res://.godot/imported/umpire_chair.blend-cc8a44e48f19ff0d09150e50d4621df7.scn"
 
 [deps]
 
 source_file="res://assets/models/umpire_chair/umpire_chair.blend"
+dest_files=["res://.godot/imported/umpire_chair.blend-cc8a44e48f19ff0d09150e50d4621df7.scn"]
 
 [params]
 
@@ -30,7 +31,42 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
+_subresources={
+"materials": {
+"Human.afro01.001": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/Human.afro01.001.tres"
+},
+"Material.001": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/Material.001.tres"
+},
+"Material.002": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/Material.002.tres"
+},
+"Material.003": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/Material.003.tres"
+},
+"eye": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/eye.tres"
+},
+"lambert2SG": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/lambert2SG.tres"
+},
+"lambert3SG": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/lambert3SG.tres"
+},
+"skin": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/models/umpire_chair/materials/skin.tres"
+}
+}
+}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true

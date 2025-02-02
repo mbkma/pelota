@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dhgyjcbmyhbx6"]
+
+[resource]
+resource_name = "Human.afro01.001"
+albedo_color = Color(0.821789, 0.821789, 0.821789, 1)
+roughness = 0.7
