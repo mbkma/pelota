@@ -3,6 +3,8 @@ extends MeshInstance3D
 @export var trajectory_color: Color = Color(1, 0, 0)  # Color for the trajectory line
 @export var ball: Ball
 
+var material := ORMMaterial3D.new()
+
 
 func set_active_ball(b):
 	ball = b
@@ -16,7 +18,6 @@ func _process(delta: float) -> void:
 
 # Function to draw the trajectory using ImmediateMesh
 func draw_trajectory(trajectory: Array) -> void:
-	var material := ORMMaterial3D.new()
 	mesh.clear_surfaces()
 
 	# Begin drawing the trajectory

@@ -7,12 +7,6 @@ func _ready() -> void:
 	current_level.connect("level_changed", Callable(self, "on_level_changed"))
 
 
-func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("pause"):
-		if get_tree().paused:
-			get_tree().paused = false
-
-
 func replace_main_scene(resource, init_data):
 	call_deferred("on_level_changed", resource, init_data)
 

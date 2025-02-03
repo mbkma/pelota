@@ -26,6 +26,25 @@ enum MatchStates {
 const DEBUGGING = false
 
 
+func get_horizontal_distance(source, target):
+	if not source or not target:
+		return
+	
+	# Get the forward direction of the source
+	var forward_vector = -source.transform.basis.z.normalized()
+
+	# Calculate the direction to the target in the XZ plane
+	var direction_to_target = target.position - source.position
+	direction_to_target.y = 0  # Ignore the vertical component
+
+	# Calculate the horizontal distance
+	var horizontal_distance = direction_to_target.length()
+
+	# Determine if the target is in front of the source
+	var is_in_front = forward_vector.dot(direction_to_target.normalized()) > 0
+
+	return horizontal_distance
+
 func get_filepaths_in_directory(directory_path: String, ending: String = "") -> Array:
 	var filepaths := []
 	var dir = DirAccess.open(directory_path)

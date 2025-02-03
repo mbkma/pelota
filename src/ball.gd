@@ -23,7 +23,7 @@ func spin_to_gravity(spin: float) -> float:
 
 
 func _process(delta: float) -> void:
-	if velocity.length() > 0.01:  # Only predict if velocity is not almost zero
+	if velocity.length() > 0.1:  # Only predict if velocity is not almost zero
 		trajectory = predict_trajectory()
 
 

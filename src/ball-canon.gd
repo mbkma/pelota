@@ -4,7 +4,7 @@ extends Node3D
 @export var initial_velocity := Vector3(0, 2, 20)
 
 
-func _input(event: InputEvent) -> void:
+func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("request_ball"):
 		var ball = GlobalUtils.BALL.instantiate()
 		#add_child(ball)

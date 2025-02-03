@@ -39,6 +39,12 @@ func setup(singles_match):
 	#sm.get_opponent(player).ball_hit.connect(_on_Opponent_ball_hit)
 	sm.state_changed.connect(_on_SinglesMatch_state_changed)
 
+func _process(delta: float) -> void:
+	if player and player.ball:
+		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
+		if dist < 0 or player.ball.velocity.length() < 0.1:
+			player.cancel_stroke()
+			move_input_blocked = false
 
 func _physics_process(delta: float) -> void:
 	if input_blocked:
@@ -137,26 +143,8 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 	return to
 
 
-func get_horizontal_distance(source, target):
-	# Get the forward direction of the source
-	var forward_vector = -source.transform.basis.z.normalized()
-
-	# Calculate the direction to the target in the XZ plane
-	var direction_to_target = target.position - source.position
-	direction_to_target.y = 0  # Ignore the vertical component
-
-	# Calculate the horizontal distance
-	var horizontal_distance = direction_to_target.length()
-
-	# Determine if the target is in front of the player
-	var is_in_front = forward_vector.dot(direction_to_target.normalized()) > 0
-
-	return horizontal_distance
-
-
 func _construct_stroke_from_input(aim: Vector3, pace: float):
-	var dist = get_horizontal_distance(player, player.ball)
-	var trajectory = player.ball.predict_trajectory()
+	var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 	if dist < 10 and dist > 0:
 		return {
 			"anim_id": player.model.Strokes.FOREHAND,
@@ -239,7 +227,7 @@ func _on_SinglesMatch_state_changed(old_state, new_state):
 
 func find_closest_point(points: Array, target_z: float) -> Vector3:
 	var closest_point: Vector3 = Vector3.ZERO
-	var closest_distance: float = INF  # Start with a large distance
+	var closest_distance: float = INF # Start with a large distance
 
 	for point in points:
 		var distance = abs(point.z - target_z)

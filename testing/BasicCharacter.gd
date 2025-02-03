@@ -2,7 +2,6 @@ extends CharacterBody3D
 
 @export var model_scene: Resource
 
-var velocity := Vector3.ZERO
 @export var max_speed: = 2.0
 @export var move_speed: = 2.0
 @onready var animation_tree: AnimationTree = $AnimationTree

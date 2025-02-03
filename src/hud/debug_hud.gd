@@ -15,11 +15,6 @@ func _ready() -> void:
 	fps_entry = list.add_entry("FPS:", "")
 
 
-func _init() -> void:
-	if Input.is_action_just_pressed("toggle"):
-		visible = not visible
-
-
 func _process(delta: float) -> void:
 	if sm:
 		valid_side_entry.right.text = str(sm.valid_side)

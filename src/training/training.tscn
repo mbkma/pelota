@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://drrxciscdtoof"]
+[gd_scene load_steps=9 format=3 uid="uid://drrxciscdtoof"]
 
 [ext_resource type="Script" path="res://src/training/training.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://blld3hbrvik01" path="res://src/worlds/training_center/training_center.tscn" id="2"]
@@ -7,9 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://src/players/player.tscn" id="3_tpokc"]
 [ext_resource type="PackedScene" uid="uid://c6vym6k113onc" path="res://src/hud/player_debug_hud.tscn" id="4_y5e1b"]
 [ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://src/ball-canon.tscn" id="7_qi4la"]
-[ext_resource type="Script" path="res://src/training/mesh_instance_3d.gd" id="8_w17fw"]
-
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_af1eo"]
+[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://src/trajectory_drawer.tscn" id="8_xxy4q"]
 
 [node name="Training" type="Node"]
 script = ExtResource("1")
@@ -37,9 +35,7 @@ grow_horizontal = 0
 [node name="BallCanon" parent="." instance=ExtResource("7_qi4la")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.67815)
 
-[node name="TrajectoryDrawer" type="MeshInstance3D" parent="." groups=["Player"]]
-mesh = SubResource("ImmediateMesh_af1eo")
-script = ExtResource("8_w17fw")
+[node name="TrajectoryDrawer" parent="." instance=ExtResource("8_xxy4q")]
 
 [editable path="TrainingCenter"]
 [editable path="TrainingCenter/Stadium"]

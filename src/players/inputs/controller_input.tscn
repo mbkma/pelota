@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bok2rkfqa5b1p"]
-
-[ext_resource type="Script" path="res://src/players/inputs/controller_input.gd" id="1_05yr2"]
-
-[node name="ControllerInput" type="Node"]
-script = ExtResource("1_05yr2")
