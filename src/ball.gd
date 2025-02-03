@@ -8,15 +8,23 @@ const DAMP := 0.7
 var spin := 0.0
 
 @export var initial_velocity: Vector3
+@export var initial_position: Vector3
+
+var trajectory := []
 
 
 func _ready() -> void:
-	#velocity = initial_velocity
-	apply_stroke(initial_velocity, 0)
+	velocity = initial_velocity
+	position = initial_position
 
 
 func spin_to_gravity(spin: float) -> float:
 	return 10 + spin
+
+
+func _process(delta: float) -> void:
+	if velocity.length() > 0.01:  # Only predict if velocity is not almost zero
+		trajectory = predict_trajectory()
 
 
 func _physics_process(delta: float) -> void:
@@ -39,40 +47,32 @@ func _physics_process(delta: float) -> void:
 
 
 func apply_stroke(vel: Vector3, _spin: float) -> void:
-	#print(predict_trajectory())
 	spin = _spin
 	velocity = vel
 
 
 func predict_trajectory(steps: int = 100, time_step: float = 0.016) -> Array:
-	var ghost_ball = duplicate()  # Create a copy of the ball
-	get_parent().add_child(ghost_ball)
-	#ghost_ball.set_script(null)  # Remove script to prevent physics conflicts
-	ghost_ball.position = position
-	ghost_ball.velocity = velocity
-	ghost_ball.spin = spin
-
 	var trajectory := []
+	var current_position = global_position
+	var current_velocity = velocity
 
 	for i in range(steps):
-		# Simulate physics step
-		ghost_ball.velocity.y += -ghost_ball.spin_to_gravity(ghost_ball.spin) * time_step
+		# Calculate gravity based on spin
+		var gravity = spin_to_gravity(spin)
+		current_velocity.y += -gravity * time_step  # Apply gravity
 
-		var prev_velocity = ghost_ball.velocity
-		ghost_ball.position += ghost_ball.velocity * time_step  # Update position
+		# Update position based on current velocity
+		current_position += current_velocity * time_step
 
-		# Simulate collisions
-		if ghost_ball.position.y < 0.1:
-			ghost_ball.velocity = prev_velocity.bounce(Vector3.UP) * DAMP
-			ghost_ball.position.y = 0.1  # Keep it above ground
+		# Simulate collisions with the ground
+		if current_position.y < 0.035:  #FIXME: this is average pos ball at ground
+			current_velocity = current_velocity.bounce(Vector3.UP) * DAMP
 
-		trajectory.append(ghost_ball.position)
+		# Add the current position to the trajectory
+		trajectory.append(current_position)
 
 		# Stop simulation if velocity is almost zero
-		if ghost_ball.velocity.length() < 0.01:
+		if current_velocity.length() < 0.01:
 			break
-
-	# Clean up the ghost ball
-	ghost_ball.queue_free()
 
 	return trajectory

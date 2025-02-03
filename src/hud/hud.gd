@@ -14,10 +14,14 @@ func _ready() -> void:
 		player.ball_hit.connect(_on_Player_ball_hit)
 		#sm.state_changed.connect(on_sm_state_changed)
 		stamina.max_value = player.player_data.stats.endurance
+
+
 #	set_process(true)
+
 
 func setup_singles_match(a):
 	pass
+
 
 func _on_PlayerData_stats_changed():
 	stamina.value = player.player_data.stats.endurance

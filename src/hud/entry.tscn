@@ -4,16 +4,20 @@
 [ext_resource type="Script" path="res://src/hud/entry.gd" id="2"]
 
 [node name="Entry" type="HBoxContainer"]
-offset_right = 76.0
-offset_bottom = 16.0
+custom_minimum_size = Vector2(200, 0)
+offset_right = 6.0
+offset_bottom = 18.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("2")
 
 [node name="Desc" type="Label" parent="."]
-offset_bottom = 16.0
+layout_mode = 2
 theme = ExtResource("1")
+theme_override_colors/font_color = Color(1, 1, 0, 1)
 
 [node name="Cont" type="Label" parent="."]
-offset_left = 4.0
-offset_right = 4.0
-offset_bottom = 16.0
+layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("1")
+text_overrun_behavior = 1

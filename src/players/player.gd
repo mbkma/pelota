@@ -39,6 +39,9 @@ const DISTANCE_THRESHOLD := 0.01
 var path := []
 @onready var ball_aim_marker: MeshInstance3D = $BallAimMarker
 
+var forward := -basis.z.normalized()
+var right := basis.x.normalized()
+
 
 func _ready() -> void:
 	stats = player_data.stats
@@ -112,7 +115,7 @@ func set_active_stroke(stroke: Dictionary, pos: Vector3, time: float) -> void:
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
-	model.set_stroke("forehand", pos)
+	model.set_stroke("forehand")
 	model.transition_to(model.States.STROKE)
 
 
@@ -194,9 +197,9 @@ func respawn_ball() -> void:
 		ball.queue_free()
 
 	ball = ball_scene.instantiate()
-	ball.position = position + model.toss_point
+	ball.initial_position = position + model.toss_point
+	ball.initial_velocity = Vector3(0, 6, 0)
 	get_parent().add_child(ball)
-	ball.set_velocity(Vector3(0, 6, 0))  # throw the ball up
 	emit_signal("ball_spawned", ball)
 
 	get_tree().call_group("Player", "set_active_ball", ball)
@@ -213,8 +216,8 @@ func respawn_ball() -> void:
 	emit_signal("just_served")
 
 
-func _on_RacketArea_body_entered(body: Ball) -> void:
-	if not body:
+func _on_RacketArea_body_entered(body) -> void:
+	if body is not Ball or body != ball:  # only do strokes on the active ball
 		return
 
 	if active_stroke == null:

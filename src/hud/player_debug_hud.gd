@@ -1,8 +1,7 @@
 extends Control
 
-const entry = preload("res://src/hud/entry.tscn")
-@onready var list: VBoxContainer = $List
 var sm
+@onready var list: List = $List
 
 @export var player: Player
 
@@ -13,23 +12,17 @@ var state_entry
 
 
 func _ready() -> void:
-	add_entry("Id", player.player_data.to_string())
+	list.add_entry("Id", player.player_data.to_string())
 
-	add_entry("active stroke", player.active_stroke)
-	add_entry("model playback node", player.model._playback.get_current_node())
+	list.add_entry("active stroke", player.active_stroke)
+	list.add_entry("model playback node", player.model._playback.get_current_node())
+	list.add_entry("input blocked", player.input_node.input_blocked)
+	list.add_entry("stroke input blocked", player.input_node.stroke_input_blocked)
+	list.add_entry("move input blocked", player.input_node.move_input_blocked)
 
 
 func _process(delta: float) -> void:
-	get_entry(2).text = str(player.model._playback.get_current_node())
-
-
-func add_entry(left_text, right_text):
-	var e = entry.instantiate()
-	e.label = str(left_text)
-	e.text = str(right_text) if right_text else "Null"
-	list.add_child(e)
-	return e
-
-
-func get_entry(index):
-	return list.get_child(index)
+	list.get_entry(2).update(player.model._playback.get_current_node())
+	list.get_entry(3).update(player.input_node.stroke_input_blocked)
+	list.get_entry(4).update(player.input_node.input_blocked)
+	list.get_entry(5).update(player.input_node.move_input_blocked)

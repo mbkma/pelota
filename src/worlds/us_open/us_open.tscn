@@ -4,8 +4,8 @@
 [ext_resource type="Script" path="res://src/worlds/television/television.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://fw4mlawx8kkn" path="res://src/hud/hud.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://src/umpire/umpire.tscn" id="4"]
-[ext_resource type="Script" path="res://src/free_look_camera.gd" id="4_t7m7y"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://src/worlds/television/television-hud.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://src/cameras.tscn" id="5_vvufm"]
 [ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://src/crowd/crowd_block.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://2hon8r2k00rj" path="res://src/crowd/crowd.tscn" id="8"]
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="9"]
@@ -31,7 +31,7 @@ length = 20.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("USOpen/Television/StaticEastCam:current")
+tracks/0/path = NodePath("USOpen/Television/Cameras/StaticEastCam:current")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -51,7 +51,7 @@ length = 10.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("USOpen/Television/StaticSouthCam:current")
+tracks/0/path = NodePath("USOpen/Television/Cameras/StaticSouthCam:current")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -63,7 +63,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("USOpen/Television/StaticSouthCam:fov")
+tracks/1/path = NodePath("USOpen/Television/Cameras/StaticSouthCam:fov")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -101,27 +101,6 @@ mesh = SubResource("7")
 [node name="Television" type="Node3D" parent="."]
 script = ExtResource("2")
 
-[node name="FlyingCam" type="Camera3D" parent="Television"]
-transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
-fov = 30.0
-far = 8192.0
-
-[node name="StaticEastCam" type="Camera3D" parent="Television"]
-transform = Transform3D(-0.253251, 0, 0.967401, 0, 1, 0, -0.967401, 0, -0.253251, 10.9755, 1.78039, 0)
-fov = 24.4
-
-[node name="StaticSouthCam" type="Camera3D" parent="Television"]
-transform = Transform3D(1, 0, 0, 0, 0.974217, 0.225615, 0, -0.225615, 0.974217, 0, 6.95591, 30.6839)
-current = true
-fov = 17.3
-size = 97.38
-script = ExtResource("4_t7m7y")
-
-[node name="StaticNorthCam" type="Camera3D" parent="Television"]
-transform = Transform3D(-1, 1.97238e-08, -8.51687e-08, 0, 0.974217, 0.225614, 8.74228e-08, 0.225614, -0.974217, 0, 6.956, -30.684)
-fov = 17.3
-size = 97.38
-
 [node name="Director" type="AnimationPlayer" parent="Television"]
 root_node = NodePath("../../..")
 libraries = {
@@ -133,6 +112,8 @@ layout_mode = 3
 anchors_preset = 15
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Cameras" parent="Television" instance=ExtResource("5_vvufm")]
 
 [node name="DebugHud" parent="." instance=ExtResource("11")]
 visible = false

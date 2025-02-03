@@ -13,3 +13,5 @@ script = ExtResource("1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("3")
+
+[editable path="tennisball"]

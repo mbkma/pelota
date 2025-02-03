@@ -3,4 +3,3 @@ extends Node3D
 
 @onready var court = $Court
 @onready var spawn_positions = [$Positions/SE, $Positions/NW]
-@onready var player_cameras = [$StaticSouthCam, $StaticNorthCam]

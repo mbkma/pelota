@@ -27,4 +27,7 @@ func init_scene(init_data: Dictionary):
 
 	players[0].is_serving = true
 
+
 #	world.setup_training(self)
+func _process(delta: float) -> void:
+	pass

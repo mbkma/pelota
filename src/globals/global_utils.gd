@@ -2,6 +2,7 @@ extends Node
 
 #const MainMenuScene = "res://src/menus/main-menu.tscn"
 #const MatchScene = "res://src/match/match.tscn"
+const BALL = preload("res://src/ball.tscn")
 
 enum {
 	SIDE0 = 0,

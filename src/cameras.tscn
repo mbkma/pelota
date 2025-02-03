@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq11dsxkra3s4"]
+
+[ext_resource type="Script" path="res://src/cameras.gd" id="1_ibrh3"]
+[ext_resource type="Script" path="res://src/free_look_camera.gd" id="1_owke2"]
+
+[node name="Cameras" type="Node3D" node_paths=PackedStringArray("cams")]
+script = ExtResource("1_ibrh3")
+cams = [NodePath("FlyingCam"), NodePath("StaticEastCam"), NodePath("StaticSouthCam"), NodePath("StaticNorthCam")]
+
+[node name="FlyingCam" type="Camera3D" parent="."]
+transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
+fov = 30.0
+far = 8192.0
+script = ExtResource("1_owke2")
+
+[node name="StaticEastCam" type="Camera3D" parent="."]
+transform = Transform3D(-0.253251, 0, 0.967401, 0, 1, 0, -0.967401, 0, -0.253251, 10.9755, 1.78039, 0)
+fov = 24.4
+
+[node name="StaticSouthCam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.974217, 0.225615, 0, -0.225615, 0.974217, 0, 6.95591, 30.6839)
+current = true
+fov = 17.3
+size = 97.38
+
+[node name="StaticNorthCam" type="Camera3D" parent="."]
+transform = Transform3D(-1, 1.97238e-08, -8.51688e-08, 0, 0.974217, 0.225614, 8.74228e-08, 0.225614, -0.974217, 0, 6.956, -30.684)
+fov = 17.3
+size = 97.38

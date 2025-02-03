@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7kgkt15ww76n"]
+
+[ext_resource type="Script" path="res://src/hud/list.gd" id="1_ke0qt"]
+
+[node name="List" type="VBoxContainer"]
+script = ExtResource("1_ke0qt")

@@ -1,12 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://blld3hbrvik01"]
 
-[ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="1"]
-[ext_resource type="Script" path="res://src/worlds/training_center/training_center.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://src/cameras.tscn" id="4_5o1ux"]
-[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/worlds/us_open/stadium.tscn" id="4_m5qak"]
-
-[sub_resource type="Shader" id="Shader_oe3gx"]
-code = "
 // NOTE: Shader automatically converted from Godot Engine 4.3.stable's ProceduralSkyMaterial.
 
 shader_type sky;
@@ -93,93 +85,6 @@ void sky() {
 	//clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
 	clouds = clamp(clouds, 0.0, 1.0);
 	sky += clouds;
-	
+
 	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
 }
-"
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_omcqj"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ls07b"]
-width = 1024
-height = 1024
-seamless = true
-noise = SubResource("FastNoiseLite_omcqj")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_jtuec"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ltmrp"]
-width = 1024
-height = 1024
-seamless = true
-noise = SubResource("FastNoiseLite_jtuec")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tuevj"]
-shader = SubResource("Shader_oe3gx")
-shader_parameter/sky_top_color = Color(0.291673, 0.457424, 0.658811, 1)
-shader_parameter/sky_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
-shader_parameter/sky_curve = 0.15
-shader_parameter/sky_energy = 1.0
-shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
-shader_parameter/ground_bottom_color = Color(0.2, 0.169, 0.133, 1)
-shader_parameter/ground_horizon_color = Color(0.646, 0.656, 0.67, 1)
-shader_parameter/ground_curve = 0.02
-shader_parameter/ground_energy = 1.0
-shader_parameter/sun_angle_max = 0.523599
-shader_parameter/sun_curve = 0.15
-shader_parameter/exposure = 1.0
-shader_parameter/cloud_direction = Vector2(-1, 1)
-shader_parameter/cloud_direction2 = Vector2(1, 0)
-shader_parameter/cloud_scale = Vector2(0.05, 0.05)
-shader_parameter/cloud_distance = null
-shader_parameter/cloud_speed = 0.001
-shader_parameter/cloud_speed2 = 0.002
-shader_parameter/cloud_texture = SubResource("NoiseTexture2D_ls07b")
-shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_ltmrp")
-
-[sub_resource type="Sky" id="Sky_l3u5c"]
-sky_material = SubResource("ShaderMaterial_tuevj")
-
-[sub_resource type="Environment" id="Environment_qvt5p"]
-background_mode = 2
-sky = SubResource("Sky_l3u5c")
-tonemap_mode = 2
-glow_enabled = true
-glow_normalized = true
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_t2yi8"]
-size = Vector3(38.3846, 2, 46.8104)
-
-[node name="TrainingCenter" type="Node3D"]
-script = ExtResource("2")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_qvt5p")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295, -0.446156, 0.44352, -0.777324, 0, 5.70078, 0)
-shadow_enabled = true
-
-[node name="Court" parent="." instance=ExtResource("1")]
-
-[node name="Positions" type="Node3D" parent="."]
-
-[node name="SE" type="Marker3D" parent="Positions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994293, 0, 12.1442)
-
-[node name="NW" type="Marker3D" parent="Positions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972189, 0, -13.487)
-
-[node name="Ground2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground2"]
-shape = SubResource("BoxShape3D_t2yi8")
-
-[node name="Stadium" parent="." instance=ExtResource("4_m5qak")]
-
-[node name="Cameras" parent="." instance=ExtResource("4_5o1ux")]
-
-[editable path="Stadium"]
-[editable path="Stadium/stadium"]
-[editable path="Cameras"]
