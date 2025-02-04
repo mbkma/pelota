@@ -8,9 +8,11 @@ func setup(_player) -> void:
 	player = _player
 
 
-func compute_next_stroke(pred) -> Dictionary:
+func compute_next_stroke(closest_ball_position) -> Dictionary:
 	var r = randf()
-	if sign(player.position.z) * (pred.pos.x - player.position.x) > 0:
+	var to_ball_vector: Vector3 = closest_ball_position - player.position
+	var dot_product: float = to_ball_vector.dot(player.right)
+	if dot_product > 0:
 		if r < 0.3:
 			return player.strokes.forehand_longline()
 		else:

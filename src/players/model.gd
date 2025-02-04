@@ -3,9 +3,9 @@ extends Node3D
 
 enum States { MOVE, STROKE }
 enum Strokes {
-	FOREHAND,
 	BACKHAND,
 	BACKHAND_SLICE,
+	FOREHAND,
 	SERVE,
 }
 

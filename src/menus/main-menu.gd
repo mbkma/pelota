@@ -79,7 +79,7 @@ func _on_Play_pressed() -> void:
 	print({"match_data": match_data, "world": world})
 	emit_signal(
 		"level_changed",
-		load("res://src/match/singles_match.tscn"),
+		load("res://src/tennis_session/match/singles_match.tscn"),
 		{"match_data": match_data, "world": world}
 	)
 
@@ -98,4 +98,4 @@ func _on_Career_pressed() -> void:
 
 
 func _on_training_pressed() -> void:
-	emit_signal("level_changed", load("res://src/training/training.tscn"), null)
+	emit_signal("level_changed", load("res://src/tennis_session/training/training.tscn"), null)

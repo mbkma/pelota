@@ -20,8 +20,7 @@ var human_input = "res://src/players/inputs/keyboard_input.tscn"
 enum InputType { KEYBOARD, CONTROLLER, AI }
 @export var input: InputType
 
-var input_node
-var ai_controlled := false
+var input_node: Node
 
 @export var player_data: PlayerData
 @export var stats: Dictionary
@@ -46,9 +45,11 @@ var right := basis.x.normalized()
 func _ready() -> void:
 	stats = player_data.stats
 	$Label3D.text = player_data.last_name
-	if ai_controlled:
+	if input == InputType.AI:
 		$Label3D.text += " (CPU)"
-	input_node = load(ai_input).instantiate() if ai_controlled else load(human_input).instantiate()
+		input_node = load(ai_input).instantiate()
+	else:
+		input_node = load(human_input).instantiate()
 	add_child(input_node)
 	strokes.setup(self)
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
@@ -90,7 +91,7 @@ func _move_to_target() -> Vector3:
 			path.remove_at(0)
 			emit_signal("target_point_reached")
 		else:
-			direction = Vector3(path[0] - position)
+			direction = path[0] - position
 			direction.y = 0
 
 	return direction
@@ -105,7 +106,7 @@ func cancel_movement() -> void:
 	path = []
 
 
-func set_active_stroke(stroke: Dictionary, pos: Vector3, time: float) -> void:
+func set_active_stroke(stroke: Dictionary, ball_position: Vector3, time: float) -> void:
 	if stroke.anim_id == model.Strokes.SERVE:
 		active_stroke = stroke
 		return
@@ -115,13 +116,20 @@ func set_active_stroke(stroke: Dictionary, pos: Vector3, time: float) -> void:
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
-	model.set_stroke("forehand")
+	var stroke_name
+	if stroke.anim_id == 0:
+		stroke_name = "backhand"
+	if stroke.anim_id == 2:
+		stroke_name = "forehand"
+	else:
+		stroke_name = "backhand"
+	model.set_stroke(stroke_name, ball_position)
 	model.transition_to(model.States.STROKE)
 
 
 func cancel_stroke() -> void:
 	active_stroke = null
-
+	model.transition_to(model.States.MOVE)
 
 var friction := 0.3
 var acceleration := 0.1
@@ -130,17 +138,12 @@ var move_vel := Vector3.ZERO
 
 func apply_movement(direction: Vector3, delta: float) -> void:
 #	uncomment the following for smooth roation in move direction
-#	if move_direction != Vector3.ZERO:
-#		model.rotation.y = lerp_angle(model.rotation.y, sign(position.z)*atan2(-move_direction.x, -move_direction.z), 15*delta)
+#	if direction != Vector3.ZERO:
+#		model.rotation.y = lerp_angle(model.rotation.y, sign(position.z)*atan2(-direction.x, -direction.z), 15*delta)
 #	else:
 #		model.rotation.y = lerp_angle(model.rotation.y, 0, 15*delta)
 
-	var cam_transform = camera.global_transform
-	var forward = -cam_transform.basis.z.normalized()
-	var right = cam_transform.basis.x.normalized()
-
-	direction = (forward * direction.z + right * direction.x).normalized()
-
+	direction = direction.normalized()
 	model.set_move_direction(direction)
 
 	if not is_on_floor():

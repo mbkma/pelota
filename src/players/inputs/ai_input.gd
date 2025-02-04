@@ -1,9 +1,8 @@
 # FIXME: this class depends checked SinglesMatch class, which it shouldnt
 class_name AiInput
-extends Node
+extends InputMethod
 
 var sm: SinglesMatch
-var player: Player
 var tactics = {
 	"DefaultTactics": "res://src/players/inputs/tactics/default.gd",
 	"ServeAndVolley": "res://src/players/inputs/tactics/serve_and_volley.gd"
@@ -14,27 +13,47 @@ var current_tactic = preload("res://src/players/inputs/tactics/default.gd").new(
 var pivot_point := Vector3.ZERO
 
 
-func setup(_sm: SinglesMatch) -> void:
+func _ready() -> void:
 	player = get_parent()
-	sm = _sm
-
 	current_tactic.setup(player)
 
-	sm.state_changed.connect(on_SinglesMatch_state_changed)
-	sm.get_opponent(player).just_served.connect(on_Opponent_just_served)
-	#player.connect("just_served",Callable(self,"on_Player_just_served"))
-
-	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
-	sm.get_opponent(player).ball_hit.connect(on_Opponent_ball_hit)
-	sm.get_opponent(player).ready_to_serve.connect(on_Opponent_ready_to_serve)
+	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)	
 	player.ball_hit.connect(on_Player_ball_hit)
 	player.target_point_reached.connect(on_player_target_point_reached)
-
-	player.cancel_movement()
-	move_to_serve_receive()
-	await player.target_point_reached
+	#player.just_served.connect(on_Player_just_served)
+	#player.move_to(Vector3(2,0,0))
+	#await player.target_point_reached
 	if player.is_serving:
 		make_serve()
+
+
+func _process(delta: float) -> void:
+	if player and player.ball:
+		if player.ball.velocity.z < 0.2 and player.ball.trajectory:
+			if not player.active_stroke:
+				do_stroke()
+		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)				
+		if dist < 0 or player.ball.velocity.length() < 0.1:
+			player.cancel_stroke()
+			stroke = null
+
+
+func do_stroke():
+	var closest_ball_position := get_closest_ball_position()
+	stroke = current_tactic.compute_next_stroke(closest_ball_position)
+	if stroke:
+		adjust_player_to_position(closest_ball_position)
+		player.set_active_stroke(stroke, closest_ball_position, 0)
+
+
+func setup(_sm: Object) -> void:
+	# only for singles match
+	sm = _sm
+	sm.state_changed.connect(on_SinglesMatch_state_changed)
+	sm.get_opponent(player).just_served.connect(on_Opponent_just_served)
+	sm.get_opponent(player).ball_hit.connect(on_Opponent_ball_hit)
+	sm.get_opponent(player).ready_to_serve.connect(on_Opponent_ready_to_serve)
+	move_to_serve_receive()
 
 
 func set_current_tactic(tactic):
@@ -143,7 +162,7 @@ func on_Opponent_ball_hit():
 
 func make_serve():
 	player.prepare_serve()
-	var stroke = current_tactic.compute_serve()
+	stroke = current_tactic.compute_serve()
 	player.set_active_stroke(stroke, Vector3.ZERO, 0)
 	await get_tree().create_timer(5).timeout
 	player.serve()

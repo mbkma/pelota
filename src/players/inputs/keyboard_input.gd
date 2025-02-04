@@ -1,12 +1,11 @@
 class_name HumanInput
-extends Node
+extends InputMethod
 
 signal aiming_at_pos(pos)
 signal input_changed(time_score)
 signal pace_changed(pace)
 
 var sm: SinglesMatch
-var player: Player
 
 var move_input_blocked := false
 var stroke_input_blocked := true
@@ -14,7 +13,6 @@ var input_blocked := false
 
 var mouse_from := Vector2.ZERO
 var mouse_to := Vector2.ZERO
-var stroke = null
 var pred = null
 
 var timing_score := 0.0
@@ -54,7 +52,7 @@ func _physics_process(delta: float) -> void:
 		var move_dir = player.compute_move_dir()
 		player.apply_movement(move_dir, delta)
 	else:
-		var input_direction := get_input_direction()
+		var move_direction := get_move_direction()
 
 		if Input.is_action_pressed("sprint"):
 			player.move_speed = 7
@@ -62,7 +60,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			player.acceleration = 0.1
 			player.move_speed = 5
-		player.apply_movement(input_direction, delta)
+		player.apply_movement(move_direction, delta)
 
 	if not stroke_input_blocked:
 		get_stroke_input(delta)
@@ -72,25 +70,34 @@ func _physics_process(delta: float) -> void:
 			if not player.ball:
 				printerr("Player has no ball")
 			else:
-				stroke = _construct_stroke_from_input(aiming_at, input_pace)
-				if stroke:
-					set_stroke_input()
+				do_stroke(aiming_at, input_pace)
+
 
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
 
+func do_stroke(aiming_at, input_pace):
+	var closest_ball_position := get_closest_ball_position()
+	stroke = _construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
+	print(stroke)
+	if stroke:
+		set_stroke_input(closest_ball_position)
 
-static func get_input_direction() -> Vector3:
-	return Vector3(
+func get_move_direction() -> Vector3:
+	var input := Vector3(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		0,
 		Input.get_action_strength("move_front") - Input.get_action_strength("move_back")
 	)
+	var cam_transform = player.camera.global_transform
+	var forward = -cam_transform.basis.z.normalized()
+	var right = cam_transform.basis.x.normalized()
 
+	var direction = (forward * input.z + right * input.x).normalized()
+	return direction
 
 func get_stroke_input(delta: float):
 	if Input.is_action_just_pressed("strike"):
-		print("STRIKE PRESSED")
 		mouse_from = get_viewport().get_mouse_position()
 	if Input.is_action_pressed("strike"):
 		input_pace += 0.1
@@ -101,17 +108,18 @@ func get_stroke_input(delta: float):
 		player.ball_aim_marker.visible = true
 
 
-func set_stroke_input() -> void:
+func set_stroke_input(closest_ball_position) -> void:
 	if player.is_serving:
 		player.prepare_serve()
 		player.set_active_stroke(stroke, Vector3.ZERO, 0)
 		player.serve()
 		#clear_stroke_input()
 
-	var p = find_closest_point(player.ball.trajectory, player.model.forehand_up_point.z)
+
+	adjust_player_to_position(closest_ball_position)
 	move_input_blocked = true
-	_adjust_position_to_stroke(p)
-	player.set_active_stroke(stroke, Vector3.ZERO, 0)
+	
+	player.set_active_stroke(stroke, closest_ball_position, 0)
 
 	emit_signal("input_changed", timing_score)
 	clear_stroke_input()
@@ -143,9 +151,23 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 	return to
 
 
-func _construct_stroke_from_input(aim: Vector3, pace: float):
+func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float):
 	var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
-	if dist < 10 and dist > 0:
+	if dist > 10 or dist < 0:
+		printerr("distance to ball is ", dist)
+		return null
+
+	if player.is_serving:
+		return {
+			"anim_id": player.model.Strokes.SERVE,
+			"pace": player.stats.serve_pace + randf_range(10, 20),
+			"to": aim,
+			"spin": 0,
+			"height": 1.1
+		}
+	var to_ball_vector: Vector3 = closest_ball_position - player.position
+	var dot_product: float = to_ball_vector.dot(player.right)
+	if dot_product > 0:
 		return {
 			"anim_id": player.model.Strokes.FOREHAND,
 			"pace": player.stats.forehand_pace + pace,
@@ -153,41 +175,23 @@ func _construct_stroke_from_input(aim: Vector3, pace: float):
 			"spin": player.stats.backhand_spin,
 			"height": 1 + player.stats.backhand_spin * 0.1
 		}
-	return null
-	#if player.is_serving:
-	#return {
-	#"anim_id": player.model.Strokes.SERVE,
-	#"pace": player.stats.serve_pace + randf_range(10, 20),
-	#"to": aim,
-	#"spin": 0,
-	#"height": 1.1
-	#}
-
-	#if sign(player.position.z) * (pred.pos.x - player.position.x) > 0:
-	#return {
-	#"anim_id": player.model.Strokes.FOREHAND,
-	#"pace": player.stats.forehand_pace + pace,
-	#"to": aim,
-	#"spin": player.stats.backhand_spin,
-	#"height": 1 + player.stats.backhand_spin * 0.1
-	#}
-	#else:
-	#if Input.is_action_pressed("slice"):
-	#return {
-	#"anim_id": player.model.Strokes.BACKHAND_SLICE,
-	#"pace": 20,
-	#"to": aim,
-	#"spin": -5,
-	#"height": 1.3
-	#}
-	#else:
-	#return {
-	#"anim_id": player.model.Strokes.BACKHAND,
-	#"pace": player.stats.backhand_pace + pace,
-	#"to": aim,
-	#"spin": player.stats.backhand_spin,
-	#"height": 1 + player.stats.backhand_spin * 0.1
-	#}
+	else:
+		if Input.is_action_pressed("slice"):
+			return {
+				"anim_id": player.model.Strokes.BACKHAND_SLICE,
+				"pace": 20,
+				"to": aim,
+				"spin": -5,
+				"height": 1.3
+			}
+		else:
+			return {
+				"anim_id": player.model.Strokes.BACKHAND,
+				"pace": player.stats.backhand_pace + pace,
+				"to": aim,
+				"spin": player.stats.backhand_spin,
+				"height": 1 + player.stats.backhand_spin * 0.1
+			}
 
 
 func _on_Player_ball_hit():
@@ -223,32 +227,3 @@ func _on_SinglesMatch_state_changed(old_state, new_state):
 #):
 ## predict where ball is in comfort zone
 #pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
-
-
-func find_closest_point(points: Array, target_z: float) -> Vector3:
-	var closest_point: Vector3 = Vector3.ZERO
-	var closest_distance: float = INF # Start with a large distance
-
-	for point in points:
-		var distance = abs(point.z - target_z)
-
-		# Check if this point is closer than the previous closest point
-		if distance < closest_distance:
-			closest_distance = distance
-			closest_point = point
-		else:
-			# If the distance is increasing, we can stop searching
-			break
-
-	return closest_point
-
-
-func _adjust_position_to_stroke(p):
-	var x_offset = 0
-	if stroke.anim_id == player.model.Strokes.FOREHAND:
-		x_offset = player.model.forehand_up_point.x
-	else:
-		x_offset = player.model.backhand_up_point.x
-	var final_move_pos = p - x_offset * player.right
-	final_move_pos.y = 0
-	player.move_to(final_move_pos)
