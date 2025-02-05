@@ -12,7 +12,7 @@ func set_active_ball(b):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if ball and ball.trajectory:
+	if ball and ball.trajectory and ball.trajectory.size() > 1:
 		draw_trajectory(ball.trajectory)
 
 

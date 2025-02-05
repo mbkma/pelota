@@ -17,11 +17,11 @@ func _ready() -> void:
 	player = get_parent()
 	current_tactic.setup(player)
 
-	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)	
+	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
 	player.ball_hit.connect(on_Player_ball_hit)
 	player.target_point_reached.connect(on_player_target_point_reached)
 	#player.just_served.connect(on_Player_just_served)
-	#player.move_to(Vector3(2,0,0))
+#	player.move_to(Vector3(0,0,-3))
 	#await player.target_point_reached
 	if player.is_serving:
 		make_serve()
@@ -29,19 +29,23 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if player and player.ball:
-		if player.ball.velocity.z < 0.2 and player.ball.trajectory:
+		if is_flying_towards(player, player.ball) and player.ball.trajectory:
+			#if  player.ball.velocity.z <-0.2 and player.ball.trajectory:
 			if not player.active_stroke:
+				print(player.ball.velocity)
 				do_stroke()
-		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)				
+		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
 			stroke = null
 
 
 func do_stroke():
+	player.ball.trajectory = player.ball.predict_trajectory()
 	var closest_ball_position := get_closest_ball_position()
 	stroke = current_tactic.compute_next_stroke(closest_ball_position)
 	if stroke:
+		print(player.player_data, ": closest_ball_position ", closest_ball_position)
 		adjust_player_to_position(closest_ball_position)
 		player.set_active_stroke(stroke, closest_ball_position, 0)
 

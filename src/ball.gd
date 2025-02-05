@@ -23,8 +23,8 @@ func spin_to_gravity(spin: float) -> float:
 
 
 func _process(delta: float) -> void:
-	if velocity.length() > 0.1:  # Only predict if velocity is not almost zero
-		trajectory = predict_trajectory()
+	#if velocity.length() > 0.1:  # Only predict if velocity is not almost zero
+	trajectory = predict_trajectory()
 
 
 func _physics_process(delta: float) -> void:
@@ -52,6 +52,7 @@ func apply_stroke(vel: Vector3, _spin: float) -> void:
 
 
 func predict_trajectory(steps: int = 100, time_step: float = 0.016) -> Array:
+	print("global_position", global_position)
 	var trajectory := []
 	var current_position = global_position
 	var current_velocity = velocity

@@ -29,7 +29,7 @@ const DEBUGGING = false
 func get_horizontal_distance(source, target):
 	if not source or not target:
 		return
-	
+
 	# Get the forward direction of the source
 	var forward_vector = -source.transform.basis.z.normalized()
 
@@ -44,6 +44,7 @@ func get_horizontal_distance(source, target):
 	var is_in_front = forward_vector.dot(direction_to_target.normalized()) > 0
 
 	return horizontal_distance
+
 
 func get_filepaths_in_directory(directory_path: String, ending: String = "") -> Array:
 	var filepaths := []

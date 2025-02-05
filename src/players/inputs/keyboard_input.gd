@@ -37,12 +37,14 @@ func setup(singles_match):
 	#sm.get_opponent(player).ball_hit.connect(_on_Opponent_ball_hit)
 	sm.state_changed.connect(_on_SinglesMatch_state_changed)
 
+
 func _process(delta: float) -> void:
 	if player and player.ball:
 		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
 			move_input_blocked = false
+
 
 func _physics_process(delta: float) -> void:
 	if input_blocked:
@@ -66,22 +68,23 @@ func _physics_process(delta: float) -> void:
 		get_stroke_input(delta)
 
 		if Input.is_action_just_released("strike"):
-			print(input_pace)
 			if not player.ball:
 				printerr("Player has no ball")
 			else:
 				do_stroke(aiming_at, input_pace)
 
-
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
 
+
 func do_stroke(aiming_at, input_pace):
 	var closest_ball_position := get_closest_ball_position()
+	print(player.player_data, ": closest_ball_position ", closest_ball_position)
+
 	stroke = _construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
-	print(stroke)
 	if stroke:
 		set_stroke_input(closest_ball_position)
+
 
 func get_move_direction() -> Vector3:
 	var input := Vector3(
@@ -95,6 +98,7 @@ func get_move_direction() -> Vector3:
 
 	var direction = (forward * input.z + right * input.x).normalized()
 	return direction
+
 
 func get_stroke_input(delta: float):
 	if Input.is_action_just_pressed("strike"):
@@ -115,10 +119,9 @@ func set_stroke_input(closest_ball_position) -> void:
 		player.serve()
 		#clear_stroke_input()
 
-
 	adjust_player_to_position(closest_ball_position)
 	move_input_blocked = true
-	
+
 	player.set_active_stroke(stroke, closest_ball_position, 0)
 
 	emit_signal("input_changed", timing_score)
@@ -154,7 +157,6 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float):
 	var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 	if dist > 10 or dist < 0:
-		printerr("distance to ball is ", dist)
 		return null
 
 	if player.is_serving:
@@ -195,7 +197,6 @@ func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: flo
 
 
 func _on_Player_ball_hit():
-	print("Received player ball hit!")
 	move_input_blocked = false
 
 
@@ -211,7 +212,6 @@ func _on_SinglesMatch_state_changed(old_state, new_state):
 		or new_state == GlobalUtils.MatchStates.SECOND_SERVE
 	):
 		move_input_blocked = false
-
 
 #func _on_Opponent_ball_hit():
 #if not player.ball:

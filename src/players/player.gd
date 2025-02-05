@@ -91,6 +91,10 @@ func _move_to_target() -> Vector3:
 			path.remove_at(0)
 			emit_signal("target_point_reached")
 		else:
+			if sign(path[0].z) != sign(position.z):
+				printerr("I dont move accross the net!")
+				path.remove_at(0)
+				return Vector3.ZERO
 			direction = path[0] - position
 			direction.y = 0
 
@@ -100,6 +104,7 @@ func _move_to_target() -> Vector3:
 func move_to(target: Vector3) -> void:
 	cancel_movement()
 	path.append(target)
+	print(player_data.last_name, " path: ", path)
 
 
 func cancel_movement() -> void:
@@ -130,6 +135,7 @@ func set_active_stroke(stroke: Dictionary, ball_position: Vector3, time: float) 
 func cancel_stroke() -> void:
 	active_stroke = null
 	model.transition_to(model.States.MOVE)
+
 
 var friction := 0.3
 var acceleration := 0.1
@@ -273,3 +279,4 @@ func _play_stroke_sound() -> void:
 
 func set_active_ball(b: Ball) -> void:
 	ball = b
+	print(player_data.last_name, ": New ball!", ball.global_position)
