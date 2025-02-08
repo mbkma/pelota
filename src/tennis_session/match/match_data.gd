@@ -5,7 +5,7 @@ signal completed
 
 var player0: PlayerData
 var player1: PlayerData
-var match_score: MatchScore
+var match_score: Score
 
 var number_of_sets := 2
 
@@ -19,7 +19,7 @@ var serve_sides = ["AD", "DEUCE"]
 func _init(player0, player1):
 	self.player0 = player0
 	self.player1 = player1
-	match_score = MatchScore.new()
+	match_score = Score.new()
 	match_score.only_points_changed.connect(_on_MatchScore_only_points_changed)
 	match_score.sets_changed.connect(_on_MatchScore_sets_changed)
 

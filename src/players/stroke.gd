@@ -31,13 +31,9 @@ func execute_stroke(ball: Ball) -> void:
 	var vel = GlobalPhysics.calculate_velocity(
 		ball.position, stroke_target, -sign(player.position.z) * stroke_power, stroke_spin
 	)
-	print(stroke_target)
-	print("ball_hit. speed: ", vel.length() * 3.6, "km/h vel: ", vel)
-	#vel = Vector3(0,0,-5)
-	print("Velocity Local:", vel)
+
 	ball.apply_stroke(vel, stroke_spin)
 	_play_stroke_sound()
-	print("Velocity Global:", ball.velocity)
 
 
 func _play_stroke_sound() -> void:

@@ -1,41 +1,73 @@
 class_name Court
 extends Node3D
 
-var field_width
-var field_length
+@onready var back_sideline: Marker3D = $back_sideline
+
+@onready var back_left_service_box: Marker3D = $back_left_service_box
+@onready var back_right_service_box: Marker3D = $back_right_service_box
+@onready var front_left_service_box: Marker3D = $front_left_service_box
+@onready var front_right_service_box: Marker3D = $front_right_service_box
+@onready var front_sideline: Marker3D = $front_sideline
+
+@onready var field_length = 2 * abs(front_sideline.position.z)
+@onready var field_width = 2 * abs(front_left_service_box.position.x)
+
+@onready var service_box_length = abs(back_left_service_box.position.z)
+@onready var service_box_width = abs(back_left_service_box.position.x)
+
+var court_regions: Dictionary
+
+enum CourtRegion {
+	LEFT_FRONT_SERVICE_BOX,
+	RIGHT_FRONT_SERVICE_BOX,
+	LEFT_BACK_SERVICE_BOX,
+	RIGHT_BACK_SERVICE_BOX,
+	BACK_SINGLES_BOX,
+	FRONT_SINGLES_BOX,
+}
 
 
-func _ready():
-	field_width = $NorthSide/p14.position.x - $NorthSide/p11.position.x
-	field_length = $SouthSide/p15.position.z - $NorthSide/p15.position.z
-	assert(field_length > 0)
-	assert(field_width > 0)
+func _ready() -> void:
+	court_regions = {
+		CourtRegion.LEFT_FRONT_SERVICE_BOX:
+		Rect2(
+			front_left_service_box.position.x,
+			front_left_service_box.position.z,
+			service_box_width,
+			service_box_length
+		),  # Left service box near the net
+		CourtRegion.RIGHT_FRONT_SERVICE_BOX:
+		Rect2(
+			front_right_service_box.position.x,
+			front_right_service_box.position.z,
+			service_box_width,
+			service_box_length
+		),  # Right service box near the net
+		CourtRegion.LEFT_BACK_SERVICE_BOX:
+		Rect2(
+			back_left_service_box.position.x,
+			back_left_service_box.position.z,
+			service_box_width,
+			service_box_length
+		),  # Left service box near the baseline
+		CourtRegion.RIGHT_BACK_SERVICE_BOX:
+		Rect2(
+			back_right_service_box.position.x,
+			back_right_service_box.position.z,
+			service_box_width,
+			service_box_length
+		),  # Right service box near the baseline
+		CourtRegion.BACK_SINGLES_BOX:
+		Rect2(-field_width / 2.0, back_sideline.position.z, field_width, field_length / 2.0),  # Back singles area (entire back half of the court)
+		CourtRegion.FRONT_SINGLES_BOX:
+		Rect2(-field_width / 2.0, 0, field_width, field_length / 2.0),  # Front singles area (entire front half of the court)
+	}
 
 
-func is_inside(pos: Vector3) -> bool:
-	if 2 * abs(pos.z) > field_length or 2 * abs(pos.x) > field_width:
-		return false
-	else:
-		return true
+func is_ball_in_court_region(ball_position: Vector3, court_region_enum: CourtRegion) -> bool:
+	var region = court_regions[court_region_enum]
 
+	# Convert the ball's 3D position to 2D (we only care about X and Z)
+	var ball_position_2d = Vector2(ball_position.x, ball_position.z)
 
-func get_field_at_pos(pos: Vector3) -> int:
-	if 2 * abs(pos.z) > field_length or 2 * abs(pos.x) > field_width:
-		return GlobalUtils.OUT
-
-	if pos.z > 0:  # South
-		if pos.z < $SouthSide/p11.position.z:  #t-field
-			if pos.x > $SouthSide/p13.position.x:
-				return GlobalUtils.AD_FIELD
-			else:
-				return GlobalUtils.DEUCE_FIELD
-		else:
-			return GlobalUtils.S_IN
-	else:  # North
-		if pos.z > $NorthSide/p11.position.z:  #t-field
-			if pos.x > $NorthSide/p13.position.x:
-				return GlobalUtils.NE_T_FIELD
-			else:
-				return GlobalUtils.NW_T_FIELD
-		else:
-			return GlobalUtils.N_IN
+	return region.has_point(ball_position_2d)

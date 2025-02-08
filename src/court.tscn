@@ -30,36 +30,20 @@ shape = SubResource("8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.480384, 0)
 shape = SubResource("8")
 
-[node name="NorthSide" type="Node3D" parent="."]
-
-[node name="p11" type="Marker3D" parent="NorthSide"]
+[node name="back_left_service_box" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.17569, 0, -6.36622)
 
-[node name="p12" type="Marker3D" parent="NorthSide"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0822729, 0, -6.36622)
-
-[node name="p13" type="Marker3D" parent="NorthSide"]
+[node name="back_right_service_box" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0652659, 0, -6.36622)
 
-[node name="p14" type="Marker3D" parent="NorthSide"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.06132, 0, -6.36622)
-
-[node name="p15" type="Marker3D" parent="NorthSide"]
+[node name="back_sideline" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.877)
 
-[node name="SouthSide" type="Node3D" parent="."]
+[node name="front_left_service_box" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.172, 0, 0)
 
-[node name="p11" type="Marker3D" parent="SouthSide"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.17217, 0, 6.40339)
+[node name="front_right_service_box" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0911847, 0, 0)
 
-[node name="p12" type="Marker3D" parent="SouthSide"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.070323, 0, 6.40339)
-
-[node name="p13" type="Marker3D" parent="SouthSide"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0695443, 0, 6.40339)
-
-[node name="p14" type="Marker3D" parent="SouthSide"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0656, 0, 6.40339)
-
-[node name="p15" type="Marker3D" parent="SouthSide"]
+[node name="front_sideline" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.886)

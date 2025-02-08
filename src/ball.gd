@@ -14,8 +14,6 @@ var trajectory := []
 
 
 func _ready() -> void:
-	print("ball global basis", global_basis)
-	print("ball lokal basis", basis)
 	velocity = initial_velocity
 	if initial_position:
 		global_position = initial_position

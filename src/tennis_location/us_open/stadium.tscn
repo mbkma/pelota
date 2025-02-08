@@ -37,8 +37,6 @@ cache/0/16/0/scale = 1.0
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
 
-[node name="Court" parent="." instance=ExtResource("5_2qn74")]
-
 [node name="stadium" parent="." instance=ExtResource("2_07d71")]
 
 [node name="Ground" type="StaticBody3D" parent="."]
@@ -97,29 +95,29 @@ font_size = 179
 
 [node name="Positions" type="Node3D" parent="."]
 
-[node name="ServeDeuce0" type="Marker3D" parent="Positions"]
+[node name="ServeFrontRight" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 12)
 
-[node name="ServeAd0" type="Marker3D" parent="Positions"]
+[node name="ServeFrontLeft" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 12)
 
-[node name="ReceiveDeuce0" type="Marker3D" parent="Positions"]
+[node name="ReceiveFrontRight" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 13)
 
-[node name="ReceiveAd0" type="Marker3D" parent="Positions"]
+[node name="ReceiveFrontLeft" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 13)
 
-[node name="ServeDeuce1" type="Marker3D" parent="Positions"]
+[node name="ServeBackRight" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -12)
 
-[node name="ServeAd1" type="Marker3D" parent="Positions"]
+[node name="ServeBackLeft" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -12)
 
-[node name="ReceiveDeuce1" type="Marker3D" parent="Positions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
-
-[node name="ReceiveAd1" type="Marker3D" parent="Positions"]
+[node name="ReceiveBackRight" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -13)
+
+[node name="ReceiveBackLeft" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
 
 [node name="ServeClocks" type="Node3D" parent="."]
 
@@ -146,5 +144,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.
 text = "25
 Serve Clock"
 font = SubResource("5")
+
+[node name="Court" parent="." instance=ExtResource("5_2qn74")]
 
 [editable path="stadium"]

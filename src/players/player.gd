@@ -16,10 +16,10 @@ signal input_changed(timing)
 
 var ai_input = "res://src/players/inputs/ai/ai_input.tscn"
 var human_input = "res://src/players/inputs/keyboard_input.tscn"
+
 enum InputType { KEYBOARD, CONTROLLER, AI }
 @export var input: InputType
-
-var input_node: Node
+@export var input_node: Node
 
 @export var player_data: PlayerData
 @export var stats: Dictionary
@@ -196,11 +196,13 @@ func serve() -> void:
 	emit_signal("ball_spawned", ball)
 
 	get_tree().call_group("Player", "set_active_ball", ball)
+	#await get_tree().create_timer(1).timeout
+	#print("serve as", active_stroke)
 
-	await get_tree().create_timer(1).timeout
 
-	hit_ball(ball)
-	emit_signal("just_served")
+#
+#hit_ball(ball)
+#emit_signal("just_served")
 
 
 func _on_RacketArea_body_entered(body) -> void:
@@ -214,6 +216,8 @@ func _on_RacketArea_body_entered(body) -> void:
 
 
 func hit_ball(ball: Ball) -> void:
+	if active_stroke == null:
+		return
 	active_stroke.execute_stroke(ball)
 	emit_signal("ball_hit")
 	cancel_stroke()

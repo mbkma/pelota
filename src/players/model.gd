@@ -61,6 +61,8 @@ func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
 	match stroke.stroke_type:
 		stroke.StrokeType.FOREHAND:
 			animation_name = "forehand"
+		stroke.StrokeType.SERVE:
+			animation_name = "serve"
 		_:
 			animation_name = "backhand"
 

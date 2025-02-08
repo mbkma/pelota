@@ -1,9 +1,14 @@
 extends Control
 
-@onready var ScoreDisplay = $USOpenScoreDisplay
-@onready var MatchStatsPanel = $MatchStatsPanel
+@onready var score_display = $ScoreDisplay
+
+@export var score: Score
 
 
-func setup_singles_match(singles_match) -> void:
-	ScoreDisplay.setup_singles_match(singles_match)
-	MatchStatsPanel.setup_singles_match(singles_match)
+func _ready() -> void:
+	if score:
+		score.changed.connect(on_score_changed)
+
+
+func on_score_changed():
+	score_display.set_score(score)

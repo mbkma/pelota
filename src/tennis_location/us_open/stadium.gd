@@ -3,16 +3,29 @@ extends Node3D
 
 @onready var serve_speed_panels := [$ServeSpeedPanel, $ServeSpeedPanel2]
 var sm
-@onready var positions := {
-	"serve_deuce0": $Positions/ServeDeuce0.position,
-	"serve_ad0": $Positions/ServeAd0.position,
-	"receive_deuce0": $Positions/ReceiveDeuce0.position,
-	"receive_ad0": $Positions/ReceiveAd0.position,
-	"serve_deuce1": $Positions/ServeDeuce1.position,
-	"serve_ad1": $Positions/ServeAd1.position,
-	"receive_deuce1": $Positions/ReceiveDeuce1.position,
-	"receive_ad1": $Positions/ReceiveAd1.position,
+
+enum StadiumPosition {
+	SERVE_FRONT_RIGHT,
+	SERVE_FRONT_LEFT,
+	RECEIVE_FRONT_RIGHT,
+	RECEIVE_FRONT_LEFT,
+	SERVE_BACK_RIGHT,
+	SERVE_BACK_LEFT,
+	RECEIVE_BACK_RIGHT,
+	RECEIVE_BACK_LEFT
 }
+
+@onready var positions := {
+	StadiumPosition.SERVE_FRONT_RIGHT: $Positions/ServeFrontRight.position,
+	StadiumPosition.SERVE_FRONT_LEFT: $Positions/ServeFrontLeft.position,
+	StadiumPosition.RECEIVE_FRONT_RIGHT: $Positions/ReceiveFrontRight.position,
+	StadiumPosition.RECEIVE_FRONT_LEFT: $Positions/ReceiveFrontLeft.position,
+	StadiumPosition.SERVE_BACK_RIGHT: $Positions/ServeBackRight.position,
+	StadiumPosition.SERVE_BACK_LEFT: $Positions/ServeBackLeft.position,
+	StadiumPosition.RECEIVE_BACK_RIGHT: $Positions/ReceiveBackRight.position,
+	StadiumPosition.RECEIVE_BACK_LEFT: $Positions/ReceiveBackLeft.position
+}
+
 @onready var serve_clocks := $ServeClocks.get_children()
 
 var serve_clocks_active := false

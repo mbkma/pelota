@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://r13b2pnjirfc"]
+[gd_scene load_steps=7 format=3 uid="uid://r13b2pnjirfc"]
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1"]
 [ext_resource type="Script" path="res://src/television/television-hud.gd" id="2"]
 [ext_resource type="Script" path="res://src/television/match_stats_panel.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://djjxvsnmspjrf" path="res://src/television/score_displays/USOpenScoreDisplay.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://bu1ji7n825w7x" path="res://src/television/score_displays/ScoreDisplay.tscn" id="4_xpbfi"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -21,18 +21,29 @@ tracks/0/keys = {
 "values": [false]
 }
 
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k50em"]
+_data = {
+"start": SubResource("1")
+}
+
 [node name="TelevisionHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("2")
 
 [node name="MatchStatsPanel" type="Control" parent="."]
 visible = false
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("3")
 
 [node name="Panel" type="Panel" parent="MatchStatsPanel"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -43,6 +54,7 @@ offset_right = 250.0
 offset_bottom = 150.0
 
 [node name="Label" type="Label" parent="MatchStatsPanel/Panel"]
+layout_mode = 0
 offset_left = 145.0
 offset_top = 78.0
 offset_right = 185.0
@@ -52,6 +64,7 @@ text = "Novak
 Djokovic"
 
 [node name="Label2" type="Label" parent="MatchStatsPanel/Panel"]
+layout_mode = 0
 offset_left = 310.0
 offset_top = 78.0
 offset_right = 365.0
@@ -61,6 +74,7 @@ text = "Novak
 Djokovic"
 
 [node name="Label3" type="Label" parent="MatchStatsPanel/Panel"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -71,35 +85,35 @@ offset_right = 20.0
 offset_bottom = -10.0
 theme = ExtResource("1")
 text = "vs"
-align = 1
+horizontal_alignment = 1
 
 [node name="PlayerImage" type="TextureRect" parent="MatchStatsPanel"]
+layout_mode = 0
 offset_left = 277.0
 offset_top = 201.0
 offset_right = 477.0
 offset_bottom = 401.0
-minimum_size = Vector2(200, 200)
 size_flags_vertical = 3
-expand = true
+expand_mode = 1
 stretch_mode = 5
 
 [node name="PlayerImage2" type="TextureRect" parent="MatchStatsPanel"]
+layout_mode = 0
 offset_left = 626.0
 offset_top = 201.0
 offset_right = 826.0
 offset_bottom = 401.0
-minimum_size = Vector2(200, 200)
 size_flags_vertical = 3
-expand = true
+expand_mode = 1
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MatchStatsPanel"]
-anims/start = SubResource("1")
+libraries = {
+"": SubResource("AnimationLibrary_k50em")
+}
 
-[node name="USOpenScoreDisplay" parent="." instance=ExtResource("4")]
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 47.0
-offset_top = -82.0
-offset_right = 47.0
-offset_bottom = -82.0
+[node name="ScoreDisplay" parent="." instance=ExtResource("4_xpbfi")]
+offset_top = 608.0
+offset_bottom = 608.0
+
+[editable path="ScoreDisplay"]

@@ -19,7 +19,7 @@ var timing_score := 0.0
 var mouse_pressed := false
 var aiming_at := Vector3.ZERO
 var input_pace := 0.0
-@onready var ball_aim_marker: MeshInstance3D = $BallAimMarker
+@export var ball_aim_marker: MeshInstance3D
 
 @export var mouse_sensitivity := 100.0
 
@@ -81,6 +81,24 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
 
+	if Input.is_action_just_pressed("serve"):
+		set_serve_input(aiming_at)
+
+
+func set_serve_input(aim):
+	player.serve()
+	var stroke = Stroke.new()
+	stroke.player = player
+	stroke.stroke_type = stroke.StrokeType.SERVE
+	stroke.stroke_power = player.stats.serve_pace + randf_range(10, 20)
+	stroke.stroke_spin = 0
+	stroke.stroke_target = aim
+
+	stroke.execute_stroke(player.ball)
+	#player.prepare_serve()
+	#player.set_active_stroke(Vector3.ZERO, 0)
+	#player.serve()
+
 
 func do_stroke(aiming_at, input_pace):
 	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
@@ -121,11 +139,7 @@ func get_stroke_input(delta: float):
 
 
 func set_stroke_input(closest_ball_position) -> void:
-	if player.is_serving:
-		player.prepare_serve()
-		player.set_active_stroke(Vector3.ZERO, 0)
-		player.serve()
-		#clear_stroke_input()
+	#clear_stroke_input()
 
 	move_input_blocked = true
 
@@ -162,13 +176,6 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 
 func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float):
 	var stroke = player.stroke
-	if player.is_serving:
-		stroke.stroke_type = stroke.StrokeType.SERVE
-		stroke.stroke_power = player.stats.serve_pace + randf_range(10, 20)
-		stroke.stroke_spin = 0
-		stroke.stroke_target = aim
-		return stroke
-
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
 	if dot_product > 0:

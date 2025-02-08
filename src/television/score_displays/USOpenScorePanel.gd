@@ -11,11 +11,10 @@ extends Control
 @onready var serve_indicator = $MarginContainer/HBoxContainer11/ServeIndicator
 
 
-func set_score(score, index):
+func set_score(score: Score, index):
 	var points = score.points
 	var games = score.games
-	var sets = score.sets
-
+	var sets = score.games_in_set
 	# update points
 	points_label.text = str(points[index])
 	if points[index] == 45:
