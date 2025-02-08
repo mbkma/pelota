@@ -19,16 +19,19 @@ var timing_score := 0.0
 var mouse_pressed := false
 var aiming_at := Vector3.ZERO
 var input_pace := 0.0
+@onready var ball_aim_marker: MeshInstance3D = $BallAimMarker
 
+@export var mouse_sensitivity := 100.0
 
 func _ready() -> void:
 	player = get_parent()
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(0.5).timeout
 	stroke_input_blocked = false
-	player.ball_aim_marker.global_position = _get_default_aim()
-	player.ball_aim_marker.visible = true
+	ball_aim_marker.position = _get_default_aim()
+	ball_aim_marker.visible = true
 	player.ball_hit.connect(_on_Player_ball_hit)
-
+	#move_input_blocked = true
+	#player.move_to(Vector3(0,0,10))
 
 func setup(singles_match):
 	#player.timing.show()
@@ -78,12 +81,11 @@ func _physics_process(delta: float) -> void:
 
 
 func do_stroke(aiming_at, input_pace):
-	var closest_ball_position := get_closest_ball_position()
+	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
 	print(player.player_data, ": closest_ball_position ", closest_ball_position)
 
-	stroke = _construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
-	if stroke:
-		set_stroke_input(closest_ball_position)
+	_construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
+	set_stroke_input(closest_ball_position)
 
 
 func get_move_direction() -> Vector3:
@@ -92,37 +94,41 @@ func get_move_direction() -> Vector3:
 		0,
 		Input.get_action_strength("move_front") - Input.get_action_strength("move_back")
 	)
-	var cam_transform = player.camera.global_transform
-	var forward = -cam_transform.basis.z.normalized()
-	var right = cam_transform.basis.x.normalized()
+	var cam_basis = player.camera.global_basis
+	var forward = -cam_basis.z.normalized()
+	var right = cam_basis.x.normalized()
 
 	var direction = (forward * input.z + right * input.x).normalized()
 	return direction
 
 
 func get_stroke_input(delta: float):
+	if not GlobalUtils.is_flying_towards(player, player.ball):
+		return
+
 	if Input.is_action_just_pressed("strike"):
+		input_pace = 0
 		mouse_from = get_viewport().get_mouse_position()
 	if Input.is_action_pressed("strike"):
 		input_pace += 0.1
 		emit_signal("pace_changed", input_pace)
 		mouse_to = get_viewport().get_mouse_position()
 		aiming_at = _get_aim_pos(mouse_from, mouse_to)
-		player.ball_aim_marker.global_position = aiming_at
-		player.ball_aim_marker.visible = true
+		ball_aim_marker.position = aiming_at
+		ball_aim_marker.visible = true
 
 
 func set_stroke_input(closest_ball_position) -> void:
 	if player.is_serving:
 		player.prepare_serve()
-		player.set_active_stroke(stroke, Vector3.ZERO, 0)
+		player.set_active_stroke(Vector3.ZERO, 0)
 		player.serve()
 		#clear_stroke_input()
 
-	adjust_player_to_position(closest_ball_position)
 	move_input_blocked = true
 
-	player.set_active_stroke(stroke, closest_ball_position, 0)
+	player.set_active_stroke(closest_ball_position, 0)
+	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke) # FIXME
 
 	emit_signal("input_changed", timing_score)
 	clear_stroke_input()
@@ -131,15 +137,13 @@ func set_stroke_input(closest_ball_position) -> void:
 func clear_stroke_input():
 	pred = null
 	input_pace = 0.0
-	player.ball_aim_marker.visible = false
+	ball_aim_marker.visible = false
 
 
 func _get_default_aim() -> Vector3:
-	var forward := -player.basis.z.normalized()
-	var right := player.basis.x.normalized()
-	var default_aim := forward * 9
+	var default_aim := Vector3(0,0,-sign(player.position.z) * 9)
 	if player.is_serving:
-		default_aim = forward * 5 + sign(player.position.x) * right * -3
+		default_aim = Vector3(-sign(player.position.x) * -3, 0, -sign(player.position.z) * 15)
 	return default_aim
 
 
@@ -148,52 +152,41 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 
 	var default_aim := _get_default_aim()
 
-	to.z = default_aim.z + sign(player.position.z) * (mouse_to - mouse_from).y / 100
-	to.x = default_aim.x + sign(player.position.z) * (mouse_to - mouse_from).x / 100
+	to.z = default_aim.z + sign(player.position.z) * (mouse_to - mouse_from).y / mouse_sensitivity
+	to.x = default_aim.x + sign(player.position.z) * (mouse_to - mouse_from).x / mouse_sensitivity
 
 	return to
 
 
 func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float):
-	var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
-	if dist > 10 or dist < 0:
-		return null
-
+	var stroke = player.stroke
 	if player.is_serving:
-		return {
-			"anim_id": player.model.Strokes.SERVE,
-			"pace": player.stats.serve_pace + randf_range(10, 20),
-			"to": aim,
-			"spin": 0,
-			"height": 1.1
-		}
+		stroke.stroke_type = stroke.StrokeType.SERVE
+		stroke.stroke_power = player.stats.serve_pace + randf_range(10, 20)
+		stroke.stroke_spin = 0
+		stroke.stroke_target = aim
+		return stroke
+
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
-	var dot_product: float = to_ball_vector.dot(player.right)
+	var dot_product: float = to_ball_vector.dot(player.basis.x)
 	if dot_product > 0:
-		return {
-			"anim_id": player.model.Strokes.FOREHAND,
-			"pace": player.stats.forehand_pace + pace,
-			"to": aim,
-			"spin": player.stats.backhand_spin,
-			"height": 1 + player.stats.backhand_spin * 0.1
-		}
+		stroke.stroke_type = stroke.StrokeType.FOREHAND
+		stroke.stroke_power = player.stats.forehand_pace + pace
+		stroke.stroke_spin = player.stats.forehand_spin
+		stroke.stroke_target = aim
+		return stroke
 	else:
 		if Input.is_action_pressed("slice"):
-			return {
-				"anim_id": player.model.Strokes.BACKHAND_SLICE,
-				"pace": 20,
-				"to": aim,
-				"spin": -5,
-				"height": 1.3
-			}
+			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
+			stroke.stroke_power = 20
+			stroke.stroke_spin = -5
+			stroke.stroke_target = aim
 		else:
-			return {
-				"anim_id": player.model.Strokes.BACKHAND,
-				"pace": player.stats.backhand_pace + pace,
-				"to": aim,
-				"spin": player.stats.backhand_spin,
-				"height": 1 + player.stats.backhand_spin * 0.1
-			}
+			stroke.stroke_type = stroke.StrokeType.BACKHAND
+			stroke.stroke_power = player.stats.backhand_pace + pace
+			stroke.stroke_spin = player.stats.backhand_spin
+			stroke.stroke_target = aim
+			return stroke
 
 
 func _on_Player_ball_hit():

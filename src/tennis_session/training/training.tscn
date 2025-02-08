@@ -1,48 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://drrxciscdtoof"]
+[gd_scene load_steps=2 format=3 uid="uid://drrxciscdtoof"]
 
 [ext_resource type="Script" path="res://src/tennis_session/training/training.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://blld3hbrvik01" path="res://src/worlds/training_center/training_center.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://src/hud/debug_hud.tscn" id="3_5ulux"]
-[ext_resource type="Resource" path="res://src/players/resources/sinner.tres" id="3_qmdq8"]
-[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://src/players/player.tscn" id="3_tpokc"]
-[ext_resource type="PackedScene" uid="uid://c6vym6k113onc" path="res://src/hud/player_debug_hud.tscn" id="4_y5e1b"]
-[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://src/ball-canon.tscn" id="7_qi4la"]
-[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://src/trajectory_drawer.tscn" id="8_xxy4q"]
 
 [node name="Training" type="Node"]
 script = ExtResource("1")
-
-[node name="Player" parent="." instance=ExtResource("3_tpokc")]
-transform = Transform3D(0.999999, 0, 0, 0, 1, 0, 0, 0, 0.999999, -0.316805, 0, 13.7103)
-
-[node name="AiPlayer" parent="." instance=ExtResource("3_tpokc")]
-transform = Transform3D(-0.999999, 0, -8.74227e-08, 0, 1, 0, 8.74227e-08, 0, -0.999999, 0, 0, -12.6018)
-input = 2
-player_data = ExtResource("3_qmdq8")
-
-[node name="TrainingCenter" parent="." instance=ExtResource("2")]
-
-[node name="BallCanon" parent="." instance=ExtResource("7_qi4la")]
-transform = Transform3D(-0.94819, 0, -0.317702, 0, 1, 0, 0.317702, 0, -0.94819, -3.33061, 0, -5.07486)
-velocity_length = 12.0
-shoot_off_angle = 30.0
-horizontal_angle = 20.0
-
-[node name="PlayerDebugHud" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_y5e1b")]
-player = NodePath("../Player")
-
-[node name="PlayerDebugHud2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_y5e1b")]
-offset_top = 232.0
-offset_bottom = 232.0
-player = NodePath("../AiPlayer")
-
-[node name="DebugHud" parent="." instance=ExtResource("3_5ulux")]
-offset_left = 933.0
-offset_right = 933.0
-
-[node name="TrajectoryDrawer" parent="." instance=ExtResource("8_xxy4q")]
-
-[editable path="TrainingCenter"]
-[editable path="TrainingCenter/Stadium"]
-[editable path="TrainingCenter/Stadium/stadium"]
-[editable path="TrainingCenter/Cameras"]

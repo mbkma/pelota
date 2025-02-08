@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://b0fek2dc3mv3s"]
 
 [ext_resource type="FontFile" uid="uid://bkyrq2b8hve32" path="res://assets/fonts/Outfit-Regular.otf" id="1"]
-[ext_resource type="Script" path="res://src/worlds/us_open/serve_speed_panel.gd" id="2"]
+[ext_resource type="Script" path="res://src/tennis_location/us_open/serve_speed_panel.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://de4vcr3xqmwui" path="res://assets/models/stadium/serve_speed_panel/serve_speed_panel.blend" id="2_y4lyk"]
 
 [sub_resource type="FontFile" id="1"]

@@ -52,13 +52,19 @@ func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
 	return (stroke_pos - point_down) / (point_up - point_down)
 
 
-func set_stroke(stroke_name: String, stroke_pos := Vector3.ZERO) -> void:
+func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
 	#var point := get_stroke_blend_position(stroke_id, stroke_pos)
 	#animation_tree["parameters/stroke/forehand/blend_position"] = point.y
 	#animation_tree["parameters/stroke/backhand/blend_position"] = point.y
 	#animation_tree["parameters/stroke/backhand_slice/blend_position"] = point.y
-	animation_tree["parameters/stroke/Transition/transition_request"] = stroke_name
-	pass
+	var animation_name: String
+	match stroke.stroke_type:
+		stroke.StrokeType.FOREHAND:
+			animation_name = "forehand"
+		_:
+			animation_name = "backhand"
+
+	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name
 
 
 func transition_to(state_id: int) -> void:

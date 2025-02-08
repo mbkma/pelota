@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://djjxvsnmspjrf"]
 
-[ext_resource type="PackedScene" path="res://src/worlds/television/score_displays/USOpenScorePanel.tscn" id="1"]
-[ext_resource type="Script" path="res://src/worlds/television/score_displays/USOpenScoreDisplay.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://dowg1643af372" path="res://src/television/score_displays/USOpenScorePanel.tscn" id="1"]
+[ext_resource type="Script" path="res://src/television/score_displays/USOpenScoreDisplay.gd" id="2"]
 
 [node name="USOpenScoreDisplay" type="Control"]
 script = ExtResource("2")

@@ -14,7 +14,7 @@ signal level_changed(level_name, init_data)
 	start_menu.get_node("HBoxContainer/PlayerSelector2"),
 ]
 
-var world = preload("res://src/worlds/us_open/us_open.tscn")
+var world = preload("res://src/tennis_location/us_open/us_open.tscn")
 var match_data
 
 
@@ -98,4 +98,4 @@ func _on_Career_pressed() -> void:
 
 
 func _on_training_pressed() -> void:
-	emit_signal("level_changed", load("res://src/tennis_session/training/training.tscn"), null)
+	emit_signal("level_changed", load("res://src/tennis_location/training_center/training_center.tscn"), null)

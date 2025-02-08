@@ -4,11 +4,11 @@ extends InputMethod
 
 var sm: SinglesMatch
 var tactics = {
-	"DefaultTactics": "res://src/players/inputs/tactics/default.gd",
-	"ServeAndVolley": "res://src/players/inputs/tactics/serve_and_volley.gd"
+	"DefaultTactics": "res://src/players/inputs/ai/tactics/default.gd",
+	"ServeAndVolley": "res://src/players/inputs/ai/tactics/serve_and_volley.gd"
 }
 
-var current_tactic = preload("res://src/players/inputs/tactics/default.gd").new():
+var current_tactic = preload("res://src/players/inputs/ai/tactics/default.gd").new():
 	set = set_current_tactic
 var pivot_point := Vector3.ZERO
 
@@ -21,7 +21,7 @@ func _ready() -> void:
 	player.ball_hit.connect(on_Player_ball_hit)
 	player.target_point_reached.connect(on_player_target_point_reached)
 	#player.just_served.connect(on_Player_just_served)
-#	player.move_to(Vector3(0,0,-3))
+	#player.move_to(Vector3(0,0,-13))
 	#await player.target_point_reached
 	if player.is_serving:
 		make_serve()
@@ -29,26 +29,20 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if player and player.ball:
-		if is_flying_towards(player, player.ball) and player.ball.trajectory:
-			#if  player.ball.velocity.z <-0.2 and player.ball.trajectory:
+		if GlobalUtils.is_flying_towards(player, player.ball):
 			if not player.active_stroke:
-				print(player.ball.velocity)
 				do_stroke()
 		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
-			stroke = null
 
 
 func do_stroke():
 	player.ball.trajectory = player.ball.predict_trajectory()
-	var closest_ball_position := get_closest_ball_position()
-	stroke = current_tactic.compute_next_stroke(closest_ball_position)
-	if stroke:
-		print(player.player_data, ": closest_ball_position ", closest_ball_position)
-		adjust_player_to_position(closest_ball_position)
-		player.set_active_stroke(stroke, closest_ball_position, 0)
-
+	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
+	current_tactic.compute_next_stroke(closest_ball_position)
+	player.set_active_stroke(closest_ball_position, 0)
+	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke) # FIXME
 
 func setup(_sm: Object) -> void:
 	# only for singles match
@@ -126,47 +120,48 @@ var pred
 
 
 func on_Opponent_ball_hit():
-	if not player.ball:
-		return
-
-	# first, compute next stroke
-#	var p1 = GlobalPhysics._get_ball_position_at_ground(player.ball).pos
-#	if sm.world.court.get_field_at_pos(p1) == GlobalUtils.OUT:
-#		player.cancel_stroke()
-#		return
-
-	pred = GlobalPhysics.get_ball_position_at(player.ball, player.position.z)
-	var ball_pos_prediction = pred.pos
-
-	print("BALL PREDICTION", ball_pos_prediction.y)
-
-	# second, compute how to move in order to do the stroke
-
-	# if ball outside of comfort zone
-	if (
-		ball_pos_prediction.y < player.model.forehand_down_point.y
-		or ball_pos_prediction.y > player.model.forehand_up_point.y
-	):
-		pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
-
-	if not pred:
-		return
-
-	var stroke = current_tactic.compute_next_stroke(pred)
-	var x_offset = 0
-	if stroke.anim_id == player.model.Strokes.FOREHAND:
-		x_offset = player.model.forehand_up_point.x
-	else:
-		x_offset = player.model.backhand_up_point.x
-	var final_move_pos = pred.pos - x_offset * player.transform.basis.x
-	final_move_pos.y = 0
-	player.move_to(final_move_pos)
-	player.set_active_stroke(stroke, pred.pos, pred.time)
+	pass
+	#if not player.ball:
+		#return
+#
+	## first, compute next stroke
+##	var p1 = GlobalPhysics._get_ball_position_at_ground(player.ball).pos
+##	if sm.world.court.get_field_at_pos(p1) == GlobalUtils.OUT:
+##		player.cancel_stroke()
+##		return
+#
+	#pred = GlobalPhysics.get_ball_position_at(player.ball, player.position.z)
+	#var ball_pos_prediction = pred.pos
+#
+	##print("BALL PREDICTION", ball_pos_prediction.y)
+#
+	## second, compute how to move in order to do the stroke
+#
+	## if ball outside of comfort zone
+	#if (
+		#ball_pos_prediction.y < player.model.forehand_down_point.y
+		#or ball_pos_prediction.y > player.model.forehand_up_point.y
+	#):
+		#pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
+#
+	#if not pred:
+		#return
+#
+	#var stroke = current_tactic.compute_next_stroke(pred)
+	#var x_offset = 0
+	#if stroke.anim_id == player.model.Strokes.FOREHAND:
+		#x_offset = player.model.forehand_up_point.x
+	#else:
+		#x_offset = player.model.backhand_up_point.x
+	#var final_move_pos = pred.pos - x_offset * player.transform.basis.x
+	#final_move_pos.y = 0
+	#player.move_to(final_move_pos)
+	#player.set_active_stroke(stroke, pred.pos, pred.time)
 
 
 func make_serve():
 	player.prepare_serve()
-	stroke = current_tactic.compute_serve()
-	player.set_active_stroke(stroke, Vector3.ZERO, 0)
+	current_tactic.compute_serve()
+	player.set_active_stroke(Vector3.ZERO, 0)
 	await get_tree().create_timer(5).timeout
 	player.serve()

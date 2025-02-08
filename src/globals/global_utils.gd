@@ -26,6 +26,99 @@ enum MatchStates {
 const DEBUGGING = false
 
 
+enum Direction {
+	LEFT,
+	RIGHT,
+	FRONT,
+	BEHIND
+}
+
+enum CheckType {
+	LEFT_RIGHT,
+	FRONT_BEHIND
+}
+
+func check_relative_position(player: Node3D, target_position: Vector3, check_type: CheckType) -> Direction:
+	var player_forward = player.basis.z.normalized()  # Forward vector (Z axis)
+	var player_right = player.basis.x.normalized()    # Right vector (X axis)
+
+	var direction_to_target = (target_position - player.position).normalized()
+
+	if check_type == CheckType.LEFT_RIGHT:
+		# Check if the target is to the left or right
+		var is_to_right = player_right.dot(direction_to_target) > 0
+		return Direction.RIGHT if is_to_right else Direction.LEFT
+	elif check_type == CheckType.FRONT_BEHIND:
+		# Check if the target is in front or behind
+		var is_in_front = player_forward.dot(direction_to_target) > 0
+		return Direction.FRONT if is_in_front else Direction.BEHIND
+
+	return -1
+
+# Function to check if the target is flying towards the source
+func is_flying_towards(source: Node3D, target: Node3D) -> bool:
+	# Ensure both source and target are valid
+	if source == null or target == null:
+		return false
+
+	# Get the current position of the source and the target
+	var source_position = source.global_position
+	var target_position = target.global_position
+
+	# Calculate the direction vector from the target to the source
+	var direction_to_source = (source_position - target_position).normalized()
+
+	# Get the current velocity of the target (assuming it's a KinematicBody3D or similar)
+	var velocity = Vector3.ZERO
+	if target.has_method("get_velocity"):
+		velocity = target.get_velocity()
+
+	# Normalize the velocity vector
+	if velocity.length() > 0.6:
+		var normalized_velocity = velocity.normalized()
+
+		# Check if the angle between the direction to the source and the velocity is small
+		var angle = direction_to_source.angle_to(normalized_velocity)
+
+		# Define a threshold angle (in radians) to consider as "flying towards"
+		var threshold_angle = deg_to_rad(30)  # Adjust this value as needed
+
+		return angle < threshold_angle
+
+	return false
+
+
+func adjust_player_to_position(player: Player, closest_ball_position: Vector3, stroke: Stroke):
+	## Calculate the direction from the position
+	var x_offset: float
+	if stroke.stroke_type == stroke.StrokeType.FOREHAND:
+		x_offset = -1
+	else:
+		x_offset = 1
+
+	var new_position = closest_ball_position + x_offset * player.basis.x
+	new_position.y = player.position.y
+	player.move_to(new_position)
+
+
+func get_closest_ball_position(player: Player) -> Vector3:  # FIXME: Optimize Performance
+	# Initialize variables to track the closest point
+	var closest_ball_position: Vector3 = Vector3.ZERO
+	var closest_z_distance: float = INF  # Start with a large number
+	var trajectory = player.ball.predict_trajectory()
+	# Iterate through the ball trajectory to find the closest point in Z
+	for ball_position in trajectory:
+		# Calculate the Z distance
+		var z_distance = abs(ball_position.z - player.position.z)
+		#print(ball_position)
+		if z_distance < closest_z_distance:
+			closest_z_distance = z_distance
+			closest_ball_position = ball_position
+
+	# Now closest_ball_position holds the position of the ball closest to the player in Z
+	return closest_ball_position
+
+
 func get_horizontal_distance(source, target):
 	if not source or not target:
 		return
@@ -44,6 +137,7 @@ func get_horizontal_distance(source, target):
 	var is_in_front = forward_vector.dot(direction_to_target.normalized()) > 0
 
 	return horizontal_distance
+
 
 
 func get_filepaths_in_directory(directory_path: String, ending: String = "") -> Array:

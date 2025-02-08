@@ -1,25 +1,24 @@
-[gd_scene load_steps=21 format=3 uid="uid://c80dkx83gt6sf"]
+[gd_scene load_steps=20 format=3 uid="uid://c80dkx83gt6sf"]
 
-[ext_resource type="Script" path="res://src/worlds/us_open/us_open.gd" id="1"]
-[ext_resource type="Script" path="res://src/worlds/television/television.gd" id="2"]
+[ext_resource type="Script" path="res://src/tennis_location/us_open/us_open.gd" id="1"]
+[ext_resource type="Script" path="res://src/television/television.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://fw4mlawx8kkn" path="res://src/hud/hud.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://src/umpire/umpire.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://src/worlds/television/television-hud.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://src/television/television-hud.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://src/cameras.tscn" id="5_vvufm"]
-[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://src/crowd/crowd_block.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://2hon8r2k00rj" path="res://src/crowd/crowd.tscn" id="8"]
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="9"]
-[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/worlds/us_open/stadium.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/tennis_location/us_open/stadium.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://src/hud/debug_hud.tscn" id="11"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mjdmi"]
 
-[sub_resource type="Sky" id="Sky_qjppd"]
+[sub_resource type="Sky" id="Sky_ydxc0"]
 sky_material = SubResource("ProceduralSkyMaterial_mjdmi")
 
 [sub_resource type="Environment" id="Environment_341du"]
 background_mode = 2
-sky = SubResource("Sky_qjppd")
+sky = SubResource("Sky_ydxc0")
 tonemap_mode = 2
 glow_enabled = true
 
@@ -130,19 +129,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.2
 
 [node name="Stadium" parent="." instance=ExtResource("10")]
 
-[node name="Court" parent="Stadium" instance=ExtResource("9")]
+[node name="Court2" parent="Stadium" instance=ExtResource("9")]
 
 [node name="Umpire" parent="Stadium" instance=ExtResource("4")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.36976, 0, 0)
-
-[node name="CrowdBlock" parent="." instance=ExtResource("7")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.7438, 0, -8.51666)
-
-[node name="CrowdBlock2" parent="." instance=ExtResource("7")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16.7438, 0, -5.38179)
-
-[node name="CrowdBlock3" parent="." instance=ExtResource("7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56151, 1.59512, -22.1274)
-
-[node name="CrowdBlock4" parent="." instance=ExtResource("7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53452, 1.59512, -22.1274)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=4 uid="uid://dowg1643af372"]
 
 [ext_resource type="Texture2D" uid="uid://bepf2xkcu5bov" path="res://assets/textures/hud/yellow_dot.png" id="1"]
-[ext_resource type="Script" path="res://src/worlds/television/score_displays/USOpenScorePanel.gd" id="2"]
+[ext_resource type="Script" path="res://src/television/score_displays/USOpenScorePanel.gd" id="2"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(0.00392157, 0.270588, 0.537255, 1)

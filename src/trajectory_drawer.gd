@@ -24,7 +24,7 @@ func draw_trajectory(trajectory: Array) -> void:
 	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_color = trajectory_color
-
+	#print(trajectory[0])
 	for point in trajectory:
 		mesh.surface_add_vertex(point)
 

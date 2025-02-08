@@ -29,6 +29,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not player:
 		return
+	if player.active_stroke:
+		list.get_entry(1).update(player.active_stroke.stroke_target)
+	else:
+		list.get_entry(1).update("null")
+
 	list.get_entry(2).update(player.model._playback.get_current_node())
 
 	if player.input != player.InputType.AI:

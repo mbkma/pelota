@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://d237t32p1sgei"]
+[gd_scene load_steps=11 format=3 uid="uid://d237t32p1sgei"]
 
 [ext_resource type="PackedScene" uid="uid://dt3o07tt1qdgd" path="res://assets/models/stadium/stadium.blend" id="2_07d71"]
-[ext_resource type="Script" path="res://src/worlds/us_open/stadium.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/worlds/us_open/serve_speed_panel.tscn" id="5"]
+[ext_resource type="Script" path="res://src/tennis_location/us_open/stadium.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/tennis_location/us_open/serve_speed_panel.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="5_2qn74"]
 [ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
 
 [sub_resource type="BoxShape3D" id="1"]
@@ -35,6 +36,8 @@ cache/0/16/0/scale = 1.0
 
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
+
+[node name="Court" parent="." instance=ExtResource("5_2qn74")]
 
 [node name="stadium" parent="." instance=ExtResource("2_07d71")]
 

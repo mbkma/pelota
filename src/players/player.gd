@@ -12,10 +12,9 @@ signal input_changed(timing)
 
 @onready var ball_scene := preload("res://src/ball.tscn")
 @onready var model: Model = $Model
-@onready var strokes: Node = $Strokes
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-var ai_input = "res://src/players/inputs/ai_input.tscn"
+var ai_input = "res://src/players/inputs/ai/ai_input.tscn"
 var human_input = "res://src/players/inputs/keyboard_input.tscn"
 enum InputType { KEYBOARD, CONTROLLER, AI }
 @export var input: InputType
@@ -30,36 +29,33 @@ var input_node: Node
 @export var is_serving := false
 @export var team_index: int
 
+@onready var stroke: Stroke = $Strokes
+
 var animation_hit_time := 0.37
-var active_stroke = null
+var active_stroke: Stroke
 var vel := Vector3.ZERO
 
 const DISTANCE_THRESHOLD := 0.01
 var path := []
-@onready var ball_aim_marker: MeshInstance3D = $BallAimMarker
-
-var forward := -basis.z.normalized()
-var right := basis.x.normalized()
+@export var ball_aim_marker: MeshInstance3D
 
 
 func _ready() -> void:
 	stats = player_data.stats
 	$Label3D.text = player_data.last_name
-	if input == InputType.AI:
-		$Label3D.text += " (CPU)"
-		input_node = load(ai_input).instantiate()
-	else:
-		input_node = load(human_input).instantiate()
-	add_child(input_node)
-	strokes.setup(self)
+	#if input == InputType.AI:
+		#$Label3D.text += " (CPU)"
+		#input_node = load(ai_input).instantiate()
+	#else:
+		#input_node = load(human_input).instantiate()
+	#add_child(input_node)
+	#strokes.setup(self)
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
 
 
 func setup(data: PlayerData, ai_controlled: bool) -> void:
 	player_data = data
-
-	self.ai_controlled = ai_controlled
 
 	#var mesh := $"Model/v3player/Rig/Skeleton3D/shirt" as MeshInstance3D
 	#var new_mat = mesh.get_active_material(0).duplicate()
@@ -91,11 +87,13 @@ func _move_to_target() -> Vector3:
 			path.remove_at(0)
 			emit_signal("target_point_reached")
 		else:
-			if sign(path[0].z) != sign(position.z):
-				printerr("I dont move accross the net!")
-				path.remove_at(0)
-				return Vector3.ZERO
-			direction = path[0] - position
+			#if sign(path[0].z) != sign(position.z):
+				#printerr("I dont move accross the net!")
+				#path.remove_at(0)
+				#return Vector3.ZERO
+
+
+			direction = (path[0] - position).normalized()
 			direction.y = 0
 
 	return direction
@@ -104,15 +102,15 @@ func _move_to_target() -> Vector3:
 func move_to(target: Vector3) -> void:
 	cancel_movement()
 	path.append(target)
-	print(player_data.last_name, " path: ", path)
+	#print(player_data.last_name, " path: ", path)
 
 
 func cancel_movement() -> void:
 	path = []
 
 
-func set_active_stroke(stroke: Dictionary, ball_position: Vector3, time: float) -> void:
-	if stroke.anim_id == model.Strokes.SERVE:
+func set_active_stroke(ball_position: Vector3, time: float) -> void:
+	if stroke.stroke_type == stroke.StrokeType.SERVE:
 		active_stroke = stroke
 		return
 
@@ -121,14 +119,7 @@ func set_active_stroke(stroke: Dictionary, ball_position: Vector3, time: float) 
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
-	var stroke_name
-	if stroke.anim_id == 0:
-		stroke_name = "backhand"
-	if stroke.anim_id == 2:
-		stroke_name = "forehand"
-	else:
-		stroke_name = "backhand"
-	model.set_stroke(stroke_name, ball_position)
+	model.set_stroke(active_stroke, ball_position)
 	model.transition_to(model.States.STROKE)
 
 
@@ -153,9 +144,9 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	model.set_move_direction(direction)
 
 	if not is_on_floor():
-		vel.y += -GlobalPhysics.DEFAULT_GRAVITY * 2 * delta
+		vel.y += -GlobalPhysics.GRAVITY * 2 * delta
 	else:
-		vel.y = -GlobalPhysics.DEFAULT_GRAVITY / 10
+		vel.y = -GlobalPhysics.GRAVITY / 10
 
 	vel.x = direction.x * move_speed
 	vel.z = direction.z * move_speed
@@ -190,20 +181,14 @@ func challenge() -> void:
 
 
 func serve() -> void:
-	model.set_stroke("serve")
-	model.transition_to(model.States.STROKE)
-	respawn_ball()
-
-
-# this function gets called from animation "serve"
-func respawn_ball() -> void:
 	if not active_stroke:
 		return
 
-	print("New Ball!")
-
 	if ball:
 		ball.queue_free()
+
+	model.set_stroke(active_stroke)
+	model.transition_to(model.States.STROKE)
 
 	ball = ball_scene.instantiate()
 	ball.initial_position = position + model.toss_point
@@ -214,15 +199,10 @@ func respawn_ball() -> void:
 	get_tree().call_group("Player", "set_active_ball", ball)
 
 	await get_tree().create_timer(1).timeout
-	var vel = GlobalPhysics.get_velocity_stroke_from_to(
-		ball.position,
-		active_stroke.to,
-		-sign(position.z) * active_stroke.pace,
-		active_stroke.spin,
-		active_stroke.height
-	)
-	hit_ball(ball as Ball, vel, active_stroke.spin)
+
+	hit_ball(ball)
 	emit_signal("just_served")
+
 
 
 func _on_RacketArea_body_entered(body) -> void:
@@ -232,49 +212,20 @@ func _on_RacketArea_body_entered(body) -> void:
 	if active_stroke == null:
 		return
 
-	_modify_active_stroke()
-	var vel = GlobalPhysics.get_velocity_stroke_from_to(
-		body.position,
-		active_stroke.to,
-		-sign(position.z) * active_stroke.pace,
-		active_stroke.spin,
-		active_stroke.height
-	)
+	hit_ball(ball)
 
-	hit_ball(body, vel, active_stroke.spin)
-
-
-#
-#func ready_to_receive() -> void:
-##	root_state_machine.travel("receive-loop")
-#	emit_signal("ready_to_receive")
-
-
-func _modify_active_stroke() -> void:
-	var rand_factor = (player_data.stats.control + ball.velocity.length() * 3.6) / 100
-	active_stroke.to += rand_factor * Vector3(randf_range(-1, 1), 0, randf_range(-1, 1))
-
-
-func hit_ball(ball: Ball, vel: Vector3, spin: float) -> void:
-	ball.apply_stroke(vel, spin)
-	_play_stroke_sound()
-
+func hit_ball(ball: Ball) -> void:
+	active_stroke.execute_stroke(ball)
 	emit_signal("ball_hit")
-	print("ball_hit. speed: ", vel.length() * 3.6, "km/h vel: ", vel)
 	cancel_stroke()
-	player_data.set_stat("endurance", player_data.stats.endurance - randf_range(2, 5))
 
 
-func _play_stroke_sound() -> void:
-	if active_stroke.anim_id == model.Strokes.BACKHAND_SLICE:
-		strokes.sounds_slice[randi() % strokes.sounds_slice.size()].play()
-	else:
+func player_grunt_sound():
+	if active_stroke.stroke_type != stroke.StrokeType.BACKHAND_SLICE:
 		var grunts = player_data.sounds.grunt_flat
 		if grunts.size() > 0 and randf() < player_data.sounds.grunt_frequency:
 			audio_stream_player.stream = grunts[randi() % grunts.size()]
 			audio_stream_player.play()
-		else:
-			strokes.sounds_flat[randi() % strokes.sounds_flat.size()].play()
 
 
 func set_active_ball(b: Ball) -> void:
