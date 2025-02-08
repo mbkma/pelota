@@ -44,10 +44,10 @@ func _ready() -> void:
 	stats = player_data.stats
 	$Label3D.text = player_data.last_name
 	#if input == InputType.AI:
-		#$Label3D.text += " (CPU)"
-		#input_node = load(ai_input).instantiate()
+	#$Label3D.text += " (CPU)"
+	#input_node = load(ai_input).instantiate()
 	#else:
-		#input_node = load(human_input).instantiate()
+	#input_node = load(human_input).instantiate()
 	#add_child(input_node)
 	#strokes.setup(self)
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
@@ -88,10 +88,9 @@ func _move_to_target() -> Vector3:
 			emit_signal("target_point_reached")
 		else:
 			#if sign(path[0].z) != sign(position.z):
-				#printerr("I dont move accross the net!")
-				#path.remove_at(0)
-				#return Vector3.ZERO
-
+			#printerr("I dont move accross the net!")
+			#path.remove_at(0)
+			#return Vector3.ZERO
 
 			direction = (path[0] - position).normalized()
 			direction.y = 0
@@ -204,7 +203,6 @@ func serve() -> void:
 	emit_signal("just_served")
 
 
-
 func _on_RacketArea_body_entered(body) -> void:
 	if body is not Ball or body != ball:  # only do strokes on the active ball
 		return
@@ -213,6 +211,7 @@ func _on_RacketArea_body_entered(body) -> void:
 		return
 
 	hit_ball(ball)
+
 
 func hit_ball(ball: Ball) -> void:
 	active_stroke.execute_stroke(ball)

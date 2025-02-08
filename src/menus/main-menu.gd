@@ -98,4 +98,8 @@ func _on_Career_pressed() -> void:
 
 
 func _on_training_pressed() -> void:
-	emit_signal("level_changed", load("res://src/tennis_location/training_center/training_center.tscn"), null)
+	emit_signal(
+		"level_changed",
+		load("res://src/tennis_location/training_center/training_center.tscn"),
+		null
+	)

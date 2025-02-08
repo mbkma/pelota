@@ -42,7 +42,8 @@ func do_stroke():
 	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
 	current_tactic.compute_next_stroke(closest_ball_position)
 	player.set_active_stroke(closest_ball_position, 0)
-	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke) # FIXME
+	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke)  # FIXME
+
 
 func setup(_sm: Object) -> void:
 	# only for singles match
@@ -122,41 +123,43 @@ var pred
 func on_Opponent_ball_hit():
 	pass
 	#if not player.ball:
-		#return
+	#return
+
+
 #
-	## first, compute next stroke
+## first, compute next stroke
 ##	var p1 = GlobalPhysics._get_ball_position_at_ground(player.ball).pos
 ##	if sm.world.court.get_field_at_pos(p1) == GlobalUtils.OUT:
 ##		player.cancel_stroke()
 ##		return
 #
-	#pred = GlobalPhysics.get_ball_position_at(player.ball, player.position.z)
-	#var ball_pos_prediction = pred.pos
+#pred = GlobalPhysics.get_ball_position_at(player.ball, player.position.z)
+#var ball_pos_prediction = pred.pos
 #
-	##print("BALL PREDICTION", ball_pos_prediction.y)
+##print("BALL PREDICTION", ball_pos_prediction.y)
 #
-	## second, compute how to move in order to do the stroke
+## second, compute how to move in order to do the stroke
 #
-	## if ball outside of comfort zone
-	#if (
-		#ball_pos_prediction.y < player.model.forehand_down_point.y
-		#or ball_pos_prediction.y > player.model.forehand_up_point.y
-	#):
-		#pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
+## if ball outside of comfort zone
+#if (
+#ball_pos_prediction.y < player.model.forehand_down_point.y
+#or ball_pos_prediction.y > player.model.forehand_up_point.y
+#):
+#pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
 #
-	#if not pred:
-		#return
+#if not pred:
+#return
 #
-	#var stroke = current_tactic.compute_next_stroke(pred)
-	#var x_offset = 0
-	#if stroke.anim_id == player.model.Strokes.FOREHAND:
-		#x_offset = player.model.forehand_up_point.x
-	#else:
-		#x_offset = player.model.backhand_up_point.x
-	#var final_move_pos = pred.pos - x_offset * player.transform.basis.x
-	#final_move_pos.y = 0
-	#player.move_to(final_move_pos)
-	#player.set_active_stroke(stroke, pred.pos, pred.time)
+#var stroke = current_tactic.compute_next_stroke(pred)
+#var x_offset = 0
+#if stroke.anim_id == player.model.Strokes.FOREHAND:
+#x_offset = player.model.forehand_up_point.x
+#else:
+#x_offset = player.model.backhand_up_point.x
+#var final_move_pos = pred.pos - x_offset * player.transform.basis.x
+#final_move_pos.y = 0
+#player.move_to(final_move_pos)
+#player.set_active_stroke(stroke, pred.pos, pred.time)
 
 
 func make_serve():

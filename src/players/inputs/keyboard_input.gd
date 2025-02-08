@@ -23,6 +23,7 @@ var input_pace := 0.0
 
 @export var mouse_sensitivity := 100.0
 
+
 func _ready() -> void:
 	player = get_parent()
 	await get_tree().create_timer(0.5).timeout
@@ -32,6 +33,7 @@ func _ready() -> void:
 	player.ball_hit.connect(_on_Player_ball_hit)
 	#move_input_blocked = true
 	#player.move_to(Vector3(0,0,10))
+
 
 func setup(singles_match):
 	#player.timing.show()
@@ -128,7 +130,7 @@ func set_stroke_input(closest_ball_position) -> void:
 	move_input_blocked = true
 
 	player.set_active_stroke(closest_ball_position, 0)
-	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke) # FIXME
+	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke)  # FIXME
 
 	emit_signal("input_changed", timing_score)
 	clear_stroke_input()
@@ -141,7 +143,7 @@ func clear_stroke_input():
 
 
 func _get_default_aim() -> Vector3:
-	var default_aim := Vector3(0,0,-sign(player.position.z) * 9)
+	var default_aim := Vector3(0, 0, -sign(player.position.z) * 9)
 	if player.is_serving:
 		default_aim = Vector3(-sign(player.position.x) * -3, 0, -sign(player.position.z) * 15)
 	return default_aim

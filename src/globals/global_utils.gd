@@ -25,22 +25,16 @@ enum MatchStates {
 
 const DEBUGGING = false
 
+enum Direction { LEFT, RIGHT, FRONT, BEHIND }
 
-enum Direction {
-	LEFT,
-	RIGHT,
-	FRONT,
-	BEHIND
-}
+enum CheckType { LEFT_RIGHT, FRONT_BEHIND }
 
-enum CheckType {
-	LEFT_RIGHT,
-	FRONT_BEHIND
-}
 
-func check_relative_position(player: Node3D, target_position: Vector3, check_type: CheckType) -> Direction:
+func check_relative_position(
+	player: Node3D, target_position: Vector3, check_type: CheckType
+) -> Direction:
 	var player_forward = player.basis.z.normalized()  # Forward vector (Z axis)
-	var player_right = player.basis.x.normalized()    # Right vector (X axis)
+	var player_right = player.basis.x.normalized()  # Right vector (X axis)
 
 	var direction_to_target = (target_position - player.position).normalized()
 
@@ -54,6 +48,7 @@ func check_relative_position(player: Node3D, target_position: Vector3, check_typ
 		return Direction.FRONT if is_in_front else Direction.BEHIND
 
 	return -1
+
 
 # Function to check if the target is flying towards the source
 func is_flying_towards(source: Node3D, target: Node3D) -> bool:
@@ -137,7 +132,6 @@ func get_horizontal_distance(source, target):
 	var is_in_front = forward_vector.dot(direction_to_target.normalized()) > 0
 
 	return horizontal_distance
-
 
 
 func get_filepaths_in_directory(directory_path: String, ending: String = "") -> Array:

@@ -24,7 +24,10 @@ func _ready() -> void:
 func spin_to_gravity(spin: float) -> float:
 	return 10 + spin
 
+
 var prev_velocity
+
+
 func _physics_process(delta: float) -> void:
 	var gravity := spin_to_gravity(spin)
 	velocity.y += -gravity * delta
@@ -47,6 +50,7 @@ func _physics_process(delta: float) -> void:
 	#print("position", position)
 	#print("global_position", global_position)
 	#trajectory = predict_trajectory()
+
 
 func apply_stroke(vel: Vector3, _spin: float) -> void:
 	spin = _spin

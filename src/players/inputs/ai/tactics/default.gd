@@ -18,6 +18,7 @@ enum StrokeType {
 
 var standard_length := 10.0
 
+
 func setup(_player) -> void:
 	player = _player
 
@@ -62,36 +63,50 @@ func set_stroke(stroke_type: StrokeType):
 			player.stroke.stroke_type = player.stroke.StrokeType.FOREHAND
 			player.stroke.stroke_power = player.stats.forehand_pace
 			player.stroke.stroke_spin = player.stats.forehand_spin
-			player.stroke.stroke_target = Vector3(sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length)
+			player.stroke.stroke_target = Vector3(
+				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
+			)
 		StrokeType.FOREHAND_CROSS:
 			player.stroke.stroke_type = player.stroke.StrokeType.FOREHAND
 			player.stroke.stroke_power = player.stats.forehand_pace
 			player.stroke.stroke_spin = player.stats.forehand_spin
 			var target_local = Vector3(-8 * 0.3, 0, -11)  # Cross direction
 			var target_global = player.global_position + player.global_basis * target_local
-			player.stroke.stroke_target = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length)
+			player.stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
+			)
 		StrokeType.BACKHAND_LONGLINE:
 			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND
 			player.stroke.stroke_power = player.stats.backhand_pace
 			player.stroke.stroke_spin = player.stats.backhand_spin
-			player.stroke.stroke_target = Vector3(sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length)
+			player.stroke.stroke_target = Vector3(
+				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
+			)
 		StrokeType.BACKHAND_CROSS:
 			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND
 			player.stroke.stroke_power = player.stats.backhand_pace
 			player.stroke.stroke_spin = player.stats.backhand_spin
-			player.stroke.stroke_target = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length)
+			player.stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
+			)
 		StrokeType.BACKHAND_SLICE_CROSS:
 			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND_SLICE
 			player.stroke.stroke_power = 20
 			player.stroke.stroke_spin = -5
-			player.stroke.stroke_target = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length)
+			player.stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
+			)
 		StrokeType.BACKHAND_SLICE_LONGLINE:
 			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND_SLICE
 			player.stroke.stroke_power = 20
 			player.stroke.stroke_spin = -5
-			player.stroke.stroke_target = Vector3(sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length)
+			player.stroke.stroke_target = Vector3(
+				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
+			)
 		StrokeType.BACKHAND_DROP_SHOT:
 			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND_SLICE
 			player.stroke.stroke_power = 10
 			player.stroke.stroke_spin = -2
-			player.stroke.stroke_target = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 4)
+			player.stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 4
+			)
