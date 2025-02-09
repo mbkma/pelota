@@ -2,12 +2,8 @@ class_name Model
 extends Node3D
 
 enum States { MOVE, STROKE }
-enum Strokes {
-	BACKHAND,
-	BACKHAND_SLICE,
-	FOREHAND,
-	SERVE,
-}
+
+var animation_hit_time := 0.37
 
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var _playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
@@ -51,6 +47,15 @@ func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
 
 	return (stroke_pos - point_down) / (point_up - point_down)
 
+
+func play_stroke_animation(stroke: Stroke, ball_position):
+	var time = 0 # should be stroke.time
+	var t = max(0, time - animation_hit_time)
+	if t > 0:
+		await get_tree().create_timer(t).timeout
+
+	set_stroke(stroke, ball_position)
+	transition_to(States.STROKE)
 
 func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
 	#var point := get_stroke_blend_position(stroke_id, stroke_pos)

@@ -35,10 +35,15 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if get_slide_collision_count() > 0:
 		var col := get_slide_collision(0)
-		velocity = prev_velocity.bounce(col.get_normal()) * DAMP
-		position.y = GROUND
-		if is_on_wall():
-			velocity *= 0.05
+		var collider := col.get_collider()
+		print(collider)
+		if collider.is_in_group("Net"):
+			prev_velocity.z *= 0.1
+			prev_velocity.x *= 0.1
+			velocity = prev_velocity.bounce(col.get_normal()) * DAMP
+		else:
+			velocity = prev_velocity.bounce(col.get_normal()) * DAMP
+			position.y = GROUND
 		if position.y < 0.1:
 			emit_signal("on_ground")
 

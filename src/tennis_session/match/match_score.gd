@@ -1,7 +1,7 @@
-extends Node
 class_name Score
+extends Resource
 
-signal changed
+signal score_changed
 
 enum TennisPoint { LOVE, FIFTEEN, THIRTY, FORTY, AD }
 
@@ -14,7 +14,7 @@ var tiebreak_points := [0, 0]
 
 var is_tiebreak = false
 
-var current_server = 0
+var current_server := 0
 
 
 func add_games_in_set(games):
@@ -75,4 +75,4 @@ func add_point(index):
 		print("match over")
 		return
 	print("server", current_server)
-	changed.emit()
+	score_changed.emit()

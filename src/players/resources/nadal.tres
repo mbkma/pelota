@@ -1,10 +1,10 @@
-[gd_resource type="Resource" load_steps=3 format=2]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://bsmhgwnl5bmx2"]
 
-[ext_resource path="res://src/players/resources/player_data.gd" type="Script" id=1]
-[ext_resource path="res://src/players/resources/nadal_flat_stroke.wav" type="AudioStream" id=2]
+[ext_resource type="Script" path="res://src/players/resources/player_data.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://b4fpnyd387pe4" path="res://src/players/resources/nadal_flat_stroke.wav" id="2"]
 
 [resource]
-script = ExtResource( 1 )
+script = ExtResource("1")
 first_name = "Rafael"
 last_name = "Nadal"
 age = 36
@@ -25,7 +25,7 @@ stats = {
 "strength": 100
 }
 sounds = {
-"grunt_flat": [ ExtResource( 2 ) ],
+"grunt_flat": [ExtResource("2")],
 "grunt_frequency": 0.9,
-"victory": [  ]
+"victory": []
 }

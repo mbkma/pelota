@@ -17,7 +17,7 @@ func _ready() -> void:
 
 	list.add_entry("Id", player.player_data.last_name)
 
-	list.add_entry("active stroke", player.active_stroke)
+	list.add_entry("active stroke", player.queued_stroke)
 	list.add_entry("model playback node", player.model._playback.get_current_node())
 
 	if player.input != player.InputType.AI:
@@ -29,8 +29,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not player:
 		return
-	if player.active_stroke:
-		list.get_entry(1).update(player.active_stroke.stroke_target)
+	if player.queued_stroke:
+		list.get_entry(1).update(player.queued_stroke.stroke_target)
 	else:
 		list.get_entry(1).update("null")
 

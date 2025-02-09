@@ -3,7 +3,7 @@ extends Node
 
 var player: Player
 
-enum StrokeType {
+enum AiStrokeType {
 	FOREHAND_LONGLINE,
 	FOREHAND_CROSS,
 	BACKHAND_LONGLINE,
@@ -23,90 +23,116 @@ func setup(_player) -> void:
 	player = _player
 
 
-func compute_next_stroke(closest_ball_position) -> void:
+func compute_next_stroke(closest_ball_position) -> Stroke:
 	var r = randf()
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
 	if dot_product > 0:
 		if r < 0.3:
-			set_stroke(StrokeType.FOREHAND_LONGLINE)
+			return get_stroke(AiStrokeType.FOREHAND_LONGLINE)
 		else:
-			set_stroke(StrokeType.FOREHAND_CROSS)
+			return get_stroke(AiStrokeType.FOREHAND_CROSS)
 	else:
 		if r < 0.2:
-			set_stroke(StrokeType.BACKHAND_LONGLINE)
+			return get_stroke(AiStrokeType.BACKHAND_LONGLINE)
 		elif r < 0.4:
-			set_stroke(StrokeType.BACKHAND_CROSS)
+			return get_stroke(AiStrokeType.BACKHAND_CROSS)
 		elif r < 0.9:
-			set_stroke(StrokeType.BACKHAND_SLICE_CROSS)
+			return get_stroke(AiStrokeType.BACKHAND_SLICE_CROSS)
 		else:
-			return set_stroke(StrokeType.BACKHAND_DROP_SHOT)
+			return get_stroke(AiStrokeType.BACKHAND_DROP_SHOT)
 
 
-func compute_serve() -> Dictionary:
+func compute_serve() -> Stroke:
 	var r = randf()
-	if r < 0.3:
-		return player.strokes.serve_wide()
-	elif r < 0.6:
-		return player.strokes.serve_t()
+	if r < 0.4:
+		return get_stroke(AiStrokeType.SERVE_WIDE)
+	elif r < 0.8:
+		return get_stroke(AiStrokeType.SERVE_T)
 	else:
-		return player.strokes.serve_body()
+		return get_stroke(AiStrokeType.SERVE_BODY)
 
 
 func on_Player_ball_hit():
 	player.move_to(Vector3(sign(player.position.x) * 2, 0, player.position.z))
 
 
-func set_stroke(stroke_type: StrokeType):
+func get_stroke(stroke_type: AiStrokeType) -> Stroke:
+	var stroke := Stroke.new()
 	match stroke_type:
-		StrokeType.FOREHAND_LONGLINE:
-			player.stroke.stroke_type = player.stroke.StrokeType.FOREHAND
-			player.stroke.stroke_power = player.stats.forehand_pace
-			player.stroke.stroke_spin = player.stats.forehand_spin
-			player.stroke.stroke_target = Vector3(
+		AiStrokeType.FOREHAND_LONGLINE:
+			stroke.stroke_type = stroke.StrokeType.FOREHAND
+			stroke.stroke_power = player.stats.forehand_pace
+			stroke.stroke_spin = player.stats.forehand_spin
+			stroke.stroke_target = Vector3(
 				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
-		StrokeType.FOREHAND_CROSS:
-			player.stroke.stroke_type = player.stroke.StrokeType.FOREHAND
-			player.stroke.stroke_power = player.stats.forehand_pace
-			player.stroke.stroke_spin = player.stats.forehand_spin
+		AiStrokeType.FOREHAND_CROSS:
+			stroke.stroke_type = stroke.StrokeType.FOREHAND
+			stroke.stroke_power = player.stats.forehand_pace
+			stroke.stroke_spin = player.stats.forehand_spin
 			var target_local = Vector3(-8 * 0.3, 0, -11)  # Cross direction
 			var target_global = player.global_position + player.global_basis * target_local
-			player.stroke.stroke_target = Vector3(
+			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
-		StrokeType.BACKHAND_LONGLINE:
-			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND
-			player.stroke.stroke_power = player.stats.backhand_pace
-			player.stroke.stroke_spin = player.stats.backhand_spin
-			player.stroke.stroke_target = Vector3(
+		AiStrokeType.BACKHAND_LONGLINE:
+			stroke.stroke_type = stroke.StrokeType.BACKHAND
+			stroke.stroke_power = player.stats.backhand_pace
+			stroke.stroke_spin = player.stats.backhand_spin
+			stroke.stroke_target = Vector3(
 				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
-		StrokeType.BACKHAND_CROSS:
-			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND
-			player.stroke.stroke_power = player.stats.backhand_pace
-			player.stroke.stroke_spin = player.stats.backhand_spin
-			player.stroke.stroke_target = Vector3(
+		AiStrokeType.BACKHAND_CROSS:
+			stroke.stroke_type = stroke.StrokeType.BACKHAND
+			stroke.stroke_power = player.stats.backhand_pace
+			stroke.stroke_spin = player.stats.backhand_spin
+			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
-		StrokeType.BACKHAND_SLICE_CROSS:
-			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND_SLICE
-			player.stroke.stroke_power = 20
-			player.stroke.stroke_spin = -5
-			player.stroke.stroke_target = Vector3(
+		AiStrokeType.BACKHAND_SLICE_CROSS:
+			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
+			stroke.stroke_power = 20
+			stroke.stroke_spin = -5
+			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
-		StrokeType.BACKHAND_SLICE_LONGLINE:
-			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND_SLICE
-			player.stroke.stroke_power = 20
-			player.stroke.stroke_spin = -5
-			player.stroke.stroke_target = Vector3(
+		AiStrokeType.BACKHAND_SLICE_LONGLINE:
+			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
+			stroke.stroke_power = 20
+			stroke.stroke_spin = -5
+			stroke.stroke_target = Vector3(
 				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
-		StrokeType.BACKHAND_DROP_SHOT:
-			player.stroke.stroke_type = player.stroke.StrokeType.BACKHAND_SLICE
-			player.stroke.stroke_power = 10
-			player.stroke.stroke_spin = -2
-			player.stroke.stroke_target = Vector3(
+		AiStrokeType.BACKHAND_DROP_SHOT:
+			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
+			stroke.stroke_power = 10
+			stroke.stroke_spin = -2
+			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 4
 			)
+		AiStrokeType.SERVE_WIDE:
+			stroke.stroke_type = stroke.StrokeType.SERVE
+			stroke.stroke_power = player.stats.serve_pace - 5
+			stroke.stroke_spin = 2
+			stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5
+			)
+		AiStrokeType.SERVE_T:
+			stroke.stroke_type = stroke.StrokeType.SERVE
+			stroke.stroke_power = player.stats.serve_pace -5
+			stroke.stroke_spin = 2
+			stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5
+			)
+		AiStrokeType.SERVE_BODY:
+			stroke.stroke_type = stroke.StrokeType.SERVE
+			stroke.stroke_power = player.stats.serve_pace - 5
+			stroke.stroke_spin = 2
+			stroke.stroke_target = Vector3(
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5
+			)
+		_:
+			push_error("AiStroke ", stroke_type, " not implemented!")
+
+	return stroke

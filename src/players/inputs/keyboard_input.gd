@@ -5,23 +5,23 @@ signal aiming_at_pos(pos)
 signal input_changed(time_score)
 signal pace_changed(pace)
 
+@export var ball_aim_marker: MeshInstance3D
+@export var mouse_sensitivity := 100.0
+
 var sm: SinglesMatch
 
+## Move related
 var move_input_blocked := false
 var stroke_input_blocked := true
 var input_blocked := false
 
+# Stroke Related
 var mouse_from := Vector2.ZERO
 var mouse_to := Vector2.ZERO
-var pred = null
-
-var timing_score := 0.0
 var mouse_pressed := false
 var aiming_at := Vector3.ZERO
 var input_pace := 0.0
-@export var ball_aim_marker: MeshInstance3D
 
-@export var mouse_sensitivity := 100.0
 
 
 func _ready() -> void:
@@ -35,20 +35,46 @@ func _ready() -> void:
 	#player.move_to(Vector3(0,0,10))
 
 
-func setup(singles_match):
-	#player.timing.show()
-	sm = singles_match
-
-	#sm.get_opponent(player).ball_hit.connect(_on_Opponent_ball_hit)
-	sm.state_changed.connect(_on_SinglesMatch_state_changed)
-
-
 func _process(delta: float) -> void:
 	if player and player.ball:
 		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
 			move_input_blocked = false
+
+	if Input.is_action_pressed("sprint"):
+		player.move_speed = 7
+		player.acceleration = 0.2
+	else:
+		player.acceleration = 0.1
+		player.move_speed = 5
+
+
+
+
+	if not stroke_input_blocked:
+		if Input.is_action_just_pressed("strike"):
+			input_pace = 0
+			mouse_from = get_viewport().get_mouse_position()
+		if Input.is_action_pressed("strike"):
+			input_pace += 0.1
+			emit_signal("pace_changed", input_pace)
+			mouse_to = get_viewport().get_mouse_position()
+			aiming_at = _get_aim_pos(mouse_from, mouse_to)
+			ball_aim_marker.position = aiming_at
+			ball_aim_marker.visible = true
+		if Input.is_action_just_released("strike"):
+			if player.is_serving:
+				do_serve(aiming_at, input_pace)
+			else:
+				if not player.ball:
+					printerr("Player has no ball")
+				else:
+					do_stroke(aiming_at, input_pace)
+
+	if Input.is_action_just_pressed("challenge"):
+		player.challenge()
+
 
 
 func _physics_process(delta: float) -> void:
@@ -61,51 +87,12 @@ func _physics_process(delta: float) -> void:
 	else:
 		var move_direction := get_move_direction()
 
-		if Input.is_action_pressed("sprint"):
-			player.move_speed = 7
-			player.acceleration = 0.2
-		else:
-			player.acceleration = 0.1
-			player.move_speed = 5
+
 		player.apply_movement(move_direction, delta)
 
-	if not stroke_input_blocked:
-		get_stroke_input(delta)
 
-		if Input.is_action_just_released("strike"):
-			if not player.ball:
-				printerr("Player has no ball")
-			else:
-				do_stroke(aiming_at, input_pace)
-
-	if Input.is_action_just_pressed("challenge"):
-		player.challenge()
-
-	if Input.is_action_just_pressed("serve"):
-		set_serve_input(aiming_at)
-
-
-func set_serve_input(aim):
-	player.serve()
-	var stroke = Stroke.new()
-	stroke.player = player
-	stroke.stroke_type = stroke.StrokeType.SERVE
-	stroke.stroke_power = player.stats.serve_pace + randf_range(10, 20)
-	stroke.stroke_spin = 0
-	stroke.stroke_target = aim
-
-	stroke.execute_stroke(player.ball)
-	#player.prepare_serve()
-	#player.set_active_stroke(Vector3.ZERO, 0)
-	#player.serve()
-
-
-func do_stroke(aiming_at, input_pace):
-	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
-	print(player.player_data, ": closest_ball_position ", closest_ball_position)
-
-	_construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
-	set_stroke_input(closest_ball_position)
+## Move related
+###############
 
 
 func get_move_direction() -> Vector3:
@@ -122,44 +109,13 @@ func get_move_direction() -> Vector3:
 	return direction
 
 
-func get_stroke_input(delta: float):
-	if not GlobalUtils.is_flying_towards(player, player.ball):
-		return
-
-	if Input.is_action_just_pressed("strike"):
-		input_pace = 0
-		mouse_from = get_viewport().get_mouse_position()
-	if Input.is_action_pressed("strike"):
-		input_pace += 0.1
-		emit_signal("pace_changed", input_pace)
-		mouse_to = get_viewport().get_mouse_position()
-		aiming_at = _get_aim_pos(mouse_from, mouse_to)
-		ball_aim_marker.position = aiming_at
-		ball_aim_marker.visible = true
-
-
-func set_stroke_input(closest_ball_position) -> void:
-	#clear_stroke_input()
-
-	move_input_blocked = true
-
-	player.set_active_stroke(closest_ball_position, 0)
-	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke)  # FIXME
-
-	emit_signal("input_changed", timing_score)
-	clear_stroke_input()
-
-
-func clear_stroke_input():
-	pred = null
-	input_pace = 0.0
-	ball_aim_marker.visible = false
-
+## Stroke related
+#################
 
 func _get_default_aim() -> Vector3:
 	var default_aim := Vector3(0, 0, -sign(player.position.z) * 9)
 	if player.is_serving:
-		default_aim = Vector3(-sign(player.position.x) * -3, 0, -sign(player.position.z) * 15)
+		default_aim = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 3)
 	return default_aim
 
 
@@ -174,8 +130,39 @@ func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
 	return to
 
 
-func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float):
-	var stroke = player.stroke
+func do_serve(aiming_at, input_pace):
+	var stroke = Stroke.new()
+	stroke.stroke_type = stroke.StrokeType.SERVE
+	stroke.stroke_power = player.stats.serve_pace + input_pace
+	stroke.stroke_spin = 0
+	stroke.stroke_target = aiming_at
+
+	#player.prepare_serve()
+	player.serve(stroke)
+
+
+func do_stroke(aiming_at, input_pace):
+	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
+	print(player.player_data, ": closest_ball_position ", closest_ball_position)
+
+	var stroke := _construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
+	move_input_blocked = true
+
+	player.queue_stroke(stroke, closest_ball_position)
+	GlobalUtils.adjust_player_to_position(player, closest_ball_position, stroke)  # FIXME
+
+	clear_stroke_input()
+
+
+func clear_stroke_input():
+	input_pace = 0.0
+	ball_aim_marker.visible = false
+
+
+
+
+func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float) -> Stroke:
+	var stroke = Stroke.new()
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
 	if dot_product > 0:
@@ -183,7 +170,6 @@ func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: flo
 		stroke.stroke_power = player.stats.forehand_pace + pace
 		stroke.stroke_spin = player.stats.forehand_spin
 		stroke.stroke_target = aim
-		return stroke
 	else:
 		if Input.is_action_pressed("slice"):
 			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
@@ -195,8 +181,20 @@ func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: flo
 			stroke.stroke_power = player.stats.backhand_pace + pace
 			stroke.stroke_spin = player.stats.backhand_spin
 			stroke.stroke_target = aim
-			return stroke
 
+	return stroke
+
+
+## Misc
+#######
+
+
+func setup(singles_match):
+	#player.timing.show()
+	sm = singles_match
+
+	#sm.get_opponent(player).ball_hit.connect(_on_Opponent_ball_hit)
+	sm.state_changed.connect(_on_SinglesMatch_state_changed)
 
 func _on_Player_ball_hit():
 	move_input_blocked = false

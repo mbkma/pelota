@@ -47,8 +47,8 @@ func on_selection_changed() -> void:
 
 
 func _on_Start_pressed() -> void:
-	start_menu.visible = not start_menu.visible
-
+	#start_menu.visible = not start_menu.visible
+	emit_signal("level_changed", load("res://src/tennis_session/tennis_match.tscn"), null)
 
 func _on_Quit_pressed() -> void:
 	get_tree().quit()
@@ -75,13 +75,13 @@ func _on_Play_pressed() -> void:
 
 	match_data = MatchData.new(players_data[0], players_data[1])
 
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	print({"match_data": match_data, "world": world})
-	emit_signal(
-		"level_changed",
-		load("res://src/tennis_session/match/singles_match.tscn"),
-		{"match_data": match_data, "world": world}
-	)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	#print({"match_data": match_data, "world": world})
+	#emit_signal(
+		#"level_changed",
+		#load("res://src/tennis_session/match/singles_match.tscn"),
+		#{"match_data": match_data, "world": world}
+	#)
 
 
 func _on_Tournament_pressed() -> void:

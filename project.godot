@@ -21,6 +21,8 @@ GlobalGameData="*res://src/globals/global_game_data.gd"
 GlobalMusicPlayer="*res://src/globals/global_music_player.gd"
 GlobalHud="*res://src/globals/global_hud.gd"
 GlobalPhysics="*res://src/globals/global_physics.gd"
+SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
+DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 [debug]
 
@@ -32,6 +34,10 @@ shapes/navigation/geometry_color=Color(1, 0, 0.960784, 0.4)
 mouse_cursor/custom_image="res://assets/textures/menus/crosshair121-scaled.png"
 mouse_cursor/custom_image_hotspot=Vector2(16, 16)
 window/size/fullscreen=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/modular-settings-menu/plugin.cfg")
 
 [gui]
 

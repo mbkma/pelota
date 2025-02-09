@@ -8,8 +8,7 @@ var tactics = {
 	"ServeAndVolley": "res://src/players/inputs/ai/tactics/serve_and_volley.gd"
 }
 
-var current_tactic = preload("res://src/players/inputs/ai/tactics/default.gd").new():
-	set = set_current_tactic
+var current_tactic = preload("res://src/players/inputs/ai/tactics/default.gd").new()
 var pivot_point := Vector3.ZERO
 
 
@@ -18,110 +17,121 @@ func _ready() -> void:
 	current_tactic.setup(player)
 
 	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
-	player.ball_hit.connect(on_Player_ball_hit)
-	player.target_point_reached.connect(on_player_target_point_reached)
+	#player.ball_hit.connect(on_Player_ball_hit)
+	#player.target_point_reached.connect(on_player_target_point_reached)
 	#player.just_served.connect(on_Player_just_served)
 	#player.move_to(Vector3(0,0,-13))
 	#await player.target_point_reached
-	if player.is_serving:
-		make_serve()
 
+
+func serve_requested():
+	make_serve()
 
 func _process(delta: float) -> void:
 	if player and player.ball:
-		if GlobalUtils.is_flying_towards(player, player.ball):
-			if not player.active_stroke:
-				do_stroke()
 		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
+		if GlobalUtils.is_flying_towards(player, player.ball) and dist > 3:
+			if not player.queued_stroke:
+				do_stroke()
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
-
-
-func do_stroke():
-	player.ball.trajectory = player.ball.predict_trajectory()
-	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
-	current_tactic.compute_next_stroke(closest_ball_position)
-	player.set_active_stroke(closest_ball_position, 0)
-	GlobalUtils.adjust_player_to_position(player, closest_ball_position, player.active_stroke)  # FIXME
-
-
-func setup(_sm: Object) -> void:
-	# only for singles match
-	sm = _sm
-	sm.state_changed.connect(on_SinglesMatch_state_changed)
-	sm.get_opponent(player).just_served.connect(on_Opponent_just_served)
-	sm.get_opponent(player).ball_hit.connect(on_Opponent_ball_hit)
-	sm.get_opponent(player).ready_to_serve.connect(on_Opponent_ready_to_serve)
-	move_to_serve_receive()
-
-
-func set_current_tactic(tactic):
-	current_tactic = tactic
-
-
-func on_Opponent_just_served():
-	pass
-
 
 func _physics_process(delta: float) -> void:
 	var move_dir = player.compute_move_dir()
 	player.apply_movement(move_dir, delta)
 
 
-func on_player_target_point_reached():
-	return
 
 
-func on_Player_ball_hit():
-	current_tactic.on_Player_ball_hit()
 
 
-func on_Opponent_ready_to_serve():
+## Stroke related
+#################
+
+func do_stroke():
+	player.ball.predict_trajectory()
+	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
+
+	#if closest_ball_position.distance_squared_to(player.position) > 20:
+		#return
+
+	var stroke := current_tactic.compute_next_stroke(closest_ball_position)
+	player.queue_stroke(stroke, closest_ball_position)
+	GlobalUtils.adjust_player_to_position(player, closest_ball_position, stroke)  # FIXME
+
+
+func make_serve():
+	var stroke := current_tactic.compute_serve()
+	player.prepare_serve()
+	await get_tree().create_timer(2).timeout
+	player.serve(stroke)
+
+
+## Misc
+#######
+
+
+func setup(_sm: Object) -> void:
 	pass
+	# only for singles match
+	#sm = _sm
+	#sm.state_changed.connect(on_SinglesMatch_state_changed)
+	#sm.get_opponent(player).just_served.connect(on_Opponent_just_served)
+	#sm.get_opponent(player).ball_hit.connect(on_Opponent_ball_hit)
+	#sm.get_opponent(player).ready_to_serve.connect(on_Opponent_ready_to_serve)
+	#move_to_serve_receive()
+
+
+#func set_current_tactic(tactic):
+	#current_tactic = tactic
+#
+#
+#func on_Opponent_just_served():
+	#pass
+#
+#
+#
+#func on_player_target_point_reached():
+	#return
+#
+#
+#func on_Player_ball_hit():
+	#current_tactic.on_Player_ball_hit()
+#
+#
+#func on_Opponent_ready_to_serve():
+	#pass
 
 
 #	player.ready_to_receive()
 
 
-func move_to_serve_receive():
-	var score = sm.match_data.match_score._score
-	if player.is_serving:
-		var pos = sm.world.get_stadium_position("serve_deuce0")
-		if not sm.match_data.match_score.is_points_diff_even():
-			pos = sm.world.get_stadium_position("serve_ad0")
-		player.move_to(pos)
-	else:
-		var pos = sm.world.get_stadium_position("receive_deuce1")
-		if not sm.match_data.match_score.is_points_diff_even():
-			pos = sm.world.get_stadium_position("receive_ad1")
-		player.move_to(pos)
+
+#func on_SinglesMatch_state_changed(old_state, new_state):
+	#if (
+		#new_state == GlobalUtils.MatchStates.IDLE
+		#or new_state == GlobalUtils.MatchStates.SECOND_SERVE
+	#):
+		## cancel all player movement orders
+		#player.cancel_movement()
+		#player.cancel_stroke()
+		#await get_tree().create_timer(3).timeout
+		#move_to_serve_receive()
+		#await player.target_point_reached
+		#if player.is_serving:
+			#make_serve()
+#
+	#pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
+	#if new_state == GlobalUtils.MatchStates.FAULT:
+		#player.cancel_movement()
+		#player.cancel_stroke()
+#
+#
+#var pred
 
 
-func on_SinglesMatch_state_changed(old_state, new_state):
-	if (
-		new_state == GlobalUtils.MatchStates.IDLE
-		or new_state == GlobalUtils.MatchStates.SECOND_SERVE
-	):
-		# cancel all player movement orders
-		player.cancel_movement()
-		player.cancel_stroke()
-		await get_tree().create_timer(3).timeout
-		move_to_serve_receive()
-		await player.target_point_reached
-		if player.is_serving:
-			make_serve()
-
-	pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
-	if new_state == GlobalUtils.MatchStates.FAULT:
-		player.cancel_movement()
-		player.cancel_stroke()
-
-
-var pred
-
-
-func on_Opponent_ball_hit():
-	pass
+#func on_Opponent_ball_hit():
+	#pass
 	#if not player.ball:
 	#return
 
@@ -160,11 +170,3 @@ func on_Opponent_ball_hit():
 #final_move_pos.y = 0
 #player.move_to(final_move_pos)
 #player.set_active_stroke(stroke, pred.pos, pred.time)
-
-
-func make_serve():
-	player.prepare_serve()
-	current_tactic.compute_serve()
-	player.set_active_stroke(Vector3.ZERO, 0)
-	await get_tree().create_timer(5).timeout
-	player.serve()

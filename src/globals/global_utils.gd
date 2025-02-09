@@ -93,7 +93,26 @@ func adjust_player_to_position(player: Player, closest_ball_position: Vector3, s
 
 	var new_position = closest_ball_position + x_offset * player.basis.x
 	new_position.y = player.position.y
+	print("new position ", new_position)
 	player.move_to(new_position)
+
+
+func get_optimal_ball_position(player: Player) -> Vector3:  # TODO
+	# Initialize variables to track the closest point
+	var optimal_ball_position: Vector3 = Vector3.ZERO
+	var closest_z_distance: float = INF  # Start with a large number
+	var trajectory = player.ball.predict_trajectory()
+	# Iterate through the ball trajectory to find the closest point in Z
+	for ball_position in trajectory:
+		# Calculate the Z distance
+		var z_distance = abs(ball_position.z - player.position.z)
+		#print(ball_position)
+		if z_distance < closest_z_distance:
+			closest_z_distance = z_distance
+			optimal_ball_position = ball_position
+
+	# Now closest_ball_position holds the position of the ball closest to the player in Z
+	return optimal_ball_position
 
 
 func get_closest_ball_position(player: Player) -> Vector3:  # FIXME: Optimize Performance

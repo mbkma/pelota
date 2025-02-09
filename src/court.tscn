@@ -1,12 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dyg40a5hhkqva"]
+[gd_scene load_steps=4 format=3 uid="uid://dyg40a5hhkqva"]
 
 [ext_resource type="PackedScene" uid="uid://dbfeuchykukj3" path="res://assets/models/court/court.blend" id="2_cwupy"]
 [ext_resource type="Script" path="res://src/court.gd" id="5"]
-
-[sub_resource type="PhysicsMaterial" id="11"]
-rough = true
-bounce = 0.41
-absorbent = true
 
 [sub_resource type="BoxShape3D" id="8"]
 size = Vector3(10, 1.01273, 0.0807126)
@@ -16,11 +11,10 @@ script = ExtResource("5")
 
 [node name="court" parent="." instance=ExtResource("2_cwupy")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Net" type="StaticBody3D" parent="." groups=["Net"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.388625, 0)
-physics_material_override = SubResource("11")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Net"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0917587, 0)
 shape = SubResource("8")
 
