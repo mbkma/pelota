@@ -10,7 +10,6 @@ enum StrokeType {
 	VOLLEY,
 }
 
-
 # Variables for stroke properties
 var stroke_type: StrokeType
 var stroke_power: float

@@ -49,13 +49,14 @@ func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
 
 
 func play_stroke_animation(stroke: Stroke, ball_position):
-	var time = 0 # should be stroke.time
+	var time = 0  # should be stroke.time
 	var t = max(0, time - animation_hit_time)
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
 	set_stroke(stroke, ball_position)
 	transition_to(States.STROKE)
+
 
 func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
 	#var point := get_stroke_blend_position(stroke_id, stroke_pos)

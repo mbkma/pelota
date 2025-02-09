@@ -27,6 +27,7 @@ func _ready() -> void:
 func serve_requested():
 	make_serve()
 
+
 func _process(delta: float) -> void:
 	if player and player.ball:
 		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
@@ -36,24 +37,22 @@ func _process(delta: float) -> void:
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
 
+
 func _physics_process(delta: float) -> void:
 	var move_dir = player.compute_move_dir()
 	player.apply_movement(move_dir, delta)
 
 
-
-
-
-
 ## Stroke related
 #################
+
 
 func do_stroke():
 	player.ball.predict_trajectory()
 	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
 
 	#if closest_ball_position.distance_squared_to(player.position) > 20:
-		#return
+	#return
 
 	var stroke := current_tactic.compute_next_stroke(closest_ball_position)
 	player.queue_stroke(stroke, closest_ball_position)
@@ -81,60 +80,54 @@ func setup(_sm: Object) -> void:
 	#sm.get_opponent(player).ready_to_serve.connect(on_Opponent_ready_to_serve)
 	#move_to_serve_receive()
 
-
 #func set_current_tactic(tactic):
-	#current_tactic = tactic
+#current_tactic = tactic
 #
 #
 #func on_Opponent_just_served():
-	#pass
+#pass
 #
 #
 #
 #func on_player_target_point_reached():
-	#return
+#return
 #
 #
 #func on_Player_ball_hit():
-	#current_tactic.on_Player_ball_hit()
+#current_tactic.on_Player_ball_hit()
 #
 #
 #func on_Opponent_ready_to_serve():
-	#pass
-
+#pass
 
 #	player.ready_to_receive()
 
-
-
 #func on_SinglesMatch_state_changed(old_state, new_state):
-	#if (
-		#new_state == GlobalUtils.MatchStates.IDLE
-		#or new_state == GlobalUtils.MatchStates.SECOND_SERVE
-	#):
-		## cancel all player movement orders
-		#player.cancel_movement()
-		#player.cancel_stroke()
-		#await get_tree().create_timer(3).timeout
-		#move_to_serve_receive()
-		#await player.target_point_reached
-		#if player.is_serving:
-			#make_serve()
+#if (
+#new_state == GlobalUtils.MatchStates.IDLE
+#or new_state == GlobalUtils.MatchStates.SECOND_SERVE
+#):
+## cancel all player movement orders
+#player.cancel_movement()
+#player.cancel_stroke()
+#await get_tree().create_timer(3).timeout
+#move_to_serve_receive()
+#await player.target_point_reached
+#if player.is_serving:
+#make_serve()
 #
-	#pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
-	#if new_state == GlobalUtils.MatchStates.FAULT:
-		#player.cancel_movement()
-		#player.cancel_stroke()
+#pivot_point = Vector3(0, 0, sign(player.position.z) * 13)
+#if new_state == GlobalUtils.MatchStates.FAULT:
+#player.cancel_movement()
+#player.cancel_stroke()
 #
 #
 #var pred
 
-
 #func on_Opponent_ball_hit():
-	#pass
-	#if not player.ball:
-	#return
-
+#pass
+#if not player.ball:
+#return
 
 #
 ## first, compute next stroke

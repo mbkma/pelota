@@ -23,7 +23,6 @@ var aiming_at := Vector3.ZERO
 var input_pace := 0.0
 
 
-
 func _ready() -> void:
 	player = get_parent()
 	await get_tree().create_timer(0.5).timeout
@@ -49,9 +48,6 @@ func _process(delta: float) -> void:
 		player.acceleration = 0.1
 		player.move_speed = 5
 
-
-
-
 	if not stroke_input_blocked:
 		if Input.is_action_just_pressed("strike"):
 			input_pace = 0
@@ -76,7 +72,6 @@ func _process(delta: float) -> void:
 		player.challenge()
 
 
-
 func _physics_process(delta: float) -> void:
 	if input_blocked:
 		return
@@ -86,7 +81,6 @@ func _physics_process(delta: float) -> void:
 		player.apply_movement(move_dir, delta)
 	else:
 		var move_direction := get_move_direction()
-
 
 		player.apply_movement(move_direction, delta)
 
@@ -111,6 +105,7 @@ func get_move_direction() -> Vector3:
 
 ## Stroke related
 #################
+
 
 func _get_default_aim() -> Vector3:
 	var default_aim := Vector3(0, 0, -sign(player.position.z) * 9)
@@ -159,8 +154,6 @@ func clear_stroke_input():
 	ball_aim_marker.visible = false
 
 
-
-
 func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float) -> Stroke:
 	var stroke = Stroke.new()
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
@@ -195,6 +188,7 @@ func setup(singles_match):
 
 	#sm.get_opponent(player).ball_hit.connect(_on_Opponent_ball_hit)
 	sm.state_changed.connect(_on_SinglesMatch_state_changed)
+
 
 func _on_Player_ball_hit():
 	move_input_blocked = false

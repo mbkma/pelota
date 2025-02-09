@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bq11dsxkra3s4"]
+[gd_scene load_steps=4 format=3 uid="uid://bq11dsxkra3s4"]
 
 [ext_resource type="Script" path="res://src/cameras.gd" id="1_ibrh3"]
 [ext_resource type="Script" path="res://src/free_look_camera.gd" id="1_owke2"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/tennis_location/us_open/stadium.tscn" id="3_pi3s4"]
 
 [node name="Cameras" type="Node3D" node_paths=PackedStringArray("cams")]
 script = ExtResource("1_ibrh3")
@@ -18,14 +19,14 @@ transform = Transform3D(-0.253251, 0, 0.967401, 0, 1, 0, -0.967401, 0, -0.253251
 fov = 24.4
 
 [node name="StaticSouthCam" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.974217, 0.225615, 0, -0.225615, 0.974217, 0, 6.95591, 30.6839)
+transform = Transform3D(1, 0, 0, 0, 0.948324, 0.317305, 0, -0.317305, 0.948324, 0, 9.836, 35.084)
 current = true
-fov = 17.3
+fov = 22.5
 size = 97.38
 
 [node name="StaticNorthCam" type="Camera3D" parent="."]
-transform = Transform3D(-1, 1.97238e-08, -8.51688e-08, 0, 0.974217, 0.225614, 8.74228e-08, 0.225614, -0.974217, 0, 6.956, -30.684)
-fov = 17.3
+transform = Transform3D(-1, 2.77397e-08, -8.29051e-08, 0, 0.948324, 0.317305, 8.74228e-08, 0.317305, -0.948324, 0, 9.836, -35.084)
+fov = 22.5
 size = 97.38
 
 [node name="CourtSidePos" type="Camera3D" parent="."]
@@ -35,3 +36,5 @@ fov = 39.5
 [node name="CourtSideNeg" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -19)
 fov = 39.5
+
+[node name="Stadium" parent="." instance=ExtResource("3_pi3s4")]

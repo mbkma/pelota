@@ -120,7 +120,7 @@ func get_stroke(stroke_type: AiStrokeType) -> Stroke:
 			)
 		AiStrokeType.SERVE_T:
 			stroke.stroke_type = stroke.StrokeType.SERVE
-			stroke.stroke_power = player.stats.serve_pace -5
+			stroke.stroke_power = player.stats.serve_pace - 5
 			stroke.stroke_spin = 2
 			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5

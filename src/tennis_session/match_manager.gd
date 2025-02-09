@@ -3,24 +3,14 @@ extends Node
 
 signal state_changed
 
-enum MatchState {
-	NOT_STARTED,
-	IDLE,
-	SERVE,
-	SECOND_SERVE,
-	PLAY,
-	FAULT,
-	GAME_OVER
-}
+enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER }
 
 var last_hitter: Player  # Stores reference to last player who hit the ball
 
-
-var current_state: MatchState = MatchState.NOT_STARTED :
+var current_state: MatchState = MatchState.NOT_STARTED:
 	set(value):
 		current_state = value
 		state_changed.emit()
-
 
 @onready var match_data: MatchData
 
@@ -34,6 +24,7 @@ var current_state: MatchState = MatchState.NOT_STARTED :
 var _valid_court_region: Court.CourtRegion
 var _valid_rally_zone: Court.CourtRegion
 var _ground_contacts := 0
+
 
 func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not televisionHud:
@@ -55,16 +46,18 @@ func _input(event: InputEvent) -> void:
 			add_point(randi() % 2)
 			print(match_data.get_score().sets)
 
+
 func set_active_ball(b: Ball) -> void:
 	ball = b
 	ball.on_ground.connect(_on_ball_on_ground)
 
 
 #func get_server() -> Player:
-	#if match_data.get_server() == 0:
-		#return player1
-	#else:
-		#return player0
+#if match_data.get_server() == 0:
+#return player1
+#else:
+#return player0
+
 
 func get_opponent(player: Player) -> Player:
 	if player == player0:
@@ -72,11 +65,13 @@ func get_opponent(player: Player) -> Player:
 	else:
 		return player0
 
+
 func get_player_index(player: Player) -> int:
 	if player == player0:
 		return 0
 	else:
 		return 1
+
 
 func _on_state_changed():
 	if current_state == MatchState.SERVE:
@@ -101,6 +96,7 @@ func _set_player_is_serving(is_serving: bool) -> void:
 		player0.is_serving = false
 		player1.is_serving = false
 
+
 func start_match():
 	_valid_rally_zone = Court.CourtRegion.BACK_SINGLES_BOX
 	current_state = MatchState.SERVE
@@ -114,10 +110,16 @@ func reset_match():
 	current_state = MatchState.NOT_STARTED
 	# Reset scores and positions
 
+
 func _swap_valid_rally_zone():
 	print("_swap_valid_rally_zone from ", _valid_rally_zone)
-	_valid_rally_zone = Court.CourtRegion.BACK_SINGLES_BOX if _valid_rally_zone == Court.CourtRegion.FRONT_SINGLES_BOX else Court.CourtRegion.FRONT_SINGLES_BOX
+	_valid_rally_zone = (
+		Court.CourtRegion.BACK_SINGLES_BOX
+		if _valid_rally_zone == Court.CourtRegion.FRONT_SINGLES_BOX
+		else Court.CourtRegion.FRONT_SINGLES_BOX
+	)
 	print("to ", _valid_rally_zone)
+
 
 func _on_ball_on_ground():
 	if current_state == MatchState.IDLE:
@@ -182,6 +184,7 @@ func serve_from_deuce_side() -> bool:
 	var total_points = score.points[0] + score.points[1]
 	return (total_points % 2) == 0
 
+
 func get_valid_service_box() -> Court.CourtRegion:
 	var server = match_data.get_server()  # 0 for Player 0, 1 for Player 1
 	var score = match_data.get_score()
@@ -189,9 +192,17 @@ func get_valid_service_box() -> Court.CourtRegion:
 
 	var valid_service_box: Court.CourtRegion
 	if _valid_rally_zone == Court.CourtRegion.BACK_SINGLES_BOX:
-		valid_service_box = Court.CourtRegion.LEFT_BACK_SERVICE_BOX if serve_from_deuce_side else Court.CourtRegion.RIGHT_BACK_SERVICE_BOX
+		valid_service_box = (
+			Court.CourtRegion.LEFT_BACK_SERVICE_BOX
+			if serve_from_deuce_side
+			else Court.CourtRegion.RIGHT_BACK_SERVICE_BOX
+		)
 	else:
-		valid_service_box = Court.CourtRegion.RIGHT_FRONT_SERVICE_BOX if serve_from_deuce_side else Court.CourtRegion.LEFT_FRONT_SERVICE_BOX
+		valid_service_box = (
+			Court.CourtRegion.RIGHT_FRONT_SERVICE_BOX
+			if serve_from_deuce_side
+			else Court.CourtRegion.LEFT_FRONT_SERVICE_BOX
+		)
 
 	return valid_service_box
 
@@ -266,9 +277,9 @@ func place_players():
 	print("player0.rotation.y", player1.rotation.y)
 
 
-
 ## Callback functions
 #####################
+
 
 func _on_player0_ball_hit():
 	# important for volley
@@ -278,6 +289,7 @@ func _on_player0_ball_hit():
 			print("Player 0 made a volley")
 		_ground_contacts = 0
 	last_hitter = player0
+
 
 func _on_player1_ball_hit():
 	# important for volley

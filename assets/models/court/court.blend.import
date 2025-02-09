@@ -34,23 +34,23 @@ import_script/path=""
 _subresources={
 "materials": {
 "court": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/court/court.tres"
+"use_external/enabled": false,
+"use_external/path": "res://assets/models/court/materials/court.tres"
 },
 "mercedes": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://assets/models/court/mercedes.tres"
 },
 "net": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://assets/models/court/net.tres"
 },
 "post": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://assets/models/court/post.tres"
 },
 "top_net": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://assets/models/court/top_net.tres"
 }
 }

@@ -17,7 +17,6 @@ signal input_changed(timing)
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var audio_stream_player_3d: AudioStreamPlayer3D = $AudioStreamPlayer3D
 
-
 var ai_input = "res://src/players/inputs/ai/ai_input.tscn"
 var human_input = "res://src/players/inputs/keyboard_input.tscn"
 
@@ -89,8 +88,10 @@ func setup_singles_match(sm: SinglesMatch):
 func setup_training(training):
 	pass
 
+
 ## Move Related
 ###############
+
 
 func apply_movement(direction: Vector3, delta: float) -> void:
 #	uncomment the following for smooth roation in move direction
@@ -163,6 +164,7 @@ func cancel_movement() -> void:
 ## Stroke related
 #################
 
+
 # Here you can queue all strokes, except serves
 func queue_stroke(stroke: Stroke, ball_position: Vector3) -> void:
 	if not ball:
@@ -194,8 +196,10 @@ func _hit_ball(ball: Ball, stroke: Stroke) -> void:
 	emit_signal("ball_hit")
 	cancel_stroke()
 
+
 func _play_stroke_sound():
 	pass
+
 
 func cancel_stroke() -> void:
 	queued_stroke = null
@@ -222,11 +226,15 @@ func serve(stroke: Stroke) -> void:
 	_hit_ball(ball, stroke)
 	just_served.emit()
 
+
 ## Other functions
 ##################
 
+
 func prepare_serve() -> void:
 	ready_to_serve.emit()
+
+
 #	root_state_machine.travel("serve-dribble-ball-loop")
 #	await get_tree().create_timer(3).timeout
 #	root_state_machine.travel("before-serve-loop")
@@ -257,6 +265,7 @@ func play_stroke_sound(stroke: Stroke):
 
 	audio_stream_player.stream = stream
 	audio_stream_player.play()
+
 
 func set_active_ball(b: Ball) -> void:
 	ball = b

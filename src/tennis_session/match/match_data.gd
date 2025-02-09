@@ -12,6 +12,7 @@ var aces := 0
 
 var server := 0
 
+
 func _init(player0: PlayerData, player1: PlayerData) -> void:
 	self.player0 = player0
 	self.player1 = player1
@@ -21,8 +22,10 @@ func _init(player0: PlayerData, player1: PlayerData) -> void:
 func get_score() -> Score:
 	return match_score
 
+
 func get_server() -> int:
 	return match_score.current_server
+
 
 func simulate_result() -> void:
 	match_score.add_set([6, 0])
