@@ -4,25 +4,6 @@ extends Node
 #const MatchScene = "res://src/match/match.tscn"
 const BALL = preload("res://src/ball.tscn")
 
-enum {
-	SIDE0 = 0,
-	SIDE1 = 1,
-}
-
-enum {
-	OUT = 0,
-	DEUCE_FIELD,
-	AD_FIELD,
-}
-
-enum MatchStates {
-	IDLE = 0,
-	SERVE = 1,
-	SECOND_SERVE = 2,
-	PLAY = 3,
-	FAULT = 4,
-}
-
 const DEBUGGING = false
 
 enum Direction { LEFT, RIGHT, FRONT, BEHIND }
@@ -187,7 +168,3 @@ func get_filepaths_in_directory(directory_path: String, ending: String = "") -> 
 
 func spin_to_gravity(spin: float) -> float:
 	return 10 + spin
-
-
-func get_opposite_side(side) -> int:
-	return SIDE1 if side == SIDE0 else SIDE0

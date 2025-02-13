@@ -14,8 +14,7 @@ signal input_changed(timing)
 
 @onready var ball_scene := preload("res://src/ball.tscn")
 @onready var model: Model = $Model
-@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
-@onready var audio_stream_player_3d: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
 
 var ai_input = "res://src/players/inputs/ai/ai_input.tscn"
 var human_input = "res://src/players/inputs/keyboard_input.tscn"

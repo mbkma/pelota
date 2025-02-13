@@ -1,11 +1,15 @@
-[gd_scene load_steps=22 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=26 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" path="res://src/tennis_session/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://bujaw8qgawaj8" path="res://src/players/humanPlayer.tscn" id="2_i47c8"]
+[ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/flat_stroke1.wav" id="3_3q2lv"]
 [ext_resource type="PackedScene" uid="uid://fdj1nvw8fcxn" path="res://src/players/AiPlayer.tscn" id="3_wwbby"]
 [ext_resource type="Resource" path="res://src/players/resources/alcaraz.tres" id="4_7pj63"]
+[ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/flat_stroke2.wav" id="4_dqeqr"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://src/television/television-hud.tscn" id="4_upnw7"]
+[ext_resource type="AudioStream" uid="uid://7ulnk6wumimm" path="res://assets/sounds/flat_stroke3.wav" id="5_xeslq"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/tennis_location/us_open/stadium.tscn" id="6_4vere"]
+[ext_resource type="AudioStream" uid="uid://bffa2ad0odjrc" path="res://assets/sounds/slice_stroke3.wav" id="6_ysm0b"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://src/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://src/tennis_session/match_manager.tscn" id="8_2s2ac"]
 [ext_resource type="PackedScene" uid="uid://cggqb75a8w8r" path="res://addons/debug_menu/debug_menu.tscn" id="10_7cjfu"]
@@ -181,10 +185,64 @@ script = ExtResource("1_3pywv")
 [node name="Player" parent="." instance=ExtResource("2_i47c8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.3828)
 
+[node name="AudioStreamPlayer" parent="Player" index="3"]
+volume_db = 6.0
+
+[node name="Skeleton3D" parent="Player/Model/v3player/Rig" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/128/scale = Vector3(1, 1, 1)
+bones/466/scale = Vector3(1, 1, 1)
+bones/881/rotation = Quaternion(-0.307775, -0.310701, 0.888889, -0.136441)
+
+[node name="Camera3D" parent="Player" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
+
+[node name="Flat1" parent="Player/Sounds/Flat" index="0"]
+stream = ExtResource("3_3q2lv")
+
+[node name="Flat2" parent="Player/Sounds/Flat" index="1"]
+stream = ExtResource("4_dqeqr")
+
+[node name="Flat3" parent="Player/Sounds/Flat" index="2"]
+stream = ExtResource("5_xeslq")
+
+[node name="Slice1" parent="Player/Sounds/Slice" index="0"]
+stream = ExtResource("6_ysm0b")
+
+[node name="AudioStreamPlayer3D" parent="Player" index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56929, 0)
+
 [node name="AiPlayer" parent="." instance=ExtResource("3_wwbby")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.0306)
 player_data = ExtResource("4_7pj63")
 move_speed = 10.0
+
+[node name="AudioStreamPlayer" parent="AiPlayer" index="3"]
+volume_db = 6.0
+
+[node name="Skeleton3D" parent="AiPlayer/Model/v3player/Rig" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/128/scale = Vector3(1, 1, 1)
+bones/466/scale = Vector3(1, 1, 1)
+bones/881/rotation = Quaternion(-0.307775, -0.310701, 0.888889, -0.136441)
+
+[node name="Camera3D" parent="AiPlayer" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
+
+[node name="Flat1" parent="AiPlayer/Sounds/Flat" index="0"]
+stream = ExtResource("3_3q2lv")
+
+[node name="Flat2" parent="AiPlayer/Sounds/Flat" index="1"]
+stream = ExtResource("4_dqeqr")
+
+[node name="Flat3" parent="AiPlayer/Sounds/Flat" index="2"]
+stream = ExtResource("5_xeslq")
+
+[node name="Slice1" parent="AiPlayer/Sounds/Slice" index="0"]
+stream = ExtResource("6_ysm0b")
+
+[node name="AudioStreamPlayer3D" parent="AiPlayer" index="8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56929, 0)
 
 [node name="TelevisionHUD" parent="." instance=ExtResource("4_upnw7")]
 

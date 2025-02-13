@@ -183,6 +183,7 @@ func _clear_ball():
 	if ball:
 		ball.on_ground.disconnect(_on_ball_on_ground)
 
+
 func serve_from_deuce_side() -> bool:
 	# Returns true if server serves from deuce side
 	var score = match_data.get_score()
