@@ -33,7 +33,11 @@ func _process(delta: float) -> void:
 		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
 		if GlobalUtils.is_flying_towards(player, player.ball) and dist > 3:
 			if not player.queued_stroke:
-				do_stroke()
+				var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
+				if sign(closest_ball_position.z) != sign(player.position.z):
+					return
+
+				do_stroke(closest_ball_position)
 		if dist < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
 
@@ -47,13 +51,7 @@ func _physics_process(delta: float) -> void:
 #################
 
 
-func do_stroke():
-	player.ball.predict_trajectory()
-	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
-
-	#if closest_ball_position.distance_squared_to(player.position) > 20:
-	#return
-
+func do_stroke(closest_ball_position):
 	var stroke := current_tactic.compute_next_stroke(closest_ball_position)
 	player.queue_stroke(stroke, closest_ball_position)
 	GlobalUtils.adjust_player_to_position(player, closest_ball_position, stroke)  # FIXME

@@ -139,6 +139,9 @@ func do_serve(aiming_at, input_pace):
 func do_stroke(aiming_at, input_pace):
 	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
 	print(player.player_data, ": closest_ball_position ", closest_ball_position)
+	if sign(closest_ball_position.z) != sign(player.position.z):
+		printerr("closest ball position on other side!")
+		return
 
 	var stroke := _construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
 	move_input_blocked = true

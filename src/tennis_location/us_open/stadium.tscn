@@ -37,6 +37,8 @@ cache/0/16/0/scale = 1.0
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
 
+[node name="Court" parent="." instance=ExtResource("5_2qn74")]
+
 [node name="stadium" parent="." instance=ExtResource("2_p68rm")]
 
 [node name="Ground" type="StaticBody3D" parent="."]
@@ -143,5 +145,3 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.
 text = "25
 Serve Clock"
 font = SubResource("5")
-
-[node name="Court" parent="." instance=ExtResource("5_2qn74")]

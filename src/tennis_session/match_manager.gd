@@ -6,9 +6,11 @@ signal state_changed
 enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER }
 
 var last_hitter: Player  # Stores reference to last player who hit the ball
+var state_history: Array[MatchState]
 
 var current_state: MatchState = MatchState.NOT_STARTED:
 	set(value):
+		state_history.push_back(value)
 		current_state = value
 		state_changed.emit()
 
@@ -133,6 +135,7 @@ func _on_ball_on_ground():
 			_swap_valid_rally_zone()
 		else:
 			current_state = MatchState.SECOND_SERVE
+			_clear_ball()
 	elif current_state == MatchState.SECOND_SERVE:
 		var valid_box = get_valid_service_box()
 		if court.is_ball_in_court_region(ball.position, valid_box):
@@ -142,7 +145,6 @@ func _on_ball_on_ground():
 			_swap_valid_rally_zone()
 		else:
 			current_state = MatchState.FAULT
-
 	elif current_state == MatchState.PLAY:
 		if court.is_ball_in_court_region(ball.position, _valid_rally_zone):
 			_ground_contacts += 1
@@ -157,7 +159,7 @@ func _on_ball_on_ground():
 			current_state = MatchState.FAULT
 
 	if current_state == MatchState.FAULT:
-		current_state = MatchState.IDLE
+		_clear_ball()
 		var point_winner: Player
 		if _ground_contacts == 0:
 			point_winner = get_opponent(last_hitter)
@@ -166,6 +168,7 @@ func _on_ball_on_ground():
 			point_winner = last_hitter
 			print(point_winner.name, " wins the point!", _ground_contacts)
 
+		current_state = MatchState.IDLE
 		add_point(get_player_index(point_winner))
 
 
@@ -173,10 +176,12 @@ func add_point(winner: int):
 	match_data.add_point(winner)
 	place_players()
 	televisionHud.update_score(match_data.get_score())
-	if ball:
-		ball.on_ground.disconnect(_on_ball_on_ground)
 	current_state = MatchState.SERVE
 
+
+func _clear_ball():
+	if ball:
+		ball.on_ground.disconnect(_on_ball_on_ground)
 
 func serve_from_deuce_side() -> bool:
 	# Returns true if server serves from deuce side
