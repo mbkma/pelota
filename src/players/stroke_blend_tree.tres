@@ -1,0 +1,36 @@
+[gd_resource type="AnimationNodeBlendTree" load_steps=5 format=3 uid="uid://bay3hh3awjm8t"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r8bvv"]
+animation = &"backhand"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i5hc0"]
+animation = &"serve"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_62gj7"]
+animation = &"forehand"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_cpv0i"]
+input_0/name = "forehand"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "backhand"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "serve"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+
+[resource]
+nodes/Animation/node = SubResource("AnimationNodeAnimation_62gj7")
+nodes/Animation/position = Vector2(600.72, 260.903)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_r8bvv")
+"nodes/Animation 2/position" = Vector2(580, 440)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_i5hc0")
+"nodes/Animation 3/position" = Vector2(620, 620)
+nodes/Transition/node = SubResource("AnimationNodeTransition_cpv0i")
+nodes/Transition/position = Vector2(920, 340)
+nodes/output/position = Vector2(1160, 360)
+node_connections = [&"Transition", 0, &"Animation", &"Transition", 1, &"Animation 2", &"Transition", 2, &"Animation 3", &"output", 0, &"Transition"]

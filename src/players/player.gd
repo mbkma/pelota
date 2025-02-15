@@ -80,8 +80,6 @@ func setup(data: PlayerData, ai_controlled: bool) -> void:
 	#mesh.set_surface_override_material(0, new_mat)
 
 
-func setup_singles_match(sm: SinglesMatch):
-	input_node.setup(sm)
 
 
 func setup_training(training):
@@ -119,7 +117,6 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 
 	velocity = real_velocity
 	move_and_slide()
-	#real_velocity = move_velocity
 
 
 func compute_move_dir() -> Vector3:

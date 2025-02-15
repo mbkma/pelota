@@ -14,7 +14,6 @@ signal level_changed(level_name, init_data)
 	start_menu.get_node("HBoxContainer/PlayerSelector2"),
 ]
 
-var world = preload("res://src/tennis_location/us_open/us_open.tscn")
 var match_data
 
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://d237t32p1sgei"]
 
-[ext_resource type="PackedScene" uid="uid://dt3o07tt1qdgd" path="res://assets/models/stadium/stadium.blend" id="2_p68rm"]
+[ext_resource type="PackedScene" uid="uid://snrtqlwgilhu" path="res://assets/models/stadium/stadium1.blend" id="2_f18ec"]
 [ext_resource type="Script" path="res://src/tennis_location/us_open/stadium.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/tennis_location/us_open/serve_speed_panel.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="5_2qn74"]
@@ -37,9 +37,9 @@ cache/0/16/0/scale = 1.0
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
 
-[node name="Court" parent="." instance=ExtResource("5_2qn74")]
+[node name="stadium1" parent="." instance=ExtResource("2_f18ec")]
 
-[node name="stadium" parent="." instance=ExtResource("2_p68rm")]
+[node name="Court" parent="." instance=ExtResource("5_2qn74")]
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)

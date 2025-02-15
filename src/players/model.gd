@@ -27,8 +27,8 @@ func _ready() -> void:
 
 
 func set_move_direction(direction: Vector3) -> void:
-	var dir := Vector2(direction.x, direction.z)
-	#animation_tree["parameters/move/blend_position"] = dir
+	var dir := Vector2(direction.x, -direction.z)
+	animation_tree["parameters/move/blend_position"] = dir
 
 
 func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
@@ -54,8 +54,8 @@ func play_stroke_animation(stroke: Stroke, ball_position):
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
-	set_stroke(stroke, ball_position)
 	transition_to(States.STROKE)
+	set_stroke(stroke, ball_position)
 
 
 func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
@@ -69,8 +69,10 @@ func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
 			animation_name = "forehand"
 		stroke.StrokeType.SERVE:
 			animation_name = "serve"
-		_:
+		stroke.StrokeType.BACKHAND:
 			animation_name = "backhand"
+		_:
+			printerr("Stroke name ", stroke, " not defined!")
 
 	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name
 

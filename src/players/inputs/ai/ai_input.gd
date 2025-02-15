@@ -2,7 +2,6 @@
 class_name AiInput
 extends InputMethod
 
-var sm: SinglesMatch
 var tactics = {
 	"DefaultTactics": "res://src/players/inputs/ai/tactics/default.gd",
 	"ServeAndVolley": "res://src/players/inputs/ai/tactics/serve_and_volley.gd"

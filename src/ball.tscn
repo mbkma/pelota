@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://qipgtc2hwn48" path="res://assets/models/tennisball/tennisball.blend" id="2_ix6ww"]
 
 [sub_resource type="SphereShape3D" id="3"]
-radius = 0.0337885
+radius = 0.04
 
 [node name="Ball" type="CharacterBody3D"]
 script = ExtResource("1")

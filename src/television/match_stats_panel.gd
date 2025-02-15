@@ -13,10 +13,7 @@ var players
 const SPRITE_PATH: String = "res://assets/images/players/"
 
 
-func setup_singles_match(singles_match: SinglesMatch):
-	players = singles_match.players
-	set_players(singles_match.players[0], singles_match.players[1])
-	anim_player.play("start")
+
 
 
 func set_players(player1, player2):

@@ -8,8 +8,6 @@ signal pace_changed(pace)
 @export var ball_aim_marker: MeshInstance3D
 @export var mouse_sensitivity := 100.0
 
-var sm: SinglesMatch
-
 ## Move related
 var move_input_blocked := false
 var stroke_input_blocked := true
@@ -184,13 +182,6 @@ func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: flo
 ## Misc
 #######
 
-
-func setup(singles_match):
-	#player.timing.show()
-	sm = singles_match
-
-	#sm.get_opponent(player).ball_hit.connect(_on_Opponent_ball_hit)
-	sm.state_changed.connect(_on_SinglesMatch_state_changed)
 
 
 func _on_Player_ball_hit():
