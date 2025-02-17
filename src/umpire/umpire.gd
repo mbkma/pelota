@@ -25,14 +25,15 @@ extends Node3D
 }
 
 
-
 func say_second_serve():
 	audio_stream_player.stream = umpire_sounds["second_serve"]
 	audio_stream_player.play()
 
+
 func say_fault():
 	audio_stream_player.stream = umpire_sounds["out"]
 	audio_stream_player.play()
+
 
 func say_score(score: Score):
 	var points = score.points

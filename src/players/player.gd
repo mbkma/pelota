@@ -70,6 +70,7 @@ func _ready() -> void:
 func request_serve():
 	input_node.request_serve()
 
+
 func setup(data: PlayerData, ai_controlled: bool) -> void:
 	player_data = data
 
@@ -77,8 +78,6 @@ func setup(data: PlayerData, ai_controlled: bool) -> void:
 	#var new_mat = mesh.get_active_material(0).duplicate()
 	#new_mat.albedo_color = Color(randf(), randf(), randf())
 	#mesh.set_surface_override_material(0, new_mat)
-
-
 
 
 func setup_training(training):
@@ -89,6 +88,7 @@ func stop():
 	cancel_movement()
 	cancel_stroke()
 	ball = null
+
 
 ## Move Related
 ###############
@@ -105,9 +105,9 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	model.set_move_direction(direction)
 
 	#if not is_on_floor():
-		#move_velocity.y += -GlobalPhysics.GRAVITY * 2 * delta
+	#move_velocity.y += -GlobalPhysics.GRAVITY * 2 * delta
 	#else:
-		#move_velocity.y = -GlobalPhysics.GRAVITY / 10
+	#move_velocity.y = -GlobalPhysics.GRAVITY / 10
 
 	move_velocity.x = direction.x * move_speed
 	move_velocity.z = direction.z * move_speed

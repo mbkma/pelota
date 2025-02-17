@@ -76,14 +76,20 @@ func get_player_index(player: Player) -> int:
 	else:
 		return 1
 
+
 func set_player_serve():
 	if match_data.get_server() == 0:
 		player0.request_serve()
 	else:
 		player1.request_serve()
 
+
 func start_match():
-	_valid_serve_zone = Court.CourtRegion.BACK_SINGLES_BOX if get_server().position.z > 0 else Court.CourtRegion.FRONT_SINGLES_BOX
+	_valid_serve_zone = (
+		Court.CourtRegion.BACK_SINGLES_BOX
+		if get_server().position.z > 0
+		else Court.CourtRegion.FRONT_SINGLES_BOX
+	)
 	_valid_rally_zone = _valid_serve_zone
 	current_state = MatchState.SERVE
 	set_player_serve()
@@ -157,9 +163,11 @@ func _on_ball_on_ground():
 		_valid_rally_zone = _valid_serve_zone
 		add_point(get_player_index(point_winner))
 
+
 func _stop_players():
 	player0.stop()
 	player1.stop()
+
 
 func _on_ball_on_net():
 	if current_state == MatchState.SERVE:
@@ -171,6 +179,7 @@ func _on_ball_on_net():
 		current_state = MatchState.FAULT
 		# ball gets cleared in _on_ground
 
+
 func add_point(winner: int):
 	match_data.add_point(winner)
 	televisionHud.update_score(match_data.get_score())
@@ -179,9 +188,14 @@ func add_point(winner: int):
 	await get_tree().create_timer(3).timeout
 	place_players()
 	await players_placed
-	_valid_serve_zone = Court.CourtRegion.BACK_SINGLES_BOX if get_server().position.z > 0 else Court.CourtRegion.FRONT_SINGLES_BOX
+	_valid_serve_zone = (
+		Court.CourtRegion.BACK_SINGLES_BOX
+		if get_server().position.z > 0
+		else Court.CourtRegion.FRONT_SINGLES_BOX
+	)
 	current_state = MatchState.SERVE
 	set_player_serve()
+
 
 func get_server():
 	var server = match_data.match_score.current_server
@@ -189,6 +203,7 @@ func get_server():
 		return player0
 	else:
 		return player1
+
 
 func _clear_ball():
 	if ball:
@@ -289,6 +304,7 @@ func place_players():
 	player0.rotation.y = PI if player0.position.z < 0 else 0.0
 	player1.rotation.y = PI if player1.position.z < 0 else 0.0
 	players_placed.emit()
+
 
 ## Callback functions
 #####################

@@ -21,6 +21,7 @@ var aiming_at := Vector3.ZERO
 var input_pace := 0.0
 var serve_controls := false
 
+
 func _ready() -> void:
 	player = get_parent()
 	await get_tree().create_timer(0.5).timeout
@@ -40,11 +41,11 @@ func _process(delta: float) -> void:
 			move_input_blocked = false
 
 	#if Input.is_action_pressed("sprint"):
-		#player.move_speed += 2
-		#player.acceleration += 0.2
+	#player.move_speed += 2
+	#player.acceleration += 0.2
 	#else:
-		#player.acceleration = 0.1
-		#player.move_speed = 5
+	#player.acceleration = 0.1
+	#player.move_speed = 5
 
 	if not stroke_input_blocked:
 		if Input.is_action_just_pressed("strike"):
@@ -70,8 +71,10 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
 
+
 func request_serve():
 	serve_controls = true
+
 
 func _physics_process(delta: float) -> void:
 	if input_blocked:
@@ -158,7 +161,9 @@ func clear_stroke_input():
 	ball_aim_marker.visible = false
 
 
-func _construct_stroke_from_input(closest_step: TrajectoryStep, aim: Vector3, pace: float) -> Stroke:
+func _construct_stroke_from_input(
+	closest_step: TrajectoryStep, aim: Vector3, pace: float
+) -> Stroke:
 	var stroke = Stroke.new()
 	var to_ball_vector: Vector3 = closest_step.point - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
@@ -186,7 +191,6 @@ func _construct_stroke_from_input(closest_step: TrajectoryStep, aim: Vector3, pa
 
 ## Misc
 #######
-
 
 
 func _on_Player_ball_hit():

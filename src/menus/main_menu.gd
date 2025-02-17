@@ -32,7 +32,6 @@ func _ready():
 	for p in player_selectors:
 		p.selection_changed.connect(on_selection_changed)
 
-
 	#GlobalMusicPlayer.play_music(GlobalMusicPlayer.music[0])
 
 
@@ -50,6 +49,7 @@ func _on_Start_pressed() -> void:
 	print("on start pressed")
 	level_changed.emit(load("res://src/tennis_session/tennis_match.tscn"), null)
 	#SceneManager.swap_scenes("res://src/tennis_session/tennis_match.tscn", null, self)
+
 
 func _on_Quit_pressed() -> void:
 	get_tree().quit()

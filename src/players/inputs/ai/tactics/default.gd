@@ -48,6 +48,7 @@ func compute_next_stroke(closest_step: TrajectoryStep) -> Stroke:
 
 	return stroke
 
+
 func compute_serve() -> Stroke:
 	var r = randf()
 	if r < 0.4:

@@ -13,9 +13,6 @@ var players
 const SPRITE_PATH: String = "res://assets/images/players/"
 
 
-
-
-
 func set_players(player1, player2):
 	name_label1.text = player1.player_data.first_name + "\n" + player1.player_data.last_name
 	if ResourceLoader.exists(SPRITE_PATH + player1.player_data["last_name"].to_lower() + ".png"):

@@ -6,7 +6,6 @@ extends CanvasLayer
 @onready var valid_serve_zone: Label = $DebugHud/VBoxContainer/ValidServeZone
 @onready var valid_rally_zone: Label = $DebugHud/VBoxContainer/ValidRallyZone
 
-
 ## Debug menu display style.
 enum Style {
 	HIDDEN,  ## Debug menu is hidden.
@@ -41,7 +40,6 @@ var fps_history: Array[float] = []  # Only used for graphs.
 var frame_time_gradient := Gradient.new()
 
 
-
 func _ready() -> void:
 	# NOTE: Both FPS and frametimes are colored following FPS logic
 	# (red = 10 FPS, yellow = 60 FPS, green = 110 FPS, cyan = 160 FPS).
@@ -62,8 +60,12 @@ func _process(_delta: float) -> void:
 	if visible:
 		# Difference between the last two rendered frames in milliseconds.
 		state.text = "Current state: " + match_state_to_string(match_manager.current_state)
-		valid_serve_zone.text = "Valid Serve Zone: " + court_region_to_string(match_manager._valid_serve_zone)
-		valid_rally_zone.text = "Valid Rally Zone: " + court_region_to_string(match_manager._valid_rally_zone)
+		valid_serve_zone.text = (
+			"Valid Serve Zone: " + court_region_to_string(match_manager._valid_serve_zone)
+		)
+		valid_rally_zone.text = (
+			"Valid Rally Zone: " + court_region_to_string(match_manager._valid_rally_zone)
+		)
 
 
 func court_region_to_string(value: Court.CourtRegion) -> String:
@@ -89,6 +91,7 @@ func match_state_to_string(value: MatchManager.MatchState) -> String:
 		MatchManager.MatchState.GAME_OVER: "GAME_OVER",
 	}
 	return enum_map.get(value, "UNKNOWN")
+
 
 func _on_visibility_changed() -> void:
 	if visible:

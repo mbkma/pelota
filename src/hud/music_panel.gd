@@ -18,5 +18,5 @@ func _on_track_started(track: Track):
 
 
 func set_track(track: Track):
-	label.text = track.title + " by " +  track.artist
+	label.text = track.title + " by " + track.artist
 	texture_rect.texture = load(track.cover_path)

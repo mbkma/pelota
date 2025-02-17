@@ -80,6 +80,7 @@ func adjust_player_position_to_stroke(player: Player, stroke: Stroke):
 func get_optimal_ball_position(player: Player):  # TODO
 	pass
 
+
 func get_closest_trajectory_step(player: Player) -> TrajectoryStep:  # FIXME: Optimize Performance
 	# Initialize variables to track the closest point
 	var closest_trajectory_step: TrajectoryStep

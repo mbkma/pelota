@@ -6,7 +6,12 @@ signal track_started(track: Track)
 var current_track: Track = null  # Stores the currently playing track
 
 var music := [
-	Track.new("Hawaii", "Waesto", preload("res://assets/music/Waesto - Hawaii.mp3"), "res://assets/music/md.webp")
+	Track.new(
+		"Hawaii",
+		"Waesto",
+		preload("res://assets/music/Waesto - Hawaii.mp3"),
+		"res://assets/music/md.webp"
+	)
 ]
 
 
@@ -17,6 +22,7 @@ func _ready():
 	music_player.autoplay = false
 	add_child(music_player)
 	music_player.process_mode = Node.PROCESS_MODE_ALWAYS  # Ensures it runs even when scenes change
+
 
 # Function to play music (only if it's not already playing)
 func play_music(track: Track, loop: bool = true):
@@ -30,14 +36,17 @@ func play_music(track: Track, loop: bool = true):
 	music_player.stream.loop = loop
 	track_started.emit(track)
 
+
 # Function to stop music
 func stop_music():
 	music_player.stop()
 	current_track = null
 
+
 # Function to pause and resume music
 func toggle_pause():
 	music_player.stream_paused = !music_player.stream_paused
+
 
 # Function to handle looping
 func _on_music_finished():
