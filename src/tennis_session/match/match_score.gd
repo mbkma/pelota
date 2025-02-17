@@ -2,6 +2,7 @@ class_name Score
 extends Resource
 
 signal score_changed
+signal game_changed
 
 enum TennisPoint { LOVE, FIFTEEN, THIRTY, FORTY, AD }
 
@@ -35,6 +36,7 @@ func add_game(index):
 	else:
 		games[index] += 1
 		current_server = 1 - current_server
+		game_changed.emit()
 
 
 func add_tiebreak_point(index):

@@ -1,36 +1,45 @@
 extends Node
 
-signal song_started(song)
+signal track_started(track: Track)
 
-var music_queue: Array
-var audio_stream_player: AudioStreamPlayer
+@onready var music_player: AudioStreamPlayer = AudioStreamPlayer.new()
+var current_track: Track = null  # Stores the currently playing track
 
-
-func _ready() -> void:
-	audio_stream_player = AudioStreamPlayer.new()
-	add_child(audio_stream_player)
-	audio_stream_player.finished.connect(on_audio_stream_player_finished)
+var music := [
+	Track.new("Hawaii", "Waesto", preload("res://assets/music/Waesto - Hawaii.mp3"), "res://assets/music/md.webp")
+]
 
 
-func play(path: String):
-	audio_stream_player.stream = load(path)
-	audio_stream_player.play(0)
-	emit_signal("song_started", path)
+func _ready():
+	# Add the AudioStreamPlayer node to the scene and make it persistent
+	music_player.stream = null
+	music_player.bus = "Music"  # Make sure to set up a Music bus in Audio settings
+	music_player.autoplay = false
+	add_child(music_player)
+	music_player.process_mode = Node.PROCESS_MODE_ALWAYS  # Ensures it runs even when scenes change
 
+# Function to play music (only if it's not already playing)
+func play_music(track: Track, loop: bool = true):
+	if current_track == track:
+		return  # Avoid restarting the same track
+	current_track = track
+	music_player.stream = track.stream
+	music_player.play()
+	music_player.stream_paused = false
+	music_player.finished.connect(_on_music_finished)  # Ensure looping if needed
+	music_player.stream.loop = loop
+	track_started.emit(track)
 
-func stop():
-	audio_stream_player.finished.disconnect(on_audio_stream_player_finished)
-	audio_stream_player.stop()
+# Function to stop music
+func stop_music():
+	music_player.stop()
+	current_track = null
 
+# Function to pause and resume music
+func toggle_pause():
+	music_player.stream_paused = !music_player.stream_paused
 
-func play_playlist(paths: Array):
-	for p in paths:
-		music_queue.push_back(p)
-	play(music_queue[randi() % music_queue.size()])
-
-
-func on_audio_stream_player_finished():
-	if music_queue.size() == 0:
-		return
-
-	play(music_queue.pop_back())
+# Function to handle looping
+func _on_music_finished():
+	if music_player.stream and music_player.stream.loop:
+		music_player.play()  # Restart if looping is enabled

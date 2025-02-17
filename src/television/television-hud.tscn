@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://r13b2pnjirfc"]
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1"]
-[ext_resource type="Script" path="res://src/television/television-hud.gd" id="2"]
-[ext_resource type="Script" path="res://src/television/match_stats_panel.gd" id="3"]
+[ext_resource type="Script" uid="uid://e1hyxnyxh4pd" path="res://src/television/television-hud.gd" id="2"]
+[ext_resource type="Script" uid="uid://xu64bd1yo2ki" path="res://src/television/match_stats_panel.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://bu1ji7n825w7x" path="res://src/television/score_displays/ScoreDisplay.tscn" id="4_xpbfi"]
 
 [sub_resource type="Animation" id="1"]
@@ -23,7 +23,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k50em"]
 _data = {
-"start": SubResource("1")
+&"start": SubResource("1")
 }
 
 [node name="TelevisionHUD" type="Control"]

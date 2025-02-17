@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ballueo452p5m"]
 
-[ext_resource type="Script" path="res://src/tournament/match_panel.gd" id="1"]
+[ext_resource type="Script" uid="uid://p5p066gssx37" path="res://src/tournament/match_panel.gd" id="1"]
 
 [node name="MarginContainer" type="MarginContainer"]
 offset_right = 147.0

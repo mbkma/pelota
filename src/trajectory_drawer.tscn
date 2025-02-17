@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://brw673es8wnx2"]
 
-[ext_resource type="Script" path="res://src/trajectory_drawer.gd" id="1_jnyvj"]
+[ext_resource type="Script" uid="uid://buhms0t5xprib" path="res://src/trajectory_drawer.gd" id="1_jnyvj"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_af1eo"]
 

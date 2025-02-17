@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://l4d1s1kqx3b7"]
 
-[ext_resource type="Script" path="res://src/television/score_displays/USOpenScorePanel.gd" id="1_3xw37"]
+[ext_resource type="Script" uid="uid://mi0xm7fb6sap" path="res://src/television/score_displays/USOpenScorePanel.gd" id="1_3xw37"]
 [ext_resource type="Texture2D" uid="uid://bepf2xkcu5bov" path="res://assets/textures/hud/yellow_dot.png" id="2_fm0o1"]
 
 [node name="PlayerScorePanel" type="HBoxContainer"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://buqq0kms2dbb4"]
 
-[ext_resource type="Script" path="res://addons/modular-settings-menu/scripts/settings_section.gd" id="1_704sp"]
+[ext_resource type="Script" uid="uid://bdtto1e138803" path="res://addons/modular-settings-menu/scripts/settings_section.gd" id="1_704sp"]
 [ext_resource type="PackedScene" uid="uid://byff0jwaicxvr" path="res://addons/modular-settings-menu/scenes/settings-elements/graphics-elements/display_mode.tscn" id="1_mr6e7"]
 [ext_resource type="PackedScene" uid="uid://cn8r63dmvd55c" path="res://addons/modular-settings-menu/scenes/settings-elements/graphics-elements/resolution.tscn" id="2_5bpi0"]
 [ext_resource type="PackedScene" uid="uid://b3w7qpn4nhmu2" path="res://addons/modular-settings-menu/scenes/settings-elements/graphics-elements/scaler.tscn" id="4_g2t2s"]

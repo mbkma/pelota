@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://diod0iqweogpn"]
 
 [ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="1"]
-[ext_resource type="Script" path="res://src/menus/ranking.gd" id="2"]
+[ext_resource type="Script" uid="uid://cc7ll68kuylbr" path="res://src/menus/ranking.gd" id="2"]
 
 [sub_resource type="FontFile" id="1"]
 fallbacks = Array[Font]([ExtResource("1")])

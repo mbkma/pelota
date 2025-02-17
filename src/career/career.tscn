@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dj31ck8yhjhb6"]
 
-[ext_resource type="Script" path="res://src/career/career.gd" id="1"]
-[ext_resource type="PackedScene" path="res://src/career/career_main_menu.tscn" id="2"]
+[ext_resource type="Script" uid="uid://b7rulv6u6aswh" path="res://src/career/career.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bwqh1blfjfxip" path="res://src/career/career_main_menu.tscn" id="2"]
 
 [node name="Career" type="Node"]
 script = ExtResource("1")

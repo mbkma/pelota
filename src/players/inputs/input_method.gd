@@ -5,5 +5,5 @@ var player: Player
 
 
 # Child Classes need to implement this
-func serve_requested():
+func request_serve():
 	pass

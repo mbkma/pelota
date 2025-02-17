@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bq11dsxkra3s4"]
 
-[ext_resource type="Script" path="res://src/cameras.gd" id="1_ibrh3"]
-[ext_resource type="Script" path="res://src/free_look_camera.gd" id="1_owke2"]
+[ext_resource type="Script" uid="uid://bhlvub0gn61wg" path="res://src/cameras.gd" id="1_ibrh3"]
+[ext_resource type="Script" uid="uid://wtb4m808ung5" path="res://src/free_look_camera.gd" id="1_owke2"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://src/tennis_location/us_open/stadium.tscn" id="3_pi3s4"]
 
 [node name="Cameras" type="Node3D" node_paths=PackedStringArray("cams")]

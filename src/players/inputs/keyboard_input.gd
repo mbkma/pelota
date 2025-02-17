@@ -19,7 +19,7 @@ var mouse_to := Vector2.ZERO
 var mouse_pressed := false
 var aiming_at := Vector3.ZERO
 var input_pace := 0.0
-
+var serve_controls := false
 
 func _ready() -> void:
 	player = get_parent()
@@ -39,12 +39,12 @@ func _process(delta: float) -> void:
 			player.cancel_stroke()
 			move_input_blocked = false
 
-	if Input.is_action_pressed("sprint"):
-		player.move_speed = 7
-		player.acceleration = 0.2
-	else:
-		player.acceleration = 0.1
-		player.move_speed = 5
+	#if Input.is_action_pressed("sprint"):
+		#player.move_speed += 2
+		#player.acceleration += 0.2
+	#else:
+		#player.acceleration = 0.1
+		#player.move_speed = 5
 
 	if not stroke_input_blocked:
 		if Input.is_action_just_pressed("strike"):
@@ -58,8 +58,9 @@ func _process(delta: float) -> void:
 			ball_aim_marker.position = aiming_at
 			ball_aim_marker.visible = true
 		if Input.is_action_just_released("strike"):
-			if player.is_serving:
+			if serve_controls:
 				do_serve(aiming_at, input_pace)
+				serve_controls = false
 			else:
 				if not player.ball:
 					printerr("Player has no ball")
@@ -69,6 +70,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
 
+func request_serve():
+	serve_controls = true
 
 func _physics_process(delta: float) -> void:
 	if input_blocked:
@@ -107,7 +110,7 @@ func get_move_direction() -> Vector3:
 
 func _get_default_aim() -> Vector3:
 	var default_aim := Vector3(0, 0, -sign(player.position.z) * 9)
-	if player.is_serving:
+	if serve_controls:
 		default_aim = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 3)
 	return default_aim
 
@@ -135,17 +138,17 @@ func do_serve(aiming_at, input_pace):
 
 
 func do_stroke(aiming_at, input_pace):
-	var closest_ball_position := GlobalUtils.get_closest_ball_position(player)
-	print(player.player_data, ": closest_ball_position ", closest_ball_position)
+	var closest_step := GlobalUtils.get_closest_trajectory_step(player)
+	var closest_ball_position := closest_step.point
 	if sign(closest_ball_position.z) != sign(player.position.z):
 		printerr("closest ball position on other side!")
 		return
 
-	var stroke := _construct_stroke_from_input(closest_ball_position, aiming_at, input_pace)
+	var stroke := _construct_stroke_from_input(closest_step, aiming_at, input_pace)
 	move_input_blocked = true
 
-	player.queue_stroke(stroke, closest_ball_position)
-	GlobalUtils.adjust_player_to_position(player, closest_ball_position, stroke)  # FIXME
+	player.queue_stroke(stroke)
+	GlobalUtils.adjust_player_position_to_stroke(player, stroke)  # FIXME
 
 	clear_stroke_input()
 
@@ -155,9 +158,9 @@ func clear_stroke_input():
 	ball_aim_marker.visible = false
 
 
-func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: float) -> Stroke:
+func _construct_stroke_from_input(closest_step: TrajectoryStep, aim: Vector3, pace: float) -> Stroke:
 	var stroke = Stroke.new()
-	var to_ball_vector: Vector3 = closest_ball_position - player.position
+	var to_ball_vector: Vector3 = closest_step.point - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
 	if dot_product > 0:
 		stroke.stroke_type = stroke.StrokeType.FOREHAND
@@ -175,6 +178,8 @@ func _construct_stroke_from_input(closest_ball_position, aim: Vector3, pace: flo
 			stroke.stroke_power = player.stats.backhand_pace + pace
 			stroke.stroke_spin = player.stats.backhand_spin
 			stroke.stroke_target = aim
+
+	stroke.step = closest_step
 
 	return stroke
 

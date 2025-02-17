@@ -48,17 +48,17 @@ func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
 	return (stroke_pos - point_down) / (point_up - point_down)
 
 
-func play_stroke_animation(stroke: Stroke, ball_position):
-	var time = 0  # should be stroke.time
-	var t = max(0, time - animation_hit_time)
+func play_stroke_animation(stroke: Stroke):
+	print("stroke.step.time ", stroke.step.time)
+	var t = max(0, stroke.step.time - animation_hit_time)
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
 	transition_to(States.STROKE)
-	set_stroke(stroke, ball_position)
+	set_stroke(stroke)
 
 
-func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
+func set_stroke(stroke: Stroke) -> void:
 	#var point := get_stroke_blend_position(stroke_id, stroke_pos)
 	#animation_tree["parameters/stroke/forehand/blend_position"] = point.y
 	#animation_tree["parameters/stroke/backhand/blend_position"] = point.y
@@ -71,8 +71,11 @@ func set_stroke(stroke: Stroke, stroke_pos := Vector3.ZERO) -> void:
 			animation_name = "serve"
 		stroke.StrokeType.BACKHAND:
 			animation_name = "backhand"
+		stroke.StrokeType.BACKHAND_SLICE:
+			animation_name = "backhand"
 		_:
-			printerr("Stroke name ", stroke, " not defined!")
+			printerr("Stroke animation ", stroke.stroke_type, " not available!")
+			return
 
 	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name
 

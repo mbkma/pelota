@@ -16,5 +16,5 @@ var stroke_power: float
 var stroke_spin: float
 var stroke_target: Vector3
 
-# time until the ball enters racket
-var timing: float
+# step contains information about where and when to hit the ball
+var step: TrajectoryStep

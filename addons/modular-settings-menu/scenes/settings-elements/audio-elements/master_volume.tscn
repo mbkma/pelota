@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://pir75xaw2g08"]
 
-[ext_resource type="Script" path="res://addons/modular-settings-menu/scripts/settings-elements-scripts/audio_setting.gd" id="1_n7p26"]
+[ext_resource type="Script" uid="uid://buxi7qrb2drik" path="res://addons/modular-settings-menu/scripts/settings-elements-scripts/audio_setting.gd" id="1_n7p26"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hlot4"]
 size = Vector2(0, 0)

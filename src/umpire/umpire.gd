@@ -1,33 +1,50 @@
+class_name Umpire
 extends Node3D
 
-var current_match: SinglesMatch
+@onready var audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
+
+@export var umpire_sounds := {
+	"0-1": preload("res://src/umpire/sounds/0-15.ogg"),
+	"0-2": preload("res://src/umpire/sounds/0-30.ogg"),
+	"0-3": preload("res://src/umpire/sounds/0-40.ogg"),
+	"1-0": preload("res://src/umpire/sounds/15-0.ogg"),
+	"1-1": preload("res://src/umpire/sounds/15-15.ogg"),
+	"1-2": preload("res://src/umpire/sounds/15-30.ogg"),
+	"1-3": preload("res://src/umpire/sounds/15-40.ogg"),
+	"2-0": preload("res://src/umpire/sounds/30-0.ogg"),
+	"2-1": preload("res://src/umpire/sounds/30-15.ogg"),
+	"2-2": preload("res://src/umpire/sounds/30-30.ogg"),
+	"2-3": preload("res://src/umpire/sounds/30-40.ogg"),
+	"3-0": preload("res://src/umpire/sounds/40-0.ogg"),
+	"3-1": preload("res://src/umpire/sounds/40-15.ogg"),
+	"3-2": preload("res://src/umpire/sounds/40-30.ogg"),
+	"3-3": preload("res://src/umpire/sounds/40-40.ogg"),
+	"advantage": preload("res://src/umpire/sounds/advantage.ogg"),
+	"out": preload("res://src/umpire/sounds/out.wav"),
+	"second_serve": preload("res://src/umpire/sounds/second_serve.ogg"),
+}
 
 
-func setup_singles_match(sm: SinglesMatch) -> void:
-	current_match = sm
-	sm.match_data.match_score.points_changed.connect(_on_MatchScore_points_changed)
-	sm.state_changed.connect(_on_MatchScore_state_changed)
 
+func say_second_serve():
+	audio_stream_player.stream = umpire_sounds["second_serve"]
+	audio_stream_player.play()
 
-func _on_MatchScore_state_changed(old_state, new_state):
-	if (new_state == GlobalUtils.MatchStates.FAULT) and current_match.get_fault_reason() == "out":
-		get_node("Sounds/out").play()
-	elif new_state == GlobalUtils.MatchStates.SECOND_SERVE:
-		get_node("Sounds/second_serve").play()
+func say_fault():
+	audio_stream_player.stream = umpire_sounds["out"]
+	audio_stream_player.play()
 
-
-func _on_MatchScore_points_changed(score):
+func say_score(score: Score):
 	var points = score.points
-	if points[0] == 0 and points[1] == 0:
+	if points[0] == score.TennisPoint.LOVE and points[1] == score.TennisPoint.LOVE:
 		return
 
 	# say current score
 	await get_tree().create_timer(1).timeout
-	var str_points := str(points[0]) + "-" + str(points[1])
-	var sound_effect := "Sounds/" + str_points
-	if points[0] == 45 or points[1] == 45:
-		sound_effect = "Sounds/advantage"
+	var key := str(points[0]) + "-" + str(points[1])
+	var stream = umpire_sounds[key]
+	if points[0] == score.TennisPoint.AD or points[1] == score.TennisPoint.AD:
+		stream = umpire_sounds["advantage"]
 
-	var node = get_node(sound_effect)
-	if node:
-		node.play()
+	audio_stream_player.stream = stream
+	audio_stream_player.play()

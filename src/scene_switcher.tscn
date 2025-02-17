@@ -1,9 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cf0l4walrllxc"]
 
-[ext_resource type="Script" path="res://src/scene_switcher.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://d3yiwgabkh58o" path="res://src/menus/main-menu.tscn" id="2_ol8fi"]
+[ext_resource type="Script" uid="uid://dbqjthrcbghrx" path="res://src/scene_switcher.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://d3yiwgabkh58o" path="res://src/menus/main_menu.tscn" id="2_ol8fi"]
 
 [node name="SceneSwitcher" type="Node"]
+process_mode = 3
 script = ExtResource("1")
 
 [node name="MainMenu" parent="." instance=ExtResource("2_ol8fi")]

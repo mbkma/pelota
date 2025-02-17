@@ -1,12 +1,20 @@
-[gd_resource type="AudioBusLayout" format=3 uid="uid://udhfafl0u4fa"]
+[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://udhfafl0u4fa"]
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_r518u"]
+resource_name = "Reverb"
+room_size = 0.3
+damping = 0.7
+spread = 0.65
 
 [resource]
 bus/1/name = &"Umpire"
 bus/1/solo = false
 bus/1/mute = false
 bus/1/bypass_fx = false
-bus/1/volume_db = -5.625
+bus/1/volume_db = -12.4611
 bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectReverb_r518u")
+bus/1/effect/0/enabled = true
 bus/2/name = &"Music"
 bus/2/solo = false
 bus/2/mute = false

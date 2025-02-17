@@ -1,31 +1,29 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bxqcmd2k7v707"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://bxqcmd2k7v707"]
 
 [ext_resource type="FontFile" uid="uid://koyy3418d5e4" path="res://main_font.tres" id="1"]
 
-[sub_resource type="StyleBoxTexture" id="3"]
-region_rect = Rect2(0, 0, 100, 100)
-modulate_color = Color(0.411765, 0.411765, 0.411765, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gi7rr"]
 
-[sub_resource type="StyleBoxTexture" id="2"]
-region_rect = Rect2(0, 0, 190, 49)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wu8vu"]
 
-[sub_resource type="StyleBoxTexture" id="1"]
-region_rect = Rect2(0, 0, 100, 100)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c0yf0"]
 
-[sub_resource type="StyleBoxTexture" id="4"]
-region_rect = Rect2(0, 0, 190, 45)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oboeh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kw3yr"]
 
 [resource]
 default_font = ExtResource("1")
-Button/colors/font_color = Color(0, 0, 0, 1)
-Button/colors/font_color_disabled = Color(0, 0, 0, 1)
-Button/colors/font_color_focus = Color(0, 0, 0, 1)
-Button/colors/font_color_hover = Color(0, 0, 0, 1)
-Button/colors/font_color_pressed = Color(0, 0, 0, 1)
-Button/styles/disabled = SubResource("3")
-Button/styles/hover = SubResource("2")
-Button/styles/normal = SubResource("1")
-Button/styles/pressed = SubResource("4")
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxEmpty_gi7rr")
+Button/styles/focus = SubResource("StyleBoxEmpty_wu8vu")
+Button/styles/hover = SubResource("StyleBoxEmpty_c0yf0")
+Button/styles/normal = SubResource("StyleBoxEmpty_oboeh")
+Button/styles/pressed = SubResource("StyleBoxEmpty_kw3yr")
 TabContainer/constants/label_valign_bg = 1
 TabContainer/constants/label_valign_fg = -1
 TabContainer/constants/side_margin = -1

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bum40gf2yhnp6"]
 
-[ext_resource type="Script" path="res://libraries/InverseKinematics.gd" id="1"]
+[ext_resource type="Script" uid="uid://dl2p73g6oyh4w" path="res://libraries/InverseKinematics.gd" id="1"]
 
 [node name="InverseKinematics" type="Node3D"]
 script = ExtResource("1")

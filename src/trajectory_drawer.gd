@@ -25,8 +25,8 @@ func draw_trajectory(trajectory: Array) -> void:
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_color = trajectory_color
 	#print(trajectory[0])
-	for point in trajectory:
-		mesh.surface_add_vertex(point)
+	for step in trajectory:
+		mesh.surface_add_vertex(step.point)
 
 	# End drawing the trajectory
 	mesh.surface_end()

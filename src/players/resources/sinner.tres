@@ -1,9 +1,9 @@
-[gd_resource type="Resource" load_steps=2 format=2]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://bp3wxjl6bi806"]
 
-[ext_resource path="res://src/players/resources/player_data.gd" type="Script" id=1]
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://src/players/resources/player_data.gd" id="1"]
 
 [resource]
-script = ExtResource( 1 )
+script = ExtResource("1")
 first_name = "Jannik"
 last_name = "Sinner"
 age = 20
@@ -22,4 +22,9 @@ stats = {
 "serve_pace": 35,
 "speed": 100,
 "strength": 100
+}
+sounds = {
+"grunt_flat": [],
+"grunt_frequency": 0.0,
+"victory": []
 }

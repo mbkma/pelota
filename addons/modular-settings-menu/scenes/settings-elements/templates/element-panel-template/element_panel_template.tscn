@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwhs0kpipkxfv"]
 
-[ext_resource type="Script" path="res://addons/modular-settings-menu/scripts/element_panel.gd" id="1_3f2r5"]
+[ext_resource type="Script" uid="uid://b317y2ko2ae8d" path="res://addons/modular-settings-menu/scripts/element_panel.gd" id="1_3f2r5"]
 [ext_resource type="PackedScene" uid="uid://bjcuw6amean2" path="res://addons/modular-settings-menu/scenes/settings-elements/templates/slider_element_template.tscn" id="2_fpsnu"]
 
 [node name="ElementPanelTemplate" type="Control"]

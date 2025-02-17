@@ -1,22 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0phb2womt7n0"]
+[gd_scene load_steps=2 format=3 uid="uid://hslyrbgarp35"]
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1"]
 
 [node name="Pause_Popup" type="Window"]
 process_mode = 2
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -115.0
-offset_right = 140.0
-offset_bottom = 115.0
-minimum_size = Vector2(280, 230)
 theme = ExtResource("1")
-window_title = "Game paused"
 
 [node name="Button_resume" type="Button" parent="."]
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -26,11 +17,9 @@ offset_top = -139.0
 offset_right = 130.0
 offset_bottom = -79.0
 text = "Resume"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Button_quit" type="Button" parent="."]
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -42,15 +31,12 @@ offset_bottom = -9.0
 text = "Quit to title"
 
 [node name="Label" type="Label" parent="."]
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -140.0
 offset_right = 140.0
 offset_bottom = 80.0
-custom_colors/font_color = Color(0.767365, 0.753906, 1, 1)
-custom_colors/font_color_shadow = Color(0, 0, 0, 1)
-custom_constants/shadow_offset_x = 2
-custom_constants/shadow_offset_y = 2
 text = "GAME PAUSED"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 1

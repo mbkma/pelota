@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b0fek2dc3mv3s"]
 
-[ext_resource type="Script" path="res://src/tennis_location/us_open/serve_speed_panel.gd" id="2"]
+[ext_resource type="Script" uid="uid://bii2t25tcross" path="res://src/tennis_location/us_open/serve_speed_panel.gd" id="2"]
 
 [node name="ServeSpeedPanel" type="Node3D"]
 script = ExtResource("2")

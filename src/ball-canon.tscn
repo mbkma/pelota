@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cqtiji5vwaevb"]
 
-[ext_resource type="Script" path="res://src/ball-canon.gd" id="1"]
+[ext_resource type="Script" uid="uid://dyfttcqggyxip" path="res://src/ball-canon.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://b1ndmeerawd2s" path="res://assets/models/stadium/BallMachine.blend" id="2_wphch"]
 
 [sub_resource type="BoxShape3D" id="7"]

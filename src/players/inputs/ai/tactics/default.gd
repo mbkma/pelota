@@ -23,25 +23,30 @@ func setup(_player) -> void:
 	player = _player
 
 
-func compute_next_stroke(closest_ball_position) -> Stroke:
+func compute_next_stroke(closest_step: TrajectoryStep) -> Stroke:
 	var r = randf()
+	var closest_ball_position := closest_step.point
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
+	var stroke: Stroke
 	if dot_product > 0:
 		if r < 0.3:
-			return get_stroke(AiStrokeType.FOREHAND_LONGLINE)
+			stroke = get_stroke(AiStrokeType.FOREHAND_LONGLINE)
 		else:
-			return get_stroke(AiStrokeType.FOREHAND_CROSS)
+			stroke = get_stroke(AiStrokeType.FOREHAND_CROSS)
 	else:
 		if r < 0.2:
-			return get_stroke(AiStrokeType.BACKHAND_LONGLINE)
+			stroke = get_stroke(AiStrokeType.BACKHAND_LONGLINE)
 		elif r < 0.4:
-			return get_stroke(AiStrokeType.BACKHAND_CROSS)
+			stroke = get_stroke(AiStrokeType.BACKHAND_CROSS)
 		elif r < 0.9:
-			return get_stroke(AiStrokeType.BACKHAND_SLICE_CROSS)
+			stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_CROSS)
 		else:
-			return get_stroke(AiStrokeType.BACKHAND_DROP_SHOT)
+			stroke = get_stroke(AiStrokeType.BACKHAND_DROP_SHOT)
 
+	stroke.step = closest_step
+
+	return stroke
 
 func compute_serve() -> Stroke:
 	var r = randf()
@@ -71,8 +76,6 @@ func get_stroke(stroke_type: AiStrokeType) -> Stroke:
 			stroke.stroke_type = stroke.StrokeType.FOREHAND
 			stroke.stroke_power = player.stats.forehand_pace
 			stroke.stroke_spin = player.stats.forehand_spin
-			var target_local = Vector3(-8 * 0.3, 0, -11)  # Cross direction
-			var target_global = player.global_position + player.global_basis * target_local
 			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)

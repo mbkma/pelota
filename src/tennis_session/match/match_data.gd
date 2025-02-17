@@ -10,8 +10,6 @@ var match_score: Score
 var rally_length := 0
 var aces := 0
 
-var server := 0
-
 
 func _init(player0: PlayerData, player1: PlayerData) -> void:
 	self.player0 = player0

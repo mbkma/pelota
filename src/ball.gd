@@ -2,6 +2,7 @@ class_name Ball
 extends CharacterBody3D
 
 signal on_ground
+signal on_net
 
 const DAMP := 0.7
 const GROUND := 0.035
@@ -36,16 +37,16 @@ func _physics_process(delta: float) -> void:
 	if get_slide_collision_count() > 0:
 		var col := get_slide_collision(0)
 		var collider := col.get_collider()
-		print(collider)
 		if collider.is_in_group("Net"):
 			prev_velocity.z *= 0.1
 			prev_velocity.x *= 0.1
 			velocity = prev_velocity.bounce(col.get_normal()) * DAMP
+			on_net.emit()
 		else:
 			velocity = prev_velocity.bounce(col.get_normal()) * DAMP
 			position.y = GROUND
 		if position.y < 0.1:
-			emit_signal("on_ground")
+			on_ground.emit()
 
 	#rotation = spin*velocity
 	velocity = velocity.lerp(Vector3.ZERO, 0.001)
@@ -60,17 +61,17 @@ func apply_stroke(vel: Vector3, _spin: float) -> void:
 	velocity = vel
 
 
-func predict_trajectory(steps: int = 200, time_step: float = 0.016) -> Array:
+func predict_trajectory(steps: int = 200, time_step: float = 0.016) -> Array[TrajectoryStep]:
 	#print("global_position", global_position)
-	var trajectory := []
+	var trajectory: Array[TrajectoryStep]
 	var current_position = global_position
 	var current_velocity = velocity
 
+	var time := 0.0
 	for i in range(steps):
 		# Calculate gravity based on spin
 		var gravity = spin_to_gravity(spin)
 		current_velocity.y += -gravity * time_step  # Apply gravity
-
 		# Update position based on current velocity
 		current_position += current_velocity * time_step
 
@@ -79,8 +80,9 @@ func predict_trajectory(steps: int = 200, time_step: float = 0.016) -> Array:
 			current_velocity = current_velocity.bounce(Vector3.UP) * DAMP
 			current_position.y = GROUND
 		# Add the current position to the trajectory
-		trajectory.append(current_position)
-
+		var step = TrajectoryStep.new(current_position, time)
+		trajectory.append(step)
+		time += time_step
 		# Stop simulation if velocity is almost zero
 		if current_velocity.length() < 0.01:
 			break

@@ -1,8 +1,10 @@
 [gd_scene load_steps=8 format=3 uid="uid://r6ewusuy2y2d"]
 
-[ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1"]
-[ext_resource type="Script" path="res://src/hud/music_panel.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://c6s0a1ukffhjp" path="res://assets/textures/menus/org.gnome.Music.svg" id="3"]
+[ext_resource type="Script" uid="uid://bni14ipra7ejv" path="res://src/hud/music_panel.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://g48gk6m2wc81" path="res://assets/music/md.webp" id="2_p2kxs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_itcay"]
+bg_color = Color(0.129558, 0.129559, 0.129558, 1)
 
 [sub_resource type="Animation" id="1"]
 resource_name = "fade_in"
@@ -51,24 +53,12 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="3"]
 resource_name = "speaker_active"
 loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("OrggnomeMusic:scale")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.417969, 0.40625), Vector2(0.6, 0.6), Vector2(0.417969, 0.40625)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_amtl8"]
 _data = {
-"fade_in": SubResource("1"),
-"fade_out": SubResource("2"),
-"speaker_active": SubResource("3")
+&"fade_in": SubResource("1"),
+&"fade_out": SubResource("2"),
+&"speaker_active": SubResource("3")
 }
 
 [node name="MusicPanel" type="Panel"]
@@ -77,34 +67,40 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -201.5
-offset_right = -201.5
-theme = ExtResource("1")
-script = ExtResource("2")
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -51.5
-offset_top = -11.0
-offset_right = 51.5
-offset_bottom = 11.0
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
 grow_horizontal = 2
-grow_vertical = 2
-text = "Song Name"
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_itcay")
+script = ExtResource("2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_amtl8")
 }
 
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_p2kxs")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Song Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
-
-[node name="OrggnomeMusic" type="Sprite2D" parent="."]
-position = Vector2(20.125, 13)
-scale = Vector2(0.422749, 0.411338)
-texture = ExtResource("3")

@@ -1,8 +1,6 @@
 class_name Player
 extends CharacterBody3D
 
-signal serve_requested
-
 signal ball_hit
 signal just_served
 signal target_point_reached
@@ -27,7 +25,7 @@ enum InputType { KEYBOARD, CONTROLLER, AI }
 @export var camera: Camera3D
 @export var ball: Ball
 @export var move_speed := 5.0
-@export var is_serving := false
+#@export var is_serving := false
 @export var team_index: int
 @export var ball_aim_marker: MeshInstance3D
 
@@ -68,8 +66,9 @@ func _ready() -> void:
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
 
-	serve_requested.connect(input_node.serve_requested)
 
+func request_serve():
+	input_node.request_serve()
 
 func setup(data: PlayerData, ai_controlled: bool) -> void:
 	player_data = data
@@ -86,6 +85,11 @@ func setup_training(training):
 	pass
 
 
+func stop():
+	cancel_movement()
+	cancel_stroke()
+	ball = null
+
 ## Move Related
 ###############
 
@@ -100,14 +104,16 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	direction = direction.normalized()
 	model.set_move_direction(direction)
 
-	if not is_on_floor():
-		move_velocity.y += -GlobalPhysics.GRAVITY * 2 * delta
-	else:
-		move_velocity.y = -GlobalPhysics.GRAVITY / 10
+	#if not is_on_floor():
+		#move_velocity.y += -GlobalPhysics.GRAVITY * 2 * delta
+	#else:
+		#move_velocity.y = -GlobalPhysics.GRAVITY / 10
 
 	move_velocity.x = direction.x * move_speed
 	move_velocity.z = direction.z * move_speed
-
+	print("direction", direction)
+	print("move_speed", move_speed)
+	print("move_velocity", move_velocity)
 	# If there's input, accelerate to the input move_velocity
 	if direction.length() > 0:
 		real_velocity = real_velocity.lerp(move_velocity, acceleration)
@@ -134,7 +140,7 @@ func _get_move_direction() -> Vector3:
 		if position.distance_squared_to(path[0]) < DISTANCE_THRESHOLD:
 			path.remove_at(0)
 			target_point_reached.emit()
-			print(self, ": target point reached ", position)
+			#print(self, ": target point reached ", position)
 		else:
 			#if sign(path[0].z) != sign(position.z):
 			#printerr("I dont move accross the net!")
@@ -162,12 +168,12 @@ func cancel_movement() -> void:
 
 
 # Here you can queue all strokes, except serves
-func queue_stroke(stroke: Stroke, ball_position: Vector3) -> void:
+func queue_stroke(stroke: Stroke) -> void:
 	if not ball:
 		printerr("Player ", self, " has not ball!")
 
 	queued_stroke = stroke
-	model.play_stroke_animation(stroke, ball_position)
+	model.play_stroke_animation(stroke)
 
 
 func _on_RacketArea_body_entered(body) -> void:
@@ -185,7 +191,6 @@ func _hit_ball(ball: Ball, stroke: Stroke) -> void:
 		-sign(position.z) * stroke.stroke_power,
 		stroke.stroke_spin
 	)
-	print(stroke.stroke_target)
 
 	ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
 	play_stroke_sound(stroke)
@@ -265,4 +270,3 @@ func play_stroke_sound(stroke: Stroke):
 
 func set_active_ball(b: Ball) -> void:
 	ball = b
-	print(player_data.last_name, ": New ball!", ball.global_position)
