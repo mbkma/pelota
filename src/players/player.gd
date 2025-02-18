@@ -93,6 +93,8 @@ func stop():
 ## Move Related
 ###############
 
+var root_motion = true
+
 
 func apply_movement(direction: Vector3, delta: float) -> void:
 #	uncomment the following for smooth roation in move direction
@@ -100,6 +102,10 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 #		model.rotation.y = lerp_angle(model.rotation.y, sign(position.z)*atan2(-direction.x, -direction.z), 15*delta)
 #	else:
 #		model.rotation.y = lerp_angle(model.rotation.y, 0, 15*delta)
+
+	if root_motion:
+		root_motion_movement(direction, delta)
+		return
 
 	direction = direction.normalized()
 	model.set_move_direction(direction)
@@ -122,6 +128,16 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 		real_velocity = real_velocity.lerp(Vector3.ZERO, friction)
 
 	velocity = real_velocity
+	move_and_slide()
+
+
+func root_motion_movement(direction, delta: float):
+	direction = direction.normalized()
+
+	# for root motion
+	model.animation_tree.set("parameters/conditions/moving", direction != Vector3.ZERO)
+	model.animation_tree.set("parameters/conditions/idle", direction == Vector3.ZERO)
+	velocity = (model.animation_tree.get_root_motion_position()) / delta
 	move_and_slide()
 
 
