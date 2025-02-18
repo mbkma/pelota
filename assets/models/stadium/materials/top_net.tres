@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bonob3apqsjud"]
+
+[resource]
+resource_name = "top_net"
+cull_mode = 2
+roughness = 0.5

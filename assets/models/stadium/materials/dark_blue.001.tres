@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://u8einxmmo03r"]
+
+[ext_resource type="Texture2D" uid="uid://b8lbbl4ie612b" path="res://assets/pbr_textures/Plastic007_1K-PNG/Plastic007_1K_Roughness.png" id="1_80gfc"]
+[ext_resource type="Texture2D" uid="uid://skef7ria27in" path="res://assets/pbr_textures/Plastic007_1K-PNG/Plastic007_1K_NormalGL.png" id="2_antg8"]
+
+[resource]
+resource_name = "dark_blue.001"
+albedo_color = Color(0.209952, 0.331387, 0.531638, 1)
+metallic_texture = ExtResource("1_80gfc")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_80gfc")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("2_antg8")

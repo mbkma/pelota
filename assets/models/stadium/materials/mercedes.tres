@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b7q3habawtn4t"]
+
+[ext_resource type="Texture2D" uid="uid://dr5u840jw0cju" path="res://assets/models/court/textures/mercedes-alpha.png" id="1_ma4no"]
+
+[resource]
+resource_name = "mercedes"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_ma4no")
+roughness = 0.5
+texture_repeat = false

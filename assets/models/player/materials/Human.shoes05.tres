@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dypqur1tbridq"]
+
+[ext_resource type="Texture2D" uid="uid://bkge6uq0ikd00" path="res://assets/models/player/test_04_shoes05_diffuse.png" id="1_ikr0n"]
+
+[resource]
+resource_name = "Human.shoes05"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_ikr0n")
+roughness = 0.727559

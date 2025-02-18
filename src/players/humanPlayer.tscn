@@ -12,17 +12,12 @@ material = SubResource("StandardMaterial3D_ar8o2")
 [node name="Player" node_paths=PackedStringArray("input_node") instance=ExtResource("1_yyl23")]
 input_node = NodePath("HumanInput")
 
-[node name="AnimationTree" parent="Model" index="6"]
-parameters/stroke/Transition/current_state = ""
-parameters/stroke/Transition/transition_request = ""
-parameters/stroke/Transition/current_index = -1
-
-[node name="BallAimMarker" type="MeshInstance3D" parent="." index="5"]
+[node name="BallAimMarker" type="MeshInstance3D" parent="." index="4"]
 transform = Transform3D(0.277424, 0, -8.4411e-08, 0, 0.107815, 0, 8.37798e-08, 0, 0.279514, 0, 0, 0)
 top_level = true
 mesh = SubResource("CylinderMesh_ssn5c")
 
-[node name="HumanInput" parent="." index="6" node_paths=PackedStringArray("ball_aim_marker") instance=ExtResource("2_5v6y4")]
+[node name="HumanInput" parent="." index="5" node_paths=PackedStringArray("ball_aim_marker") instance=ExtResource("2_5v6y4")]
 ball_aim_marker = NodePath("../BallAimMarker")
 
 [editable path="Model"]

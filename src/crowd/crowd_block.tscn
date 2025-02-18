@@ -1,7 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://ds5ryhspuxtpf"]
+[gd_scene load_steps=3 format=3 uid="uid://ds5ryhspuxtpf"]
 
-[ext_resource type="PackedScene" uid="uid://tbwcrfbncqfk" path="res://assets/models/crowd/anim-crowd-ready-test.blend" id="1_ga41u"]
+[ext_resource type="Script" uid="uid://b5wdbxay612jn" path="res://src/crowd/crowd_block.gd" id="1_jcoec"]
+[ext_resource type="PackedScene" uid="uid://b68wl0nx6f7sh" path="res://src/crowd/crowd_lonely.tscn" id="2_k6j24"]
 
 [node name="CrowdBlock" type="Node3D"]
+script = ExtResource("1_jcoec")
 
-[node name="anim-crowd-ready-test" parent="." instance=ExtResource("1_ga41u")]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.997811, 0.0661346, 0, -0.0661346, 0.997811, 1.94727, 0.379695, 2.15496)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="crowd-lonely" parent="." instance=ExtResource("2_k6j24")]
+visible = false
+script = null
+
+[node name="LookAtModifier3D" parent="crowd-lonely/crowd/Skeleton3D" index="5"]
+target_node = NodePath("../../../../Camera3D")
+
+[editable path="crowd-lonely"]

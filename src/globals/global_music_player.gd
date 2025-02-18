@@ -9,7 +9,7 @@ var music := [
 	Track.new(
 		"Hawaii",
 		"Waesto",
-		preload("res://assets/music/Waesto - Hawaii.mp3"),
+		preload("res://assets/music/hawaii/Waesto - Hawaii.mp3"),
 		"res://assets/music/md.webp"
 	)
 ]

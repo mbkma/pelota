@@ -1,7 +1,7 @@
 class_name Model
 extends Node3D
 
-enum States { MOVE, STROKE }
+enum States { IDLE, MOVE, STROKE }
 
 var animation_hit_time := 0.37
 
@@ -29,6 +29,10 @@ func _ready() -> void:
 func set_move_direction(direction: Vector3) -> void:
 	var dir := Vector2(direction.x, -direction.z)
 	animation_tree["parameters/move/blend_position"] = dir
+	if dir.x > 0:
+		_playback.travel("g_run_right")
+	else:
+		_playback.travel("idle")
 
 
 func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
@@ -82,6 +86,8 @@ func set_stroke(stroke: Stroke) -> void:
 
 func transition_to(state_id: int) -> void:
 	match state_id:
+		States.IDLE:
+			_playback.travel("idle")
 		States.MOVE:
 			_playback.travel("move")
 		States.STROKE:

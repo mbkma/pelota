@@ -204,7 +204,7 @@ func _play_stroke_sound():
 
 func cancel_stroke() -> void:
 	queued_stroke = null
-	model.transition_to(model.States.MOVE)
+	model.transition_to(model.States.IDLE)
 
 
 func serve(stroke: Stroke) -> void:

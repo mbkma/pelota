@@ -23,7 +23,7 @@ GlobalHud="*res://src/globals/global_hud.gd"
 GlobalPhysics="*res://src/globals/global_physics.gd"
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-SceneManager="*res://scene_manager.gd"
+SceneManager="res://scene_manager.gd"
 
 [debug]
 
@@ -52,6 +52,9 @@ ogg_vorbis={
 }
 animation_library={
 &"animation/import_rest_as_RESET": true,
+&"blender/nodes/visible": 1
+}
+scene={
 &"blender/nodes/visible": 1
 }
 
@@ -145,8 +148,5 @@ game_debug_menu={
 
 [rendering]
 
-anti_aliasing/quality/msaa_2d=1
-anti_aliasing/quality/msaa_3d=1
-anti_aliasing/quality/use_taa=true
 quality/filters/msaa=1
 environment/default_environment="res://default_env.tres"

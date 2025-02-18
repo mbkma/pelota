@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bnx2blfcjnmhj"]
+
+[ext_resource type="Texture2D" uid="uid://lnpxjd7x7h3h" path="res://assets/models/player/test_04_M_Swimming_trunks_01.png" id="1_u1omx"]
+
+[resource]
+resource_name = "Human.mindfront_male_swimming_trunks_01"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_u1omx")
+metallic = 0.362205
+roughness = 0.788152

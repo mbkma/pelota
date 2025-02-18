@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c7nf1fx48wgkj"]
+
+[resource]
+resource_name = "rolex-green.001"
+albedo_color = Color(0.0239357, 0.329105, 0.113697, 1)
+roughness = 0.5

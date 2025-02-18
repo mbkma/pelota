@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://ckuhldtseut8a"]
+
+[ext_resource type="Texture2D" uid="uid://caq3pq5alwjkn" path="res://assets/models/player/test_04_head_racket.png" id="1_lks6b"]
+[ext_resource type="Texture2D" uid="uid://h6340xh8kyp5" path="res://assets/models/player/test_04_Image_1.png" id="2_ft00p"]
+
+[resource]
+resource_name = "Frame.001"
+albedo_texture = ExtResource("1_lks6b")
+roughness = 0.2
+normal_enabled = true
+normal_texture = ExtResource("2_ft00p")

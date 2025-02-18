@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://b68wl0nx6f7sh"]
+
+[ext_resource type="PackedScene" uid="uid://uxx5lgyjrs3m" path="res://assets/models/crowd/crowd-lonely.blend" id="1_uh07b"]
+[ext_resource type="Script" uid="uid://byoy2mf26x2pk" path="res://src/crowd/crowd_lonely.gd" id="2_55ric"]
+
+[node name="crowd-lonely" instance=ExtResource("1_uh07b")]
+script = ExtResource("2_55ric")
+n = NodePath("Camera3D")
+
+[node name="Skeleton3D" parent="crowd" index="0"]
+bones/0/position = Vector3(0.00661526, 1.81759, -55.9127)
+bones/0/rotation = Quaternion(-0.706182, 0.0076108, 0.00493547, 0.707972)
+bones/1/rotation = Quaternion(0.0962939, 0.000893607, -0.0140132, 0.995254)
+bones/2/rotation = Quaternion(-0.00174309, 0.0018226, -0.00312459, 0.999992)
+bones/3/rotation = Quaternion(-0.00174584, 0.00213574, -0.00265217, 0.999993)
+bones/4/rotation = Quaternion(-0.0142048, -0.0112581, 0.00425154, 0.999827)
+bones/5/rotation = Quaternion(-0.0755547, -0.0412993, -0.0433409, 0.995343)
+bones/7/rotation = Quaternion(0.627385, 0.379466, -0.472706, 0.488817)
+bones/8/position = Vector3(-2.51421e-06, 13.3121, -5.22074e-06)
+bones/8/rotation = Quaternion(0.414551, 0.127638, 0.143052, 0.889602)
+bones/9/position = Vector3(4.43113e-08, 21.19, 6.49244e-06)
+bones/9/rotation = Quaternion(-0.00547223, 0.00028163, 0.516486, 0.856278)
+bones/10/position = Vector3(2.65728e-06, 21.1062, 1.26604e-06)
+bones/10/rotation = Quaternion(-0.353483, 0.265675, 0.0565606, 0.895136)
+bones/11/position = Vector3(1.68354e-06, 5.30121, -5.10329e-06)
+bones/11/rotation = Quaternion(0.233151, -0.00247787, -0.0180507, 0.97227)
+bones/12/position = Vector3(1.78814e-06, 2.88149, -9.45851e-06)
+bones/12/rotation = Quaternion(0.189547, 0.0220364, -0.131688, 0.972751)
+bones/13/position = Vector3(-1.01404, 4.12817, -0.0573381)
+bones/13/rotation = Quaternion(0.003153, 0.000683023, 0.00096201, 0.999994)
+bones/14/position = Vector3(-0.634358, 2.75945, 0.424788)
+bones/15/rotation = Quaternion(0.549322, -0.46441, 0.566445, 0.40213)
+bones/16/position = Vector3(-2.67688e-06, 13.3121, -7.8766e-06)
+bones/16/rotation = Quaternion(0.447364, -0.154347, -0.285641, 0.833337)
+bones/17/position = Vector3(-1.26103e-06, 21.1902, -3.03889e-06)
+bones/17/rotation = Quaternion(-0.00496251, -0.000351237, -0.462795, 0.886452)
+bones/18/position = Vector3(-8.10789e-06, 21.1066, -4.15646e-06)
+bones/18/rotation = Quaternion(-0.276352, -0.342432, -0.148096, 0.885685)
+bones/19/position = Vector3(7.21748e-07, 5.29747, 1.38972e-05)
+bones/19/rotation = Quaternion(0.117875, -0.0256985, -0.00753233, 0.992667)
+bones/20/position = Vector3(2.4438e-06, 2.7097, -7.52566e-07)
+bones/20/rotation = Quaternion(0.284424, -0.0104649, 0.0643726, 0.956478)
+bones/21/position = Vector3(0.420859, 4.11806, -0.512161)
+bones/21/rotation = Quaternion(0.0391484, -0.00382222, -0.00124225, 0.999225)
+bones/22/position = Vector3(0.265714, 3.02402, -0.126049)
+bones/23/position = Vector3(8.54014, -4.86722, 0.302556)
+bones/23/rotation = Quaternion(0.0494462, 0.646826, 0.753862, -0.104229)
+bones/24/position = Vector3(-7.42197e-07, 42.725, -3.08945e-06)
+bones/24/rotation = Quaternion(-0.665664, -0.038837, 0.0188822, 0.745001)
+bones/25/position = Vector3(2.59608e-06, 38.2489, 4.04089e-06)
+bones/25/rotation = Quaternion(0.491259, 0.0677707, -0.0693351, 0.8656)
+bones/26/rotation = Quaternion(0.257916, -0.0319653, 0.00853394, 0.965601)
+bones/28/position = Vector3(-8.54015, -4.86722, 0.182265)
+bones/28/rotation = Quaternion(-0.0188387, 0.653241, 0.751034, 0.0941728)
+bones/29/position = Vector3(-3.15731e-07, 42.7277, -3.16734e-07)
+bones/29/rotation = Quaternion(-0.665063, 0.027341, -0.0271044, 0.745794)
+bones/30/rotation = Quaternion(0.488396, -0.00853484, 0.0471543, 0.871305)
+bones/31/rotation = Quaternion(0.256922, 0.03174, -0.00843469, 0.965874)
+
+[node name="LookAtModifier3D" type="LookAtModifier3D" parent="crowd/Skeleton3D" index="5"]
+transform = Transform3D(100, 0, 0, 0, 0, 100, 0, -100, 0, 0, 0, 0)
+target_node = NodePath("../../../Camera3D")
+bone_name = "mixamorig_Head"
+bone = 5
+use_secondary_rotation = false
+
+[node name="Camera3D" type="Camera3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.06916, 0.716389, 2.38421)

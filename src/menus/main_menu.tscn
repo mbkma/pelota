@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d3yiwgabkh58o"]
+[gd_scene load_steps=8 format=3 uid="uid://d3yiwgabkh58o"]
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://main_theme.tres" id="1"]
 [ext_resource type="Script" uid="uid://cp7eliy5mm75n" path="res://src/menus/main_menu.gd" id="2"]
@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://d0ihbnragjhar" path="res://assets/textures/roger-federer-backhand-rochvanh-.jpg" id="4"]
 [ext_resource type="PackedScene" uid="uid://px6a2dg8cawb" path="res://addons/modular-settings-menu/scenes/settings.tscn" id="5_e2417"]
 [ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://src/hud/music_panel.tscn" id="6_u0nle"]
+
+[sub_resource type="Gradient" id="Gradient_3p5o7"]
+offsets = PackedFloat32Array(0, 0.477551)
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 0, 1)
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -55,6 +59,7 @@ text = "Training"
 
 [node name="Tournament" type="Button" parent="MainMenu"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Tournament"
 
 [node name="Career" type="Button" parent="MainMenu"]
@@ -116,6 +121,23 @@ offset_left = 463.0
 offset_top = 653.0
 offset_right = 663.0
 offset_bottom = 703.0
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(543, 313)
+amount = 18
+lifetime = 6.35
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(42.8, 1)
+gravity = Vector2(50, 20)
+orbit_velocity_min = 0.1
+orbit_velocity_max = 0.1
+scale_amount_min = 2.1
+scale_amount_max = 10.75
+color = Color(1, 1, 0, 1)
+color_ramp = SubResource("Gradient_3p5o7")
+hue_variation_min = 0.01
+hue_variation_max = 0.65
 
 [connection signal="pressed" from="MainMenu/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="MainMenu/Training" to="." method="_on_training_pressed"]
