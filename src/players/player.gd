@@ -144,7 +144,9 @@ func root_motion_movement(direction, delta: float):
 	model.animation_tree.set("parameters/conditions/idle", direction == Vector3.ZERO)
 
 	var currentRotation = transform.basis.get_rotation_quaternion()
-	velocity = (currentRotation.normalized()*model.animation_tree.get_root_motion_position()) / delta
+	velocity = (
+		(currentRotation.normalized() * model.animation_tree.get_root_motion_position()) / delta
+	)
 	move_and_slide()
 
 

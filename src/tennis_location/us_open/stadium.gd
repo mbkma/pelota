@@ -36,12 +36,10 @@ func _ready() -> void:
 	timer.timeout.connect(_on_ServeClocks_timeout)
 
 
-
 func _process(delta: float) -> void:
 	if serve_clocks_active:
 		for clock in serve_clocks:
 			clock.text = str(int(timer.get_time_left())) + "\n" + "Serve Clock"
-
 
 
 func show_serve_speed(ball: Ball):

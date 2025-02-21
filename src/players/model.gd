@@ -22,18 +22,17 @@ var movement_animations := {
 	"crossover_right": preload("res://src/players/anim_crossover_right.tres")
 }
 
-var stroke_animations := {
-	"forehand": preload("res://src/players/forehand_anim.tres")
-}
+var stroke_animations := {"forehand": preload("res://src/players/forehand_anim.tres")}
 
 var stroke_active := false
-
 
 @export var animation_tree: AnimationTree
 @onready var _playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
 
+
 func _ready() -> void:
 	animation_tree.active = true
+
 
 func get_move_speed_factor():
 	var current_time = _playback.get_current_play_position()
@@ -43,16 +42,16 @@ func get_move_speed_factor():
 	if current_animation == "g_right":
 		w = movement_animations["crossover_right"].sample(current_time / current_length)
 		print("w", w)
-		print("current_time",current_time)
-		print("current_length",current_length)
+		print("current_time", current_time)
+		print("current_length", current_length)
 
 	return w
+
 
 func set_move_direction(direction: Vector3) -> void:
 	var dir := Vector2(direction.x, -direction.z)
 	animation_tree["parameters/move/blend_position"] = dir
 	#transition_to(States.MOVE)
-
 
 
 func get_stroke_blend_position(stroke_id: int, stroke_pos: Vector3) -> Vector3:
@@ -123,6 +122,7 @@ func transition_to(state_id: int) -> void:
 # gets called from animation
 func _set_stroke_active():
 	stroke_active = true
+
 
 func _set_stroke_inactive():
 	stroke_active = false

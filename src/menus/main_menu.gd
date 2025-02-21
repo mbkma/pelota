@@ -93,6 +93,7 @@ func hide_all_menus() -> void:
 	start_menu.hide()
 	main_menu.hide()
 
+
 func _on_Career_pressed() -> void:
 	level_changed.emit(load("res://src/career/new_career.tscn"), null)
 

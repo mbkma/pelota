@@ -311,9 +311,11 @@ func place_players():
 ## Callback functions
 #####################
 
+
 func _on_player_just_served():
 	stadium.show_serve_speed(ball)
 	stadium.stop_serve_clocks()
+
 
 func _on_player0_ball_hit():
 	# important for volley
