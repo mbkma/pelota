@@ -4,10 +4,10 @@ signal level_changed(level_name, init_data)
 
 @export var level_name: String = "level"
 
-#onready var MainMenu = $MainMenu
+@onready var main_menu: HBoxContainer = $MainMenu
 @onready var start_menu = $StartMenu
 @onready var play = start_menu.get_node("Actions/Play")
-@onready var SettingsMenu = $SettingsMenu
+@onready var settings_menu: SettingsMenu = $SettingsMenu
 
 @onready var player_selectors = [
 	start_menu.get_node("HBoxContainer/PlayerSelector"),
@@ -57,7 +57,7 @@ func _on_Quit_pressed() -> void:
 
 func _on_Settings_pressed() -> void:
 	hide_all_menus()
-	SettingsMenu.show()
+	settings_menu.show()
 
 
 func _on_Back_pressed() -> void:
@@ -91,8 +91,7 @@ func _on_Tournament_pressed() -> void:
 
 func hide_all_menus() -> void:
 	start_menu.hide()
-	SettingsMenu.hide()
-
+	main_menu.hide()
 
 func _on_Career_pressed() -> void:
 	level_changed.emit(load("res://src/career/new_career.tscn"), null)
@@ -100,3 +99,7 @@ func _on_Career_pressed() -> void:
 
 func _on_training_pressed() -> void:
 	level_changed.emit(load("res://src/tennis_location/training_center/training_center.tscn"), null)
+
+
+func _on_settings_menu_settings_menu_closed() -> void:
+	main_menu.show()

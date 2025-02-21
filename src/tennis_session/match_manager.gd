@@ -37,6 +37,8 @@ func _ready() -> void:
 	match_data = MatchData.new(player0.player_data, player1.player_data)
 	player0.ball_hit.connect(_on_player0_ball_hit)
 	player1.ball_hit.connect(_on_player1_ball_hit)
+	player0.just_served.connect(_on_player_just_served)
+	player1.just_served.connect(_on_player_just_served)
 	televisionHud.score_display.player_1_score_panel.set_player(player0.player_data)
 	televisionHud.score_display.player_2_score_panel.set_player(player1.player_data)
 	#state_changed.connect(_on_state_changed)
@@ -309,6 +311,9 @@ func place_players():
 ## Callback functions
 #####################
 
+func _on_player_just_served():
+	stadium.show_serve_speed(ball)
+	stadium.stop_serve_clocks()
 
 func _on_player0_ball_hit():
 	# important for volley

@@ -56,4 +56,10 @@ theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 14
 text = "Valid Rally Zone: "
 
+[node name="GroundContacts" type="Label" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="LastHitter" type="Label" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

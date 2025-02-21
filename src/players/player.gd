@@ -12,7 +12,7 @@ signal input_changed(timing)
 
 @onready var ball_scene := preload("res://src/ball.tscn")
 @onready var model: Model = $Model
-@onready var audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 var ai_input = "res://src/players/inputs/ai/ai_input.tscn"
 var human_input = "res://src/players/inputs/keyboard_input.tscn"
@@ -93,7 +93,7 @@ func stop():
 ## Move Related
 ###############
 
-var root_motion = true
+var root_motion = false
 
 
 func apply_movement(direction: Vector3, delta: float) -> void:
@@ -117,15 +117,17 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 
 	move_velocity.x = direction.x * move_speed
 	move_velocity.z = direction.z * move_speed
-	print("direction", direction)
-	print("move_speed", move_speed)
-	print("move_velocity", move_velocity)
+	#print("direction", direction)
+	#print("move_speed", move_speed)
+	#print("move_velocity", move_velocity)
 	# If there's input, accelerate to the input move_velocity
 	if direction.length() > 0:
 		real_velocity = real_velocity.lerp(move_velocity, acceleration)
 	else:
 		# If there's no input, slow down to (0, 0)
 		real_velocity = real_velocity.lerp(Vector3.ZERO, friction)
+
+	real_velocity *= model.get_move_speed_factor()
 
 	velocity = real_velocity
 	move_and_slide()
@@ -134,10 +136,15 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 func root_motion_movement(direction, delta: float):
 	direction = direction.normalized()
 
+	var dir := Vector2(-direction.x, direction.z)
+	model.animation_tree["parameters/move/blend_position"] = dir
+
 	# for root motion
 	model.animation_tree.set("parameters/conditions/moving", direction != Vector3.ZERO)
 	model.animation_tree.set("parameters/conditions/idle", direction == Vector3.ZERO)
-	velocity = (model.animation_tree.get_root_motion_position()) / delta
+
+	var currentRotation = transform.basis.get_rotation_quaternion()
+	velocity = (currentRotation.normalized()*model.animation_tree.get_root_motion_position()) / delta
 	move_and_slide()
 
 
@@ -234,7 +241,7 @@ func serve(stroke: Stroke) -> void:
 	ball.initial_position = position + model.toss_point
 	ball.initial_velocity = Vector3(0, 6, 0)
 	get_parent().add_child(ball)
-	emit_signal("ball_spawned", ball)
+	ball_spawned.emit(ball)
 
 	get_tree().call_group("Player", "set_active_ball", ball)
 	await get_tree().create_timer(1).timeout
@@ -258,7 +265,7 @@ func prepare_serve() -> void:
 
 
 func challenge() -> void:
-	emit_signal("challenged")
+	challenged.emit()
 
 
 func _get_grunt_sound() -> AudioStream:

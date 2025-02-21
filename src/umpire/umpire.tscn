@@ -20,6 +20,5 @@ shape = SubResource("4")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47242, -2.39926)
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.36801, 0)
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 bus = &"Umpire"

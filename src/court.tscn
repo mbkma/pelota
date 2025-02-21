@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dyg40a5hhkqva"]
 
-[ext_resource type="PackedScene" uid="uid://dbfeuchykukj3" path="res://assets/models/court/court.blend" id="2_cwupy"]
+[ext_resource type="PackedScene" uid="uid://d0pev7c2tn33h" path="res://assets/models/court/court1.blend" id="2_u8opk"]
 [ext_resource type="Script" uid="uid://df50no5o2qa5p" path="res://src/court.gd" id="5"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h4etg"]
@@ -12,7 +12,7 @@ data = PackedVector3Array(-4.649, 0.997, 0, -4.9696, -0.012, 0, -4.9696, 0.997, 
 [node name="Court" type="Node3D"]
 script = ExtResource("5")
 
-[node name="court" parent="." instance=ExtResource("2_cwupy")]
+[node name="court1" parent="." instance=ExtResource("2_u8opk")]
 
 [node name="Net" type="StaticBody3D" parent="." groups=["Net"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.388625, 0)

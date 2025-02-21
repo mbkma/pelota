@@ -10,8 +10,9 @@ script = ExtResource("1_jwjy5")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 180.0
-offset_bottom = 42.0
+offset_right = 152.0
+offset_bottom = 36.0
+theme_override_constants/separation = 0
 
 [node name="Player1ScorePanel" parent="VBoxContainer" instance=ExtResource("2_y8th3")]
 layout_mode = 2

@@ -55,7 +55,8 @@ animation_library={
 &"blender/nodes/visible": 1
 }
 scene={
-&"blender/nodes/visible": 1
+&"blender/nodes/visible": 1,
+&"gltf/embedded_image_handling": 2
 }
 
 [input]

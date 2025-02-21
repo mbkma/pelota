@@ -1,7 +1,7 @@
 class_name Umpire
 extends Node3D
 
-@onready var audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 @export var umpire_sounds := {
 	"0-1": preload("res://src/umpire/sounds/0-15.ogg"),

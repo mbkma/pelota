@@ -12,6 +12,46 @@ material = SubResource("StandardMaterial3D_ar8o2")
 [node name="Player" node_paths=PackedStringArray("input_node") instance=ExtResource("1_yyl23")]
 input_node = NodePath("HumanInput")
 
+[node name="Skeleton3D" parent="Model/h/test_05/game-rig" index="0"]
+bones/2/rotation = Quaternion(0.167571, 0, 0, 0.98586)
+bones/4/position = Vector3(0, 0.0660226, 2.48346e-09)
+bones/4/rotation = Quaternion(-0.00345228, 0, 0, 0.999994)
+bones/5/position = Vector3(0, 0.154704, -4.09159e-08)
+bones/5/rotation = Quaternion(0.19824, 0, 0, 0.980154)
+bones/6/position = Vector3(0, 0.239778, -1.73027e-08)
+bones/6/rotation = Quaternion(0.0221995, 0, 0, 0.999754)
+bones/7/rotation = Quaternion(-0.151289, 0, 0, 0.98849)
+bones/106/position = Vector3(0.0246734, 0.166657, 0.034995)
+bones/106/rotation = Quaternion(0.609448, 0.50796, 0.467079, -0.390367)
+bones/107/position = Vector3(-9.29814e-08, 0.177717, 1.32951e-07)
+bones/107/rotation = Quaternion(-0.44343, 0.0136084, -0.0924728, 0.891422)
+bones/108/position = Vector3(-7.99834e-08, 0.177717, 1.25638e-07)
+bones/108/rotation = Quaternion(-0.138788, 0.474524, -0.568101, 0.657896)
+bones/109/rotation = Quaternion(3.76337e-09, 0.131719, 1.81042e-07, 0.991287)
+bones/110/rotation = Quaternion(0.538167, 0.131554, 0.0158745, 0.832357)
+bones/111/rotation = Quaternion(-6.76629e-08, -0.35607, 2.21779e-08, 0.934459)
+bones/112/rotation = Quaternion(0.0410611, -0.355324, -0.153741, 0.921099)
+bones/132/position = Vector3(-0.0246734, 0.166657, 0.034995)
+bones/132/rotation = Quaternion(0.609448, -0.50796, -0.467079, -0.390367)
+bones/133/position = Vector3(1.21929e-07, 0.177717, -7.76137e-08)
+bones/133/rotation = Quaternion(-0.498364, 0.00265617, 0.148953, 0.854072)
+bones/134/position = Vector3(8.48254e-08, 0.177717, 2.24022e-08)
+bones/134/rotation = Quaternion(-0.280055, -0.534639, 0.479099, 0.637334)
+bones/135/rotation = Quaternion(1.52528e-07, -0.237389, -2.25004e-07, 0.971415)
+bones/136/rotation = Quaternion(0.592183, -0.237117, -0.0896263, 0.764893)
+
+[node name="racket" parent="Model/h/test_05/game-rig/Skeleton3D" index="0"]
+transform = Transform3D(-0.0892486, -0.553561, -0.828012, -0.921649, -0.269283, 0.279369, -0.377618, 0.78807, -0.486157, -0.188202, 1.47045, 0.621032)
+
+[node name="AnimationTreeRootMotion" parent="Model" index="4"]
+parameters/move/blend_position = Vector2(0.035533, -0.486792)
+parameters/stroke/Transition/current_state = ""
+parameters/stroke/Transition/transition_request = ""
+parameters/stroke/Transition/current_index = -1
+
+[node name="Camera3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.13285, 8.69776)
+
 [node name="BallAimMarker" type="MeshInstance3D" parent="." index="4"]
 transform = Transform3D(0.277424, 0, -8.4411e-08, 0, 0.107815, 0, 8.37798e-08, 0, 0.279514, 0, 0, 0)
 top_level = true
@@ -21,4 +61,4 @@ mesh = SubResource("CylinderMesh_ssn5c")
 ball_aim_marker = NodePath("../BallAimMarker")
 
 [editable path="Model"]
-[editable path="Model/h/test_04"]
+[editable path="Model/h/test_05"]

@@ -6,12 +6,18 @@
 [node name="ScoreDisplay" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+offset_left = 39.0
+offset_top = 573.0
+offset_right = 39.0
+offset_bottom = 573.0
 script = ExtResource("2")
+metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 180.0
 offset_bottom = 42.0
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayerScorePanel" parent="VBoxContainer" instance=ExtResource("2_bumyy")]
 layout_mode = 2

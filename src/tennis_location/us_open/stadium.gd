@@ -2,7 +2,6 @@ class_name Stadium
 extends Node3D
 
 @onready var serve_speed_panels := [$ServeSpeedPanel, $ServeSpeedPanel2]
-var sm
 
 enum StadiumPosition {
 	SERVE_FRONT_RIGHT,
@@ -37,11 +36,6 @@ func _ready() -> void:
 	timer.timeout.connect(_on_ServeClocks_timeout)
 
 
-func setup_singles_match(singles_match):
-	sm = singles_match
-	for player in sm.players:
-		player.just_served.connect(_on_Player_just_served)
-
 
 func _process(delta: float) -> void:
 	if serve_clocks_active:
@@ -49,10 +43,10 @@ func _process(delta: float) -> void:
 			clock.text = str(int(timer.get_time_left())) + "\n" + "Serve Clock"
 
 
-func _on_Player_just_served():
+
+func show_serve_speed(ball: Ball):
 	for panel in serve_speed_panels:
-		panel.show_serve_speed(sm._active_ball.velocity.length())
-	stop_serve_clocks()
+		panel.show_serve_speed(ball.velocity.length())
 
 
 func get_stadium_position(pos: String):

@@ -66,7 +66,13 @@ func _process(_delta: float) -> void:
 		valid_rally_zone.text = (
 			"Valid Rally Zone: " + court_region_to_string(match_manager._valid_rally_zone)
 		)
-
+		valid_rally_zone.text = (
+			"Ground Contacts: " + str(match_manager._ground_contacts)
+		)
+		if match_manager.last_hitter:
+			valid_rally_zone.text = (
+				"Last Hitter: " + str(match_manager.last_hitter.player_data.last_name)
+			)
 
 func court_region_to_string(value: Court.CourtRegion) -> String:
 	var enum_map := {

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://r6ewusuy2y2d"]
 
 [ext_resource type="Script" uid="uid://bni14ipra7ejv" path="res://src/hud/music_panel.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://g48gk6m2wc81" path="res://assets/music/md.webp" id="2_p2kxs"]
+[ext_resource type="Texture2D" uid="uid://g48gk6m2wc81" path="res://assets/music/hawaii/md.webp" id="2_p2kxs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_itcay"]
 bg_color = Color(0.129558, 0.129559, 0.129558, 1)
@@ -79,7 +79,7 @@ script = ExtResource("2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_amtl8")
+&"": SubResource("AnimationLibrary_amtl8")
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

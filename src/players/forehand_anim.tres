@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="StrokeAnimation" load_steps=2 format=3 uid="uid://d0g644ds1v51f"]
+
+[ext_resource type="Script" uid="uid://cmme86y8ym3a5" path="res://src/stroke_animation.gd" id="1_sxun2"]
+
+[resource]
+script = ExtResource("1_sxun2")
+name = "forehand"
+hit_zone = [0.63, 1.0]
+metadata/_custom_type_script = "uid://cmme86y8ym3a5"

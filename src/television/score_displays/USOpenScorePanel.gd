@@ -8,7 +8,7 @@ extends Control
 	$MarginContainer2/HBoxContainer12/Games4,
 	$MarginContainer2/HBoxContainer12/Games5,
 ]
-@onready var points_label = $MarginContainer2/HBoxContainer12/Panel2/Points
+@onready var points_label = $MarginContainer2/HBoxContainer12/MarginContainer/Points
 @onready var serve_indicator = $MarginContainer/HBoxContainer11/ServeIndicator
 
 
