@@ -22,6 +22,7 @@ func init_scene():
 
 
 func _ready():
+	$MainMenu/Start.call_deferred("grab_focus")
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	player_selectors[0].input_select_button.text = "CPU"
@@ -44,18 +45,11 @@ func on_selection_changed() -> void:
 	play.disabled = not player_selected
 
 
-func _on_Start_pressed() -> void:
-	#start_menu.visible = not start_menu.visible
-	print("on start pressed")
-	level_changed.emit(load("res://src/tennis_session/tennis_match.tscn"), null)
-	#SceneManager.swap_scenes("res://src/tennis_session/tennis_match.tscn", null, self)
-
-
-func _on_Quit_pressed() -> void:
+func _on_quit_pressed() -> void:
 	get_tree().quit()
 
 
-func _on_Settings_pressed() -> void:
+func _on_settings_pressed() -> void:
 	hide_all_menus()
 	settings_menu.show()
 
@@ -85,7 +79,7 @@ func _on_Play_pressed() -> void:
 	#)
 
 
-func _on_Tournament_pressed() -> void:
+func _on_tournament_pressed() -> void:
 	level_changed.emit(load("res://src/menus/tournament-main-menu.tscn"), null)
 
 
@@ -94,7 +88,7 @@ func hide_all_menus() -> void:
 	main_menu.hide()
 
 
-func _on_Career_pressed() -> void:
+func _on_career_pressed() -> void:
 	level_changed.emit(load("res://src/career/new_career.tscn"), null)
 
 
@@ -104,3 +98,10 @@ func _on_training_pressed() -> void:
 
 func _on_settings_menu_settings_menu_closed() -> void:
 	main_menu.show()
+
+
+func _on_start_pressed() -> void:
+	#start_menu.visible = not start_menu.visible
+	print("on start pressed")
+	level_changed.emit(load("res://src/tennis_session/tennis_match.tscn"), null)
+	#SceneManager.swap_scenes("res://src/tennis_session/tennis_match.tscn", null, self)

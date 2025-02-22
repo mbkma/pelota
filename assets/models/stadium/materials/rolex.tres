@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bpkuov7lu8uaq"]
+
+[ext_resource type="Texture2D" uid="uid://b5gdmkho8jope" path="res://assets/models/stadium/stadium_rolex-alpha.png" id="1_410xp"]
+
+[resource]
+resource_name = "rolex"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_410xp")
+roughness = 0.5
+texture_repeat = false

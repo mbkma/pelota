@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://d237t32p1sgei"]
 
+[ext_resource type="PackedScene" uid="uid://dvo2jq6bdkolh" path="res://assets/models/stadium/stadium.blend" id="2_3ig1o"]
 [ext_resource type="Script" uid="uid://bb1k88sjxnegb" path="res://src/tennis_location/us_open/stadium.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://src/tennis_location/us_open/serve_speed_panel.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://src/court.tscn" id="5_2qn74"]
-[ext_resource type="PackedScene" uid="uid://ditk0k1t67yfr" path="res://assets/models/stadium/stadium.blend" id="5_3ig1o"]
 [ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
 
 [sub_resource type="BoxShape3D" id="1"]
@@ -36,6 +36,8 @@ cache/0/16/0/scale = 1.0
 
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
+
+[node name="stadium" parent="." instance=ExtResource("2_3ig1o")]
 
 [node name="Court" parent="." instance=ExtResource("5_2qn74")]
 
@@ -81,6 +83,7 @@ shape = SubResource("2")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.891512, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundArea"]
+visible = false
 shape = SubResource("4")
 
 [node name="ServeSpeedPanel2" parent="." instance=ExtResource("5")]
@@ -93,6 +96,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.58155, 0.0526706, -19.7603
 transform = Transform3D(0.591664, 0, 0, 0, 0.554529, 0, 0, 0, 1.21236, 6.52847, 0.606019, -19.6819)
 
 [node name="Label3D" type="Label3D" parent="TimePanel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.21567, -0.444406, -0.111006)
 modulate = Color(1, 1, 0, 1)
 text = "0:00"
 font_size = 179
@@ -129,7 +133,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.63603, 1.41341, -19.7699)
 text = "25
 Serve Clock"
-font = SubResource("5")
+font_size = 38
+outline_size = 0
 
 [node name="ServeClock2" type="Label3D" parent="ServeClocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.42196, 1.41341, -19.7699)
@@ -148,10 +153,3 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.
 text = "25
 Serve Clock"
 font = SubResource("5")
-
-[node name="stadium" parent="." instance=ExtResource("5_3ig1o")]
-
-[node name="Court2" parent="stadium" index="32"]
-visible = false
-
-[editable path="stadium"]

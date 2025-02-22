@@ -32,22 +32,26 @@ custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 
 [node name="Ranking" type="Label" parent="MarginContainer/HBoxContainer11"]
+custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 size_flags_vertical = 1
+theme_override_font_sizes/font_size = 10
 text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Name" type="Label" parent="MarginContainer/HBoxContainer11"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Djokovic"
-horizontal_alignment = 1
 vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 1
 
 [node name="Country" type="Label" parent="MarginContainer/HBoxContainer11"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "SRB"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ServeIndicator" type="TextureRect" parent="MarginContainer/HBoxContainer11"]
@@ -115,7 +119,7 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jl6tf")
 
 [node name="Points" type="Label" parent="MarginContainer2/HBoxContainer12/MarginContainer" groups=["GamesLabel"]]
-custom_minimum_size = Vector2(20, 0)
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"

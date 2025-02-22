@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://d18pm82t4pbqh"]
+
+[ext_resource type="Texture2D" uid="uid://dmlpd8fnsysw3" path="res://assets/models/stadium/stadium_Concrete034_1K_Roughness.png" id="1_54hp2"]
+[ext_resource type="Texture2D" uid="uid://b7pyohuc5avt4" path="res://assets/models/stadium/stadium_Concrete034_1K_NormalGL.png" id="2_wqspc"]
+
+[resource]
+resource_name = "white-concrete"
+albedo_color = Color(0.760785, 0.760784, 0.760784, 1)
+metallic_texture = ExtResource("1_54hp2")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_54hp2")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("2_wqspc")

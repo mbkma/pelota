@@ -3,6 +3,7 @@ extends Node
 signal track_started(track: Track)
 
 @onready var music_player: AudioStreamPlayer = AudioStreamPlayer.new()
+@onready var sound_player: AudioStreamPlayer = AudioStreamPlayer.new()
 var current_track: Track = null  # Stores the currently playing track
 
 var music := [
@@ -22,6 +23,11 @@ func _ready():
 	music_player.autoplay = false
 	add_child(music_player)
 	music_player.process_mode = Node.PROCESS_MODE_ALWAYS  # Ensures it runs even when scenes change
+	sound_player.stream = null
+	sound_player.bus = "SFX"  # Make sure to set up a Music bus in Audio settings
+	sound_player.autoplay = false
+	add_child(sound_player)
+	sound_player.process_mode = Node.PROCESS_MODE_ALWAYS  # Ensures it runs even when scenes change
 
 
 # Function to play music (only if it's not already playing)
@@ -32,9 +38,18 @@ func play_music(track: Track, loop: bool = true):
 	music_player.stream = track.stream
 	music_player.play()
 	music_player.stream_paused = false
-	music_player.finished.connect(_on_music_finished)  # Ensure looping if needed
+	#music_player.finished.connect(_on_music_finished)  # Ensure looping if needed
 	music_player.stream.loop = loop
 	track_started.emit(track)
+
+
+# Function to play sound (only if it's not already playing)
+func play_sound(stream: AudioStream, loop: bool = false):
+	sound_player.stream = stream
+	sound_player.play()
+	sound_player.stream_paused = false
+	#music_player.finished.connect(_on_music_finished)  # Ensure looping if needed
+	#music_player.stream.loop = loop
 
 
 # Function to stop music

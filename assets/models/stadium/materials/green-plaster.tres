@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://46ul05enyegn"]
+
+[ext_resource type="Texture2D" uid="uid://b7kkhaw5l6i1w" path="res://assets/models/stadium/stadium_PaintedPlaster017_1K_Roughness.png" id="1_pmdun"]
+
+[resource]
+resource_name = "green-plaster"
+cull_mode = 2
+albedo_color = Color(0.353107, 0.594948, 0.352074, 1)
+metallic_texture = ExtResource("1_pmdun")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_pmdun")
+roughness_texture_channel = 1

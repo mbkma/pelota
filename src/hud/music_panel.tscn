@@ -4,7 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://g48gk6m2wc81" path="res://assets/music/hawaii/md.webp" id="2_p2kxs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_itcay"]
-bg_color = Color(0.129558, 0.129559, 0.129558, 1)
+bg_color = Color(0.129412, 0.129412, 0.129412, 0.807843)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="Animation" id="1"]
 resource_name = "fade_in"
@@ -62,18 +66,7 @@ _data = {
 }
 
 [node name="MusicPanel" type="Panel"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -50.0
-offset_right = 100.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 0
-size_flags_vertical = 8
+custom_minimum_size = Vector2(400, 50)
 theme_override_styles/panel = SubResource("StyleBoxFlat_itcay")
 script = ExtResource("2")
 

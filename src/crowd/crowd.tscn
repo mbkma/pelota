@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxo4shm4p8nco"]
+
+[ext_resource type="Script" uid="uid://37ocapndkb0w" path="res://src/crowd/crowd.gd" id="1_a7rkt"]
+[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://src/crowd/crowd_block.tscn" id="2_axxkg"]
+
+[node name="Crowd" type="Node3D"]
+script = ExtResource("1_a7rkt")
+
+[node name="Blocks" type="Node3D" parent="."]
+
+[node name="CrowdBlock" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -16.6489)
+
+[node name="CrowdBlock5" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -13.5758)
+
+[node name="CrowdBlock6" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 1.46538, -20.8177)
+
+[node name="CrowdBlock7" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 1.46538, -20.8177)
+
+[node name="CrowdBlock8" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 1.46538, -20.8177)
+
+[node name="CrowdBlock9" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 1.46538, -20.8177)
+
+[node name="CrowdBlock10" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 1.46538, -20.8177)
+
+[node name="CrowdBlock11" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 1.46538, -20.8177)
+
+[node name="CrowdBlock2" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -9.55223)
+
+[node name="CrowdBlock3" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -6.48601)
+
+[node name="CrowdBlock4" parent="Blocks" instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -2.46337)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

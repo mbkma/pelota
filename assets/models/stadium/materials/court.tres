@@ -1,9 +1,0 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dxvcdvd7ilnpf"]
-
-[ext_resource type="Texture2D" uid="uid://tsm2ekp23ns2" path="res://assets/models/court/textures/tenniscourt.png" id="1_oyc6t"]
-
-[resource]
-resource_name = "court"
-cull_mode = 2
-albedo_texture = ExtResource("1_oyc6t")
-roughness = 0.9

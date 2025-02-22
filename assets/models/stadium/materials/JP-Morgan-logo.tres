@@ -1,6 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://lmyisxrcc8fn"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cj1106gqte7gv"]
 
-[ext_resource type="Texture2D" uid="uid://bf8dye7yotfe0" path="res://assets/models/stadium/textures/JP-Morgan-logo-alpha.png" id="1_rg3kc"]
+[ext_resource type="Texture2D" uid="uid://bavjmc17c61e3" path="res://assets/models/stadium/stadium_JP-Morgan-logo-alpha.png" id="1_rg3kc"]
 
 [resource]
 resource_name = "JP-Morgan-logo"

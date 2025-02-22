@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://cp7eliy5mm75n" path="res://src/menus/main_menu.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://src/menus/player-selector.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://px6a2dg8cawb" path="res://addons/modular-settings-menu/scenes/settings.tscn" id="5_e2417"]
-[ext_resource type="Texture2D" uid="uid://bk8op2immhs0" path="res://assets/bg.png" id="6_3p5o7"]
 [ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://src/hud/music_panel.tscn" id="6_u0nle"]
+[ext_resource type="PackedScene" uid="uid://bw3wmvsvqsbm5" path="res://src/menus/pelota_button.tscn" id="7_lnm77"]
 
 [sub_resource type="Gradient" id="Gradient_3p5o7"]
 offsets = PackedFloat32Array(0, 0.477551)
@@ -29,7 +29,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_3p5o7")
 expand_mode = 2
 
 [node name="Title_Label" type="Label" parent="."]
@@ -59,46 +58,28 @@ theme = ExtResource("1")
 theme_override_constants/separation = 33
 alignment = 1
 
-[node name="Start" type="Button" parent="MainMenu"]
-custom_minimum_size = Vector2(120, 30)
+[node name="Start" parent="MainMenu" instance=ExtResource("7_lnm77")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-text = "Start Game"
+text = "Start"
 
-[node name="Training" type="Button" parent="MainMenu"]
-custom_minimum_size = Vector2(120, 30)
+[node name="Training" parent="MainMenu" instance=ExtResource("7_lnm77")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 text = "Training"
 
-[node name="Tournament" type="Button" parent="MainMenu"]
-custom_minimum_size = Vector2(120, 30)
+[node name="Tournament" parent="MainMenu" instance=ExtResource("7_lnm77")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 text = "Tournament"
 
-[node name="Career" type="Button" parent="MainMenu"]
-custom_minimum_size = Vector2(120, 30)
+[node name="Career" parent="MainMenu" instance=ExtResource("7_lnm77")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 text = "Career"
 
-[node name="Settings" type="Button" parent="MainMenu"]
-custom_minimum_size = Vector2(120, 30)
+[node name="Settings" parent="MainMenu" instance=ExtResource("7_lnm77")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 text = "Settings"
 
-[node name="Quit" type="Button" parent="MainMenu"]
-custom_minimum_size = Vector2(120, 30)
+[node name="Quit" parent="MainMenu" instance=ExtResource("7_lnm77")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 text = "Quit"
 
 [node name="StartMenu" type="VBoxContainer" parent="."]
@@ -137,10 +118,10 @@ MenuPanelRef = NodePath("../MainMenu")
 
 [node name="MusicPanel" parent="." instance=ExtResource("6_u0nle")]
 layout_mode = 1
-offset_left = 463.0
-offset_top = 653.0
-offset_right = 663.0
-offset_bottom = 703.0
+offset_left = -576.0
+offset_top = -648.0
+offset_right = -576.0
+offset_bottom = -648.0
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 position = Vector2(543, 313)
@@ -159,12 +140,12 @@ color_ramp = SubResource("Gradient_3p5o7")
 hue_variation_min = 0.01
 hue_variation_max = 0.65
 
-[connection signal="pressed" from="MainMenu/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="MainMenu/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="MainMenu/Training" to="." method="_on_training_pressed"]
-[connection signal="pressed" from="MainMenu/Tournament" to="." method="_on_Tournament_pressed"]
-[connection signal="pressed" from="MainMenu/Career" to="." method="_on_Career_pressed"]
-[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_Settings_pressed"]
-[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="MainMenu/Tournament" to="." method="_on_tournament_pressed"]
+[connection signal="pressed" from="MainMenu/Career" to="." method="_on_career_pressed"]
+[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="StartMenu/Actions/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="StartMenu/Actions/Play" to="." method="_on_Play_pressed"]
 [connection signal="settings_menu_closed" from="SettingsMenu" to="." method="_on_settings_menu_settings_menu_closed"]

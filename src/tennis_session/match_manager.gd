@@ -24,6 +24,7 @@ var current_state: MatchState = MatchState.NOT_STARTED:
 @export var stadium: Stadium
 @export var televisionHud: TelevisionHud
 @export var umpire: Umpire
+@export var crowd: Crowd
 
 var _valid_serve_zone: Court.CourtRegion
 var _valid_rally_zone: Court.CourtRegion
@@ -151,8 +152,11 @@ func _on_ball_on_ground():
 		_stop_players()
 		_clear_ball()
 		if umpire:
-			umpire.say_fault()
+			if _ground_contacts == 0:
+				umpire.say_fault()
 
+		if crowd:
+			crowd.victory()
 		var point_winner: Player
 		if _ground_contacts == 0:
 			point_winner = get_opponent(last_hitter)

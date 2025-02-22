@@ -26,19 +26,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.388625, 0)
 shape = SubResource("ConcavePolygonShape3D_rt42o")
 
 [node name="back_left_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.17569, 0, -6.36622)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05747, 0, -6.30159)
 
 [node name="back_right_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0652659, 0, -6.36622)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0285019, 0, -6.30187)
 
 [node name="back_sideline" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.877)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.8899)
 
 [node name="front_left_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.172, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05713, 0, 0)
 
 [node name="front_right_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0911847, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0263167, 0, 0)
 
 [node name="front_sideline" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.886)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.8901)

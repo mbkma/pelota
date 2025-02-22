@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ditk0k1t67yfr"
+uid="uid://dvo2jq6bdkolh"
 path="res://.godot/imported/stadium.blend-181bbe5065566730485912e36740f0d0.scn"
 
 [deps]
@@ -32,90 +32,7 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"materials": {
-"JP-Morgan-logo": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/JP-Morgan-logo.tres"
-},
-"Material.004": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/Material.004.tres"
-},
-"black": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/black.tres"
-},
-"black.001": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/black.001.tres"
-},
-"blue": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/blue.tres"
-},
-"court": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/court.tres"
-},
-"dark_blue": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/dark_blue.tres"
-},
-"dark_blue.001": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/dark_blue.001.tres"
-},
-"glass": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/glass.tres"
-},
-"green": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/green.tres"
-},
-"ibm": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/ibm.tres"
-},
-"ibm-alpha.001": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/ibm-alpha.001.tres"
-},
-"mercedes": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/mercedes.tres"
-},
-"net": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/net.tres"
-},
-"post": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/post.tres"
-},
-"rolex-alpha.001": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/rolex-alpha.001.tres"
-},
-"rolex-green.001": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/rolex-green.001.tres"
-},
-"top_net": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/top_net.tres"
-},
-"us_open_logo": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/us_open_logo.tres"
-},
-"white-gray": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/models/stadium/materials/white-gray.tres"
-}
-}
-}
+_subresources={}
 blender/nodes/visible=1
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true
