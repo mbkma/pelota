@@ -1,0 +1,27 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://bgg1msr62655h"
+path.bptc="res://.godot/imported/stadium.exr-658dd0b2dfb76e26db2a19fa8c931772.bptc.ctexarray"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://src/tennis_location/us_open/stadium.exr"
+dest_files=["res://.godot/imported/stadium.exr-658dd0b2dfb76e26db2a19fa8c931772.bptc.ctexarray"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=6

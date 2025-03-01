@@ -30,9 +30,9 @@ fov = 22.5
 size = 97.38
 
 [node name="MiddleFront" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.981628, 0.190809, 0, -0.190809, 0.981628, 0, 9.401, 47.879)
+transform = Transform3D(1, 0, 0, 0, 0.963631, 0.267239, 0, -0.267239, 0.963631, 0, 6.936, 28.829)
 current = true
-fov = 23.5
+fov = 24.5
 size = 97.38
 
 [node name="MiddleBack" type="Camera3D" parent="."]

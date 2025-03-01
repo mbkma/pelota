@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://dtf4r0hkx8c6h"]
-
-[resource]
-resource_name = "court.001"
-cull_mode = 2
-albedo_color = Color(0.0104776, 0.0490962, 0.297463, 1)
-roughness = 0.856436

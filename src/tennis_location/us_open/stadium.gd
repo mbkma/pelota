@@ -27,6 +27,10 @@ enum StadiumPosition {
 
 @onready var serve_clocks := $ServeClocks.get_children()
 
+@onready var player_camera: Node3D = $PlayerCamera
+@onready var back_player_camera: Node3D = $BackPlayerCamera
+@onready var front_player_camera: Node3D = $FrontPlayerCamera
+
 var serve_clocks_active := false
 var timer := Timer.new()
 

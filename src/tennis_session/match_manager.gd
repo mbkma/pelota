@@ -57,6 +57,9 @@ func set_active_ball(b: Ball) -> void:
 	ball = b
 	ball.on_ground.connect(_on_ball_on_ground)
 	ball.on_net.connect(_on_ball_on_net)
+	stadium.front_player_camera.target = player0
+	stadium.back_player_camera.target = player1
+	stadium.player_camera.target = player0
 
 
 #func get_server() -> Player:

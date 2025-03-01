@@ -1,7 +1,7 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://d18pm82t4pbqh"]
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://bhk14ffv3wma3"]
 
-[ext_resource type="Texture2D" uid="uid://dmlpd8fnsysw3" path="res://assets/models/stadium/stadium_Concrete034_1K_Roughness.png" id="1_54hp2"]
-[ext_resource type="Texture2D" uid="uid://b7pyohuc5avt4" path="res://assets/models/stadium/stadium_Concrete034_1K_NormalGL.png" id="2_wqspc"]
+[ext_resource type="Texture2D" uid="uid://dvpv2noks01a3" path="res://assets/models/stadium/textures/Concrete034_1K_Roughness.png" id="1_54hp2"]
+[ext_resource type="Texture2D" uid="uid://doqup6lqfnho" path="res://assets/models/stadium/textures/Concrete034_1K_NormalGL.png" id="2_wqspc"]
 
 [resource]
 resource_name = "white-concrete"

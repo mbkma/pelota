@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://dc8067eycd36f"]
-
-[resource]
-resource_name = "post"
-albedo_color = Color(0.105595, 0.159391, 0.221507, 1)
-metallic = 0.206349
-roughness = 0.293651
