@@ -44,7 +44,7 @@ func play_music(track: Track, loop: bool = true):
 
 
 # Function to play sound (only if it's not already playing)
-func play_sound(stream: AudioStream, loop: bool = false):
+func play_sound(stream: AudioStream, _loop: bool = false):
 	sound_player.stream = stream
 	sound_player.play()
 	sound_player.stream_paused = false

@@ -3,7 +3,7 @@ extends Node
 # Array of the players loaded from json file
 var player_data: Array = []
 
-const player_scene = preload("res://src/players/player.tscn")
+const PLAYER_SCENE = preload("res://src/players/player.tscn")
 
 
 # Called when the node enters the scene tree for the first time.
@@ -29,7 +29,7 @@ func load_players():
 
 
 func create_player(player_data, ai_controlled: bool):
-	var player = player_scene.instantiate()
+	var player = PLAYER_SCENE.instantiate()
 	player.setup(player_data, ai_controlled)
 	return player
 

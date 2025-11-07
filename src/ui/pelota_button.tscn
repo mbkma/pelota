@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw3wmvsvqsbm5"]
+
+[ext_resource type="Script" uid="uid://c2oqbhdyslyss" path="res://src/utilities/pelota_button.gd" id="1_eb6oh"]
+
+[node name="PelotaButton" type="Button"]
+custom_minimum_size = Vector2(120, 30)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_eb6oh")
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]

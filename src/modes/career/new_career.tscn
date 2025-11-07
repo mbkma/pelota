@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://dglfvla4hwrbu"]
+
+[ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
+[ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://src/ui/player-selector.tscn" id="2"]
+[ext_resource type="Script" uid="uid://bxheexg11xtgd" path="res://src/modes/career/new_career.gd" id="3"]
+
+[node name="NewCareer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1")
+script = ExtResource("3")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 257.0
+offset_bottom = 157.0
+text = "new career menu"
+
+[node name="PlayerSelector" parent="." instance=ExtResource("2")]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 59.0
+offset_right = 300.0
+offset_bottom = 479.0
+
+[node name="StartCareer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 157.0
+offset_top = 510.0
+offset_right = 197.0
+offset_bottom = 524.0
+text = "Start Career"
+
+[connection signal="pressed" from="StartCareer" to="." method="_on_Button_pressed"]

@@ -26,7 +26,7 @@ signal ball_spawned(ball: Ball)
 ## Emitted when input method is changed
 signal input_changed(timing: float)
 
-@onready var ball_scene := preload("res://src/ball.tscn")
+@onready var ball_scene := preload("res://src/core/ball.tscn")
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
@@ -95,12 +95,12 @@ func request_serve() -> void:
 
 
 ## Setup player with given data and control method
-func setup(data: PlayerData, ai_controlled: bool) -> void:
+func setup(data: PlayerData, _ai_controlled: bool) -> void:
 	player_data = data
 
 
 ## Setup player for training mode
-func setup_training(training_data: Dictionary) -> void:
+func setup_training(_training_data: Dictionary) -> void:
 	pass
 
 
@@ -113,6 +113,7 @@ func stop() -> void:
 
 ## Movement System
 ####################
+
 
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, delta: float) -> void:
@@ -195,6 +196,7 @@ func cancel_movement() -> void:
 ## Stroke System
 ##################
 
+
 ## Queue a stroke to execute (non-serve strokes)
 func queue_stroke(stroke: Stroke) -> void:
 	if not ball:
@@ -259,6 +261,7 @@ func serve(stroke: Stroke) -> void:
 ## Other Functions
 ####################
 
+
 ## Notify player is ready to serve
 func prepare_serve() -> void:
 	ready_to_serve.emit()
@@ -271,9 +274,9 @@ func challenge() -> void:
 
 ## Get a random grunt sound from player data
 func _get_grunt_sound() -> AudioStream:
-	var grunts: Array[AudioStream] = player_data.sounds.grunt_flat
+	var grunts: Array = player_data.sounds.grunt_flat
 	if grunts and grunts.size() > 0:
-		return grunts[randi() % grunts.size()]
+		return grunts[randi() % grunts.size()] as AudioStream
 	return null
 
 

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ds5ryhspuxtpf"]
+
+[ext_resource type="Script" uid="uid://b5wdbxay612jn" path="res://src/environment/crowd/crowd_block.gd" id="1_jcoec"]
+
+[node name="CrowdBlock" type="Node3D"]
+script = ExtResource("1_jcoec")

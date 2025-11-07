@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Pelota"
-run/main_scene="res://src/scene_switcher.tscn"
+run/main_scene="res://src/utilities/scene_switcher.tscn"
 config/features=PackedStringArray("4.5")
+
+[audio]
+
+buses/default_bus_layout="res://assets/resources/default_bus_layout.tres"
 
 [autoload]
 
@@ -20,10 +24,10 @@ GlobalUtils="*res://src/globals/global_utils.gd"
 GlobalGameData="*res://src/globals/global_game_data.gd"
 GlobalMusicPlayer="*res://src/globals/global_music_player.gd"
 GlobalHud="*res://src/globals/global_hud.gd"
-GlobalPhysics="*res://src/globals/global_physics.gd"
+GlobalPhysics="*res://src/physics/global_physics.gd"
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-SceneManager="res://scene_manager.gd"
+SceneManager="*res://src/utilities/scene_manager.gd"
 
 [debug]
 
@@ -42,7 +46,7 @@ enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/mo
 
 [gui]
 
-theme/custom="res://main_theme.tres"
+theme/custom="res://assets/resources/main_theme.tres"
 
 [importer_defaults]
 

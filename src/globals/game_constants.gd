@@ -15,6 +15,21 @@ const BALL_DAMP: float = 0.7
 ## Ball ground contact threshold (distance in meters)
 const BALL_GROUND_THRESHOLD: float = 0.035
 
+## Spin-to-gravity conversion multiplier for ball physics
+const SPIN_GRAVITY_MULTIPLIER: float = 0.5
+
+## Air resistance/friction factor for velocity damping
+const AIR_RESISTANCE_FACTOR: float = 0.001
+
+## Net bounce velocity damping (X and Z reduction factor)
+const NET_BOUNCE_VELOCITY_DAMPING: float = 0.1
+
+## Ground level threshold for emit signal (units)
+const GROUND_EMISSION_THRESHOLD: float = 0.1
+
+## Velocity magnitude threshold for trajectory tracking (units/sec)
+const VELOCITY_TRACKING_THRESHOLD: float = 0.1
+
 # ============================================================================
 # PLAYER CONSTANTS
 # ============================================================================
@@ -49,6 +64,21 @@ const AIM_BACK_COURT: float = 3.0
 
 ## Default aim position multiplier for serves
 const AIM_SERVE: float = 5.0
+
+## Pace increment rate per input frame
+const PACE_INCREMENT_RATE: float = 0.1
+
+## Ball velocity threshold for canceling stroke (units/sec)
+const BALL_VELOCITY_CANCELLATION_THRESHOLD: float = 0.1
+
+## Backhand slice default power
+const BACKHAND_SLICE_POWER: float = 20.0
+
+## Backhand slice default spin (negative = topspin)
+const BACKHAND_SLICE_SPIN: float = -5.0
+
+## Animation hit time as proportion of animation (forehand default)
+const ANIMATION_HIT_TIME: float = 0.37
 
 # ============================================================================
 # AI CONSTANTS
@@ -88,6 +118,32 @@ const AI_SERVE_STARTUP_DELAY: float = 2.0
 ## Animation frame sync delay for physics operations (seconds)
 const PHYSICS_FRAME_SYNC_DELAY: float = 0.05
 
+## Additional delay after fault (extends FAULT_DELAY)
+const POINT_RESET_EXTRA_DELAY: float = 2.0
+
+# ============================================================================
+# TRAJECTORY CONSTANTS
+# ============================================================================
+
+## Default number of steps for ball trajectory prediction
+const TRAJECTORY_PREDICTION_STEPS: int = 200
+
+## Time step for trajectory prediction (16ms = 1/60th second)
+const TRAJECTORY_TIME_STEP: float = 0.016
+
+## Velocity threshold for stopping trajectory prediction (units/sec)
+const TRAJECTORY_STOP_VELOCITY_THRESHOLD: float = 0.01
+
+# ============================================================================
+# MATCH GAMEPLAY CONSTANTS
+# ============================================================================
+
+## Minimum ground contacts before counting as double bounce
+const GROUND_CONTACT_THRESHOLD: int = 2
+
+## Game cycle for side switching (every 4th game)
+const SIDE_SWITCH_GAME_CYCLE: int = 4
+
 # ============================================================================
 # COURT CONSTANTS
 # ============================================================================
@@ -109,7 +165,7 @@ const SERVICE_BOX_DISTANCE: float = 21.0
 # ============================================================================
 
 ## Match state enum for readability
-enum MATCH_STATE {
+enum MatchState {
 	NOT_STARTED,
 	IDLE,
 	SERVE,

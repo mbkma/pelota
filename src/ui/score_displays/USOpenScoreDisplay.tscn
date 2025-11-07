@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://djjxvsnmspjrf"]
+
+[ext_resource type="Script" uid="uid://caaqfcny7sb8g" path="res://src/ui/score_displays/USOpenScoreDisplay.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://l4d1s1kqx3b7" path="res://src/ui/score_displays/PlayerScorePanel.tscn" id="2_bumyy"]
+
+[node name="ScoreDisplay" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 39.0
+offset_top = 573.0
+offset_right = 39.0
+offset_bottom = 573.0
+script = ExtResource("2")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 42.0
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerScorePanel" parent="VBoxContainer" instance=ExtResource("2_bumyy")]
+layout_mode = 2
+
+[node name="PlayerScorePanel2" parent="VBoxContainer" instance=ExtResource("2_bumyy")]
+layout_mode = 2

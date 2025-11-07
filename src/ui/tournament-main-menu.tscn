@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dao2m7qjha6j2"]
+
+[ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
+[ext_resource type="Script" uid="uid://c0vekq3w0bjnu" path="res://src/ui/tournament-main-menu.gd" id="2"]
+
+[node name="TournamentMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1")
+script = ExtResource("2")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 635.0
+offset_top = 553.0
+offset_right = 675.0
+offset_bottom = 569.0
+text = "Next Round"
+
+[node name="GridContainer" type="GridContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+custom_constants/v_separation = 80

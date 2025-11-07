@@ -53,13 +53,12 @@ func compute_serve() -> Stroke:
 	var r = randf()
 	if r < 0.4:
 		return get_stroke(AiStrokeType.SERVE_WIDE)
-	elif r < 0.8:
+	if r < 0.8:
 		return get_stroke(AiStrokeType.SERVE_T)
-	else:
-		return get_stroke(AiStrokeType.SERVE_BODY)
+	return get_stroke(AiStrokeType.SERVE_BODY)
 
 
-func on_Player_ball_hit():
+func on_player_ball_hit():
 	player.move_to(Vector3(sign(player.position.x) * 2, 0, player.position.z))
 
 
