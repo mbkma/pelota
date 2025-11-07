@@ -2,15 +2,11 @@ extends CanvasLayer
 
 @export var match_manager: MatchManager
 
-@onready var state: Label = $DebugHud/VBoxContainer/State
-@onready var valid_serve_zone: Label = $DebugHud/VBoxContainer/ValidServeZone
-@onready var valid_rally_zone: Label = $DebugHud/VBoxContainer/ValidRallyZone
-
 ## Debug menu display style.
 enum Style {
 	HIDDEN,  ## Debug menu is hidden.
-	VISIBLE_COMPACT,  ## Debug menu is visible, with only the FPS, FPS cap (if any) and time taken to render the last frame.
-	VISIBLE_DETAILED,  ## Debug menu is visible with full information, including graphs.
+	VISIBLE_COMPACT,  ## Debug menu is visible with minimal info.
+	VISIBLE_DETAILED,  ## Debug menu is visible with full information.
 	MAX,  ## Represents the size of the Style enum.
 }
 
@@ -23,32 +19,37 @@ var style := Style.HIDDEN:
 				visible = false
 			Style.VISIBLE_COMPACT, Style.VISIBLE_DETAILED:
 				visible = true
-				state.visible = style >= Style.VISIBLE_COMPACT
 
-# Value of `Time.get_ticks_usec()` on the previous frame.
-var last_tick := 0
+# Node references - Match Stats
+@onready var match_state_label: Label = $DebugHud/VBoxContainer/MatchState/Value
+@onready var server_label: Label = $DebugHud/VBoxContainer/Server/Value
+@onready var serve_zone_label: Label = $DebugHud/VBoxContainer/ServeZone/Value
+@onready var rally_zone_label: Label = $DebugHud/VBoxContainer/RallyZone/Value
+@onready var ground_contacts_label: Label = $DebugHud/VBoxContainer/GroundContacts/Value
+@onready var last_hitter_label: Label = $DebugHud/VBoxContainer/LastHitter/Value
+@onready var rally_length_label: Label = $DebugHud/VBoxContainer/RallyLength/Value
 
-## Returns the sum of all values of an array (use as a parameter to `Array.reduce()`).
-var sum_func := func avg(accum: float, number: float) -> float: return accum + number
+# Player 0 labels
+@onready var p0_name_label: Label = $DebugHud/VBoxContainer/Player0/Name/Value
+@onready var p0_position_label: Label = $DebugHud/VBoxContainer/Player0/Position/Value
+@onready var p0_velocity_label: Label = $DebugHud/VBoxContainer/Player0/Velocity/Value
+@onready var p0_endurance_label: Label = $DebugHud/VBoxContainer/Player0/Endurance/Value
+@onready var p0_speed_label: Label = $DebugHud/VBoxContainer/Player0/Speed/Value
 
-# History of the last `HISTORY_NUM_FRAMES` rendered frames.
-var frame_history_total: Array[float] = []
-var frame_history_cpu: Array[float] = []
-var frame_history_gpu: Array[float] = []
-var fps_history: Array[float] = []  # Only used for graphs.
+# Player 1 labels
+@onready var p1_name_label: Label = $DebugHud/VBoxContainer/Player1/Name/Value
+@onready var p1_position_label: Label = $DebugHud/VBoxContainer/Player1/Position/Value
+@onready var p1_velocity_label: Label = $DebugHud/VBoxContainer/Player1/Velocity/Value
+@onready var p1_endurance_label: Label = $DebugHud/VBoxContainer/Player1/Endurance/Value
+@onready var p1_speed_label: Label = $DebugHud/VBoxContainer/Player1/Speed/Value
 
-var frame_time_gradient := Gradient.new()
+# Ball labels
+@onready var ball_position_label: Label = $DebugHud/VBoxContainer/Ball/Position/Value
+@onready var ball_velocity_label: Label = $DebugHud/VBoxContainer/Ball/Velocity/Value
 
 
 func _ready() -> void:
-	# NOTE: Both FPS and frametimes are colored following FPS logic
-	# (red = 10 FPS, yellow = 60 FPS, green = 110 FPS, cyan = 160 FPS).
-	# This makes the color gradient non-linear.
-	# Colors are taken from <https://tailwindcolor.com/>.
-	frame_time_gradient.set_color(0, Color8(239, 68, 68))  # red-500
-	frame_time_gradient.set_color(1, Color8(56, 189, 248))  # light-blue-400
-	frame_time_gradient.add_point(0.3333, Color8(250, 204, 21))  # yellow-400
-	frame_time_gradient.add_point(0.6667, Color8(128, 226, 95))  # 50-50 mix of lime-400 and green-400
+	pass
 
 
 func _input(event: InputEvent) -> void:
@@ -58,19 +59,53 @@ func _input(event: InputEvent) -> void:
 
 func _process(_delta: float) -> void:
 	if visible:
-		# Difference between the last two rendered frames in milliseconds.
-		state.text = "Current state: " + match_state_to_string(match_manager.current_state)
-		valid_serve_zone.text = (
-			"Valid Serve Zone: " + court_region_to_string(match_manager._valid_serve_zone)
-		)
-		valid_rally_zone.text = (
-			"Valid Rally Zone: " + court_region_to_string(match_manager._valid_rally_zone)
-		)
-		valid_rally_zone.text = ("Ground Contacts: " + str(match_manager._ground_contacts))
-		if match_manager.last_hitter:
-			valid_rally_zone.text = (
-				"Last Hitter: " + str(match_manager.last_hitter.player_data.last_name)
-			)
+		update_match_stats()
+		if style == Style.VISIBLE_DETAILED:
+			update_player_stats()
+			update_ball_stats()
+
+
+func update_match_stats() -> void:
+	match_state_label.text = match_state_to_string(match_manager.current_state)
+
+	var server_idx = match_manager.match_data.get_server()
+	var server_name = match_manager.player0.player_data.last_name if server_idx == 0 else match_manager.player1.player_data.last_name
+	server_label.text = server_name
+
+	serve_zone_label.text = court_region_to_string(match_manager._valid_serve_zone)
+	rally_zone_label.text = court_region_to_string(match_manager._valid_rally_zone)
+	ground_contacts_label.text = str(match_manager._ground_contacts)
+	rally_length_label.text = str(match_manager.match_data.rally_length)
+
+	if match_manager.last_hitter:
+		last_hitter_label.text = match_manager.last_hitter.player_data.last_name
+	else:
+		last_hitter_label.text = "None"
+
+
+func update_player_stats() -> void:
+	# Player 0
+	var p0 = match_manager.player0
+	p0_name_label.text = p0.player_data.last_name
+	p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
+	p0_velocity_label.text = "%.2f" % p0.velocity.length()
+	p0_endurance_label.text = str(p0.player_data.stats.get("endurance", 0))
+	p0_speed_label.text = str(p0.player_data.stats.get("speed", 0))
+
+	# Player 1
+	var p1 = match_manager.player1
+	p1_name_label.text = p1.player_data.last_name
+	p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
+	p1_velocity_label.text = "%.2f" % p1.velocity.length()
+	p1_endurance_label.text = str(p1.player_data.stats.get("endurance", 0))
+	p1_speed_label.text = str(p1.player_data.stats.get("speed", 0))
+
+
+func update_ball_stats() -> void:
+	if match_manager.ball:
+		var ball = match_manager.ball
+		ball_position_label.text = "%.2f, %.2f, %.2f" % [ball.position.x, ball.position.y, ball.position.z]
+		ball_velocity_label.text = "%.2f" % ball.velocity.length()
 
 
 func court_region_to_string(value: Court.CourtRegion) -> String:
@@ -96,19 +131,3 @@ func match_state_to_string(value: MatchManager.MatchState) -> String:
 		MatchManager.MatchState.GAME_OVER: "GAME_OVER",
 	}
 	return enum_map.get(value, "UNKNOWN")
-
-
-func _on_visibility_changed() -> void:
-	if visible:
-		# Reset graphs to prevent them from looking strange before `HISTORY_NUM_FRAMES` frames
-		# have been drawn.
-		var frametime_last := (Time.get_ticks_usec() - last_tick) * 0.001
-
-		var viewport_rid := get_viewport().get_viewport_rid()
-		frame_history_cpu.fill(
-			(
-				RenderingServer.viewport_get_measured_render_time_cpu(viewport_rid)
-				+ RenderingServer.get_frame_setup_time_cpu()
-			)
-		)
-		frame_history_gpu.fill(RenderingServer.viewport_get_measured_render_time_gpu(viewport_rid))

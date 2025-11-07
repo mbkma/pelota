@@ -184,6 +184,7 @@ func _on_ball_on_net():
 		_clear_ball()
 		if umpire:
 			umpire.say_second_serve()
+		set_player_serve()
 	elif current_state == MatchState.SECOND_SERVE:
 		current_state = MatchState.FAULT
 		# ball gets cleared in _on_ground

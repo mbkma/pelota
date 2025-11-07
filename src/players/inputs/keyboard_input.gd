@@ -103,7 +103,9 @@ func get_move_direction() -> Vector3:
 	var forward = -cam_basis.z.normalized()
 	var right = cam_basis.x.normalized()
 
-	var direction = (forward * input.z + right * input.x).normalized()
+	# Invert left/right for back player (positive Z position) to match their perspective
+	var lr_multiplier = sign(player.position.z)
+	var direction = (forward * input.z + right * input.x * lr_multiplier).normalized()
 	return direction
 
 

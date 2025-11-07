@@ -31,6 +31,7 @@ var stroke_active := false
 
 
 func _ready() -> void:
+	player = get_parent()
 	animation_tree.active = true
 
 
@@ -49,7 +50,10 @@ func get_move_speed_factor():
 
 
 func set_move_direction(direction: Vector3) -> void:
-	var dir := Vector2(direction.x, -direction.z)
+	# Transform world-space direction to player's local space for correct animation
+	# This ensures the animation always plays in the correct direction regardless of player orientation
+	var local_direction = player.global_transform.basis.inverse() * direction
+	var dir := Vector2(local_direction.x, -local_direction.z)
 	animation_tree["parameters/move/blend_position"] = dir
 	#transition_to(States.MOVE)
 
