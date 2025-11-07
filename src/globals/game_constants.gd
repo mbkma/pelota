@@ -1,0 +1,133 @@
+## Central constants module for all gameplay values
+## Consolidates magic numbers and configuration values used across the codebase
+class_name GameConstants
+
+# ============================================================================
+# PHYSICS CONSTANTS
+# ============================================================================
+
+## Gravitational acceleration (m/s²)
+const GRAVITY: float = 9.81
+
+## Ball damping factor (0.0-1.0, 0.7 means 30% energy loss per bounce)
+const BALL_DAMP: float = 0.7
+
+## Ball ground contact threshold (distance in meters)
+const BALL_GROUND_THRESHOLD: float = 0.035
+
+# ============================================================================
+# PLAYER CONSTANTS
+# ============================================================================
+
+## Default player movement speed (units/sec)
+const PLAYER_MOVE_SPEED: float = 5.0
+
+## Player acceleration factor for movement interpolation
+const PLAYER_ACCELERATION: float = 0.1
+
+## Player friction factor for deceleration
+const PLAYER_FRICTION: float = 1.0
+
+## Distance threshold for path navigation (units)
+const PLAYER_DISTANCE_THRESHOLD: float = 0.01
+
+# ============================================================================
+# INPUT CONSTANTS
+# ============================================================================
+
+## Mouse sensitivity multiplier for stroke aiming
+const MOUSE_SENSITIVITY: float = 100.0
+
+## Delay before input becomes available after scene load (seconds)
+const INPUT_STARTUP_DELAY: float = 0.5
+
+## Default aim position multiplier for front court strokes
+const AIM_FRONT_COURT: float = 9.0
+
+## Default aim position multiplier for back court strokes
+const AIM_BACK_COURT: float = 3.0
+
+## Default aim position multiplier for serves
+const AIM_SERVE: float = 5.0
+
+# ============================================================================
+# AI CONSTANTS
+# ============================================================================
+
+## Standard stroke target distance for baseline shots
+const AI_STROKE_STANDARD_LENGTH: float = 10.0
+
+## Cross-court target offset from center
+const AI_STROKE_CROSS_OFFSET: float = 3.0
+
+## Drop shot target distance
+const AI_STROKE_DROP_DISTANCE: float = 4.0
+
+## Serve target distance
+const AI_SERVE_DISTANCE: float = 5.0
+
+## Minimum distance to ball before AI commits to stroke
+const AI_BALL_COMMIT_DISTANCE: float = 3.0
+
+## AI ball velocity minimum before considering it "stopped"
+const AI_BALL_VELOCITY_MIN: float = 0.1
+
+# ============================================================================
+# TIMING CONSTANTS
+# ============================================================================
+
+## Delay after a fault before next serve can begin (seconds)
+const FAULT_DELAY: float = 1.0
+
+## Delay after point ends before positioning for next point (seconds)
+const POINT_RESET_DELAY: float = 3.0
+
+## Delay before AI initiates serve after request (seconds)
+const AI_SERVE_STARTUP_DELAY: float = 2.0
+
+## Animation frame sync delay for physics operations (seconds)
+const PHYSICS_FRAME_SYNC_DELAY: float = 0.05
+
+# ============================================================================
+# COURT CONSTANTS
+# ============================================================================
+
+## Court field width (units)
+const COURT_WIDTH: float = 27.0
+
+## Court field length (units)
+const COURT_LENGTH: float = 78.0
+
+## Half court length - baseline distance from net (units)
+const COURT_LENGTH_HALF: float = 13.0
+
+## Service box distance from net (units)
+const SERVICE_BOX_DISTANCE: float = 21.0
+
+# ============================================================================
+# MATCH STATES
+# ============================================================================
+
+## Match state enum for readability
+enum MATCH_STATE {
+	NOT_STARTED,
+	IDLE,
+	SERVE,
+	SECOND_SERVE,
+	PLAY,
+	FAULT,
+	GAME_OVER,
+}
+
+# ============================================================================
+# PLAYER POSITIONS
+# ============================================================================
+
+## Front player Z position
+const FRONT_PLAYER_Z: float = 12.3828
+
+## Back player Z position
+const BACK_PLAYER_Z: float = -15.0306
+
+## Player service line position
+const SERVICE_LINE_Z: float = 13.0

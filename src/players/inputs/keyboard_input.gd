@@ -1,228 +1,209 @@
+## Human player input handler for keyboard/mouse controls
+## Manages movement, aiming, and stroke execution
 class_name HumanInput
 extends InputMethod
 
-signal aiming_at_pos(pos)
-signal input_changed(time_score)
-signal pace_changed(pace)
+signal aiming_at_pos(position: Vector3)
+signal input_changed(time_score: float)
+signal pace_changed(pace: float)
 
 @export var ball_aim_marker: MeshInstance3D
-@export var mouse_sensitivity := 100.0
 
-## Move related
-var move_input_blocked := false
-var stroke_input_blocked := true
-var input_blocked := false
+## Input state flags
+var _move_input_blocked: bool = false
+var _stroke_input_blocked: bool = true
+var _input_blocked: bool = false
 
-# Stroke Related
-var mouse_from := Vector2.ZERO
-var mouse_to := Vector2.ZERO
-var mouse_pressed := false
-var aiming_at := Vector3.ZERO
-var input_pace := 0.0
-var serve_controls := false
+## Mouse/stroke tracking
+var _mouse_from: Vector2 = Vector2.ZERO
+var _mouse_to: Vector2 = Vector2.ZERO
+var _aiming_at: Vector3 = Vector3.ZERO
+var _input_pace: float = 0.0
+var _serve_controls: bool = false
 
 
 func _ready() -> void:
 	player = get_parent()
-	await get_tree().create_timer(0.5).timeout
-	stroke_input_blocked = false
+	await get_tree().create_timer(GameConstants.INPUT_STARTUP_DELAY).timeout
+	_stroke_input_blocked = false
 	ball_aim_marker.position = _get_default_aim()
 	ball_aim_marker.visible = true
-	player.ball_hit.connect(_on_Player_ball_hit)
-	#move_input_blocked = true
-	#player.move_to(Vector3(0,0,10))
+	player.ball_hit.connect(_on_player_ball_hit)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if player and player.ball:
-		var dist = GlobalUtils.get_horizontal_distance(player, player.ball)
-		if dist < 0 or player.ball.velocity.length() < 0.1:
+		var distance_to_ball: float = GlobalUtils.get_horizontal_distance(player, player.ball)
+		if distance_to_ball < 0 or player.ball.velocity.length() < 0.1:
 			player.cancel_stroke()
-			move_input_blocked = false
+			_move_input_blocked = false
 
-	#if Input.is_action_pressed("sprint"):
-	#player.move_speed += 2
-	#player.acceleration += 0.2
-	#else:
-	#player.acceleration = 0.1
-	#player.move_speed = 5
-
-	if not stroke_input_blocked:
+	# Handle stroke input
+	if not _stroke_input_blocked:
 		if Input.is_action_just_pressed("strike"):
-			input_pace = 0
-			mouse_from = get_viewport().get_mouse_position()
+			_input_pace = 0.0
+			_mouse_from = get_viewport().get_mouse_position()
+
 		if Input.is_action_pressed("strike"):
-			input_pace += 0.1
-			emit_signal("pace_changed", input_pace)
-			mouse_to = get_viewport().get_mouse_position()
-			aiming_at = _get_aim_pos(mouse_from, mouse_to)
-			ball_aim_marker.position = aiming_at
+			_input_pace += 0.1
+			pace_changed.emit(_input_pace)
+			_mouse_to = get_viewport().get_mouse_position()
+			_aiming_at = _get_aim_pos(_mouse_from, _mouse_to)
+			ball_aim_marker.position = _aiming_at
 			ball_aim_marker.visible = true
+
 		if Input.is_action_just_released("strike"):
-			if serve_controls:
-				do_serve(aiming_at, input_pace)
-				serve_controls = false
+			if _serve_controls:
+				_do_serve(_aiming_at, _input_pace)
+				_serve_controls = false
 			else:
 				if not player.ball:
 					printerr("Player has no ball")
 				else:
-					do_stroke(aiming_at, input_pace)
+					_do_stroke(_aiming_at, _input_pace)
 
+	# Handle challenge input
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
 
 
-func request_serve():
-	serve_controls = true
+func request_serve() -> void:
+	_serve_controls = true
 
 
-func _physics_process(delta: float) -> void:
-	if input_blocked:
+func _physics_process(_delta: float) -> void:
+	if _input_blocked:
 		return
 
-	if move_input_blocked:
-		var move_dir = player.compute_move_dir()
-		player.apply_movement(move_dir, delta)
+	if _move_input_blocked:
+		var move_direction: Vector3 = player.compute_move_dir()
+		player.apply_movement(move_direction, _delta)
 	else:
-		var move_direction := get_move_direction()
-
-		player.apply_movement(move_direction, delta)
-
-
-## Move related
-###############
+		var move_direction: Vector3 = _get_move_direction()
+		player.apply_movement(move_direction, _delta)
 
 
-func get_move_direction() -> Vector3:
-	var input := Vector3(
+## Computes move direction from input relative to camera orientation
+func _get_move_direction() -> Vector3:
+	var raw_input: Vector3 = Vector3(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-		0,
+		0.0,
 		Input.get_action_strength("move_front") - Input.get_action_strength("move_back")
 	)
-	var cam_basis = player.camera.global_basis
-	var forward = -cam_basis.z.normalized()
-	var right = cam_basis.x.normalized()
 
-	# Invert left/right for back player (positive Z position) to match their perspective
-	var lr_multiplier = sign(player.position.z)
-	var direction = (forward * input.z + right * input.x * lr_multiplier).normalized()
+	var camera_basis: Basis = player.camera.global_basis
+	var forward: Vector3 = -camera_basis.z.normalized()
+	var right: Vector3 = camera_basis.x.normalized()
+
+	# Invert left/right for back player to match their reversed camera perspective
+	var lr_multiplier: float = sign(player.position.z)
+	var direction: Vector3 = (
+		forward * raw_input.z + right * raw_input.x * lr_multiplier
+	).normalized()
+
 	return direction
 
 
-## Stroke related
-#################
-
-
+## Gets default aiming position based on context (serve vs rally)
 func _get_default_aim() -> Vector3:
-	var default_aim := Vector3(0, 0, -sign(player.position.z) * 9)
-	if serve_controls:
-		default_aim = Vector3(-sign(player.position.x) * 3, 0, -sign(player.position.z) * 3)
+	var default_aim: Vector3 = Vector3(
+		0.0,
+		0.0,
+		-sign(player.position.z) * GameConstants.AIM_FRONT_COURT
+	)
+
+	if _serve_controls:
+		default_aim = Vector3(
+			-sign(player.position.x) * GameConstants.AIM_BACK_COURT,
+			0.0,
+			-sign(player.position.z) * GameConstants.AIM_SERVE
+		)
+
 	return default_aim
 
 
-func _get_aim_pos(mouse_from: Vector2, mouse_to: Vector2) -> Vector3:
-	var to := Vector3.ZERO
+## Calculates aim position with mouse offset from default
+func _get_aim_pos(mouse_start: Vector2, mouse_current: Vector2) -> Vector3:
+	var default_aim: Vector3 = _get_default_aim()
+	var mouse_delta: Vector2 = mouse_current - mouse_start
+	var mouse_sensitivity: float = GameConstants.MOUSE_SENSITIVITY
 
-	var default_aim := _get_default_aim()
+	var aim_position: Vector3 = default_aim
+	aim_position.z += sign(player.position.z) * mouse_delta.y / mouse_sensitivity
+	aim_position.x += sign(player.position.z) * mouse_delta.x / mouse_sensitivity
 
-	to.z = default_aim.z + sign(player.position.z) * (mouse_to - mouse_from).y / mouse_sensitivity
-	to.x = default_aim.x + sign(player.position.z) * (mouse_to - mouse_from).x / mouse_sensitivity
-
-	return to
+	return aim_position
 
 
-func do_serve(aiming_at, input_pace):
-	var stroke = Stroke.new()
-	stroke.stroke_type = stroke.StrokeType.SERVE
-	stroke.stroke_power = player.stats.serve_pace + input_pace
-	stroke.stroke_spin = 0
-	stroke.stroke_target = aiming_at
+## Executes a serve stroke
+func _do_serve(aim_position: Vector3, pace: float) -> void:
+	var stroke: Stroke = Stroke.new()
+	stroke.stroke_type = Stroke.StrokeType.SERVE
+	stroke.stroke_power = player.stats.get("serve_pace", 30.0) + pace
+	stroke.stroke_spin = 0.0
+	stroke.stroke_target = aim_position
 
-	#player.prepare_serve()
 	player.serve(stroke)
 
 
-func do_stroke(aiming_at, input_pace):
-	var closest_step := GlobalUtils.get_closest_trajectory_step(player)
-	var closest_ball_position := closest_step.point
+## Executes a rally stroke (forehand/backhand/slice)
+func _do_stroke(aim_position: Vector3, pace: float) -> void:
+	var closest_step: TrajectoryStep = GlobalUtils.get_closest_trajectory_step(player)
+	var closest_ball_position: Vector3 = closest_step.point
+
+	# Ensure ball is on same side of court as player
 	if sign(closest_ball_position.z) != sign(player.position.z):
-		printerr("closest ball position on other side!")
+		printerr("Ball is on opposite side of court")
 		return
 
-	var stroke := _construct_stroke_from_input(closest_step, aiming_at, input_pace)
-	move_input_blocked = true
+	var stroke: Stroke = _construct_stroke_from_input(closest_step, aim_position, pace)
+	_move_input_blocked = true
 
 	player.queue_stroke(stroke)
-	GlobalUtils.adjust_player_position_to_stroke(player, stroke)  # FIXME
+	GlobalUtils.adjust_player_position_to_stroke(player, stroke)
 
-	clear_stroke_input()
+	_clear_stroke_input()
 
 
-func clear_stroke_input():
-	input_pace = 0.0
+## Clears stroke input state after executing a stroke
+func _clear_stroke_input() -> void:
+	_input_pace = 0.0
 	ball_aim_marker.visible = false
 
 
+## Constructs a stroke from player input, determining stroke type based on ball position
 func _construct_stroke_from_input(
-	closest_step: TrajectoryStep, aim: Vector3, pace: float
+	closest_step: TrajectoryStep,
+	aim_position: Vector3,
+	pace: float
 ) -> Stroke:
-	var stroke = Stroke.new()
+	var stroke: Stroke = Stroke.new()
 	var to_ball_vector: Vector3 = closest_step.point - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
-	if dot_product > 0:
-		stroke.stroke_type = stroke.StrokeType.FOREHAND
-		stroke.stroke_power = player.stats.forehand_pace + pace
-		stroke.stroke_spin = player.stats.forehand_spin
-		stroke.stroke_target = aim
+
+	if dot_product > 0.0:
+		# Forehand stroke
+		stroke.stroke_type = Stroke.StrokeType.FOREHAND
+		stroke.stroke_power = player.stats.get("forehand_pace", 25.0) + pace
+		stroke.stroke_spin = player.stats.get("forehand_spin", 5.0)
+		stroke.stroke_target = aim_position
 	else:
+		# Backhand or slice stroke
 		if Input.is_action_pressed("slice"):
-			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = 20
-			stroke.stroke_spin = -5
-			stroke.stroke_target = aim
+			stroke.stroke_type = Stroke.StrokeType.BACKHAND_SLICE
+			stroke.stroke_power = 20.0
+			stroke.stroke_spin = -5.0
+			stroke.stroke_target = aim_position
 		else:
-			stroke.stroke_type = stroke.StrokeType.BACKHAND
-			stroke.stroke_power = player.stats.backhand_pace + pace
-			stroke.stroke_spin = player.stats.backhand_spin
-			stroke.stroke_target = aim
+			stroke.stroke_type = Stroke.StrokeType.BACKHAND
+			stroke.stroke_power = player.stats.get("backhand_pace", 25.0) + pace
+			stroke.stroke_spin = player.stats.get("backhand_spin", 5.0)
+			stroke.stroke_target = aim_position
 
 	stroke.step = closest_step
-
 	return stroke
 
 
-## Misc
-#######
-
-
-func _on_Player_ball_hit():
-	move_input_blocked = false
-
-
-func _on_SinglesMatch_state_changed(old_state, new_state):
-	if new_state == GlobalUtils.MatchStates.FAULT:
-		stroke_input_blocked = true
-		move_input_blocked = true
-		clear_stroke_input()
-		await get_tree().create_timer(1).timeout
-		stroke_input_blocked = false
-	if (
-		new_state == GlobalUtils.MatchStates.IDLE
-		or new_state == GlobalUtils.MatchStates.SECOND_SERVE
-	):
-		move_input_blocked = false
-
-#func _on_Opponent_ball_hit():
-#if not player.ball:
-#return
-#
-#pred = GlobalPhysics.get_ball_position_at(player.ball, player.position.z)
-#var ball_pos_prediction = pred.pos
-#
-## if ball outside of comfort zone
-#if (
-#ball_pos_prediction.y < player.model.forehand_down_point.y
-#or ball_pos_prediction.y > player.model.forehand_up_point.y
-#):
-## predict where ball is in comfort zone
-#pred = GlobalPhysics.get_ball_position_at_height_after_bounce(player.ball, 1)
+## Called when player successfully hits the ball
+func _on_player_ball_hit() -> void:
+	_move_input_blocked = false

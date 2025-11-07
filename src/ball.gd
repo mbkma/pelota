@@ -1,17 +1,20 @@
+## Physics-based ball entity with trajectory prediction and collision handling
 class_name Ball
 extends CharacterBody3D
 
 signal on_ground
 signal on_net
 
-const DAMP := 0.7
-const GROUND := 0.035
-var spin := 0.0
+const BALL_DAMPING: float = GameConstants.BALL_DAMP
+const BALL_GROUND_LEVEL: float = GameConstants.BALL_GROUND_THRESHOLD
+const GRAVITY_BASE: float = GameConstants.GRAVITY
 
 @export var initial_velocity: Vector3
 var initial_position: Vector3
 
-var trajectory := []
+var spin: float = 0.0
+var trajectory: Array[TrajectoryStep] = []
+var _previous_velocity: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
@@ -20,74 +23,80 @@ func _ready() -> void:
 		global_position = initial_position
 
 
-func spin_to_gravity(spin: float) -> float:
-	return 10 + spin
-
-
-var prev_velocity
-
-
 func _physics_process(delta: float) -> void:
-	var gravity := spin_to_gravity(spin)
+	# Apply gravity with spin effect
+	var gravity: float = GRAVITY_BASE + (spin * 0.5)
 	velocity.y += -gravity * delta
 
+	# Track previous velocity for bounce calculations
 	if velocity.length() > 0.1:
-		prev_velocity = velocity
+		_previous_velocity = velocity
+
 	move_and_slide()
+
+	# Handle collisions
 	if get_slide_collision_count() > 0:
-		var col := get_slide_collision(0)
-		var collider := col.get_collider()
+		var collision: KinematicCollision3D = get_slide_collision(0)
+		var collider: Node = collision.get_collider()
+
 		if collider.is_in_group("Net"):
-			prev_velocity.z *= 0.1
-			prev_velocity.x *= 0.1
-			velocity = prev_velocity.bounce(col.get_normal()) * DAMP
+			# Ball hit net - reduce velocity significantly
+			_previous_velocity.z *= 0.1
+			_previous_velocity.x *= 0.1
+			velocity = _previous_velocity.bounce(collision.get_normal()) * BALL_DAMPING
 			on_net.emit()
 		else:
-			velocity = prev_velocity.bounce(col.get_normal()) * DAMP
-			position.y = GROUND
+			# Ball hit ground - bounce with damping
+			velocity = _previous_velocity.bounce(collision.get_normal()) * BALL_DAMPING
+			position.y = BALL_GROUND_LEVEL
+
+		# Emit ground signal if ball is near ground level
 		if position.y < 0.1:
 			on_ground.emit()
 
-	#rotation = spin*velocity
+	# Apply air resistance
 	velocity = velocity.lerp(Vector3.ZERO, 0.001)
 
-	#print("position", position)
-	#print("global_position", global_position)
-	#trajectory = predict_trajectory()
+
+## Applies a stroke to the ball with given velocity and spin
+func apply_stroke(stroke_velocity: Vector3, spin_amount: float) -> void:
+	spin = spin_amount
+	velocity = stroke_velocity
 
 
-func apply_stroke(vel: Vector3, _spin: float) -> void:
-	spin = _spin
-	velocity = vel
+## Predicts ball trajectory for the next N steps
+## Used by AI and aiming systems
+func predict_trajectory(
+	steps: int = 200,
+	time_step: float = 0.016
+) -> Array[TrajectoryStep]:
+	var predicted_trajectory: Array[TrajectoryStep] = []
+	var current_position: Vector3 = global_position
+	var current_velocity: Vector3 = velocity
+	var elapsed_time: float = 0.0
 
+	for _step_index in range(steps):
+		# Apply gravity with spin effect
+		var gravity: float = GRAVITY_BASE + (spin * 0.5)
+		current_velocity.y += -gravity * time_step
 
-func predict_trajectory(steps: int = 200, time_step: float = 0.016) -> Array[TrajectoryStep]:
-	#print("global_position", global_position)
-	var trajectory: Array[TrajectoryStep]
-	var current_position = global_position
-	var current_velocity = velocity
-
-	var time := 0.0
-	for i in range(steps):
-		# Calculate gravity based on spin
-		var gravity = spin_to_gravity(spin)
-		current_velocity.y += -gravity * time_step  # Apply gravity
-		# Update position based on current velocity
+		# Update position
 		current_position += current_velocity * time_step
 
-		# Simulate collisions with the ground
-		if current_position.y < GROUND:  #FIXME: this is average pos ball at ground
-			current_velocity = current_velocity.bounce(Vector3.UP) * DAMP
-			current_position.y = GROUND
-		# Add the current position to the trajectory
-		var step = TrajectoryStep.new(current_position, time)
-		trajectory.append(step)
-		time += time_step
-		# Stop simulation if velocity is almost zero
+		# Simulate ground collision
+		if current_position.y < BALL_GROUND_LEVEL:
+			current_velocity = current_velocity.bounce(Vector3.UP) * BALL_DAMPING
+			current_position.y = BALL_GROUND_LEVEL
+
+		# Record trajectory point
+		var trajectory_step: TrajectoryStep = TrajectoryStep.new(current_position, elapsed_time)
+		predicted_trajectory.append(trajectory_step)
+
+		elapsed_time += time_step
+
+		# Stop if ball has essentially stopped
 		if current_velocity.length() < 0.01:
 			break
 
-	self.trajectory = trajectory
-	#print(trajectory)
-
-	return trajectory
+	self.trajectory = predicted_trajectory
+	return predicted_trajectory
