@@ -15,9 +15,11 @@ dest_files=["res://.godot/imported/umpire_chair.blend-cc8a44e48f19ff0d09150e50d4
 
 nodes/root_type="Node3D"
 nodes/root_name="Scene Root"
+nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
@@ -32,39 +34,50 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
 _subresources={
 "materials": {
 "Human.afro01.001": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/Human.afro01.001.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/Human.afro01.001.tres",
+"use_external/path": "uid://dhgyjcbmyhbx6"
 },
 "Material.001": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/Material.001.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/Material.001.tres",
+"use_external/path": "uid://ye7n5dsypklj"
 },
 "Material.002": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/Material.002.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/Material.002.tres",
+"use_external/path": "uid://ca5l0vq8eawv"
 },
 "Material.003": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/Material.003.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/Material.003.tres",
+"use_external/path": "uid://xwdslllswke4"
 },
 "eye": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/eye.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/eye.tres",
+"use_external/path": "uid://dgrup50ah6031"
 },
 "lambert2SG": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/lambert2SG.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/lambert2SG.tres",
+"use_external/path": "uid://duh7pbrhhi4o"
 },
 "lambert3SG": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/lambert3SG.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/lambert3SG.tres",
+"use_external/path": "uid://bjadv2xtl0bc0"
 },
 "skin": {
 "use_external/enabled": true,
-"use_external/path": "res://assets/models/umpire_chair/materials/skin.tres"
+"use_external/fallback_path": "res://assets/models/umpire_chair/materials/skin.tres",
+"use_external/path": "uid://bd2j4gx2kkmcv"
 }
 }
 }
@@ -86,3 +99,4 @@ blender/materials/export_materials=1
 blender/animation/limit_playback=true
 blender/animation/always_sample=true
 blender/animation/group_tracks=true
+gltf/naming_version=0

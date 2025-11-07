@@ -10,10 +10,13 @@ extends Node3D
 
 
 func _ready():
+	if not people:
+		return
+	
 	var seat_position := Vector3.ZERO
 	for i in range(rows):  # Create 50 people
 		for j in range(columns):
-			var person = people.instantiate()
+			var person : CrowdPerson = people.instantiate()
 			person.key = "crowd-" + str(randi_range(1, 4))
 			person.position = seat_position
 			add_child(person)
@@ -23,21 +26,23 @@ func _ready():
 
 			# Play the animation with blending
 			var blend_time = 0.5  # Adjust for smoother transitions
+			
 			person.animation_player.play(animation_name, blend_time)
 
 			# Offset animation randomly
-			var animation_length = person.animation_player.get_animation(animation_name).length
-			person.animation_player.seek(randf_range(0, animation_length), true)
+			if person.animation_player.has_animation(animation_name):
+				var animation_length = person.animation_player.get_animation(animation_name).length
+				person.animation_player.seek(randf_range(0, animation_length), true)
 
-			# Loop through animations smoothly
-			person.animation_player.animation_finished.connect(
-				func _on_animation_finished(anim_name):
-					var new_animation = person.idle_animations[
-						randi() % person.idle_animations.size()
-					]
-					person.animation_player.play(new_animation, blend_time)
-			)
-			seat_position.x += seats_x
+				# Loop through animations smoothly
+				person.animation_player.animation_finished.connect(
+					func _on_animation_finished(anim_name):
+						var new_animation = person.idle_animations[
+							randi() % person.idle_animations.size()
+						]
+						person.animation_player.play(new_animation, blend_time)
+				)
+				seat_position.x += seats_x
 
 		seat_position.x = 0.0
 		seat_position.y += seats_y

@@ -1,3 +1,4 @@
+class_name CrowdPerson
 extends Node3D
 
 @export var people := {

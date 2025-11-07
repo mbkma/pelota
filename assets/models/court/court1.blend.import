@@ -15,9 +15,11 @@ dest_files=["res://.godot/imported/court1.blend-0aa359626dcc840cb43d47a03b905f3f
 
 nodes/root_type=""
 nodes/root_name=""
+nodes/root_script=null
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
@@ -32,34 +34,44 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
 _subresources={
 "materials": {
 "Material.004": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/Material.004.tres"
 },
 "court.001": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/court.001.tres"
 },
 "line": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/line.tres"
 },
 "mercedes": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/mercedes.tres"
 },
 "net": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/net.tres"
 },
 "post": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/post.tres"
 },
 "top_net": {
 "use_external/enabled": true,
+"use_external/fallback_path": "",
 "use_external/path": "res://assets/models/court/materials/top_net.tres"
 }
 }
@@ -82,3 +94,4 @@ blender/materials/export_materials=1
 blender/animation/limit_playback=true
 blender/animation/always_sample=true
 blender/animation/group_tracks=true
+gltf/naming_version=0
