@@ -38,7 +38,7 @@ func _ready():
 	for p in player_selectors:
 		p.selection_changed.connect(on_selection_changed)
 
-	#GlobalMusicPlayer.play_music(GlobalMusicPlayer.music[0])
+	GlobalScenes.music_player.play_track_list(GlobalScenes.music_player.music, true, true)
 
 
 func on_selection_changed() -> void:
@@ -64,7 +64,7 @@ func _on_Back_pressed() -> void:
 
 
 func _on_Play_pressed() -> void:
-	GlobalMusicPlayer.stop()
+	GlobalScenes.music_player.stop()
 
 	var players_data := []
 	for ps in player_selectors:

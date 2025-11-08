@@ -22,7 +22,6 @@ buses/default_bus_layout="res://assets/resources/default_bus_layout.tres"
 
 GlobalUtils="*res://scripts/globals/global_utils.gd"
 GlobalGameData="*res://scripts/globals/global_game_data.gd"
-GlobalMusicPlayer="*res://scripts/globals/global_music_player.gd"
 GlobalHud="*res://scripts/globals/global_hud.gd"
 GlobalPhysics="*res://scripts/physics/global_physics.gd"
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"

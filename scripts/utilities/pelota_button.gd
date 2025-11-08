@@ -5,8 +5,8 @@ extends Button
 
 
 func _on_focus_entered() -> void:
-	GlobalMusicPlayer.play_sound(button_sounds[0])
+	GlobalScenes.music_player.play_sound(button_sounds[0])
 
 
 func _on_button_down() -> void:
-	GlobalMusicPlayer.play_sound(button_sounds[0])
+	GlobalScenes.music_player.play_sound(button_sounds[0])

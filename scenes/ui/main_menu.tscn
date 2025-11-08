@@ -2,14 +2,14 @@
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
 [ext_resource type="Script" uid="uid://cp7eliy5mm75n" path="res://scripts/ui/main_menu.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://bcwuxgarbilrg" path="res://scripts/modes/match/tennis_match.tscn" id="2_35tjg"]
-[ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://scripts/ui/player-selector.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://58fqxcxqa0qr" path="res://scripts/modes/training/tennis_training.tscn" id="3_vob5f"]
-[ext_resource type="PackedScene" uid="uid://dglfvla4hwrbu" path="res://scripts/modes/career/new_career.tscn" id="4_0prml"]
+[ext_resource type="PackedScene" uid="uid://bcwuxgarbilrg" path="res://scenes/modes/match/tennis_match.tscn" id="2_35tjg"]
+[ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://scenes/ui/player-selector.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://58fqxcxqa0qr" path="res://scenes/modes/training/tennis_training.tscn" id="3_vob5f"]
+[ext_resource type="PackedScene" uid="uid://dglfvla4hwrbu" path="res://scenes/modes/career/new_career.tscn" id="4_0prml"]
 [ext_resource type="PackedScene" uid="uid://px6a2dg8cawb" path="res://addons/modular-settings-menu/scenes/settings.tscn" id="5_e2417"]
-[ext_resource type="PackedScene" uid="uid://dao2m7qjha6j2" path="res://scripts/ui/tournament-main-menu.tscn" id="5_yipxn"]
-[ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://scripts/ui/music_panel.tscn" id="6_u0nle"]
-[ext_resource type="PackedScene" uid="uid://bw3wmvsvqsbm5" path="res://scripts/ui/pelota_button.tscn" id="7_lnm77"]
+[ext_resource type="PackedScene" uid="uid://dao2m7qjha6j2" path="res://scenes/ui/tournament-main-menu.tscn" id="5_yipxn"]
+[ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://scenes/ui/music_panel.tscn" id="6_u0nle"]
+[ext_resource type="PackedScene" uid="uid://bw3wmvsvqsbm5" path="res://scenes/ui/pelota_button.tscn" id="7_lnm77"]
 
 [sub_resource type="Gradient" id="Gradient_3p5o7"]
 offsets = PackedFloat32Array(0, 0.477551)

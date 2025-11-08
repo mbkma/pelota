@@ -7,7 +7,7 @@ extends Panel
 
 
 func _ready() -> void:
-	GlobalMusicPlayer.track_started.connect(_on_track_started)
+	GlobalScenes.music_player.track_started.connect(_on_track_started)
 
 
 func _on_track_started(track: Track):
@@ -19,4 +19,4 @@ func _on_track_started(track: Track):
 
 func set_track(track: Track):
 	label.text = track.title + " by " + track.artist
-	texture_rect.texture = load(track.cover_path)
+	texture_rect.texture = track.cover

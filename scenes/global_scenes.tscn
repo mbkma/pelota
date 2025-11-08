@@ -1,13 +1,49 @@
-[gd_scene load_steps=6 format=3 uid="uid://ceop0q7nsqi27"]
+[gd_scene load_steps=17 format=3 uid="uid://ceop0q7nsqi27"]
 
-[ext_resource type="Script" uid="uid://npp4x45tg74" path="res://scenes/global_scenes.gd" id="1_rmbq0"]
+[ext_resource type="Script" uid="uid://npp4x45tg74" path="res://scripts/globals/global_scenes.gd" id="1_rmbq0"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_wnfw1"]
 [ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="3_lneag"]
 [ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="4_g2ium"]
 [ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://scenes/props/ball.tscn" id="5_g2ium"]
+[ext_resource type="Script" uid="uid://bfw1sqnvttb13" path="res://scripts/globals/global_music_player.gd" id="6_ive1o"]
+[ext_resource type="Texture2D" uid="uid://g48gk6m2wc81" path="res://assets/sounds/music/hawaii/md.webp" id="7_jsmfi"]
+[ext_resource type="Script" uid="uid://bndh0hgyh1ixw" path="res://scripts/utilities/track.gd" id="7_u7smb"]
+[ext_resource type="AudioStream" uid="uid://bcklvsvk6n33c" path="res://assets/sounds/music/hawaii/Waesto - Hawaii.mp3" id="9_g0ur2"]
+[ext_resource type="Texture2D" uid="uid://d382trgnljl2w" path="res://assets/sounds/music/on_fire/Screenshot 2025-02-17 at 22-19-32 Fashion Rnb Pop by Infraction No Copyright Music _ On Fire - YouTube.png" id="10_iplwg"]
+[ext_resource type="AudioStream" uid="uid://bt4lccx7bctj5" path="res://assets/sounds/music/on_fire/Infraction-On-Fire-pr.mp3" id="11_j5f1n"]
+[ext_resource type="Texture2D" uid="uid://cd884rjjomm2b" path="res://assets/sounds/music/wanderer/walen-wanderer.jpg" id="12_4xgel"]
+[ext_resource type="AudioStream" uid="uid://bqrb2yswc2fiy" path="res://assets/sounds/music/wanderer/Walen - Wanderer (freetouse.com).mp3" id="13_yjeu2"]
+
+[sub_resource type="Resource" id="Resource_41rb2"]
+script = ExtResource("7_u7smb")
+title = "Hawaii"
+artist = "Waesto"
+stream = ExtResource("9_g0ur2")
+cover = ExtResource("7_jsmfi")
+metadata/_custom_type_script = "uid://bndh0hgyh1ixw"
+
+[sub_resource type="Resource" id="Resource_4xgel"]
+script = ExtResource("7_u7smb")
+title = "On Fire"
+artist = "Infraction"
+stream = ExtResource("11_j5f1n")
+cover = ExtResource("10_iplwg")
+metadata/_custom_type_script = "uid://bndh0hgyh1ixw"
+
+[sub_resource type="Resource" id="Resource_ns3k6"]
+script = ExtResource("7_u7smb")
+title = "Wanderer"
+artist = "Walen"
+stream = ExtResource("13_yjeu2")
+cover = ExtResource("12_4xgel")
+metadata/_custom_type_script = "uid://bndh0hgyh1ixw"
 
 [node name="GlobalScenes" type="Node"]
 script = ExtResource("1_rmbq0")
 PLAYER_SCENE = ExtResource("2_wnfw1")
 PLAYER_DATA = Array[Resource]([ExtResource("3_lneag"), ExtResource("4_g2ium")])
 BALL_SCENE = ExtResource("5_g2ium")
+
+[node name="GlobalMusicPlayer" type="Node" parent="."]
+script = ExtResource("6_ive1o")
+music = [SubResource("Resource_41rb2"), SubResource("Resource_4xgel"), SubResource("Resource_ns3k6")]
