@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bcklvsvk6n33c"
+path="res://.godot/imported/Waesto - Hawaii.mp3-2679d4495b33868575d217e6cd656b7f.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/music/hawaii/Waesto - Hawaii.mp3"
+dest_files=["res://.godot/imported/Waesto - Hawaii.mp3-2679d4495b33868575d217e6cd656b7f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

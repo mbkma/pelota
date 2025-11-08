@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3 uid="uid://fdj1nvw8fcxn"]
+
+[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scripts/characters/player.tscn" id="1_uc5qs"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scripts/characters/inputs/ai/ai_input.tscn" id="2_yiecc"]
+
+[node name="AiPlayer" node_paths=PackedStringArray("input_node") instance=ExtResource("1_uc5qs")]
+input_node = NodePath("AiInput")
+
+[node name="GeneralSkeleton" parent="Model/h/player/game-rig" index="0"]
+bones/0/position = Vector3(0.0006336512, 0.9449681, 0.011327827)
+bones/1/rotation = Quaternion(-0.00072551635, -3.027581e-10, 2.686487e-10, 0.99999976)
+bones/2/rotation = Quaternion(1.6296528e-06, 0.00018045524, 2.411131e-05, 1)
+bones/3/rotation = Quaternion(-0.004610102, 0.0005280324, -2.1715075e-05, 0.9999892)
+bones/4/rotation = Quaternion(-0.0036966112, 0.00035419103, 1.3093106e-06, 0.9999932)
+bones/5/rotation = Quaternion(0.010677187, -0.00053126033, 5.672609e-06, 0.9999429)
+bones/6/rotation = Quaternion(-0.0015466104, -0.0026005325, -4.02163e-06, 0.99999547)
+bones/105/rotation = Quaternion(0.502259, 0.50232744, 0.4976715, -0.49772105)
+bones/106/position = Vector3(-0.008537763, 0.17905062, -0.03147686)
+bones/106/rotation = Quaternion(-0.48796955, -0.054720297, -0.15265721, 0.85766387)
+bones/107/rotation = Quaternion(0.2101343, 0.92990494, -0.1833317, 0.23981205)
+bones/108/rotation = Quaternion(-0.00030273598, 0.09232127, 0.105764575, 0.9900962)
+bones/109/rotation = Quaternion(0.10479494, -0.723281, 0.20165534, 0.6520873)
+bones/110/rotation = Quaternion(-0.16958413, -0.17772442, -0.25238147, 0.9359268)
+bones/111/rotation = Quaternion(0.12559672, 0.557653, -0.30182573, 0.76298743)
+bones/131/rotation = Quaternion(0.502259, -0.50232756, -0.49767148, -0.49772102)
+bones/132/position = Vector3(0.008537772, 0.1790508, -0.031476885)
+bones/132/rotation = Quaternion(-0.50937927, 0.0107005155, 0.083407015, 0.85642374)
+bones/133/rotation = Quaternion(-0.10409218, 0.9617458, -0.22409403, -0.11828726)
+bones/134/rotation = Quaternion(-0.0005161894, -0.15740237, -0.18032247, 0.9709316)
+bones/135/rotation = Quaternion(0.06331827, 0.6917077, -0.33507577, 0.6365968)
+bones/159/rotation = Quaternion(0.9984687, 0.043564655, -0.0014701895, 0.034061898)
+bones/160/rotation = Quaternion(-6.3917023e-06, 6.6391955e-08, 3.1918873e-05, 1)
+bones/161/rotation = Quaternion(0.99847484, -0.04356766, 0.0014645752, 0.033879403)
+bones/162/rotation = Quaternion(-1.3908132e-06, -2.8118672e-08, -6.885285e-06, 1)
+bones/165/rotation = Quaternion(-9.263658e-05, 0.00095859537, 0.9999995, 0.00010670238)
+bones/166/position = Vector3(-0.021526644, 0.24425115, 0.016920011)
+bones/166/rotation = Quaternion(2.3632622e-06, -2.7719185e-05, -1.928235e-06, 1)
+bones/167/rotation = Quaternion(-1.32059085e-05, 0.9999966, -0.0025940822, 0.0002866569)
+bones/168/position = Vector3(0.025694707, 0.22999547, 0.0086635975)
+bones/168/rotation = Quaternion(-6.618265e-07, -5.389334e-06, -1.7356012e-07, 1)
+bones/169/rotation = Quaternion(0.00010537479, 0.70681274, -0.7074008, -4.8725058e-05)
+bones/171/rotation = Quaternion(5.1266445e-05, 0.00055663486, 0.9999999, -2.0891679e-05)
+bones/172/position = Vector3(0.021526292, 0.24424687, 0.016919706)
+bones/172/rotation = Quaternion(1.666554e-06, 1.9694698e-05, 1.3705757e-06, 1)
+bones/173/rotation = Quaternion(2.3969218e-05, 0.9999958, -0.0028984596, -0.0003082103)
+bones/174/position = Vector3(-0.025694124, 0.22999027, 0.008663398)
+bones/174/rotation = Quaternion(-3.4045784e-06, 2.9978379e-05, 1.1027023e-06, 1)
+bones/175/rotation = Quaternion(-3.1513897e-05, 0.7069245, -0.70728904, -5.7020125e-06)
+
+[node name="racket" parent="Model/h/player/game-rig/GeneralSkeleton" index="0"]
+transform = Transform3D(-0.19823274, -0.18422523, 0.9626857, -0.6517406, 0.7583623, 0.010920674, -0.732077, -0.6252573, -0.27039945, 0.041927904, 1.450152, 0.5117191)
+
+[node name="AiInput" parent="." index="4" instance=ExtResource("2_yiecc")]
+
+[editable path="Model"]
+[editable path="Model/h/player"]

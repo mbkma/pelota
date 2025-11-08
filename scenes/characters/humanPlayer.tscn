@@ -1,0 +1,74 @@
+[gd_scene load_steps=5 format=3 uid="uid://bujaw8qgawaj8"]
+
+[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scripts/characters/player.tscn" id="1_yyl23"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scripts/characters/inputs/keyboard_input.tscn" id="2_5v6y4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ar8o2"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ssn5c"]
+material = SubResource("StandardMaterial3D_ar8o2")
+
+[node name="Player" node_paths=PackedStringArray("input_node") instance=ExtResource("1_yyl23")]
+input_node = NodePath("HumanInput")
+
+[node name="GeneralSkeleton" parent="Model/h/player/game-rig" index="0"]
+bones/0/position = Vector3(0.0006595437, 0.94492674, 0.01137402)
+bones/1/rotation = Quaternion(-0.00032523467, -3.0265057e-10, 2.6876987e-10, 1)
+bones/2/rotation = Quaternion(8.638141e-07, 0.00013201578, 1.7657367e-05, 1)
+bones/3/rotation = Quaternion(-0.0011569062, 0.00038623085, -1.7226328e-05, 0.99999934)
+bones/4/rotation = Quaternion(-0.0009570028, 0.00025911376, 2.4800786e-07, 0.9999996)
+bones/5/rotation = Quaternion(0.0026480462, -0.00038866975, 1.0290811e-06, 0.9999965)
+bones/6/rotation = Quaternion(-0.0006109425, -0.0024579163, -1.5013765e-06, 0.9999968)
+bones/105/rotation = Quaternion(0.5005638, 0.50058186, 0.49942014, -0.49943304)
+bones/106/position = Vector3(-0.00836574, 0.17544301, -0.03084273)
+bones/106/rotation = Quaternion(-0.48772398, -0.056560166, -0.15468866, 0.8573201)
+bones/107/rotation = Quaternion(0.21354608, 0.9281987, -0.18288164, 0.24372046)
+bones/108/rotation = Quaternion(-0.00028638667, 0.08732087, 0.100035995, 0.99114466)
+bones/109/rotation = Quaternion(0.08559485, -0.7248732, 0.19584394, 0.6548875)
+bones/110/rotation = Quaternion(-0.17097029, -0.17917715, -0.2544448, 0.93483824)
+bones/111/rotation = Quaternion(0.17176324, 0.57065, -0.30831683, 0.74148285)
+bones/131/rotation = Quaternion(0.5005638, -0.50058186, -0.49942014, -0.49943304)
+bones/132/position = Vector3(0.008365751, 0.17544307, -0.030842695)
+bones/132/rotation = Quaternion(-0.50861, 0.0106873335, 0.082913026, 0.8569289)
+bones/133/rotation = Quaternion(-0.10347203, 0.96239644, -0.22194546, -0.1175881)
+bones/134/rotation = Quaternion(-0.00051207, -0.15615268, -0.17889088, 0.97139806)
+bones/135/rotation = Quaternion(0.065935634, 0.6972976, -0.34045276, 0.62731224)
+bones/159/rotation = Quaternion(0.998479, 0.043561593, -0.0014638414, 0.033762623)
+bones/160/rotation = Quaternion(-8.8057027e-07, 3.1644003e-08, 4.3645814e-06, 1)
+bones/161/rotation = Quaternion(0.9984659, -0.04356779, 0.0014725644, 0.034141097)
+bones/162/rotation = Quaternion(-6.764908e-06, -7.429409e-08, -3.375619e-05, 1)
+bones/165/rotation = Quaternion(-2.9922427e-05, 0.0003202453, 1, 1.3530664e-05)
+bones/166/position = Vector3(-0.021526525, 0.24424979, 0.016919918)
+bones/166/rotation = Quaternion(1.5132442e-06, -1.8067767e-05, -1.2596771e-06, 1)
+bones/167/rotation = Quaternion(-2.1061942e-05, 0.9999964, -0.0026637586, 0.0002831529)
+bones/168/position = Vector3(0.02569455, 0.22999406, 0.008663544)
+bones/168/rotation = Quaternion(-3.7535738e-06, -3.30621e-05, -1.215875e-06, 1)
+bones/169/rotation = Quaternion(3.3515877e-05, 0.70700777, -0.7072058, 1.635218e-05)
+bones/171/rotation = Quaternion(0.00010718284, 0.0011191252, 0.9999994, -0.000112444)
+bones/172/position = Vector3(0.02152655, 0.24424982, 0.01691991)
+bones/172/rotation = Quaternion(2.3030316e-06, 2.6915031e-05, 1.8706277e-06, 1)
+bones/173/rotation = Quaternion(1.3743907e-05, 0.9999964, -0.002683767, -0.00029685826)
+bones/174/position = Vector3(-0.025694476, 0.22999342, 0.0086635165)
+bones/174/rotation = Quaternion(7.123877e-08, -1.1346757e-06, -6.9127324e-08, 1)
+bones/175/rotation = Quaternion(-0.00010724428, 0.7067791, -0.7074343, 5.9047747e-05)
+
+[node name="racket" parent="Model/h/player/game-rig/GeneralSkeleton" index="0"]
+transform = Transform3D(-0.19408923, -0.19383675, 0.96164215, -0.6525319, 0.75747, 0.020981014, -0.7324825, -0.62343085, -0.2735013, 0.04008916, 1.4502128, 0.5079155)
+
+[node name="AnimationTreeRootMotion" parent="Model" index="4"]
+parameters/move/blend_position = Vector2(0.035533, -0.486792)
+
+[node name="Camera3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.13285, 8.69776)
+
+[node name="BallAimMarker" type="MeshInstance3D" parent="." index="4"]
+transform = Transform3D(0.277424, 0, -8.4411e-08, 0, 0.107815, 0, 8.37798e-08, 0, 0.279514, 0, 0, 0)
+top_level = true
+mesh = SubResource("CylinderMesh_ssn5c")
+
+[node name="HumanInput" parent="." index="5" node_paths=PackedStringArray("ball_aim_marker") instance=ExtResource("2_5v6y4")]
+ball_aim_marker = NodePath("../BallAimMarker")
+
+[editable path="Model"]
+[editable path="Model/h/player"]

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pelota"
-run/main_scene="res://src/utilities/scene_switcher.tscn"
+run/main_scene="uid://cf0l4walrllxc"
 config/features=PackedStringArray("4.5")
 
 [audio]
@@ -20,14 +20,15 @@ buses/default_bus_layout="res://assets/resources/default_bus_layout.tres"
 
 [autoload]
 
-GlobalUtils="*res://src/globals/global_utils.gd"
-GlobalGameData="*res://src/globals/global_game_data.gd"
-GlobalMusicPlayer="*res://src/globals/global_music_player.gd"
-GlobalHud="*res://src/globals/global_hud.gd"
-GlobalPhysics="*res://src/physics/global_physics.gd"
+GlobalUtils="*res://scripts/globals/global_utils.gd"
+GlobalGameData="*res://scripts/globals/global_game_data.gd"
+GlobalMusicPlayer="*res://scripts/globals/global_music_player.gd"
+GlobalHud="*res://scripts/globals/global_hud.gd"
+GlobalPhysics="*res://scripts/physics/global_physics.gd"
 SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-SceneManager="*res://src/utilities/scene_manager.gd"
+SceneManager="*res://scripts/utilities/scene_manager.gd"
+GlobalScenes="*res://scenes/global_scenes.tscn"
 
 [debug]
 
@@ -36,7 +37,7 @@ shapes/navigation/geometry_color=Color(1, 0, 0.960784, 0.4)
 
 [display]
 
-mouse_cursor/custom_image="res://assets/textures/menus/crosshair121-scaled.png"
+mouse_cursor/custom_image="res://assets/textures/ui/menus/crosshair121-scaled.png"
 mouse_cursor/custom_image_hotspot=Vector2(16, 16)
 window/size/fullscreen=true
 

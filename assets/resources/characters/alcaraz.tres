@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://cngw1dhrbgb21"]
+
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scripts/characters/resources/player_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+first_name = "Carlos"
+last_name = "Alcaraz"
+age = 19
+country = "Spain"
+height = 183
+hand = "R"
+backhand = 2
+rank = 5
+stats = {
+"backhand_pace": 20,
+"backhand_spin": 5,
+"control": 100,
+"endurance": 100,
+"forehand_pace": 20,
+"forehand_spin": 5,
+"serve_pace": 35,
+"speed": 100,
+"strength": 100
+}
+sounds = {
+"grunt_flat": [],
+"grunt_frequency": 0.0,
+"victory": []
+}

@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://ds5ryhspuxtpf"]
+
+[ext_resource type="Script" uid="uid://c4yi3riq177jf" path="res://scripts/environment/crowd/crowd_block.gd" id="1_jcoec"]
+[ext_resource type="PackedScene" uid="uid://dnoktlosmy7xg" path="res://scenes/environment/crowd/crowd_person.tscn" id="2_r2fk0"]
+
+[node name="CrowdBlock" type="Node3D"]
+script = ExtResource("1_jcoec")
+_people = ExtResource("2_r2fk0")

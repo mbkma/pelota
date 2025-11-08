@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://drrxciscdtoof"]
-
-[ext_resource type="Script" uid="uid://c1heyel4iud16" path="res://src/modes/tennis_session/training/training.gd" id="1"]
-
-[node name="Training" type="Node"]
-script = ExtResource("1")

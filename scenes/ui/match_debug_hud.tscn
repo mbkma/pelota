@@ -1,0 +1,374 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7nclbgkw6veg"]
+
+[ext_resource type="Script" uid="uid://mpiigeysorux" path="res://scripts/ui/match_debug_hud.gd" id="1_88p7u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_9jzwl"]
+bg_color = Color(0, 0, 0, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+
+[node name="MatchDebugHud" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_88p7u")
+
+[node name="DebugHud" type="PanelContainer" parent="."]
+offset_right = 550.0
+offset_bottom = 1080.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_9jzwl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugHud"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="DebugHud/VBoxContainer"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MATCH DEBUG"
+horizontal_alignment = 1
+
+[node name="MatchStatsSpacer1" type="Control" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 4)
+
+[node name="MatchStatTitle" type="Label" parent="DebugHud/VBoxContainer"]
+modulate = Color(0, 1, 1, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "= MATCH STATS ="
+horizontal_alignment = 1
+
+[node name="MatchState" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/MatchState"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/MatchState"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "IDLE"
+
+[node name="Server" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Server"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Server:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Server"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Player1"
+
+[node name="ServeZone" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/ServeZone"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Serve Zone:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/ServeZone"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "BACK_SINGLES_BOX"
+
+[node name="RallyZone" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/RallyZone"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Rally Zone:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/RallyZone"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "BACK_SINGLES_BOX"
+
+[node name="GroundContacts" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/GroundContacts"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Ground Contacts:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/GroundContacts"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LastHitter" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/LastHitter"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Last Hitter:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/LastHitter"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "None"
+
+[node name="RallyLength" type="HBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/RallyLength"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Rally Length:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/RallyLength"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="PlayersSpacer" type="Control" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+
+[node name="PlayersTitle" type="Label" parent="DebugHud/VBoxContainer"]
+modulate = Color(0, 1, 1, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "= PLAYER 0 ="
+horizontal_alignment = 1
+
+[node name="Player0" type="VBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player0/Name"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Name:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player0/Name"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Player0"
+
+[node name="Position" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player0/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Position:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player0/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "0.00, 0.00, 0.00"
+
+[node name="Velocity" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player0/Velocity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Velocity:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player0/Velocity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "0.00"
+
+[node name="Endurance" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player0/Endurance"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Endurance:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player0/Endurance"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "100"
+
+[node name="Speed" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player0/Speed"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Speed:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player0/Speed"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "100"
+
+[node name="Player1Spacer" type="Control" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+
+[node name="Player1Title" type="Label" parent="DebugHud/VBoxContainer"]
+modulate = Color(0, 1, 1, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "= PLAYER 1 ="
+horizontal_alignment = 1
+
+[node name="Player1" type="VBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player1/Name"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Name:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player1/Name"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Player1"
+
+[node name="Position" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player1/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Position:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player1/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "0.00, 0.00, 0.00"
+
+[node name="Velocity" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player1/Velocity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Velocity:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player1/Velocity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "0.00"
+
+[node name="Endurance" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player1/Endurance"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Endurance:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player1/Endurance"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "100"
+
+[node name="Speed" type="HBoxContainer" parent="DebugHud/VBoxContainer/Player1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Player1/Speed"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Speed:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Player1/Speed"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "100"
+
+[node name="BallSpacer" type="Control" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+
+[node name="BallTitle" type="Label" parent="DebugHud/VBoxContainer"]
+modulate = Color(0, 1, 1, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "= BALL ="
+horizontal_alignment = 1
+
+[node name="Ball" type="VBoxContainer" parent="DebugHud/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Position" type="HBoxContainer" parent="DebugHud/VBoxContainer/Ball"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Ball/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Position:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Ball/Position"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "0.00, 0.00, 0.00"
+
+[node name="Velocity" type="HBoxContainer" parent="DebugHud/VBoxContainer/Ball"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/VBoxContainer/Ball/Velocity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "Velocity:"
+
+[node name="Value" type="Label" parent="DebugHud/VBoxContainer/Ball/Velocity"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "0.00"

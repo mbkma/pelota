@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://foxv46tnu837"]
+
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scripts/characters/resources/player_data.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://b8qyvdmruk4h5" path="res://assets/sounds/effects/strokes/stroke_flat_djokovic_1.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+first_name = "Novak"
+last_name = "Djokovic"
+age = 35
+country = "Serbia"
+height = 185
+hand = "R"
+backhand = 2
+rank = 7
+stats = {
+"backhand_pace": 20,
+"backhand_spin": 5,
+"control": 100,
+"endurance": 100,
+"forehand_pace": 20,
+"forehand_spin": 5,
+"serve_pace": 35,
+"speed": 100,
+"strength": 100
+}
+sounds = {
+"grunt_flat": [ExtResource("2")],
+"grunt_frequency": 0.2,
+"victory": []
+}

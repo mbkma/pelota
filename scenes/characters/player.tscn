@@ -1,0 +1,94 @@
+[gd_scene load_steps=13 format=3 uid="uid://dkonwbmg06m5n"]
+
+[ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scripts/characters/player.gd" id="1"]
+[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scripts/characters/model.tscn" id="3_lm2ok"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scripts/characters/inputs/ai/ai_input.tscn" id="3_u0krv"]
+[ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scripts/characters/inputs/keyboard_input.tscn" id="4_gnr23"]
+[ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/effects/strokes/stroke_flat_2.wav" id="4_p4hr7"]
+[ext_resource type="AudioStream" uid="uid://7ulnk6wumimm" path="res://assets/sounds/effects/strokes/stroke_flat_3.wav" id="5_drsim"]
+[ext_resource type="AudioStream" uid="uid://dkhg5enkwrhu8" path="res://assets/sounds/effects/strokes/stroke_slice_1.wav" id="6_xtirx"]
+[ext_resource type="AudioStream" uid="uid://cmob7pfsbsmhu" path="res://assets/sounds/effects/strokes/stroke_slice_2.wav" id="7_4n1kg"]
+[ext_resource type="AudioStream" uid="uid://bffa2ad0odjrc" path="res://assets/sounds/effects/strokes/stroke_slice_3.wav" id="8_cjnul"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0l77o"]
+radius = 0.0950554
+height = 1.58024
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera") groups=["Player"]]
+script = ExtResource("1")
+ai_input = ExtResource("3_u0krv")
+human_input = ExtResource("4_gnr23")
+player_data = ExtResource("2_uxa8p")
+camera = NodePath("Camera3D")
+stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
+stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.876131, 0)
+shape = SubResource("CapsuleShape3D_0l77o")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.01951, 0)
+billboard = 1
+text = "Test"
+
+[node name="Model" parent="." instance=ExtResource("3_lm2ok")]
+
+[node name="GeneralSkeleton" parent="Model/h/player/game-rig" index="0"]
+bones/0/position = Vector3(0.0006648194, 0.94491833, 0.011383432)
+bones/1/rotation = Quaternion(-0.00061992195, -3.0272973e-10, 2.6868066e-10, 0.9999999)
+bones/2/rotation = Quaternion(7.272446e-07, 0.00012215233, 1.6341639e-05, 1)
+bones/3/rotation = Quaternion(-0.0036522148, 0.00035741163, -1.504873e-05, 0.99999326)
+bones/4/rotation = Quaternion(-0.0029319078, 0.00023975279, 7.029639e-07, 0.99999577)
+bones/5/rotation = Quaternion(0.008431276, -0.00035961805, 3.0320314e-06, 0.9999645)
+bones/6/rotation = Quaternion(-0.0012321074, -0.0024288758, -2.9923729e-06, 0.99999636)
+bones/105/rotation = Quaternion(0.50178677, 0.50184137, 0.49815953, -0.49819914)
+bones/106/position = Vector3(-0.008492383, 0.17809895, -0.03130958)
+bones/106/rotation = Quaternion(-0.4879132, -0.055232354, -0.15322582, 0.8575617)
+bones/107/rotation = Quaternion(0.21108954, 0.9294245, -0.18323632, 0.24090627)
+bones/108/rotation = Quaternion(-0.00029818068, 0.09094003, 0.10418233, 0.99039185)
+bones/109/rotation = Quaternion(0.099423535, -0.7237618, 0.20007461, 0.6528813)
+bones/110/rotation = Quaternion(-0.16994673, -0.17810392, -0.25292104, 0.9356432)
+bones/111/rotation = Quaternion(0.13851961, 0.56155306, -0.30363935, 0.7571484)
+bones/131/rotation = Quaternion(0.5017867, -0.5018415, -0.49815953, -0.4981991)
+bones/132/position = Vector3(0.008492393, 0.1780991, -0.031309582)
+bones/132/rotation = Quaternion(-0.50912243, 0.010696628, 0.08324205, 0.8565926)
+bones/133/rotation = Quaternion(-0.103914365, 0.96193326, -0.22347674, -0.11808682)
+bones/134/rotation = Quaternion(-0.00051493204, -0.1570239, -0.179889, 0.97107327)
+bones/135/rotation = Quaternion(0.064058006, 0.6932835, -0.33657125, 0.6340144)
+bones/159/rotation = Quaternion(0.99848145, 0.04356028, -0.0014629845, 0.033691887)
+bones/160/rotation = Quaternion(2.8898032e-07, 2.9238455e-08, -1.4829243e-06, 1)
+bones/161/rotation = Quaternion(0.99846447, -0.043567143, 0.0014743088, 0.034182966)
+bones/162/rotation = Quaternion(-7.801985e-06, -8.753846e-08, -3.894174e-05, 1)
+bones/165/rotation = Quaternion(-1.5358002e-05, 0.00017038603, 1, -6.05695e-06)
+bones/166/position = Vector3(-0.02152648, 0.2442493, 0.016919883)
+bones/166/rotation = Quaternion(1.31062e-06, -1.5766967e-05, -1.1002375e-06, 1)
+bones/167/rotation = Quaternion(-2.219228e-05, 0.99999654, -0.0026360664, 0.0002779946)
+bones/168/position = Vector3(0.025694491, 0.22999354, 0.008663525)
+bones/168/rotation = Quaternion(-4.2181273e-06, -3.7219317e-05, -1.3724687e-06, 1)
+bones/169/rotation = Quaternion(2.0340482e-05, 0.70706224, -0.7071513, 2.907735e-05)
+bones/171/rotation = Quaternion(0.000116478426, 0.0012104954, 0.9999993, -0.00013038571)
+bones/172/position = Vector3(0.021526664, 0.2442511, 0.016919998)
+bones/172/rotation = Quaternion(2.3030022e-06, 2.6915024e-05, 1.8706371e-06, 1)
+bones/173/rotation = Quaternion(1.1675935e-05, 0.9999966, -0.0026000887, -0.0002899464)
+bones/174/position = Vector3(-0.025694627, 0.22999477, 0.008663568)
+bones/174/rotation = Quaternion(9.4814385e-07, -8.983401e-06, -3.6477135e-07, 1)
+bones/175/rotation = Quaternion(-0.00012275447, 0.7067628, -0.7074506, 7.267016e-05)
+
+[node name="racket" parent="Model/h/player/game-rig/GeneralSkeleton" index="0"]
+transform = Transform3D(-0.19661707, -0.18654479, 0.96257013, -0.6519813, 0.75810957, 0.01374504, -0.73229843, -0.6248762, -0.2706813, 0.04110977, 1.4501379, 0.51074266)
+
+[node name="AnimationTreeRootMotion" parent="Model" index="4"]
+parameters/stroke/Transition/current_state = ""
+parameters/stroke/Transition/current_index = -1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
+top_level = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[editable path="Model"]
+[editable path="Model/h/player"]

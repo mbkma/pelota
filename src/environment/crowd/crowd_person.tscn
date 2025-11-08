@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dnoktlosmy7xg"]
-
-[ext_resource type="Script" uid="uid://dy7xmmjswxxbw" path="res://src/environment/crowd/crowd_person.gd" id="1_lhrgx"]
-
-[node name="CrowdPerson" type="Node3D"]
-script = ExtResource("1_lhrgx")

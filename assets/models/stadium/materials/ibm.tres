@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cg4q82q0t74wc"]
 
-[ext_resource type="Texture2D" uid="uid://cv5f4uav0pa5m" path="res://assets/models/stadium/textures/ibm-alpha.png" id="1_ljvbp"]
+[ext_resource type="Texture2D" uid="uid://cv5f4uav0pa5m" path="res://assets/textures/environment/stadium/ibm-alpha.png" id="1_ljvbp"]
 
 [resource]
 resource_name = "ibm"

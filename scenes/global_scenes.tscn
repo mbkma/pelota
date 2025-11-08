@@ -1,0 +1,13 @@
+[gd_scene load_steps=6 format=3 uid="uid://ceop0q7nsqi27"]
+
+[ext_resource type="Script" uid="uid://npp4x45tg74" path="res://scenes/global_scenes.gd" id="1_rmbq0"]
+[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_wnfw1"]
+[ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="3_lneag"]
+[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="4_g2ium"]
+[ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://scenes/props/ball.tscn" id="5_g2ium"]
+
+[node name="GlobalScenes" type="Node"]
+script = ExtResource("1_rmbq0")
+PLAYER_SCENE = ExtResource("2_wnfw1")
+PLAYER_DATA = Array[Resource]([ExtResource("3_lneag"), ExtResource("4_g2ium")])
+BALL_SCENE = ExtResource("5_g2ium")

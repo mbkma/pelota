@@ -1,0 +1,293 @@
+[gd_scene load_steps=22 format=3 uid="uid://58fqxcxqa0qr"]
+
+[ext_resource type="Script" uid="uid://b2ln7l4birgbu" path="res://scripts/modes/training/tennis_training.gd" id="1_gx02n"]
+[ext_resource type="PackedScene" uid="uid://bujaw8qgawaj8" path="res://scripts/characters/humanPlayer.tscn" id="2_fqabv"]
+[ext_resource type="PackedScene" uid="uid://fdj1nvw8fcxn" path="res://scripts/characters/AiPlayer.tscn" id="3_618rm"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scripts/environment/world/us_open/stadium.tscn" id="4_guntq"]
+[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scripts/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
+[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scripts/utilities/ball-canon.tscn" id="6_l6sfg"]
+[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scripts/utilities/trajectory_drawer.tscn" id="8_xeshg"]
+[ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scripts/ui/pause_menu.tscn" id="9_fqabv"]
+
+[sub_resource type="Shader" id="Shader_rdv83"]
+code = "
+// NOTE: Shader automatically converted from Godot Engine 4.3.stable's ProceduralSkyMaterial.
+
+shader_type sky;
+render_mode use_debanding;
+
+uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
+uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float sky_curve : hint_range(0, 1) = 0.15;
+uniform float sky_energy = 1.0; // In Lux.
+uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
+uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
+uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float ground_curve : hint_range(0, 1) = 0.02;
+uniform float ground_energy = 1.0;
+uniform float sun_angle_max = 30.0;
+uniform float sun_curve : hint_range(0, 1) = 0.15;
+uniform float exposure : hint_range(0, 128) = 1.0;
+
+uniform sampler2D cloud_texture;
+uniform sampler2D cloud_texture2;
+uniform vec2 cloud_direction;
+uniform vec2 cloud_direction2;
+uniform vec2 cloud_scale;
+uniform float cloud_distance;
+uniform float cloud_speed;
+uniform float cloud_speed2;
+
+void sky() {
+	float v_angle = acos(clamp(EYEDIR.y, -1.0, 1.0));
+	float c = (1.0 - v_angle / (PI * 0.5));
+	vec3 sky = mix(sky_horizon_color.rgb, sky_top_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / sky_curve), 0.0, 1.0));
+	sky *= sky_energy;
+
+	if (LIGHT0_ENABLED) {
+		float sun_angle = acos(dot(LIGHT0_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT0_SIZE) {
+			sky = LIGHT0_COLOR * LIGHT0_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT0_SIZE) / (sun_angle_max - LIGHT0_SIZE);
+			sky = mix(LIGHT0_COLOR * LIGHT0_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT1_ENABLED) {
+		float sun_angle = acos(dot(LIGHT1_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT1_SIZE) {
+			sky = LIGHT1_COLOR * LIGHT1_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT1_SIZE) / (sun_angle_max - LIGHT1_SIZE);
+			sky = mix(LIGHT1_COLOR * LIGHT1_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT2_ENABLED) {
+		float sun_angle = acos(dot(LIGHT2_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT2_SIZE) {
+			sky = LIGHT2_COLOR * LIGHT2_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT2_SIZE) / (sun_angle_max - LIGHT2_SIZE);
+			sky = mix(LIGHT2_COLOR * LIGHT2_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT3_ENABLED) {
+		float sun_angle = acos(dot(LIGHT3_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT3_SIZE) {
+			sky = LIGHT3_COLOR * LIGHT3_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT3_SIZE) / (sun_angle_max - LIGHT3_SIZE);
+			sky = mix(LIGHT3_COLOR * LIGHT3_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	vec4 sky_cover_texture = texture(sky_cover, SKY_COORDS);
+	sky += (sky_cover_texture.rgb * sky_cover_modulate.rgb) * sky_cover_texture.a * sky_cover_modulate.a * sky_energy;
+
+	c = (v_angle - (PI * 0.5)) / (PI * 0.5);
+	vec3 ground = mix(ground_horizon_color.rgb, ground_bottom_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / ground_curve), 0.0, 1.0));
+	ground *= ground_energy;
+
+	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
+	vec3 clouds = texture(cloud_texture, sky_uv * cloud_scale + TIME * cloud_direction * cloud_speed).rgb - texture(cloud_texture2, sky_uv * cloud_scale + TIME * cloud_direction2 * cloud_speed2).rgb;
+	//clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
+	clouds = clamp(clouds, 0.0, 1.0);
+	sky += clouds;
+	
+	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_37kj5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0cs1n"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_37kj5")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mmi0g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_udx35"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_mmi0g")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lwqkh"]
+shader = SubResource("Shader_rdv83")
+shader_parameter/sky_top_color = Color(0.291673, 0.457424, 0.658811, 1)
+shader_parameter/sky_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
+shader_parameter/sky_curve = 0.15
+shader_parameter/sky_energy = 1.0
+shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
+shader_parameter/ground_bottom_color = Color(0.2, 0.169, 0.133, 1)
+shader_parameter/ground_horizon_color = Color(0.646, 0.656, 0.67, 1)
+shader_parameter/ground_curve = 0.02
+shader_parameter/ground_energy = 1.0
+shader_parameter/sun_angle_max = 0.523599
+shader_parameter/sun_curve = 0.15
+shader_parameter/exposure = 1.0
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_0cs1n")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_udx35")
+shader_parameter/cloud_direction = Vector2(-1, 1)
+shader_parameter/cloud_direction2 = Vector2(1, 0)
+shader_parameter/cloud_scale = Vector2(0.05, 0.05)
+shader_parameter/cloud_distance = 0.0
+shader_parameter/cloud_speed = 0.001
+shader_parameter/cloud_speed2 = 0.002
+
+[sub_resource type="Sky" id="Sky_m0hxs"]
+sky_material = SubResource("ShaderMaterial_lwqkh")
+
+[sub_resource type="Environment" id="Environment_f635r"]
+background_mode = 2
+sky = SubResource("Sky_m0hxs")
+tonemap_mode = 1
+glow_enabled = true
+glow_normalized = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4om81"]
+size = Vector3(38.3846, 2, 46.8104)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gcn7x"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_u85gn"]
+material = SubResource("StandardMaterial3D_gcn7x")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e84ga"]
+albedo_color = Color(0.0253638, 0.0253638, 0.0253638, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hbkay"]
+material = SubResource("StandardMaterial3D_e84ga")
+
+[node name="TennisTraining" type="Node"]
+script = ExtResource("1_gx02n")
+
+[node name="Player" parent="." instance=ExtResource("2_fqabv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.2728)
+
+[node name="GeneralSkeleton" parent="Player/Model/h/player/game-rig" index="0"]
+bones/0/position = Vector3(0.000686352, 0.94488394, 0.011421846)
+bones/1/rotation = Quaternion(-7.1861876e-05, -3.0258243e-10, 2.6884653e-10, 1)
+bones/2/rotation = Quaternion(2.8848e-07, 8.2014485e-05, 1.0979401e-05, 1)
+bones/3/rotation = Quaternion(-0.00024629073, 0.00023993406, -1.0923819e-05, 1)
+bones/4/rotation = Quaternion(-0.00021146837, 0.0001609729, 3.405337e-08, 1)
+bones/5/rotation = Quaternion(0.00037941904, -0.00024145961, 9.1617636e-08, 1)
+bones/6/rotation = Quaternion(-0.00013503135, -0.0023107054, -3.118639e-07, 0.9999973)
+bones/105/rotation = Quaternion(0.5001201, 0.500124, 0.49987656, -0.4998793)
+bones/106/position = Vector3(-0.008316567, 0.17441154, -0.03066137)
+bones/106/rotation = Quaternion(-0.48763466, -0.05706332, -0.15523809, 0.8572383)
+bones/107/rotation = Quaternion(0.21451685, 0.92771757, -0.18270095, 0.24483266)
+bones/108/rotation = Quaternion(-0.00028160322, 0.08588128, 0.09838687, 0.99143547)
+bones/109/rotation = Quaternion(0.07981434, -0.7252832, 0.19400626, 0.65571)
+bones/110/rotation = Quaternion(-0.17137285, -0.17959914, -0.25504392, 0.93452024)
+bones/111/rotation = Quaternion(0.18625219, 0.57415754, -0.31038636, 0.73437977)
+bones/131/rotation = Quaternion(0.5001201, -0.500124, -0.49987656, -0.4998793)
+bones/132/position = Vector3(0.008316583, 0.17441174, -0.030661404)
+bones/132/rotation = Quaternion(-0.5082414, 0.010679887, 0.082676455, 0.8571705)
+bones/133/rotation = Quaternion(-0.10328736, 0.9625882, -0.221309, -0.1173801)
+bones/134/rotation = Quaternion(-0.00051066844, -0.15572299, -0.17839871, 0.97155756)
+bones/135/rotation = Quaternion(0.06669087, 0.69891894, -0.34205157, 0.62455213)
+bones/159/rotation = Quaternion(0.99849325, 0.04355059, -0.0014637954, 0.033354912)
+bones/160/rotation = Quaternion(5.186136e-06, 5.1840058e-08, -2.5971181e-05, 1)
+bones/161/rotation = Quaternion(0.99846166, -0.04356045, 0.0014804067, 0.034271713)
+bones/162/rotation = Quaternion(-1.167776e-05, -1.5893418e-07, -5.8320522e-05, 1)
+bones/165/rotation = Quaternion(5.2845466e-05, -0.0005390844, 0.9999999, -8.799173e-05)
+bones/166/position = Vector3(-0.021526752, 0.24425238, 0.016920097)
+bones/166/rotation = Quaternion(8.177414e-07, -1.0174572e-05, -7.127687e-07, 1)
+bones/167/rotation = Quaternion(-2.1805237e-05, 0.99999744, -0.0022666682, 0.00023185543)
+bones/168/position = Vector3(0.025694853, 0.22999677, 0.008663647)
+bones/168/rotation = Quaternion(-4.9776318e-06, -4.401801e-05, -1.6285622e-06, 1)
+bones/169/rotation = Quaternion(-1.734827e-05, 0.7073781, -0.70683545, 7.8596604e-05)
+bones/171/rotation = Quaternion(0.00013950306, 0.0014175344, 0.999999, -0.00019935309)
+bones/172/position = Vector3(0.021527415, 0.24425961, 0.016920589)
+bones/172/rotation = Quaternion(2.3026953e-06, 2.691494e-05, 1.8707369e-06, 1)
+bones/173/rotation = Quaternion(5.244209e-06, 0.999998, -0.0020046819, -0.0002307295)
+bones/174/position = Vector3(-0.025695622, 0.23000367, 0.008663903)
+bones/174/rotation = Quaternion(5.294156e-06, -4.7881917e-05, -1.8300448e-06, 1)
+bones/175/rotation = Quaternion(-0.00017725366, 0.7067808, -0.7074326, 0.00012553541)
+
+[node name="racket" parent="Player/Model/h/player/game-rig/GeneralSkeleton" index="0"]
+transform = Transform3D(-0.19239894, -0.19628751, 0.9614848, -0.6530511, 0.7569374, 0.023849487, -0.73246557, -0.62331086, -0.2738197, 0.03925235, 1.4504112, 0.50695)
+
+[node name="AiPlayer2" parent="." instance=ExtResource("3_618rm")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -12.7524)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_f635r")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295, -0.446156, 0.44352, -0.777324, 0, 5.70078, 0)
+shadow_enabled = true
+
+[node name="Positions" type="Node3D" parent="."]
+
+[node name="SE" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994293, 0, 12.1442)
+
+[node name="NW" type="Marker3D" parent="Positions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972189, 0, -13.487)
+
+[node name="Ground2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground2"]
+shape = SubResource("BoxShape3D_4om81")
+
+[node name="Stadium" parent="." instance=ExtResource("4_guntq")]
+
+[node name="Cameras" parent="." instance=ExtResource("5_lrvso")]
+
+[node name="BallCanon" parent="." instance=ExtResource("6_l6sfg")]
+transform = Transform3D(-0.965659, 0, -0.259814, 0, 1, 0, 0.259814, 0, -0.965659, -3.82491, 0, -4.53048)
+velocity_length = 13.0
+shoot_off_angle = 5.0
+
+[node name="Marker3D2" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.1, -5.27)
+
+[node name="BallAimMarker" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.277424, 0, -8.44111e-08, 0, 0.107815, 0, 8.37798e-08, 0, 0.279514, 0, 0, 0)
+mesh = SubResource("CylinderMesh_u85gn")
+skeleton = NodePath("../..")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.322, 0.327529, 13.4815)
+
+[node name="TrajectoryDrawer" parent="Node3D" instance=ExtResource("8_xeshg")]
+skeleton = NodePath("../TrainingCenter")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1284.83, 0, 0, 0, 2.2935, 0, 0, 0, 1299.25, 0, -0.05, 0)
+mesh = SubResource("PlaneMesh_hbkay")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 36.8647, 22.2819)
+light_color = Color(0.605553, 0.539689, 0.02218, 1)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+shadow_enabled = true
+spot_range = 4096.0
+spot_attenuation = 0.15
+spot_angle = 11.22
+
+[node name="PauseMenu" parent="." instance=ExtResource("9_fqabv")]
+process_mode = 3
+metadata/_edit_use_anchors_ = true
+
+[editable path="Player"]
+[editable path="Player/Model"]
+[editable path="Player/Model/h/player"]
+[editable path="Stadium"]
+[editable path="Cameras"]
+[editable path="Cameras/Stadium"]
+[editable path="Cameras/Stadium/stadium"]

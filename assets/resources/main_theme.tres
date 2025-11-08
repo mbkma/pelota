@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=6 format=3 uid="uid://bxqcmd2k7v707"]
 
-[ext_resource type="Texture2D" uid="uid://c3y2p78a2crq1" path="res://assets/textures/menus/rect111.svg" id="1_a2l2q"]
+[ext_resource type="Texture2D" uid="uid://c3y2p78a2crq1" path="res://assets/textures/ui/menus/rect111.svg" id="1_a2l2q"]
 [ext_resource type="FontFile" uid="uid://bkyrq2b8hve32" path="res://assets/fonts/Outfit-Regular.otf" id="2_a2l2q"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_a2l2q"]

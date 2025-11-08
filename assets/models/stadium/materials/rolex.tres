@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cq7y6dwp1v0bp"]
 
-[ext_resource type="Texture2D" uid="uid://si5jt7ooak81" path="res://assets/models/stadium/textures/rolex-alpha.png" id="1_410xp"]
+[ext_resource type="Texture2D" uid="uid://si5jt7ooak81" path="res://assets/textures/environment/stadium/rolex-alpha.png" id="1_410xp"]
 
 [resource]
 resource_name = "rolex"

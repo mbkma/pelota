@@ -1,0 +1,166 @@
+[gd_scene load_steps=12 format=3 uid="uid://d3yiwgabkh58o"]
+
+[ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
+[ext_resource type="Script" uid="uid://cp7eliy5mm75n" path="res://scripts/ui/main_menu.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bcwuxgarbilrg" path="res://scripts/modes/match/tennis_match.tscn" id="2_35tjg"]
+[ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://scripts/ui/player-selector.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://58fqxcxqa0qr" path="res://scripts/modes/training/tennis_training.tscn" id="3_vob5f"]
+[ext_resource type="PackedScene" uid="uid://dglfvla4hwrbu" path="res://scripts/modes/career/new_career.tscn" id="4_0prml"]
+[ext_resource type="PackedScene" uid="uid://px6a2dg8cawb" path="res://addons/modular-settings-menu/scenes/settings.tscn" id="5_e2417"]
+[ext_resource type="PackedScene" uid="uid://dao2m7qjha6j2" path="res://scripts/ui/tournament-main-menu.tscn" id="5_yipxn"]
+[ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://scripts/ui/music_panel.tscn" id="6_u0nle"]
+[ext_resource type="PackedScene" uid="uid://bw3wmvsvqsbm5" path="res://scripts/ui/pelota_button.tscn" id="7_lnm77"]
+
+[sub_resource type="Gradient" id="Gradient_3p5o7"]
+offsets = PackedFloat32Array(0, 0.477551)
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 0, 1)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
+level_name = "MainMenuLevel"
+match_scence = ExtResource("2_35tjg")
+training_scence = ExtResource("3_vob5f")
+career_scence = ExtResource("4_0prml")
+tournament_scence = ExtResource("5_yipxn")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 2
+
+[node name="Title_Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 199.0
+offset_right = 738.0
+offset_bottom = 86.0
+theme = ExtResource("1")
+text = "Pelota"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenu" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -485.0
+offset_top = -86.55
+offset_right = 485.0
+offset_bottom = -56.55
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("1")
+theme_override_constants/separation = 33
+alignment = 1
+
+[node name="Start" parent="MainMenu" instance=ExtResource("7_lnm77")]
+layout_mode = 2
+text = "Start"
+
+[node name="Training" parent="MainMenu" instance=ExtResource("7_lnm77")]
+layout_mode = 2
+text = "Training"
+
+[node name="Tournament" parent="MainMenu" instance=ExtResource("7_lnm77")]
+layout_mode = 2
+text = "Tournament"
+
+[node name="Career" parent="MainMenu" instance=ExtResource("7_lnm77")]
+layout_mode = 2
+text = "Career"
+
+[node name="Settings" parent="MainMenu" instance=ExtResource("7_lnm77")]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" parent="MainMenu" instance=ExtResource("7_lnm77")]
+layout_mode = 2
+text = "Quit"
+
+[node name="StartMenu" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 91.0
+offset_top = 69.0
+offset_right = 639.0
+offset_bottom = 429.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu"]
+layout_mode = 2
+
+[node name="PlayerSelector" parent="StartMenu/HBoxContainer" instance=ExtResource("3")]
+layout_mode = 2
+
+[node name="PlayerSelector2" parent="StartMenu/HBoxContainer" instance=ExtResource("3")]
+layout_mode = 2
+player_index = 1
+
+[node name="Actions" type="HBoxContainer" parent="StartMenu"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="StartMenu/Actions"]
+layout_mode = 2
+text = "Back"
+
+[node name="Play" type="Button" parent="StartMenu/Actions"]
+layout_mode = 2
+text = "Play"
+
+[node name="SettingsMenu" parent="." node_paths=PackedStringArray("MenuPanelRef") instance=ExtResource("5_e2417")]
+visible = false
+layout_mode = 1
+MenuPanelRef = NodePath("../MainMenu")
+
+[node name="MusicPanel" parent="." instance=ExtResource("6_u0nle")]
+layout_mode = 1
+offset_left = -576.0
+offset_top = -648.0
+offset_right = -576.0
+offset_bottom = -648.0
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(543, 313)
+amount = 18
+lifetime = 6.35
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_rect_extents = Vector2(42.8, 1)
+gravity = Vector2(50, 20)
+orbit_velocity_min = 0.1
+orbit_velocity_max = 0.1
+scale_amount_min = 2.1
+scale_amount_max = 10.75
+color = Color(1, 1, 0, 1)
+color_ramp = SubResource("Gradient_3p5o7")
+hue_variation_min = 0.01
+hue_variation_max = 0.65
+
+[connection signal="pressed" from="MainMenu/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MainMenu/Training" to="." method="_on_training_pressed"]
+[connection signal="pressed" from="MainMenu/Tournament" to="." method="_on_tournament_pressed"]
+[connection signal="pressed" from="MainMenu/Career" to="." method="_on_career_pressed"]
+[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="StartMenu/Actions/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="StartMenu/Actions/Play" to="." method="_on_Play_pressed"]
+[connection signal="settings_menu_closed" from="SettingsMenu" to="." method="_on_settings_menu_settings_menu_closed"]
+
+[editable path="SettingsMenu"]
+[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Gameplay"]
+[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Graphics"]
+[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Controls"]
+[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Audio"]
+[editable path="SettingsMenu/DiscardChangesPopup"]

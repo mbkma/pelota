@@ -1,0 +1,61 @@
+[gd_scene load_steps=21 format=3 uid="uid://dnkjfx5fk78c1"]
+
+[ext_resource type="AudioStream" uid="uid://dt3xd6iqydbf1" path="res://assets/sounds/effects/umpire/0-15.ogg" id="2_eonia"]
+[ext_resource type="PackedScene" uid="uid://cdacr12b1vmyo" path="res://assets/models/umpire_chair/umpire_chair.blend" id="2_qv13u"]
+[ext_resource type="AudioStream" uid="uid://dxbmnv4ofonya" path="res://assets/sounds/effects/umpire/0-30.ogg" id="3_qey24"]
+[ext_resource type="AudioStream" uid="uid://ct2pjmgyh6esx" path="res://assets/sounds/effects/umpire/0-40.ogg" id="4_l2qjg"]
+[ext_resource type="AudioStream" uid="uid://24q3i36ef37e" path="res://assets/sounds/effects/umpire/15-0.ogg" id="5_65orh"]
+[ext_resource type="AudioStream" uid="uid://doaw66g8nwcey" path="res://assets/sounds/effects/umpire/30-0.ogg" id="6_grhre"]
+[ext_resource type="Script" uid="uid://0x60svm0lwgm" path="res://scripts/modes/match/umpire/umpire.gd" id="7"]
+[ext_resource type="AudioStream" uid="uid://ddnps5yngc7ai" path="res://assets/sounds/effects/umpire/40-0.ogg" id="7_vxyis"]
+[ext_resource type="AudioStream" uid="uid://ei1r0h8av4hv" path="res://assets/sounds/effects/umpire/advantage.ogg" id="8_ardl1"]
+[ext_resource type="AudioStream" uid="uid://bo6m84tlffwxd" path="res://assets/sounds/effects/umpire/out.wav" id="9_yggoj"]
+[ext_resource type="AudioStream" uid="uid://cvonpl75stb7o" path="res://assets/sounds/effects/umpire/second_serve.ogg" id="10_hradu"]
+[ext_resource type="AudioStream" uid="uid://bx2k242xw6w3g" path="res://assets/sounds/effects/umpire/15-15.ogg" id="11_hradu"]
+[ext_resource type="AudioStream" uid="uid://bsnukbfkytqem" path="res://assets/sounds/effects/umpire/15-30.ogg" id="12_a1ni2"]
+[ext_resource type="AudioStream" uid="uid://3t6nfchf0fru" path="res://assets/sounds/effects/umpire/30-15.ogg" id="13_5xaq4"]
+[ext_resource type="AudioStream" uid="uid://bbqseutn38dai" path="res://assets/sounds/effects/umpire/30-30.ogg" id="14_6pv4p"]
+[ext_resource type="AudioStream" uid="uid://0q70t68hex4s" path="res://assets/sounds/effects/umpire/30-40.ogg" id="15_3hrej"]
+[ext_resource type="AudioStream" uid="uid://wv2dpw77keu7" path="res://assets/sounds/effects/umpire/40-15.ogg" id="16_curdj"]
+[ext_resource type="AudioStream" uid="uid://c2ex7irmrjsw2" path="res://assets/sounds/effects/umpire/40-30.ogg" id="17_rr8j0"]
+[ext_resource type="AudioStream" uid="uid://dw3dk5rijt2ey" path="res://assets/sounds/effects/umpire/40-40.ogg" id="18_h4dv8"]
+
+[sub_resource type="BoxShape3D" id="4"]
+size = Vector3(1.20747, 2.9555, 1.21453)
+
+[node name="Umpire" type="Node3D"]
+script = ExtResource("7")
+umpire_sounds = Dictionary[String, AudioStream]({
+"0-1": ExtResource("2_eonia"),
+"0-2": ExtResource("3_qey24"),
+"0-3": ExtResource("4_l2qjg"),
+"1-0": ExtResource("5_65orh"),
+"1-1": ExtResource("11_hradu"),
+"1-2": ExtResource("12_a1ni2"),
+"1-3": ExtResource("12_a1ni2"),
+"2-0": ExtResource("6_grhre"),
+"2-1": ExtResource("13_5xaq4"),
+"2-2": ExtResource("14_6pv4p"),
+"2-3": ExtResource("15_3hrej"),
+"3-0": ExtResource("7_vxyis"),
+"3-1": ExtResource("16_curdj"),
+"3-2": ExtResource("17_rr8j0"),
+"3-3": ExtResource("18_h4dv8"),
+"advantage": ExtResource("8_ardl1"),
+"out": ExtResource("9_yggoj"),
+"second_serve": ExtResource("10_hradu")
+})
+
+[node name="umpire_chair" parent="." instance=ExtResource("2_qv13u")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49691, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47242, -2.39926)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Umpire"
