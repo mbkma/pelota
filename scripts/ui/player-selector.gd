@@ -44,10 +44,10 @@ func on_button_ready_pressed():
 
 func on_button_pressed(button_name):
 	if button_name == "Button_Next":
-		player_index = (player_index + 1) % GlobalGameData.player_data.size()
+		player_index = (player_index + 1) % GlobalScenes.PLAYER_DATA.size()
 		player_changed()
 	elif button_name == "Button_Prev":
-		player_index = (player_index - 1) % GlobalGameData.player_data.size()
+		player_index = (player_index - 1) % GlobalScenes.PLAYER_DATA.size()
 		player_changed()
 	elif button_name == "Button_Check":
 		check_button.visible = false

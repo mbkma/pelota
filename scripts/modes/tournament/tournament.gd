@@ -11,7 +11,7 @@ func _init():
 
 
 func generate_matches():
-	var players = GlobalGameData.player_data
+	var players = GlobalScenes.PLAYER_DATA
 	for i in range(0, players.size() - 1, 2):
 		singles_matches.append(MatchData.new(players[i], players[i + 1]))
 

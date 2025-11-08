@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://d3yiwgabkh58o"]
+[gd_scene load_steps=14 format=3 uid="uid://d3yiwgabkh58o"]
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
 [ext_resource type="Script" uid="uid://cp7eliy5mm75n" path="res://scripts/ui/main_menu.gd" id="2"]
@@ -11,9 +11,17 @@
 [ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://scenes/ui/music_panel.tscn" id="6_u0nle"]
 [ext_resource type="PackedScene" uid="uid://bw3wmvsvqsbm5" path="res://scenes/ui/pelota_button.tscn" id="7_lnm77"]
 
-[sub_resource type="Gradient" id="Gradient_3p5o7"]
-offsets = PackedFloat32Array(0, 0.477551)
-colors = PackedColorArray(0, 1, 0, 1, 1, 1, 0, 1)
+[sub_resource type="Gradient" id="Gradient_bg"]
+colors = PackedColorArray(0.05, 0.1, 0.15, 1, 0.1, 0.2, 0.25, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+width = 1920
+height = 1080
+
+[sub_resource type="Gradient" id="Gradient_particles"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.2, 0.8, 0.4, 1, 0.4, 1, 0.6, 0.5, 1, 1, 0.2, 0)
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -29,64 +37,128 @@ training_scence = ExtResource("3_vob5f")
 career_scence = ExtResource("4_0prml")
 tournament_scence = ExtResource("5_yipxn")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-visible = false
+[node name="BackgroundGradient" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = SubResource("GradientTexture2D_bg")
 expand_mode = 2
 
-[node name="Title_Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 199.0
-offset_right = 738.0
-offset_bottom = 86.0
+[node name="ParticlesTop" type="CPUParticles2D" parent="."]
+position = Vector2(300, 200)
+amount = 12
+lifetime = 8.0
+lifetime_randomness = 0.6
+emission_shape = 3
+emission_rect_extents = Vector2(100, 30)
+gravity = Vector2(20, 30)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.1
+orbit_velocity_max = 0.1
+scale_amount_min = 1.5
+scale_amount_max = 3.0
+color = Color(0.2, 0.8, 0.4, 0.8)
+color_ramp = SubResource("Gradient_particles")
+hue_variation_min = -0.3
+hue_variation_max = 0.3
+
+[node name="ParticlesBottom" type="CPUParticles2D" parent="."]
+position = Vector2(1620, 800)
+amount = 12
+lifetime = 8.0
+lifetime_randomness = 0.6
+emission_shape = 3
+emission_rect_extents = Vector2(100, 30)
+direction = Vector2(-1, 0)
+gravity = Vector2(-20, -30)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.1
+orbit_velocity_max = 0.1
+scale_amount_min = 1.5
+scale_amount_max = 3.0
+color = Color(1, 0.8, 0.2, 0.7)
+color_ramp = SubResource("Gradient_particles")
+hue_variation_min = -0.2
+hue_variation_max = 0.2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+
+[node name="TitlePanel" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer/TitlePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 30
+
+[node name="Title_Label" type="Label" parent="CenterContainer/VBoxContainer/TitlePanel/MarginContainer"]
+layout_mode = 2
 theme = ExtResource("1")
-text = "Pelota"
+theme_override_font_sizes/font_size = 120
+text = "PELOTA"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainMenu" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -485.0
-offset_top = -86.55
-offset_right = 485.0
-offset_bottom = -56.55
-grow_horizontal = 2
-grow_vertical = 0
-theme = ExtResource("1")
-theme_override_constants/separation = 33
+[node name="Spacer1" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="MenuContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Start" parent="MainMenu" instance=ExtResource("7_lnm77")]
+[node name="Start" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
-text = "Start"
+text = "Start Match"
 
-[node name="Training" parent="MainMenu" instance=ExtResource("7_lnm77")]
+[node name="Training" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Training"
 
-[node name="Tournament" parent="MainMenu" instance=ExtResource("7_lnm77")]
+[node name="Tournament" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Tournament"
 
-[node name="Career" parent="MainMenu" instance=ExtResource("7_lnm77")]
+[node name="Career" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Career"
 
-[node name="Settings" parent="MainMenu" instance=ExtResource("7_lnm77")]
+[node name="Settings" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Settings"
 
-[node name="Quit" parent="MainMenu" instance=ExtResource("7_lnm77")]
+[node name="Quit" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Quit"
 
@@ -122,7 +194,7 @@ text = "Play"
 [node name="SettingsMenu" parent="." node_paths=PackedStringArray("MenuPanelRef") instance=ExtResource("5_e2417")]
 visible = false
 layout_mode = 1
-MenuPanelRef = NodePath("../MainMenu")
+MenuPanelRef = NodePath("../CenterContainer/VBoxContainer/MenuContainer")
 
 [node name="MusicPanel" parent="." instance=ExtResource("6_u0nle")]
 layout_mode = 1
@@ -131,29 +203,12 @@ offset_top = -648.0
 offset_right = -576.0
 offset_bottom = -648.0
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-position = Vector2(543, 313)
-amount = 18
-lifetime = 6.35
-lifetime_randomness = 0.5
-emission_shape = 3
-emission_rect_extents = Vector2(42.8, 1)
-gravity = Vector2(50, 20)
-orbit_velocity_min = 0.1
-orbit_velocity_max = 0.1
-scale_amount_min = 2.1
-scale_amount_max = 10.75
-color = Color(1, 1, 0, 1)
-color_ramp = SubResource("Gradient_3p5o7")
-hue_variation_min = 0.01
-hue_variation_max = 0.65
-
-[connection signal="pressed" from="MainMenu/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="MainMenu/Training" to="." method="_on_training_pressed"]
-[connection signal="pressed" from="MainMenu/Tournament" to="." method="_on_tournament_pressed"]
-[connection signal="pressed" from="MainMenu/Career" to="." method="_on_career_pressed"]
-[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Training" to="." method="_on_training_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Tournament" to="." method="_on_tournament_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Career" to="." method="_on_career_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="StartMenu/Actions/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="StartMenu/Actions/Play" to="." method="_on_Play_pressed"]
 [connection signal="settings_menu_closed" from="SettingsMenu" to="." method="_on_settings_menu_settings_menu_closed"]

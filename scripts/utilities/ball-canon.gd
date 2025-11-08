@@ -29,7 +29,7 @@ func _process(_delta: float) -> void:
 			+ global_basis.y.normalized() * shoot_off_angle
 		)
 
-		var ball = GlobalUtils.BALL.instantiate()
+		var ball = GlobalScenes.BALL_SCENE.instantiate()
 		ball.initial_position = ball_spawn_marker_3d.global_position
 		ball.initial_velocity = initial_velocity
 		get_parent().add_child(ball)

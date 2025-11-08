@@ -26,8 +26,8 @@ func get_server() -> int:
 
 
 func simulate_result() -> void:
-	match_score.add_set([6, 0])
-	match_score.add_set([6, 0])
+	#todo
+	pass
 
 
 func add_point(team_index: int) -> void:

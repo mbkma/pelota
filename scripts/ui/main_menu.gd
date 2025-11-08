@@ -9,7 +9,7 @@ signal level_changed(level_name, init_data)
 @export var tournament_scence: PackedScene
 
 
-@onready var main_menu: HBoxContainer = $MainMenu
+@onready var main_menu: VBoxContainer = $CenterContainer/VBoxContainer/MenuContainer
 @onready var start_menu = $StartMenu
 @onready var play = start_menu.get_node("Actions/Play")
 @onready var settings_menu: SettingsMenu = $SettingsMenu
@@ -19,6 +19,9 @@ signal level_changed(level_name, init_data)
 	start_menu.get_node("HBoxContainer/PlayerSelector2"),
 ]
 
+@onready var back_button = start_menu.get_node("Actions/Back")
+@onready var first_main_menu_button = main_menu.get_child(0)
+
 var match_data
 
 
@@ -27,7 +30,6 @@ func init_scene():
 
 
 func _ready():
-	$MainMenu/Start.call_deferred("grab_focus")
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	player_selectors[0].input_select_button.text = "CPU"
@@ -39,6 +41,10 @@ func _ready():
 		p.selection_changed.connect(on_selection_changed)
 
 	GlobalScenes.music_player.play_track_list(GlobalScenes.music_player.music, true, true)
+
+	# Animate button entrance and set initial focus
+	_animate_buttons_entrance()
+	_show_main_menu()
 
 
 func on_selection_changed() -> void:
@@ -55,16 +61,18 @@ func _on_quit_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	hide_all_menus()
+	main_menu.hide()
 	settings_menu.show()
+	_focus_settings_menu()
 
 
 func _on_Back_pressed() -> void:
-	hide_all_menus()
+	start_menu.hide()
+	_show_main_menu()
 
 
 func _on_Play_pressed() -> void:
-	GlobalScenes.music_player.stop()
+	GlobalScenes.music_player.stop_music()
 
 	var players_data := []
 	for ps in player_selectors:
@@ -74,6 +82,10 @@ func _on_Play_pressed() -> void:
 		players_data.append(player_data)
 
 	match_data = MatchData.new(players_data[0], players_data[1])
+
+	level_changed.emit(
+		match_scence, null
+	)
 
 	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	#print({"match_data": match_data, "world": world})
@@ -88,9 +100,14 @@ func _on_tournament_pressed() -> void:
 	level_changed.emit(tournament_scence, null)
 
 
-func hide_all_menus() -> void:
-	start_menu.hide()
-	main_menu.hide()
+func _show_main_menu() -> void:
+	main_menu.show()
+	first_main_menu_button.call_deferred("grab_focus")
+
+
+func _show_start_menu() -> void:
+	start_menu.show()
+	player_selectors[0].call_deferred("grab_focus")
 
 
 func _on_career_pressed() -> void:
@@ -104,10 +121,48 @@ func _on_training_pressed() -> void:
 
 
 func _on_settings_menu_settings_menu_closed() -> void:
-	main_menu.show()
+	settings_menu.hide()
+	_show_main_menu()
 
 
 func _on_start_pressed() -> void:
-	#start_menu.visible = not start_menu.visible
-	level_changed.emit(match_scence, null)
-	#SceneManager.swap_scenes("res://src/modes/tennis_session/tennis_match.tscn", null, self)
+	_show_start_menu()
+
+
+func _animate_buttons_entrance() -> void:
+	var buttons = main_menu.get_children()
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.set_trans(Tween.TRANS_BACK)
+	tween.set_ease(Tween.EASE_OUT)
+
+	for i in range(buttons.size()):
+		var button = buttons[i]
+		button.modulate.a = 0.0
+		button.scale = Vector2(0.8, 0.8)
+
+		tween.tween_property(button, "modulate:a", 1.0, 0.6).set_delay(i * 0.1)
+		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.6).set_delay(i * 0.1)
+
+	await tween.finished
+
+
+func _focus_settings_menu() -> void:
+	# Find the first focusable element in the settings menu
+	settings_menu.call_deferred("grab_focus")
+	var first_focusable = _find_first_focusable(settings_menu)
+	if first_focusable:
+		first_focusable.call_deferred("grab_focus")
+
+
+func _find_first_focusable(node: Node) -> Control:
+	if node is Control:
+		if node.focus_mode == Control.FOCUS_ALL:
+			return node as Control
+
+	for child in node.get_children():
+		var result = _find_first_focusable(child)
+		if result:
+			return result
+
+	return null
