@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="StrokeAnimation" load_steps=2 format=3 uid="uid://c0g755dt2v62g"]
+
+[ext_resource type="Script" uid="uid://b0u67k5bc8g6l" path="res://scripts/core/stroke_animation.gd" id="1_sxun2"]
+
+[resource]
+script = ExtResource("1_sxun2")
+name = "serve"
+hit_zone = [0.6, 1.0]
+metadata/_custom_type_script = "uid://b0u67k5bc8g6l"

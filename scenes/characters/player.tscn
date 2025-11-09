@@ -1,11 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dkonwbmg06m5n"]
+[gd_scene load_steps=11 format=3 uid="uid://dkonwbmg06m5n"]
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scripts/characters/player.gd" id="1"]
 [ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="2_uxa8p"]
-[ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scripts/characters/model.tscn" id="3_lm2ok"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scripts/characters/inputs/ai/ai_input.tscn" id="3_u0krv"]
+[ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/characters/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scripts/characters/inputs/keyboard_input.tscn" id="4_gnr23"]
 [ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/effects/strokes/stroke_flat_2.wav" id="4_p4hr7"]
 [ext_resource type="AudioStream" uid="uid://7ulnk6wumimm" path="res://assets/sounds/effects/strokes/stroke_flat_3.wav" id="5_drsim"]
 [ext_resource type="AudioStream" uid="uid://dkhg5enkwrhu8" path="res://assets/sounds/effects/strokes/stroke_slice_1.wav" id="6_xtirx"]
@@ -18,8 +16,6 @@ height = 1.58024
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera") groups=["Player"]]
 script = ExtResource("1")
-ai_input = ExtResource("3_u0krv")
-human_input = ExtResource("4_gnr23")
 player_data = ExtResource("2_uxa8p")
 camera = NodePath("Camera3D")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
@@ -78,7 +74,7 @@ bones/174/rotation = Quaternion(9.4814385e-07, -8.983401e-06, -3.6477135e-07, 1)
 bones/175/rotation = Quaternion(-0.00012275447, 0.7067628, -0.7074506, 7.267016e-05)
 
 [node name="racket" parent="Model/h/player/game-rig/GeneralSkeleton" index="0"]
-transform = Transform3D(-0.19661707, -0.18654479, 0.96257013, -0.6519813, 0.75810957, 0.01374504, -0.73229843, -0.6248762, -0.2706813, 0.04110977, 1.4501379, 0.51074266)
+transform = Transform3D(0.40896657, 0.91176707, 0.03776923, -0.8122027, 0.38255215, -0.4404301, -0.4160182, 0.14944513, 0.89699113, -0.4252264, 1.3199025, 0.17648973)
 
 [node name="AnimationTreeRootMotion" parent="Model" index="4"]
 parameters/stroke/Transition/current_state = ""

@@ -26,15 +26,9 @@ signal ball_spawned(ball: Ball)
 ## Emitted when input method is changed
 signal input_changed(timing: float)
 
-@export var ai_input: PackedScene
-@export var human_input: PackedScene
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-
-
-enum InputType { KEYBOARD, CONTROLLER, AI }
-@export var input: InputType
 @export var input_node: InputMethod
 @export var player_data: PlayerData
 @export var stats: Dictionary = {}
