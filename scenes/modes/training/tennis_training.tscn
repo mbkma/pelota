@@ -1,13 +1,15 @@
 [gd_scene load_steps=22 format=3 uid="uid://58fqxcxqa0qr"]
 
 [ext_resource type="Script" uid="uid://b2ln7l4birgbu" path="res://scripts/modes/training/tennis_training.gd" id="1_gx02n"]
-[ext_resource type="PackedScene" uid="uid://bujaw8qgawaj8" path="res://scripts/characters/humanPlayer.tscn" id="2_fqabv"]
-[ext_resource type="PackedScene" uid="uid://fdj1nvw8fcxn" path="res://scripts/characters/AiPlayer.tscn" id="3_618rm"]
-[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scripts/environment/world/us_open/stadium.tscn" id="4_guntq"]
-[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scripts/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
-[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scripts/utilities/ball-canon.tscn" id="6_l6sfg"]
-[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scripts/utilities/trajectory_drawer.tscn" id="8_xeshg"]
-[ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scripts/ui/pause_menu.tscn" id="9_fqabv"]
+[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_tjnrq"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/keyboard_input.tscn" id="3_4chpy"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_input.tscn" id="4_ci6ek"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="4_guntq"]
+[ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="5_d51he"]
+[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
+[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/utilities/ball_canon.tscn" id="6_l6sfg"]
+[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/trajectory_drawer.tscn" id="8_xeshg"]
+[ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scenes/ui/pause_menu.tscn" id="9_fqabv"]
 
 [sub_resource type="Shader" id="Shader_rdv83"]
 code = "
@@ -154,12 +156,6 @@ glow_normalized = true
 [sub_resource type="BoxShape3D" id="BoxShape3D_4om81"]
 size = Vector3(38.3846, 2, 46.8104)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gcn7x"]
-albedo_color = Color(1, 0, 0, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_u85gn"]
-material = SubResource("StandardMaterial3D_gcn7x")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e84ga"]
 albedo_color = Color(0.0253638, 0.0253638, 0.0253638, 1)
 
@@ -169,55 +165,14 @@ material = SubResource("StandardMaterial3D_e84ga")
 [node name="TennisTraining" type="Node"]
 script = ExtResource("1_gx02n")
 
-[node name="Player" parent="." instance=ExtResource("2_fqabv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.2728)
+[node name="Player" parent="." instance=ExtResource("2_tjnrq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.989744)
+input_scene = ExtResource("3_4chpy")
 
-[node name="GeneralSkeleton" parent="Player/Model/h/player/game-rig" index="0"]
-bones/0/position = Vector3(0.000686352, 0.94488394, 0.011421846)
-bones/1/rotation = Quaternion(-7.1861876e-05, -3.0258243e-10, 2.6884653e-10, 1)
-bones/2/rotation = Quaternion(2.8848e-07, 8.2014485e-05, 1.0979401e-05, 1)
-bones/3/rotation = Quaternion(-0.00024629073, 0.00023993406, -1.0923819e-05, 1)
-bones/4/rotation = Quaternion(-0.00021146837, 0.0001609729, 3.405337e-08, 1)
-bones/5/rotation = Quaternion(0.00037941904, -0.00024145961, 9.1617636e-08, 1)
-bones/6/rotation = Quaternion(-0.00013503135, -0.0023107054, -3.118639e-07, 0.9999973)
-bones/105/rotation = Quaternion(0.5001201, 0.500124, 0.49987656, -0.4998793)
-bones/106/position = Vector3(-0.008316567, 0.17441154, -0.03066137)
-bones/106/rotation = Quaternion(-0.48763466, -0.05706332, -0.15523809, 0.8572383)
-bones/107/rotation = Quaternion(0.21451685, 0.92771757, -0.18270095, 0.24483266)
-bones/108/rotation = Quaternion(-0.00028160322, 0.08588128, 0.09838687, 0.99143547)
-bones/109/rotation = Quaternion(0.07981434, -0.7252832, 0.19400626, 0.65571)
-bones/110/rotation = Quaternion(-0.17137285, -0.17959914, -0.25504392, 0.93452024)
-bones/111/rotation = Quaternion(0.18625219, 0.57415754, -0.31038636, 0.73437977)
-bones/131/rotation = Quaternion(0.5001201, -0.500124, -0.49987656, -0.4998793)
-bones/132/position = Vector3(0.008316583, 0.17441174, -0.030661404)
-bones/132/rotation = Quaternion(-0.5082414, 0.010679887, 0.082676455, 0.8571705)
-bones/133/rotation = Quaternion(-0.10328736, 0.9625882, -0.221309, -0.1173801)
-bones/134/rotation = Quaternion(-0.00051066844, -0.15572299, -0.17839871, 0.97155756)
-bones/135/rotation = Quaternion(0.06669087, 0.69891894, -0.34205157, 0.62455213)
-bones/159/rotation = Quaternion(0.99849325, 0.04355059, -0.0014637954, 0.033354912)
-bones/160/rotation = Quaternion(5.186136e-06, 5.1840058e-08, -2.5971181e-05, 1)
-bones/161/rotation = Quaternion(0.99846166, -0.04356045, 0.0014804067, 0.034271713)
-bones/162/rotation = Quaternion(-1.167776e-05, -1.5893418e-07, -5.8320522e-05, 1)
-bones/165/rotation = Quaternion(5.2845466e-05, -0.0005390844, 0.9999999, -8.799173e-05)
-bones/166/position = Vector3(-0.021526752, 0.24425238, 0.016920097)
-bones/166/rotation = Quaternion(8.177414e-07, -1.0174572e-05, -7.127687e-07, 1)
-bones/167/rotation = Quaternion(-2.1805237e-05, 0.99999744, -0.0022666682, 0.00023185543)
-bones/168/position = Vector3(0.025694853, 0.22999677, 0.008663647)
-bones/168/rotation = Quaternion(-4.9776318e-06, -4.401801e-05, -1.6285622e-06, 1)
-bones/169/rotation = Quaternion(-1.734827e-05, 0.7073781, -0.70683545, 7.8596604e-05)
-bones/171/rotation = Quaternion(0.00013950306, 0.0014175344, 0.999999, -0.00019935309)
-bones/172/position = Vector3(0.021527415, 0.24425961, 0.016920589)
-bones/172/rotation = Quaternion(2.3026953e-06, 2.691494e-05, 1.8707369e-06, 1)
-bones/173/rotation = Quaternion(5.244209e-06, 0.999998, -0.0020046819, -0.0002307295)
-bones/174/position = Vector3(-0.025695622, 0.23000367, 0.008663903)
-bones/174/rotation = Quaternion(5.294156e-06, -4.7881917e-05, -1.8300448e-06, 1)
-bones/175/rotation = Quaternion(-0.00017725366, 0.7067808, -0.7074326, 0.00012553541)
-
-[node name="racket" parent="Player/Model/h/player/game-rig/GeneralSkeleton" index="0"]
-transform = Transform3D(-0.19239894, -0.19628751, 0.9614848, -0.6530511, 0.7569374, 0.023849487, -0.73246557, -0.62331086, -0.2738197, 0.03925235, 1.4504112, 0.50695)
-
-[node name="AiPlayer2" parent="." instance=ExtResource("3_618rm")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -12.7524)
+[node name="Player2" parent="." instance=ExtResource("2_tjnrq")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, -12.423061)
+input_scene = ExtResource("4_ci6ek")
+player_data = ExtResource("5_d51he")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f635r")
@@ -252,11 +207,6 @@ shoot_off_angle = 5.0
 [node name="Marker3D2" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.1, -5.27)
 
-[node name="BallAimMarker" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.277424, 0, -8.44111e-08, 0, 0.107815, 0, 8.37798e-08, 0, 0.279514, 0, 0, 0)
-mesh = SubResource("CylinderMesh_u85gn")
-skeleton = NodePath("../..")
-
 [node name="Node3D" type="Node3D" parent="."]
 
 [node name="Marker3D" type="Marker3D" parent="Node3D"]
@@ -284,9 +234,6 @@ spot_angle = 11.22
 process_mode = 3
 metadata/_edit_use_anchors_ = true
 
-[editable path="Player"]
-[editable path="Player/Model"]
-[editable path="Player/Model/h/player"]
 [editable path="Stadium"]
 [editable path="Cameras"]
 [editable path="Cameras/Stadium"]

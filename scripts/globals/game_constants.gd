@@ -78,7 +78,7 @@ const BACKHAND_SLICE_POWER: float = 20.0
 const BACKHAND_SLICE_SPIN: float = -5.0
 
 ## Animation hit time as proportion of animation (forehand default)
-const ANIMATION_HIT_TIME: float = 0.37
+const ANIMATION_HIT_TIME: float = 0.63
 
 # ============================================================================
 # AI CONSTANTS

@@ -4,64 +4,72 @@ extends CanvasLayer
 ## Reference to match manager for accessing game state
 @export var match_manager: MatchManager
 
-## Debug menu display style enumeration
-enum Style {
-	HIDDEN,  ## Debug menu is hidden
-	VISIBLE_COMPACT,  ## Debug menu visible with minimal stats
-	VISIBLE_DETAILED,  ## Debug menu visible with all stats
-	MAX,  ## Size of enum for wrapping
-}
+## Reference to trajectory drawer
+@export var _trajectory_drawer: TrajectoryDrawer
 
-## Current debug menu display style
-var _style: Style = Style.HIDDEN:
-	set(value):
-		_style = value
-		match _style:
-			Style.HIDDEN:
-				visible = false
-			Style.VISIBLE_COMPACT, Style.VISIBLE_DETAILED:
-				visible = true
+# Tab containers and content
+@onready var _tab_container: TabContainer = $DebugHud/TabContainer
+
+# Performance labels
+@onready var _fps_label: Label = $DebugHud/TabContainer/Performance/VBox/FPS/Value
+@onready var _frametime_label: Label = $DebugHud/TabContainer/Performance/VBox/FrameTime/Value
 
 # Match state labels
-@onready var _match_state_label: Label = $DebugHud/VBoxContainer/MatchState/Value
-@onready var _server_label: Label = $DebugHud/VBoxContainer/Server/Value
-@onready var _serve_zone_label: Label = $DebugHud/VBoxContainer/ServeZone/Value
-@onready var _rally_zone_label: Label = $DebugHud/VBoxContainer/RallyZone/Value
-@onready var _ground_contacts_label: Label = $DebugHud/VBoxContainer/GroundContacts/Value
-@onready var _last_hitter_label: Label = $DebugHud/VBoxContainer/LastHitter/Value
-@onready var _rally_length_label: Label = $DebugHud/VBoxContainer/RallyLength/Value
+@onready var _match_state_label: Label = $DebugHud/TabContainer/Match/VBox/State/Value
+@onready var _server_label: Label = $DebugHud/TabContainer/Match/VBox/Server/Value
+@onready var _serve_zone_label: Label = $DebugHud/TabContainer/Match/VBox/ServeZone/Value
+@onready var _rally_zone_label: Label = $DebugHud/TabContainer/Match/VBox/RallyZone/Value
+@onready var _ground_contacts_label: Label = $DebugHud/TabContainer/Match/VBox/GroundContacts/Value
+@onready var _last_hitter_label: Label = $DebugHud/TabContainer/Match/VBox/LastHitter/Value
+@onready var _rally_length_label: Label = $DebugHud/TabContainer/Match/VBox/RallyLength/Value
 
 # Player 0 stat labels
-@onready var _p0_name_label: Label = $DebugHud/VBoxContainer/Player0/Name/Value
-@onready var _p0_position_label: Label = $DebugHud/VBoxContainer/Player0/Position/Value
-@onready var _p0_velocity_label: Label = $DebugHud/VBoxContainer/Player0/Velocity/Value
-@onready var _p0_endurance_label: Label = $DebugHud/VBoxContainer/Player0/Endurance/Value
-@onready var _p0_speed_label: Label = $DebugHud/VBoxContainer/Player0/Speed/Value
+@onready var _p0_name_label: Label = $DebugHud/TabContainer/Player0/VBox/Name/Value
+@onready var _p0_position_label: Label = $DebugHud/TabContainer/Player0/VBox/Position/Value
+@onready var _p0_velocity_label: Label = $DebugHud/TabContainer/Player0/VBox/Velocity/Value
 
 # Player 1 stat labels
-@onready var _p1_name_label: Label = $DebugHud/VBoxContainer/Player1/Name/Value
-@onready var _p1_position_label: Label = $DebugHud/VBoxContainer/Player1/Position/Value
-@onready var _p1_velocity_label: Label = $DebugHud/VBoxContainer/Player1/Velocity/Value
-@onready var _p1_endurance_label: Label = $DebugHud/VBoxContainer/Player1/Endurance/Value
-@onready var _p1_speed_label: Label = $DebugHud/VBoxContainer/Player1/Speed/Value
+@onready var _p1_name_label: Label = $DebugHud/TabContainer/Player1/VBox/Name/Value
+@onready var _p1_position_label: Label = $DebugHud/TabContainer/Player1/VBox/Position/Value
+@onready var _p1_velocity_label: Label = $DebugHud/TabContainer/Player1/VBox/Velocity/Value
 
 # Ball stat labels
-@onready var _ball_position_label: Label = $DebugHud/VBoxContainer/Ball/Position/Value
-@onready var _ball_velocity_label: Label = $DebugHud/VBoxContainer/Ball/Velocity/Value
+@onready var _ball_position_label: Label = $DebugHud/TabContainer/Ball/VBox/Position/Value
+@onready var _ball_velocity_label: Label = $DebugHud/TabContainer/Ball/VBox/Velocity/Value
+
+# Trajectory toggle
+@onready var _trajectory_button: CheckButton = $DebugHud/TabContainer/Ball/VBox/TrajectoryToggle
+
+
+## Initialize debug HUD
+func _ready() -> void:
+	# Start hidden
+	self.visible = false
+	_trajectory_button.toggled.connect(_toggle_trajectory)
 
 
 ## Handle debug menu toggle input
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("game_debug_menu"):
-		_style = wrapi(_style + 1, 0, Style.MAX) as Style
+		self.visible = not self.visible
 
 
 ## Update debug display each frame if visible
 func _process(_delta: float) -> void:
 	if visible:
+		_update_performance_stats(_delta)
 		_update_match_stats()
 		_update_player_stats()
 		_update_ball_stats()
+
+
+## Update performance metrics
+func _update_performance_stats(_delta: float) -> void:
+	var fps: int = Engine.get_frames_per_second()
+	var frametime_ms: float = _delta * 1000.0
+
+	_fps_label.text = str(fps)
+	_frametime_label.text = "%.2f ms" % frametime_ms
 
 
 ## Update match state statistics display
@@ -94,16 +102,12 @@ func _update_player_stats() -> void:
 	_p0_name_label.text = p0.player_data.last_name
 	_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_p0_velocity_label.text = "%.2f" % p0.velocity.length()
-	_p0_endurance_label.text = str(p0.player_data.stats.get("endurance", 0))
-	_p0_speed_label.text = str(p0.player_data.stats.get("speed", 0))
 
 	# Player 1 stats
 	var p1: Player = match_manager.player1
 	_p1_name_label.text = p1.player_data.last_name
 	_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_p1_velocity_label.text = "%.2f" % p1.velocity.length()
-	_p1_endurance_label.text = str(p1.player_data.stats.get("endurance", 0))
-	_p1_speed_label.text = str(p1.player_data.stats.get("speed", 0))
 
 
 ## Update ball position and velocity display
@@ -141,3 +145,9 @@ func _match_state_to_string(value: MatchManager.MatchState) -> String:
 		MatchManager.MatchState.GAME_OVER: "GAME_OVER",
 	}
 	return enum_map.get(value, "UNKNOWN")
+
+
+## Toggle ball trajectory drawing
+func _toggle_trajectory(enabled: bool) -> void:
+	if _trajectory_drawer:
+		_trajectory_drawer.visible = enabled

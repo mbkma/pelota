@@ -29,14 +29,14 @@ signal input_changed(timing: float)
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-@export var input_node: InputMethod
+@export var input_scene: PackedScene
 @export var player_data: PlayerData
 @export var stats: Dictionary = {}
 @export var camera: Camera3D
 @export var ball: Ball
 @export var move_speed: float = 5.0
 @export var team_index: int = 0
-@export var ball_aim_marker: MeshInstance3D
+@export var ball_aim_marker: BallAimMarker
 
 ## Flat stroke sound effects
 @export var stroke_sounds_flat: Array[AudioStream]
@@ -46,6 +46,8 @@ signal input_changed(timing: float)
 
 ## Currently queued stroke to execute
 var queued_stroke: Stroke
+
+var input_node
 
 ## Current movement velocity
 var _move_velocity: Vector3 = Vector3.ZERO
@@ -73,7 +75,8 @@ func _ready() -> void:
 	$Label3D.text = player_data.last_name
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
-
+	input_node = input_scene.instantiate()
+	add_child(input_node)
 
 ## Request the input handler to initiate a serve
 func request_serve() -> void:
@@ -107,8 +110,16 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 		_root_motion_movement(direction, delta)
 		return
 
+	# Separate animation direction from movement direction
+	# For small movements, play idle animation but still move the player
+	var animation_direction: Vector3 = direction
+	if _path.size() > 0:
+		var distance_to_target: float = position.distance_to(_path[0])
+		if distance_to_target < 0.5:  # Small distance threshold - no animation
+			animation_direction = Vector3.ZERO
+
 	direction = direction.normalized()
-	model.set_move_direction(direction)
+	model.set_move_direction(animation_direction)
 
 	_move_velocity.x = direction.x * move_speed
 	_move_velocity.z = direction.z * move_speed
@@ -225,20 +236,30 @@ func cancel_stroke() -> void:
 
 ## Execute a serve with given stroke
 func serve(stroke: Stroke) -> void:
+	queued_stroke = stroke
 	model.set_stroke(stroke)
 	model.transition_to(model.States.STROKE)
+	print(queued_stroke)
+	# Animation callbacks will handle spawning ball and hitting it
 
+
+## Called by serve animation to hit the ball
+func from_anim_hit_serve() -> void:
+	print(queued_stroke)
+	
+	if queued_stroke and ball:
+		_hit_ball(ball, queued_stroke)
+		just_served.emit()
+
+## Called by serve animation to spawn the ball at toss point
+func from_anim_spawn_ball() -> void:
 	ball = GlobalScenes.BALL_SCENE.instantiate()
 	ball.initial_position = position + model.toss_point
-	ball.initial_velocity = Vector3(0, 6, 0)
+	ball.initial_velocity = Vector3(0, 5, 0)
 	get_parent().add_child(ball)
 	ball_spawned.emit(ball)
-
 	get_tree().call_group("Player", "set_active_ball", ball)
-	await get_tree().create_timer(GameConstants.FAULT_DELAY).timeout
-
-	_hit_ball(ball, stroke)
-	just_served.emit()
+	print(queued_stroke)
 
 
 ## Other Functions
@@ -271,11 +292,9 @@ func play_stroke_sound(stroke: Stroke) -> void:
 		stream = _get_grunt_sound()
 	else:
 		if stroke.stroke_type == stroke.StrokeType.BACKHAND_SLICE:
-			if stroke_sounds_slice.size() > 0:
-				stream = stroke_sounds_slice[randi() % stroke_sounds_slice.size()]
+			stream = stroke_sounds_slice[randi() % stroke_sounds_slice.size()]
 		else:
-			if stroke_sounds_flat.size() > 0:
-				stream = stroke_sounds_flat[randi() % stroke_sounds_flat.size()]
+			stream = stroke_sounds_flat[randi() % stroke_sounds_flat.size()]
 
 	if stream:
 		audio_stream_player.stream = stream

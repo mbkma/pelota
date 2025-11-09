@@ -7,6 +7,7 @@ signal level_changed(level_name, init_data)
 @export var training_scence: PackedScene
 @export var career_scence: PackedScene
 @export var tournament_scence: PackedScene
+@export var music_enabled := false
 
 
 @onready var main_menu: VBoxContainer = $CenterContainer/VBoxContainer/MenuContainer
@@ -40,7 +41,8 @@ func _ready():
 	for p in player_selectors:
 		p.selection_changed.connect(on_selection_changed)
 
-	GlobalScenes.music_player.play_track_list(GlobalScenes.music_player.music, true, true)
+	if music_enabled:
+		GlobalScenes.music_player.play_track_list(GlobalScenes.music_player.music, true, true)
 
 	# Animate button entrance and set initial focus
 	_animate_buttons_entrance()
@@ -126,7 +128,12 @@ func _on_settings_menu_settings_menu_closed() -> void:
 
 
 func _on_start_pressed() -> void:
-	_show_start_menu()
+	GlobalScenes.music_player.stop_music()
+	level_changed.emit(
+		match_scence, null
+	)
+	
+	#_show_start_menu()
 
 
 func _animate_buttons_entrance() -> void:

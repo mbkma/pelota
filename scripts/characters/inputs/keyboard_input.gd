@@ -6,8 +6,6 @@ extends InputMethod
 ## Local signal for aiming position (parent class has aiming_at_position)
 signal aiming_at_pos(position: Vector3)
 
-@export var ball_aim_marker: MeshInstance3D
-
 ## Input state flags
 var _move_input_blocked: bool = false
 var _stroke_input_blocked: bool = true
@@ -28,15 +26,15 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 
-	if not ball_aim_marker:
+	if not player.ball_aim_marker:
 		push_error("HumanInput: ball_aim_marker not assigned in editor")
 		set_process(false)
 		return
 
 	await get_tree().create_timer(GameConstants.INPUT_STARTUP_DELAY).timeout
 	_stroke_input_blocked = false
-	ball_aim_marker.position = _get_default_aim()
-	ball_aim_marker.visible = true
+	player.ball_aim_marker.global_position = _get_default_aim()
+	player.ball_aim_marker.visible = true
 	player.ball_hit.connect(_on_player_ball_hit)
 
 
@@ -61,8 +59,8 @@ func _process(_delta: float) -> void:
 			pace_changed.emit(_input_pace)
 			_mouse_to = get_viewport().get_mouse_position()
 			_aiming_at = _get_aim_pos(_mouse_from, _mouse_to)
-			ball_aim_marker.position = _aiming_at
-			ball_aim_marker.visible = true
+			player.ball_aim_marker.global_position = _aiming_at
+			player.ball_aim_marker.visible = true
 
 		if Input.is_action_just_released("strike"):
 			if _serve_controls:
@@ -200,7 +198,7 @@ func _do_stroke(aim_position: Vector3, pace: float) -> void:
 ## Clears stroke input state after executing a stroke
 func _clear_stroke_input() -> void:
 	_input_pace = 0.0
-	ball_aim_marker.visible = false
+	player.ball_aim_marker.visible = false
 
 
 ## Constructs a stroke from player input, determining stroke type based on ball position

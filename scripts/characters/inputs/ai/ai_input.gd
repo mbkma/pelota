@@ -3,7 +3,7 @@ class_name AiInput
 extends InputMethod
 
 ## Available tactics for AI decision-making
-@export var tactics: Dictionary[String, Script] 
+@export var tactics: Dictionary[String, Script]
 
 ## Current tactic instance for stroke computation
 var _current_tactic: Object
@@ -28,6 +28,9 @@ func _ready() -> void:
 	_current_tactic = _current_tactic.new()
 	_current_tactic.setup(player)
 	_pivot_point = Vector3(0, 0, sign(player.position.z) * GameConstants.COURT_LENGTH_HALF)
+
+	# Connect to ball_hit signal to move to defensive position
+	player.ball_hit.connect(_on_ball_hit)
 
 
 ## Request the AI to serve
@@ -60,8 +63,8 @@ func _process(_delta: float) -> void:
 
 			_do_stroke(closest_step)
 
-	if dist < 0 or player.ball.velocity.length() < 0.1:
-		player.cancel_stroke()
+	# if dist < 0 or player.ball.velocity.length() < 0.1:
+	# 	player.cancel_stroke()
 
 
 ## Process movement decisions
@@ -119,3 +122,51 @@ func make_serve() -> void:
 ## Setup AI for match manager integration
 func setup(_match_manager: Object) -> void:
 	pass
+
+
+## Called when AI player hits the ball - move to defensive position
+func _on_ball_hit() -> void:
+	if not validate_player() or not player.ball:
+		return
+
+	# Calculate the position where opponent might hit the ball
+	var closest_step: TrajectoryStep = GlobalUtils.get_closest_trajectory_step(player)
+	if not closest_step:
+		return
+
+	var opponent_hit_position: Vector3 = closest_step.point
+
+	# Calculate angle bisector position (best defensive position)
+	var defensive_position: Vector3 = _calculate_angle_bisector_position(opponent_hit_position)
+
+	# Move to the calculated position
+	player.move_to(defensive_position)
+
+
+## Calculate the angle bisector position (best defensive position)
+## Returns the point that maximizes angle coverage to both corners
+func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vector3:
+	var court_width: float = GameConstants.COURT_WIDTH / 2.0
+	var court_depth: float = GameConstants.COURT_LENGTH_HALF
+
+	# Determine which side of court the opponent is hitting from
+	var opponent_side: float = sign(opponent_hit_position.z)
+
+	# The two extreme points the opponent could hit to (far corners on AI's side)
+	var corner_left: Vector3 = Vector3(-court_width, 0, -opponent_side * court_depth)
+	var corner_right: Vector3 = Vector3(court_width, 0, -opponent_side * court_depth)
+
+	# Calculate vectors from opponent hit position to both corners
+	var to_left: Vector3 = (corner_left - opponent_hit_position).normalized()
+	var to_right: Vector3 = (corner_right - opponent_hit_position).normalized()
+
+	# The bisector direction is the average of the two directions
+	var bisector_direction: Vector3 = (to_left + to_right).normalized()
+
+	# Position AI along the bisector, at a reasonable distance from opponent
+	# The distance should be based on court positioning (around the baseline)
+	var baseline_z: float = opponent_side * court_depth * 0.8
+	var defensive_position: Vector3 = opponent_hit_position + bisector_direction * 5.0
+	defensive_position.z = baseline_z
+
+	return defensive_position

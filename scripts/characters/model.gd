@@ -24,7 +24,7 @@ var player: Player
 @export var _movement_animations: Dictionary[String, Resource]
 
 ## Stroke animation resources
-@export var _stroke_animations: Dictionary[String, Resource]
+@export var _stroke_animations: Dictionary[String, StrokeAnimation]
 
 ## Whether a stroke is currently active
 var _stroke_active: bool = false
@@ -61,26 +61,19 @@ func set_move_direction(direction: Vector3) -> void:
 	animation_tree["parameters/move/blend_position"] = dir
 
 
-## Get stroke blend position for smooth animation blending
-func get_stroke_blend_position(_stroke_id: int, stroke_pos: Vector3) -> Vector3:
-	var point_down: Vector3 = Vector3.ZERO
-	var point_up: Vector3 = Vector3.ZERO
-
-	return (stroke_pos - point_down) / (point_up - point_down)
-
 
 ## Play stroke animation with proper timing
 func play_stroke_animation(stroke: Stroke) -> void:
 	var animation_hit_time: float = GameConstants.ANIMATION_HIT_TIME
 	if stroke.stroke_type == Stroke.StrokeType.FOREHAND:
-		animation_hit_time = _stroke_animations["forehand"].hit_zone[0]
+		animation_hit_time = _stroke_animations["forehand"].hit_time
 
 	var t: float = max(0, stroke.step.time - animation_hit_time)
 	if t > 0:
 		await get_tree().create_timer(t).timeout
 
-	transition_to(States.STROKE)
 	set_stroke(stroke)
+	transition_to(States.STROKE)
 
 
 ## Set stroke animation type based on stroke
@@ -89,6 +82,7 @@ func set_stroke(stroke: Stroke) -> void:
 	match stroke.stroke_type:
 		stroke.StrokeType.FOREHAND:
 			animation_name = "forehand"
+			animation_tree["parameters/stroke/forehand/blend_position"] = compute_stroke_blend_position(stroke)
 		stroke.StrokeType.SERVE:
 			animation_name = "serve"
 		stroke.StrokeType.BACKHAND:
@@ -101,6 +95,18 @@ func set_stroke(stroke: Stroke) -> void:
 
 	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name
 
+## Called from animation timeline to spawn the ball (forwarded to player)
+func _from_anim_spawn_ball() -> void:
+	player.from_anim_spawn_ball()
+
+
+## Called from animation timeline to hit the serve (forwarded to player)
+func from_anim_hit_serve() -> void:
+	player.from_anim_hit_serve()
+
+func compute_stroke_blend_position(stroke: Stroke) -> float:
+	return ((stroke.step.point.y - forehand_down_point.y) /
+			(forehand_up_point.y - forehand_down_point.y))
 
 ## Transition to animation state
 func transition_to(state_id: int) -> void:
