@@ -58,10 +58,6 @@ func compute_serve() -> Stroke:
 	return get_stroke(AiStrokeType.SERVE_BODY)
 
 
-func on_player_ball_hit():
-	player.move_to(Vector3(sign(player.position.x) * 2, 0, player.position.z))
-
-
 func get_stroke(stroke_type: AiStrokeType) -> Stroke:
 	var stroke := Stroke.new()
 	match stroke_type:
@@ -95,14 +91,14 @@ func get_stroke(stroke_type: AiStrokeType) -> Stroke:
 			)
 		AiStrokeType.BACKHAND_SLICE_CROSS:
 			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = 20
+			stroke.stroke_power = 17
 			stroke.stroke_spin = -5
 			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
 		AiStrokeType.BACKHAND_SLICE_LONGLINE:
 			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = 20
+			stroke.stroke_power = 17
 			stroke.stroke_spin = -5
 			stroke.stroke_target = Vector3(
 				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length

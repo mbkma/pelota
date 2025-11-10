@@ -1,8 +1,6 @@
 ## Global utility functions for game logic and calculations
 extends Node
 
-const DEBUGGING: bool = false
-
 enum Direction { LEFT, RIGHT, FRONT, BEHIND }
 
 enum CheckType { LEFT_RIGHT, FRONT_BEHIND }
@@ -148,8 +146,3 @@ func get_filepaths_in_directory(directory_path: String, ending: String = "") -> 
 		push_error("Error accessing directory path: " + directory_path)
 
 	return filepaths
-
-
-## Convert spin value to gravity effect (deprecated - use GlobalPhysics._spin_to_gravity)
-func spin_to_gravity(spin: float) -> float:
-	return 10.0 + spin

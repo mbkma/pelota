@@ -9,8 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/modes/match/match_manager.tscn" id="8_2s2ac"]
 [ext_resource type="PackedScene" uid="uid://cggqb75a8w8r" path="res://addons/debug_menu/debug_menu.tscn" id="10_7cjfu"]
-[ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/match_debug_hud.tscn" id="11_7qdcc"]
-[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/trajectory_drawer.tscn" id="11_324nl"]
+[ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/debug_hud.tscn" id="11_7qdcc"]
+[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
 [ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scenes/ui/pause_menu.tscn" id="13_rcvjq"]
 [ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environment/crowd/crowd.tscn" id="14_o6v58"]
@@ -102,10 +102,10 @@ libraries = {
 
 [node name="Stadium" parent="." instance=ExtResource("6_4vere")]
 
-[node name="Cameras" parent="." instance=ExtResource("7_6frth")]
+[node name="Cameras" parent="." node_paths=PackedStringArray("cams") instance=ExtResource("7_6frth")]
+cams = [NodePath("FlyingCam"), NodePath("StaticEastCam"), NodePath("TopFront"), NodePath("TopBack"), NodePath("CourtSideFront"), NodePath("CourtSideBack"), NodePath("CameraTop")]
 
 [node name="TrajectoryDrawer" parent="." node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]
-visible = false
 players = [NodePath("../Player"), NodePath("../Player2")]
 
 [node name="CanvasLayer" parent="." instance=ExtResource("10_7cjfu")]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b7nclbgkw6veg"]
 
-[ext_resource type="Script" uid="uid://mpiigeysorux" path="res://scripts/ui/match_debug_hud.gd" id="1_88p7u"]
+[ext_resource type="Script" uid="uid://mpiigeysorux" path="res://scripts/ui/debug_hud.gd" id="1_88p7u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 bg_color = Color(0, 0, 0, 0.5)

@@ -67,7 +67,11 @@ func play_stroke_animation(stroke: Stroke) -> void:
 	var animation_hit_time: float = GameConstants.ANIMATION_HIT_TIME
 	if stroke.stroke_type == Stroke.StrokeType.FOREHAND:
 		animation_hit_time = _stroke_animations["forehand"].hit_time
-
+	elif stroke.stroke_type == Stroke.StrokeType.BACKHAND:
+		animation_hit_time = _stroke_animations["backhand"].hit_time
+	elif stroke.stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
+		animation_hit_time = _stroke_animations["backhand_slice"].hit_time
+	
 	var t: float = max(0, stroke.step.time - animation_hit_time)
 	if t > 0:
 		await get_tree().create_timer(t).timeout
@@ -87,8 +91,11 @@ func set_stroke(stroke: Stroke) -> void:
 			animation_name = "serve"
 		stroke.StrokeType.BACKHAND:
 			animation_name = "backhand"
+			animation_tree["parameters/stroke/forehand/blend_position"] = compute_stroke_blend_position(stroke)
 		stroke.StrokeType.BACKHAND_SLICE:
-			animation_name = "backhand"
+			animation_name = "backhand_slice"
+		stroke.StrokeType.BACKHAND_DROP_SHOT:
+			animation_name = "backhand_slice"
 		_:
 			push_error("Stroke animation ", stroke.stroke_type, " not available!")
 			return
@@ -105,8 +112,16 @@ func from_anim_hit_serve() -> void:
 	player.from_anim_hit_serve()
 
 func compute_stroke_blend_position(stroke: Stroke) -> float:
-	return ((stroke.step.point.y - forehand_down_point.y) /
-			(forehand_up_point.y - forehand_down_point.y))
+	match stroke.stroke_type:
+		stroke.StrokeType.FOREHAND:
+			return ((stroke.step.point.y - forehand_down_point.y) /
+					(forehand_up_point.y - forehand_down_point.y))
+		stroke.StrokeType.BACKHAND:
+			return ((stroke.step.point.y - backhand_down_point.y) /
+					(backhand_up_point.y - backhand_down_point.y))
+		_:
+			return 0.5
+
 
 ## Transition to animation state
 func transition_to(state_id: int) -> void:

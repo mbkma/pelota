@@ -48,6 +48,11 @@ func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
 		push_error("MatchManager not properly initialized! Missing required nodes.")
 		return
+
+	# Set opponent references for each player
+	player0.opponent = player1
+	player1.opponent = player0
+
 	match_data = MatchData.new(player0.player_data, player1.player_data)
 	player0.ball_hit.connect(_on_player0_ball_hit)
 	player1.ball_hit.connect(_on_player1_ball_hit)

@@ -4,12 +4,15 @@ extends MeshInstance3D
 @export var trajectory_color: Color = Color(1, 0, 0)  # Color for the trajectory line
 @export var arrow_color: Color = Color(0, 1, 0)  # Color for AI movement arrows (green)
 @export var arrow_size: float = 0.3  # Size of arrowhead
+@export var bisector_line_color: Color = Color(0.942, 0.882, 0.342, 1.0)  # Color for lines to corners (bright orange)
+@export var bisector_angle_color: Color = Color(0.904, 0.809, 0.149, 1.0)  # Color for angle bisector (dark orange)
 @export var ball: Ball
 @export var players: Array[Player] = []  # Store player references to visualize their movement paths
 
 
 var trajectory_material := ORMMaterial3D.new()
 var arrow_material := ORMMaterial3D.new()
+var bisector_material := ORMMaterial3D.new()
 
 
 func set_active_ball(b):
@@ -31,6 +34,10 @@ func _process(_delta: float) -> void:
 			# Draw between consecutive waypoints
 			for i in range(player._path.size() - 1):
 				draw_arrow(player._path[i] + Vector3(0,1,0), player._path[i + 1] + Vector3(0,1,0))
+
+		# Draw angle bisector visualization for each player
+		if player and player.bisector_direction != Vector3.ZERO:
+			draw_angle_bisector_visualization(player)
 
 
 # Function to draw the trajectory using ImmediateMesh
@@ -89,3 +96,37 @@ func draw_arrow(start_pos: Vector3, end_pos: Vector3) -> void:
 		mesh.surface_add_vertex(arrowhead_point2)
 
 		mesh.surface_end()
+
+
+# Draw angle bisector visualization using pre-calculated data from player
+func draw_angle_bisector_visualization(player: Player) -> void:
+	if not player.opponent:
+		return
+
+	var opponent_position: Vector3 = player.opponent.position
+	var service_line_left: Vector3 = player.bisector_service_line_left
+	var service_line_right: Vector3 = player.bisector_service_line_right
+	var bisector_direction: Vector3 = player.bisector_direction
+
+	# Project opponent position to XZ plane for visualization consistency
+	var opponent_xz: Vector3 = Vector3(opponent_position.x, 0, opponent_position.z)
+
+	# Draw lines to service line extremes in bright orange
+	draw_line(opponent_xz + Vector3(0, 1, 0), service_line_left + Vector3(0, 1, 0), bisector_line_color)
+	draw_line(opponent_xz + Vector3(0, 1, 0), service_line_right + Vector3(0, 1, 0), bisector_line_color)
+
+	# Draw bisector line extending from opponent position using pre-calculated direction
+	var bisector_end: Vector3 = opponent_xz + bisector_direction * 26.0
+	draw_line(opponent_xz + Vector3(0, 1, 0), bisector_end + Vector3(0, 1, 0), bisector_angle_color)
+
+
+# Draw a simple line between two points
+func draw_line(start_pos: Vector3, end_pos: Vector3, color: Color) -> void:
+	mesh.surface_begin(Mesh.PRIMITIVE_LINES, bisector_material)
+	bisector_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	bisector_material.albedo_color = color
+
+	mesh.surface_add_vertex(start_pos)
+	mesh.surface_add_vertex(end_pos)
+
+	mesh.surface_end()

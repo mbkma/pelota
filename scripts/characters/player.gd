@@ -37,6 +37,7 @@ signal input_changed(timing: float)
 @export var move_speed: float = 5.0
 @export var team_index: int = 0
 @export var ball_aim_marker: BallAimMarker
+@export var opponent: Player  # Reference to opponent player
 
 ## Flat stroke sound effects
 @export var stroke_sounds_flat: Array[AudioStream]
@@ -66,6 +67,11 @@ var _path: Array[Vector3] = []
 
 ## Whether to use root motion for movement
 var _root_motion: bool = false
+
+## Angle bisector visualization data for debug drawing
+var bisector_service_line_left: Vector3 = Vector3.ZERO
+var bisector_service_line_right: Vector3 = Vector3.ZERO
+var bisector_direction: Vector3 = Vector3.ZERO
 
 const DISTANCE_THRESHOLD: float = 0.01
 

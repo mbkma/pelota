@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="5_d51he"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
 [ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/utilities/ball_canon.tscn" id="6_l6sfg"]
-[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/trajectory_drawer.tscn" id="8_xeshg"]
+[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="8_xeshg"]
 [ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scenes/ui/pause_menu.tscn" id="9_fqabv"]
 
 [sub_resource type="Shader" id="Shader_rdv83"]

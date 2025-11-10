@@ -4,9 +4,11 @@ extends Resource
 # Enum for stroke types
 enum StrokeType {
 	FOREHAND,
+	FOREHAND_DROP_SHOT,
 	BACKHAND,
 	SERVE,
 	BACKHAND_SLICE,
+	BACKHAND_DROP_SHOT,
 	VOLLEY,
 }
 

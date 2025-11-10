@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bhlvub0gn61wg" path="res://scripts/environment/world/us_open/cameras/cameras.gd" id="1_ibrh3"]
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="2_rx4uh"]
-[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scripts/environment/world/us_open/stadium.tscn" id="3_pi3s4"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="3_pi3s4"]
 
 [node name="Cameras" type="Node3D" node_paths=PackedStringArray("cams")]
 script = ExtResource("1_ibrh3")
@@ -47,6 +47,9 @@ fov = 39.5
 [node name="CourtSideBack" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -19)
 fov = 39.5
+
+[node name="CameraTop" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16.42067, 0)
 
 [node name="Stadium" parent="." instance=ExtResource("3_pi3s4")]
 visible = false

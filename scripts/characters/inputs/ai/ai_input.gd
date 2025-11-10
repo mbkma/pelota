@@ -119,22 +119,15 @@ func make_serve() -> void:
 	player.serve(stroke)
 
 
-## Setup AI for match manager integration
-func setup(_match_manager: Object) -> void:
-	pass
-
-
 ## Called when AI player hits the ball - move to defensive position
 func _on_ball_hit() -> void:
-	if not validate_player() or not player.ball:
+	if not validate_player() or not player.opponent:
 		return
 
-	# Calculate the position where opponent might hit the ball
-	var closest_step: TrajectoryStep = GlobalUtils.get_closest_trajectory_step(player)
-	if not closest_step:
-		return
-
-	var opponent_hit_position: Vector3 = closest_step.point
+	# Use opponent's queued stroke position (where they will hit the ball from)
+	var opponent_hit_position: Vector3 = player.opponent.position
+	if player.opponent.queued_stroke:
+		opponent_hit_position = player.opponent.queued_stroke.position
 
 	# Calculate angle bisector position (best defensive position)
 	var defensive_position: Vector3 = _calculate_angle_bisector_position(opponent_hit_position)
@@ -145,28 +138,46 @@ func _on_ball_hit() -> void:
 
 ## Calculate the angle bisector position (best defensive position)
 ## Returns the point that maximizes angle coverage to both corners
-func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vector3:
+func _calculate_angle_bisector_position(opponent_position: Vector3) -> Vector3:
+	var opponent_xz: Vector3 = Vector3(opponent_position.x, 0, opponent_position.z)
+
 	var court_width: float = GameConstants.COURT_WIDTH / 2.0
 	var court_depth: float = GameConstants.COURT_LENGTH_HALF
+	var service_line_z: float = GameConstants.SERVICE_LINE_Z
 
 	# Determine which side of court the opponent is hitting from
-	var opponent_side: float = sign(opponent_hit_position.z)
+	var opponent_side: float = sign(opponent_xz.z)
 
-	# The two extreme points the opponent could hit to (far corners on AI's side)
-	var corner_left: Vector3 = Vector3(-court_width, 0, -opponent_side * court_depth)
-	var corner_right: Vector3 = Vector3(court_width, 0, -opponent_side * court_depth)
+	# The two extreme shot directions are the outer left and right points of the opposite service line
+	var service_line_left: Vector3 = Vector3(-court_width, 0, -opponent_side * service_line_z)
+	var service_line_right: Vector3 = Vector3(court_width, 0, -opponent_side * service_line_z)
 
-	# Calculate vectors from opponent hit position to both corners
-	var to_left: Vector3 = (corner_left - opponent_hit_position).normalized()
-	var to_right: Vector3 = (corner_right - opponent_hit_position).normalized()
+	# Calculate vectors from opponent hit position to both service line extremes (on XZ plane)
+	var to_left: Vector3 = (service_line_left - opponent_xz).normalized()
+	var to_right: Vector3 = (service_line_right - opponent_xz).normalized()
 
 	# The bisector direction is the average of the two directions
 	var bisector_direction: Vector3 = (to_left + to_right).normalized()
 
-	# Position AI along the bisector, at a reasonable distance from opponent
-	# The distance should be based on court positioning (around the baseline)
-	var baseline_z: float = opponent_side * court_depth * 0.8
-	var defensive_position: Vector3 = opponent_hit_position + bisector_direction * 5.0
-	defensive_position.z = baseline_z
+	print("-------------")
+	print("angle bis->left (deg):", bisector_direction.angle_to(to_left) * 180.0/PI)
+	print("angle bis->right (deg):", bisector_direction.angle_to(to_right) * 180.0/PI)
+	print("bisector_direction:", bisector_direction)
+	print("-------------")
+
+	# Store bisector visualization data on player for debug drawer to use
+	player.bisector_service_line_left = service_line_left
+	player.bisector_service_line_right = service_line_right
+	player.bisector_direction = bisector_direction
+
+	# Position AI at the midpoint between the two service line targets, on the baseline
+	var baseline_z: float = -opponent_side * court_depth * 0.8
+
+	# Midpoint X between left and right service line targets
+	var midpoint_x: float = (service_line_left.x + service_line_right.x) / 2.0
+
+	var defensive_position: Vector3 = Vector3(midpoint_x, 0, baseline_z)
+
+	print("defensive_position", defensive_position)
 
 	return defensive_position

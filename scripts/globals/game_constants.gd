@@ -10,7 +10,7 @@ class_name GameConstants
 const GRAVITY: float = 9.81
 
 ## Ball damping factor (0.0-1.0, 0.7 means 30% energy loss per bounce)
-const BALL_DAMP: float = 0.7
+const BALL_DAMP: float = 0.8
 
 ## Ball ground contact threshold (distance in meters)
 const BALL_GROUND_THRESHOLD: float = 0.035
@@ -72,7 +72,7 @@ const PACE_INCREMENT_RATE: float = 0.1
 const BALL_VELOCITY_CANCELLATION_THRESHOLD: float = 0.1
 
 ## Backhand slice default power
-const BACKHAND_SLICE_POWER: float = 20.0
+const BACKHAND_SLICE_POWER: float = 17.0
 
 ## Backhand slice default spin (negative = topspin)
 const BACKHAND_SLICE_SPIN: float = -5.0
@@ -149,16 +149,13 @@ const SIDE_SWITCH_GAME_CYCLE: int = 4
 # ============================================================================
 
 ## Court field width (units)
-const COURT_WIDTH: float = 27.0
+const COURT_WIDTH: float = 8.11
 
 ## Court field length (units)
-const COURT_LENGTH: float = 78.0
+const COURT_LENGTH: float = 26.0
 
 ## Half court length - baseline distance from net (units)
 const COURT_LENGTH_HALF: float = 13.0
-
-## Service box distance from net (units)
-const SERVICE_BOX_DISTANCE: float = 21.0
 
 # ============================================================================
 # MATCH STATES
@@ -186,4 +183,4 @@ const FRONT_PLAYER_Z: float = 12.3828
 const BACK_PLAYER_Z: float = -15.0306
 
 ## Player service line position
-const SERVICE_LINE_Z: float = 13.0
+const SERVICE_LINE_Z: float = 6.302
