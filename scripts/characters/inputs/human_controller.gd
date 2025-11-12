@@ -1,7 +1,7 @@
 ## Human player input handler for keyboard/mouse controls
 ## Manages movement, aiming, and stroke execution
 class_name HumanInput
-extends InputMethod
+extends Controller
 
 ## Local signal for aiming position (parent class has aiming_at_position)
 signal aiming_at_pos(position: Vector3)
@@ -168,7 +168,7 @@ func _do_stroke(aim_position: Vector3, pace: float) -> void:
 		push_error("HumanInput._do_stroke: Player has no ball to stroke")
 		return
 
-	var closest_step: TrajectoryStep = GlobalUtils.get_closest_trajectory_step(player)
+	var closest_step: TrajectoryStep = get_closest_trajectory_step(player)
 	if not closest_step:
 		push_error("HumanInput._do_stroke: Could not find ball trajectory step")
 		return
@@ -190,7 +190,7 @@ func _do_stroke(aim_position: Vector3, pace: float) -> void:
 	_move_input_blocked = true
 
 	player.queue_stroke(stroke)
-	GlobalUtils.adjust_player_position_to_stroke(player, stroke)
+	adjust_player_position_to_stroke(player, closest_step)
 
 	_clear_stroke_input()
 

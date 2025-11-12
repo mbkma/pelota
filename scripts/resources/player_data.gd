@@ -16,10 +16,10 @@ signal stats_changed
 	"speed": 100,
 	"control": 100,
 	"strength": 100,
-	"serve_pace": 35,
+	"serve_pace": 40,
 	"forehand_pace": 25,
-	"forehand_spin": 5,
-	"backhand_pace": 25,
+	"forehand_spin": 10,
+	"backhand_pace": 23,
 	"backhand_spin": 5,
 }
 @export var sounds := {

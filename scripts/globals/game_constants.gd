@@ -30,6 +30,7 @@ const GROUND_EMISSION_THRESHOLD: float = 0.1
 ## Velocity magnitude threshold for trajectory tracking (units/sec)
 const VELOCITY_TRACKING_THRESHOLD: float = 0.1
 
+
 # ============================================================================
 # PLAYER CONSTANTS
 # ============================================================================

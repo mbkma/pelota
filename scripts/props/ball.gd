@@ -102,6 +102,7 @@ func predict_trajectory(
 	var current_position: Vector3 = global_position
 	var current_velocity: Vector3 = velocity
 	var elapsed_time: float = 0.0
+	var bounces := 0
 
 	for _step_index in range(steps):
 		# Apply gravity with spin effect
@@ -111,13 +112,15 @@ func predict_trajectory(
 		# Update position
 		current_position += current_velocity * time_step
 
+
 		# Simulate ground collision
 		if current_position.y < BALL_GROUND_LEVEL:
 			current_velocity = current_velocity.bounce(Vector3.UP) * BALL_DAMPING
 			current_position.y = BALL_GROUND_LEVEL
+			bounces += 1
 
 		# Record trajectory point
-		var trajectory_step: TrajectoryStep = TrajectoryStep.new(current_position, elapsed_time)
+		var trajectory_step: TrajectoryStep = TrajectoryStep.new(current_position, elapsed_time, bounces)
 		predicted_trajectory.append(trajectory_step)
 
 		elapsed_time += time_step

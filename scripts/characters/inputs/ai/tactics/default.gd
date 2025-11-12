@@ -29,18 +29,21 @@ func compute_next_stroke(closest_step: TrajectoryStep) -> Stroke:
 	var to_ball_vector: Vector3 = closest_ball_position - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)
 	var stroke: Stroke
+	# Forehand
 	if dot_product > 0:
 		if r < 0.3:
 			stroke = get_stroke(AiStrokeType.FOREHAND_LONGLINE)
 		else:
 			stroke = get_stroke(AiStrokeType.FOREHAND_CROSS)
 	else:
-		if r < 0.2:
+		if r < 0.4:
 			stroke = get_stroke(AiStrokeType.BACKHAND_LONGLINE)
-		elif r < 0.4:
+		elif r < 0.8:
 			stroke = get_stroke(AiStrokeType.BACKHAND_CROSS)
 		elif r < 0.9:
 			stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_CROSS)
+		elif r < 0.95:
+			stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_LONGLINE)
 		else:
 			stroke = get_stroke(AiStrokeType.BACKHAND_DROP_SHOT)
 
@@ -91,45 +94,45 @@ func get_stroke(stroke_type: AiStrokeType) -> Stroke:
 			)
 		AiStrokeType.BACKHAND_SLICE_CROSS:
 			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = 17
-			stroke.stroke_spin = -5
+			stroke.stroke_power = 24
+			stroke.stroke_spin = -10
 			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
 		AiStrokeType.BACKHAND_SLICE_LONGLINE:
 			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = 17
-			stroke.stroke_spin = -5
+			stroke.stroke_power = 24
+			stroke.stroke_spin = -10
 			stroke.stroke_target = Vector3(
 				sign(player.position.x) * 3, 0, -sign(player.position.z) * standard_length
 			)
 		AiStrokeType.BACKHAND_DROP_SHOT:
 			stroke.stroke_type = stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = 10
+			stroke.stroke_power = 15
 			stroke.stroke_spin = -2
 			stroke.stroke_target = Vector3(
 				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 4
 			)
 		AiStrokeType.SERVE_WIDE:
 			stroke.stroke_type = stroke.StrokeType.SERVE
-			stroke.stroke_power = player.stats.serve_pace - 5
-			stroke.stroke_spin = 2
+			stroke.stroke_power = player.stats.serve_pace
+			stroke.stroke_spin = 5
 			stroke.stroke_target = Vector3(
-				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5
+				-sign(player.position.x) * 4, 0, -sign(player.position.z) * 6
 			)
 		AiStrokeType.SERVE_T:
 			stroke.stroke_type = stroke.StrokeType.SERVE
-			stroke.stroke_power = player.stats.serve_pace - 5
-			stroke.stroke_spin = 2
+			stroke.stroke_power = player.stats.serve_pace
+			stroke.stroke_spin = 5
 			stroke.stroke_target = Vector3(
-				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5
+				-sign(player.position.x) * 0.1, 0, -sign(player.position.z) * 6
 			)
 		AiStrokeType.SERVE_BODY:
 			stroke.stroke_type = stroke.StrokeType.SERVE
-			stroke.stroke_power = player.stats.serve_pace - 5
-			stroke.stroke_spin = 2
+			stroke.stroke_power = player.stats.serve_pace
+			stroke.stroke_spin = 5
 			stroke.stroke_target = Vector3(
-				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 5
+				-sign(player.position.x) * 1.5, 0, -sign(player.position.z) * 6
 			)
 		_:
 			push_error("AiStroke ", stroke_type, " not implemented!")

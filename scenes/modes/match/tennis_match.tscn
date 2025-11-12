@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_input.tscn" id="3_1gved"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="3_1gved"]
 [ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="4_7pj63"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
@@ -41,12 +41,12 @@ script = ExtResource("1_3pywv")
 
 [node name="Player2" parent="." instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.376896)
-input_scene = ExtResource("3_1gved")
+controller_scene = ExtResource("3_1gved")
 player_data = ExtResource("4_7pj63")
 
 [node name="Player" parent="." instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.34449)
-input_scene = ExtResource("3_1gved")
+controller_scene = ExtResource("3_1gved")
 
 [node name="TelevisionHUD" parent="." instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true

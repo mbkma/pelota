@@ -103,20 +103,18 @@ func draw_angle_bisector_visualization(player: Player) -> void:
 	if not player.opponent:
 		return
 
-	var opponent_position: Vector3 = player.opponent.position
 	var service_line_left: Vector3 = player.bisector_service_line_left
 	var service_line_right: Vector3 = player.bisector_service_line_right
 	var bisector_direction: Vector3 = player.bisector_direction
+	var opponent_xz: Vector3 = player.opponent_hit_position
 
-	# Project opponent position to XZ plane for visualization consistency
-	var opponent_xz: Vector3 = Vector3(opponent_position.x, 0, opponent_position.z)
 
 	# Draw lines to service line extremes in bright orange
 	draw_line(opponent_xz + Vector3(0, 1, 0), service_line_left + Vector3(0, 1, 0), bisector_line_color)
 	draw_line(opponent_xz + Vector3(0, 1, 0), service_line_right + Vector3(0, 1, 0), bisector_line_color)
 
 	# Draw bisector line extending from opponent position using pre-calculated direction
-	var bisector_end: Vector3 = opponent_xz + bisector_direction * 26.0
+	var bisector_end: Vector3 = opponent_xz + bisector_direction * 24.0
 	draw_line(opponent_xz + Vector3(0, 1, 0), bisector_end + Vector3(0, 1, 0), bisector_angle_color)
 
 

@@ -29,7 +29,7 @@ signal input_changed(timing: float)
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-@export var input_scene: PackedScene
+@export var controller_scene: PackedScene
 @export var player_data: PlayerData
 @export var stats: Dictionary = {}
 @export var camera: Camera3D
@@ -48,7 +48,7 @@ signal input_changed(timing: float)
 ## Currently queued stroke to execute
 var queued_stroke: Stroke
 
-var input_node
+var controller: Controller
 
 ## Current movement velocity
 var _move_velocity: Vector3 = Vector3.ZERO
@@ -72,6 +72,7 @@ var _root_motion: bool = false
 var bisector_service_line_left: Vector3 = Vector3.ZERO
 var bisector_service_line_right: Vector3 = Vector3.ZERO
 var bisector_direction: Vector3 = Vector3.ZERO
+var opponent_hit_position: Vector3 = Vector3.ZERO
 
 const DISTANCE_THRESHOLD: float = 0.01
 
@@ -81,13 +82,12 @@ func _ready() -> void:
 	$Label3D.text = player_data.last_name
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
-	input_node = input_scene.instantiate()
-	add_child(input_node)
+	controller = controller_scene.instantiate()
+	add_child(controller)
 
 ## Request the input handler to initiate a serve
 func request_serve() -> void:
-	input_node.request_serve()
-
+	controller.request_serve()
 
 ## Setup player with given data and control method
 func setup(data: PlayerData, _ai_controlled: bool) -> void:
@@ -212,11 +212,13 @@ func queue_stroke(stroke: Stroke) -> void:
 
 ## Handle racket collision with ball
 func _on_RacketArea_body_entered(body: Node3D) -> void:
-	if not body is Ball or not queued_stroke:
+	if not body is Ball:
 		return
-
+	if not queued_stroke:
+		push_error("Ball entered but no queued stroke")
+		return
+	print(player_data.last_name, ": ball entered")
 	_hit_ball(ball, queued_stroke)
-	queued_stroke = null
 
 
 ## Execute ball hit with given stroke
@@ -245,14 +247,11 @@ func serve(stroke: Stroke) -> void:
 	queued_stroke = stroke
 	model.set_stroke(stroke)
 	model.transition_to(model.States.STROKE)
-	print(queued_stroke)
 	# Animation callbacks will handle spawning ball and hitting it
 
 
 ## Called by serve animation to hit the ball
 func from_anim_hit_serve() -> void:
-	print(queued_stroke)
-	
 	if queued_stroke and ball:
 		_hit_ball(ball, queued_stroke)
 		just_served.emit()
@@ -265,7 +264,6 @@ func from_anim_spawn_ball() -> void:
 	get_parent().add_child(ball)
 	ball_spawned.emit(ball)
 	get_tree().call_group("Player", "set_active_ball", ball)
-	print(queued_stroke)
 
 
 ## Other Functions
@@ -294,11 +292,12 @@ func _get_grunt_sound() -> AudioStream:
 func play_stroke_sound(stroke: Stroke) -> void:
 	var stream: AudioStream
 
-	if randf() < player_data.sounds.grunt_frequency:
-		stream = _get_grunt_sound()
+	if (stroke.stroke_type == stroke.StrokeType.BACKHAND_SLICE or
+		stroke.stroke_type == stroke.StrokeType.BACKHAND_DROP_SHOT):
+		stream = stroke_sounds_slice[randi() % stroke_sounds_slice.size()]
 	else:
-		if stroke.stroke_type == stroke.StrokeType.BACKHAND_SLICE:
-			stream = stroke_sounds_slice[randi() % stroke_sounds_slice.size()]
+		if randf() < player_data.sounds.grunt_frequency:
+			stream = _get_grunt_sound()
 		else:
 			stream = stroke_sounds_flat[randi() % stroke_sounds_flat.size()]
 

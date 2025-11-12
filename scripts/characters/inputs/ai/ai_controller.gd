@@ -1,12 +1,12 @@
 ## AI input handler that computes strokes and movement decisions automatically
 class_name AiInput
-extends InputMethod
+extends Controller
 
 ## Available tactics for AI decision-making
 @export var tactics: Dictionary[String, Script]
 
 ## Current tactic instance for stroke computation
-var _current_tactic: Object
+var _current_tactic: DefaultTactics
 
 ## Base position for AI movement (on the baseline)
 var _pivot_point: Vector3 = Vector3.ZERO
@@ -19,13 +19,12 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 
-	_current_tactic = tactics["default"]
+	_current_tactic = tactics["default"].new()
 	if not _current_tactic:
 		push_error("AiInput: Failed to instantiate default tactic")
 		set_process(false)
 		return
 
-	_current_tactic = _current_tactic.new()
 	_current_tactic.setup(player)
 	_pivot_point = Vector3(0, 0, sign(player.position.z) * GameConstants.COURT_LENGTH_HALF)
 
@@ -40,31 +39,36 @@ func request_serve() -> void:
 
 ## Process stroke decisions based on ball trajectory
 func _process(_delta: float) -> void:
+	#print(player.player_data.last_name, " #player.queued_stroke: ", player.queued_stroke)
+	#print(player.player_data.last_name, " #player.ball: ", player.ball)
+
 	if not validate_player():
 		return
 
 	if not player.ball:
 		return
 
-	var dist: float = GlobalUtils.get_horizontal_distance(player, player.ball)
+	if player.queued_stroke:
+		return
+
 	if (
-		GlobalUtils.is_flying_towards(player, player.ball)
-		and dist > GameConstants.AI_BALL_COMMIT_DISTANCE
+		is_flying_towards(player, player.ball) 
 	):
-		if not player.queued_stroke:
-			var closest_step: TrajectoryStep = GlobalUtils.get_closest_trajectory_step(player)
-			if not closest_step:
-				push_error("AiInput: Could not find ball trajectory step")
-				return
+		var closest_step := get_closest_trajectory_step(player)
+		if closest_step.point.y < 0.5 or closest_step.point.y > 1.5:
+			closest_step = get_closest_apex_after_first_bounce(player)
 
-			var closest_ball_position: Vector3 = closest_step.point
-			if sign(closest_ball_position.z) != sign(player.position.z):
-				return
+		if not closest_step:
+			push_error("AiInput: Could not find ball trajectory step")
+			return
 
-			_do_stroke(closest_step)
+		var closest_ball_position := closest_step.point
+		if sign(closest_ball_position.z) != sign(player.position.z):
+			push_warning("AiInput: Closest Ball position not on my side")
+			return
 
-	# if dist < 0 or player.ball.velocity.length() < 0.1:
-	# 	player.cancel_stroke()
+
+		_do_stroke(closest_step)
 
 
 ## Process movement decisions
@@ -78,25 +82,13 @@ func _physics_process(delta: float) -> void:
 
 ## Compute and execute a stroke for the given trajectory step
 func _do_stroke(closest_step: TrajectoryStep) -> void:
-	if not validate_player():
-		push_error("AiInput._do_stroke: Invalid player state")
-		return
-
-	if not closest_step:
-		push_error("AiInput._do_stroke: closest_step is null")
-		return
-
-	if not _current_tactic:
-		push_error("AiInput._do_stroke: No tactic assigned")
-		return
-
 	var stroke: Stroke = _current_tactic.compute_next_stroke(closest_step)
 	if not stroke:
 		push_error("AiInput._do_stroke: Tactic returned null stroke")
 		return
 
 	player.queue_stroke(stroke)
-	GlobalUtils.adjust_player_position_to_stroke(player, stroke)
+	adjust_player_position_to_stroke(player, closest_step)
 
 
 ## Initiate a serve using current tactic
@@ -125,10 +117,8 @@ func _on_ball_hit() -> void:
 		return
 
 	# Use opponent's queued stroke position (where they will hit the ball from)
-	var opponent_hit_position: Vector3 = player.opponent.position
-	if player.opponent.queued_stroke:
-		opponent_hit_position = player.opponent.queued_stroke.position
-
+	var opponent_hit_position: Vector3 = player.queued_stroke.stroke_target
+	#opponent_hit_position = Vector3(0,0,1)
 	# Calculate angle bisector position (best defensive position)
 	var defensive_position: Vector3 = _calculate_angle_bisector_position(opponent_hit_position)
 
@@ -138,8 +128,8 @@ func _on_ball_hit() -> void:
 
 ## Calculate the angle bisector position (best defensive position)
 ## Returns the point that maximizes angle coverage to both corners
-func _calculate_angle_bisector_position(opponent_position: Vector3) -> Vector3:
-	var opponent_xz: Vector3 = Vector3(opponent_position.x, 0, opponent_position.z)
+func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vector3:
+	var opponent_xz: Vector3 = Vector3(opponent_hit_position.x, 0, opponent_hit_position.z)
 
 	var court_width: float = GameConstants.COURT_WIDTH / 2.0
 	var court_depth: float = GameConstants.COURT_LENGTH_HALF
@@ -159,25 +149,21 @@ func _calculate_angle_bisector_position(opponent_position: Vector3) -> Vector3:
 	# The bisector direction is the average of the two directions
 	var bisector_direction: Vector3 = (to_left + to_right).normalized()
 
-	print("-------------")
-	print("angle bis->left (deg):", bisector_direction.angle_to(to_left) * 180.0/PI)
-	print("angle bis->right (deg):", bisector_direction.angle_to(to_right) * 180.0/PI)
-	print("bisector_direction:", bisector_direction)
-	print("-------------")
-
 	# Store bisector visualization data on player for debug drawer to use
+	player.opponent_hit_position = opponent_xz
 	player.bisector_service_line_left = service_line_left
 	player.bisector_service_line_right = service_line_right
 	player.bisector_direction = bisector_direction
 
-	# Position AI at the midpoint between the two service line targets, on the baseline
-	var baseline_z: float = -opponent_side * court_depth * 0.8
+	var baseline_z: float = 14.0 * -opponent_side  # baseline for this player
+	var t: float = (baseline_z - opponent_xz.z) / bisector_direction.z
+	var defensive_position: Vector3 = Vector3(
+		opponent_xz.x + t * bisector_direction.x,
+		0.0,  # player height
+		baseline_z
+	)
 
-	# Midpoint X between left and right service line targets
-	var midpoint_x: float = (service_line_left.x + service_line_right.x) / 2.0
-
-	var defensive_position: Vector3 = Vector3(midpoint_x, 0, baseline_z)
-
+	
 	print("defensive_position", defensive_position)
 
 	return defensive_position

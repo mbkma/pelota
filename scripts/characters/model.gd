@@ -11,11 +11,14 @@ var player: Player
 @onready var serve_point: Vector3 = points.get_node("BallServePoint").position
 @onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
 @onready var forehand_up_point: Vector3 = points.get_node("ForehandUpPoint").position
+@onready var forehand_point: Marker3D = $Points/ForehandPoint
 @onready var forehand_down_point: Vector3 = points.get_node("ForehandDownPoint").position
 @onready var backhand_up_point: Vector3 = points.get_node("BackhandUpPoint").position
 @onready var backhand_down_point: Vector3 = points.get_node("BackhandDownPoint").position
 @onready var backhandslice_up_point: Vector3 = points.get_node("BackhandSliceUpPoint").position
 @onready var backhandslice_down_point: Vector3 = points.get_node("BackhandSliceDownPoint").position
+@onready var backhand_point: Marker3D = $Points/BackhandPoint
+@onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
 
 @onready var racket_forehand: Area3D = $RacketForehand
 @onready var racket_backhand: Area3D = $RacketBackhand
@@ -87,11 +90,14 @@ func set_stroke(stroke: Stroke) -> void:
 		stroke.StrokeType.FOREHAND:
 			animation_name = "forehand"
 			animation_tree["parameters/stroke/forehand/blend_position"] = compute_stroke_blend_position(stroke)
+			print("## forehand", animation_tree["parameters/stroke/forehand/blend_position"])
+
 		stroke.StrokeType.SERVE:
 			animation_name = "serve"
 		stroke.StrokeType.BACKHAND:
 			animation_name = "backhand"
 			animation_tree["parameters/stroke/forehand/blend_position"] = compute_stroke_blend_position(stroke)
+			print("## backhand", animation_tree["parameters/stroke/forehand/blend_position"])
 		stroke.StrokeType.BACKHAND_SLICE:
 			animation_name = "backhand_slice"
 		stroke.StrokeType.BACKHAND_DROP_SHOT:
@@ -106,7 +112,6 @@ func set_stroke(stroke: Stroke) -> void:
 func _from_anim_spawn_ball() -> void:
 	player.from_anim_spawn_ball()
 
-
 ## Called from animation timeline to hit the serve (forwarded to player)
 func from_anim_hit_serve() -> void:
 	player.from_anim_hit_serve()
@@ -117,7 +122,7 @@ func compute_stroke_blend_position(stroke: Stroke) -> float:
 			return ((stroke.step.point.y - forehand_down_point.y) /
 					(forehand_up_point.y - forehand_down_point.y))
 		stroke.StrokeType.BACKHAND:
-			return ((stroke.step.point.y - backhand_down_point.y) /
+			return ((stroke.step.point.y - 0.4 - backhand_down_point.y) /
 					(backhand_up_point.y - backhand_down_point.y))
 		_:
 			return 0.5

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b2ln7l4birgbu" path="res://scripts/modes/training/tennis_training.gd" id="1_gx02n"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_tjnrq"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/keyboard_input.tscn" id="3_4chpy"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_input.tscn" id="4_ci6ek"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_4chpy"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_ci6ek"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="4_guntq"]
 [ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="5_d51he"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]

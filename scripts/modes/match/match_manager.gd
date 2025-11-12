@@ -2,9 +2,6 @@
 class_name MatchManager
 extends Node
 
-## Emitted when match state changes
-signal state_changed
-
 ## Emitted when players have been positioned
 signal players_placed
 
@@ -21,7 +18,6 @@ var current_state: MatchState = MatchState.NOT_STARTED:
 	set(value):
 		state_history.append(value)
 		current_state = value
-		state_changed.emit()
 
 ## Valid service zone for current serve
 var _valid_serve_zone: Court.CourtRegion
@@ -99,6 +95,10 @@ func get_player_index(player: Player) -> int:
 
 ## Request the current server to serve
 func set_player_serve() -> void:
+	_stop_players()
+	_clear_ball()
+	place_players()
+	await players_placed
 	if match_data.get_server() == 0:
 		player0.request_serve()
 	else:
@@ -220,14 +220,15 @@ func _stop_players() -> void:
 
 ## Handle ball hitting the net during serve
 func _on_ball_on_net() -> void:
-	if current_state == MatchState.SERVE:
-		current_state = MatchState.SECOND_SERVE
-		_clear_ball()
-		if umpire:
-			umpire.say_second_serve()
-		set_player_serve()
-	elif current_state == MatchState.SECOND_SERVE:
-		current_state = MatchState.FAULT
+	pass
+	#if current_state == MatchState.SERVE:
+		##current_state = MatchState.SECOND_SERVE
+		##_clear_ball()
+		##if umpire:
+			##umpire.say_second_serve()
+		##set_player_serve()
+	#elif current_state == MatchState.SECOND_SERVE:
+		#current_state = MatchState.FAULT
 
 
 ## Add a point to the winner and handle score update
