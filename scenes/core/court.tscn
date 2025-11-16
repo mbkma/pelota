@@ -12,8 +12,6 @@ data = PackedVector3Array(-4.649, 0.997, 0, -4.9696, -0.012, 0, -4.9696, 0.997, 
 [node name="Court" type="Node3D"]
 script = ExtResource("5")
 
-[node name="court" parent="." instance=ExtResource("2_flwb3")]
-
 [node name="Net" type="StaticBody3D" parent="." groups=["Net"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.388625, 0)
 
@@ -26,21 +24,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.388625, 0)
 shape = SubResource("ConcavePolygonShape3D_rt42o")
 
 [node name="back_left_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05747, 0, -6.30159)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1617117, 0, -6.4051905)
 
 [node name="back_right_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0285019, 0, -6.30187)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04666415, 0, -6.410841)
 
 [node name="back_sideline" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.8899)
 
 [node name="front_left_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05713, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.166126, 0, 0)
 
 [node name="front_right_service_box" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0263167, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03842455, 0, 0)
 
 [node name="front_sideline" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.8901)
+
+[node name="court" parent="." instance=ExtResource("2_flwb3")]
 
 [editable path="court"]

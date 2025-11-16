@@ -39,37 +39,41 @@ materials/extract_format=0
 materials/extract_path="res://assets/materials"
 _subresources={
 "materials": {
-"Material.001": null,
-"Matte Noise": null,
+"Material.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Material.001.tres",
+"use_external/path": "uid://b8o1p5hsqdaoh"
+},
+"Matte Noise": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Matte Noise.tres",
+"use_external/path": "uid://m8b80hj5eq1l"
+},
 "court": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/court.tres",
 "use_external/path": "uid://bcl0df2my33sh"
 },
-"mercedes": {
-"use_external/enabled": false,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/mercedes.tres"
+"mercedes-alpha.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/mercedes-alpha.001.tres",
+"use_external/path": "uid://cxt62tfr3pjqm"
 },
-"mercedes-alpha.001": null,
-"net": {
-"use_external/enabled": false,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/net.tres"
+"net.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/net.001.tres",
+"use_external/path": "uid://c5bpw2hb2xuit"
 },
-"net.001": null,
-"post": {
-"use_external/enabled": false,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/post.tres"
+"post.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/post.001.tres",
+"use_external/path": "uid://odnuc0s3hsrj"
 },
-"post.001": null,
-"top_net": {
-"use_external/enabled": false,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/top_net.tres"
-},
-"top_net.001": null
+"top_net.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/top_net.001.tres",
+"use_external/path": "uid://duvyve5usvrce"
+}
 }
 }
 blender/nodes/visible=0
