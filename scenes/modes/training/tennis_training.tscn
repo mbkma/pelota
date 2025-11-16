@@ -157,7 +157,7 @@ size = Vector3(38.3846, 2, 46.8104)
 script = ExtResource("1_gx02n")
 
 [node name="Player" parent="." instance=ExtResource("2_tjnrq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.989744)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.84141)
 controller_scene = ExtResource("3_tjnrq")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -185,6 +185,9 @@ shape = SubResource("BoxShape3D_4om81")
 
 [node name="Stadium" parent="." instance=ExtResource("4_guntq")]
 
+[node name="CollisionShape3D" parent="Stadium/WallWest" index="0"]
+visible = true
+
 [node name="Cameras" parent="." instance=ExtResource("5_lrvso")]
 
 [node name="BallCanon" parent="." instance=ExtResource("6_l6sfg")]
@@ -199,6 +202,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.1, -5.27)
 process_mode = 3
 metadata/_edit_use_anchors_ = true
 
+[editable path="Player"]
+[editable path="Player/Model"]
+[editable path="Player/Model/h/player_djokovic"]
 [editable path="Stadium"]
 [editable path="Stadium/stadium"]
 [editable path="Cameras"]

@@ -45,6 +45,7 @@ func _ready():
 		GlobalScenes.music_player.play_track_list(GlobalScenes.music_player.music, true, true)
 
 	# Animate button entrance and set initial focus
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_animate_buttons_entrance()
 	_show_main_menu()
 
@@ -148,8 +149,8 @@ func _animate_buttons_entrance() -> void:
 		button.modulate.a = 0.0
 		button.scale = Vector2(0.8, 0.8)
 
-		tween.tween_property(button, "modulate:a", 1.0, 0.6).set_delay(i * 0.1)
-		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.6).set_delay(i * 0.1)
+		tween.tween_property(button, "modulate:a", 1.0, 0.6).set_delay(i * 0.5)
+		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.6).set_delay(i * 0.5)
 
 	await tween.finished
 

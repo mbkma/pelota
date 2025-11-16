@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=27 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
 [ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scenes/ui/pause_menu.tscn" id="13_rcvjq"]
 [ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environment/crowd/crowd.tscn" id="14_o6v58"]
+[ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://addons/fpc/character.tscn" id="16_11ka0"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -182,6 +183,12 @@ glow_normalized = true
 [node name="TennisMatch" type="Node"]
 script = ExtResource("1_3pywv")
 
+[node name="Character" parent="." instance=ExtResource("16_11ka0")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -14.604242, 1.5630431, 3.5835266)
+
+[node name="Camera" parent="Character/Head" index="0"]
+current = true
+
 [node name="Player" parent="." instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.34449)
 controller_scene = ExtResource("3_1gved")
@@ -252,6 +259,7 @@ current = false
 
 [node name="MiddleFront" parent="Cameras" index="3" node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.9614011, 0.27515078, 0, -0.27515078, 0.9614011, 0, 6.936, 28.829)
+current = false
 fov = 23.5
 script = ExtResource("8_lvdh6")
 target = NodePath("../../Player")
@@ -295,6 +303,7 @@ transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295
 light_energy = 2.143
 shadow_enabled = true
 
+[editable path="Character"]
 [editable path="TelevisionHUD"]
 [editable path="TelevisionHUD/ScoreDisplay"]
 [editable path="TelevisionHUD/ScoreDisplay/VBoxContainer/Player1ScorePanel"]
