@@ -1,10 +1,7 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dpejjl7jrsgdc"]
-
-[ext_resource type="Texture2D" uid="uid://buh68t30hhleg" path="res://assets/models/player/test_04_djokovic-2_DH0853_C9U_24.jpg" id="1_vr4mh"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dpejjl7jrsgdc"]
 
 [resource]
 resource_name = "Material"
 cull_mode = 2
-albedo_texture = ExtResource("1_vr4mh")
 metallic = 0.409449
 roughness = 0.783465

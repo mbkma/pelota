@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://dbt16oxqmvu0r" path="res://scripts/characters/inputs/human_controller.gd" id="1_lhbt4"]
 
-[node name="HumanInput" type="Node"]
+[node name="HumanController" type="Node"]
 script = ExtResource("1_lhbt4")

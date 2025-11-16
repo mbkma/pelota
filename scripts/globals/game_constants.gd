@@ -72,11 +72,6 @@ const PACE_INCREMENT_RATE: float = 0.1
 ## Ball velocity threshold for canceling stroke (units/sec)
 const BALL_VELOCITY_CANCELLATION_THRESHOLD: float = 0.1
 
-## Backhand slice default power
-const BACKHAND_SLICE_POWER: float = 17.0
-
-## Backhand slice default spin (negative = topspin)
-const BACKHAND_SLICE_SPIN: float = -5.0
 
 ## Animation hit time as proportion of animation (forehand default)
 const ANIMATION_HIT_TIME: float = 0.63
@@ -102,6 +97,36 @@ const AI_BALL_COMMIT_DISTANCE: float = 3.0
 
 ## AI ball velocity minimum before considering it "stopped"
 const AI_BALL_VELOCITY_MIN: float = 0.1
+
+## Forehand pace (power)
+const AI_FOREHAND_PACE: float = 25.0
+
+## Forehand spin
+const AI_FOREHAND_SPIN: float = 1.0
+
+## Backhand pace (power)
+const AI_BACKHAND_PACE: float = 22.0
+
+## Backhand spin
+const AI_BACKHAND_SPIN: float = 0.5
+
+## Backhand slice pace (power)
+const AI_BACKHAND_SLICE_PACE: float = 18.0
+
+## Backhand slice spin
+const AI_BACKHAND_SLICE_SPIN: float = -1.0
+
+## Drop shot pace (power)
+const AI_DROP_SHOT_PACE: float = 10.0
+
+## Drop shot spin
+const AI_DROP_SHOT_SPIN: float = -1.0
+
+## Serve pace (power)
+const AI_SERVE_PACE: float = 30.0
+
+## Serve spin
+const AI_SERVE_SPIN: float = 0.8
 
 # ============================================================================
 # TIMING CONSTANTS
@@ -157,21 +182,6 @@ const COURT_LENGTH: float = 26.0
 
 ## Half court length - baseline distance from net (units)
 const COURT_LENGTH_HALF: float = 13.0
-
-# ============================================================================
-# MATCH STATES
-# ============================================================================
-
-## Match state enum for readability
-enum MatchState {
-	NOT_STARTED,
-	IDLE,
-	SERVE,
-	SECOND_SERVE,
-	PLAY,
-	FAULT,
-	GAME_OVER,
-}
 
 # ============================================================================
 # PLAYER POSITIONS

@@ -22,7 +22,7 @@ nodes/import_as_skeleton_bones=false
 nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
-meshes/generate_lods=true
+meshes/generate_lods=false
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
@@ -34,45 +34,42 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-materials/extract=0
+materials/extract=2
 materials/extract_format=0
-materials/extract_path=""
+materials/extract_path="res://assets/materials"
 _subresources={
 "materials": {
+"Asphalt New Detailed": null,
 "Material.004": {
 "use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/Material.004.tres"
+"use_external/fallback_path": "res://assets/materials/Material.004.tres",
+"use_external/path": "uid://crq2ua4yep0ce"
 },
-"court.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/court.001.tres"
-},
+"Matte Noise": null,
 "line": {
 "use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/line.tres"
+"use_external/fallback_path": "res://assets/materials/line.tres",
+"use_external/path": "uid://dqoyx7y0t6eyc"
 },
 "mercedes": {
 "use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/mercedes.tres"
+"use_external/fallback_path": "res://assets/materials/mercedes.tres",
+"use_external/path": "uid://cwn0ef1mkhj35"
 },
 "net": {
 "use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/net.tres"
+"use_external/fallback_path": "res://assets/materials/net.tres",
+"use_external/path": "uid://idkr1ikbtvxg"
 },
 "post": {
 "use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/post.tres"
+"use_external/fallback_path": "res://assets/materials/post.tres",
+"use_external/path": "uid://crgqg0w2ki2j2"
 },
 "top_net": {
 "use_external/enabled": true,
-"use_external/fallback_path": "",
-"use_external/path": "res://assets/models/court/materials/top_net.tres"
+"use_external/fallback_path": "res://assets/materials/top_net.tres",
+"use_external/path": "uid://b8r2wv4erwfnn"
 }
 }
 }

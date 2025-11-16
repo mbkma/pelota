@@ -11,7 +11,6 @@ age = 36
 country = "Spain"
 height = 185
 hand = "L"
-backhand = 2
 rank = 3
 stats = {
 "backhand_pace": 20,

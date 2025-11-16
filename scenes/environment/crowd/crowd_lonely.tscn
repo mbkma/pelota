@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://b68wl0nx6f7sh"]
+[gd_scene load_steps=3 format=3 uid="uid://dx7ug232c7tb7"]
 
 [ext_resource type="PackedScene" uid="uid://uxx5lgyjrs3m" path="res://assets/models/crowd/crowd-lonely.blend" id="1_uh07b"]
-[ext_resource type="Script" uid="uid://byoy2mf26x2pk" path="res://scripts/environment/crowd/crowd_lonely.gd" id="2_55ric"]
+[ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scripts/environment/crowd/crowd.gd" id="2_55ric"]
 
 [node name="crowd-lonely" instance=ExtResource("1_uh07b")]
 script = ExtResource("2_55ric")

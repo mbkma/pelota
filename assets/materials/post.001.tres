@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://odnuc0s3hsrj"]
+
+[resource]
+resource_name = "post.001"
+albedo_color = Color(0.10559505, 0.15939131, 0.22150655, 1)
+metallic = 0.20634922
+roughness = 0.2936508
+metadata/extras = {
+"blenderkit": {}
+}

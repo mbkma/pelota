@@ -46,7 +46,13 @@ signal input_changed(timing: float)
 @export var stroke_sounds_slice: Array[AudioStream]
 
 ## Currently queued stroke to execute
-var queued_stroke: Stroke
+var queued_stroke: Stroke:
+	get:
+		return queued_stroke
+	set(value):
+		queued_stroke = value
+		print("Setting queued stroke to ", value)
+
 
 var controller: Controller
 
@@ -137,7 +143,7 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 		# If there's no input, slow down to (0, 0)
 		_real_velocity = _real_velocity.lerp(Vector3.ZERO, _friction)
 
-	_real_velocity *= model.get_move_speed_factor()
+	#_real_velocity *= model.get_move_speed_factor()
 
 	velocity = _real_velocity
 	move_and_slide()
@@ -222,15 +228,15 @@ func _on_RacketArea_body_entered(body: Node3D) -> void:
 
 
 ## Execute ball hit with given stroke
-func _hit_ball(hit_ball: Ball, stroke: Stroke) -> void:
+func _hit_ball(ball: Ball, stroke: Stroke) -> void:
 	var stroke_velocity: Vector3 = GlobalPhysics.calculate_velocity(
-		hit_ball.position,
+		ball.position,
 		stroke.stroke_target,
 		-sign(position.z) * stroke.stroke_power,
 		stroke.stroke_spin
 	)
 
-	hit_ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
+	ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
 	play_stroke_sound(stroke)
 	ball_hit.emit()
 	cancel_stroke()
@@ -252,10 +258,10 @@ func serve(stroke: Stroke) -> void:
 
 ## Called by serve animation to hit the ball
 func from_anim_hit_serve() -> void:
-	if queued_stroke and ball:
 		_hit_ball(ball, queued_stroke)
 		just_served.emit()
-
+		print("SERVING")
+	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
 	ball = GlobalScenes.BALL_SCENE.instantiate()
@@ -264,7 +270,7 @@ func from_anim_spawn_ball() -> void:
 	get_parent().add_child(ball)
 	ball_spawned.emit(ball)
 	get_tree().call_group("Player", "set_active_ball", ball)
-
+	print("from_anim_spawn_ball", queued_stroke, ball)
 
 ## Other Functions
 ####################

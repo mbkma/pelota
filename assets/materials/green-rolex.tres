@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cn2jmog8hrr13"]
+
+[resource]
+resource_name = "green-rolex"
+cull_mode = 2
+albedo_color = Color(0.08875309, 0.3670822, 0.057109136, 1)
+roughness = 0.5
+metadata/extras = {
+"blenderkit": {}
+}

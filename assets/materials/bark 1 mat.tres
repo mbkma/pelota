@@ -1,0 +1,22 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://dux77f00quep1"]
+
+[ext_resource type="Texture2D" uid="uid://dfn0v1hnakkg4" path="res://assets/models/stadium/textures/bark 1 color.png" id="1_31p32"]
+[ext_resource type="Texture2D" uid="uid://dw87e4r28e70f" path="res://assets/models/stadium/textures/bark 1 roughness.png" id="2_q5m53"]
+[ext_resource type="Texture2D" uid="uid://ch2q46au5u6el" path="res://assets/models/stadium/textures/bark 1 normal open gl.png" id="3_0cg4k"]
+
+[resource]
+resource_name = "bark 1 mat"
+cull_mode = 2
+albedo_texture = ExtResource("1_31p32")
+metallic_texture = ExtResource("2_q5m53")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_q5m53")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.61
+normal_texture = ExtResource("3_0cg4k")
+uv1_scale = Vector3(2, 2, 1)
+uv1_offset = Vector3(0, -1, 0)
+metadata/extras = {
+"yp": {}
+}

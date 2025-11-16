@@ -1,6 +1,6 @@
 ## Human player input handler for keyboard/mouse controls
 ## Manages movement, aiming, and stroke execution
-class_name HumanInput
+class_name HumanController
 extends Controller
 
 ## Local signal for aiming position (parent class has aiming_at_position)
@@ -39,22 +39,26 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if player and player.ball:
-		var distance_to_ball: float = GlobalUtils.get_horizontal_distance(player, player.ball)
-		if (
-			distance_to_ball < 0
-			or player.ball.velocity.length() < GameConstants.BALL_VELOCITY_CANCELLATION_THRESHOLD
-		):
-			player.cancel_stroke()
-			_move_input_blocked = false
+	#if player and player.ball:
+		#var distance_to_ball: float = GlobalUtils.get_horizontal_distance(player, player.ball)
+		#if (
+			#distance_to_ball < 0
+			#or player.ball.velocity.length() < GameConstants.BALL_VELOCITY_CANCELLATION_THRESHOLD
+		#):
+			#player.cancel_stroke()
+			#_move_input_blocked = false
 
 	# Handle stroke input
 	if not _stroke_input_blocked:
-		if Input.is_action_just_pressed("strike"):
+		if (Input.is_action_just_pressed("strike") or 
+			Input.is_action_just_pressed("slice") or
+			Input.is_action_just_pressed("drop_shot")):
 			_input_pace = 0.0
 			_mouse_from = get_viewport().get_mouse_position()
 
-		if Input.is_action_pressed("strike"):
+		if (Input.is_action_just_pressed("strike") or 
+			Input.is_action_just_pressed("slice") or
+			Input.is_action_just_pressed("drop_shot")):
 			_input_pace += GameConstants.PACE_INCREMENT_RATE
 			pace_changed.emit(_input_pace)
 			_mouse_to = get_viewport().get_mouse_position()
@@ -62,15 +66,16 @@ func _process(_delta: float) -> void:
 			player.ball_aim_marker.global_position = _aiming_at
 			player.ball_aim_marker.visible = true
 
-		if Input.is_action_just_released("strike"):
+		if Input.is_action_just_pressed("strike"):
 			if _serve_controls:
 				_do_serve(_aiming_at, _input_pace)
 				_serve_controls = false
 			else:
-				if not player.ball:
-					printerr("Player has no ball")
-				else:
-					_do_stroke(_aiming_at, _input_pace)
+				_do_stroke(_aiming_at, _input_pace)
+		elif Input.is_action_just_pressed("slice"):
+			_do_stroke(_aiming_at, _input_pace, "slice")
+		elif Input.is_action_just_pressed("drop_shot"):
+			_do_stroke(_aiming_at, _input_pace, "drop_shot")
 
 	# Handle challenge input
 	if Input.is_action_just_pressed("challenge"):
@@ -151,15 +156,15 @@ func _do_serve(aim_position: Vector3, pace: float) -> void:
 
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_type = Stroke.StrokeType.SERVE
-	stroke.stroke_power = float(player.stats.get("serve_pace", 30.0)) + pace
-	stroke.stroke_spin = 0.0
+	stroke.stroke_power = GameConstants.AI_SERVE_PACE + pace
+	stroke.stroke_spin = GameConstants.AI_SERVE_SPIN
 	stroke.stroke_target = aim_position
 
 	player.serve(stroke)
 
 
 ## Executes a rally stroke (forehand/backhand/slice)
-func _do_stroke(aim_position: Vector3, pace: float) -> void:
+func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") -> void:
 	if not validate_player():
 		push_error("HumanInput._do_stroke: Invalid player state")
 		return
@@ -186,7 +191,7 @@ func _do_stroke(aim_position: Vector3, pace: float) -> void:
 		)
 		return
 
-	var stroke: Stroke = _construct_stroke_from_input(closest_step, aim_position, pace)
+	var stroke: Stroke = _construct_stroke_from_input(closest_step, aim_position, pace, stroke_name)
 	_move_input_blocked = true
 
 	player.queue_stroke(stroke)
@@ -203,7 +208,7 @@ func _clear_stroke_input() -> void:
 
 ## Constructs a stroke from player input, determining stroke type based on ball position
 func _construct_stroke_from_input(
-	closest_step: TrajectoryStep, aim_position: Vector3, pace: float
+	closest_step: TrajectoryStep, aim_position: Vector3, pace: float, stroke_name: String
 ) -> Stroke:
 	if not closest_step:
 		push_error("HumanInput._construct_stroke_from_input: closest_step is null")
@@ -216,20 +221,25 @@ func _construct_stroke_from_input(
 	if dot_product > 0.0:
 		# Forehand stroke
 		stroke.stroke_type = Stroke.StrokeType.FOREHAND
-		stroke.stroke_power = float(player.stats.get("forehand_pace", 25.0)) + pace
-		stroke.stroke_spin = float(player.stats.get("forehand_spin", 5.0))
+		stroke.stroke_power = GameConstants.AI_FOREHAND_PACE + pace
+		stroke.stroke_spin = GameConstants.AI_FOREHAND_SPIN
 		stroke.stroke_target = aim_position
 	else:
 		# Backhand or slice stroke
-		if Input.is_action_pressed("slice"):
+		if stroke_name == "slice":
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND_SLICE
-			stroke.stroke_power = GameConstants.BACKHAND_SLICE_POWER
-			stroke.stroke_spin = GameConstants.BACKHAND_SLICE_SPIN
+			stroke.stroke_power = GameConstants.AI_BACKHAND_SLICE_PACE
+			stroke.stroke_spin = GameConstants.AI_BACKHAND_SLICE_SPIN
+			stroke.stroke_target = aim_position
+		elif stroke_name == "drop_shot":
+			stroke.stroke_type = Stroke.StrokeType.BACKHAND_DROP_SHOT
+			stroke.stroke_power = GameConstants.AI_DROP_SHOT_PACE
+			stroke.stroke_spin = GameConstants.AI_DROP_SHOT_SPIN
 			stroke.stroke_target = aim_position
 		else:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND
-			stroke.stroke_power = float(player.stats.get("backhand_pace", 25.0)) + pace
-			stroke.stroke_spin = float(player.stats.get("backhand_spin", 5.0))
+			stroke.stroke_power = GameConstants.AI_BACKHAND_PACE + pace
+			stroke.stroke_spin = GameConstants.AI_BACKHAND_SPIN
 			stroke.stroke_target = aim_position
 
 	stroke.step = closest_step

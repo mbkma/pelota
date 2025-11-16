@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b68pou4ei1f15"]
+
+[ext_resource type="Texture2D" uid="uid://c2foqpb7m847t" path="res://assets/models/stadium/textures/Plastic008_1K_Roughness.png" id="1_ejr0n"]
+
+[resource]
+resource_name = "white-plastic"
+cull_mode = 2
+albedo_color = Color(0.73416287, 0.73416287, 0.73416287, 1)
+metallic_texture = ExtResource("1_ejr0n")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_ejr0n")
+roughness_texture_channel = 1
+metadata/extras = {
+"blenderkit": {}
+}

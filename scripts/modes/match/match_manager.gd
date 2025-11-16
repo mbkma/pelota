@@ -198,7 +198,7 @@ func _handle_fault() -> void:
 			umpire.say_fault()
 
 	if crowd:
-		crowd.victory()
+		crowd.play_victory()
 
 	var point_winner: Player
 	if _ground_contacts == 0:

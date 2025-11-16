@@ -1,10 +1,7 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://gacp3w2b2hn5"]
-
-[ext_resource type="Texture2D" uid="uid://dwdq7l50mtibp" path="res://assets/models/player/test_04_eyelashes01.png" id="1_hjshg"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://gacp3w2b2hn5"]
 
 [resource]
 resource_name = "Human.eyelashes01.001"
 transparency = 4
 cull_mode = 2
-albedo_texture = ExtResource("1_hjshg")
 roughness = 0.5

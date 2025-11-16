@@ -9,7 +9,6 @@ last_name = "Tsitsipas"
 age = 23
 country = "Greek"
 height = 193
-hand = "R"
 backhand = 1
 rank = 4
 stats = {
@@ -22,9 +21,4 @@ stats = {
 "serve_pace": 35,
 "speed": 100,
 "strength": 100
-}
-sounds = {
-"grunt_flat": [],
-"grunt_frequency": 0.0,
-"victory": []
 }

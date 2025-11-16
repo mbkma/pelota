@@ -1,9 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://du4q8qqg54l40"]
-
-[ext_resource type="Texture2D" uid="uid://bbexrvjceqwis" path="res://assets/models/player/test_04_middleage_lightskinned_male_diffuse.png" id="1_di3cp"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://du4q8qqg54l40"]
 
 [resource]
 resource_name = "Human.body"
 cull_mode = 2
-albedo_texture = ExtResource("1_di3cp")
 roughness = 0.56947

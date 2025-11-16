@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://c5bpw2hb2xuit"]
+
+[ext_resource type="Texture2D" uid="uid://du0bsuhit70gm" path="res://assets/models/court/textures/net1.png" id="1_q81mf"]
+
+[resource]
+resource_name = "net.001"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_q81mf")
+roughness = 0.8492063
+metadata/extras = {
+"blenderkit": {}
+}

@@ -1,11 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://4knexq0rmmj1"]
-
-[ext_resource type="Texture2D" uid="uid://br5nvardvko18" path="res://assets/models/player/test_04_head_strings.png" id="1_ige2u"]
-[ext_resource type="Texture2D" uid="uid://31wuwdhjwvo" path="res://assets/models/player/test_04_Image_3.png" id="2_jyf5y"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://4knexq0rmmj1"]
 
 [resource]
 resource_name = "strings.001"
 transparency = 4
-albedo_texture = ExtResource("1_ige2u")
 normal_enabled = true
-normal_texture = ExtResource("2_jyf5y")

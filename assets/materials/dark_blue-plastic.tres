@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://bu5fjlvmcsor7"]
+
+[ext_resource type="Texture2D" uid="uid://cvp8gffdr84ag" path="res://assets/models/stadium/textures/Plastic007_1K_Roughness.png" id="1_qcw1n"]
+[ext_resource type="Texture2D" uid="uid://ca0hm0poxoenu" path="res://assets/models/stadium/textures/Plastic007_1K_NormalGL.png" id="2_f6m5a"]
+
+[resource]
+resource_name = "dark_blue-plastic"
+albedo_color = Color(0.16496465, 0.26037785, 0.41771877, 1)
+metallic_texture = ExtResource("1_qcw1n")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_qcw1n")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("2_f6m5a")
+metadata/extras = {
+"blenderkit": {}
+}

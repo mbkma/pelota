@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bkocmevna7ekb"]
+
+[ext_resource type="Texture2D" uid="uid://b2kkilyhf4234" path="res://assets/models/stadium/textures/ibm-alpha.png" id="1_ktla5"]
+
+[resource]
+resource_name = "ibm"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_ktla5")
+roughness = 0.5
+texture_repeat = false
+metadata/extras = {
+"blenderkit": {}
+}

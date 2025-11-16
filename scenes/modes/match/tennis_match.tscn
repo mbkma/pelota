@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=26 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/modes/match/match_manager.tscn" id="8_2s2ac"]
+[ext_resource type="Script" uid="uid://dqtx4wyjr5o1v" path="res://scripts/environment/world/us_open/adaptive_broadcast_camera.gd" id="8_lvdh6"]
 [ext_resource type="PackedScene" uid="uid://cggqb75a8w8r" path="res://addons/debug_menu/debug_menu.tscn" id="10_7cjfu"]
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/debug_hud.tscn" id="11_7qdcc"]
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
@@ -36,17 +37,159 @@ _data = {
 &"start": SubResource("1")
 }
 
+[sub_resource type="Shader" id="Shader_rdv83"]
+code = "
+// NOTE: Shader automatically converted from Godot Engine 4.3.stable's ProceduralSkyMaterial.
+
+shader_type sky;
+render_mode use_debanding;
+
+uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
+uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float sky_curve : hint_range(0, 1) = 0.15;
+uniform float sky_energy = 1.0; // In Lux.
+uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
+uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
+uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float ground_curve : hint_range(0, 1) = 0.02;
+uniform float ground_energy = 1.0;
+uniform float sun_angle_max = 30.0;
+uniform float sun_curve : hint_range(0, 1) = 0.15;
+uniform float exposure : hint_range(0, 128) = 1.0;
+
+uniform sampler2D cloud_texture;
+uniform sampler2D cloud_texture2;
+uniform vec2 cloud_direction;
+uniform vec2 cloud_direction2;
+uniform vec2 cloud_scale;
+uniform float cloud_distance;
+uniform float cloud_speed;
+uniform float cloud_speed2;
+
+void sky() {
+	float v_angle = acos(clamp(EYEDIR.y, -1.0, 1.0));
+	float c = (1.0 - v_angle / (PI * 0.5));
+	vec3 sky = mix(sky_horizon_color.rgb, sky_top_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / sky_curve), 0.0, 1.0));
+	sky *= sky_energy;
+
+	if (LIGHT0_ENABLED) {
+		float sun_angle = acos(dot(LIGHT0_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT0_SIZE) {
+			sky = LIGHT0_COLOR * LIGHT0_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT0_SIZE) / (sun_angle_max - LIGHT0_SIZE);
+			sky = mix(LIGHT0_COLOR * LIGHT0_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT1_ENABLED) {
+		float sun_angle = acos(dot(LIGHT1_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT1_SIZE) {
+			sky = LIGHT1_COLOR * LIGHT1_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT1_SIZE) / (sun_angle_max - LIGHT1_SIZE);
+			sky = mix(LIGHT1_COLOR * LIGHT1_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT2_ENABLED) {
+		float sun_angle = acos(dot(LIGHT2_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT2_SIZE) {
+			sky = LIGHT2_COLOR * LIGHT2_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT2_SIZE) / (sun_angle_max - LIGHT2_SIZE);
+			sky = mix(LIGHT2_COLOR * LIGHT2_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT3_ENABLED) {
+		float sun_angle = acos(dot(LIGHT3_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT3_SIZE) {
+			sky = LIGHT3_COLOR * LIGHT3_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT3_SIZE) / (sun_angle_max - LIGHT3_SIZE);
+			sky = mix(LIGHT3_COLOR * LIGHT3_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	vec4 sky_cover_texture = texture(sky_cover, SKY_COORDS);
+	sky += (sky_cover_texture.rgb * sky_cover_modulate.rgb) * sky_cover_texture.a * sky_cover_modulate.a * sky_energy;
+
+	c = (v_angle - (PI * 0.5)) / (PI * 0.5);
+	vec3 ground = mix(ground_horizon_color.rgb, ground_bottom_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / ground_curve), 0.0, 1.0));
+	ground *= ground_energy;
+
+	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
+	vec3 clouds = texture(cloud_texture, sky_uv * cloud_scale + TIME * cloud_direction * cloud_speed).rgb - texture(cloud_texture2, sky_uv * cloud_scale + TIME * cloud_direction2 * cloud_speed2).rgb;
+	//clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
+	clouds = clamp(clouds, 0.0, 1.0);
+	sky += clouds;
+	
+	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_11ka0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0cs1n"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_11ka0")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cux4k"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_udx35"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_cux4k")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xinb2"]
+shader = SubResource("Shader_rdv83")
+shader_parameter/sky_top_color = Color(0.291673, 0.457424, 0.658811, 1)
+shader_parameter/sky_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
+shader_parameter/sky_curve = 0.15
+shader_parameter/sky_energy = 1.0
+shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
+shader_parameter/ground_bottom_color = Color(0.2, 0.169, 0.133, 1)
+shader_parameter/ground_horizon_color = Color(0.646, 0.656, 0.67, 1)
+shader_parameter/ground_curve = 0.02
+shader_parameter/ground_energy = 1.0
+shader_parameter/sun_angle_max = 0.523599
+shader_parameter/sun_curve = 0.15
+shader_parameter/exposure = 1.0
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_0cs1n")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_udx35")
+shader_parameter/cloud_direction = Vector2(-1, 1)
+shader_parameter/cloud_direction2 = Vector2(1, 0)
+shader_parameter/cloud_scale = Vector2(0.05, 0.05)
+shader_parameter/cloud_distance = 0.0
+shader_parameter/cloud_speed = 0.001
+shader_parameter/cloud_speed2 = 0.002
+
+[sub_resource type="Sky" id="Sky_m0hxs"]
+sky_material = SubResource("ShaderMaterial_xinb2")
+
+[sub_resource type="Environment" id="Environment_0o0an"]
+background_mode = 2
+sky = SubResource("Sky_m0hxs")
+tonemap_mode = 4
+glow_enabled = true
+glow_normalized = true
+
 [node name="TennisMatch" type="Node"]
 script = ExtResource("1_3pywv")
+
+[node name="Player" parent="." instance=ExtResource("2_hqvfk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.34449)
+controller_scene = ExtResource("3_1gved")
 
 [node name="Player2" parent="." instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.376896)
 controller_scene = ExtResource("3_1gved")
 player_data = ExtResource("4_7pj63")
-
-[node name="Player" parent="." instance=ExtResource("2_hqvfk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.34449)
-controller_scene = ExtResource("3_1gved")
 
 [node name="TelevisionHUD" parent="." instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
@@ -102,8 +245,19 @@ libraries = {
 
 [node name="Stadium" parent="." instance=ExtResource("6_4vere")]
 
-[node name="Cameras" parent="." node_paths=PackedStringArray("cams") instance=ExtResource("7_6frth")]
-cams = [NodePath("FlyingCam"), NodePath("StaticEastCam"), NodePath("TopFront"), NodePath("TopBack"), NodePath("CourtSideFront"), NodePath("CourtSideBack"), NodePath("CameraTop")]
+[node name="Cameras" parent="." instance=ExtResource("7_6frth")]
+
+[node name="TopFront" parent="Cameras" index="1"]
+current = false
+
+[node name="MiddleFront" parent="Cameras" index="3" node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.9614011, 0.27515078, 0, -0.27515078, 0.9614011, 0, 6.936, 28.829)
+fov = 23.5
+script = ExtResource("8_lvdh6")
+target = NodePath("../../Player")
+
+[node name="MiddleBack" parent="Cameras" index="4"]
+transform = Transform3D(-1, 4.79117e-08, -1.43193e-07, 0, 0.948324, 0.317305, 1.50996e-07, 0.317305, -0.948324, 0, 7.446, -28)
 
 [node name="TrajectoryDrawer" parent="." node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]
 players = [NodePath("../Player"), NodePath("../Player2")]
@@ -133,10 +287,17 @@ television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
 crowd = NodePath("../Crowd")
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0o0an")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295, -0.446156, 0.44352, -0.777324, 0, 5.70078, 0)
+light_energy = 2.143
+shadow_enabled = true
+
 [editable path="TelevisionHUD"]
 [editable path="TelevisionHUD/ScoreDisplay"]
 [editable path="TelevisionHUD/ScoreDisplay/VBoxContainer/Player1ScorePanel"]
 [editable path="Stadium"]
+[editable path="Stadium/stadium"]
 [editable path="Cameras"]
-[editable path="Cameras/Stadium"]
-[editable path="Cameras/Stadium/stadium"]

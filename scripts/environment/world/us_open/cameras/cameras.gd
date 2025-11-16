@@ -1,7 +1,11 @@
 extends Node3D
 
-@export var cams: Array[Camera3D]
+
 var active_cam_index := 0
+var cams: Array
+
+func _ready() -> void:
+	cams = get_children() 
 
 
 func _input(event: InputEvent) -> void:

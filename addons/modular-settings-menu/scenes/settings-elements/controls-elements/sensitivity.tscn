@@ -25,10 +25,10 @@ grow_vertical = 2
 script = SubResource("GDScript_s1j2c")
 MAX_VALUE = 5.0
 STEP_VALUE = 0.01
-IDENTIFIER = "Sensitivity"
-IS_IN_GAME_SETTING = true
 SliderRef = NodePath("SliderValue/Slider")
 ValueBoxRef = NodePath("SliderValue/Value")
+IDENTIFIER = "Sensitivity"
+IS_IN_GAME_SETTING = true
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2

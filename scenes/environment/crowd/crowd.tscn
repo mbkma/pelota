@@ -1,15 +1,27 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxo4shm4p8nco"]
+[gd_scene load_steps=10 format=3 uid="uid://cxo4shm4p8nco"]
 
 [ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scripts/environment/crowd/crowd.gd" id="1_a7rkt"]
-[ext_resource type="AudioStream" uid="uid://501usltpmnhx" path="res://assets/sounds/effects/crowd/crowd-after-point1.wav" id="2_a1kgf"]
-[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scripts/environment/crowd/crowd_block.tscn" id="2_axxkg"]
-[ext_resource type="AudioStream" uid="uid://birb4657ratbv" path="res://assets/sounds/effects/crowd/crowd-after-point2.wav" id="3_k6qjj"]
-[ext_resource type="AudioStream" uid="uid://ck1krkhd4cgch" path="res://assets/sounds/effects/crowd/crowd-idle.wav" id="4_grqhi"]
+[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environment/crowd/crowd_block.tscn" id="2_axxkg"]
+[ext_resource type="Script" uid="uid://wf2jvpga3hfj" path="res://scripts/environment/crowd/crowd_config.gd" id="2_g6y2l"]
+[ext_resource type="AudioStream" uid="uid://501usltpmnhx" path="res://assets/sounds/effects/crowd/crowd-after-point1.wav" id="2_g038y"]
+[ext_resource type="AudioStream" uid="uid://birb4657ratbv" path="res://assets/sounds/effects/crowd/crowd-after-point2.wav" id="3_xu5ij"]
+[ext_resource type="Script" uid="uid://cln3iv60dk3kt" path="res://scripts/environment/crowd/crowd_color_palette.gd" id="4_gs5kl"]
+[ext_resource type="AudioStream" uid="uid://ck1krkhd4cgch" path="res://assets/sounds/effects/crowd/crowd-idle.wav" id="5_cp0o2"]
+
+[sub_resource type="Resource" id="Resource_pnppm"]
+script = ExtResource("4_gs5kl")
+metadata/_custom_type_script = "uid://cln3iv60dk3kt"
+
+[sub_resource type="Resource" id="Resource_x5f0j"]
+script = ExtResource("2_g6y2l")
+idle_sounds = Array[AudioStream]([ExtResource("5_cp0o2")])
+after_point_sounds = Array[AudioStream]([ExtResource("2_g038y"), ExtResource("3_xu5ij")])
+color_palette = SubResource("Resource_pnppm")
+metadata/_custom_type_script = "uid://wf2jvpga3hfj"
 
 [node name="Crowd" type="Node3D"]
 script = ExtResource("1_a7rkt")
-crowd_after_point_sounds = Array[AudioStream]([ExtResource("2_a1kgf"), ExtResource("3_k6qjj")])
-crowd_idle_sounds = Array[AudioStream]([ExtResource("4_grqhi")])
+config = SubResource("Resource_x5f0j")
 
 [node name="Blocks" type="Node3D" parent="."]
 

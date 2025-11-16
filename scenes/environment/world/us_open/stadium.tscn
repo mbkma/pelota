@@ -1,25 +1,12 @@
-[gd_scene load_steps=18 format=3 uid="uid://d237t32p1sgei"]
+[gd_scene load_steps=13 format=3 uid="uid://d237t32p1sgei"]
 
-[ext_resource type="LightmapGIData" uid="uid://b4qe3oiugwlel" path="res://scripts/environment/world/us_open/stadium.lmbake" id="2_af67j"]
-[ext_resource type="Texture2D" uid="uid://dhppfhjttkkk0" path="res://assets/textures/environment/skyboxes/OutdoorHDRI010_1K-HDR.exr" id="2_fequ6"]
 [ext_resource type="PackedScene" uid="uid://dvo2jq6bdkolh" path="res://assets/models/stadium/stadium.blend" id="2_hi2re"]
 [ext_resource type="Script" uid="uid://h38us3lvmlk7" path="res://scripts/environment/world/us_open/stadium.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://scripts/environment/world/us_open/serve_speed_panel.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://scripts/core/court.tscn" id="5_2qn74"]
+[ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://scenes/environment/world/us_open/serve_speed_panel.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://scenes/core/court.tscn" id="5_2qn74"]
 [ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
 [ext_resource type="Script" uid="uid://cwhjwue5t16nc" path="res://scripts/environment/world/us_open/look_at.gd" id="7_af67j"]
 [ext_resource type="PackedScene" uid="uid://dlfmxq26xgf2y" path="res://assets/models/stadium/camera.blend" id="8_rminr"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_rminr"]
-panorama = ExtResource("2_fequ6")
-
-[sub_resource type="Sky" id="Sky_cgkyy"]
-sky_material = SubResource("PanoramaSkyMaterial_rminr")
-
-[sub_resource type="Environment" id="Environment_nv566"]
-background_mode = 2
-sky = SubResource("Sky_cgkyy")
-tonemap_mode = 2
 
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(38.3846, 2, 46.8104)
@@ -52,17 +39,7 @@ cache/0/16/0/scale = 1.0
 [node name="Stadium" type="Node3D"]
 script = ExtResource("3")
 
-[node name="LightmapGI" type="LightmapGI" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.56784, 0)
-light_data = ExtResource("2_af67j")
-
 [node name="stadium" parent="." instance=ExtResource("2_hi2re")]
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.368499, 0.926814, 0.0722782, -0.872854, 0.318192, 0.369972, 0.319897, -0.199423, 0.926227, 0, 5.83942, 0)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_nv566")
 
 [node name="Court" parent="." instance=ExtResource("5_2qn74")]
 
@@ -199,3 +176,5 @@ script = ExtResource("7_af67j")
 
 [node name="camera" parent="BackPlayerCamera" instance=ExtResource("8_rminr")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[editable path="stadium"]

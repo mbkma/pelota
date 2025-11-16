@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cxt62tfr3pjqm"]
+
+[ext_resource type="Texture2D" uid="uid://dr5u840jw0cju" path="res://assets/models/court/textures/mercedes-alpha.png" id="1_ir8bi"]
+
+[resource]
+resource_name = "mercedes-alpha.001"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_ir8bi")
+roughness = 0.5
+texture_repeat = false
+metadata/extras = {
+"blenderkit": {}
+}

@@ -34,6 +34,61 @@ text = "Test"
 
 [node name="Model" parent="." instance=ExtResource("3_lm2ok")]
 
+[node name="Skeleton3D" parent="Model/h/player/game-rig" index="0"]
+bones/0/position = Vector3(0.0004876821, 0.9450643, 0.011506445)
+bones/1/rotation = Quaternion(0.16749284, -2.2308469e-10, 1.8647224e-10, 0.9858734)
+bones/2/rotation = Quaternion(-0.1379103, 6.8865054e-05, 9.208827e-06, 0.9904447)
+bones/3/position = Vector3(5.0939253e-11, 0.06629219, -1.6218122e-08)
+bones/3/rotation = Quaternion(-0.0038025433, 0.00020073722, 1.9390143e-05, 0.99999285)
+bones/4/position = Vector3(-1.603148e-11, 0.15502983, 9.361542e-08)
+bones/4/rotation = Quaternion(0.19794478, 0.00013495515, -7.4838595e-06, 0.98021317)
+bones/5/position = Vector3(9.8516965e-11, 0.24032338, 3.9008e-08)
+bones/5/rotation = Quaternion(0.023322636, -0.00019486598, 5.5966684e-05, 0.999728)
+bones/6/rotation = Quaternion(-0.15147841, -0.0016709982, 0.00024696236, 0.9884591)
+bones/105/position = Vector3(0.024737647, 0.1673546, 0.03502617)
+bones/105/rotation = Quaternion(0.6095816, 0.5081251, 0.46690083, -0.39015764)
+bones/106/position = Vector3(8.901107e-09, 0.17808999, -1.1054922e-07)
+bones/106/rotation = Quaternion(-0.41314667, -0.029670011, -0.1785276, 0.89250076)
+bones/107/position = Vector3(4.276455e-09, 0.17808981, -3.041497e-07)
+bones/107/rotation = Quaternion(-0.13920735, 0.47552457, -0.56688285, 0.65813494)
+bones/108/rotation = Quaternion(-6.804238e-09, 0.13241477, 1.560463e-07, 0.9911944)
+bones/109/rotation = Quaternion(0.54007775, 0.13229552, 0.012962921, 0.8310512)
+bones/110/rotation = Quaternion(-8.6508116e-08, -0.3553739, -4.0785197e-10, 0.9347243)
+bones/111/rotation = Quaternion(0.04168575, -0.35444087, -0.14519224, 0.9227965)
+bones/131/position = Vector3(-0.024737647, 0.1673546, 0.03502617)
+bones/131/rotation = Quaternion(0.6095816, -0.5081251, -0.46690083, -0.39015764)
+bones/132/position = Vector3(-1.0789603e-09, 0.1780905, -5.168904e-08)
+bones/132/rotation = Quaternion(-0.4323714, -0.010470283, 0.10252033, 0.8957874)
+bones/133/position = Vector3(-1.4677126e-08, 0.17809033, -1.1341862e-07)
+bones/133/rotation = Quaternion(-0.2800082, -0.53376335, 0.48074907, 0.6368457)
+bones/134/rotation = Quaternion(1.3667149e-07, -0.23744333, -2.280279e-07, 0.9714014)
+bones/135/rotation = Quaternion(0.589558, -0.23714912, -0.08803927, 0.76709247)
+bones/158/rotation = Quaternion(0.99689317, 0.043484896, 0.0028612495, -0.06561208)
+bones/159/rotation = Quaternion(2.5087047e-06, 3.5416196e-08, -1.2575238e-05, 1)
+bones/160/rotation = Quaternion(0.9969294, -0.043492302, -0.0028506333, -0.06505564)
+bones/161/rotation = Quaternion(-7.4594786e-06, -1.0232261e-07, -3.7242655e-05, 1)
+bones/164/rotation = Quaternion(0.996934, 0.04378713, 0.0028292758, -0.06478697)
+bones/165/position = Vector3(-1.6392695e-08, 0.24579482, 4.591407e-08)
+bones/165/rotation = Quaternion(7.690219e-08, -7.582948e-06, 2.1837952e-08, 1)
+bones/166/position = Vector3(7.885021e-09, 0.24579436, 2.0730592e-08)
+bones/166/rotation = Quaternion(0.054869946, 0.0052929795, -0.011741787, 0.9984105)
+bones/167/position = Vector3(1.0848639e-08, 0.23160115, 6.411713e-09)
+bones/167/rotation = Quaternion(-5.9830036e-08, -3.1834887e-05, 3.2761644e-08, 1)
+bones/168/position = Vector3(2.2323412e-08, 0.23160073, 1.6886979e-08)
+bones/168/rotation = Quaternion(-0.5395356, -0.039257064, 0.041368186, 0.8400292)
+bones/170/rotation = Quaternion(0.9970182, -0.043607403, -0.0028699639, -0.06359972)
+bones/171/position = Vector3(-2.0431779e-08, 0.24579644, 5.162621e-08)
+bones/171/rotation = Quaternion(7.0160844e-08, 1.9674873e-05, -2.8696764e-08, 1)
+bones/172/position = Vector3(9.523875e-09, 0.24579594, 2.9225061e-08)
+bones/172/rotation = Quaternion(0.054739635, -0.005276483, 0.0117306765, 0.9984178)
+bones/173/position = Vector3(-8.243022e-09, 0.23160346, 9.0846495e-09)
+bones/173/rotation = Quaternion(-5.6797628e-08, -2.4343266e-05, -2.5919878e-08, 1)
+bones/174/position = Vector3(1.8708946e-08, 0.23160282, 2.0045505e-09)
+bones/174/rotation = Quaternion(-0.53996265, 0.03919516, -0.041211367, 0.83976537)
+
+[node name="DEF-attachment_hand_R" parent="Model/h/player/game-rig/Skeleton3D" index="0"]
+transform = Transform3D(-0.086712845, 0.41879636, 0.9039304, 0.36494723, 0.8576278, -0.36233532, -0.9269807, 0.29846776, -0.22720608, -0.103142716, 1.1616664, 0.40615857)
+
 [node name="AnimationTreeRootMotion" parent="Model" index="4"]
 parameters/stroke/Transition/current_state = ""
 parameters/stroke/Transition/current_index = -1
@@ -45,6 +100,7 @@ top_level = true
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="BallAimMarker" parent="." instance=ExtResource("10_7vyk4")]
+visible = false
 
 [editable path="Model"]
 [editable path="Model/h/player"]

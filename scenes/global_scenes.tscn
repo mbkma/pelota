@@ -46,4 +46,4 @@ BALL_SCENE = ExtResource("5_g2ium")
 
 [node name="GlobalMusicPlayer" type="Node" parent="."]
 script = ExtResource("6_ive1o")
-music = [SubResource("Resource_41rb2"), SubResource("Resource_4xgel"), SubResource("Resource_ns3k6")]
+music = Array[ExtResource("7_u7smb")]([SubResource("Resource_41rb2"), SubResource("Resource_4xgel"), SubResource("Resource_ns3k6")])

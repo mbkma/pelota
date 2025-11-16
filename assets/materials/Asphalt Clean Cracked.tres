@@ -1,0 +1,232 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cikr7ls8kjdnk"]
+
+[ext_resource type="Texture2D" uid="uid://xbqxl513b5cv" path="res://assets/models/stadium/textures/Asphalt_08_roughness.jpg" id="1_rvnhh"]
+[ext_resource type="Texture2D" uid="uid://dhxgoc2kqj3x0" path="res://assets/models/stadium/textures/Asphalt_08_normalogl.jpg" id="2_7kghh"]
+
+[resource]
+resource_name = "Asphalt Clean Cracked"
+cull_mode = 2
+albedo_color = Color(0.17251694, 0.34161434, 0.09483107, 1)
+metallic_specular = 0.3
+metallic_texture = ExtResource("1_rvnhh")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("1_rvnhh")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("2_7kghh")
+metadata/extras = {
+"asset_data": {
+"addonVersion": "3.17.0",
+"assetBaseId": "48361b9e-b5a8-4367-92d5-c2f9eda05e88",
+"assetType": "material",
+"author": {
+"aboutMe": "3D artist and generalist.",
+"aboutMeUrl": "https://www.patreon.com/Sillet",
+"avatar128": "/avatar-redirect/c3b8d54b-249d-4922-be68-e4fc5a4f40fd/128/",
+"firstName": "Julio",
+"fullName": "Julio Sillet",
+"gravatarHash": "775143b46896be593570fa04745731da",
+"id": "10533",
+"lastName": "Sillet"
+},
+"available_resolutions": [512.0, 1024.0, 2048.0],
+"canDownload": true,
+"canDownloadError": true,
+"category": "asphalt",
+"created": "2025-11-04T04:12:08.663328+01:00",
+"description": "Clean cracked asphalt ground.",
+"dictParameters": {
+"addons": true,
+"animated": false,
+"engine": "cycles",
+"joinBlenderkitDiscounts": true,
+"materialStyle": "realistic",
+"megapixels": 0.0,
+"nodeCount": 0.0,
+"pbrType": "metallic",
+"procedural": true,
+"purePbr": true,
+"sexualizedContent": false,
+"shaders": ["[]"],
+"textureCount": 0.0,
+"textureSizeMeters": 1.0,
+"uv": true
+},
+"displayName": "Asphalt Clean Cracked",
+"downloaded": 0.0,
+"files": [{
+"created": "2025-11-04T04:12:15.479550+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/870738/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "blend",
+"fileUploadSize": 8599019.0,
+"filename": "assets/e5df1758e74544b9947906acff27d7c1/files/blend_5e9fb7eb-b7eb-4dfa-99ae-1cca9235473a.blend",
+"modified": "2025-11-04T04:12:15.479566+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-04T11:05:57.592427+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/871285/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_0_5K",
+"fileUploadSize": 346930.0,
+"filename": "assets/e5df1758e74544b9947906acff27d7c1/files/resolution_0_5K_cfd5a9ab-aeaf-4b6e-803a-0a036825cb79.blend",
+"modified": "2025-11-04T11:05:57.592440+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-04T11:05:57.130310+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/871284/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_1K",
+"fileUploadSize": 1214193.0,
+"filename": "assets/e5df1758e74544b9947906acff27d7c1/files/resolution_1K_956ed52c-cef7-4597-8b25-4ea6f58ba3a2.blend",
+"modified": "2025-11-04T11:05:57.130323+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-04T11:05:56.501363+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/871283/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_2K",
+"fileUploadSize": 4346332.0,
+"file_name": "/home/junruh/dev/github/mbkma/pelota/assets/models/stadium/assets/materials/asphalt-clean-cr_e5df1758-e745-44b9-9479-06acff27d7c1/asphalt-clean-cracked_2K_baf4a421-a1f3-4517-a606-0a137a1125a5.blend",
+"filename": "assets/e5df1758e74544b9947906acff27d7c1/files/resolution_2K_baf4a421-a1f3-4517-a606-0a137a1125a5.blend",
+"modified": "2025-11-04T11:05:56.501381+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": "https://assets.blenderkit.com/assets/e5df1758e74544b9947906acff27d7c1/files/resolution_2K_baf4a421-a1f3-4517-a606-0a137a1125a5.blend?verify=1763027421-eqtCp6I7hBiIOvz45OvpSZ0HF9zGs45kQk2s4%2BzQfFg%3D"
+}, {
+"created": "2025-11-04T04:12:12.770736+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/870737/",
+"fileThumbnail": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.96x96_q85_crop-%2C.png",
+"fileThumbnailLarge": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.1024x1024_q85_crop-%2C.png",
+"fileType": "thumbnail",
+"fileUploadSize": 4507645.0,
+"filename": "assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png",
+"modified": "2025-11-04T04:12:12.770751+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.512x512_q85_crop-%2C.png",
+"thumbnailSmallUrl": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.256x256_q85_crop-%2C.png",
+"url": ""
+}],
+"filesSize": 18568.0,
+"id": "e5df1758-e745-44b9-9479-06acff27d7c1",
+"isFree": true,
+"isPrivate": false,
+"lastBlendUpload": "2025-11-04T03:12:15.479550+00:00",
+"lastGltfUpload": "",
+"lastPhotoThumbnailUpload": "",
+"lastResolutionUpload": "2025-11-04T10:05:57.592427+00:00",
+"lastThumbnailUpload": "2025-11-04T03:12:12.770736+00:00",
+"lastUserInteraction": "2025-11-04T04:12:15.946067+01:00",
+"lastVideoUpload": "",
+"lastZipFileUpload": "",
+"license": "royalty_free",
+"max_resolution": 2048.0,
+"name": "Asphalt Clean Cracked",
+"pk": 186101.0,
+"ratingsAverage": {
+"bookmarks": 0.875,
+"quality": 9.0,
+"virtualPrice": null,
+"workingHours": 1.0
+},
+"ratingsCount": {
+"bookmarks": 8.0,
+"quality": 1.0,
+"virtualPrice": 0.0,
+"workingHours": 1.0
+},
+"ratingsMedian": {
+"bookmarks": 1.0,
+"quality": 9.0,
+"virtualPrice": null,
+"workingHours": 1.0
+},
+"ratingsSum": {
+"bookmarks": 7.0,
+"quality": 9.0,
+"score": 90.0,
+"virtualPrice": null,
+"workingHours": 1.0
+},
+"resolution": "resolution_2K",
+"score": 90.0,
+"showMarketingLabels": true,
+"sourceAppName": "blender",
+"sourceAppVersion": "4.5.0",
+"tags": ["new", "street", "road", "ground", "asphalt"],
+"texture_size_meters": 1.0,
+"thumbnail": "thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.512x512_q85_crop-%2C.png.webp",
+"thumbnailLargeUrl": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.1024x1024_q85_crop-%2C.png",
+"thumbnailLargeUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.1024x1024_q85.png",
+"thumbnailLargeUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.1024x1024_q85.png.webp?webp_generated=1762250785",
+"thumbnailLargeUrlWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1762250785",
+"thumbnailMiddleUrl": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.512x512_q85_crop-%2C.png",
+"thumbnailMiddleUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.512x512_q85.png",
+"thumbnailMiddleUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.512x512_q85.png.webp?webp_generated=1762250785",
+"thumbnailMiddleUrlWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.512x512_q85_crop-%2C.png.webp?webp_generated=1762250785",
+"thumbnailSmallUrl": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.256x256_q85_crop-%2C.png",
+"thumbnailSmallUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.256x256_q85.png",
+"thumbnailSmallUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.256x256_q85.png.webp?webp_generated=1762250785",
+"thumbnailSmallUrlWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.256x256_q85_crop-%2C.png.webp?webp_generated=1762250785",
+"thumbnailXlargeUrl": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.2048x2048_q85_crop-%2C.png",
+"thumbnailXlargeUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.2048x2048_q85.png",
+"thumbnailXlargeUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.2048x2048_q85.png.webp?webp_generated=1762250785",
+"thumbnailXlargeUrlWebp": "https://public.blenderkit.com/thumbnails/assets/e5df1758e74544b9947906acff27d7c1/files/thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1762250785",
+"thumbnail_small": "thumbnail_534f7071-19b9-409d-b4e8-89f560c39330.png.256x256_q85_crop-%2C.png.webp",
+"tooltip_data": {
+"aname": "Asphalt Clean Cracked",
+"author_text": "by Julio Sillet",
+"quality": "9"
+},
+"url": "https://www.blenderkit.com/api/v1/assets/e5df1758-e745-44b9-9479-06acff27d7c1/",
+"verificationStatus": "validated",
+"versionNumber": 1.0,
+"webpGeneratedTimestamp": 1762250785.0
+},
+"blenderkit": {
+"adaptive_subdivision": 1.0,
+"asset_base_id": "48361b9e-b5a8-4367-92d5-c2f9eda05e88",
+"category": 2.0,
+"description": "Clean cracked asphalt ground.",
+"has_thumbnail": 1.0,
+"id": "e5df1758-e745-44b9-9479-06acff27d7c1",
+"is_generating_thumbnail": 0.0,
+"is_procedural": 1.0,
+"name": "Asphalt Clean Cracked",
+"name_changed": 1.0,
+"name_old": "Asphalt Clean Cracked",
+"node_count": 0.0,
+"pbr": 1.0,
+"report": "",
+"shaders": "",
+"tags": "new, street, road, ground, asphalt",
+"texture_count": 0.0,
+"texture_resolution_max": 0.0,
+"texture_resolution_min": 0.0,
+"thumbnail": "H:\\Work\\BlenderKit\\Vol 05\\Asphalt_01\\Renders\\asphalt-08.png",
+"thumbnail_generating_state": "",
+"thumbnail_resolution": 3.0,
+"thumbnail_scale": 1.4,
+"total_megapixels": 0.0,
+"uploading": 0.0,
+"uv": 1.0
+},
+"zen_uv": {
+"trimsheet_image": {},
+"world_size_image": {}
+}
+}

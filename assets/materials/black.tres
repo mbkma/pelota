@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c6hhohmjpoh4r"]
+
+[resource]
+resource_name = "black"
+albedo_color = Color(0.17999269, 0.17999269, 0.17999269, 1)
+roughness = 0.5
+metadata/extras = {
+"blenderkit": {}
+}

@@ -1,0 +1,23 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://dc5u7qwlmg2u7"]
+
+[ext_resource type="Texture2D" uid="uid://b5h5jxhhrplbp" path="res://assets/models/stadium/textures/leaf_2_color.png" id="1_kuau0"]
+[ext_resource type="Texture2D" uid="uid://ch4qfkciu3gqj" path="res://assets/models/stadium/textures/leaf_2_roughness.jpg" id="2_yulgl"]
+[ext_resource type="Texture2D" uid="uid://mulkvtuqah65" path="res://assets/models/stadium/textures/leaf_2_normal.jpg" id="3_qc24r"]
+
+[resource]
+resource_name = "tree_hp_01"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_kuau0")
+metallic_texture = ExtResource("2_yulgl")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_yulgl")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_scale = 0.84999996
+normal_texture = ExtResource("3_qc24r")
+metadata/extras = {
+"yp": {
+"active_ypaint_node": ""
+}
+}

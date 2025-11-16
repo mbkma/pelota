@@ -6,11 +6,8 @@
 script = ExtResource("1")
 first_name = "Jannik"
 last_name = "Sinner"
-age = 20
 country = "Italy"
 height = 188
-hand = "R"
-backhand = 2
 rank = 10
 stats = {
 "backhand_pace": 20,
@@ -22,9 +19,4 @@ stats = {
 "serve_pace": 35,
 "speed": 100,
 "strength": 100
-}
-sounds = {
-"grunt_flat": [],
-"grunt_frequency": 0.0,
-"victory": []
 }

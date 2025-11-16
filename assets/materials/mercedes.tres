@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cwn0ef1mkhj35"]
+
+[ext_resource type="Texture2D" uid="uid://dr5u840jw0cju" path="res://assets/models/court/textures/mercedes-alpha.png" id="1_22bi1"]
+
+[resource]
+resource_name = "mercedes"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_22bi1")
+roughness = 0.5
+texture_repeat = false
+metadata/extras = {
+"blenderkit": {}
+}

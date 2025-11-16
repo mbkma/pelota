@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://d3yiwgabkh58o"]
+[gd_scene load_steps=13 format=3 uid="uid://d3yiwgabkh58o"]
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
 [ext_resource type="Script" uid="uid://cp7eliy5mm75n" path="res://scripts/ui/main_menu.gd" id="2"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://scenes/ui/player-selector.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://58fqxcxqa0qr" path="res://scenes/modes/training/tennis_training.tscn" id="3_vob5f"]
 [ext_resource type="PackedScene" uid="uid://dglfvla4hwrbu" path="res://scenes/modes/career/new_career.tscn" id="4_0prml"]
-[ext_resource type="PackedScene" uid="uid://px6a2dg8cawb" path="res://addons/modular-settings-menu/scenes/settings.tscn" id="5_e2417"]
 [ext_resource type="PackedScene" uid="uid://dao2m7qjha6j2" path="res://scenes/ui/tournament-main-menu.tscn" id="5_yipxn"]
 [ext_resource type="PackedScene" uid="uid://r6ewusuy2y2d" path="res://scenes/ui/music_panel.tscn" id="6_u0nle"]
 [ext_resource type="PackedScene" uid="uid://bw3wmvsvqsbm5" path="res://scenes/ui/pelota_button.tscn" id="7_lnm77"]
@@ -190,11 +189,6 @@ text = "Back"
 layout_mode = 2
 text = "Play"
 
-[node name="SettingsMenu" parent="." node_paths=PackedStringArray("MenuPanelRef") instance=ExtResource("5_e2417")]
-visible = false
-layout_mode = 1
-MenuPanelRef = NodePath("../CenterContainer/VBoxContainer/MenuContainer")
-
 [node name="MusicPanel" parent="." instance=ExtResource("6_u0nle")]
 layout_mode = 1
 offset_left = -576.0
@@ -210,11 +204,3 @@ offset_bottom = -648.0
 [connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="StartMenu/Actions/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="StartMenu/Actions/Play" to="." method="_on_Play_pressed"]
-[connection signal="settings_menu_closed" from="SettingsMenu" to="." method="_on_settings_menu_settings_menu_closed"]
-
-[editable path="SettingsMenu"]
-[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Gameplay"]
-[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Graphics"]
-[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Controls"]
-[editable path="SettingsMenu/SettingsPanel/SettingsTabs/Audio"]
-[editable path="SettingsMenu/DiscardChangesPopup"]

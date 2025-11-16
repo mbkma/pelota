@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bu1ji7n825w7x"]
 
 [ext_resource type="Script" uid="uid://caaqfcny7sb8g" path="res://scripts/ui/score_displays/USOpenScoreDisplay.gd" id="1_jwjy5"]
-[ext_resource type="PackedScene" uid="uid://l4d1s1kqx3b7" path="res://scripts/ui/score_displays/PlayerScorePanel.tscn" id="2_y8th3"]
+[ext_resource type="PackedScene" uid="uid://l4d1s1kqx3b7" path="res://scenes/ui/score_displays/PlayerScorePanel.tscn" id="2_y8th3"]
 
 [node name="ScoreDisplay" type="Control"]
 layout_mode = 3

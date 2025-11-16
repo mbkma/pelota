@@ -1,0 +1,239 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://m8b80hj5eq1l"]
+
+[ext_resource type="Texture2D" uid="uid://cb1uhxv0qgyme" path="res://assets/models/court/textures/DefaultMaterial_BaseColor.1001.jpg" id="1_rhgnr"]
+[ext_resource type="Texture2D" uid="uid://crmtsf3vylx1v" path="res://assets/models/court/textures/DefaultMaterial_Roughness.1001.jpg" id="2_6mmfe"]
+[ext_resource type="Texture2D" uid="uid://cabcx16yoqg61" path="res://assets/models/court/textures/DefaultMaterial_Normal.1001.jpg" id="3_t6ixy"]
+
+[resource]
+resource_name = "Matte Noise"
+cull_mode = 2
+albedo_texture = ExtResource("1_rhgnr")
+metallic = 1.0
+metallic_texture = ExtResource("2_6mmfe")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_6mmfe")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3_t6ixy")
+metadata/extras = {
+"asset_data": {
+"addonVersion": "3.17.0",
+"assetBaseId": "800ae887-df1e-4f5f-b0ab-8e18c9e2cf18",
+"assetType": "material",
+"author": {
+"aboutMe": "3D modeling artis for AR and VR",
+"aboutMeUrl": "https://www.behance.net/anandvk",
+"avatar128": "/avatar-redirect/18942f77-2c61-41c4-913e-552fd16c6261/128/",
+"firstName": "Anand",
+"fullName": "Anand Vk",
+"gravatarHash": "7ba447d296dfac779f3d21cdfd57963f",
+"id": "1447053",
+"lastName": "Vk"
+},
+"available_resolutions": [512.0, 1024.0, 2048.0, 4096.0],
+"canDownload": true,
+"canDownloadError": true,
+"category": "rubber",
+"created": "2025-11-05T09:57:46.979481+01:00",
+"description": "This is a fine, uniform noise texture or micro-grain finish presented in grayscale.",
+"dictParameters": {
+"addons": true,
+"animated": false,
+"engine": "cycles",
+"joinBlenderkitDiscounts": true,
+"materialStyle": "realistic",
+"megapixels": 80.0,
+"nodeCount": 14.0,
+"procedural": false,
+"purePbr": false,
+"sexualizedContent": false,
+"shaders": ["[principled]"],
+"textureCount": 5.0,
+"textureResolutionMax": 4096.0,
+"textureResolutionMin": 4096.0,
+"textureSizeMeters": 1.0,
+"uv": false
+},
+"displayName": "Matte Noise",
+"downloaded": 0.0,
+"files": [{
+"created": "2025-11-05T09:59:00.594391+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/872997/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "blend",
+"fileUploadSize": 60994582.0,
+"filename": "assets/da0f26673c4046048b0888bec4b1b682/files/blend_c50fc502-782e-43fb-bdea-241ee563899e.blend",
+"modified": "2025-11-05T09:59:00.594402+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-05T11:46:35.252252+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/873209/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_0_5K",
+"fileUploadSize": 238068.0,
+"filename": "assets/da0f26673c4046048b0888bec4b1b682/files/resolution_0_5K_b5902976-7ec5-4123-95bf-9c1174a0a27a.blend",
+"modified": "2025-11-05T11:46:35.252267+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-05T11:46:34.195046+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/873208/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_1K",
+"fileUploadSize": 989214.0,
+"filename": "assets/da0f26673c4046048b0888bec4b1b682/files/resolution_1K_dead41c8-0b32-4031-9cf7-7222efee26a5.blend",
+"modified": "2025-11-05T11:46:34.195065+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-05T11:46:33.425827+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/873207/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_2K",
+"fileUploadSize": 4311574.0,
+"file_name": "/home/junruh/dev/github/mbkma/pelota/assets/models/court/assets/materials/matte-noise_da0f2667-3c40-4604-8b08-88bec4b1b682/matte-noise_2K_c714f31f-8b9a-4f10-8c51-e522ed1642be.blend",
+"filename": "assets/da0f26673c4046048b0888bec4b1b682/files/resolution_2K_c714f31f-8b9a-4f10-8c51-e522ed1642be.blend",
+"modified": "2025-11-05T11:46:33.425841+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": "https://assets.blenderkit.com/assets/da0f26673c4046048b0888bec4b1b682/files/resolution_2K_c714f31f-8b9a-4f10-8c51-e522ed1642be.blend?verify=1763032575-7P%2BJVrtJm22C2VcT7i%2BZd3g0omailxwIon8SpcTDyzo%3D"
+}, {
+"created": "2025-11-05T11:46:32.759804+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/873206/",
+"fileThumbnail": "",
+"fileThumbnailLarge": "",
+"fileType": "resolution_4K",
+"fileUploadSize": 16874214.0,
+"filename": "assets/da0f26673c4046048b0888bec4b1b682/files/resolution_4K_199b1d52-b7c3-4504-8b88-ca3ea636dcbf.blend",
+"modified": "2025-11-05T11:46:32.759817+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "",
+"thumbnailSmallUrl": "",
+"url": ""
+}, {
+"created": "2025-11-05T09:57:56.979531+01:00",
+"downloadUrl": "https://www.blenderkit.com/api/v1/downloads/872988/",
+"fileThumbnail": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.96x96_q85_crop-%2C.png",
+"fileThumbnailLarge": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.1024x1024_q85_crop-%2C.png",
+"fileType": "thumbnail",
+"fileUploadSize": 4417415.0,
+"filename": "assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png",
+"modified": "2025-11-05T09:57:56.979548+01:00",
+"resolution": 0.0,
+"thumbnailMiddleUrl": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.512x512_q85_crop-%2C.png",
+"thumbnailSmallUrl": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.256x256_q85_crop-%2C.png",
+"url": ""
+}],
+"filesSize": 85766.0,
+"id": "da0f2667-3c40-4604-8b08-88bec4b1b682",
+"isFree": true,
+"isPrivate": false,
+"lastBlendUpload": "2025-11-05T08:59:00.594391+00:00",
+"lastGltfUpload": "",
+"lastPhotoThumbnailUpload": "",
+"lastResolutionUpload": "2025-11-05T10:46:35.252252+00:00",
+"lastThumbnailUpload": "2025-11-05T08:57:56.979531+00:00",
+"lastUserInteraction": "2025-11-05T09:59:01.121385+01:00",
+"lastVideoUpload": "",
+"lastZipFileUpload": "",
+"license": "royalty_free",
+"max_resolution": 4096.0,
+"name": "Matte Noise",
+"pk": 186441.0,
+"ratingsAverage": {
+"bookmarks": 1.0,
+"quality": 5.0,
+"virtualPrice": null,
+"workingHours": 1.0
+},
+"ratingsCount": {
+"bookmarks": 24.0,
+"quality": 1.0,
+"virtualPrice": 0.0,
+"workingHours": 1.0
+},
+"ratingsMedian": {
+"bookmarks": 1.0,
+"quality": 5.0,
+"virtualPrice": null,
+"workingHours": 1.0
+},
+"ratingsSum": {
+"bookmarks": 24.0,
+"quality": 5.0,
+"score": 50.0,
+"virtualPrice": null,
+"workingHours": 1.0
+},
+"resolution": "resolution_2K",
+"score": 50.0,
+"showMarketingLabels": true,
+"sourceAppName": "blender",
+"sourceAppVersion": "4.3.2",
+"tags": ["grip", "rubber", "plastic", "black"],
+"texture_size_meters": 1.0,
+"thumbnail": "thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.512x512_q85_crop-%2C.png.webp",
+"thumbnailLargeUrl": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.1024x1024_q85_crop-%2C.png",
+"thumbnailLargeUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.1024x1024_q85.png",
+"thumbnailLargeUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.1024x1024_q85.png.webp?webp_generated=1762339577",
+"thumbnailLargeUrlWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.1024x1024_q85_crop-%2C.png.webp?webp_generated=1762339577",
+"thumbnailMiddleUrl": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.512x512_q85_crop-%2C.png",
+"thumbnailMiddleUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.512x512_q85.png",
+"thumbnailMiddleUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.512x512_q85.png.webp?webp_generated=1762339577",
+"thumbnailMiddleUrlWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.512x512_q85_crop-%2C.png.webp?webp_generated=1762339577",
+"thumbnailSmallUrl": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.256x256_q85_crop-%2C.png",
+"thumbnailSmallUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.256x256_q85.png",
+"thumbnailSmallUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.256x256_q85.png.webp?webp_generated=1762339577",
+"thumbnailSmallUrlWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.256x256_q85_crop-%2C.png.webp?webp_generated=1762339577",
+"thumbnailXlargeUrl": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.2048x2048_q85_crop-%2C.png",
+"thumbnailXlargeUrlNonsquared": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.2048x2048_q85.png",
+"thumbnailXlargeUrlNonsquaredWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.2048x2048_q85.png.webp?webp_generated=1762339577",
+"thumbnailXlargeUrlWebp": "https://public.blenderkit.com/thumbnails/assets/da0f26673c4046048b0888bec4b1b682/files/thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.2048x2048_q85_crop-%2C.png.webp?webp_generated=1762339577",
+"thumbnail_small": "thumbnail_19f21846-aafc-47d4-9bdf-efe7d1bdabb5.png.256x256_q85_crop-%2C.png.webp",
+"tooltip_data": {
+"aname": "Matte Noise",
+"author_text": "by Anand Vk",
+"quality": "5"
+},
+"url": "https://www.blenderkit.com/api/v1/assets/da0f2667-3c40-4604-8b08-88bec4b1b682/",
+"verificationStatus": "validated",
+"versionNumber": 1.0,
+"webpGeneratedTimestamp": 1762339577.0
+},
+"blenderkit": {
+"asset_base_id": "800ae887-df1e-4f5f-b0ab-8e18c9e2cf18",
+"category": 28.0,
+"description": "This is a fine, uniform noise texture or micro-grain finish presented in grayscale.",
+"has_thumbnail": 1.0,
+"id": "da0f2667-3c40-4604-8b08-88bec4b1b682",
+"is_generating_thumbnail": 0.0,
+"is_procedural": 0.0,
+"name": "Matte Noise",
+"name_changed": 1.0,
+"name_old": "Matte Noise",
+"node_count": 14.0,
+"report": "",
+"shaders": "principled, ",
+"tags": "grip, rubber, plastic, black",
+"texture_count": 5.0,
+"texture_resolution_max": 4096.0,
+"texture_resolution_min": 4096.0,
+"thumbnail": "//matte-noise.png",
+"thumbnail_generating_state": "",
+"thumbnail_resolution": 3.0,
+"total_megapixels": 80.0,
+"uploading": 0.0
+}
+}

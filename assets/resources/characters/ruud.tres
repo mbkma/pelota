@@ -9,8 +9,6 @@ last_name = "Ruud"
 age = 23
 country = "Norway"
 height = 183
-hand = "R"
-backhand = 2
 rank = 6
 stats = {
 "backhand_pace": 20,
@@ -22,9 +20,4 @@ stats = {
 "serve_pace": 35,
 "speed": 100,
 "strength": 100
-}
-sounds = {
-"grunt_flat": [],
-"grunt_frequency": 0.0,
-"victory": []
 }

@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
 [ext_resource type="Script" uid="uid://e1hyxnyxh4pd" path="res://scripts/ui/television-hud.gd" id="2"]
 [ext_resource type="Script" uid="uid://xu64bd1yo2ki" path="res://scripts/ui/match_stats_panel.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://bu1ji7n825w7x" path="res://scripts/ui/score_displays/ScoreDisplay.tscn" id="4_xpbfi"]
+[ext_resource type="PackedScene" uid="uid://bu1ji7n825w7x" path="res://scenes/ui/score_displays/ScoreDisplay.tscn" id="4_xpbfi"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"

@@ -1,14 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://58fqxcxqa0qr"]
+[gd_scene load_steps=17 format=3 uid="uid://58fqxcxqa0qr"]
 
 [ext_resource type="Script" uid="uid://b2ln7l4birgbu" path="res://scripts/modes/training/tennis_training.gd" id="1_gx02n"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_tjnrq"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_4chpy"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_ci6ek"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_tjnrq"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="4_guntq"]
-[ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="5_d51he"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
 [ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/utilities/ball_canon.tscn" id="6_l6sfg"]
-[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="8_xeshg"]
 [ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scenes/ui/pause_menu.tscn" id="9_fqabv"]
 
 [sub_resource type="Shader" id="Shader_rdv83"]
@@ -149,36 +146,26 @@ sky_material = SubResource("ShaderMaterial_lwqkh")
 [sub_resource type="Environment" id="Environment_f635r"]
 background_mode = 2
 sky = SubResource("Sky_m0hxs")
-tonemap_mode = 1
+tonemap_mode = 4
 glow_enabled = true
 glow_normalized = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4om81"]
 size = Vector3(38.3846, 2, 46.8104)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e84ga"]
-albedo_color = Color(0.0253638, 0.0253638, 0.0253638, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_hbkay"]
-material = SubResource("StandardMaterial3D_e84ga")
-
 [node name="TennisTraining" type="Node"]
 script = ExtResource("1_gx02n")
 
 [node name="Player" parent="." instance=ExtResource("2_tjnrq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.989744)
-input_scene = ExtResource("3_4chpy")
-
-[node name="Player2" parent="." instance=ExtResource("2_tjnrq")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, -12.423061)
-input_scene = ExtResource("4_ci6ek")
-player_data = ExtResource("5_d51he")
+controller_scene = ExtResource("3_tjnrq")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f635r")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295, -0.446156, 0.44352, -0.777324, 0, 5.70078, 0)
+light_energy = 2.143
 shadow_enabled = true
 
 [node name="Positions" type="Node3D" parent="."]
@@ -189,10 +176,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994293, 0, 12.1442)
 [node name="NW" type="Marker3D" parent="Positions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972189, 0, -13.487)
 
-[node name="Ground2" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+visible = false
 shape = SubResource("BoxShape3D_4om81")
 
 [node name="Stadium" parent="." instance=ExtResource("4_guntq")]
@@ -207,34 +195,10 @@ shoot_off_angle = 5.0
 [node name="Marker3D2" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.1, -5.27)
 
-[node name="Node3D" type="Node3D" parent="."]
-
-[node name="Marker3D" type="Marker3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.322, 0.327529, 13.4815)
-
-[node name="TrajectoryDrawer" parent="Node3D" instance=ExtResource("8_xeshg")]
-skeleton = NodePath("../TrainingCenter")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
-transform = Transform3D(1284.83, 0, 0, 0, 2.2935, 0, 0, 0, 1299.25, 0, -0.05, 0)
-mesh = SubResource("PlaneMesh_hbkay")
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 36.8647, 22.2819)
-light_color = Color(0.605553, 0.539689, 0.02218, 1)
-light_energy = 16.0
-light_indirect_energy = 16.0
-light_volumetric_fog_energy = 16.0
-shadow_enabled = true
-spot_range = 4096.0
-spot_attenuation = 0.15
-spot_angle = 11.22
-
 [node name="PauseMenu" parent="." instance=ExtResource("9_fqabv")]
 process_mode = 3
 metadata/_edit_use_anchors_ = true
 
 [editable path="Stadium"]
+[editable path="Stadium/stadium"]
 [editable path="Cameras"]
-[editable path="Cameras/Stadium"]
-[editable path="Cameras/Stadium/stadium"]
