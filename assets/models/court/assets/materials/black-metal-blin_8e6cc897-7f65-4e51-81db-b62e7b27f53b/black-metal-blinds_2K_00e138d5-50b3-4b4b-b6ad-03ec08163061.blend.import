@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://43xlfiatp1ae"
-valid=false
+path="res://.godot/imported/black-metal-blinds_2K_00e138d5-50b3-4b4b-b6ad-03ec08163061.blend-84721f527bc93452a6abcd98c6ab8cba.scn"
 
 [deps]
 
 source_file="res://assets/models/court/assets/materials/black-metal-blin_8e6cc897-7f65-4e51-81db-b62e7b27f53b/black-metal-blinds_2K_00e138d5-50b3-4b4b-b6ad-03ec08163061.blend"
+dest_files=["res://.godot/imported/black-metal-blinds_2K_00e138d5-50b3-4b4b-b6ad-03ec08163061.blend-84721f527bc93452a6abcd98c6ab8cba.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

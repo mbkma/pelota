@@ -14,7 +14,7 @@ script = ExtResource("2_un5sf")
 color_palette = SubResource("Resource_u2lxb")
 metadata/_custom_type_script = "uid://wf2jvpga3hfj"
 
-[node name="CrowdBlock" type="Node3D"]
+[node name="CrowdBlock" type="Node3D" unique_id=900926214]
 script = ExtResource("1_jcoec")
 config = SubResource("Resource_uhd3o")
 crowd_person_scene = ExtResource("2_r2fk0")

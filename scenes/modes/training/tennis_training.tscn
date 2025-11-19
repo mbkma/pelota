@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="4_guntq"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
 [ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/utilities/ball_canon.tscn" id="6_l6sfg"]
-[ext_resource type="PackedScene" uid="uid://bxr6pnwu01hft" path="res://scenes/ui/pause_menu.tscn" id="9_fqabv"]
+[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="9_fqabv"]
 
 [sub_resource type="Shader" id="Shader_rdv83"]
 code = "
@@ -153,54 +153,52 @@ glow_normalized = true
 [sub_resource type="BoxShape3D" id="BoxShape3D_4om81"]
 size = Vector3(38.3846, 2, 46.8104)
 
-[node name="TennisTraining" type="Node"]
+[node name="TennisTraining" type="Node" unique_id=1611399565]
 script = ExtResource("1_gx02n")
 
-[node name="Player" parent="." instance=ExtResource("2_tjnrq")]
+[node name="Player" parent="." unique_id=1570492392 instance=ExtResource("2_tjnrq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.84141)
 controller_scene = ExtResource("3_tjnrq")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1709110098]
 environment = SubResource("Environment_f635r")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1392627917]
 transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295, -0.446156, 0.44352, -0.777324, 0, 5.70078, 0)
 light_energy = 2.143
 shadow_enabled = true
 
-[node name="Positions" type="Node3D" parent="."]
+[node name="Positions" type="Node3D" parent="." unique_id=19005137]
 
-[node name="SE" type="Marker3D" parent="Positions"]
+[node name="SE" type="Marker3D" parent="Positions" unique_id=1653311780]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994293, 0, 12.1442)
 
-[node name="NW" type="Marker3D" parent="Positions"]
+[node name="NW" type="Marker3D" parent="Positions" unique_id=1905855358]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972189, 0, -13.487)
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=709732411]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2075691090]
 visible = false
 shape = SubResource("BoxShape3D_4om81")
 
-[node name="Stadium" parent="." instance=ExtResource("4_guntq")]
+[node name="Stadium" parent="." unique_id=1825421631 instance=ExtResource("4_guntq")]
 
-[node name="CollisionShape3D" parent="Stadium/WallWest" index="0"]
+[node name="CollisionShape3D" parent="Stadium/WallWest" parent_id_path=PackedInt32Array(1825421631, 1007468064) index="0" unique_id=1462181196]
 visible = true
 
-[node name="Cameras" parent="." instance=ExtResource("5_lrvso")]
+[node name="Cameras" parent="." unique_id=1828597319 instance=ExtResource("5_lrvso")]
 
-[node name="BallCanon" parent="." instance=ExtResource("6_l6sfg")]
+[node name="BallCanon" parent="." unique_id=180960615 instance=ExtResource("6_l6sfg")]
 transform = Transform3D(-0.965659, 0, -0.259814, 0, 1, 0, 0.259814, 0, -0.965659, -3.82491, 0, -4.53048)
 velocity_length = 13.0
 shoot_off_angle = 5.0
 
-[node name="Marker3D2" type="Marker3D" parent="."]
+[node name="Marker3D2" type="Marker3D" parent="." unique_id=1174166646]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.1, -5.27)
 
-[node name="PauseMenu" parent="." instance=ExtResource("9_fqabv")]
-process_mode = 3
-metadata/_edit_use_anchors_ = true
+[node name="PauseMenu" parent="." unique_id=638761742 instance=ExtResource("9_fqabv")]
 
 [editable path="Player"]
 [editable path="Player/Model"]

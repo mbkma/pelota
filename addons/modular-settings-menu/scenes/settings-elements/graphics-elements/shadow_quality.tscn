@@ -25,7 +25,7 @@ func _apply_settings() -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_drjjf"]
 
-[node name="ShadowQuality" type="HBoxContainer" node_paths=PackedStringArray("OptionsRef")]
+[node name="ShadowQuality" type="HBoxContainer" unique_id=1959258436 node_paths=PackedStringArray("OptionsRef")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -36,14 +36,14 @@ DEFAULT_VALUE = "Low"
 OptionsRef = NodePath("Options")
 IDENTIFIER = "ShadowQuality"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1848998731]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Shadow Quality"
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="."]
+[node name="Options" type="OptionButton" parent="." unique_id=1298653882]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

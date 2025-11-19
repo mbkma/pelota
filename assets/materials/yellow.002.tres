@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dha8fqg0ai0pu"]
+
+[resource]
+resource_name = "yellow.002"
+albedo_color = Color(0.7666597, 0.704129, 0.32284954, 1)
+roughness = 0.7

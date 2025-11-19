@@ -20,21 +20,21 @@ func _apply_settings() -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_drjjf"]
 
-[node name="FSRMode" type="HBoxContainer" node_paths=PackedStringArray("OptionsRef")]
+[node name="FSRMode" type="HBoxContainer" unique_id=105827882 node_paths=PackedStringArray("OptionsRef")]
 size_flags_vertical = 3
 script = SubResource("GDScript_usma2")
 DEFAULT_VALUE = "Balanced"
 OptionsRef = NodePath("Options")
 IDENTIFIER = "FSRMode"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=111888626]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "FSR Mode"
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="."]
+[node name="Options" type="OptionButton" parent="." unique_id=640789607]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

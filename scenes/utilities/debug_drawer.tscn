@@ -4,6 +4,6 @@
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_af1eo"]
 
-[node name="DebugDrawer" type="MeshInstance3D" groups=["Player"]]
+[node name="DebugDrawer" type="MeshInstance3D" unique_id=1887163694 groups=["Player"]]
 mesh = SubResource("ImmediateMesh_af1eo")
 script = ExtResource("1_jnyvj")

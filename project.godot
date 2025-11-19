@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Pelota"
 run/main_scene="uid://cf0l4walrllxc"
-config/features=PackedStringArray("4.5")
+config/features=PackedStringArray("4.6")
 
 [audio]
 
@@ -24,10 +24,10 @@ GlobalUtils="*res://scripts/globals/global_utils.gd"
 GlobalGameData="*res://scripts/globals/global_game_data.gd"
 GlobalHud="*res://scripts/globals/global_hud.gd"
 GlobalPhysics="*res://scripts/physics/global_physics.gd"
-SettingsDataManager="*res://addons/modular-settings-menu/singletons/settings_data_manager.gd"
-DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
-SceneManager="*res://scripts/utilities/scene_manager.gd"
+SettingsDataManager="*uid://dl202u8yk6qon"
+DebugMenu="*uid://cggqb75a8w8r"
 GlobalScenes="*res://scenes/global_scenes.tscn"
+SceneManager="*res://scripts/globals/scene_manager.gd"
 
 [debug]
 

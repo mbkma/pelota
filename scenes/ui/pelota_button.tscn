@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c2oqbhdyslyss" path="res://scripts/utilities/pelota_button.gd" id="1_eb6oh"]
 [ext_resource type="AudioStream" uid="uid://3we76bar4ply" path="res://assets/sounds/effects/UI_SFX_Set/rollover1.wav" id="2_3strq"]
 
-[node name="PelotaButton" type="Button"]
+[node name="PelotaButton" type="Button" unique_id=41260463]
 custom_minimum_size = Vector2(120, 30)
 size_flags_horizontal = 4
 size_flags_vertical = 4

@@ -39,150 +39,151 @@ cache/0/16/0/underline_position = 0.0
 cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 
-[node name="Stadium" type="Node3D"]
+[node name="Stadium" type="Node3D" unique_id=1375206359]
 script = ExtResource("3")
 
-[node name="stadium" parent="." instance=ExtResource("2_hi2re")]
+[node name="stadium" parent="." unique_id=1426900104 instance=ExtResource("2_hi2re")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="stadium/Cube_007" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="stadium/Cube_007" parent_id_path=PackedInt32Array(1426900104, 308546433) index="0" unique_id=743389104]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="stadium/Cube_007/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="stadium/Cube_007/StaticBody3D" unique_id=917849905]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_f5ksu")
 
-[node name="Court" parent="." instance=ExtResource("5_2qn74")]
+[node name="Court" parent="." unique_id=412000164 instance=ExtResource("5_2qn74")]
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1699210346]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1119701321]
 visible = false
 shape = SubResource("1")
 
-[node name="WallNord" type="StaticBody3D" parent="."]
+[node name="WallNord" type="StaticBody3D" parent="." unique_id=1775614588]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, -20.5244)
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="WallNord"]
+[node name="CollisionShape2" type="CollisionShape3D" parent="WallNord" unique_id=1631690973]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0450077)
 visible = false
 shape = SubResource("2")
 
-[node name="WallEast" type="StaticBody3D" parent="."]
+[node name="WallEast" type="StaticBody3D" parent="." unique_id=1537985736]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8566, 6.05442, -0.262106)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast" unique_id=475963912]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586548, 0)
 visible = false
 shape = SubResource("3")
 
-[node name="WallWest" type="StaticBody3D" parent="."]
+[node name="WallWest" type="StaticBody3D" parent="." unique_id=1007468064]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8512, 6.05442, -0.262106)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest" unique_id=1462181196]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586548, 0)
 visible = false
 shape = SubResource("3")
 
-[node name="WallSouth" type="StaticBody3D" parent="."]
+[node name="WallSouth" type="StaticBody3D" parent="." unique_id=128149593]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, 20.7466)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth" unique_id=1793847488]
 visible = false
 shape = SubResource("2")
 
-[node name="GroundArea" type="Area3D" parent="."]
+[node name="GroundArea" type="Area3D" parent="." unique_id=1589190859]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.891512, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundArea" unique_id=913066920]
 visible = false
 shape = SubResource("4")
 
-[node name="ServeSpeedPanel2" parent="." instance=ExtResource("5")]
+[node name="ServeSpeedPanel2" parent="." unique_id=1128045737 instance=ExtResource("5")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 5.762, 0, 19.7)
 
-[node name="ServeSpeedPanel" parent="." instance=ExtResource("5")]
+[node name="ServeSpeedPanel" parent="." unique_id=249829326 instance=ExtResource("5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.58155, 0.0526706, -19.7603)
 
-[node name="TimePanel" type="Node3D" parent="."]
+[node name="TimePanel" type="Node3D" parent="." unique_id=1191015511]
 transform = Transform3D(0.591664, 0, 0, 0, 0.554529, 0, 0, 0, 1.21236, 6.52847, 0.606019, -19.6819)
 
-[node name="Label3D" type="Label3D" parent="TimePanel"]
+[node name="Label3D" type="Label3D" parent="TimePanel" unique_id=1866972551]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.21567, -0.444406, -0.111006)
 modulate = Color(1, 1, 0, 1)
 text = "0:00"
 font_size = 179
 
-[node name="Positions" type="Node3D" parent="."]
+[node name="Positions" type="Node3D" parent="." unique_id=17340585]
 
-[node name="ServeFrontRight" type="Marker3D" parent="Positions"]
+[node name="ServeFrontRight" type="Marker3D" parent="Positions" unique_id=1772300345]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 12)
 
-[node name="ServeFrontLeft" type="Marker3D" parent="Positions"]
+[node name="ServeFrontLeft" type="Marker3D" parent="Positions" unique_id=619357107]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 12)
 
-[node name="ReceiveFrontRight" type="Marker3D" parent="Positions"]
+[node name="ReceiveFrontRight" type="Marker3D" parent="Positions" unique_id=1637183302]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 13)
 
-[node name="ReceiveFrontLeft" type="Marker3D" parent="Positions"]
+[node name="ReceiveFrontLeft" type="Marker3D" parent="Positions" unique_id=607494205]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 13)
 
-[node name="ServeBackRight" type="Marker3D" parent="Positions"]
+[node name="ServeBackRight" type="Marker3D" parent="Positions" unique_id=1467679428]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -12)
 
-[node name="ServeBackLeft" type="Marker3D" parent="Positions"]
+[node name="ServeBackLeft" type="Marker3D" parent="Positions" unique_id=966667630]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -12)
 
-[node name="ReceiveBackRight" type="Marker3D" parent="Positions"]
+[node name="ReceiveBackRight" type="Marker3D" parent="Positions" unique_id=1283468245]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -13)
 
-[node name="ReceiveBackLeft" type="Marker3D" parent="Positions"]
+[node name="ReceiveBackLeft" type="Marker3D" parent="Positions" unique_id=811591914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
 
-[node name="ServeClocks" type="Node3D" parent="."]
+[node name="ServeClocks" type="Node3D" parent="." unique_id=1993826580]
 
-[node name="ServeClock" type="Label3D" parent="ServeClocks"]
+[node name="ServeClock" type="Label3D" parent="ServeClocks" unique_id=736676380]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.63603, 1.41341, -19.7699)
 text = "25
 Serve Clock"
 font_size = 38
 outline_size = 0
 
-[node name="ServeClock2" type="Label3D" parent="ServeClocks"]
+[node name="ServeClock2" type="Label3D" parent="ServeClocks" unique_id=1946983221]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.42196, 1.41341, -19.7699)
 text = "25
 Serve Clock"
 font = SubResource("5")
 
-[node name="ServeClock3" type="Label3D" parent="ServeClocks"]
+[node name="ServeClock3" type="Label3D" parent="ServeClocks" unique_id=799800393]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 9.422, 1.413, 19.77)
 text = "25
 Serve Clock"
 font = SubResource("5")
 
-[node name="ServeClock4" type="Label3D" parent="ServeClocks"]
+[node name="ServeClock4" type="Label3D" parent="ServeClocks" unique_id=1309599702]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.413, 19.77)
 text = "25
 Serve Clock"
 font = SubResource("5")
 
-[node name="PlayerCamera" type="Node3D" parent="."]
+[node name="PlayerCamera" type="Node3D" parent="." unique_id=1549887150]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, 0)
 script = ExtResource("7_af67j")
 
-[node name="camera" parent="PlayerCamera" instance=ExtResource("8_rminr")]
+[node name="camera" parent="PlayerCamera" unique_id=768048712 instance=ExtResource("8_rminr")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 
-[node name="FrontPlayerCamera" type="Node3D" parent="."]
+[node name="FrontPlayerCamera" type="Node3D" parent="." unique_id=430943148]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, 1.5)
 script = ExtResource("7_af67j")
 
-[node name="camera" parent="FrontPlayerCamera" instance=ExtResource("8_rminr")]
+[node name="camera" parent="FrontPlayerCamera" unique_id=630861209 instance=ExtResource("8_rminr")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 
-[node name="BackPlayerCamera" type="Node3D" parent="."]
+[node name="BackPlayerCamera" type="Node3D" parent="." unique_id=412625823]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, -1.5)
 script = ExtResource("7_af67j")
 
-[node name="camera" parent="BackPlayerCamera" instance=ExtResource("8_rminr")]
+[node name="camera" parent="BackPlayerCamera" unique_id=731066851 instance=ExtResource("8_rminr")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
 
 [editable path="stadium"]

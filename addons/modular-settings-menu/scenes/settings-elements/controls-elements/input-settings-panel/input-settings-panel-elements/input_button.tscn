@@ -2,7 +2,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jjel1"]
 
-[node name="InputButton" type="PanelContainer"]
+[node name="InputButton" type="PanelContainer" unique_id=1805690461]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,17 +11,17 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=870240063]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=458099528]
 layout_mode = 2
 
-[node name="ActionLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="ActionLabel" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1612574268]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 1
@@ -30,7 +30,7 @@ text = "action name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActionInput" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="ActionInput" type="Button" parent="MarginContainer/HBoxContainer" unique_id=1035248177]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1

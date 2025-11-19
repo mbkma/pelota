@@ -2,33 +2,33 @@
 
 [ext_resource type="Script" uid="uid://cjth0a76nhkh1" path="res://scripts/modes/tournament/match_panel.gd" id="1"]
 
-[node name="MarginContainer" type="MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" unique_id=1766238693]
 offset_right = 147.0
 offset_bottom = 40.0
 script = ExtResource("1")
 
-[node name="MatchPanel" type="Panel" parent="."]
+[node name="MatchPanel" type="Panel" parent="." unique_id=1944222594]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MatchPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MatchPanel" unique_id=51236769]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MatchPanel/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MatchPanel/HBoxContainer" unique_id=380605528]
 layout_mode = 2
 
-[node name="Player0Label" type="Label" parent="MatchPanel/HBoxContainer/VBoxContainer"]
+[node name="Player0Label" type="Label" parent="MatchPanel/HBoxContainer/VBoxContainer" unique_id=1245558538]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Djokovic"
 
-[node name="Player1Label" type="Label" parent="MatchPanel/HBoxContainer/VBoxContainer"]
+[node name="Player1Label" type="Label" parent="MatchPanel/HBoxContainer/VBoxContainer" unique_id=1707072651]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Zverev"
 
-[node name="ResultLabel" type="Label" parent="MatchPanel/HBoxContainer"]
+[node name="ResultLabel" type="Label" parent="MatchPanel/HBoxContainer" unique_id=167610638]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://5b4wts5sp70m"
-valid=false
+path="res://.godot/imported/asphalt-new-detailed_2K_e06c7f42-24cc-4424-81dd-5279fd736d92.blend-e9de9965ba6b887dcce853bce5a2fc23.scn"
 
 [deps]
 
 source_file="res://assets/models/court/assets/materials/asphalt-new-deta_69986b8f-3f01-4737-937f-0bfb7d6b9aab/asphalt-new-detailed_2K_e06c7f42-24cc-4424-81dd-5279fd736d92.blend"
+dest_files=["res://.godot/imported/asphalt-new-detailed_2K_e06c7f42-24cc-4424-81dd-5279fd736d92.blend-e9de9965ba6b887dcce853bce5a2fc23.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

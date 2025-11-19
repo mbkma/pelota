@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://scenes/ui/player-selector.tscn" id="2"]
 [ext_resource type="Script" uid="uid://bxheexg11xtgd" path="res://scripts/modes/career/new_career.gd" id="3"]
 
-[node name="NewCareer" type="Control"]
+[node name="NewCareer" type="Control" unique_id=613059651]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -12,20 +12,20 @@ offset_bottom = 40.0
 theme = ExtResource("1")
 script = ExtResource("3")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=373784903]
 layout_mode = 0
 offset_right = 257.0
 offset_bottom = 157.0
 text = "new career menu"
 
-[node name="PlayerSelector" parent="." instance=ExtResource("2")]
+[node name="PlayerSelector" parent="." unique_id=371507883 instance=ExtResource("2")]
 layout_mode = 0
 offset_left = 56.0
 offset_top = 59.0
 offset_right = 300.0
 offset_bottom = 479.0
 
-[node name="StartCareer" type="Button" parent="."]
+[node name="StartCareer" type="Button" parent="." unique_id=2131191018]
 layout_mode = 0
 offset_left = 157.0
 offset_top = 510.0

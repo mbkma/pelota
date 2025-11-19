@@ -1,7 +1,5 @@
 extends Node
 
-signal level_changed(level_name, init_data)
-
 var player
 
 

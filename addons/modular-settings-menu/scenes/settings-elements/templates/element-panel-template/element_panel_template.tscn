@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b317y2ko2ae8d" path="res://addons/modular-settings-menu/scripts/element_panel.gd" id="1_3f2r5"]
 [ext_resource type="PackedScene" uid="uid://bjcuw6amean2" path="res://addons/modular-settings-menu/scenes/settings-elements/templates/slider_element_template.tscn" id="2_fpsnu"]
 
-[node name="ElementPanelTemplate" type="Control"]
+[node name="ElementPanelTemplate" type="Control" unique_id=1610235426]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_3f2r5")
 IDENTIFIER = "PanelTemplate"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=687837590]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -27,22 +27,22 @@ offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1041638725]
 custom_minimum_size = Vector2(0, 280)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer" unique_id=442268431]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/MarginContainer" unique_id=1066052972]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/MarginContainer/ScrollContainer" unique_id=1473154262]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -51,16 +51,16 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ElementList" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer"]
+[node name="ElementList" type="VBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer" unique_id=477931909]
 layout_mode = 2
 
-[node name="SliderElementTemplate" parent="VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/ElementList" instance=ExtResource("2_fpsnu")]
+[node name="SliderElementTemplate" parent="VBoxContainer/PanelContainer/MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=1260332798 instance=ExtResource("2_fpsnu")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=811535533]
 layout_mode = 2
 
-[node name="ApplyButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ApplyButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1561390439]
 layout_direction = 1
 layout_mode = 2
 size_flags_horizontal = 3
@@ -68,7 +68,7 @@ focus_mode = 0
 disabled = true
 text = "Apply"
 
-[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=2135745330]
 layout_direction = 1
 layout_mode = 2
 size_flags_horizontal = 3

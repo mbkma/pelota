@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dxy1y5jqcijwi" path="res://scripts/characters/inputs/ai/ai_controller.gd" id="1"]
 [ext_resource type="Script" uid="uid://d3bqf0hxdnfen" path="res://scripts/characters/inputs/ai/tactics/default.gd" id="2_qmycn"]
 
-[node name="AiController" type="Node"]
+[node name="AiController" type="Node" unique_id=1580375701]
 script = ExtResource("1")
 tactics = Dictionary[String, Script]({
 "default": ExtResource("2_qmycn")

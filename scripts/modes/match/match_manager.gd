@@ -38,7 +38,7 @@ var _ground_contacts: int = 0
 @export var television_hud: TelevisionHud
 @export var umpire: Umpire
 @export var crowd: Crowd
-
+@export var cameras: Cameras
 
 func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
@@ -74,10 +74,6 @@ func set_active_ball(b: Ball) -> void:
 	ball = b
 	ball.on_ground.connect(_on_ball_on_ground)
 	ball.on_net.connect(_on_ball_on_net)
-	stadium.front_player_camera.target = player0
-	stadium.back_player_camera.target = player1
-	stadium.player_camera.target = player0
-
 
 ## Get the opponent of the given player
 func get_opponent(player: Player) -> Player:
@@ -325,7 +321,8 @@ func place_players() -> void:
 	player0.rotation.y = PI if player0.position.z < 0 else 0.0
 	player1.rotation.y = PI if player1.position.z < 0 else 0.0
 	players_placed.emit()
-
+	cameras.set_camera_for_player(player0)
+	cameras.set_camera_for_player(player1)
 
 ## Get position for a player based on serve and side information
 func _get_player_position(

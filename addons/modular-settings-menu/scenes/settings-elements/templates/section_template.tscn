@@ -8,7 +8,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e0spm"]
 
-[node name="SectionTemplate" type="TabBar"]
+[node name="SectionTemplate" type="TabBar" unique_id=984041260]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -20,7 +20,7 @@ theme_override_styles/tab_focus = SubResource("StyleBoxEmpty_e0spm")
 script = ExtResource("1_aglse")
 IDENTIFIER = "ExampleSection"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=252416285]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,11 +32,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1953288207]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer" unique_id=851164251]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -45,34 +45,34 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer" unique_id=763516132]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="ParentElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" instance=ExtResource("2_xre3j")]
+[node name="ParentElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=251139364 instance=ExtResource("2_xre3j")]
 layout_mode = 2
 
-[node name="SubSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="SubSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=965851647]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection" unique_id=848571563]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Sub Section"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection" unique_id=2023278422]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection" unique_id=808868031]
 layout_mode = 2
 
-[node name="OptionElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection/SubSectionElements" instance=ExtResource("2_ws4gk")]
+[node name="OptionElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection/SubSectionElements" unique_id=1719307983 instance=ExtResource("2_ws4gk")]
 layout_mode = 2
 
-[node name="SliderElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection/SubSectionElements" instance=ExtResource("3_o11e6")]
+[node name="SliderElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection/SubSectionElements" unique_id=632352245 instance=ExtResource("3_o11e6")]
 layout_mode = 2
 
-[node name="ToggleElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection/SubSectionElements" instance=ExtResource("4_41mog")]
+[node name="ToggleElementTemplate" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/SubSection/SubSectionElements" unique_id=191612195 instance=ExtResource("4_41mog")]
 layout_mode = 2

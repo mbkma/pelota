@@ -84,7 +84,7 @@ func adjust_resolution(sizeScale: float = 1.0) -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_drjjf"]
 
-[node name="DisplayMode" type="HBoxContainer" node_paths=PackedStringArray("OptionsRef")]
+[node name="DisplayMode" type="HBoxContainer" unique_id=120249726 node_paths=PackedStringArray("OptionsRef")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -95,14 +95,14 @@ DEFAULT_VALUE = "Fullscreen"
 OptionsRef = NodePath("Options")
 IDENTIFIER = "DisplayMode"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1271816001]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Display Mode"
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="."]
+[node name="Options" type="OptionButton" parent="." unique_id=1800670383]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

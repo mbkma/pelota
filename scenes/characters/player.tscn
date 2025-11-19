@@ -15,7 +15,7 @@
 radius = 0.0950554
 height = 1.58024
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "ball_aim_marker") groups=["Player"]]
+[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("camera", "ball_aim_marker") groups=["Player"]]
 script = ExtResource("1")
 player_data = ExtResource("2_uxa8p")
 camera = NodePath("Camera3D")
@@ -23,22 +23,24 @@ ball_aim_marker = NodePath("BallAimMarker")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=971709666]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.876131, 0)
 shape = SubResource("CapsuleShape3D_0l77o")
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Label3D" type="Label3D" parent="." unique_id=131366643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.01951, 0)
 billboard = 1
 text = "Test"
 
-[node name="Camera3D2" type="Camera3D" parent="."]
+[node name="Camera3D2" type="Camera3D" parent="." unique_id=573308729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.24305734)
-current = true
 
-[node name="Model" parent="." instance=ExtResource("3_lm2ok")]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1842340249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
 
-[node name="Skeleton3D" parent="Model/h/player_djokovic/game-rig" index="0"]
+[node name="Model" parent="." unique_id=1631475750 instance=ExtResource("3_lm2ok")]
+
+[node name="Skeleton3D" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1631475750, 2042450697, 205808917) index="0" unique_id=178717131]
 bones/0/position = Vector3(0, 0.9454937, 0.011756052)
 bones/0/rotation = Quaternion(-0.09911045, 0, 0, 0.9950765)
 bones/0/scale = Vector3(0.99999857, 0.9999898, 0.9999968)
@@ -232,19 +234,16 @@ bones/175/position = Vector3(3.6987576e-08, 0.1560523, -1.7425904e-08)
 bones/175/rotation = Quaternion(0.013187933, 0.9658582, -0.25872073, 0.0027588378)
 bones/175/scale = Vector3(0.99999964, 1.0000001, 1.0000029)
 
-[node name="DEF-attachment_hand_R" parent="Model/h/player_djokovic/game-rig/Skeleton3D" index="0"]
-transform = Transform3D(0.44097078, 0.21230687, 0.8720479, 0.7512759, 0.44425637, -0.4880576, -0.49103254, 0.8703759, 0.03640213, -0.5514751, 1.0978513, 0.2395195)
+[node name="DEF-attachment_hand_R" parent="Model/h/player_djokovic/game-rig/Skeleton3D" index="0" unique_id=1669172702]
+transform = Transform3D(0.44096717, 0.21230514, 0.87205106, 0.7512735, 0.44425482, -0.48806158, -0.49103245, 0.8703754, 0.036402598, -0.5514732, 1.0978531, 0.23951943)
 
-[node name="AnimationTreeRootMotion" parent="Model" index="4"]
+[node name="AnimationTreeRootMotion" parent="Model" index="5" unique_id=2021565860]
 parameters/stroke/Transition/current_state = ""
 parameters/stroke/Transition/current_index = -1
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-
-[node name="BallAimMarker" parent="." instance=ExtResource("10_7vyk4")]
+[node name="BallAimMarker" parent="." unique_id=801641257 instance=ExtResource("10_7vyk4")]
 visible = false
 
 [editable path="Model"]

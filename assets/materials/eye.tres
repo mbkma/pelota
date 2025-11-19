@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bd2cfdcv8o0l1"]
+
+[ext_resource type="Texture2D" uid="uid://b7pua0gsg0up7" path="res://assets/textures/environment/crowd/brown_eye.png" id="1_vwfx7"]
+
+[resource]
+resource_name = "eye"
+albedo_texture = ExtResource("1_vwfx7")
+metallic = 0.54330707
+roughness = 0.11811024

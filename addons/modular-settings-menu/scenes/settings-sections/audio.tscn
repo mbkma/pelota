@@ -7,7 +7,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e0spm"]
 
-[node name="Audio" type="TabBar"]
+[node name="Audio" type="TabBar" unique_id=1418154767]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -19,7 +19,7 @@ theme_override_styles/tab_focus = SubResource("StyleBoxEmpty_e0spm")
 script = ExtResource("1_e0sxq")
 IDENTIFIER = "Audio"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=329127057]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,11 +31,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=189820846]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer" unique_id=2032240775]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -44,31 +44,31 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer" unique_id=690990722]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="VolumeSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="VolumeSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=1222035053]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings" unique_id=1872909193]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Volume Settings"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings" unique_id=1673722298]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings" unique_id=1966879609]
 layout_mode = 2
 
-[node name="MasterVolume" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings/SubSectionElements" instance=ExtResource("2_l5q4d")]
+[node name="MasterVolume" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings/SubSectionElements" unique_id=767562096 instance=ExtResource("2_l5q4d")]
 layout_mode = 2
 
-[node name="MusicVolume" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings/SubSectionElements" instance=ExtResource("3_v08xa")]
+[node name="MusicVolume" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings/SubSectionElements" unique_id=1808088627 instance=ExtResource("3_v08xa")]
 layout_mode = 2
 
-[node name="SFXVolume" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings/SubSectionElements" instance=ExtResource("4_j1ron")]
+[node name="SFXVolume" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/VolumeSettings/SubSectionElements" unique_id=2144395514 instance=ExtResource("4_j1ron")]
 layout_mode = 2

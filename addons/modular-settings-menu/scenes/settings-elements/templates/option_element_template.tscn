@@ -19,7 +19,7 @@ func _apply_settings() -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_drjjf"]
 
-[node name="OptionElementTemplate" type="HBoxContainer" node_paths=PackedStringArray("OptionsRef")]
+[node name="OptionElementTemplate" type="HBoxContainer" unique_id=141372507 node_paths=PackedStringArray("OptionsRef")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -30,14 +30,14 @@ DEFAULT_VALUE = "Example"
 OptionsRef = NodePath("Options")
 IDENTIFIER = "OptionTemplate"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1886742808]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Option Element"
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="."]
+[node name="Options" type="OptionButton" parent="." unique_id=2071161654]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

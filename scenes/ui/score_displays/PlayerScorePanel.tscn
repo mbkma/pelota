@@ -12,26 +12,26 @@ bg_color = Color(0.0355967, 0.198755, 0.288023, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jl6tf"]
 bg_color = Color(1, 1, 1, 1)
 
-[node name="PlayerScorePanel" type="HBoxContainer"]
+[node name="PlayerScorePanel" type="HBoxContainer" unique_id=841218569]
 offset_right = 152.0
 offset_bottom = 18.0
 theme_override_constants/separation = 0
 script = ExtResource("1_3xw37")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2077410797]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MarginContainer"]
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=799049692]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_821ld")
 
-[node name="HBoxContainer11" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer11" type="HBoxContainer" parent="MarginContainer" unique_id=528572628]
 custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
 
-[node name="Ranking" type="Label" parent="MarginContainer/HBoxContainer11"]
+[node name="Ranking" type="Label" parent="MarginContainer/HBoxContainer11" unique_id=956223532]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -40,7 +40,7 @@ text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="Label" parent="MarginContainer/HBoxContainer11"]
+[node name="Name" type="Label" parent="MarginContainer/HBoxContainer11" unique_id=1128624677]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Djokovic"
@@ -48,38 +48,38 @@ vertical_alignment = 1
 clip_text = true
 text_overrun_behavior = 1
 
-[node name="Country" type="Label" parent="MarginContainer/HBoxContainer11"]
+[node name="Country" type="Label" parent="MarginContainer/HBoxContainer11" unique_id=1346425587]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "SRB"
 vertical_alignment = 1
 
-[node name="ServeIndicator" type="TextureRect" parent="MarginContainer/HBoxContainer11"]
+[node name="ServeIndicator" type="TextureRect" parent="MarginContainer/HBoxContainer11" unique_id=57478154]
 layout_mode = 2
 texture = ExtResource("2_fm0o1")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=1040328051]
 layout_mode = 2
 
-[node name="Panel2" type="Panel" parent="MarginContainer2"]
+[node name="Panel2" type="Panel" parent="MarginContainer2" unique_id=836041025]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_s3kw8")
 
-[node name="HBoxContainer12" type="HBoxContainer" parent="MarginContainer2"]
+[node name="HBoxContainer12" type="HBoxContainer" parent="MarginContainer2" unique_id=696295649]
 layout_mode = 2
 
-[node name="Games1" type="Label" parent="MarginContainer2/HBoxContainer12" groups=["GamesLabel"]]
+[node name="Games1" type="Label" parent="MarginContainer2/HBoxContainer12" unique_id=103791456 groups=["GamesLabel"]]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Games2" type="Label" parent="MarginContainer2/HBoxContainer12" groups=["GamesLabel"]]
+[node name="Games2" type="Label" parent="MarginContainer2/HBoxContainer12" unique_id=2135065357 groups=["GamesLabel"]]
 visible = false
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
@@ -87,7 +87,7 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Games3" type="Label" parent="MarginContainer2/HBoxContainer12" groups=["GamesLabel"]]
+[node name="Games3" type="Label" parent="MarginContainer2/HBoxContainer12" unique_id=1969153445 groups=["GamesLabel"]]
 visible = false
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
@@ -95,7 +95,7 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Games4" type="Label" parent="MarginContainer2/HBoxContainer12" groups=["GamesLabel"]]
+[node name="Games4" type="Label" parent="MarginContainer2/HBoxContainer12" unique_id=794323025 groups=["GamesLabel"]]
 visible = false
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
@@ -103,7 +103,7 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Games5" type="Label" parent="MarginContainer2/HBoxContainer12" groups=["GamesLabel"]]
+[node name="Games5" type="Label" parent="MarginContainer2/HBoxContainer12" unique_id=1954511202 groups=["GamesLabel"]]
 visible = false
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
@@ -111,14 +111,14 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/HBoxContainer12"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/HBoxContainer12" unique_id=421091826]
 layout_mode = 2
 
-[node name="Panel2" type="Panel" parent="MarginContainer2/HBoxContainer12/MarginContainer"]
+[node name="Panel2" type="Panel" parent="MarginContainer2/HBoxContainer12/MarginContainer" unique_id=2136120002]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_jl6tf")
 
-[node name="Points" type="Label" parent="MarginContainer2/HBoxContainer12/MarginContainer" groups=["GamesLabel"]]
+[node name="Points" type="Label" parent="MarginContainer2/HBoxContainer12/MarginContainer" unique_id=1302037426 groups=["GamesLabel"]]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)

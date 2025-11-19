@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c3qvttn5xgja1"
-valid=false
+path="res://.godot/imported/pebbles-in-cement_2K_81e1ea5d-e34b-4989-a889-024d8d756d13.blend-dcd9be0dc81bc37a6dfc8244a33a5261.scn"
 
 [deps]
 
 source_file="res://assets/models/court/assets/materials/pebbles-in-cemen_d116a492-ec77-4abc-92b4-4c1c20a441d1/pebbles-in-cement_2K_81e1ea5d-e34b-4989-a889-024d8d756d13.blend"
+dest_files=["res://.godot/imported/pebbles-in-cement_2K_81e1ea5d-e34b-4989-a889-024d8d756d13.blend-dcd9be0dc81bc37a6dfc8244a33a5261.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

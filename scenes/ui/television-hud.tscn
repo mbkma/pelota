@@ -26,7 +26,7 @@ _data = {
 &"start": SubResource("1")
 }
 
-[node name="TelevisionHUD" type="Control"]
+[node name="TelevisionHUD" type="Control" unique_id=304559251]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,14 +35,14 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2")
 
-[node name="MatchStatsPanel" type="Control" parent="."]
+[node name="MatchStatsPanel" type="Control" parent="." unique_id=2140378516]
 visible = false
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("3")
 
-[node name="Panel" type="Panel" parent="MatchStatsPanel"]
+[node name="Panel" type="Panel" parent="MatchStatsPanel" unique_id=1044850648]
 layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
@@ -53,7 +53,7 @@ offset_top = -150.0
 offset_right = 250.0
 offset_bottom = 150.0
 
-[node name="Label" type="Label" parent="MatchStatsPanel/Panel"]
+[node name="Label" type="Label" parent="MatchStatsPanel/Panel" unique_id=1328085612]
 layout_mode = 0
 offset_left = 145.0
 offset_top = 78.0
@@ -63,7 +63,7 @@ theme = ExtResource("1")
 text = "Novak
 Djokovic"
 
-[node name="Label2" type="Label" parent="MatchStatsPanel/Panel"]
+[node name="Label2" type="Label" parent="MatchStatsPanel/Panel" unique_id=1390046489]
 layout_mode = 0
 offset_left = 310.0
 offset_top = 78.0
@@ -73,7 +73,7 @@ theme = ExtResource("1")
 text = "Novak
 Djokovic"
 
-[node name="Label3" type="Label" parent="MatchStatsPanel/Panel"]
+[node name="Label3" type="Label" parent="MatchStatsPanel/Panel" unique_id=2082832951]
 layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
@@ -87,7 +87,7 @@ theme = ExtResource("1")
 text = "vs"
 horizontal_alignment = 1
 
-[node name="PlayerImage" type="TextureRect" parent="MatchStatsPanel"]
+[node name="PlayerImage" type="TextureRect" parent="MatchStatsPanel" unique_id=1401311793]
 layout_mode = 0
 offset_left = 277.0
 offset_top = 201.0
@@ -97,7 +97,7 @@ size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PlayerImage2" type="TextureRect" parent="MatchStatsPanel"]
+[node name="PlayerImage2" type="TextureRect" parent="MatchStatsPanel" unique_id=643599586]
 layout_mode = 0
 offset_left = 626.0
 offset_top = 201.0
@@ -107,12 +107,12 @@ size_flags_vertical = 3
 expand_mode = 1
 stretch_mode = 5
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MatchStatsPanel"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MatchStatsPanel" unique_id=241539447]
 libraries = {
 &"": SubResource("AnimationLibrary_k50em")
 }
 
-[node name="ScoreDisplay" parent="." instance=ExtResource("4_xpbfi")]
+[node name="ScoreDisplay" parent="." unique_id=1936900464 instance=ExtResource("4_xpbfi")]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0

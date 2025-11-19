@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cv82ucowgp4wr"
-valid=false
+path="res://.godot/imported/matte-noise_2K_c714f31f-8b9a-4f10-8c51-e522ed1642be.blend-f7ee5d2c3e3b56be62da250f427b3b2b.scn"
 
 [deps]
 
 source_file="res://assets/models/court/assets/materials/matte-noise_da0f2667-3c40-4604-8b08-88bec4b1b682/matte-noise_2K_c714f31f-8b9a-4f10-8c51-e522ed1642be.blend"
+dest_files=["res://.godot/imported/matte-noise_2K_c714f31f-8b9a-4f10-8c51-e522ed1642be.blend-f7ee5d2c3e3b56be62da250f427b3b2b.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

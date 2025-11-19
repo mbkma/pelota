@@ -149,6 +149,7 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	move_and_slide()
 
 
+
 ## Apply movement using animation root motion
 func _root_motion_movement(direction: Vector3, delta: float) -> void:
 	direction = direction.normalized()

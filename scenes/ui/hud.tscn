@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://by8pct1eyc8pn" path="res://scripts/ui/hud.gd" id="3"]
 
-[node name="Hud" type="Control"]
+[node name="Hud" type="Control" unique_id=2103026716]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("3")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2001262320]
 layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
@@ -23,11 +23,11 @@ offset_top = -79.0
 offset_right = -25.0
 offset_bottom = -19.0
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1554896839]
 layout_mode = 2
 text = "Stamina:"
 
-[node name="Stamina" type="TextureProgressBar" parent="VBoxContainer"]
+[node name="Stamina" type="TextureProgressBar" parent="VBoxContainer" unique_id=1588933635]
 layout_mode = 2
 value = 100.0
 nine_patch_stretch = true
@@ -36,11 +36,11 @@ stretch_margin_top = 4
 stretch_margin_right = 4
 stretch_margin_bottom = 4
 
-[node name="Label2" type="Label" parent="VBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer" unique_id=1284780303]
 layout_mode = 2
 text = "Stroke Power:"
 
-[node name="Stroke" type="TextureProgressBar" parent="VBoxContainer"]
+[node name="Stroke" type="TextureProgressBar" parent="VBoxContainer" unique_id=721950375]
 layout_mode = 2
 max_value = 5.0
 nine_patch_stretch = true

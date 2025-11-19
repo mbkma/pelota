@@ -17,7 +17,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v0fou"]
 
-[node name="Graphics" type="TabBar"]
+[node name="Graphics" type="TabBar" unique_id=485841973]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -27,7 +27,7 @@ theme_override_styles/tab_focus = SubResource("StyleBoxEmpty_v0fou")
 script = ExtResource("1_704sp")
 IDENTIFIER = "Graphics"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2075351342]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,11 +39,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=430090343]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer" unique_id=782727611]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -52,76 +52,76 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer" unique_id=576818371]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="BasicSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="BasicSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=312234361]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings" unique_id=1960597589]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Basic Settings"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings" unique_id=289475963]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings" unique_id=1344999550]
 layout_mode = 2
 
-[node name="DisplayMode" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings/SubSectionElements" instance=ExtResource("1_mr6e7")]
+[node name="DisplayMode" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings/SubSectionElements" unique_id=26160500 instance=ExtResource("1_mr6e7")]
 layout_mode = 2
 
-[node name="Resolution" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings/SubSectionElements" instance=ExtResource("2_5bpi0")]
+[node name="Resolution" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings/SubSectionElements" unique_id=2021491940 instance=ExtResource("2_5bpi0")]
 layout_mode = 2
 
-[node name="MaxFPS" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings/SubSectionElements" instance=ExtResource("5_82fyi")]
+[node name="MaxFPS" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/BasicSettings/SubSectionElements" unique_id=1038046988 instance=ExtResource("5_82fyi")]
 layout_mode = 2
 
-[node name="AdvancedSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="AdvancedSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=62086390]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings" unique_id=334057020]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Advanced Settings
 "
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings" unique_id=979501015]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings" unique_id=1444918135]
 layout_mode = 2
 
-[node name="Scaler" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("4_g2t2s")]
+[node name="Scaler" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1913557505 instance=ExtResource("4_g2t2s")]
 layout_mode = 2
 
-[node name="AntiAliasing" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("7_r8hxv")]
+[node name="AntiAliasing" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1864456749 instance=ExtResource("7_r8hxv")]
 layout_mode = 2
 
-[node name="VSync" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("6_2rh1a")]
+[node name="VSync" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1501642383 instance=ExtResource("6_2rh1a")]
 layout_mode = 2
 
-[node name="DepthOfField" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("8_28f8l")]
+[node name="DepthOfField" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1911244445 instance=ExtResource("8_28f8l")]
 layout_mode = 2
 
-[node name="ShadowQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("9_1x78v")]
+[node name="ShadowQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1047509756 instance=ExtResource("9_1x78v")]
 layout_mode = 2
 
-[node name="GlowQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("10_m0pim")]
+[node name="GlowQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=540413215 instance=ExtResource("10_m0pim")]
 layout_mode = 2
 
-[node name="SSRQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("10_cfuis")]
+[node name="SSRQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=569836206 instance=ExtResource("10_cfuis")]
 layout_mode = 2
 
-[node name="SSAOQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("11_xa1gl")]
+[node name="SSAOQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1399974392 instance=ExtResource("11_xa1gl")]
 layout_mode = 2
 
-[node name="SSILQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("12_jqvyp")]
+[node name="SSILQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=1542466181 instance=ExtResource("12_jqvyp")]
 layout_mode = 2
 
-[node name="SDFGIQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" instance=ExtResource("13_ifeh4")]
+[node name="SDFGIQuality" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/AdvancedSettings/SubSectionElements" unique_id=695429689 instance=ExtResource("13_ifeh4")]
 layout_mode = 2

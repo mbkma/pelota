@@ -12,7 +12,7 @@ func _apply_settings() -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_drjjf"]
 
-[node name="ToggleElementTemplate" type="HBoxContainer" node_paths=PackedStringArray("ToggleRef")]
+[node name="ToggleElementTemplate" type="HBoxContainer" unique_id=1141791581 node_paths=PackedStringArray("ToggleRef")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -22,14 +22,14 @@ script = SubResource("GDScript_bpxmf")
 ToggleRef = NodePath("Toggle")
 IDENTIFIER = "ToggleTemplate"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=764890426]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Toggle Element"
 vertical_alignment = 1
 
-[node name="Toggle" type="CheckButton" parent="."]
+[node name="Toggle" type="CheckButton" parent="." unique_id=864827805]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

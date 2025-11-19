@@ -8,9 +8,9 @@ albedo_color = Color(0.3060863, 0.30608633, 0.30608633, 1)
 [sub_resource type="CylinderMesh" id="CylinderMesh_kjtf1"]
 material = SubResource("StandardMaterial3D_7lufo")
 
-[node name="BallAimMarker" type="Node3D"]
+[node name="BallAimMarker" type="Node3D" unique_id=160563153]
 script = ExtResource("1_kjtf1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1507997537]
 transform = Transform3D(0.14904475, 0, 0, 0, 0.007067608, 0, 0, 0, 0.14904475, 0, 0, 0)
 mesh = SubResource("CylinderMesh_kjtf1")

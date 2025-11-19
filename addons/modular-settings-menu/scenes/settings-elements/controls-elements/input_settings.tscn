@@ -154,7 +154,7 @@ func verify_settings_data(data_: Dictionary) -> void:
 			push_warning(\"Input action is missing: \", action)
 "
 
-[node name="InputSettings" type="Button"]
+[node name="InputSettings" type="Button" unique_id=1677763859]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

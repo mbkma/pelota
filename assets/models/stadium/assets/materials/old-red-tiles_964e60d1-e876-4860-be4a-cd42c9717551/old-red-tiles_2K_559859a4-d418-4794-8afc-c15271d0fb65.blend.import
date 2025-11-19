@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cskm8nbl5ica0"
-valid=false
+path="res://.godot/imported/old-red-tiles_2K_559859a4-d418-4794-8afc-c15271d0fb65.blend-b0be03b1e4d8f27fd2cfe8b6f54aba2e.scn"
 
 [deps]
 
 source_file="res://assets/models/stadium/assets/materials/old-red-tiles_964e60d1-e876-4860-be4a-cd42c9717551/old-red-tiles_2K_559859a4-d418-4794-8afc-c15271d0fb65.blend"
+dest_files=["res://.godot/imported/old-red-tiles_2K_559859a4-d418-4794-8afc-c15271d0fb65.blend-b0be03b1e4d8f27fd2cfe8b6f54aba2e.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

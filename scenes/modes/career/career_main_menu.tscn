@@ -2,68 +2,70 @@
 
 [ext_resource type="Theme" uid="uid://bxqcmd2k7v707" path="res://assets/resources/main_theme.tres" id="1"]
 
-[node name="CareerMainMenu" type="Control"]
+[node name="CareerMainMenu" type="Control" unique_id=817825862]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1")
 
-[node name="Calendar" type="Panel" parent="."]
+[node name="Calendar" type="Panel" parent="." unique_id=797821270]
 layout_mode = 0
 offset_left = 181.0
 offset_top = 149.0
 offset_right = 596.0
 offset_bottom = 384.0
 
-[node name="Label" type="Label" parent="Calendar"]
+[node name="Label" type="Label" parent="Calendar" unique_id=1555676500]
 layout_mode = 0
 offset_right = 84.0
 offset_bottom = 22.0
 text = "Calendar"
 
-[node name="GridContainer" type="GridContainer" parent="Calendar"]
+[node name="GridContainer" type="GridContainer" parent="Calendar" unique_id=817330599]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 33.0
 offset_right = 405.0
 offset_bottom = 234.0
 
-[node name="Label2" type="Label" parent="Calendar/GridContainer"]
+[node name="Label2" type="Label" parent="Calendar/GridContainer" unique_id=204111751]
 layout_mode = 2
 text = "Training"
 
-[node name="Label3" type="Label" parent="Calendar/GridContainer"]
+[node name="Label3" type="Label" parent="Calendar/GridContainer" unique_id=427106666]
 layout_mode = 2
 text = "Training"
 
-[node name="Label4" type="Label" parent="Calendar/GridContainer"]
+[node name="Label4" type="Label" parent="Calendar/GridContainer" unique_id=136115942]
 layout_mode = 2
 text = "Training"
 
-[node name="Label5" type="Label" parent="Calendar/GridContainer"]
+[node name="Label5" type="Label" parent="Calendar/GridContainer" unique_id=2044974922]
 layout_mode = 2
 text = "Training"
 
-[node name="Label6" type="Label" parent="Calendar/GridContainer"]
+[node name="Label6" type="Label" parent="Calendar/GridContainer" unique_id=983932336]
 layout_mode = 2
 text = "Training"
 
-[node name="Label7" type="Label" parent="Calendar/GridContainer"]
+[node name="Label7" type="Label" parent="Calendar/GridContainer" unique_id=1639533945]
 layout_mode = 2
 text = "Training"
 
-[node name="Label8" type="Label" parent="Calendar/GridContainer"]
+[node name="Label8" type="Label" parent="Calendar/GridContainer" unique_id=1567828511]
 layout_mode = 2
 text = "Match"
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=419427296]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 14.0
 text = "Career mode main menu"
 
-[node name="NextDay" type="Button" parent="."]
+[node name="NextDay" type="Button" parent="." unique_id=1396781277]
 layout_mode = 0
 offset_left = 873.0
 offset_top = 549.0

@@ -37,6 +37,7 @@ var _stroke_active: bool = false
 	animation_tree.get("parameters/playback")
 )
 
+
 func _ready() -> void:
 	player = get_parent()
 	animation_tree.active = true

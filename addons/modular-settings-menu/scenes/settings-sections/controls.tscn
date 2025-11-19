@@ -7,7 +7,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e0spm"]
 
-[node name="Controls" type="TabBar"]
+[node name="Controls" type="TabBar" unique_id=1530650751]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,7 +17,7 @@ theme_override_styles/tab_focus = SubResource("StyleBoxEmpty_e0spm")
 script = ExtResource("1_vmore")
 IDENTIFIER = "Controls"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=194939417]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,11 +29,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1206959841]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer" unique_id=1299460597]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -42,45 +42,45 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer" unique_id=1324909181]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="MouseSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="MouseSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=533175162]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings" unique_id=1730856796]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Mouse Settings"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings" unique_id=1984383865]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings" unique_id=95488847]
 layout_mode = 2
 
-[node name="Sensitivity" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings/SubSectionElements" instance=ExtResource("2_qcqml")]
+[node name="Sensitivity" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings/SubSectionElements" unique_id=2113485005 instance=ExtResource("2_qcqml")]
 layout_mode = 2
 
-[node name="InvertY" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings/SubSectionElements" instance=ExtResource("3_8np8q")]
+[node name="InvertY" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/MouseSettings/SubSectionElements" unique_id=787862931 instance=ExtResource("3_8np8q")]
 layout_mode = 2
 
-[node name="KeyboardSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="KeyboardSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=1620285897]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings" unique_id=958931053]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Keyboard Settings"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings" unique_id=1868174939]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings" unique_id=1644135737]
 layout_mode = 2
 
-[node name="InputSettings" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings/SubSectionElements" instance=ExtResource("4_bejag")]
+[node name="InputSettings" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/KeyboardSettings/SubSectionElements" unique_id=1391638349 instance=ExtResource("4_bejag")]
 layout_mode = 2

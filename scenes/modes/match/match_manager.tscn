@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://dfa30tq3ssikg" path="res://scripts/modes/match/match_manager.gd" id="1_6wyww"]
 
-[node name="MatchManager" type="Node"]
+[node name="MatchManager" type="Node" unique_id=1629570563]
 script = ExtResource("1_6wyww")

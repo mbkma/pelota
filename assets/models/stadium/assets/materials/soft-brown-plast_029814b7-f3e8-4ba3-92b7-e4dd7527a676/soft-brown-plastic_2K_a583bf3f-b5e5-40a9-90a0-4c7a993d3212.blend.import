@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://csrxswvuielgi"
-valid=false
+path="res://.godot/imported/soft-brown-plastic_2K_a583bf3f-b5e5-40a9-90a0-4c7a993d3212.blend-483085be39fd923be5df44432b49cda4.scn"
 
 [deps]
 
 source_file="res://assets/models/stadium/assets/materials/soft-brown-plast_029814b7-f3e8-4ba3-92b7-e4dd7527a676/soft-brown-plastic_2K_a583bf3f-b5e5-40a9-90a0-4c7a993d3212.blend"
+dest_files=["res://.godot/imported/soft-brown-plastic_2K_a583bf3f-b5e5-40a9-90a0-4c7a993d3212.blend-483085be39fd923be5df44432b49cda4.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

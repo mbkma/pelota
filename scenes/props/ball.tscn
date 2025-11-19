@@ -6,12 +6,12 @@
 [sub_resource type="SphereShape3D" id="3"]
 radius = 0.04
 
-[node name="Ball" type="CharacterBody3D"]
+[node name="Ball" type="CharacterBody3D" unique_id=1405282757]
 script = ExtResource("1")
 
-[node name="tennisball" parent="." instance=ExtResource("2_ix6ww")]
+[node name="tennisball" parent="." unique_id=1368146021 instance=ExtResource("2_ix6ww")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1117245061]
 shape = SubResource("3")
 
 [editable path="tennisball"]

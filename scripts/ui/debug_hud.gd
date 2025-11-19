@@ -10,6 +10,19 @@ extends CanvasLayer
 # Tab containers and content
 @onready var _tab_container: TabContainer = $DebugHud/TabContainer
 
+# Summary tab labels
+@onready var _summary_fps_label: Label = $DebugHud/TabContainer/Summary/VBox/Performance/FPS
+@onready var _summary_frame_label: Label = $DebugHud/TabContainer/Summary/VBox/Performance/Frame
+@onready var _summary_state_label: Label = $DebugHud/TabContainer/Summary/VBox/MatchState/Value
+@onready var _summary_server_label: Label = $DebugHud/TabContainer/Summary/VBox/Server/Value
+@onready var _summary_rally_label: Label = $DebugHud/TabContainer/Summary/VBox/Rally/Value
+@onready var _summary_last_hitter_label: Label = $DebugHud/TabContainer/Summary/VBox/LastHitter/Value
+@onready var _summary_ball_position_label: Label = $DebugHud/TabContainer/Summary/VBox/Ball/Position
+@onready var _summary_ball_velocity_label: Label = $DebugHud/TabContainer/Summary/VBox/Ball/BallVel
+
+# Trajectory toggle
+@onready var _trajectory_button: CheckButton = $DebugHud/TabContainer/Summary/VBox/TrajectoryToggle
+
 # Performance labels
 @onready var _fps_label: Label = $DebugHud/TabContainer/Performance/VBox/FPS/Value
 @onready var _frametime_label: Label = $DebugHud/TabContainer/Performance/VBox/FrameTime/Value
@@ -37,9 +50,6 @@ extends CanvasLayer
 @onready var _ball_position_label: Label = $DebugHud/TabContainer/Ball/VBox/Position/Value
 @onready var _ball_velocity_label: Label = $DebugHud/TabContainer/Ball/VBox/Velocity/Value
 
-# Trajectory toggle
-@onready var _trajectory_button: CheckButton = $DebugHud/TabContainer/Ball/VBox/TrajectoryToggle
-
 
 ## Initialize debug HUD
 func _ready() -> void:
@@ -61,6 +71,7 @@ func _process(_delta: float) -> void:
 		_update_match_stats()
 		_update_player_stats()
 		_update_ball_stats()
+		_update_summary_stats(_delta)
 
 
 ## Update performance metrics
@@ -151,3 +162,34 @@ func _match_state_to_string(value: MatchManager.MatchState) -> String:
 func _toggle_trajectory(enabled: bool) -> void:
 	if _trajectory_drawer:
 		_trajectory_drawer.visible = enabled
+
+
+## Update summary tab with key information from all systems
+func _update_summary_stats(_delta: float) -> void:
+	var fps: int = Engine.get_frames_per_second()
+	var frametime_ms: float = _delta * 1000.0
+
+	_summary_fps_label.text = str(fps)
+	_summary_frame_label.text = "%.1fms" % frametime_ms
+
+	_summary_state_label.text = _match_state_to_string(match_manager.current_state)
+
+	var server_idx: int = match_manager.match_data.match_score.current_server
+	var server_name: String = (
+		match_manager.player0.player_data.last_name
+		if server_idx == 0
+		else match_manager.player1.player_data.last_name
+	)
+	_summary_server_label.text = server_name
+
+	_summary_rally_label.text = str(match_manager.match_data.rally_length)
+
+	if match_manager.last_hitter:
+		_summary_last_hitter_label.text = match_manager.last_hitter.player_data.last_name
+	else:
+		_summary_last_hitter_label.text = "None"
+
+	if match_manager.ball:
+		var ball: Ball = match_manager.ball
+		_summary_ball_position_label.text = "%.1f, %.1f" % [ball.position.x, ball.position.z]
+		_summary_ball_velocity_label.text = "%.1f" % ball.velocity.length()

@@ -533,10 +533,10 @@ _data = {
 &"wipe_to_right": SubResource("Animation_7yl5p")
 }
 
-[node name="LoadingScreen" type="Node"]
+[node name="LoadingScreen" type="Node" unique_id=1631362159]
 script = ExtResource("1_k5r6i")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=2023245171]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -544,7 +544,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="Control"]
+[node name="Panel" type="Panel" parent="Control" unique_id=1122350380]
 self_modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -556,7 +556,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_awhaq")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=387956979]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -567,11 +567,11 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer" unique_id=192195329]
 layout_mode = 2
 alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="Control/HBoxContainer/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="Control/HBoxContainer/VBoxContainer" unique_id=369561687]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 8)
 layout_mode = 2
@@ -579,13 +579,13 @@ theme_override_styles/background = SubResource("StyleBoxFlat_17cna")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ljhlj")
 show_percentage = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1767756490]
 unique_name_in_owner = true
 libraries = {
 &"": SubResource("AnimationLibrary_4w84n")
 }
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=652477342]
 wait_time = 3.0
 one_shot = true
 

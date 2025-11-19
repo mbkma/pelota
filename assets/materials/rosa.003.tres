@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c0eevolcrij5y"]
+
+[resource]
+resource_name = "rosa.003"
+albedo_color = Color(0.9063318, 0.44648808, 0.46957818, 1)
+roughness = 0.5

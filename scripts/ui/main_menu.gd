@@ -1,7 +1,5 @@
 extends Node
 
-signal level_changed(level_name, init_data)
-
 @export var level_name: String = "level"
 @export var match_scence: PackedScene
 @export var training_scence: PackedScene
@@ -85,22 +83,14 @@ func _on_Play_pressed() -> void:
 		players_data.append(player_data)
 
 	match_data = MatchData.new(players_data[0], players_data[1])
+#
+	print(match_scence)
+	SceneManager.goto(match_scence)
 
-	level_changed.emit(
-		match_scence, null
-	)
-
-	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	#print({"match_data": match_data, "world": world})
-	#emit_signal(
-	#"level_changed",
-	#load("res://src/modes/tennis_session/match/singles_match.tscn"),
-	#{"match_data": match_data, "world": world}
-	#)
 
 
 func _on_tournament_pressed() -> void:
-	level_changed.emit(tournament_scence, null)
+	SceneManager.goto(tournament_scence)
 
 
 func _show_main_menu() -> void:
@@ -114,13 +104,11 @@ func _show_start_menu() -> void:
 
 
 func _on_career_pressed() -> void:
-	level_changed.emit(career_scence, null)
+	SceneManager.goto(career_scence)
 
 
 func _on_training_pressed() -> void:
-	level_changed.emit(
-		training_scence, null
-	)
+	SceneManager.goto(training_scence)
 
 
 func _on_settings_menu_settings_menu_closed() -> void:
@@ -130,9 +118,8 @@ func _on_settings_menu_settings_menu_closed() -> void:
 
 func _on_start_pressed() -> void:
 	GlobalScenes.music_player.stop_music()
-	level_changed.emit(
-		match_scence, null
-	)
+	SceneManager.goto(match_scence)
+
 	
 	#_show_start_menu()
 

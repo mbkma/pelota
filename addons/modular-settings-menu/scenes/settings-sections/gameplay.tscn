@@ -5,7 +5,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e0spm"]
 
-[node name="Gameplay" type="TabBar"]
+[node name="Gameplay" type="TabBar" unique_id=1209590507]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,7 +17,7 @@ theme_override_styles/tab_focus = SubResource("StyleBoxEmpty_e0spm")
 script = ExtResource("1_i11k5")
 IDENTIFIER = "Gameplay"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1077004403]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,11 +29,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=941226588]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ScrollContainer" unique_id=310353]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -42,25 +42,25 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer"]
+[node name="ElementList" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer" unique_id=724475480]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="GeneralSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList"]
+[node name="GeneralSettings" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList" unique_id=1335969339]
 layout_mode = 2
 
-[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings"]
+[node name="SubSectionName" type="Label" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings" unique_id=392150513]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "General Settings"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings" unique_id=1358018561]
 layout_mode = 2
 
-[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings"]
+[node name="SubSectionElements" type="VBoxContainer" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings" unique_id=131679956]
 layout_mode = 2
 
-[node name="FOV" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings/SubSectionElements" instance=ExtResource("2_c8t76")]
+[node name="FOV" parent="MarginContainer/ScrollContainer/MarginContainer/ElementList/GeneralSettings/SubSectionElements" unique_id=382978425 instance=ExtResource("2_c8t76")]
 layout_mode = 2

@@ -2,8 +2,5 @@
 
 [resource]
 resource_name = "black"
-albedo_color = Color(0.17999269, 0.17999269, 0.17999269, 1)
-roughness = 0.5
-metadata/extras = {
-"blenderkit": {}
-}
+albedo_color = Color(0.21332596, 0.21332596, 0.21332596, 1)
+roughness = 0.7

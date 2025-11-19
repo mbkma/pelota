@@ -23,7 +23,7 @@
 [sub_resource type="BoxShape3D" id="4"]
 size = Vector3(1.20747, 2.9555, 1.21453)
 
-[node name="Umpire" type="Node3D"]
+[node name="Umpire" type="Node3D" unique_id=2112865629]
 script = ExtResource("7")
 umpire_sounds = Dictionary[String, AudioStream]({
 "0-1": ExtResource("2_eonia"),
@@ -46,16 +46,16 @@ umpire_sounds = Dictionary[String, AudioStream]({
 "second_serve": ExtResource("10_hradu")
 })
 
-[node name="umpire_chair" parent="." instance=ExtResource("2_qv13u")]
+[node name="umpire_chair" parent="." unique_id=1793929124 instance=ExtResource("2_qv13u")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1442936764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49691, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1378992289]
 shape = SubResource("4")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=740636569]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47242, -2.39926)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2104138986]
 bus = &"Umpire"

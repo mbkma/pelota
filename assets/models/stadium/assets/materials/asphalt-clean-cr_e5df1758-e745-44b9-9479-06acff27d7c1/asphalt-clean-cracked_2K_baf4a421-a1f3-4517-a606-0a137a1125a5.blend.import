@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bjohpokfjui6d"
-valid=false
+path="res://.godot/imported/asphalt-clean-cracked_2K_baf4a421-a1f3-4517-a606-0a137a1125a5.blend-922b98e8553409181e79bd029019f5ee.scn"
 
 [deps]
 
 source_file="res://assets/models/stadium/assets/materials/asphalt-clean-cr_e5df1758-e745-44b9-9479-06acff27d7c1/asphalt-clean-cracked_2K_baf4a421-a1f3-4517-a606-0a137a1125a5.blend"
+dest_files=["res://.godot/imported/asphalt-clean-cracked_2K_baf4a421-a1f3-4517-a606-0a137a1125a5.blend-922b98e8553409181e79bd029019f5ee.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

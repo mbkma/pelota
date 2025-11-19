@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsxmrb6wm8npr"]
+
+[ext_resource type="Script" uid="uid://vvty7qbogxbc" path="res://scripts/modes/match/splitscreen_manager.gd" id="1_88sxd"]
+
+[node name="SplitscreenUI" type="Control" unique_id=82629459]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_88sxd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1267324346]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="LeftViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=1800360779]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="LeftViewport" type="SubViewport" parent="HBoxContainer/LeftViewportContainer" unique_id=144757490]
+handle_input_locally = false
+size = Vector2i(576, 648)
+render_target_update_mode = 4
+
+[node name="RightViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=348418839]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="RightViewport" type="SubViewport" parent="HBoxContainer/RightViewportContainer" unique_id=2064336570]
+handle_input_locally = false
+size = Vector2i(576, 648)
+render_target_update_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1094283819]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopViewportContainer" type="SubViewportContainer" parent="VBoxContainer" unique_id=1184020623]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="TopViewport" type="SubViewport" parent="VBoxContainer/TopViewportContainer" unique_id=1003405679]
+handle_input_locally = false
+size = Vector2i(1152, 324)
+render_target_update_mode = 4
+
+[node name="BottomViewportContainer" type="SubViewportContainer" parent="VBoxContainer" unique_id=89981103]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="BottomViewport" type="SubViewport" parent="VBoxContainer/BottomViewportContainer" unique_id=1494325066]
+handle_input_locally = false
+size = Vector2i(1152, 324)
+render_target_update_mode = 4

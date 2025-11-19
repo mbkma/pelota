@@ -6,14 +6,14 @@
 [sub_resource type="BoxShape3D" id="7"]
 size = Vector3(1.495, 2, 2)
 
-[node name="BallCanon" type="StaticBody3D"]
+[node name="BallCanon" type="StaticBody3D" unique_id=1472446330]
 script = ExtResource("1")
 
-[node name="Marker3D" type="Marker3D" parent="."]
+[node name="Marker3D" type="Marker3D" parent="." unique_id=605358620]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36504, -1.13585)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=711909077]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("7")
 
-[node name="BallMachine" parent="." instance=ExtResource("2_wphch")]
+[node name="BallMachine" parent="." unique_id=1552028703 instance=ExtResource("2_wphch")]

@@ -22,7 +22,7 @@ height = 1080
 offsets = PackedFloat32Array(0, 0.5, 1)
 colors = PackedColorArray(0.2, 0.8, 0.4, 1, 0.4, 1, 0.6, 0.5, 1, 1, 0.2, 0)
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=995015391]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,8 +35,9 @@ match_scence = ExtResource("2_35tjg")
 training_scence = ExtResource("3_vob5f")
 career_scence = ExtResource("4_0prml")
 tournament_scence = ExtResource("5_yipxn")
+music_enabled = null
 
-[node name="BackgroundGradient" type="TextureRect" parent="."]
+[node name="BackgroundGradient" type="TextureRect" parent="." unique_id=1355971403]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,7 +47,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_bg")
 expand_mode = 2
 
-[node name="ParticlesTop" type="CPUParticles2D" parent="."]
+[node name="ParticlesTop" type="CPUParticles2D" parent="." unique_id=732818069]
 position = Vector2(300, 200)
 amount = 12
 lifetime = 8.0
@@ -65,7 +66,7 @@ color_ramp = SubResource("Gradient_particles")
 hue_variation_min = -0.3
 hue_variation_max = 0.3
 
-[node name="ParticlesBottom" type="CPUParticles2D" parent="."]
+[node name="ParticlesBottom" type="CPUParticles2D" parent="." unique_id=1876608816]
 position = Vector2(1620, 800)
 amount = 12
 lifetime = 8.0
@@ -85,7 +86,7 @@ color_ramp = SubResource("Gradient_particles")
 hue_variation_min = -0.2
 hue_variation_max = 0.2
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1965378297]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -93,25 +94,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1895848247]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 20
 
-[node name="TitlePanel" type="PanelContainer" parent="CenterContainer/VBoxContainer"]
+[node name="TitlePanel" type="PanelContainer" parent="CenterContainer/VBoxContainer" unique_id=1046625716]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer/TitlePanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer/TitlePanel" unique_id=750502484]
 layout_mode = 2
 theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 30
 
-[node name="Title_Label" type="Label" parent="CenterContainer/VBoxContainer/TitlePanel/MarginContainer"]
+[node name="Title_Label" type="Label" parent="CenterContainer/VBoxContainer/TitlePanel/MarginContainer" unique_id=254033229]
 layout_mode = 2
 theme = ExtResource("1")
 theme_override_font_sizes/font_size = 55
@@ -119,48 +120,48 @@ text = "PELOTA"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Spacer1" type="Control" parent="CenterContainer/VBoxContainer"]
+[node name="Spacer1" type="Control" parent="CenterContainer/VBoxContainer" unique_id=1829806325]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="MenuContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+[node name="MenuContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1437094614]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Start" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+[node name="Start" parent="CenterContainer/VBoxContainer/MenuContainer" unique_id=2055361805 instance=ExtResource("7_lnm77")]
 custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Start Match"
 
-[node name="Training" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+[node name="Training" parent="CenterContainer/VBoxContainer/MenuContainer" unique_id=499321656 instance=ExtResource("7_lnm77")]
 custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Training"
 
-[node name="Tournament" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+[node name="Tournament" parent="CenterContainer/VBoxContainer/MenuContainer" unique_id=355603609 instance=ExtResource("7_lnm77")]
 custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Tournament"
 
-[node name="Career" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+[node name="Career" parent="CenterContainer/VBoxContainer/MenuContainer" unique_id=949391600 instance=ExtResource("7_lnm77")]
 custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Career"
 
-[node name="Settings" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+[node name="Settings" parent="CenterContainer/VBoxContainer/MenuContainer" unique_id=86379174 instance=ExtResource("7_lnm77")]
 custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Settings"
 
-[node name="Quit" parent="CenterContainer/VBoxContainer/MenuContainer" instance=ExtResource("7_lnm77")]
+[node name="Quit" parent="CenterContainer/VBoxContainer/MenuContainer" unique_id=1942397311 instance=ExtResource("7_lnm77")]
 custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
 text = "Quit"
 
-[node name="StartMenu" type="VBoxContainer" parent="."]
+[node name="StartMenu" type="VBoxContainer" parent="." unique_id=1832949332]
 visible = false
 layout_mode = 0
 offset_left = 91.0
@@ -168,28 +169,28 @@ offset_top = 69.0
 offset_right = 639.0
 offset_bottom = 429.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu"]
+[node name="HBoxContainer" type="HBoxContainer" parent="StartMenu" unique_id=312112120]
 layout_mode = 2
 
-[node name="PlayerSelector" parent="StartMenu/HBoxContainer" instance=ExtResource("3")]
+[node name="PlayerSelector" parent="StartMenu/HBoxContainer" unique_id=1453222617 instance=ExtResource("3")]
 layout_mode = 2
 
-[node name="PlayerSelector2" parent="StartMenu/HBoxContainer" instance=ExtResource("3")]
+[node name="PlayerSelector2" parent="StartMenu/HBoxContainer" unique_id=337994056 instance=ExtResource("3")]
 layout_mode = 2
 player_index = 1
 
-[node name="Actions" type="HBoxContainer" parent="StartMenu"]
+[node name="Actions" type="HBoxContainer" parent="StartMenu" unique_id=1029246758]
 layout_mode = 2
 
-[node name="Back" type="Button" parent="StartMenu/Actions"]
+[node name="Back" type="Button" parent="StartMenu/Actions" unique_id=783577977]
 layout_mode = 2
 text = "Back"
 
-[node name="Play" type="Button" parent="StartMenu/Actions"]
+[node name="Play" type="Button" parent="StartMenu/Actions" unique_id=288214078]
 layout_mode = 2
 text = "Play"
 
-[node name="MusicPanel" parent="." instance=ExtResource("6_u0nle")]
+[node name="MusicPanel" parent="." unique_id=1236886159 instance=ExtResource("6_u0nle")]
 layout_mode = 1
 offset_left = -576.0
 offset_top = -648.0

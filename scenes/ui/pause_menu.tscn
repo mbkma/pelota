@@ -1,28 +1,55 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxr6pnwu01hft"]
+[gd_scene load_steps=2 format=3 uid="uid://dwo71krc1o5v6"]
 
-[ext_resource type="Script" uid="uid://x7ingeehnqgr" path="res://scripts/ui/pause_menu.gd" id="1_nacag"]
+[ext_resource type="Script" uid="uid://ewe3w7dax3mw" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
 
-[node name="PauseMenu" type="Control"]
-process_mode = 2
-visible = false
+[node name="PauseMenu" type="Control" unique_id=1768035606]
 layout_mode = 3
-anchors_preset = 0
-script = ExtResource("1_nacag")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pause")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="DimBackground" type="ColorRect" parent="." unique_id=1868047258]
+layout_mode = 1
+color = Color(0, 0, 0, 0.5)
 
-[node name="Resume" type="Button" parent="VBoxContainer"]
-process_mode = 2
+[node name="PausePanel" type="Panel" parent="." unique_id=1431041448]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PausePanel" unique_id=1161138022]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseLabel" type="Label" parent="PausePanel/VBoxContainer" unique_id=1204901611]
 layout_mode = 2
-text = "Resume"
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Back" type="Button" parent="VBoxContainer"]
-process_mode = 2
+[node name="Spacer" type="Control" parent="PausePanel/VBoxContainer" unique_id=2014309216]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-text = "Back to Main Menu"
 
-[connection signal="pressed" from="VBoxContainer/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]
+[node name="ResumeButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=816962526]
+layout_mode = 2
+text = "Resume (ESC)"
+
+[node name="MainMenuButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=599764900]
+layout_mode = 2
+text = "Main Menu"

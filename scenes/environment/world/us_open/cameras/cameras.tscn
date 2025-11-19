@@ -4,44 +4,44 @@
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="2_rx4uh"]
 [ext_resource type="Script" uid="uid://dqtx4wyjr5o1v" path="res://scripts/environment/world/us_open/adaptive_broadcast_camera.gd" id="3_gvk2c"]
 
-[node name="Cameras" type="Node3D"]
+[node name="Cameras" type="Node3D" unique_id=1668762139]
 script = ExtResource("1_ibrh3")
 
-[node name="FlyingCam" type="Camera3D" parent="."]
+[node name="FlyingCam" type="Camera3D" parent="." unique_id=994003878]
 transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
 fov = 30.0
 far = 8192.0
 script = ExtResource("2_rx4uh")
 
-[node name="TopFront" type="Camera3D" parent="."]
+[node name="TopFront" type="Camera3D" parent="." unique_id=1711630965]
 transform = Transform3D(1, 0, 0, 0, 0.948324, 0.317305, 0, -0.317305, 0.948324, 0, 9.836, 35.084)
 fov = 29.9
 size = 97.38
 script = ExtResource("3_gvk2c")
 
-[node name="TopBack" type="Camera3D" parent="."]
+[node name="TopBack" type="Camera3D" parent="." unique_id=600431920]
 transform = Transform3D(-1, 2.77397e-08, -8.29051e-08, 0, 0.948324, 0.317305, 8.74228e-08, 0.317305, -0.948324, 0, 9.836, -35.084)
 fov = 22.5
 size = 97.38
 script = ExtResource("3_gvk2c")
 
-[node name="MiddleFront" type="Camera3D" parent="."]
+[node name="MiddleFront" type="Camera3D" parent="." unique_id=2002676584]
 transform = Transform3D(1, 0, 0, 0, 0.963631, 0.267239, 0, -0.267239, 0.963631, 0, 6.936, 28.829)
 fov = 24.5
 size = 97.38
 
-[node name="MiddleBack" type="Camera3D" parent="."]
+[node name="MiddleBack" type="Camera3D" parent="." unique_id=1711178741]
 transform = Transform3D(-1, 4.79117e-08, -1.43193e-07, 0, 0.948324, 0.317305, 1.50996e-07, 0.317305, -0.948324, 0, 7.446, -33.359)
 fov = 23.5
 size = 97.38
 
-[node name="CourtSideFront" type="Camera3D" parent="."]
+[node name="CourtSideFront" type="Camera3D" parent="." unique_id=90699718]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 19)
 fov = 39.5
 
-[node name="CourtSideBack" type="Camera3D" parent="."]
+[node name="CourtSideBack" type="Camera3D" parent="." unique_id=1456183779]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -19)
 fov = 39.5
 
-[node name="CameraTop" type="Camera3D" parent="."]
+[node name="CameraTop" type="Camera3D" parent="." unique_id=1099254777]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 16.42067, 0)

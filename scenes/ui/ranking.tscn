@@ -2,33 +2,33 @@
 
 [ext_resource type="Script" uid="uid://cc7ll68kuylbr" path="res://scripts/ui/ranking.gd" id="2"]
 
-[node name="Ranking" type="HBoxContainer"]
+[node name="Ranking" type="HBoxContainer" unique_id=1852060261]
 offset_right = 423.0
 offset_bottom = 200.0
 script = ExtResource("2")
 
-[node name="Info" type="VBoxContainer" parent="."]
+[node name="Info" type="VBoxContainer" parent="." unique_id=637701195]
 layout_mode = 2
 alignment = 1
 
-[node name="Name" type="Label" parent="Info"]
+[node name="Name" type="Label" parent="Info" unique_id=274690863]
 layout_mode = 2
 text = "Novak
 Djokovic"
 horizontal_alignment = 2
 
-[node name="Hbox" type="HBoxContainer" parent="Info"]
+[node name="Hbox" type="HBoxContainer" parent="Info" unique_id=450811948]
 layout_mode = 2
 
-[node name="Label1" type="Label" parent="Info/Hbox"]
+[node name="Label1" type="Label" parent="Info/Hbox" unique_id=1282937432]
 layout_mode = 2
 text = "Rank"
 
-[node name="Rank" type="Label" parent="Info/Hbox"]
+[node name="Rank" type="Label" parent="Info/Hbox" unique_id=488598606]
 layout_mode = 2
 text = "1"
 
-[node name="PlayerImage" type="TextureRect" parent="."]
+[node name="PlayerImage" type="TextureRect" parent="." unique_id=1475128895]
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1

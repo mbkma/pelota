@@ -85,7 +85,7 @@ func check_anti_aliasing() -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_drjjf"]
 
-[node name="Scaler" type="VBoxContainer" node_paths=PackedStringArray("MainElementRef", "SUB_ELEMENTS_")]
+[node name="Scaler" type="VBoxContainer" unique_id=672541227 node_paths=PackedStringArray("MainElementRef", "SUB_ELEMENTS_")]
 offset_top = 51.0
 offset_right = 1152.0
 offset_bottom = 51.0
@@ -93,7 +93,7 @@ script = SubResource("GDScript_bn0b0")
 MainElementRef = NodePath("ScalingMode")
 SUB_ELEMENTS_ = [NodePath("ResolutionScale"), NodePath("FSRMode"), NodePath("FSRSharpness")]
 
-[node name="ScalingMode" type="HBoxContainer" parent="." node_paths=PackedStringArray("OptionsRef")]
+[node name="ScalingMode" type="HBoxContainer" parent="." unique_id=125707219 node_paths=PackedStringArray("OptionsRef")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = SubResource("GDScript_mdyud")
@@ -101,28 +101,28 @@ DEFAULT_VALUE = "Disabled"
 OptionsRef = NodePath("Options")
 IDENTIFIER = "ScalingMode"
 
-[node name="Label" type="Label" parent="ScalingMode"]
+[node name="Label" type="Label" parent="ScalingMode" unique_id=381097688]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Scaling Mode"
 vertical_alignment = 1
 
-[node name="Options" type="OptionButton" parent="ScalingMode"]
+[node name="Options" type="OptionButton" parent="ScalingMode" unique_id=1713338476]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_drjjf")
 
-[node name="ResolutionScale" parent="." instance=ExtResource("1_4irey")]
+[node name="ResolutionScale" parent="." unique_id=618799700 instance=ExtResource("1_4irey")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="FSRMode" parent="." instance=ExtResource("2_w65g1")]
+[node name="FSRMode" parent="." unique_id=98407151 instance=ExtResource("2_w65g1")]
 visible = false
 layout_mode = 2
 
-[node name="FSRSharpness" parent="." instance=ExtResource("3_v8pix")]
+[node name="FSRSharpness" parent="." unique_id=1032971027 instance=ExtResource("3_v8pix")]
 visible = false
 layout_mode = 2

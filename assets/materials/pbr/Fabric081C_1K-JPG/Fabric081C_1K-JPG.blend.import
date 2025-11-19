@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://8lf2wd3q4gs5"
-valid=false
+path="res://.godot/imported/Fabric081C_1K-JPG.blend-07bb2c0c71b50d281e78da1c6888cd68.scn"
 
 [deps]
 
 source_file="res://assets/materials/pbr/Fabric081C_1K-JPG/Fabric081C_1K-JPG.blend"
+dest_files=["res://.godot/imported/Fabric081C_1K-JPG.blend-07bb2c0c71b50d281e78da1c6888cd68.scn"]
 
 [params]
 
@@ -47,6 +48,7 @@ blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
+blender/meshes/gpu_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false

@@ -1,7 +1,5 @@
 extends Control
 
-signal level_changed(level_name, init_data)
-
 @onready var next_round_button = $Button
 @onready var grid = $GridContainer
 

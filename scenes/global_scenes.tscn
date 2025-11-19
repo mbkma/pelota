@@ -38,12 +38,12 @@ stream = ExtResource("13_yjeu2")
 cover = ExtResource("12_4xgel")
 metadata/_custom_type_script = "uid://bndh0hgyh1ixw"
 
-[node name="GlobalScenes" type="Node"]
+[node name="GlobalScenes" type="Node" unique_id=725382235]
 script = ExtResource("1_rmbq0")
 PLAYER_SCENE = ExtResource("2_wnfw1")
 PLAYER_DATA = Array[Resource]([ExtResource("3_lneag"), ExtResource("4_g2ium")])
 BALL_SCENE = ExtResource("5_g2ium")
 
-[node name="GlobalMusicPlayer" type="Node" parent="."]
+[node name="GlobalMusicPlayer" type="Node" parent="." unique_id=1939642293]
 script = ExtResource("6_ive1o")
 music = Array[ExtResource("7_u7smb")]([SubResource("Resource_41rb2"), SubResource("Resource_4xgel"), SubResource("Resource_ns3k6")])
