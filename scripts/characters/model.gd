@@ -79,7 +79,7 @@ func play_stroke_animation(stroke: Stroke) -> void:
 	#if t > 0:
 		#await get_tree().create_timer(t).timeout
 
-	var playback_speed = compute_animation_speed(48.0 / 30.0, stroke.step.time)
+	var playback_speed = compute_animation_speed(31.0 / 30.0, stroke.step.time)
 	playback_speed = clamp(playback_speed, 0.5, 3)
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
 	print("playback_speed!!! ", playback_speed, " time ",  stroke.step.time)

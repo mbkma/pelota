@@ -5,6 +5,7 @@
 .vscode/
 .claude/
 
+assets/models/
 
 ### Blender ###
 # Ignore temporary Blender files.

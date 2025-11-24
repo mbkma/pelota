@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=23 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
 [ext_resource type="Resource" uid="uid://cngw1dhrbgb21" path="res://assets/resources/characters/alcaraz.tres" id="4_7pj63"]
 [ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="4_cux4k"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_xinb2"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/modes/match/match_manager.tscn" id="8_2s2ac"]
@@ -70,8 +71,11 @@ controller_scene = ExtResource("4_cux4k")
 
 [node name="Player2" parent="." unique_id=1521373215 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.376896)
-controller_scene = ExtResource("4_cux4k")
+controller_scene = ExtResource("4_xinb2")
 player_data = ExtResource("4_7pj63")
+
+[node name="DEF-attachment_hand_R" parent="Player2/Model/h/player_djokovic/game-rig/Skeleton3D" parent_id_path=PackedInt32Array(1521373215, 1631475750, 676436879, 442406218) index="0" unique_id=856445439]
+transform = Transform3D(0.44097078, 0.21230687, 0.8720479, 0.7512759, 0.44425637, -0.4880576, -0.49103254, 0.8703759, 0.03640213, -0.5514751, 1.0978513, 0.2395195)
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
