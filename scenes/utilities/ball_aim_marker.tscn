@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://n0ox8xlulbmh" path="res://scenes/utilities/ball_aim_marker.gd" id="1_kjtf1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lufo"]
-albedo_color = Color(0.3060863, 0.30608633, 0.30608633, 1)
+albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kjtf1"]
 material = SubResource("StandardMaterial3D_7lufo")

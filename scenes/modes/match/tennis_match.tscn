@@ -1,7 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=23 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_cux4k"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_xinb2"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
@@ -13,13 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
 [ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scripts/environment/crowd/crowd.gd" id="15_rqw0b"]
-[ext_resource type="AudioStream" uid="uid://501usltpmnhx" path="res://assets/sounds/effects/crowd/crowd-after-point1.wav" id="16_rqw0b"]
-[ext_resource type="AudioStream" uid="uid://birb4657ratbv" path="res://assets/sounds/effects/crowd/crowd-after-point2.wav" id="17_1yqqs"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/modes/match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="18_pause"]
-[ext_resource type="Script" uid="uid://cln3iv60dk3kt" path="res://scripts/environment/crowd/crowd_color_palette.gd" id="18_sc0rm"]
-[ext_resource type="AudioStream" uid="uid://ck1krkhd4cgch" path="res://assets/sounds/effects/crowd/crowd-idle.wav" id="19_hwrae"]
-[ext_resource type="Script" uid="uid://wf2jvpga3hfj" path="res://scripts/environment/crowd/crowd_config.gd" id="20_txnd0"]
 [ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environment/crowd/crowd_block.tscn" id="21_7fyad"]
 
 [sub_resource type="Animation" id="1"]
@@ -65,32 +61,13 @@ volumetric_fog_emission_energy = 1.27
 volumetric_fog_anisotropy = 0.5
 volumetric_fog_sky_affect = 0.0
 
-[sub_resource type="Resource" id="Resource_pnppm"]
-script = ExtResource("18_sc0rm")
-shirt_colors = PackedColorArray(1, 1, 1, 1, 0.9, 0.9, 0.9, 1, 0.2, 0.2, 0.2, 1, 0.4, 0.4, 0.4, 1, 0.1, 0.3, 0.6, 1, 0.2, 0.5, 0.8, 1, 0.8, 0.2, 0.2, 1, 0.8, 0.4, 0.1, 1, 0.2, 0.6, 0.2, 1, 0.6, 0.2, 0.4, 1)
-shorts_colors = PackedColorArray(0.2, 0.2, 0.2, 1, 0.3, 0.3, 0.3, 1, 0.5, 0.5, 0.5, 1, 0.8, 0.8, 0.8, 1, 0.1, 0.3, 0.6, 1, 0.2, 0.5, 0.8, 1, 0.4, 0.3, 0.2, 1, 0.8, 0.2, 0.2, 1, 0.2, 0.6, 0.2, 1)
-hair_colors = PackedColorArray(0.1, 0.08, 0.05, 1, 0.2, 0.15, 0.08, 1, 0.35, 0.25, 0.1, 1, 0.5, 0.35, 0.15, 1, 0.6, 0.45, 0.2, 1, 0.55, 0.3, 0.15, 1, 0.25, 0.2, 0.18, 1, 0.4, 0.35, 0.32, 1)
-skin_colors = PackedColorArray(0.95, 0.85, 0.75, 1, 0.92, 0.82, 0.72, 1, 0.88, 0.75, 0.62, 1, 0.85, 0.68, 0.52, 1, 0.75, 0.55, 0.4, 1, 0.65, 0.45, 0.3, 1)
-metadata/_custom_type_script = "uid://cln3iv60dk3kt"
-
-[sub_resource type="Resource" id="Resource_gewmb"]
-script = ExtResource("20_txnd0")
-grid_rows = 6
-idle_animations = PackedStringArray("sit-idle-2", "sit-idle-3", "sit-talk-1", "sit-talk-2", "sit-talk-3")
-victory_animations = PackedStringArray("sit-victory-1", "sit-victory-2", "sit-victory-3", "sit-victory-4")
-model_variants = PackedStringArray("crowd-1", "crowd-3", "crowd-4")
-idle_sounds = Array[AudioStream]([ExtResource("19_hwrae")])
-after_point_sounds = Array[AudioStream]([ExtResource("16_rqw0b"), ExtResource("17_1yqqs")])
-color_palette = SubResource("Resource_pnppm")
-metadata/_custom_type_script = "uid://wf2jvpga3hfj"
-
 [node name="TennisMatch" type="Node" unique_id=1484614295]
 process_mode = 1
 script = ExtResource("1_3pywv")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.890247)
-controller_scene = ExtResource("4_xinb2")
+controller_scene = ExtResource("3_cux4k")
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
@@ -202,7 +179,6 @@ shadow_blur = 2.954
 
 [node name="Crowd" type="Node" parent="." unique_id=849436384]
 script = ExtResource("15_rqw0b")
-config = SubResource("Resource_gewmb")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Crowd" unique_id=637033766]
 

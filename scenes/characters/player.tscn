@@ -46,7 +46,7 @@ parameters/stroke/Transition/current_index = -1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 
-[node name="BallAimMarker" parent="." unique_id=801641257 instance=ExtResource("10_7vyk4")]
+[node name="BallAimMarker" parent="." unique_id=160563153 instance=ExtResource("10_7vyk4")]
 visible = false
 
 [editable path="Model"]

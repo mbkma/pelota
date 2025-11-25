@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c4yi3riq177jf" path="res://scripts/environment/crowd/crowd_block.gd" id="1_jcoec"]
 [ext_resource type="PackedScene" uid="uid://dnoktlosmy7xg" path="res://scenes/environment/crowd/crowd_person.tscn" id="2_r2fk0"]
-[ext_resource type="Resource" uid="uid://cd1vrmlg6sfga" path="res://scenes/environment/crowd/crowd_block.tres" id="2_rk23e"]
+[ext_resource type="Resource" uid="uid://cd1vrmlg6sfga" path="res://assets/resources/crowd_block.tres" id="2_rk23e"]
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="5_u2lxb"]
 
 [node name="CrowdBlock" type="Node3D" unique_id=900926214]

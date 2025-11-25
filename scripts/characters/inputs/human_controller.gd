@@ -50,36 +50,65 @@ func _process(_delta: float) -> void:
 
 	# Handle stroke input
 	if not _stroke_input_blocked:
-		if (Input.is_action_just_pressed("strike") or 
+		var is_any_action_pressed: bool = (
+			Input.is_action_pressed("strike") or
+			Input.is_action_pressed("slice") or
+			Input.is_action_pressed("drop_shot")
+		)
+
+		var is_any_action_just_pressed: bool = (
+			Input.is_action_just_pressed("strike") or
 			Input.is_action_just_pressed("slice") or
-			Input.is_action_just_pressed("drop_shot")):
+			Input.is_action_just_pressed("drop_shot")
+		)
+
+		var is_any_action_just_released: bool = (
+			Input.is_action_just_released("strike") or
+			Input.is_action_just_released("slice") or
+			Input.is_action_just_released("drop_shot")
+		)
+
+		# Initialize stroke when button is first pressed
+		if is_any_action_just_pressed:
 			_input_pace = 0.0
 			_mouse_from = get_viewport().get_mouse_position()
+			_aiming_at = _get_default_aim()
+			_vibrate_joypad(0.3, 0.3)  # Light vibration on aim start
 
-		if (Input.is_action_just_pressed("strike") or 
-			Input.is_action_just_pressed("slice") or
-			Input.is_action_just_pressed("drop_shot")):
+		# Continuously update aim and pace while button is held
+		if is_any_action_pressed:
 			_input_pace += GameConstants.PACE_INCREMENT_RATE
+			_input_pace = clamp(_input_pace, 0.0, 1.0)  # Cap pace at 100%
 			pace_changed.emit(_input_pace)
 			_mouse_to = get_viewport().get_mouse_position()
 			_aiming_at = _get_aim_pos(_mouse_from, _mouse_to)
+			print("aiming at, ", _aiming_at)
 			player.ball_aim_marker.global_position = _aiming_at
 			player.ball_aim_marker.visible = true
+			# Scale marker based on pace for visual feedback (1.0 - 1.5x size)
+			player.ball_aim_marker.scale = Vector3.ONE * (1.0 + _input_pace * 0.5)
 
-		if Input.is_action_just_pressed("strike"):
-			if _serve_controls:
+		# Execute stroke when button is released
+		if is_any_action_just_released:
+			# Determine which stroke type was used
+			var stroke_type: String = "topspin"
+			if Input.is_action_just_released("slice"):
+				stroke_type = "slice"
+			elif Input.is_action_just_released("drop_shot"):
+				stroke_type = "drop_shot"
+
+			if Input.is_action_just_released("strike") and _serve_controls:
 				_do_serve(_aiming_at, _input_pace)
 				_serve_controls = false
+				_vibrate_joypad(0.6, 0.5)  # Strong vibration on serve
 			else:
-				_do_stroke(_aiming_at, _input_pace)
-		elif Input.is_action_just_pressed("slice"):
-			_do_stroke(_aiming_at, _input_pace, "slice")
-		elif Input.is_action_just_pressed("drop_shot"):
-			_do_stroke(_aiming_at, _input_pace, "drop_shot")
+				_do_stroke(_aiming_at, _input_pace, stroke_type)
+				_vibrate_joypad(0.5, 0.4)  # Medium vibration on stroke
 
 	# Handle challenge input
 	if Input.is_action_just_pressed("challenge"):
 		player.challenge()
+		_vibrate_joypad(0.7, 0.2)  # Strong short vibration on challenge
 
 
 func request_serve() -> void:
@@ -167,15 +196,18 @@ func _do_serve(aim_position: Vector3, pace: float) -> void:
 func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") -> void:
 	if not validate_player():
 		push_error("HumanInput._do_stroke: Invalid player state")
+		_move_input_blocked = false
 		return
 
 	if not player.ball:
 		push_error("HumanInput._do_stroke: Player has no ball to stroke")
+		_move_input_blocked = false
 		return
 
 	var closest_step: TrajectoryStep = get_closest_trajectory_step(player)
 	if not closest_step:
 		push_error("HumanInput._do_stroke: Could not find ball trajectory step")
+		_move_input_blocked = false
 		return
 
 	var closest_ball_position: Vector3 = closest_step.point
@@ -189,6 +221,7 @@ func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") ->
 			closest_ball_position.z,
 			")"
 		)
+		_move_input_blocked = false
 		return
 
 	var stroke: Stroke = _construct_stroke_from_input(closest_step, aim_position, pace, stroke_name)
@@ -249,3 +282,19 @@ func _construct_stroke_from_input(
 ## Called when player successfully hits the ball
 func _on_player_ball_hit() -> void:
 	_move_input_blocked = false
+	_vibrate_joypad(0.8, 0.1)  # Strong brief vibration on ball contact
+
+
+## Vibrates the joypad with specified strength and duration
+func _vibrate_joypad(strength: float, duration: float) -> void:
+	strength = clamp(strength, 0.0, 1.0)
+
+	# Get the first connected joypad
+	var joypad_id: int = 0
+	if Input.get_connected_joypads().size() > 0:
+		joypad_id = Input.get_connected_joypads()[0]
+	else:
+		return  # No joypad connected
+
+	# Strong vibration (left motor) and weak vibration (right motor)
+	Input.start_joy_vibration(joypad_id, strength * 0.8, strength * 0.5, duration)

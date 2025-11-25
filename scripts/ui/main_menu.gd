@@ -29,7 +29,13 @@ func init_scene():
 
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# Set input mode based on controller detection
+	if Input.get_connected_joypads().size() > 0:
+		# Controller detected: capture mouse
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	else:
+		# No controller: show cursor for mouse aiming
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 	player_selectors[0].input_select_button.text = "CPU"
 	player_selectors[1].input_select_button.text = "CPU"
@@ -43,7 +49,6 @@ func _ready():
 		GlobalScenes.music_player.play_track_list(GlobalScenes.music_player.music, true, true)
 
 	# Animate button entrance and set initial focus
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_animate_buttons_entrance()
 	_show_main_menu()
 
