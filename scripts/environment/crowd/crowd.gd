@@ -1,14 +1,11 @@
 class_name Crowd
-extends Node3D
+extends Node
 
 ## Signal emitted when crowd reaction starts
 signal crowd_reaction_started(reaction_type: String)
 
 ## Signal emitted when crowd reaction ends
 signal crowd_reaction_ended(reaction_type: String)
-
-## Configuration resource for the crowd system
-@export var config: CrowdConfig
 
 ## Reference to the audio stream player
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -18,19 +15,12 @@ signal crowd_reaction_ended(reaction_type: String)
 
 ## Track current reaction state
 var _current_reaction: String = ""
-
+var config = null
 
 func _ready() -> void:
 	if not config:
-		push_error("Crowd: No configuration resource assigned")
 		return
-
-	if not config.validate():
-		push_error("Crowd: Invalid configuration")
-		return
-
 	_initialize_audio()
-	_initialize_blocks()
 
 
 ## Play idle crowd sound with looping enabled
@@ -96,19 +86,6 @@ func _initialize_audio() -> void:
 	if not audio_stream_player:
 		push_error("Crowd: AudioStreamPlayer not found")
 		return
-
-	play_idle_sound()
-
-
-func _initialize_blocks() -> void:
-	if not blocks:
-		push_error("Crowd: Blocks container not found")
-		return
-
-	# Initialize all crowd blocks with config
-	for block in blocks.get_children():
-		if block and block is CrowdBlock and not block.config:
-			block.config = config
 
 
 func _on_reaction_finished() -> void:

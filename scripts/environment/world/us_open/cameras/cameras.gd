@@ -1,5 +1,7 @@
-class_name Cameras
+class_name MatchCameras
 extends Node3D
+
+@export var cams: Array[Camera3D]
 
 @onready var flying_cam: Camera3D = $FlyingCam
 @onready var top_front: Camera3D = $TopFront
@@ -11,11 +13,11 @@ extends Node3D
 @onready var camera_top: Camera3D = $CameraTop
 
 var active_cam_index := 0
-var cams: Array
+var player0: Player
+var player1: Player
 
-func _ready() -> void:
-	cams = get_children() 
-
+func register_camera(camera: Camera3D):
+	cams.append(camera)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -24,12 +26,13 @@ func _input(event: InputEvent) -> void:
 			cams[active_cam_index].current = true
 
 # call this after the players have been placed
+# this is not the actual current camera, but rather the camera the player
+# uses to compute the move direction
 func set_camera_for_player(player: Player) -> void:
 	if sign(player.position.z) < 0:
 		player.camera = middle_back
 	else:
 		player.camera = middle_front
-		player.camera.make_current()
 
 func disable_all() -> void:
 	for c in cams:

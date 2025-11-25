@@ -28,6 +28,9 @@ signal input_changed(timing: float)
 
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var first_person_camera: Camera3D = $FirstPersonCamera
+@onready var third_person_camera: Camera3D = $ThirdPersonCamera
+
 
 @export var controller_scene: PackedScene
 @export var player_data: PlayerData

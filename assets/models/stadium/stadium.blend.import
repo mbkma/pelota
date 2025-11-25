@@ -37,7 +37,125 @@ import_script/path=""
 materials/extract=1
 materials/extract_format=0
 materials/extract_path="res://assets/materials"
-_subresources={}
+_subresources={
+"materials": {
+"@MATERIAL:10": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/@MATERIAL_10.tres",
+"use_external/path": "res://assets/materials/@MATERIAL_10.tres"
+},
+"@MATERIAL:11": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/@MATERIAL_11.tres",
+"use_external/path": "res://assets/materials/@MATERIAL_11.tres"
+},
+"@MATERIAL:8": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/@MATERIAL_8.tres",
+"use_external/path": "res://assets/materials/@MATERIAL_8.tres"
+},
+"Frame.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Frame.001.tres",
+"use_external/path": "uid://cjmc6wkoalgbr"
+},
+"JP-Morgan-logo": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/JP-Morgan-logo.tres",
+"use_external/path": "uid://b0qcl52ouf45b"
+},
+"bark 1 mat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/bark 1 mat.tres",
+"use_external/path": "uid://dux77f00quep1"
+},
+"bark 1 mat.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/bark 1 mat.001.tres",
+"use_external/path": "uid://148m7ivf7k7f"
+},
+"black": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/black.tres",
+"use_external/path": "uid://c6hhohmjpoh4r"
+},
+"blue-plastic": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/blue-plastic.tres",
+"use_external/path": "uid://6eeh3oxckum4"
+},
+"dark_blue-plastic": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/dark_blue-plastic.tres",
+"use_external/path": "uid://bu5fjlvmcsor7"
+},
+"glass": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/glass.tres",
+"use_external/path": "uid://bx63ta4i4s1x0"
+},
+"green-plastic": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/green-plastic.tres",
+"use_external/path": "uid://cbortxqfd6a4a"
+},
+"green-rolex": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/green-rolex.tres",
+"use_external/path": "uid://cn2jmog8hrr13"
+},
+"ibm": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/ibm.tres",
+"use_external/path": "uid://bkocmevna7ekb"
+},
+"labelandcap": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/labelandcap.tres",
+"use_external/path": "uid://dnxm7n6lvgglg"
+},
+"rolex": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/rolex.tres",
+"use_external/path": "uid://b5no6bxnc4lcw"
+},
+"strings.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/strings.001.tres",
+"use_external/path": "uid://dnvb2ogqs8r7v"
+},
+"tree_01_mat": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/tree_01_mat.tres",
+"use_external/path": "uid://dxg7gyruugh63"
+},
+"tree_hp_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/tree_hp_01.tres",
+"use_external/path": "uid://dc5u7qwlmg2u7"
+},
+"us_open_logo": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/us_open_logo.tres",
+"use_external/path": "uid://bq2wuq8xeg2gt"
+},
+"waterreflect": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/waterreflect.tres",
+"use_external/path": "uid://dfn24cvu0vk0i"
+},
+"white-concrete": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/white-concrete.tres",
+"use_external/path": "uid://bqlm7k12hlg31"
+},
+"white-plastic": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/white-plastic.tres",
+"use_external/path": "uid://b68pou4ei1f15"
+}
+}
+}
 blender/nodes/visible=1
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true

@@ -1,3 +1,4 @@
+@tool
 class_name CrowdColorPalette
 extends Resource
 
@@ -15,7 +16,10 @@ extends Resource
 	Color(0.8, 0.4, 0.1),  # Orange
 	Color(0.2, 0.6, 0.2),  # Green
 	Color(0.6, 0.2, 0.4),  # Purple
-]
+]:
+	set(new_setting):
+		shirt_colors = new_setting
+		changed.emit()
 
 ## Shorts colors - realistic casual/athletic wear
 @export var shorts_colors: PackedColorArray = [
@@ -28,7 +32,10 @@ extends Resource
 	Color(0.4, 0.3, 0.2),  # Brown
 	Color(0.8, 0.2, 0.2),  # Red
 	Color(0.2, 0.6, 0.2),  # Green
-]
+]:
+	set(new_setting):
+		shorts_colors = new_setting
+		changed.emit()
 
 ## Hair colors - realistic human hair variations
 @export var hair_colors: PackedColorArray = [
@@ -40,7 +47,10 @@ extends Resource
 	Color(0.55, 0.3, 0.15),  # Auburn
 	Color(0.25, 0.2, 0.18),  # Dark gray
 	Color(0.4, 0.35, 0.32),  # Light gray
-]
+]:
+	set(new_setting):
+		hair_colors = new_setting
+		changed.emit()
 
 ## Skin tone variations - realistic human skin tones
 @export var skin_colors: PackedColorArray = [
@@ -50,7 +60,10 @@ extends Resource
 	Color(0.85, 0.68, 0.52),  # Medium
 	Color(0.75, 0.55, 0.4),   # Medium-dark
 	Color(0.65, 0.45, 0.3),   # Dark
-]
+]:
+	set(new_setting):
+		skin_colors = new_setting
+		changed.emit()
 
 ## Get a random shirt color
 func get_random_shirt_color() -> Color:

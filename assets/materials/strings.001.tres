@@ -16,6 +16,3 @@ transparency = 4
 albedo_texture = SubResource("PortableCompressedTexture2D_54wbr")
 normal_enabled = true
 normal_texture = SubResource("PortableCompressedTexture2D_h3cv5")
-metadata/extras = {
-"blenderkit": {}
-}

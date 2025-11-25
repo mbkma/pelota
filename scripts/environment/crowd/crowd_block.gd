@@ -1,10 +1,22 @@
+@tool
 class_name CrowdBlock
 extends Node3D
 
 ## Crowd block system that manages groups of spectator animations
 
 ## Configuration resource for this block
-@export var config: CrowdConfig
+@export var config: CrowdConfig:
+	set(value):
+		if config:
+			if config.changed.is_connected(_on_config_changed):
+				config.changed.disconnect(_on_config_changed)
+			var old_palette = config.get_color_palette()
+			if old_palette and old_palette.changed.is_connected(_on_config_changed):
+				old_palette.changed.disconnect(_on_config_changed)
+		config = value
+		if Engine.is_editor_hint():
+			_setup_config_signal()
+			call_deferred("_regenerate_crowd")
 
 ## Scene to instantiate for each crowd member
 @export var crowd_person_scene: PackedScene
@@ -15,11 +27,29 @@ var _people_container: Node3D
 ## List of all crowd members in this block
 var _crowd_members: Array[CrowdPerson] = []
 
-## Track camera for LOD calculations
-var _camera: Camera3D
+
+
+func _enter_tree() -> void:
+	if Engine.is_editor_hint():
+		call_deferred("_regenerate_crowd")
+		_setup_config_signal()
+
+
+func _exit_tree() -> void:
+	if Engine.is_editor_hint():
+		if config:
+			if config.changed.is_connected(_on_config_changed):
+				config.changed.disconnect(_on_config_changed)
+			var palette = config.get_color_palette()
+			if palette and palette.changed.is_connected(_on_config_changed):
+				palette.changed.disconnect(_on_config_changed)
+		cleanup()
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	if not config:
 		push_error("CrowdBlock: No configuration resource assigned")
 		return
@@ -32,16 +62,16 @@ func _ready() -> void:
 		push_error("CrowdBlock: No crowd_person_scene assigned")
 		return
 
-	_camera = get_viewport().get_camera_3d()
-
 	_create_people_container()
 	_generate_crowd_grid()
 	_initialize_animations()
 
 
-func _process(_delta: float) -> void:
-	if config and config.lod_enabled and _camera:
-		_update_lod_levels()
+
+## Tool function to regenerate the crowd preview in editor
+func regenerate_preview() -> void:
+	if Engine.is_editor_hint():
+		call_deferred("_regenerate_crowd")
 
 
 ## Play random idle animation for a crowd member
@@ -50,7 +80,7 @@ func _play_random_idle_animation(person: CrowdPerson) -> void:
 		return
 
 	if not person.play_idle_animation():
-		push_warning("CrowdBlock: Failed to play idle animation for crowd member")
+		# Animation was skipped (either error or LOD chance failed)
 		return
 
 	person.setup_idle_loop()
@@ -70,10 +100,31 @@ func cleanup() -> void:
 			person.cleanup()
 	_crowd_members.clear()
 	if _people_container:
-		_people_container.queue_free()
+		if Engine.is_editor_hint():
+			_people_container.free()
+		else:
+			_people_container.queue_free()
 
 
 # Private methods
+
+func _regenerate_crowd() -> void:
+	if not config or not _is_config_valid():
+		return
+
+	if not crowd_person_scene:
+		return
+
+	# Clean up existing crowd
+	cleanup()
+
+	# Generate new crowd
+	_create_people_container()
+	_generate_crowd_grid()
+
+	# Initialize animations for both editor and runtime
+	_initialize_animations()
+
 
 func _create_people_container() -> void:
 	_people_container = Node3D.new()
@@ -112,12 +163,16 @@ func _instantiate_crowd_person() -> CrowdPerson:
 
 	var person: CrowdPerson = crowd_person_scene.instantiate()
 	if not person:
-		push_error("CrowdBlock: Failed to instantiate crowd person")
 		return null
 
 	# Assign config and random model variant
 	person.config = config
-	person.model_key = config.get_random_model_variant()
+
+	# Safely get random model variant, with fallback
+	if config.model_variants and not config.model_variants.is_empty():
+		person.model_key = config.model_variants[randi() % config.model_variants.size()]
+	else:
+		person.model_key = "crowd-1"
 
 	return person
 
@@ -128,16 +183,30 @@ func _initialize_animations() -> void:
 			_play_random_idle_animation(person)
 
 
-func _update_lod_levels() -> void:
-	if not _camera:
+func _is_config_valid() -> bool:
+	if not config:
+		return false
+
+	# In editor, just check basic properties to avoid placeholder issues
+	if Engine.is_editor_hint():
+		return config.grid_rows > 0 and config.grid_columns > 0
+
+	# At runtime, do full validation
+	return config.validate()
+
+
+func _setup_config_signal() -> void:
+	if not config or not Engine.is_editor_hint():
 		return
+	if not config.changed.is_connected(_on_config_changed):
+		config.changed.connect(_on_config_changed)
 
-	for person in _crowd_members:
-		if not person:
-			continue
+	# Also listen to color palette changes
+	var palette = config.get_color_palette()
+	if palette and not palette.changed.is_connected(_on_config_changed):
+		palette.changed.connect(_on_config_changed)
 
-		var distance = _camera.global_position.distance_to(person.global_position)
-		var lod_level = config.get_lod_level(distance)
 
-		if person.get_lod_level() != lod_level:
-			person.set_lod_level(lod_level)
+func _on_config_changed() -> void:
+	if Engine.is_editor_hint():
+		_regenerate_crowd()

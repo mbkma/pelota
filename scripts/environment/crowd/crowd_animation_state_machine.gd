@@ -1,3 +1,4 @@
+@tool
 class_name CrowdAnimationStateMachine
 extends Node
 
@@ -25,6 +26,11 @@ func _init(animation_player: AnimationPlayer, config: CrowdConfig) -> void:
 ## Play a random idle animation with optional random offset
 func play_idle_animation() -> bool:
 	if _idle_animations.is_empty():
+		return false
+
+	# Check animation percentage before playing
+	if randf() > _config.animation_percentage:
+		# Skip animation based on percentage
 		return false
 
 	var animation_name: String = _idle_animations[randi() % _idle_animations.size()]
@@ -91,6 +97,11 @@ func cleanup() -> void:
 
 func _on_animation_finished(_anim_name: StringName, animation_list: PackedStringArray) -> void:
 	if animation_list.is_empty():
+		return
+
+	# Check animation percentage
+	if randf() > _config.animation_percentage:
+		# Skip this animation playback
 		return
 
 	var new_animation: String = animation_list[randi() % animation_list.size()]

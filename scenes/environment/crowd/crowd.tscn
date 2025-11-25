@@ -1,61 +1,48 @@
-[gd_scene load_steps=10 format=3 uid="uid://cxo4shm4p8nco"]
+[gd_scene load_steps=3 format=3 uid="uid://cxo4shm4p8nco"]
 
 [ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scripts/environment/crowd/crowd.gd" id="1_a7rkt"]
 [ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environment/crowd/crowd_block.tscn" id="2_axxkg"]
-[ext_resource type="Script" uid="uid://wf2jvpga3hfj" path="res://scripts/environment/crowd/crowd_config.gd" id="2_g6y2l"]
-[ext_resource type="AudioStream" uid="uid://501usltpmnhx" path="res://assets/sounds/effects/crowd/crowd-after-point1.wav" id="2_g038y"]
-[ext_resource type="AudioStream" uid="uid://birb4657ratbv" path="res://assets/sounds/effects/crowd/crowd-after-point2.wav" id="3_xu5ij"]
-[ext_resource type="Script" uid="uid://cln3iv60dk3kt" path="res://scripts/environment/crowd/crowd_color_palette.gd" id="4_gs5kl"]
-[ext_resource type="AudioStream" uid="uid://ck1krkhd4cgch" path="res://assets/sounds/effects/crowd/crowd-idle.wav" id="5_cp0o2"]
 
-[sub_resource type="Resource" id="Resource_pnppm"]
-script = ExtResource("4_gs5kl")
-metadata/_custom_type_script = "uid://cln3iv60dk3kt"
-
-[sub_resource type="Resource" id="Resource_x5f0j"]
-script = ExtResource("2_g6y2l")
-idle_sounds = Array[AudioStream]([ExtResource("5_cp0o2")])
-after_point_sounds = Array[AudioStream]([ExtResource("2_g038y"), ExtResource("3_xu5ij")])
-color_palette = SubResource("Resource_pnppm")
-metadata/_custom_type_script = "uid://wf2jvpga3hfj"
-
-[node name="Crowd" type="Node3D" unique_id=849436384]
+[node name="Crowd" type="Node" unique_id=1204219689]
 script = ExtResource("1_a7rkt")
-config = SubResource("Resource_x5f0j")
-
-[node name="Blocks" type="Node3D" parent="." unique_id=308978892]
-
-[node name="CrowdBlock" parent="Blocks" unique_id=524828875 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -16.6489)
-
-[node name="CrowdBlock5" parent="Blocks" unique_id=1059679277 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -13.5758)
-
-[node name="CrowdBlock6" parent="Blocks" unique_id=113764286 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 1.46538, -20.8177)
-
-[node name="CrowdBlock7" parent="Blocks" unique_id=958542378 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 1.46538, -20.8177)
-
-[node name="CrowdBlock8" parent="Blocks" unique_id=339555331 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 1.46538, -20.8177)
-
-[node name="CrowdBlock9" parent="Blocks" unique_id=1578502360 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 1.46538, -20.8177)
-
-[node name="CrowdBlock10" parent="Blocks" unique_id=1355092264 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 1.46538, -20.8177)
-
-[node name="CrowdBlock11" parent="Blocks" unique_id=744643174 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 1.46538, -20.8177)
-
-[node name="CrowdBlock2" parent="Blocks" unique_id=1346328431 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -9.55223)
-
-[node name="CrowdBlock3" parent="Blocks" unique_id=1021341322 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -6.48601)
-
-[node name="CrowdBlock4" parent="Blocks" unique_id=722183903 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.9272, 0.515558, -2.46337)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=637033766]
+
+[node name="EastBlock" type="Node3D" parent="." unique_id=1070903490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.258475, 0, 0)
+
+[node name="CrowdBlock" parent="EastBlock" unique_id=524828875 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
+
+[node name="CrowdBlock5" parent="EastBlock" unique_id=1059679277 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
+
+[node name="CrowdBlock2" parent="EastBlock" unique_id=1346328431 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
+
+[node name="CrowdBlock3" parent="EastBlock" unique_id=1021341322 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
+
+[node name="CrowdBlock4" parent="EastBlock" unique_id=722183903 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
+
+[node name="NorthBlock" type="Node3D" parent="." unique_id=308978892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.829102)
+
+[node name="CrowdBlock6" parent="NorthBlock" unique_id=113764286 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 0, 0)
+
+[node name="CrowdBlock7" parent="NorthBlock" unique_id=958542378 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 0, 0)
+
+[node name="CrowdBlock8" parent="NorthBlock" unique_id=339555331 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 0, 0)
+
+[node name="CrowdBlock9" parent="NorthBlock" unique_id=1578502360 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 0, 0)
+
+[node name="CrowdBlock10" parent="NorthBlock" unique_id=1355092264 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 0, 0)
+
+[node name="CrowdBlock11" parent="NorthBlock" unique_id=744643174 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 0, 0)

@@ -1,20 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://ds5ryhspuxtpf"]
+[gd_scene load_steps=5 format=3 uid="uid://ds5ryhspuxtpf"]
 
 [ext_resource type="Script" uid="uid://c4yi3riq177jf" path="res://scripts/environment/crowd/crowd_block.gd" id="1_jcoec"]
 [ext_resource type="PackedScene" uid="uid://dnoktlosmy7xg" path="res://scenes/environment/crowd/crowd_person.tscn" id="2_r2fk0"]
-[ext_resource type="Script" uid="uid://cln3iv60dk3kt" path="res://scripts/environment/crowd/crowd_color_palette.gd" id="2_rk23e"]
-[ext_resource type="Script" uid="uid://wf2jvpga3hfj" path="res://scripts/environment/crowd/crowd_config.gd" id="2_un5sf"]
-
-[sub_resource type="Resource" id="Resource_u2lxb"]
-script = ExtResource("2_rk23e")
-metadata/_custom_type_script = "uid://cln3iv60dk3kt"
-
-[sub_resource type="Resource" id="Resource_uhd3o"]
-script = ExtResource("2_un5sf")
-color_palette = SubResource("Resource_u2lxb")
-metadata/_custom_type_script = "uid://wf2jvpga3hfj"
+[ext_resource type="Resource" uid="uid://cd1vrmlg6sfga" path="res://scenes/environment/crowd/crowd_block.tres" id="2_rk23e"]
+[ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="5_u2lxb"]
 
 [node name="CrowdBlock" type="Node3D" unique_id=900926214]
 script = ExtResource("1_jcoec")
-config = SubResource("Resource_uhd3o")
+config = ExtResource("2_rk23e")
 crowd_person_scene = ExtResource("2_r2fk0")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=897522999]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.6174798)
+script = ExtResource("5_u2lxb")

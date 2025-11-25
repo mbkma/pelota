@@ -7,8 +7,6 @@ keep_compressed_buffer = true
 
 [resource]
 resource_name = "Human.short01.002"
-transparency = 4
-cull_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_na8kb")
 metallic = 0.14173229
 roughness = 0.88897634

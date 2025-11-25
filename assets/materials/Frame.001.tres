@@ -16,6 +16,3 @@ albedo_texture = SubResource("PortableCompressedTexture2D_gpuqx")
 roughness = 0.2
 normal_enabled = true
 normal_texture = SubResource("PortableCompressedTexture2D_2y7in")
-metadata/extras = {
-"blenderkit": {}
-}

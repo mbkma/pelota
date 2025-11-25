@@ -8,7 +8,7 @@ enum SplitscreenMode { NORMAL, VERTICAL_SPLIT, HORIZONTAL_SPLIT }
 ## Signal emitted when splitscreen mode is toggled
 signal splitscreen_toggled(enabled: bool)
 
-@export var cameras: Cameras
+@export var cameras: MatchCameras
 @export var player0: Player
 @export var player1: Player
 

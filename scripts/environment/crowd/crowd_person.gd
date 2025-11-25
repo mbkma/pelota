@@ -1,3 +1,4 @@
+@tool
 class_name CrowdPerson
 extends Node3D
 
@@ -16,9 +17,6 @@ var model: Node3D
 ## Animation player from the model
 var animation_player: AnimationPlayer
 
-## Current LOD level (0=high, 1=medium, 2=low)
-var current_lod_level: int = 0
-
 ## Process mode override for culling
 var _culling_enabled: bool = true
 
@@ -33,17 +31,20 @@ func _init(p_config: CrowdConfig = null) -> void:
 func _ready() -> void:
 	if not config.validate():
 		push_error("CrowdPerson: Invalid configuration")
-		queue_free()
+		if not Engine.is_editor_hint():
+			queue_free()
 		return
 
 	if not _instantiate_model():
 		push_error("CrowdPerson: Failed to instantiate model '%s'" % model_key)
-		queue_free()
+		if not Engine.is_editor_hint():
+			queue_free()
 		return
 
 	if not _setup_animation_player():
 		push_error("CrowdPerson: Failed to setup animation player")
-		queue_free()
+		if not Engine.is_editor_hint():
+			queue_free()
 		return
 
 	_setup_animation_state_machine()
@@ -65,14 +66,6 @@ func play_victory_animation() -> bool:
 func setup_idle_loop() -> void:
 	if animation_state_machine:
 		animation_state_machine.setup_idle_loop()
-
-
-func set_lod_level(lod_level: int) -> void:
-	current_lod_level = lod_level
-
-
-func get_lod_level() -> int:
-	return current_lod_level
 
 
 func cleanup() -> void:
@@ -133,7 +126,7 @@ func _apply_color_variations() -> void:
 	if not config or not config.apply_color_variations:
 		return
 
-	var palette = config.color_palette
+	var palette = config.get_color_palette()
 	if not palette:
 		return
 

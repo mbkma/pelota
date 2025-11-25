@@ -1,3 +1,4 @@
+@tool
 class_name CrowdConfig
 extends Resource
 
@@ -5,70 +6,138 @@ extends Resource
 ## This resource centralizes all crowd system parameters for better editor experience and flexibility
 
 ## Grid layout configuration
-@export var grid_rows: int = 10
-@export var grid_columns: int = 4
-@export var seat_spacing_x: float = 0.7
-@export var seat_spacing_y: float = 0.29
-@export var seat_spacing_z: float = 1.029
+## Number of rows in the crowd grid
+@export var grid_rows: int = 10:
+	set(new_setting):
+		grid_rows = new_setting
+		changed.emit()
+
+## Number of columns in the crowd grid
+@export var grid_columns: int = 4:
+	set(new_setting):
+		grid_columns = new_setting
+		changed.emit()
+
+## Spacing between crowd members on X axis (left/right)
+@export var seat_spacing_x: float = 0.7:
+	set(new_setting):
+		seat_spacing_x = new_setting
+		changed.emit()
+
+## Spacing between crowd members on Y axis (up/down)
+@export var seat_spacing_y: float = 0.29:
+	set(new_setting):
+		seat_spacing_y = new_setting
+		changed.emit()
+
+## Spacing between crowd members on Z axis (depth)
+@export var seat_spacing_z: float = 1.029:
+	set(new_setting):
+		seat_spacing_z = new_setting
+		changed.emit()
 
 ## Animation configuration
-@export var animation_blend_time: float = 0.5
-@export var animation_seek_enabled: bool = true
+## Time to blend between animations (seconds)
+@export var animation_blend_time: float = 0.5:
+	set(new_setting):
+		animation_blend_time = new_setting
+		changed.emit()
 
-## Idle animation names
+## Whether to randomly seek into animations for variety
+@export var animation_seek_enabled: bool = true:
+	set(new_setting):
+		animation_seek_enabled = new_setting
+		changed.emit()
+
+## Idle animation names to randomly play
 @export var idle_animations: PackedStringArray = [
 	"sit-idle-2",
 	"sit-idle-3",
 	"sit-talk-1",
 	"sit-talk-2",
 	"sit-talk-3",
-]
+]:
+	set(new_setting):
+		idle_animations = new_setting
+		changed.emit()
 
-## Victory animation names
+## Victory animation names to play when crowd celebrates
 @export var victory_animations: PackedStringArray = [
 	"sit-victory-1",
 	"sit-victory-2",
 	"sit-victory-3",
 	"sit-victory-4",
-]
+]:
+	set(new_setting):
+		victory_animations = new_setting
+		changed.emit()
 
-## Model variant names - keys for the people dictionary
+## Character model variants to randomly select from
 @export var model_variants: PackedStringArray = [
 	"crowd-1",
 	#"crowd-2",
 	"crowd-3",
 	"crowd-4",
-]
+]:
+	set(new_setting):
+		model_variants = new_setting
+		changed.emit()
 
-## Model resources - path to load from
+## File paths for each model variant
 @export var model_paths: Dictionary = {
 	"crowd-1": "res://assets/models/crowd/crowd-1.blend",
 	"crowd-2": "res://assets/models/crowd/crowd-2.blend",
 	"crowd-3": "res://assets/models/crowd/crowd-3.blend",
 	"crowd-4": "res://assets/models/crowd/crowd-4.blend",
-}
+}:
+	set(new_setting):
+		model_paths = new_setting
+		changed.emit()
 
-## LOD (Level of Detail) configuration
-@export var lod_enabled: bool = true
-@export var lod_distance_high: float = 20.0  # Full quality animations
-@export var lod_distance_medium: float = 50.0  # Some idle animations skipped
-@export var lod_distance_low: float = 100.0  # Minimal animation updates
-
-## LOD animation reduction factors (0.0 to 1.0)
-@export var lod_medium_animation_chance: float = 0.5  # Play 50% of animations
-@export var lod_low_animation_chance: float = 0.1  # Play 10% of animations
+## Animation configuration
+## Percentage of crowd members that will be animated (0.0 to 1.0, where 0.5 = 50% of crowd animates)
+@export var animation_percentage: float = 1.0:
+	set(new_setting):
+		animation_percentage = clamp(new_setting, 0.0, 1.0)
+		changed.emit()
 
 ## Audio configuration
-@export var idle_sounds: Array[AudioStream] = []
-@export var after_point_sounds: Array[AudioStream] = []
+## Background crowd noise sounds to play during idle
+@export var idle_sounds: Array[AudioStream] = []:
+	set(new_setting):
+		idle_sounds = new_setting
+		changed.emit()
+
+## Crowd celebration sounds to play after scoring
+@export var after_point_sounds: Array[AudioStream] = []:
+	set(new_setting):
+		after_point_sounds = new_setting
+		changed.emit()
 
 ## Color palette for crowd member variations
-@export var color_palette: CrowdColorPalette
+@export var color_palette: CrowdColorPalette:
+	set(new_setting):
+		color_palette = new_setting
+		changed.emit()
 
 ## Performance configuration
-@export var signal_cleanup_enabled: bool = true
-@export var culling_enabled: bool = true
-@export var apply_color_variations: bool = true
+## Enable/disable signal cleanup for animation state machines
+@export var signal_cleanup_enabled: bool = true:
+	set(new_setting):
+		signal_cleanup_enabled = new_setting
+		changed.emit()
+
+## Enable/disable frustum culling for off-screen crowd members
+@export var culling_enabled: bool = true:
+	set(new_setting):
+		culling_enabled = new_setting
+		changed.emit()
+
+## Apply random color variations to crowd member clothing and appearance
+@export var apply_color_variations: bool = true:
+	set(new_setting):
+		apply_color_variations = new_setting
+		changed.emit()
 
 ## Get a random model variant name
 func get_random_model_variant() -> String:
@@ -100,29 +169,6 @@ func get_random_after_point_sound() -> AudioStream:
 		return null
 	return after_point_sounds[randi() % after_point_sounds.size()]
 
-## Determine LOD level based on distance from camera
-func get_lod_level(distance: float) -> int:
-	if not lod_enabled:
-		return 0  # High quality
-	if distance < lod_distance_high:
-		return 0  # High quality
-	elif distance < lod_distance_medium:
-		return 1  # Medium quality
-	else:
-		return 2  # Low quality
-
-## Get animation chance based on LOD level (0.0 to 1.0)
-func get_animation_chance(lod_level: int) -> float:
-	match lod_level:
-		0:
-			return 1.0
-		1:
-			return lod_medium_animation_chance
-		2:
-			return lod_low_animation_chance
-		_:
-			return 1.0
-
 ## Validate configuration
 func validate() -> bool:
 	if grid_rows <= 0 or grid_columns <= 0:
@@ -133,4 +179,16 @@ func validate() -> bool:
 	if model_variants.is_empty():
 		push_error("CrowdConfig: No model variants configured")
 		return false
+
+	# Ensure color palette exists
+	if not color_palette:
+		color_palette = CrowdColorPalette.new()
+
 	return true
+
+
+## Get the color palette, creating one if needed
+func get_color_palette() -> CrowdColorPalette:
+	if not color_palette:
+		color_palette = CrowdColorPalette.new()
+	return color_palette

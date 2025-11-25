@@ -38,7 +38,7 @@ var _ground_contacts: int = 0
 @export var television_hud: TelevisionHud
 @export var umpire: Umpire
 @export var crowd: Crowd
-@export var cameras: Cameras
+@export var cameras: MatchCameras
 
 func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
@@ -58,6 +58,11 @@ func _ready() -> void:
 	player1.ball_spawned.connect(_on_player_ball_spawned)
 	television_hud.score_display.player_1_score_panel.set_player(player0.player_data)
 	television_hud.score_display.player_2_score_panel.set_player(player1.player_data)
+	
+	cameras.register_camera(player0.first_person_camera)
+	cameras.register_camera(player1.first_person_camera)
+	cameras.player0 = player0
+	cameras.player1 = player1
 	place_players()
 	start_match()
 

@@ -39,8 +39,10 @@ var _stroke_active: bool = false
 
 
 func _ready() -> void:
-	player = get_parent()
-	animation_tree.active = true
+	var p = get_parent()
+	if p is Player:
+		player = get_parent() 
+		animation_tree.active = true
 
 
 ## Get movement speed factor from animation playback
