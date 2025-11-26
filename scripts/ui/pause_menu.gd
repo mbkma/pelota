@@ -48,7 +48,7 @@ func pause_game() -> void:
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	show()
-	print("Game paused")
+	Loggie.msg("[PauseMenu] Game paused").debug()
 
 
 ## Resume the game
@@ -57,7 +57,7 @@ func resume_game() -> void:
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hide()
-	print("Game resumed")
+	Loggie.msg("[PauseMenu] Game resumed").debug()
 
 
 ## Handle resume button press

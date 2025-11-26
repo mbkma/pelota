@@ -6,12 +6,12 @@ extends Node
 @export var career_scence: PackedScene
 @export var tournament_scence: PackedScene
 @export var music_enabled := false
+@export var settings_menu: SettingsMenu
 
 
 @onready var main_menu: VBoxContainer = $CenterContainer/VBoxContainer/MenuContainer
 @onready var start_menu = $StartMenu
 @onready var play = start_menu.get_node("Actions/Play")
-@onready var settings_menu: SettingsMenu = $SettingsMenu
 
 @onready var player_selectors = [
 	start_menu.get_node("HBoxContainer/PlayerSelector"),
@@ -89,7 +89,7 @@ func _on_Play_pressed() -> void:
 
 	match_data = MatchData.new(players_data[0], players_data[1])
 #
-	print(match_scence)
+	Loggie.msg("[MainMenu] Starting match with scene: ", match_scence).debug()
 	SceneManager.goto(match_scence)
 
 

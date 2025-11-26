@@ -1,8 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=21 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_cux4k"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_xinb2"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
@@ -66,7 +65,7 @@ script = ExtResource("1_3pywv")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.890247)
-controller_scene = ExtResource("3_cux4k")
+controller_scene = ExtResource("4_xinb2")
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)

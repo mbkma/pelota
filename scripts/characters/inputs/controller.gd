@@ -1,5 +1,6 @@
 ## Base class for player input handling (human/AI)
 ## Defines the interface that all input methods must implement
+@abstract
 class_name Controller
 extends Node
 
@@ -35,29 +36,27 @@ func _ready() -> void:
 
 
 ## Process input each frame for state updates
-func _process(_delta: float) -> void:
-	pass
-
+@abstract
+func _process(_delta: float) -> void
 
 ## Process physics-related input (movement)
-func _physics_process(_delta: float) -> void:
-	pass
-
+@abstract
+func _physics_process(_delta: float) -> void
 
 ## Request the input method to initiate a serve
 ## Implementing classes should handle serve initialization here
-func request_serve() -> void:
-	push_error("request_serve() not implemented in: ", get_class())
+@abstract
+func request_serve() -> void
 
 
 ## Check relative position of target relative to player's orientation
 func check_relative_position(
-	player: Node3D, target_position: Vector3, check_type: CheckType
+	check_player: Node3D, target_position: Vector3, check_type: CheckType
 ) -> Direction:
-	var player_forward: Vector3 = player.basis.z.normalized()  # Forward vector (Z axis)
-	var player_right: Vector3 = player.basis.x.normalized()  # Right vector (X axis)
+	var player_forward: Vector3 = check_player.basis.z.normalized()  # Forward vector (Z axis)
+	var player_right: Vector3 = check_player.basis.x.normalized()  # Right vector (X axis)
 
-	var direction_to_target: Vector3 = (target_position - player.position).normalized()
+	var direction_to_target: Vector3 = (target_position - check_player.position).normalized()
 
 	if check_type == CheckType.LEFT_RIGHT:
 		# Check if the target is to the left or right
@@ -68,7 +67,8 @@ func check_relative_position(
 		var is_in_front: bool = player_forward.dot(direction_to_target) > 0
 		return Direction.FRONT if is_in_front else Direction.BEHIND
 
-	return -1
+	push_error("check_relative_position: Unknown check_type")
+	return Direction.LEFT
 
 
 ## Check if target is flying towards source based on velocity and direction
@@ -102,17 +102,17 @@ func is_flying_towards(source: Node3D, target: Node3D) -> bool:
 
 
 ## Adjust player position to optimal stroke execution point
-func adjust_player_position_to_stroke(player: Player, closest_step: TrajectoryStep) -> void:
+func adjust_player_position_to_stroke(target_player: Player, closest_step: TrajectoryStep) -> void:
 	## Calculate the direction from the position
 	var x_offset: float
-	if player.queued_stroke.stroke_type == player.queued_stroke.StrokeType.FOREHAND:
-		x_offset = -player.model.forehand_point.position.x
+	if target_player.queued_stroke.stroke_type == target_player.queued_stroke.StrokeType.FOREHAND:
+		x_offset = -target_player.model.forehand_point.position.x
 	else:
-		x_offset = -player.model.backhand_point.position.x
+		x_offset = -target_player.model.backhand_point.position.x
 
-	var new_position: Vector3 = closest_step.point + x_offset * player.basis.x
-	new_position.y = player.position.y
-	player.move_to(new_position)
+	var new_position: Vector3 = closest_step.point + x_offset * target_player.basis.x
+	new_position.y = target_player.position.y
+	target_player.move_to(new_position)
 
 
 ## Get optimal ball position for stroke (TODO: Implement)
@@ -120,21 +120,21 @@ func get_optimal_ball_position(_player: Player) -> Vector3:
 	return Vector3.ZERO
 
 
-func get_closest_apex_after_first_bounce(player: Player) -> TrajectoryStep:
+func get_closest_apex_after_first_bounce(target_player: Player) -> TrajectoryStep:
 	var closest_step: TrajectoryStep = null
 	var closest_z_distance: float = INF
 
-	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
+	var trajectory: Array[TrajectoryStep] = target_player.ball.predict_trajectory()
 
 	for i in range(trajectory.size()):
 		var step: TrajectoryStep = trajectory[i]
-		
+
 		# Only consider steps after the first bounce
 		if step.bounces != 1:
 			continue
 
 		var ball_pos: Vector3 = step.point
-		
+
 		# Check if this step is a local Y apex
 		var is_apex: bool = false
 		if i > 0 and i < trajectory.size() - 1:
@@ -146,10 +146,10 @@ func get_closest_apex_after_first_bounce(player: Player) -> TrajectoryStep:
 			is_apex = true
 		elif i == trajectory.size() - 1 and ball_pos.y >= trajectory[i - 1].point.y:
 			is_apex = true
-		
+
 		# Track the apex closest in Z to the player
 		if is_apex:
-			var z_distance: float = abs(ball_pos.z - player.position.z)
+			var z_distance: float = abs(ball_pos.z - target_player.position.z)
 			if z_distance < closest_z_distance:
 				closest_z_distance = z_distance
 				closest_step = step
@@ -159,17 +159,17 @@ func get_closest_apex_after_first_bounce(player: Player) -> TrajectoryStep:
 
 
 ## Get closest trajectory step to player by Z distance
-func get_closest_trajectory_step(player: Player) -> TrajectoryStep:
+func get_closest_trajectory_step(target_player: Player) -> TrajectoryStep:
 	# Initialize variables to track the closest point
 	var closest_trajectory_step: TrajectoryStep
 	var closest_z_distance: float = INF  # Start with a large number
-	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
+	var trajectory: Array[TrajectoryStep] = target_player.ball.predict_trajectory()
 
 	# Iterate through the ball trajectory to find the closest point in Z
 	for step in trajectory:
 		var ball_position: Vector3 = step.point
 		# Calculate the Z distance
-		var z_distance: float = abs(ball_position.z - player.position.z)
+		var z_distance: float = abs(ball_position.z - target_player.position.z)
 		if z_distance < closest_z_distance:
 			closest_z_distance = z_distance
 			closest_trajectory_step = step
@@ -178,7 +178,7 @@ func get_closest_trajectory_step(player: Player) -> TrajectoryStep:
 	return closest_trajectory_step
 
 func calculate_velocity(
-	initial_position: Vector3, target_position: Vector3, velocity_z0: float, spin: Vector3
+	initial_position: Vector3, target_position: Vector3, velocity_z0: float, _spin: Vector3
 ) -> Vector3:
 	var velocity: Vector3 = Vector3.ZERO
 

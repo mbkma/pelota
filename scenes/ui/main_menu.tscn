@@ -35,7 +35,6 @@ match_scence = ExtResource("2_35tjg")
 training_scence = ExtResource("3_vob5f")
 career_scence = ExtResource("4_0prml")
 tournament_scence = ExtResource("5_yipxn")
-music_enabled = null
 
 [node name="BackgroundGradient" type="TextureRect" parent="." unique_id=1355971403]
 layout_mode = 1

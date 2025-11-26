@@ -84,7 +84,7 @@ func play_stroke_animation(stroke: Stroke) -> void:
 	var playback_speed = compute_animation_speed(31.0 / 30.0, stroke.step.time)
 	playback_speed = clamp(playback_speed, 0.5, 3)
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
-	print("playback_speed!!! ", playback_speed, " time ",  stroke.step.time)
+	Loggie.msg("[Model] playback_speed: ", playback_speed, " time: ", stroke.step.time).debug()
 	set_stroke(stroke)
 	transition_to(States.STROKE)
 
@@ -92,7 +92,7 @@ func compute_animation_speed(anim_time_to_contact: float, real_time_to_contact: 
 	# prevent division by zero
 	if real_time_to_contact <= 0.01:
 		return 1.0
-	print("compute_animation_speed", anim_time_to_contact / real_time_to_contact)
+	Loggie.msg("[Model] animation_speed ratio: ", anim_time_to_contact / real_time_to_contact).debug()
 	return anim_time_to_contact / real_time_to_contact
 
 
@@ -110,7 +110,7 @@ func set_stroke(stroke: Stroke) -> void:
 		stroke.StrokeType.BACKHAND:
 			animation_name = "backhand"
 			animation_tree["parameters/stroke/backhand/blend_position"] = compute_stroke_blend_position(stroke)
-			print("## backhand", animation_tree["parameters/stroke/backhand/blend_position"])
+			Loggie.msg("[Model] backhand blend position: ", animation_tree["parameters/stroke/backhand/blend_position"]).debug()
 		stroke.StrokeType.BACKHAND_SLICE:
 			animation_name = "backhand_slice"
 		stroke.StrokeType.BACKHAND_DROP_SHOT:

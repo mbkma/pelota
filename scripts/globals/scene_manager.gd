@@ -18,7 +18,7 @@ func _get_scene_switcher() -> SceneSwitcher:
 
 ## Switch to a packed scene with optional state data
 func goto(packed_scene: PackedScene, data: Dictionary = {}) -> void:
-	print("goto", packed_scene)
+	Loggie.msg("[SceneManager] goto: ", packed_scene).debug()
 	_scene_data = data
 	var switcher := _get_scene_switcher()
 	switcher.change_level(packed_scene, data)

@@ -1,4 +1,4 @@
-## Human player input handler for keyboard/mouse controls
+## Human player input handler for keyboard/mouse/gamepad controls
 ## Manages movement, aiming, and stroke execution
 class_name HumanController
 extends Controller
@@ -6,16 +6,15 @@ extends Controller
 ## Local signal for aiming position (parent class has aiming_at_position)
 signal aiming_at_pos(position: Vector3)
 
+## Input device instance (keyboard, mouse, or gamepad)
+var _input_device: InputDevice
+
 ## Input state flags
 var _move_input_blocked: bool = false
 var _stroke_input_blocked: bool = true
-var _input_blocked: bool = false
 
-## Mouse/stroke tracking
-var _mouse_from: Vector2 = Vector2.ZERO
-var _mouse_to: Vector2 = Vector2.ZERO
+## Stroke tracking
 var _aiming_at: Vector3 = Vector3.ZERO
-var _input_pace: float = 0.0
 var _serve_controls: bool = false
 
 
@@ -31,6 +30,9 @@ func _ready() -> void:
 		set_process(false)
 		return
 
+	# Initialize the appropriate input device
+	_initialize_input_device()
+
 	await get_tree().create_timer(GameConstants.INPUT_STARTUP_DELAY).timeout
 	_stroke_input_blocked = false
 	player.ball_aim_marker.global_position = _get_default_aim()
@@ -39,101 +41,71 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if not _input_device:
+		return
+
 	# Handle stroke input
 	if not _stroke_input_blocked:
-		var is_any_action_pressed: bool = (
-			Input.is_action_pressed("strike") or
-			Input.is_action_pressed("slice") or
-			Input.is_action_pressed("drop_shot")
-		)
+		var is_stroke_active: bool = _input_device.handle_stroke_input()
 
-		var is_any_action_just_pressed: bool = (
-			Input.is_action_just_pressed("strike") or
-			Input.is_action_just_pressed("slice") or
-			Input.is_action_just_pressed("drop_shot")
-		)
+		# Get the latest aiming position from the input device
+		_aiming_at = _input_device.get_aiming_position()
 
-		var is_any_action_just_released: bool = (
-			Input.is_action_just_released("strike") or
-			Input.is_action_just_released("slice") or
-			Input.is_action_just_released("drop_shot")
-		)
-
-		# Initialize stroke when button is first pressed
-		if is_any_action_just_pressed:
-			_input_pace = 0.0
-			_mouse_from = get_viewport().get_mouse_position()
-			_aiming_at = _get_default_aim()
-
-		# Continuously update aim and pace while button is held
-		if is_any_action_pressed:
-			_input_pace += GameConstants.PACE_INCREMENT_RATE
-			_input_pace = clamp(_input_pace, 0.0, 1.0)  # Cap pace at 100%
-			pace_changed.emit(_input_pace)
-			_mouse_to = get_viewport().get_mouse_position()
-			_aiming_at = _get_aim_pos(_mouse_from, _mouse_to)
-			print("aiming at, ", _aiming_at)
+		# Update UI while stroke is active or during serve (before button press)
+		var pace: float = _input_device.get_stroke_pace()
+		if is_stroke_active and pace > 0.0:
+			pace_changed.emit(pace)
+			Loggie.msg("[Aiming] Position: ", _aiming_at).debug()
 			player.ball_aim_marker.global_position = _aiming_at
 			player.ball_aim_marker.visible = true
 			# Scale marker based on pace for visual feedback (1.0 - 1.5x size)
-			player.ball_aim_marker.scale = Vector3.ONE * (1.0 + _input_pace * 0.5)
-
-		# Execute stroke when button is released
-		if is_any_action_just_released:
-			# Determine which stroke type was used
-			var stroke_type: String = "topspin"
-			if Input.is_action_just_released("slice"):
-				stroke_type = "slice"
-			elif Input.is_action_just_released("drop_shot"):
-				stroke_type = "drop_shot"
-
-			if Input.is_action_just_released("strike") and _serve_controls:
-				_do_serve(_aiming_at, _input_pace)
-				_serve_controls = false
-			else:
-				_do_stroke(_aiming_at, _input_pace, stroke_type)
-
-	# Handle challenge input
-	if Input.is_action_just_pressed("challenge"):
-		player.challenge()
-		_vibrate_joypad(0.7, 0.2)  # Strong short vibration on challenge
+			player.ball_aim_marker.scale = Vector3.ONE * (1.0 + pace * 0.5)
+		elif _serve_controls:
+			# During serve, show aim marker even before pressing stroke button
+			Loggie.msg("[Aiming] Position: ", _aiming_at).debug()
+			player.ball_aim_marker.global_position = _aiming_at
+			player.ball_aim_marker.visible = true
+			player.ball_aim_marker.scale = Vector3.ONE
 
 
 func request_serve() -> void:
 	_serve_controls = true
+	_input_device.default_aim_position = _get_default_aim()
+	_input_device.set_serve_mode(true)
 
 
 func _physics_process(_delta: float) -> void:
-	if _input_blocked:
+	if not _input_device:
 		return
 
 	if _move_input_blocked:
-		var move_direction: Vector3 = player.compute_move_dir()
-		player.apply_movement(move_direction, _delta)
+		# Block all movement during stroke animation
+		#player.apply_movement(Vector3.ZERO, _delta)
+		return
 	else:
-		var move_direction: Vector3 = _get_move_direction()
+		var move_direction: Vector3 = _input_device.get_movement_input(
+			player.camera.global_basis, player.position
+		)
 		player.apply_movement(move_direction, _delta)
 
 
-## Computes move direction from input relative to camera orientation
-func _get_move_direction() -> Vector3:
-	var raw_input: Vector3 = Vector3(
-		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-		0.0,
-		Input.get_action_strength("move_front") - Input.get_action_strength("move_back")
-	)
+## Initializes the appropriate input device based on available hardware
+func _initialize_input_device() -> void:
+	# Check if gamepad is connected
+	if Input.get_connected_joypads().size() > 0:
+		_input_device = GamepadInput.new()
+	# Check if mouse is being used (default to keyboard+mouse if no gamepad)
+	else:
+		_input_device = KeyboardMouseInput.new()
 
-	var camera_basis: Basis = player.camera.global_basis
-	var forward: Vector3 = -camera_basis.z.normalized()
-	var right: Vector3 = camera_basis.x.normalized()
+	add_child(_input_device)
 
-	# Invert left/right for back player to match their reversed camera perspective
-	var lr_multiplier: float = sign(player.position.z)
-	var direction: Vector3 = (
-		(forward * raw_input.z + right * raw_input.x * lr_multiplier).normalized()
-	)
+	# Set default aim position for the input device
+	_input_device.default_aim_position = _get_default_aim()
 
-	return direction
+	# Connect stroke signals
+	_input_device.stroke_started.connect(_on_stroke_started)
+	_input_device.stroke_completed.connect(_on_stroke_completed, CONNECT_ONE_SHOT)
 
 
 ## Gets default aiming position based on context (serve vs rally)
@@ -152,49 +124,48 @@ func _get_default_aim() -> Vector3:
 	return default_aim
 
 
-## Calculates aim position with mouse offset from default
-func _get_aim_pos(mouse_start: Vector2, mouse_current: Vector2) -> Vector3:
+## Handles stroke start - updates default aim position
+func _on_stroke_started() -> void:
 	var default_aim: Vector3 = _get_default_aim()
-	var mouse_delta: Vector2 = mouse_current - mouse_start
-	var mouse_sensitivity: float = GameConstants.MOUSE_SENSITIVITY
+	_input_device.default_aim_position = default_aim
 
-	var aim_position: Vector3 = default_aim
-	aim_position.z += sign(player.position.z) * mouse_delta.y / mouse_sensitivity
-	aim_position.x += sign(player.position.z) * mouse_delta.x / mouse_sensitivity
 
-	return aim_position
+## Handles stroke completion
+func _on_stroke_completed(pace: float, stroke_type: String) -> void:
+	if _serve_controls:
+		_do_serve(_aiming_at, pace)
+		_serve_controls = false
+		_input_device.set_serve_mode(false)
+	else:
+		_do_stroke(_aiming_at, pace, stroke_type)
+
+	_input_device.clear_stroke_input()
+
+	# Reconnect for next stroke since CONNECT_ONE_SHOT disconnects after firing
+	_input_device.stroke_completed.connect(_on_stroke_completed, CONNECT_ONE_SHOT)
 
 
 ## Executes a serve stroke
 func _do_serve(aim_position: Vector3, pace: float) -> void:
-	if not validate_player():
-		push_error("HumanInput._do_serve: Invalid player state")
-		return
-
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_type = Stroke.StrokeType.SERVE
 	stroke.stroke_power = GameConstants.AI_SERVE_PACE + pace
 	stroke.stroke_spin = GameConstants.AI_SERVE_SPIN
 	stroke.stroke_target = aim_position
 
+	_move_input_blocked = true
 	player.serve(stroke)
 
 
 ## Executes a rally stroke (forehand/backhand/slice)
 func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") -> void:
-	if not validate_player():
-		push_error("HumanInput._do_stroke: Invalid player state")
-		_move_input_blocked = false
-		return
-
 	if not player.ball:
-		push_error("HumanInput._do_stroke: Player has no ball to stroke")
-		_move_input_blocked = false
+		Loggie.msg("HumanInput._do_stroke: Player has no ball to stroke").info()
 		return
 
 	var closest_step: TrajectoryStep = get_closest_trajectory_step(player)
 	if not closest_step:
-		push_error("HumanInput._do_stroke: Could not find ball trajectory step")
+		Loggie.msg("HumanInput._do_stroke: Could not find ball trajectory step").info()
 		_move_input_blocked = false
 		return
 
@@ -202,7 +173,7 @@ func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") ->
 
 	# Ensure ball is on same side of court as player
 	if sign(closest_ball_position.z) != sign(player.position.z):
-		push_error(
+		Loggie.msg(
 			"HumanInput._do_stroke: Ball is on opposite side of court (player: ",
 			player.position.z,
 			", ball: ",
@@ -218,12 +189,11 @@ func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") ->
 	player.queue_stroke(stroke)
 	adjust_player_position_to_stroke(player, closest_step)
 
-	_clear_stroke_input()
+	_clear_stroke_input_ui()
 
 
-## Clears stroke input state after executing a stroke
-func _clear_stroke_input() -> void:
-	_input_pace = 0.0
+## Clears stroke UI state after executing a stroke
+func _clear_stroke_input_ui() -> void:
 	player.ball_aim_marker.visible = false
 
 
@@ -231,8 +201,9 @@ func _clear_stroke_input() -> void:
 func _construct_stroke_from_input(
 	closest_step: TrajectoryStep, aim_position: Vector3, pace: float, stroke_name: String
 ) -> Stroke:
+	Loggie.msg("HumanInput._construct_stroke_from_input", aim_position, pace, stroke_name).info()
 	if not closest_step:
-		push_error("HumanInput._construct_stroke_from_input: closest_step is null")
+		Loggie.msg("HumanInput._construct_stroke_from_input: closest_step is null")
 		return Stroke.new()
 
 	var stroke: Stroke = Stroke.new()

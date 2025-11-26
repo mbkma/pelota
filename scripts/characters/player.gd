@@ -54,10 +54,7 @@ var queued_stroke: Stroke:
 		return queued_stroke
 	set(value):
 		queued_stroke = value
-		print("Setting queued stroke to ", value)
-
-## Stroke waiting to have its animation played (when position is reached)
-var _stroke_waiting_for_animation: Stroke = null
+		Loggie.msg("[Player] Setting queued stroke to: ", value).debug()
 
 var controller: Controller
 
@@ -212,10 +209,8 @@ func cancel_movement() -> void:
 ## Called when player reaches movement target point
 func _on_target_point_reached() -> void:
 	# Play stroke animation if one is waiting for position
-	if _stroke_waiting_for_animation:
-		var stroke = _stroke_waiting_for_animation
-		_stroke_waiting_for_animation = null
-		model.play_stroke_animation(stroke)
+	if queued_stroke:
+		model.play_stroke_animation(queued_stroke)
 
 
 ## Stroke System
@@ -230,7 +225,6 @@ func queue_stroke(stroke: Stroke) -> void:
 		return
 
 	queued_stroke = stroke
-	_stroke_waiting_for_animation = stroke
 
 
 ## Handle racket collision with ball
@@ -238,16 +232,16 @@ func _on_RacketArea_body_entered(body: Node3D) -> void:
 	if not body is Ball:
 		return
 	if not queued_stroke:
-		push_error("Ball entered but no queued stroke")
+		Loggie.msg("Ball entered but no queued stroke").info()
 		return
-	print(player_data.last_name, ": ball entered")
-	_hit_ball(ball, queued_stroke)
+	Loggie.msg("[Player] ", player_data.last_name, ": ball entered").debug()
+	_hit_ball(queued_stroke)
 
 
 ## Execute ball hit with given stroke
-func _hit_ball(ball: Ball, stroke: Stroke) -> void:
+func _hit_ball(stroke: Stroke) -> void:
 	if not stroke:
-		push_error("_hit_ball: No queued stroke")
+		Loggie.msg("_hit_ball: No queued stroke").info()
 		return
 
 	var stroke_velocity: Vector3 = ball.calculate_velocity(
@@ -266,7 +260,6 @@ func _hit_ball(ball: Ball, stroke: Stroke) -> void:
 ## Cancel currently queued stroke
 func cancel_stroke() -> void:
 	queued_stroke = null
-	_stroke_waiting_for_animation = null
 	model.transition_to(model.States.IDLE)
 
 
@@ -280,9 +273,9 @@ func serve(stroke: Stroke) -> void:
 
 ## Called by serve animation to hit the ball
 func from_anim_hit_serve() -> void:
-		_hit_ball(ball, queued_stroke)
+		_hit_ball(queued_stroke)
 		just_served.emit()
-		print("SERVING")
+		Loggie.msg("[Player] SERVING").debug()
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
@@ -292,7 +285,7 @@ func from_anim_spawn_ball() -> void:
 	get_parent().add_child(ball)
 	ball_spawned.emit(ball)
 	get_tree().call_group("Player", "set_active_ball", ball)
-	print("from_anim_spawn_ball", queued_stroke, ball)
+	Loggie.msg("from_anim_spawn_ball: stroke: ", queued_stroke, ", ball: ", ball).info()
 
 ## Other Functions
 ####################

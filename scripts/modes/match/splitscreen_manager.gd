@@ -45,7 +45,7 @@ func _ready() -> void:
 
 	# Check if both players are human-controlled
 	if not _are_both_players_human():
-		print("Splitscreen disabled: not all players are human")
+		Loggie.msg("[Splitscreen] Disabled: not all players are human").debug()
 		return
 
 	# Create cameras for all viewports
@@ -84,7 +84,7 @@ func _create_viewport_cameras() -> void:
 	bottom_camera.name = "BottomCamera"
 	bottom_viewport.add_child(bottom_camera)
 
-	print("Splitscreen cameras created")
+	Loggie.msg("[Splitscreen] Cameras created").debug()
 
 
 ## Cycle through splitscreen modes
@@ -131,7 +131,7 @@ func _enable_vertical_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.VERTICAL_SPLIT
 	splitscreen_toggled.emit(true)
-	print("Vertical splitscreen enabled - Press X for horizontal")
+	Loggie.msg("[Splitscreen] Vertical enabled - Press X for horizontal").debug()
 
 
 ## Enable horizontal splitscreen (top-bottom)
@@ -169,7 +169,7 @@ func _enable_horizontal_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.HORIZONTAL_SPLIT
 	splitscreen_toggled.emit(true)
-	print("Horizontal splitscreen enabled - Press X to return to normal")
+	Loggie.msg("[Splitscreen] Horizontal enabled - Press X to return to normal").debug()
 
 
 ## Disable splitscreen mode
@@ -187,7 +187,7 @@ func _disable_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.NORMAL
 	splitscreen_toggled.emit(false)
-	print("Splitscreen disabled - Press X to enable")
+	Loggie.msg("[Splitscreen] Disabled - Press X to enable").debug()
 
 
 ## Update a viewport camera to match a player's camera
