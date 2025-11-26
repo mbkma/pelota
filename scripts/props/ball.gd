@@ -27,7 +27,7 @@ const AIR_DRAG: float = 0.02
 @export var initial_velocity: Vector3
 var initial_position: Vector3
 
-var spin: float = 0.0  # +topspin, -backspin
+var spin: Vector3 = Vector3.ZERO  # x: sidespin, y: topspin/backspin, z: forward spin
 var _previous_velocity: Vector3 = Vector3.ZERO
 var _was_on_ground: bool = false
 
@@ -46,9 +46,9 @@ func _physics_process(delta: float) -> void:
 func step(delta: float) -> void:
 	# --- 1. Gravity + Magnus effect ---
 	var magnus_force = Vector3(
-		spin * SPIN_SIDE_MULT,
-		-spin * SPIN_DOWN_FORCE,
-		spin * SPIN_FORWARD_MULT
+		spin.x * SPIN_SIDE_MULT,
+		-spin.y * SPIN_DOWN_FORCE,
+		spin.z * SPIN_FORWARD_MULT
 	)
 	velocity.y += (-GRAVITY_BASE + magnus_force.y) * delta
 	velocity.x += magnus_force.x * delta
@@ -110,8 +110,8 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 
 	var bounce_normal = -v_normal * BALL_DAMPING_VERTICAL
 	var bounce_tangent = v_tangent * BALL_DAMPING_HORIZONTAL
-	bounce_tangent.x += spin * SPIN_SIDE_MULT
-	bounce_tangent.z += spin * SPIN_FORWARD_MULT
+	bounce_tangent.x += spin.x * SPIN_SIDE_MULT
+	bounce_tangent.z += spin.z * SPIN_FORWARD_MULT
 
 	velocity = bounce_normal + bounce_tangent
 	print("[Bounce] New velocity after bounce: ", velocity)
@@ -120,13 +120,31 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	print("[Bounce] Corrected position.y=", position.y)
 
 
+## Calculates required velocity x,y components to hit ball from initial position to target, given the initial z velocity component
+## Accounts for Magnus effect, air drag, and gravity
+func calculate_velocity(
+	start_position: Vector3, target_position: Vector3, velocity_z0: float, ball_spin: Vector3
+) -> Vector3:
+	var calculated_velocity: Vector3 = Vector3.ZERO
+
+	# Initial estimate using simple ballistics
+	var time_to_target: float = (target_position.z - start_position.z) / velocity_z0
+	calculated_velocity.x = (target_position.x - start_position.x) / time_to_target
+	calculated_velocity.y = (
+		(0.5 * GRAVITY_BASE * time_to_target * time_to_target + (target_position.y - start_position.y)) / time_to_target
+	)
+	calculated_velocity.z = velocity_z0
+
+	return calculated_velocity
+
+
 ## Applies a stroke to the ball with given velocity and spin
-func apply_stroke(stroke_velocity: Vector3, spin_amount: float) -> void:
+func apply_stroke(stroke_velocity: Vector3, spin_amount: Vector3) -> void:
 	if not stroke_velocity:
 		push_error("Ball.apply_stroke: stroke_velocity is null")
 		return
 
-	spin = 1.0
+	spin = spin_amount
 	velocity = stroke_velocity
 
 
@@ -154,9 +172,9 @@ func predict_trajectory(
 	for _step_index in range(steps):
 		# --- 1. Apply gravity with spin effect ---
 		var magnus_force = Vector3(
-			spin * SPIN_SIDE_MULT,
-			-spin * SPIN_DOWN_FORCE,
-			spin * SPIN_FORWARD_MULT
+			spin.x * SPIN_SIDE_MULT,
+			-spin.y * SPIN_DOWN_FORCE,
+			spin.z * SPIN_FORWARD_MULT
 		)
 		current_velocity.y += (-GRAVITY_BASE + magnus_force.y) * time_step
 		current_velocity.x += magnus_force.x * time_step
@@ -206,7 +224,7 @@ func _simulate_bounce(prev_velocity: Vector3) -> Vector3:
 
 	var bounce_normal = -v_normal * BALL_DAMPING_VERTICAL
 	var bounce_tangent = v_tangent * BALL_DAMPING_HORIZONTAL
-	bounce_tangent.x += spin * SPIN_SIDE_MULT
-	bounce_tangent.z += spin * SPIN_FORWARD_MULT
+	bounce_tangent.x += spin.x * SPIN_SIDE_MULT
+	bounce_tangent.z += spin.z * SPIN_FORWARD_MULT
 
 	return bounce_normal + bounce_tangent

@@ -7,15 +7,16 @@ signal crowd_reaction_started(reaction_type: String)
 ## Signal emitted when crowd reaction ends
 signal crowd_reaction_ended(reaction_type: String)
 
+@export var config: GlobalCrowdConfig
+
 ## Reference to the audio stream player
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 ## Container for all crowd blocks
-@onready var blocks: Node3D = $Blocks
+@export var blocks: Array[Node3D]
 
 ## Track current reaction state
 var _current_reaction: String = ""
-var config = null
 
 func _ready() -> void:
 	if not config:
@@ -45,9 +46,11 @@ func play_victory() -> void:
 		play_sound(sound, false)
 
 	# Play animations in all blocks
-	for block in blocks.get_children():
-		if block and block.has_method("play_victory"):
-			block.play_victory()
+	
+	for block in blocks:
+		for crowd_block in block.get_children():
+			if crowd_block and crowd_block.has_method("play_victory"):
+				crowd_block.play_victory()
 
 	# Get animation duration and schedule end signal
 	if audio_stream_player.stream:
@@ -72,9 +75,10 @@ func play_sound(stream: AudioStream, loop := false) -> void:
 
 ## Cleanup all resources
 func cleanup() -> void:
-	for block in blocks.get_children():
-		if block and block.has_method("cleanup"):
-			block.cleanup()
+	for block in blocks:
+		for crowd_block in block.get_children():
+			if crowd_block and crowd_block.has_method("cleanup"):
+				crowd_block.cleanup()
 
 	if audio_stream_player:
 		audio_stream_player.stop()

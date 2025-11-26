@@ -39,15 +39,6 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	#if player and player.ball:
-		#var distance_to_ball: float = GlobalUtils.get_horizontal_distance(player, player.ball)
-		#if (
-			#distance_to_ball < 0
-			#or player.ball.velocity.length() < GameConstants.BALL_VELOCITY_CANCELLATION_THRESHOLD
-		#):
-			#player.cancel_stroke()
-			#_move_input_blocked = false
-
 	# Handle stroke input
 	if not _stroke_input_blocked:
 		var is_any_action_pressed: bool = (
@@ -73,7 +64,6 @@ func _process(_delta: float) -> void:
 			_input_pace = 0.0
 			_mouse_from = get_viewport().get_mouse_position()
 			_aiming_at = _get_default_aim()
-			_vibrate_joypad(0.3, 0.3)  # Light vibration on aim start
 
 		# Continuously update aim and pace while button is held
 		if is_any_action_pressed:
@@ -100,10 +90,8 @@ func _process(_delta: float) -> void:
 			if Input.is_action_just_released("strike") and _serve_controls:
 				_do_serve(_aiming_at, _input_pace)
 				_serve_controls = false
-				_vibrate_joypad(0.6, 0.5)  # Strong vibration on serve
 			else:
 				_do_stroke(_aiming_at, _input_pace, stroke_type)
-				_vibrate_joypad(0.5, 0.4)  # Medium vibration on stroke
 
 	# Handle challenge input
 	if Input.is_action_just_pressed("challenge"):

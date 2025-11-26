@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene load_steps=22 format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
@@ -13,10 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/debug_hud.tscn" id="11_7qdcc"]
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
-[ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scripts/environment/crowd/crowd.gd" id="15_rqw0b"]
+[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environment/crowd/crowd.tscn" id="16_11ka0"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/modes/match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="18_pause"]
-[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environment/crowd/crowd_block.tscn" id="21_7fyad"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -147,6 +146,8 @@ transform = Transform3D(-1, 4.79117e-08, -1.43193e-07, 0, 0.948324, 0.317305, 1.
 [node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]
 players = [null, null]
 
+[node name="Crowd" parent="." unique_id=1204219689 instance=ExtResource("16_11ka0")]
+
 [node name="Umpire" parent="." unique_id=757205017 instance=ExtResource("12_ard7f")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.18558, 0, 0)
 
@@ -156,13 +157,14 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.185
 match_manager = NodePath("../MatchManager")
 _trajectory_drawer = NodePath("../TrajectoryDrawer")
 
-[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "cameras") instance=ExtResource("8_2s2ac")]
+[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "crowd", "cameras") instance=ExtResource("8_2s2ac")]
 player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 court = NodePath("../Stadium/Court")
 stadium = NodePath("../Stadium")
 television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
+crowd = NodePath("../Crowd")
 cameras = NodePath("../Cameras")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]
@@ -177,53 +179,10 @@ shadow_blur = 2.954
 
 [node name="PauseMenu" parent="." unique_id=1371052476 instance=ExtResource("18_pause")]
 
-[node name="Crowd" type="Node" parent="." unique_id=849436384]
-script = ExtResource("15_rqw0b")
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Crowd" unique_id=637033766]
-
-[node name="EastBlock" type="Node3D" parent="Crowd" unique_id=1070903490]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.864, 0.526, 0)
-
-[node name="CrowdBlock" parent="Crowd/EastBlock" unique_id=524828875 instance=ExtResource("21_7fyad")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
-
-[node name="CrowdBlock5" parent="Crowd/EastBlock" unique_id=1059679277 instance=ExtResource("21_7fyad")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
-
-[node name="CrowdBlock2" parent="Crowd/EastBlock" unique_id=1346328431 instance=ExtResource("21_7fyad")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
-
-[node name="CrowdBlock3" parent="Crowd/EastBlock" unique_id=1021341322 instance=ExtResource("21_7fyad")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
-
-[node name="CrowdBlock4" parent="Crowd/EastBlock" unique_id=722183903 instance=ExtResource("21_7fyad")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
-
-[node name="NorthBlock" type="Node3D" parent="Crowd" unique_id=308978892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.049, 1.593, -20.878)
-
-[node name="CrowdBlock6" parent="Crowd/NorthBlock" unique_id=113764286 instance=ExtResource("21_7fyad")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 0, 0)
-
-[node name="CrowdBlock7" parent="Crowd/NorthBlock" unique_id=958542378 instance=ExtResource("21_7fyad")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 0, 0)
-
-[node name="CrowdBlock8" parent="Crowd/NorthBlock" unique_id=339555331 instance=ExtResource("21_7fyad")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 0, 0)
-
-[node name="CrowdBlock9" parent="Crowd/NorthBlock" unique_id=1578502360 instance=ExtResource("21_7fyad")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 0, 0)
-
-[node name="CrowdBlock10" parent="Crowd/NorthBlock" unique_id=1355092264 instance=ExtResource("21_7fyad")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 0, 0)
-
-[node name="CrowdBlock11" parent="Crowd/NorthBlock" unique_id=744643174 instance=ExtResource("21_7fyad")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 0, 0)
-
 [editable path="TelevisionHUD"]
 [editable path="TelevisionHUD/ScoreDisplay"]
 [editable path="TelevisionHUD/ScoreDisplay/VBoxContainer/Player1ScorePanel"]
 [editable path="Stadium"]
 [editable path="Stadium/stadium"]
 [editable path="Cameras"]
+[editable path="Crowd"]

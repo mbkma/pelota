@@ -1,2 +1,0 @@
-class_name BallAimMarker
-extends Node3D

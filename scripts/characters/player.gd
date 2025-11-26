@@ -39,7 +39,7 @@ signal input_changed(timing: float)
 @export var ball: Ball
 @export var move_speed: float = 5.0
 @export var team_index: int = 0
-@export var ball_aim_marker: BallAimMarker
+@export var ball_aim_marker: Node3D
 @export var opponent: Player  # Reference to opponent player
 
 ## Flat stroke sound effects
@@ -56,6 +56,8 @@ var queued_stroke: Stroke:
 		queued_stroke = value
 		print("Setting queued stroke to ", value)
 
+## Stroke waiting to have its animation played (when position is reached)
+var _stroke_waiting_for_animation: Stroke = null
 
 var controller: Controller
 
@@ -91,6 +93,7 @@ func _ready() -> void:
 	$Label3D.text = player_data.last_name
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
+	target_point_reached.connect(_on_target_point_reached)
 	controller = controller_scene.instantiate()
 	add_child(controller)
 
@@ -206,18 +209,28 @@ func cancel_movement() -> void:
 	_path = []
 
 
+## Called when player reaches movement target point
+func _on_target_point_reached() -> void:
+	# Play stroke animation if one is waiting for position
+	if _stroke_waiting_for_animation:
+		var stroke = _stroke_waiting_for_animation
+		_stroke_waiting_for_animation = null
+		model.play_stroke_animation(stroke)
+
+
 ## Stroke System
 ##################
 
 
 ## Queue a stroke to execute (non-serve strokes)
+## Animation will be played when the player reaches the correct position
 func queue_stroke(stroke: Stroke) -> void:
 	if not ball:
 		push_error("Player has no ball to stroke!")
 		return
 
 	queued_stroke = stroke
-	model.play_stroke_animation(stroke)
+	_stroke_waiting_for_animation = stroke
 
 
 ## Handle racket collision with ball
@@ -233,7 +246,11 @@ func _on_RacketArea_body_entered(body: Node3D) -> void:
 
 ## Execute ball hit with given stroke
 func _hit_ball(ball: Ball, stroke: Stroke) -> void:
-	var stroke_velocity: Vector3 = GlobalPhysics.calculate_velocity(
+	if not stroke:
+		push_error("_hit_ball: No queued stroke")
+		return
+
+	var stroke_velocity: Vector3 = ball.calculate_velocity(
 		ball.position,
 		stroke.stroke_target,
 		-sign(position.z) * stroke.stroke_power,
@@ -249,6 +266,7 @@ func _hit_ball(ball: Ball, stroke: Stroke) -> void:
 ## Cancel currently queued stroke
 func cancel_stroke() -> void:
 	queued_stroke = null
+	_stroke_waiting_for_animation = null
 	model.transition_to(model.States.IDLE)
 
 

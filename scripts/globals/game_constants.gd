@@ -99,34 +99,34 @@ const AI_BALL_COMMIT_DISTANCE: float = 3.0
 const AI_BALL_VELOCITY_MIN: float = 0.1
 
 ## Forehand pace (power)
-const AI_FOREHAND_PACE: float = 25.0
+const AI_FOREHAND_PACE: float = 20.0
 
-## Forehand spin
-const AI_FOREHAND_SPIN: float = 1.0
+## Forehand spin (x: sidespin, y: topspin, z: forward spin)
+const AI_FOREHAND_SPIN: Vector3 = Vector3(0.2, 1.0, 0.3)
 
 ## Backhand pace (power)
-const AI_BACKHAND_PACE: float = 22.0
+const AI_BACKHAND_PACE: float = 18.0
 
-## Backhand spin
-const AI_BACKHAND_SPIN: float = 0.5
+## Backhand spin (x: sidespin, y: topspin, z: forward spin)
+const AI_BACKHAND_SPIN: Vector3 = Vector3(-0.2, 0.5, 0.2)
 
 ## Backhand slice pace (power)
-const AI_BACKHAND_SLICE_PACE: float = 18.0
+const AI_BACKHAND_SLICE_PACE: float = 15.0
 
-## Backhand slice spin
-const AI_BACKHAND_SLICE_SPIN: float = -1.0
+## Backhand slice spin (x: sidespin, y: backspin, z: forward spin)
+const AI_BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -1.0, 0.1)
 
 ## Drop shot pace (power)
 const AI_DROP_SHOT_PACE: float = 10.0
 
-## Drop shot spin
-const AI_DROP_SHOT_SPIN: float = -1.0
+## Drop shot spin (x: sidespin, y: backspin, z: forward spin)
+const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -1.0, 0.0)
 
 ## Serve pace (power)
 const AI_SERVE_PACE: float = 30.0
 
-## Serve spin
-const AI_SERVE_SPIN: float = 0.8
+## Serve spin (x: sidespin, y: topspin, z: forward spin)
+const AI_SERVE_SPIN: Vector3 = Vector3(0.3, 0.8, 0.4)
 
 # ============================================================================
 # TIMING CONSTANTS

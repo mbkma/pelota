@@ -177,6 +177,22 @@ func get_closest_trajectory_step(player: Player) -> TrajectoryStep:
 	# Return the closest trajectory step
 	return closest_trajectory_step
 
+func calculate_velocity(
+	initial_position: Vector3, target_position: Vector3, velocity_z0: float, spin: Vector3
+) -> Vector3:
+	var velocity: Vector3 = Vector3.ZERO
+
+	# Time to reach target position
+	var time_to_target: float = (target_position.z - initial_position.z) / velocity_z0
+
+	velocity.x = (target_position.x - initial_position.x) / time_to_target
+	velocity.y = (
+		(0.5 * GameConstants.GRAVITY * time_to_target * time_to_target - initial_position.y) / time_to_target
+	)
+	velocity.z = velocity_z0
+
+	return velocity
+
 
 ## Validate player reference and state
 ## Returns true if valid, false otherwise

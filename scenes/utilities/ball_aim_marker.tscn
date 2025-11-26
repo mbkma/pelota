@@ -1,6 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bi8pmdx3d7doc"]
-
-[ext_resource type="Script" uid="uid://n0ox8xlulbmh" path="res://scenes/utilities/ball_aim_marker.gd" id="1_kjtf1"]
+[gd_scene load_steps=3 format=3 uid="uid://bi8pmdx3d7doc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lufo"]
 albedo_color = Color(1, 0, 0, 1)
@@ -9,7 +7,6 @@ albedo_color = Color(1, 0, 0, 1)
 material = SubResource("StandardMaterial3D_7lufo")
 
 [node name="BallAimMarker" type="Node3D" unique_id=160563153]
-script = ExtResource("1_kjtf1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1507997537]
 transform = Transform3D(0.14904475, 0, 0, 0, 0.007067608, 0, 0, 0, 0.14904475, 0, 0, 0)
