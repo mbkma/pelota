@@ -74,19 +74,19 @@ func request_serve() -> void:
 	_input_device.set_serve_mode(true)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not _input_device:
 		return
 
 	if _move_input_blocked:
 		# Block all movement during stroke animation
-		#player.apply_movement(Vector3.ZERO, _delta)
-		return
+		var dir = player.compute_move_dir()
+		player.apply_movement(dir, delta)
 	else:
 		var move_direction: Vector3 = _input_device.get_movement_input(
 			player.camera.global_basis, player.position
 		)
-		player.apply_movement(move_direction, _delta)
+		player.apply_movement(move_direction, delta)
 
 
 ## Initializes the appropriate input device based on available hardware
@@ -188,6 +188,7 @@ func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") ->
 
 	player.queue_stroke(stroke)
 	adjust_player_position_to_stroke(player, closest_step)
+	Loggie.msg("moving to ", closest_step.point).info()
 
 	_clear_stroke_input_ui()
 
@@ -201,9 +202,9 @@ func _clear_stroke_input_ui() -> void:
 func _construct_stroke_from_input(
 	closest_step: TrajectoryStep, aim_position: Vector3, pace: float, stroke_name: String
 ) -> Stroke:
-	Loggie.msg("HumanInput._construct_stroke_from_input", aim_position, pace, stroke_name).info()
+	Loggie.msg("_construct_stroke_from_input", aim_position, pace, stroke_name).info()
 	if not closest_step:
-		Loggie.msg("HumanInput._construct_stroke_from_input: closest_step is null")
+		Loggie.msg("_construct_stroke_from_input: closest_step is null")
 		return Stroke.new()
 
 	var stroke: Stroke = Stroke.new()

@@ -38,11 +38,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.24305734)
 [node name="ThirdPersonCamera" type="Camera3D" parent="." unique_id=1842340249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
 
-[node name="Model" parent="." unique_id=1631475750 instance=ExtResource("3_lm2ok")]
+[node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
 
-[node name="AnimationTreeRootMotion" parent="Model" index="4" unique_id=2021565860]
-parameters/stroke/Transition/current_state = ""
-parameters/stroke/Transition/current_index = -1
+[node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 839788186, 1028201433) index="0" unique_id=1066183297]
+bones/0/position = Vector3(0.00076894404, 0.9253066, -0.008382814)
+bones/0/rotation = Quaternion(0.06991143, 0.0048234593, -0.00033804608, 0.99754155)
+bones/2/rotation = Quaternion(1.9730073e-06, 0.00021804536, 2.9134442e-05, 1)
+bones/3/rotation = Quaternion(2.0971304e-06, 0.0006378976, -2.9180906e-05, 0.9999999)
+bones/4/rotation = Quaternion(5.202344e-08, 0.00042797416, 3.862453e-11, 0.9999999)
+bones/5/rotation = Quaternion(-1.4795709e-08, -0.00064196216, -1.4916159e-10, 0.9999999)
+bones/6/rotation = Quaternion(6.019612e-08, -0.0031515916, 1.0388218e-09, 0.99999505)
+bones/158/rotation = Quaternion(0.99032885, 0.058910206, -0.00044837449, 0.12561126)
+bones/159/rotation = Quaternion(0.0035512636, 6.385854e-05, -0.017760692, 0.999836)
+bones/160/rotation = Quaternion(0.9911066, -0.06264281, 7.379311e-05, 0.11740397)
+bones/161/rotation = Quaternion(0.0050702156, -0.00012961814, 0.025360687, 0.9996655)
+bones/164/rotation = Quaternion(-0.009223053, 0.15559737, 0.9857366, -0.063464426)
+bones/165/position = Vector3(-0.02120085, 0.24055523, 0.016663864)
+bones/165/rotation = Quaternion(-0.000358016, 0.0040607764, 0.0002812942, 0.9999917)
+bones/166/rotation = Quaternion(-0.0019263987, 0.98833674, -0.15187077, 0.0110508455)
+bones/167/position = Vector3(0.025279872, 0.22628266, 0.008523721)
+bones/167/rotation = Quaternion(-0.007423006, -0.066444114, -0.0025028128, 0.99775946)
+bones/168/rotation = Quaternion(-0.09069509, 0.7435722, -0.65538716, 0.09665711)
+bones/169/rotation = Quaternion(0.013724154, 0.99404824, 0.108063996, 0.0014690356)
+bones/170/rotation = Quaternion(0.004892099, 0.12736893, 0.9877083, 0.09047414)
+bones/171/position = Vector3(0.021271372, 0.24135424, 0.016719216)
+bones/171/rotation = Quaternion(-0.00042713407, -0.0048437924, -0.0003355506, 0.9999882)
+bones/172/rotation = Quaternion(0.0013364562, 0.995381, -0.09587011, -0.0048909094)
+bones/173/position = Vector3(-0.025370022, 0.22708914, 0.008554125)
+bones/173/rotation = Quaternion(-0.007873997, 0.07048092, 0.0026548852, 0.99747854)
+bones/174/rotation = Quaternion(0.108336434, 0.7627572, -0.6283909, -0.10765463)
+bones/175/rotation = Quaternion(-0.01339432, 0.9940241, 0.10832693, -0.0014248502)
+
+[node name="DEF-attachment_hand_R" parent="Model/h/player_djokovic/game-rig/GeneralSkeleton" index="0" unique_id=1081205537]
+transform = Transform3D(-0.093404114, 0.41907197, 0.9031338, 0.49228176, 0.80788684, -0.3239627, -0.8654039, 0.41433898, -0.28176335, -0.09843015, 1.0813109, 0.41169536)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 

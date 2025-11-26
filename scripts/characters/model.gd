@@ -2,6 +2,9 @@
 class_name Model
 extends Node3D
 
+## Emitted when stroke animation finishes
+signal stroke_animation_finished
+
 enum States { IDLE, MOVE, STROKE }
 
 ## Reference to parent player
@@ -45,17 +48,6 @@ func _ready() -> void:
 		animation_tree.active = true
 
 
-## Get movement speed factor from animation playback
-func get_move_speed_factor() -> float:
-	var current_time: float = _playback.get_current_play_position()
-	var current_animation: String = _playback.get_current_node()
-	var current_length: float = _playback.get_current_length()
-	var w: float = 1.0
-	if current_animation == "g_right":
-		w = _movement_animations["crossover_right"].sample(current_time / current_length)
-
-	return w
-
 
 ## Set movement animation direction based on world-space input
 func set_move_direction(direction: Vector3) -> void:
@@ -81,7 +73,7 @@ func play_stroke_animation(stroke: Stroke) -> void:
 	#if t > 0:
 		#await get_tree().create_timer(t).timeout
 
-	var playback_speed = compute_animation_speed(31.0 / 30.0, stroke.step.time)
+	var playback_speed = compute_animation_speed(17.0 / 30.0, stroke.step.time)
 	playback_speed = clamp(playback_speed, 0.5, 3)
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
 	Loggie.msg("[Model] playback_speed: ", playback_speed, " time: ", stroke.step.time).debug()
@@ -151,11 +143,5 @@ func transition_to(state_id: int) -> void:
 			_playback.travel("stroke")
 
 
-## Called from animation when stroke becomes active
-func _set_stroke_active() -> void:
-	_stroke_active = true
-
-
-## Called from animation when stroke becomes inactive
-func _set_stroke_inactive() -> void:
-	_stroke_active = false
+func get_state():
+	return _playback.get_current_node()

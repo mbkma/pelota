@@ -73,8 +73,6 @@ var _acceleration: float = 0.1
 ## Movement path waypoints
 var _path: Array[Vector3] = []
 
-## Whether to use root motion for movement
-var _root_motion: bool = false
 
 ## Angle bisector visualization data for debug drawing
 var bisector_service_line_left: Vector3 = Vector3.ZERO
@@ -120,11 +118,7 @@ func stop() -> void:
 
 
 ## Apply movement in given direction
-func apply_movement(direction: Vector3, delta: float) -> void:
-	if _root_motion:
-		_root_motion_movement(direction, delta)
-		return
-
+func apply_movement(direction: Vector3, _delta: float) -> void:
 	# Separate animation direction from movement direction
 	# For small movements, play idle animation but still move the player
 	var animation_direction: Vector3 = direction
@@ -154,22 +148,6 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 
 
 ## Apply movement using animation root motion
-func _root_motion_movement(direction: Vector3, delta: float) -> void:
-	direction = direction.normalized()
-
-	var dir := Vector2(-direction.x, direction.z)
-	model.animation_tree["parameters/move/blend_position"] = dir
-
-	# Set animation conditions for root motion
-	model.animation_tree.set("parameters/conditions/moving", direction != Vector3.ZERO)
-	model.animation_tree.set("parameters/conditions/idle", direction == Vector3.ZERO)
-
-	var current_rotation: Quaternion = transform.basis.get_rotation_quaternion()
-	velocity = (
-		(current_rotation.normalized() * model.animation_tree.get_root_motion_position()) / delta
-	)
-	move_and_slide()
-
 
 ## Compute movement direction from path
 func compute_move_dir() -> Vector3:

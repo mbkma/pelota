@@ -116,7 +116,7 @@ func _calculate_aim_position(mouse_start: Vector2, mouse_current: Vector2) -> Ve
 
 	var aim_position: Vector3 = default_aim_position
 	# Determine player side to orient mouse input correctly
-	var player_side: float = sign(default_aim_position.z) if default_aim_position.z != 0 else 1.0
+	var player_side: float = -sign(default_aim_position.z)
 	aim_position.z += player_side * mouse_delta.y / mouse_sensitivity
 	aim_position.x += player_side * mouse_delta.x / mouse_sensitivity
 

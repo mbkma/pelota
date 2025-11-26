@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="2_rx4uh"]
 [ext_resource type="Script" uid="uid://dqtx4wyjr5o1v" path="res://scripts/environment/world/us_open/adaptive_broadcast_camera.gd" id="3_gvk2c"]
 
-[node name="Cameras" type="Node3D" unique_id=1668762139]
+[node name="Cameras" type="Node3D" unique_id=1668762139 node_paths=PackedStringArray("cams")]
 script = ExtResource("1_ibrh3")
+cams = [NodePath("FlyingCam"), NodePath("TopFront"), NodePath("TopBack"), NodePath("MiddleFront"), NodePath("MiddleBack"), NodePath("CourtSideFront"), NodePath("CourtSideBack"), NodePath("CameraTop")]
 
 [node name="FlyingCam" type="Camera3D" parent="." unique_id=994003878]
 transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
