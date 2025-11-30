@@ -17,6 +17,13 @@ var _stroke_input_blocked: bool = true
 var _aiming_at: Vector3 = Vector3.ZERO
 var _serve_controls: bool = false
 
+## Pending stroke to execute (queued by controller, executed by player)
+var _pending_stroke: Stroke = null
+
+## Current stroke state for UI updates
+var _is_stroke_active: bool = false
+var _current_pace: float = 0.0
+
 
 func _ready() -> void:
 	super()  # Call base class initialization
@@ -40,32 +47,25 @@ func _ready() -> void:
 	player.ball_hit.connect(_on_player_ball_hit)
 
 
-func _process(_delta: float) -> void:
+## Update controller state - called by Player each frame
+func update() -> void:
 	if not _input_device:
 		return
 
-	# Handle stroke input
+	# Handle stroke input and update internal state
 	if not _stroke_input_blocked:
-		var is_stroke_active: bool = _input_device.handle_stroke_input()
+		_is_stroke_active = _input_device.handle_stroke_input()
 
 		# Get the latest aiming position from the input device
 		_aiming_at = _input_device.get_aiming_position()
 
-		# Update UI while stroke is active or during serve (before button press)
-		var pace: float = _input_device.get_stroke_pace()
-		if is_stroke_active and pace > 0.0:
-			pace_changed.emit(pace)
+		# Store pace for player to query
+		_current_pace = _input_device.get_stroke_pace()
+
+		# Emit pace signal for any listeners
+		if _is_stroke_active and _current_pace > 0.0:
+			pace_changed.emit(_current_pace)
 			Loggie.msg("[Aiming] Position: ", _aiming_at).debug()
-			player.ball_aim_marker.global_position = _aiming_at
-			player.ball_aim_marker.visible = true
-			# Scale marker based on pace for visual feedback (1.0 - 1.5x size)
-			player.ball_aim_marker.scale = Vector3.ONE * (1.0 + pace * 0.5)
-		elif _serve_controls:
-			# During serve, show aim marker even before pressing stroke button
-			Loggie.msg("[Aiming] Position: ", _aiming_at).debug()
-			player.ball_aim_marker.global_position = _aiming_at
-			player.ball_aim_marker.visible = true
-			player.ball_aim_marker.scale = Vector3.ONE
 
 
 func request_serve() -> void:
@@ -74,19 +74,65 @@ func request_serve() -> void:
 	_input_device.set_serve_mode(true)
 
 
-func _physics_process(delta: float) -> void:
+## Get movement direction from input device
+func get_move_direction() -> Vector3:
 	if not _input_device:
-		return
+		return Vector3.ZERO
 
 	if _move_input_blocked:
-		# Block all movement during stroke animation
-		var dir = player.compute_move_dir()
-		player.apply_movement(dir, delta)
+		# Block movement input during stroke animation, use path-based movement
+		return player.compute_move_dir()
 	else:
-		var move_direction: Vector3 = _input_device.get_movement_input(
+		return _input_device.get_movement_input(
 			player.camera.global_basis, player.position
 		)
-		player.apply_movement(move_direction, delta)
+
+
+## Get pending stroke to execute
+func get_stroke() -> Stroke:
+	var stroke: Stroke = _pending_stroke
+	_pending_stroke = null  # Clear after returning
+	return stroke
+
+
+## Get current aiming position for UI updates
+func get_aiming_position() -> Vector3:
+	return _aiming_at
+
+
+## Get current stroke pace for UI updates
+func get_current_pace() -> float:
+	return _current_pace
+
+
+## Check if stroke is currently active
+func is_stroke_active() -> bool:
+	return _is_stroke_active
+
+
+## Check if in serve mode
+func is_serving() -> bool:
+	return _serve_controls
+
+
+## Get aim marker position for UI - overrides base class
+func get_aim_marker_position() -> Variant:
+	return _aiming_at
+
+
+## Get aim marker visibility state - overrides base class
+func should_show_aim_marker() -> bool:
+	# Show marker when stroke is active with pace OR when in serve mode
+	return (_is_stroke_active and _current_pace > 0.0) or _serve_controls
+
+
+## Get aim marker scale for UI - overrides base class
+func get_aim_marker_scale() -> Vector3:
+	# Scale based on pace when active, otherwise normal size
+	if _is_stroke_active and _current_pace > 0.0:
+		return Vector3.ONE * (1.0 + _current_pace * 0.5)
+	else:
+		return Vector3.ONE
 
 
 ## Initializes the appropriate input device based on available hardware
@@ -145,7 +191,7 @@ func _on_stroke_completed(pace: float, stroke_type: String) -> void:
 	_input_device.stroke_completed.connect(_on_stroke_completed, CONNECT_ONE_SHOT)
 
 
-## Executes a serve stroke
+## Prepares a serve stroke (to be executed by player)
 func _do_serve(aim_position: Vector3, pace: float) -> void:
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_type = Stroke.StrokeType.SERVE
@@ -154,10 +200,10 @@ func _do_serve(aim_position: Vector3, pace: float) -> void:
 	stroke.stroke_target = aim_position
 
 	_move_input_blocked = true
-	player.serve(stroke)
+	_pending_stroke = stroke
 
 
-## Executes a rally stroke (forehand/backhand/slice)
+## Prepares a rally stroke (to be executed by player)
 func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") -> void:
 	if not player.ball:
 		Loggie.msg("HumanInput._do_stroke: Player has no ball to stroke").info()
@@ -186,16 +232,10 @@ func _do_stroke(aim_position: Vector3, pace: float, stroke_name := "topspin") ->
 	var stroke: Stroke = _construct_stroke_from_input(closest_step, aim_position, pace, stroke_name)
 	_move_input_blocked = true
 
-	player.queue_stroke(stroke)
-	adjust_player_position_to_stroke(player, closest_step)
+	# Queue stroke and position adjustment to be executed by player
+	_pending_stroke = stroke
+	adjust_player_position_to_stroke(player, closest_step, stroke)
 	Loggie.msg("moving to ", closest_step.point).info()
-
-	_clear_stroke_input_ui()
-
-
-## Clears stroke UI state after executing a stroke
-func _clear_stroke_input_ui() -> void:
-	player.ball_aim_marker.visible = false
 
 
 ## Constructs a stroke from player input, determining stroke type based on ball position

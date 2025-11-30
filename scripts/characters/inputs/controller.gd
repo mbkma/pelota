@@ -35,18 +35,38 @@ func _ready() -> void:
 			push_error("InputMethod parent must be a Player node, got: ", get_parent().name)
 
 
-## Process input each frame for state updates
+## Update controller state - called by Player each frame
+## Implementing classes should update their internal state here
 @abstract
-func _process(_delta: float) -> void
-
-## Process physics-related input (movement)
-@abstract
-func _physics_process(_delta: float) -> void
+func update() -> void
 
 ## Request the input method to initiate a serve
 ## Implementing classes should handle serve initialization here
 @abstract
 func request_serve() -> void
+
+## Get movement direction decision from controller
+## Returns Vector3 representing desired movement direction (normalized)
+@abstract
+func get_move_direction() -> Vector3
+
+## Get stroke decision from controller
+## Returns Stroke if controller wants to execute a stroke, null otherwise
+@abstract
+func get_stroke() -> Stroke
+
+## Get aim marker position for UI (override if controller needs UI)
+## Returns null if no aim marker should be shown
+func get_aim_marker_position() -> Variant:
+	return null
+
+## Get aim marker visibility state (override if controller needs UI)
+func should_show_aim_marker() -> bool:
+	return false
+
+## Get aim marker scale for UI (override if controller needs UI)
+func get_aim_marker_scale() -> Vector3:
+	return Vector3.ONE
 
 
 ## Check relative position of target relative to player's orientation
@@ -102,10 +122,10 @@ func is_flying_towards(source: Node3D, target: Node3D) -> bool:
 
 
 ## Adjust player position to optimal stroke execution point
-func adjust_player_position_to_stroke(target_player: Player, closest_step: TrajectoryStep) -> void:
+func adjust_player_position_to_stroke(target_player: Player, closest_step: TrajectoryStep, stroke: Stroke) -> void:
 	## Calculate the direction from the position
 	var x_offset: float
-	if target_player.queued_stroke.stroke_type == target_player.queued_stroke.StrokeType.FOREHAND:
+	if stroke.stroke_type == stroke.StrokeType.FOREHAND:
 		x_offset = -target_player.model.forehand_point.position.x
 	else:
 		x_offset = -target_player.model.backhand_point.position.x

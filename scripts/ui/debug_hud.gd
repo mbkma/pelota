@@ -38,11 +38,13 @@ extends CanvasLayer
 
 # Player 0 stat labels
 @onready var _p0_name_label: Label = $DebugHud/TabContainer/Player0/VBox/Name/Value
+@onready var _p0_state_label: Label = $DebugHud/TabContainer/Player0/VBox/State/Value
 @onready var _p0_position_label: Label = $DebugHud/TabContainer/Player0/VBox/Position/Value
 @onready var _p0_velocity_label: Label = $DebugHud/TabContainer/Player0/VBox/Velocity/Value
 
 # Player 1 stat labels
 @onready var _p1_name_label: Label = $DebugHud/TabContainer/Player1/VBox/Name/Value
+@onready var _p1_state_label: Label = $DebugHud/TabContainer/Player1/VBox/State/Value
 @onready var _p1_position_label: Label = $DebugHud/TabContainer/Player1/VBox/Position/Value
 @onready var _p1_velocity_label: Label = $DebugHud/TabContainer/Player1/VBox/Velocity/Value
 
@@ -76,7 +78,7 @@ func _process(_delta: float) -> void:
 
 ## Update performance metrics
 func _update_performance_stats(_delta: float) -> void:
-	var fps: int = Engine.get_frames_per_second()
+	var fps: int = int(Engine.get_frames_per_second())
 	var frametime_ms: float = _delta * 1000.0
 
 	_fps_label.text = str(fps)
@@ -111,12 +113,14 @@ func _update_player_stats() -> void:
 	# Player 0 stats
 	var p0: Player = match_manager.player0
 	_p0_name_label.text = p0.player_data.last_name
+	_p0_state_label.text = _player_state_to_string(p0._current_state)
 	_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_p0_velocity_label.text = "%.2f" % p0.velocity.length()
 
 	# Player 1 stats
 	var p1: Player = match_manager.player1
 	_p1_name_label.text = p1.player_data.last_name
+	_p1_state_label.text = _player_state_to_string(p1._current_state)
 	_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_p1_velocity_label.text = "%.2f" % p1.velocity.length()
 
@@ -158,6 +162,18 @@ func _match_state_to_string(value: MatchManager.MatchState) -> String:
 	return enum_map.get(value, "UNKNOWN")
 
 
+## Convert player state enum to human-readable string
+func _player_state_to_string(value: Player.PlayerState) -> String:
+	var enum_map: Dictionary[Player.PlayerState, String] = {
+		Player.PlayerState.IDLE: "IDLE",
+		Player.PlayerState.MOVING: "MOVING",
+		Player.PlayerState.PREPARING_STROKE: "PREPARING_STROKE",
+		Player.PlayerState.STROKING: "STROKING",
+		Player.PlayerState.RECOVERING: "RECOVERING",
+	}
+	return enum_map.get(value, "UNKNOWN")
+
+
 ## Toggle ball trajectory drawing
 func _toggle_trajectory(enabled: bool) -> void:
 	if _trajectory_drawer:
@@ -166,7 +182,7 @@ func _toggle_trajectory(enabled: bool) -> void:
 
 ## Update summary tab with key information from all systems
 func _update_summary_stats(_delta: float) -> void:
-	var fps: int = Engine.get_frames_per_second()
+	var fps: int = int(Engine.get_frames_per_second())
 	var frametime_ms: float = _delta * 1000.0
 
 	_summary_fps_label.text = str(fps)

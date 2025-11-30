@@ -2,6 +2,9 @@
 class_name Player
 extends CharacterBody3D
 
+## Player state enum
+enum PlayerState { IDLE, MOVING, PREPARING_STROKE, STROKING, RECOVERING }
+
 ## Emitted when player successfully hits the ball
 signal ball_hit
 
@@ -14,17 +17,11 @@ signal target_point_reached
 ## Emitted when player is ready to serve
 signal ready_to_serve
 
-## Emitted when player is ready to receive
-signal ready_to_receive
-
 ## Emitted when player challenges a call
 signal challenged
 
 ## Emitted when ball is spawned for serve
 signal ball_spawned(ball: Ball)
-
-## Emitted when input method is changed
-signal input_changed(timing: float)
 
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -55,6 +52,9 @@ var queued_stroke: Stroke:
 	set(value):
 		queued_stroke = value
 		Loggie.msg("[Player] Setting queued stroke to: ", value).debug()
+
+## Current player state
+var _current_state: PlayerState = PlayerState.IDLE
 
 var controller: Controller
 
@@ -89,8 +89,65 @@ func _ready() -> void:
 	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
 	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
 	target_point_reached.connect(_on_target_point_reached)
+	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
 	add_child(controller)
+	_set_state(PlayerState.IDLE)
+
+
+## Set player state and handle state transitions
+func _set_state(new_state: PlayerState) -> void:
+	if _current_state == new_state:
+		return
+
+	_current_state = new_state
+
+	match _current_state:
+		PlayerState.IDLE:
+			model.play_idle()
+		PlayerState.MOVING:
+			pass  # Animation handled by apply_movement
+		PlayerState.PREPARING_STROKE:
+			pass  # Animation handled when stroke is queued
+		PlayerState.STROKING:
+			pass  # Animation handled by play_stroke_animation
+		PlayerState.RECOVERING:
+			model.play_recovery()
+
+
+## Process stroke decisions from controller each frame
+func _process(_delta: float) -> void:
+	if not controller:
+		return
+
+	# Update controller state (uniform interface for all controllers)
+	controller.update()
+
+	# Update UI based on controller state
+	_update_controller_ui()
+
+	# Check if controller has a stroke decision
+	var stroke_decision: Stroke = controller.get_stroke()
+	if stroke_decision:
+		# Execute the stroke decision
+		if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
+			serve(stroke_decision)
+		else:
+			queue_stroke(stroke_decision)
+
+		# Clear UI after stroke is queued
+		if ball_aim_marker:
+			ball_aim_marker.visible = false
+
+
+## Process movement from controller each physics frame
+func _physics_process(delta: float) -> void:
+	if not controller:
+		return
+
+	# Get movement direction from controller and execute it
+	var move_direction: Vector3 = controller.get_move_direction()
+	apply_movement(move_direction, delta)
 
 ## Request the input handler to initiate a serve
 func request_serve() -> void:
@@ -128,7 +185,6 @@ func apply_movement(direction: Vector3, _delta: float) -> void:
 			animation_direction = Vector3.ZERO
 
 	direction = direction.normalized()
-	model.set_move_direction(animation_direction)
 
 	_move_velocity.x = direction.x * move_speed
 	_move_velocity.z = direction.z * move_speed
@@ -144,6 +200,14 @@ func apply_movement(direction: Vector3, _delta: float) -> void:
 
 	velocity = _real_velocity
 	move_and_slide()
+
+	# Update animation state based on movement (only if not stroking or recovering)
+	if _current_state != PlayerState.STROKING and _current_state != PlayerState.RECOVERING:
+		if animation_direction.length() > 0:
+			_set_state(PlayerState.MOVING)
+			model.play_run(animation_direction)
+		else:
+			_set_state(PlayerState.IDLE)
 
 
 
@@ -188,7 +252,8 @@ func cancel_movement() -> void:
 func _on_target_point_reached() -> void:
 	# Play stroke animation if one is waiting for position
 	if queued_stroke:
-		model.play_stroke_animation(queued_stroke)
+		_set_state(PlayerState.STROKING)
+		model.play_stroke(queued_stroke)
 
 
 ## Stroke System
@@ -238,14 +303,14 @@ func _hit_ball(stroke: Stroke) -> void:
 ## Cancel currently queued stroke
 func cancel_stroke() -> void:
 	queued_stroke = null
-	model.transition_to(model.States.IDLE)
+	_set_state(PlayerState.IDLE)
 
 
 ## Execute a serve with given stroke
 func serve(stroke: Stroke) -> void:
 	queued_stroke = stroke
-	model.set_stroke(stroke)
-	model.transition_to(model.States.STROKE)
+	_set_state(PlayerState.STROKING)
+	model.play_stroke(stroke)
 	# Animation callbacks will handle spawning ball and hitting it
 
 
@@ -308,3 +373,26 @@ func play_stroke_sound(stroke: Stroke) -> void:
 ## Set the active ball for this player
 func set_active_ball(b: Ball) -> void:
 	ball = b
+
+
+## Update UI based on controller state (uniform interface for all controllers)
+func _update_controller_ui() -> void:
+	if not ball_aim_marker or not controller:
+		return
+
+	# Check if controller wants to show aim marker
+	if controller.should_show_aim_marker():
+		var aim_position: Variant = controller.get_aim_marker_position()
+		if aim_position != null:
+			ball_aim_marker.global_position = aim_position
+			ball_aim_marker.scale = controller.get_aim_marker_scale()
+			ball_aim_marker.visible = true
+	else:
+		# Controller doesn't need aim marker visible
+		pass  # Don't hide here, only hide after stroke execution
+
+
+## Called when stroke animation finishes
+func _on_stroke_animation_finished() -> void:
+	if _current_state == PlayerState.STROKING:
+		_set_state(PlayerState.RECOVERING)

@@ -11,6 +11,9 @@ var _current_tactic: DefaultTactics
 ## Base position for AI movement (on the baseline)
 var _pivot_point: Vector3 = Vector3.ZERO
 
+## Pending stroke to execute (queued by controller, executed by player)
+var _pending_stroke: Stroke = null
+
 
 func _ready() -> void:
 	super()  # Call base class initialization
@@ -37,8 +40,8 @@ func request_serve() -> void:
 	make_serve()
 
 
-## Process stroke decisions based on ball trajectory
-func _process(_delta: float) -> void:
+## Update controller state - called by Player each frame
+func update() -> void:
 	#print(player.player_data.last_name, " #player.queued_stroke: ", player.queued_stroke)
 	#print(player.player_data.last_name, " #player.ball: ", player.ball)
 
@@ -52,7 +55,7 @@ func _process(_delta: float) -> void:
 		return
 
 	if (
-		is_flying_towards(player, player.ball) 
+		is_flying_towards(player, player.ball)
 	):
 		var closest_step := get_closest_trajectory_step(player)
 		if closest_step.point.y < 0.5 or closest_step.point.y > 1.5:
@@ -71,24 +74,31 @@ func _process(_delta: float) -> void:
 		_do_stroke(closest_step)
 
 
-## Process movement decisions
-func _physics_process(delta: float) -> void:
+## Get movement direction from AI decision
+func get_move_direction() -> Vector3:
 	if not validate_player():
-		return
+		return Vector3.ZERO
 
-	var move_dir: Vector3 = player.compute_move_dir()
-	player.apply_movement(move_dir, delta)
+	return player.compute_move_dir()
 
 
-## Compute and execute a stroke for the given trajectory step
+## Get pending stroke to execute
+func get_stroke() -> Stroke:
+	var stroke: Stroke = _pending_stroke
+	_pending_stroke = null  # Clear after returning
+	return stroke
+
+
+## Compute and prepare a stroke for the given trajectory step
 func _do_stroke(closest_step: TrajectoryStep) -> void:
 	var stroke: Stroke = _current_tactic.compute_next_stroke(closest_step)
 	if not stroke:
 		push_error("AiInput._do_stroke: Tactic returned null stroke")
 		return
 
-	player.queue_stroke(stroke)
-	adjust_player_position_to_stroke(player, closest_step)
+	# Queue stroke and position adjustment to be executed by player
+	_pending_stroke = stroke
+	adjust_player_position_to_stroke(player, closest_step, stroke)
 
 
 ## Initiate a serve using current tactic
@@ -108,7 +118,7 @@ func make_serve() -> void:
 
 	player.prepare_serve()
 	await get_tree().create_timer(GameConstants.INPUT_STARTUP_DELAY + 1.5).timeout
-	player.serve(stroke)
+	_pending_stroke = stroke
 
 
 ## Called when AI player hits the ball - move to defensive position

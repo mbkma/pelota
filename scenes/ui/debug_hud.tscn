@@ -318,6 +318,21 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 11
 text = "Player"
 
+[node name="State" type="HBoxContainer" parent="DebugHud/TabContainer/Player0/VBox" unique_id=1305390405]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player0/VBox/State" unique_id=1305390406]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player0/VBox/State" unique_id=1305390407]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
 [node name="Position" type="HBoxContainer" parent="DebugHud/TabContainer/Player0/VBox" unique_id=1305390404]
 layout_mode = 2
 
@@ -372,6 +387,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 11
 text = "Player"
+
+[node name="State" type="HBoxContainer" parent="DebugHud/TabContainer/Player1/VBox" unique_id=1968227921]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player1/VBox/State" unique_id=1968227922]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player1/VBox/State" unique_id=1968227923]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
 
 [node name="Position" type="HBoxContainer" parent="DebugHud/TabContainer/Player1/VBox" unique_id=1968227920]
 layout_mode = 2
