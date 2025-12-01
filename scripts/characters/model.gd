@@ -14,6 +14,12 @@ var player: Player
 ## Track current stroke for animation completion
 var _current_stroke: Stroke
 
+## Track last animation state for detecting transitions
+var _last_state: String = ""
+
+## Track if stroke animation finished signal was already emitted
+var _stroke_finished_emitted: bool = false
+
 @onready var points: Node3D = $Points
 @onready var serve_point: Vector3 = points.get_node("BallServePoint").position
 @onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
@@ -43,6 +49,24 @@ func _ready() -> void:
 		animation_tree.active = true
 
 
+func _process(_delta: float) -> void:
+	if not _playback:
+		return
+
+	var current_state: String = _playback.get_current_node()
+
+	# Detect when we transition away from stroke state
+	if _last_state == "stroke" and current_state != "stroke" and not _stroke_finished_emitted:
+		_stroke_finished_emitted = true
+		stroke_animation_finished.emit()
+
+	# Reset flag when entering stroke state
+	if current_state == "stroke":
+		_stroke_finished_emitted = false
+
+	_last_state = current_state
+
+
 func compute_animation_speed(anim_time_to_contact: float, real_time_to_contact: float) -> float:
 	# prevent division by zero
 	if real_time_to_contact <= 0.01:
@@ -58,10 +82,6 @@ func _from_anim_spawn_ball() -> void:
 ## Called from animation timeline to hit the serve (forwarded to player)
 func from_anim_hit_serve() -> void:
 	player.from_anim_hit_serve()
-
-## Called from animation timeline when stroke animation finishes
-func _from_anim_stroke_finished() -> void:
-	stroke_animation_finished.emit()
 
 func compute_stroke_blend_position(stroke: Stroke) -> float:
 	match stroke.stroke_type:

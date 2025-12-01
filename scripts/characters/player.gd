@@ -177,13 +177,7 @@ func stop() -> void:
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, _delta: float) -> void:
 	# Separate animation direction from movement direction
-	# For small movements, play idle animation but still move the player
 	var animation_direction: Vector3 = direction
-	if _path.size() > 0:
-		var distance_to_target: float = position.distance_to(_path[0])
-		if distance_to_target < 0.5:  # Small distance threshold - no animation
-			animation_direction = Vector3.ZERO
-
 	direction = direction.normalized()
 
 	_move_velocity.x = direction.x * move_speed
@@ -246,6 +240,13 @@ func move_to(target: Vector3) -> void:
 ## Cancel all pending movement
 func cancel_movement() -> void:
 	_path = []
+
+
+## Move to defensive position after stroke animation finishes
+func move_to_defensive_position(target_position: Vector3) -> void:
+	await model.stroke_animation_finished
+	Loggie.msg("Player now moving to defensive pos ", target_position).info()
+	move_to(target_position)
 
 
 ## Called when player reaches movement target point

@@ -132,11 +132,8 @@ func _on_ball_hit() -> void:
 	# Calculate angle bisector position (best defensive position)
 	var defensive_position: Vector3 = _calculate_angle_bisector_position(opponent_hit_position)
 
-	# Wait for stroke animation to finish before moving
-	await player.model.stroke_animation_finished
-
-	# Move to the calculated position
-	player.move_to(defensive_position)
+	# Tell player to move to defensive position after stroke animation finishes
+	await player.move_to_defensive_position(defensive_position)
 
 
 ## Calculate the angle bisector position (best defensive position)
