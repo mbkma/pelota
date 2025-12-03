@@ -77,9 +77,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_itcay")
 script = ExtResource("2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1379774744]
-libraries = {
-&"": SubResource("AnimationLibrary_amtl8")
-}
+libraries/ = SubResource("AnimationLibrary_amtl8")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=875243403]
 layout_mode = 1

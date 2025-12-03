@@ -8,8 +8,8 @@ extends Node3D
 
 
 func _ready() -> void:
-	Loggie.msg("[BallCannon] global basis: ", global_basis).debug()
-	Loggie.msg("[BallCannon] local basis: ", basis).debug()
+	Loggie.msg("global basis: ", global_basis).info()
+	Loggie.msg("local basis: ", basis).info()
 
 
 func _process(_delta: float) -> void:

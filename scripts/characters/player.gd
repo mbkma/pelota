@@ -3,7 +3,7 @@ class_name Player
 extends CharacterBody3D
 
 ## Player state enum
-enum PlayerState { IDLE, MOVING, PREPARING_STROKE, STROKING, RECOVERING }
+enum PlayerState { IDLE, MOVING, PREPARING_STROKE, STROKING, RECOVERING, UNREACHABLE }
 
 ## Emitted when player successfully hits the ball
 signal ball_hit
@@ -51,7 +51,7 @@ var queued_stroke: Stroke:
 		return queued_stroke
 	set(value):
 		queued_stroke = value
-		Loggie.msg("[Player] Setting queued stroke to: ", value).debug()
+		Loggie.msg("Setting queued stroke to: ", value).debug()
 
 ## Current player state
 var _current_state: PlayerState = PlayerState.IDLE
@@ -73,6 +73,24 @@ var _acceleration: float = 0.1
 ## Movement path waypoints
 var _path: Array[Vector3] = []
 
+## Timing system variables for animation synchronization
+## Time when ball will arrive at predicted hit location (set by opponent hit prediction)
+var _ball_prediction_time: float = 0.0
+
+## Time required for player to travel from current position to hit location
+var _travel_time: float = 0.0
+
+## Time in animation when racket contacts ball (frame-specific, set from Model)
+var _animation_hit_point_time: float = 0.0
+
+## Calculated time when animation should start to sync with ball arrival
+var _animation_start_time: float = 0.0
+
+## Whether the player is currently doing a synchronized stroke (AI-driven)
+var _is_synchronized_stroke: bool = false
+
+## Whether the player cannot reach the ball in time
+var _is_unreachable: bool = false
 
 ## Angle bisector visualization data for debug drawing
 var bisector_service_line_left: Vector3 = Vector3.ZERO
@@ -113,6 +131,11 @@ func _set_state(new_state: PlayerState) -> void:
 			pass  # Animation handled by play_stroke_animation
 		PlayerState.RECOVERING:
 			model.play_recovery()
+		PlayerState.UNREACHABLE:
+			# Player cannot reach ball in time - still move in correct direction but with unreachable behavior
+			_is_unreachable = true
+			if _path.size() > 0:
+				model.play_run((_path[0] - position).normalized())
 
 
 ## Process stroke decisions from controller each frame
@@ -169,6 +192,106 @@ func stop() -> void:
 	cancel_stroke()
 	ball = null
 
+
+## Timing System
+#################
+##
+## ARCHITECTURE:
+## The timing system synchronizes player movement and animations with predicted ball arrival.
+## This is used for AI opponents that need to meet the ball at a specific location and time.
+##
+## ANIMATION MARKERS:
+## Each stroke animation has a "hit" marker indicating when the racket contacts the ball.
+## The Model script queries this marker at runtime from Animation resources.
+##
+## FLOW:
+## 1. Opponent hits ball -> system predicts ball location and arrival time
+## 2. queue_stroke() is called with ball_prediction_time and hit location
+## 3. compute_synchronized_stroke_timing() calculates travel time and animation sync
+## 4. Player moves to hit location
+## 5. On arrival, _on_target_point_reached() delays animation until sync time
+## 6. Animation plays such that hit-frame aligns with ball arrival
+
+## Compute travel time from current position to target using movement speed and acceleration
+##
+## CALCULATION:
+## - Measures straight-line distance to target
+## - Divides by average movement speed (accounting for acceleration ramp-up)
+## - Returns time in seconds needed to reach the target
+func compute_travel_time(target_position: Vector3) -> float:
+	var distance: float = position.distance_to(target_position)
+
+	# Simplified travel time: distance / average_speed
+	# Account for acceleration ramp-up: assume we reach max speed fairly quickly
+	var average_speed: float = move_speed * 0.8  # Conservative estimate during acceleration
+
+	if average_speed <= 0:
+		return INF
+
+	return distance / average_speed
+
+## Compute animation start time to sync hit frame with ball arrival
+##
+## FORMULA:
+##   animation_start_time = ball_prediction_time - animation_hit_point_time
+##
+## EXPLANATION:
+## - ball_prediction_time: when the ball will arrive at the hit location (absolute time)
+## - animation_hit_point_time: when in the animation the racket contacts the ball (relative to anim start)
+## - animation_start_time: when to START the animation so hit-frame lands at ball arrival
+##
+## EXAMPLE:
+## - Ball arrives at t=5.0s
+## - Hit frame is at 0.45s into animation
+## - Start animation at t=4.55s so racket meets ball at t=5.0s
+func compute_animation_start_time(ball_arrival_time: float, animation_hit_frame_time: float) -> float:
+	return ball_arrival_time - animation_hit_frame_time
+
+## Compute and validate synchronized stroke timing
+## Returns true if player can reach and sync properly, false if unreachable
+##
+## VALIDATION LOGIC:
+## - If travel_time > ball_prediction_time: player cannot reach in time -> UNREACHABLE
+## - If travel_time <= ball_prediction_time: player can reach and sync -> SUCCESS
+##
+## SETS:
+## - _animation_hit_point_time: when in animation the racket contacts the ball
+## - _travel_time: how long it takes to reach the hit location
+## - _animation_start_time: when animation should start for perfect sync
+## - _ball_prediction_time: predicted ball arrival time (stored for reference)
+func compute_synchronized_stroke_timing(
+	hit_location: Vector3,
+	ball_prediction_time: float,
+	stroke: Stroke
+) -> bool:
+	# Get animation hit frame time from Model
+	_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
+
+	# Compute travel time from current position to hit location
+	_travel_time = compute_travel_time(hit_location)
+
+	# Compute when animation should start
+	_animation_start_time = compute_animation_start_time(ball_prediction_time, _animation_hit_point_time)
+
+	_ball_prediction_time = ball_prediction_time
+
+	# Check if player can reach the ball
+	if _travel_time > ball_prediction_time:
+		_is_unreachable = true
+		Loggie.msg(
+			"UNREACHABLE: travel_time(%.2f) > prediction_time(%.2f)" % [_travel_time, ball_prediction_time]
+		).warn()
+		return false
+
+	_is_unreachable = false
+	_is_synchronized_stroke = true
+
+	Loggie.msg(
+		"Synchronized stroke timing: travel=%.2f, anim_hit=%.2f, prediction=%.2f, start_time=%.2f" %
+		[_travel_time, _animation_hit_point_time, ball_prediction_time, _animation_start_time]
+	).info()
+
+	return true
 
 ## Movement System
 ####################
@@ -253,6 +376,17 @@ func move_to_defensive_position(target_position: Vector3) -> void:
 func _on_target_point_reached() -> void:
 	# Play stroke animation if one is waiting for position
 	if queued_stroke:
+		# For synchronized strokes, wait until correct animation start time
+		if _is_synchronized_stroke:
+			# Calculate remaining wait time before animation should start
+			var current_time: float = Time.get_ticks_msec() / 1000.0
+			var wait_time: float = _animation_start_time - (current_time - 0)  # Adjust based on game timing
+
+			if wait_time > 0:
+				# Delay animation start until sync point
+				Loggie.msg("Waiting %.2f seconds before stroke animation start" % wait_time).info()
+				await get_tree().create_timer(wait_time).timeout
+
 		_set_state(PlayerState.STROKING)
 		model.play_stroke(queued_stroke)
 
@@ -262,13 +396,61 @@ func _on_target_point_reached() -> void:
 
 
 ## Queue a stroke to execute (non-serve strokes)
-## Animation will be played when the player reaches the correct position
-func queue_stroke(stroke: Stroke) -> void:
+## For AI: Uses synchronized timing if ball_prediction_time is set
+## For human: Executes immediately when player is close enough
+func queue_stroke(stroke: Stroke, ball_prediction_time: float = 0.0) -> void:
 	if not ball:
 		push_error("Player has no ball to stroke!")
 		return
 
 	queued_stroke = stroke
+
+	# AI/Synchronized stroke path
+	if ball_prediction_time > 0 and _path.size() > 0:
+		var hit_location: Vector3 = _path[0]
+		if not compute_synchronized_stroke_timing(hit_location, ball_prediction_time, stroke):
+			# Cannot reach - switch to UNREACHABLE state
+			_set_state(PlayerState.UNREACHABLE)
+			return
+
+	# Otherwise proceed with normal movement -> stroke execution on arrival
+
+
+## Queue and execute a reactive stroke for human input (immediate execution)
+##
+## HUMAN CONTROLLER BEHAVIOR:
+## When a human player presses a hit button, this method starts the stroke animation immediately
+## without synchronization calculations. The hit frame from the animation will determine timing.
+##
+## EARLY VS LATE:
+## - Early: Human hits button before ball arrives (animation finishes before ball contact)
+## - Late: Human hits button when ball is already close (animation may miss the ball)
+##
+## The racket collision system handles actual ball contact - if the ball is in range when
+## the animation reaches the hit frame, collision detection will execute the hit.
+func queue_reactive_stroke(stroke: Stroke) -> void:
+	if not ball:
+		push_error("Player has no ball to stroke!")
+		return
+
+	queued_stroke = stroke
+	_is_synchronized_stroke = false
+
+	# Determine current ball-player distance
+	var ball_distance: float = position.distance_to(ball.position)
+
+	# Get animation hit frame time
+	_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
+
+	# For human reactive strokes, start animation immediately
+	# The hit will connect when the racket animation reaches the hit frame
+	_set_state(PlayerState.STROKING)
+	model.play_stroke(stroke)
+
+	Loggie.msg(
+		"Reactive stroke queued: distance_to_ball=%.2f, anim_hit_frame=%.2f" %
+		[ball_distance, _animation_hit_point_time]
+	).info()
 
 
 ## Handle racket collision with ball
@@ -278,7 +460,7 @@ func _on_RacketArea_body_entered(body: Node3D) -> void:
 	if not queued_stroke:
 		Loggie.msg("Ball entered but no queued stroke").info()
 		return
-	Loggie.msg("[Player] ", player_data.last_name, ": ball entered").debug()
+	Loggie.msg(player_data.last_name, ": ball entered").debug()
 	_hit_ball(queued_stroke)
 
 
@@ -319,7 +501,7 @@ func serve(stroke: Stroke) -> void:
 func from_anim_hit_serve() -> void:
 		_hit_ball(queued_stroke)
 		just_served.emit()
-		Loggie.msg("[Player] SERVING").debug()
+		Loggie.msg("SERVING").info()
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:

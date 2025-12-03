@@ -53,50 +53,50 @@ func step(delta: float) -> void:
 	velocity.y += (-GRAVITY_BASE + magnus_force.y) * delta
 	velocity.x += magnus_force.x * delta
 	velocity.z += magnus_force.z * delta
-	Loggie.msg("[Physics] After gravity: velocity=", velocity).debug()
+	Loggie.msg("After gravity: velocity=", velocity).debug()
 
 	# --- 2. Air drag ---
 	velocity -= velocity * AIR_DRAG * delta
-	Loggie.msg("[Physics] After drag: velocity=", velocity).debug()
+	Loggie.msg("After drag: velocity=", velocity).debug()
 
 	_previous_velocity = velocity
 
 	# --- 3. Move the ball ---
 	move_and_slide()
-	Loggie.msg("[Physics] Moved to: ", global_position).debug()
+	Loggie.msg("Moved to: ", global_position).debug()
 
 	# --- 4. Handle collisions ---
 	if get_slide_collision_count() > 0:
 		var collision: KinematicCollision3D = get_slide_collision(0)
-		Loggie.msg("[Collision] Collision detected with: ", collision.get_collider()).debug()
+		Loggie.msg("Collision detected with: ", collision.get_collider()).debug()
 		if collision:
 			var collider := collision.get_collider()
 			if collider.name == "Net":
-				Loggie.msg("[Collision] Hit net!").debug()
+				Loggie.msg("Hit net!").debug()
 				velocity = _previous_velocity.bounce(collision.get_normal()) * 0.1
 				on_net.emit()
 			elif collider.name == "Ground":
-				Loggie.msg("[Collision] Hit ground").debug()
+				Loggie.msg("Hit ground").debug()
 				_realistic_bounce(collision)
 			else:
 				velocity = _previous_velocity.bounce(collision.get_normal()) * 0.1
-				Loggie.msg("[Collision] Hit other object").debug()
+				Loggie.msg("Hit other object").debug()
 
 
 	# --- 5. Ground signal ---
 	var is_on_ground = position.y <= BALL_GROUND_LEVEL + 0.01
 	if is_on_ground and not _was_on_ground:
-		Loggie.msg("[Ground] Ball hit ground at y=", position.y).debug()
+		Loggie.msg("Ball hit ground at y=", position.y).debug()
 		on_ground.emit()
 	_was_on_ground = is_on_ground
 
 func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	var normal: Vector3 = collision.get_normal()
-	Loggie.msg("[Bounce] Collision normal: ", normal).debug()
+	Loggie.msg("Collision normal: ", normal).debug()
 
 	var v_normal = _previous_velocity.dot(normal) * normal
 	var v_tangent = _previous_velocity - v_normal
-	Loggie.msg("[Bounce] v_normal=", v_normal, " v_tangent=", v_tangent).debug()
+	Loggie.msg("v_normal=", v_normal, " v_tangent=", v_tangent).debug()
 
 	# Only bounce if normal velocity is significant
 	if v_normal.length() < MIN_BOUNCE_SPEED:
@@ -104,7 +104,7 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 		velocity.y = 0
 		velocity.x *= BALL_DAMPING_HORIZONTAL
 		velocity.z *= BALL_DAMPING_HORIZONTAL
-		Loggie.msg("[Bounce] Rolling, no vertical bounce. New velocity=", velocity).debug()
+		Loggie.msg("Rolling, no vertical bounce. New velocity=", velocity).debug()
 		position.y = BALL_GROUND_LEVEL
 		return
 
@@ -114,10 +114,10 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	bounce_tangent.z += spin.z * SPIN_FORWARD_MULT
 
 	velocity = bounce_normal + bounce_tangent
-	Loggie.msg("[Bounce] New velocity after bounce: ", velocity).debug()
+	Loggie.msg("New velocity after bounce: ", velocity).debug()
 
 	position.y = max(position.y, BALL_GROUND_LEVEL + 0.001)
-	Loggie.msg("[Bounce] Corrected position.y=", position.y).debug()
+	Loggie.msg("Corrected position.y=", position.y).debug()
 
 
 ## Calculates required velocity x,y components to hit ball from initial position to target, given the initial z velocity component

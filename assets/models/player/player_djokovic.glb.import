@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://djp08wf63mwsq"
+uid="uid://d03j662osx28b"
 path="res://.godot/imported/player_djokovic.glb-dcdf0bafbfa088d7a0b9789f63c09f28.scn"
 
 [deps]
@@ -22,14 +22,14 @@ nodes/import_as_skeleton_bones=false
 nodes/use_name_suffixes=true
 nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
-meshes/generate_lods=false
+meshes/generate_lods=true
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
 meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
-animation/fps=30.0
+animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
@@ -41,9 +41,9 @@ _subresources={
 "animations": {
 "g_A_pose": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_A_pose.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_A_pose.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://bi0dgv76l0j66",
+"save_to_file/path": "uid://dcdx3leud3dln",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -2097,9 +2097,9 @@ _subresources={
 },
 "g_T_pose": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_T_pose.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_T_pose.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://chqi6crgoaoxi",
+"save_to_file/path": "uid://c8somcdc7j3yo",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -4153,9 +4153,9 @@ _subresources={
 },
 "g_active_idle": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_active_idle.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_active_idle.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://dfy7k40ofsvo",
+"save_to_file/path": "uid://u4sps08gmi0w",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -6209,9 +6209,9 @@ _subresources={
 },
 "g_active_idle_to_forehand": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_active_idle_to_forehand.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_active_idle_to_forehand.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://c435pdoaf4i2o",
+"save_to_file/path": "uid://ccpqycy8l6oef",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -8265,9 +8265,9 @@ _subresources={
 },
 "g_backhand": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_backhand.res",
-"save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://bb6p2j8ayatvh",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_backhand.res",
+"save_to_file/keep_custom_tracks": true,
+"save_to_file/path": "uid://bbe1t7uf7ccvk",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -10321,9 +10321,9 @@ _subresources={
 },
 "g_backhand_down": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_backhand_down.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_backhand_down.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://bvhn4as55gayq",
+"save_to_file/path": "uid://c2xrwv2bjvql",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -12377,9 +12377,9 @@ _subresources={
 },
 "g_backhand_slice": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_backhand_slice.res",
-"save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://df5fxp0gt4hg3",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_backhand_slice.res",
+"save_to_file/keep_custom_tracks": true,
+"save_to_file/path": "uid://cp0cr3dckxqsf",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -14433,9 +14433,9 @@ _subresources={
 },
 "g_backhand_up": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_backhand_up.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_backhand_up.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://wjjsabv2dnvv",
+"save_to_file/path": "uid://df7a56by5rw7",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -16489,9 +16489,9 @@ _subresources={
 },
 "g_crossover_right": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_crossover_right.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_crossover_right.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://perpqpjg1sej",
+"save_to_file/path": "uid://dy0ed3jguyuk",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -18545,9 +18545,9 @@ _subresources={
 },
 "g_forehand": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_forehand.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_forehand.res",
 "save_to_file/keep_custom_tracks": true,
-"save_to_file/path": "uid://bpkxotbemoyy1",
+"save_to_file/path": "uid://bl40pa30h7jeo",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -20601,9 +20601,9 @@ _subresources={
 },
 "g_forehand_down": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_forehand_down.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_forehand_down.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://blcbltir4m1al",
+"save_to_file/path": "uid://br24pxnntbbk8",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -22657,9 +22657,9 @@ _subresources={
 },
 "g_forehand_open": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_forehand_open.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_forehand_open.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://bi83ssxns745i",
+"save_to_file/path": "uid://cs3kuqhgouxri",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -24713,9 +24713,9 @@ _subresources={
 },
 "g_forehand_up": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_forehand_up.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_forehand_up.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://dp7nftla7l7de",
+"save_to_file/path": "uid://bugva6p66w446",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -26769,9 +26769,9 @@ _subresources={
 },
 "g_idle": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_idle.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_idle.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://330mh1xc4qcm",
+"save_to_file/path": "uid://bob3nx1vp3rf3",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -28825,9 +28825,9 @@ _subresources={
 },
 "g_run_forward": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_run_forward.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_run_forward.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://ddd66ng7wvkoa",
+"save_to_file/path": "uid://csuo7c2uyvrt4",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -30881,9 +30881,9 @@ _subresources={
 },
 "g_run_left": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_run_left.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_run_left.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://dn8m6121gfjyx",
+"save_to_file/path": "uid://bjl2tp7f1ktgb",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -32937,9 +32937,9 @@ _subresources={
 },
 "g_run_right": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_run_right.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_run_right.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://ddmiwh0a1h7nh",
+"save_to_file/path": "uid://c0hv45e2l0k11",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -34993,9 +34993,9 @@ _subresources={
 },
 "g_serve": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/animations/player/g_serve_djokovic.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_serve.res",
 "save_to_file/keep_custom_tracks": true,
-"save_to_file/path": "uid://lgpjqtju0fnt",
+"save_to_file/path": "uid://bsphldyh6uri",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -37049,9 +37049,9 @@ _subresources={
 },
 "g_sidestep_left": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_sidestep_left.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_sidestep_left.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://b4ptqyctlibwt",
+"save_to_file/path": "uid://bp77rricylw1g",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -39105,9 +39105,9 @@ _subresources={
 },
 "g_sidestep_right": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_sidestep_right.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_sidestep_right.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://cmxleerckuel5",
+"save_to_file/path": "uid://bi5wmnk5s502b",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -41161,9 +41161,9 @@ _subresources={
 },
 "g_sproing_right": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/resources/player_anims/g_sproing_right.res",
+"save_to_file/fallback_path": "res://assets/resources/anims/g_sproing_right.res",
 "save_to_file/keep_custom_tracks": "",
-"save_to_file/path": "uid://dlhlg1stcjrgq",
+"save_to_file/path": "uid://dsvhufju5eqg8",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,
 "slice_1/loop_mode": 0,
@@ -43214,79 +43214,6 @@ _subresources={
 "slice_99/save_to_file/path": "",
 "slice_99/start_frame": 0,
 "slices/amount": 0
-}
-},
-"materials": {
-"Fabric White": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Fabric White.tres",
-"use_external/path": "uid://cs63spc8ukfg3"
-},
-"Frame.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Frame.001.tres",
-"use_external/path": "uid://cjmc6wkoalgbr"
-},
-"Human.body": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.body.tres",
-"use_external/path": "uid://s01h6tnpxsrj"
-},
-"Human.eyebrow012.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.eyebrow012.001.tres",
-"use_external/path": "uid://db4wk2ietdh41"
-},
-"Human.eyelashes01.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.eyelashes01.001.tres",
-"use_external/path": "uid://dhtbfl2qd6nwh"
-},
-"Human.high-poly": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.high-poly.tres",
-"use_external/path": "uid://cygwab11uwxei"
-},
-"Human.shoes05": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.shoes05.tres",
-"use_external/path": "uid://ccy41v0ciuo2t"
-},
-"Human.short01.002": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.short01.002.tres",
-"use_external/path": "uid://carcaucrbmiyf"
-},
-"Human.teeth_base.002": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.teeth_base.002.tres",
-"use_external/path": "uid://bl5m2p84s4s27"
-},
-"Human.tongue01.002": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.tongue01.002.tres",
-"use_external/path": "uid://bn3rgv7dx2byg"
-},
-"Material": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Material.tres",
-"use_external/path": "uid://rk2qooa1xee"
-},
-"strings.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/strings.001.tres",
-"use_external/path": "uid://dnvb2ogqs8r7v"
-}
-},
-"meshes": {
-"player_djokovic_short01_002": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 20.0,
-"save_to_file/enabled": false,
-"save_to_file/fallback_path": "",
-"save_to_file/path": ""
 }
 },
 "nodes": {

@@ -89,7 +89,7 @@ func _on_Play_pressed() -> void:
 
 	match_data = MatchData.new(players_data[0], players_data[1])
 #
-	Loggie.msg("[MainMenu] Starting match with scene: ", match_scence).debug()
+	Loggie.msg("Starting match with scene: ", match_scence).info()
 	SceneManager.goto(match_scence)
 
 

@@ -65,7 +65,7 @@ func update() -> void:
 		# Emit pace signal for any listeners
 		if _is_stroke_active and _current_pace > 0.0:
 			pace_changed.emit(_current_pace)
-			Loggie.msg("[Aiming] Position: ", _aiming_at).debug()
+			Loggie.msg("Aiming position: ", _aiming_at).debug()
 
 
 func request_serve() -> void:

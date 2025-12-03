@@ -10,4 +10,4 @@ func change_level(next_packed_scene: PackedScene, init_data = null) -> void:
 	if next_scene.has_method("init_scene") and init_data:
 		next_scene.init_scene(init_data)
 	set_deferred("current_scene", next_scene)
-	Loggie.msg("[SceneSwitcher] current_scene: ", current_scene).debug()
+	Loggie.msg("current_scene: ", current_scene).info()

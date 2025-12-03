@@ -581,9 +581,7 @@ show_percentage = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1767756490]
 unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_4w84n")
-}
+libraries/ = SubResource("AnimationLibrary_4w84n")
 
 [node name="Timer" type="Timer" parent="." unique_id=652477342]
 wait_time = 3.0

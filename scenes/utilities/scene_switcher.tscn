@@ -7,4 +7,3 @@
 script = ExtResource("1")
 
 [node name="MainMenu" parent="." unique_id=687215548 instance=ExtResource("2_ol8fi")]
-music_enabled = false

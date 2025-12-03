@@ -191,10 +191,6 @@ text = "Play"
 
 [node name="MusicPanel" parent="." unique_id=1236886159 instance=ExtResource("6_u0nle")]
 layout_mode = 1
-offset_left = -576.0
-offset_top = -648.0
-offset_right = -576.0
-offset_bottom = -648.0
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/MenuContainer/Training" to="." method="_on_training_pressed"]

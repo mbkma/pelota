@@ -41,6 +41,20 @@ var _stroke_finished_emitted: bool = false
 	animation_tree.get("parameters/playback")
 )
 
+## Reference to the AnimationPlayer that drives the animation tree
+@onready var _animation_player: AnimationPlayer = animation_tree.get_node(animation_tree.anim_player)
+
+## Mapping from stroke type to animation name for lookup
+var _stroke_animation_names: Dictionary = {
+	Stroke.StrokeType.FOREHAND: "g_forehand",
+	Stroke.StrokeType.BACKHAND: "g_backhand",
+	Stroke.StrokeType.BACKHAND_SLICE: "g_backhand_slice",
+	Stroke.StrokeType.BACKHAND_DROP_SHOT: "g_backhand_slice",
+	Stroke.StrokeType.SERVE: "g_serve",
+	Stroke.StrokeType.VOLLEY: "g_volley",
+	Stroke.StrokeType.FOREHAND_DROP_SHOT: "g_forehand",
+}
+
 
 func _ready() -> void:
 	var p = get_parent()
@@ -67,11 +81,42 @@ func _process(_delta: float) -> void:
 	_last_state = current_state
 
 
+## Animation Timing API
+########################
+##
+## Timing data is fetched at runtime from animation markers and lengths.
+## Each stroke animation should have a "hit" marker indicating when the racket contacts the ball.
+
+## Get the time in seconds when the racket contacts the ball for a given stroke
+## Queries the "hit" marker from the animation
+## Returns the marker time, or 0.4s default if not found
+func get_animation_hit_frame_time(stroke_type: Stroke.StrokeType) -> float:
+	var anim_name: String = _stroke_animation_names.get(stroke_type, "")
+	var animation: Animation = _animation_player.get_animation(anim_name)
+
+	# Query the "hit" marker time directly
+	return animation.get_marker_time("hit")
+
+## Get total animation length in seconds for a given stroke
+## Queries animation length directly from the animation resource
+func get_animation_length(stroke_type: Stroke.StrokeType) -> float:
+	var anim_name: String = _stroke_animation_names.get(stroke_type, "")
+	var animation: Animation = _animation_player.get_animation(anim_name)
+	return animation.length
+
+## Get timing data dictionary for a stroke type
+## Combines animation length and hit marker time
+func get_animation_timing_data(stroke_type: Stroke.StrokeType) -> Dictionary:
+	var length: float = get_animation_length(stroke_type)
+	var hit_time: float = get_animation_hit_frame_time(stroke_type)
+	return {"length": length, "hit_frame_time": hit_time}
+
+
 func compute_animation_speed(anim_time_to_contact: float, real_time_to_contact: float) -> float:
 	# prevent division by zero
 	if real_time_to_contact <= 0.01:
 		return 1.0
-	Loggie.msg("[Model] animation_speed ratio: ", anim_time_to_contact / real_time_to_contact).debug()
+	Loggie.msg("animation_speed ratio: ", anim_time_to_contact / real_time_to_contact).info()
 	return anim_time_to_contact / real_time_to_contact
 
 
@@ -120,9 +165,11 @@ func play_stroke(stroke: Stroke) -> void:
 
 	# Only compute speed from step data if available (regular strokes have step, serves don't)
 	if stroke.step:
-		playback_speed = compute_animation_speed(17.0 / 30.0, stroke.step.time)
-		playback_speed = clamp(playback_speed, 0.5, 3)
-		Loggie.msg("[Model] playback_speed: ", playback_speed, " time: ", stroke.step.time).debug()
+		# Use dynamic hit frame time from animation marker instead of hardcoded value
+		var animation_hit_time: float = get_animation_hit_frame_time(stroke.stroke_type)
+		playback_speed = compute_animation_speed(animation_hit_time, stroke.step.time)
+		#playback_speed = clamp(playback_speed, 0.5, 3)
+		Loggie.msg("playback_speed: ", playback_speed, " time: ", stroke.step.time).info()
 
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
 	_set_stroke_animation(stroke)
@@ -138,21 +185,15 @@ func play_recovery() -> void:
 
 ## Internal helper to set stroke animation type and parameters
 func _set_stroke_animation(stroke: Stroke) -> void:
-	var animation_name: String
-	match stroke.stroke_type:
-		stroke.StrokeType.FOREHAND:
-			animation_name = "forehand"
-		stroke.StrokeType.SERVE:
-			animation_name = "serve"
-		stroke.StrokeType.BACKHAND:
-			animation_name = "backhand"
-			animation_tree["parameters/stroke/backhand/blend_position"] = compute_stroke_blend_position(stroke)
-			Loggie.msg("[Model] backhand blend position: ", animation_tree["parameters/stroke/backhand/blend_position"]).debug()
-		stroke.StrokeType.BACKHAND_SLICE:
-			animation_name = "backhand_slice"
-		stroke.StrokeType.BACKHAND_DROP_SHOT:
-			animation_name = "backhand_slice"
-		_:
-			push_warning("Stroke animation ", stroke.stroke_type, " not available!")
+	var animation_name: String = _stroke_animation_names.get(stroke.stroke_type, "")
+
+	if animation_name.is_empty():
+		push_warning("Stroke animation ", stroke.stroke_type, " not available!")
+		return
+
+	# Handle backhand-specific blend position
+	if stroke.stroke_type == Stroke.StrokeType.BACKHAND:
+		animation_tree["parameters/stroke/backhand/blend_position"] = compute_stroke_blend_position(stroke)
+		Loggie.msg("backhand blend position: ", animation_tree["parameters/stroke/backhand/blend_position"]).info()
 
 	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name

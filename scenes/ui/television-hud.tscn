@@ -108,9 +108,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MatchStatsPanel" unique_id=241539447]
-libraries = {
-&"": SubResource("AnimationLibrary_k50em")
-}
+libraries/ = SubResource("AnimationLibrary_k50em")
 
 [node name="ScoreDisplay" parent="." unique_id=1936900464 instance=ExtResource("4_xpbfi")]
 layout_mode = 1

@@ -173,6 +173,6 @@ func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vecto
 		baseline_z
 	)
 
-	Loggie.msg("[AI] defensive_position: ", defensive_position).debug()
+	Loggie.msg("defensive_position: ", defensive_position).info()
 
 	return defensive_position

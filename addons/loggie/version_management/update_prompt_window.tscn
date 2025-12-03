@@ -1,6 +1,6 @@
 [gd_scene load_steps=32 format=3 uid="uid://d2eq0khfi3s15"]
 
-[ext_resource type="Script" path="res://addons/loggie/version_management/update_prompt_window.gd" id="1_xb7je"]
+[ext_resource type="Script" uid="uid://b48scbgtjloqx" path="res://addons/loggie/version_management/update_prompt_window.gd" id="1_xb7je"]
 [ext_resource type="Texture2D" uid="uid://cgh6hd3u8nlpj" path="res://addons/loggie/assets/updater_bg.png" id="2_lbawe"]
 [ext_resource type="FontFile" uid="uid://e3rpni7mpu0p" path="res://addons/loggie/assets/theme/fonts/coffee_soda.ttf" id="3_a36jf"]
 [ext_resource type="FontFile" uid="uid://btuvtbhws7p8s" path="res://addons/loggie/assets/theme/fonts/PatrickHandSC-Regular.ttf" id="4_lnh27"]
@@ -12,28 +12,28 @@
 [ext_resource type="Texture2D" uid="uid://2fr6et0qni2y" path="res://addons/loggie/assets/icon.png" id="10_abt8m"]
 [ext_resource type="Theme" uid="uid://bntkg3oi4b314" path="res://addons/loggie/assets/theme/loggie_theme.tres" id="11_5uxhl"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndum7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3sc8x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j1ttd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rw12e"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bh8r"]
 draw_center = false
 border_width_bottom = 4
 border_color = Color(0.86, 0.6794, 0.344, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rjg43"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bwgrr"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qbrxo"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_86pfv"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3asxb"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_86pfv"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qbrxo"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rw12e"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bwgrr"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j1ttd"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3sc8x"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ndum7"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rjg43"]
 
 [sub_resource type="Gradient" id="Gradient_wnvcb"]
 colors = PackedColorArray(0.0311948, 0.0139167, 0.0080977, 1, 0.125625, 0.1125, 0.15, 1)
@@ -385,12 +385,12 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lwiu5"]
 _data = {
-"RESET": SubResource("Animation_almc7"),
-"finish_success": SubResource("Animation_dewq5"),
-"show_update_overview": SubResource("Animation_jm1cu")
+&"RESET": SubResource("Animation_almc7"),
+&"finish_success": SubResource("Animation_dewq5"),
+&"show_update_overview": SubResource("Animation_jm1cu")
 }
 
-[node name="UpdatePromptWindow" type="Panel" node_paths=PackedStringArray("animator")]
+[node name="UpdatePromptWindow" type="Panel" unique_id=425722229 node_paths=PackedStringArray("animator")]
 anchors_preset = -1
 anchor_right = 0.923
 anchor_bottom = 1.037
@@ -401,7 +401,7 @@ grow_vertical = 2
 script = ExtResource("1_xb7je")
 animator = NodePath("AnimationPlayer")
 
-[node name="Notice" type="Control" parent="."]
+[node name="Notice" type="Control" parent="." unique_id=845919742]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -410,7 +410,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Background" type="TextureRect" parent="Notice"]
+[node name="Background" type="TextureRect" parent="Notice" unique_id=2120545281]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -420,7 +420,7 @@ grow_vertical = 2
 texture = ExtResource("2_lbawe")
 expand_mode = 1
 
-[node name="LabelLatestVersion" type="Label" parent="Notice"]
+[node name="LabelLatestVersion" type="Label" parent="Notice" unique_id=219595030]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -445,7 +445,7 @@ theme_override_fonts/font = ExtResource("3_a36jf")
 theme_override_font_sizes/font_size = 133
 text = "X.Y"
 
-[node name="LabelCurrentVersion" type="Label" parent="Notice"]
+[node name="LabelCurrentVersion" type="Label" parent="Notice" unique_id=1938470473]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -470,7 +470,7 @@ theme_override_fonts/font = ExtResource("3_a36jf")
 theme_override_font_sizes/font_size = 73
 text = "X.Y"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Notice"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Notice" unique_id=306780306]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.229
@@ -484,7 +484,7 @@ offset_bottom = 9.72797
 grow_horizontal = 2
 theme_override_constants/separation = -15
 
-[node name="Label" type="Label" parent="Notice/VBoxContainer"]
+[node name="Label" type="Label" parent="Notice/VBoxContainer" unique_id=196907015]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.872047, 0.774098, 0.671572, 1)
@@ -494,100 +494,100 @@ theme_override_font_sizes/font_size = 32
 text = "a new version of Loggie is available for download."
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Notice/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Notice/VBoxContainer" unique_id=100525920]
 layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
 
-[node name="NoticeButtons" type="HBoxContainer" parent="Notice/VBoxContainer/HBoxContainer"]
+[node name="NoticeButtons" type="HBoxContainer" parent="Notice/VBoxContainer/HBoxContainer" unique_id=918337292]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = 51
 
-[node name="ReleaseNotesBtn" type="Button" parent="Notice/VBoxContainer/HBoxContainer/NoticeButtons"]
+[node name="ReleaseNotesBtn" type="Button" parent="Notice/VBoxContainer/HBoxContainer/NoticeButtons" unique_id=989450508]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_disabled_color = Color(0.53, 0.475145, 0.3869, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.996078, 0.94902, 0.882353, 1)
-theme_override_colors/font_hover_color = Color(0.98, 0.67571, 0.1862, 1)
-theme_override_colors/font_pressed_color = Color(0.994326, 0.950716, 0.88154, 1)
-theme_override_colors/font_focus_color = Color(0.996078, 0.94902, 0.882353, 1)
 theme_override_colors/font_color = Color(0.980932, 0.843799, 0.621104, 1)
+theme_override_colors/font_focus_color = Color(0.996078, 0.94902, 0.882353, 1)
+theme_override_colors/font_pressed_color = Color(0.994326, 0.950716, 0.88154, 1)
+theme_override_colors/font_hover_color = Color(0.98, 0.67571, 0.1862, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.996078, 0.94902, 0.882353, 1)
+theme_override_colors/font_disabled_color = Color(0.53, 0.475145, 0.3869, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_lnh27")
 theme_override_font_sizes/font_size = 43
-theme_override_styles/focus = SubResource("StyleBoxFlat_3bh8r")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_rjg43")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_bwgrr")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_qbrxo")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_3asxb")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_86pfv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3bh8r")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rw12e")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_j1ttd")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3sc8x")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ndum7")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3sc8x")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_j1ttd")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rw12e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3bh8r")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_86pfv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_3asxb")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_qbrxo")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_bwgrr")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_rjg43")
+theme_override_styles/focus = SubResource("StyleBoxFlat_3bh8r")
 text = "release notes"
 
-[node name="UpdateNowBtn" type="Button" parent="Notice/VBoxContainer/HBoxContainer/NoticeButtons"]
+[node name="UpdateNowBtn" type="Button" parent="Notice/VBoxContainer/HBoxContainer/NoticeButtons" unique_id=31613125]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_disabled_color = Color(0.53, 0.475145, 0.3869, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.996078, 0.94902, 0.882353, 1)
-theme_override_colors/font_hover_color = Color(0.98, 0.67571, 0.1862, 1)
-theme_override_colors/font_pressed_color = Color(0.994326, 0.950716, 0.88154, 1)
-theme_override_colors/font_focus_color = Color(0.996078, 0.94902, 0.882353, 1)
 theme_override_colors/font_color = Color(0.980932, 0.843799, 0.621104, 1)
+theme_override_colors/font_focus_color = Color(0.996078, 0.94902, 0.882353, 1)
+theme_override_colors/font_pressed_color = Color(0.994326, 0.950716, 0.88154, 1)
+theme_override_colors/font_hover_color = Color(0.98, 0.67571, 0.1862, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.996078, 0.94902, 0.882353, 1)
+theme_override_colors/font_disabled_color = Color(0.53, 0.475145, 0.3869, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_lnh27")
 theme_override_font_sizes/font_size = 43
-theme_override_styles/focus = SubResource("StyleBoxFlat_3bh8r")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_rjg43")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_bwgrr")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_qbrxo")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_3asxb")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_86pfv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3bh8r")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rw12e")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_j1ttd")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3sc8x")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ndum7")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3sc8x")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_j1ttd")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rw12e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3bh8r")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_86pfv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_3asxb")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_qbrxo")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_bwgrr")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_rjg43")
+theme_override_styles/focus = SubResource("StyleBoxFlat_3bh8r")
 text = "update now"
 
-[node name="RemindLaterBtn" type="Button" parent="Notice/VBoxContainer/HBoxContainer/NoticeButtons"]
+[node name="RemindLaterBtn" type="Button" parent="Notice/VBoxContainer/HBoxContainer/NoticeButtons" unique_id=1191548990]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_disabled_color = Color(0.53, 0.475145, 0.3869, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.996078, 0.94902, 0.882353, 1)
-theme_override_colors/font_hover_color = Color(0.98, 0.67571, 0.1862, 1)
-theme_override_colors/font_pressed_color = Color(0.994326, 0.950716, 0.88154, 1)
-theme_override_colors/font_focus_color = Color(0.996078, 0.94902, 0.882353, 1)
 theme_override_colors/font_color = Color(0.98, 0.49, 0.5635, 1)
+theme_override_colors/font_focus_color = Color(0.996078, 0.94902, 0.882353, 1)
+theme_override_colors/font_pressed_color = Color(0.994326, 0.950716, 0.88154, 1)
+theme_override_colors/font_hover_color = Color(0.98, 0.67571, 0.1862, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.996078, 0.94902, 0.882353, 1)
+theme_override_colors/font_disabled_color = Color(0.53, 0.475145, 0.3869, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_lnh27")
 theme_override_font_sizes/font_size = 43
-theme_override_styles/focus = SubResource("StyleBoxFlat_3bh8r")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_rjg43")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_bwgrr")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_qbrxo")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_3asxb")
-theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_86pfv")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3bh8r")
-theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rw12e")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_j1ttd")
-theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3sc8x")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ndum7")
+theme_override_styles/normal_mirrored = SubResource("StyleBoxEmpty_3sc8x")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_j1ttd")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxEmpty_rw12e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3bh8r")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxEmpty_86pfv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_3asxb")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_qbrxo")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_bwgrr")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_rjg43")
+theme_override_styles/focus = SubResource("StyleBoxFlat_3bh8r")
 text = "remind later"
 
-[node name="DontShowAgainCheckbox" type="CheckBox" parent="Notice"]
+[node name="DontShowAgainCheckbox" type="CheckBox" parent="Notice" unique_id=2143014066]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
@@ -599,9 +599,9 @@ offset_right = -20.0
 offset_bottom = 62.0
 grow_horizontal = 0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_hover_color = Color(0.490196, 0.701961, 0.501961, 1)
-theme_override_colors/font_focus_color = Color(0.92549, 0.92549, 0.756863, 1)
 theme_override_colors/font_color = Color(0.980932, 0.843799, 0.621104, 1)
+theme_override_colors/font_focus_color = Color(0.92549, 0.92549, 0.756863, 1)
+theme_override_colors/font_hover_color = Color(0.490196, 0.701961, 0.501961, 1)
 theme_override_constants/outline_size = 7
 theme_override_fonts/font = ExtResource("4_lnh27")
 theme_override_font_sizes/font_size = 27
@@ -616,7 +616,7 @@ theme_override_icons/radio_checked_disabled = ExtResource("8_4h2cx")
 theme_override_icons/radio_unchecked_disabled = ExtResource("9_51n7f")
 text = "do not show this again"
 
-[node name="UpdateMonitor" type="Control" parent="."]
+[node name="UpdateMonitor" type="Control" parent="." unique_id=739930959]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -627,7 +627,7 @@ offset_bottom = -673.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackgroundUnder" type="TextureRect" parent="UpdateMonitor"]
+[node name="BackgroundUnder" type="TextureRect" parent="UpdateMonitor" unique_id=890554372]
 modulate = Color(1, 1, 1, 0.811765)
 layout_mode = 1
 anchors_preset = 15
@@ -637,7 +637,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture1D_k1b6u")
 
-[node name="BackgroundOver" type="TextureRect" parent="UpdateMonitor"]
+[node name="BackgroundOver" type="TextureRect" parent="UpdateMonitor" unique_id=840674855]
 modulate = Color(1, 1, 1, 0.752941)
 layout_mode = 1
 anchors_preset = 15
@@ -647,7 +647,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_p6ad4")
 
-[node name="ProgressBar" type="ProgressBar" parent="UpdateMonitor"]
+[node name="ProgressBar" type="ProgressBar" parent="UpdateMonitor" unique_id=663527217]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -667,7 +667,7 @@ theme_override_font_sizes/font_size = 31
 theme_override_styles/background = SubResource("StyleBoxFlat_y40yc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_h3ybw")
 
-[node name="LabelMainStatus" type="Label" parent="UpdateMonitor"]
+[node name="LabelMainStatus" type="Label" parent="UpdateMonitor" unique_id=763701393]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -690,7 +690,7 @@ theme_override_font_sizes/font_size = 81
 text = "status"
 horizontal_alignment = 1
 
-[node name="LabelOldVersion" type="Label" parent="UpdateMonitor"]
+[node name="LabelOldVersion" type="Label" parent="UpdateMonitor" unique_id=56321300]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -712,7 +712,7 @@ theme_override_fonts/font = ExtResource("3_a36jf")
 theme_override_font_sizes/font_size = 25
 text = "v_old"
 
-[node name="LabelNewVersion" type="Label" parent="UpdateMonitor"]
+[node name="LabelNewVersion" type="Label" parent="UpdateMonitor" unique_id=1302134242]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -735,7 +735,7 @@ theme_override_font_sizes/font_size = 25
 text = "V_NEW"
 horizontal_alignment = 2
 
-[node name="LoggieIcon" type="TextureRect" parent="UpdateMonitor"]
+[node name="LoggieIcon" type="TextureRect" parent="UpdateMonitor" unique_id=473652661]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -751,24 +751,24 @@ grow_vertical = 2
 pivot_offset = Vector2(80, 84)
 texture = ExtResource("10_abt8m")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UpdateMonitor"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UpdateMonitor" unique_id=1386714544]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -140.0
-offset_bottom = 77.0002
+offset_top = -139.99994
+offset_bottom = 77.000244
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 5
 
-[node name="OptionButtons" type="HBoxContainer" parent="UpdateMonitor/VBoxContainer"]
+[node name="OptionButtons" type="HBoxContainer" parent="UpdateMonitor/VBoxContainer" unique_id=554551624]
 layout_mode = 2
 theme_override_constants/separation = 24
 alignment = 1
 
-[node name="OptionRetryUpdateBtn" type="Button" parent="UpdateMonitor/VBoxContainer/OptionButtons"]
+[node name="OptionRetryUpdateBtn" type="Button" parent="UpdateMonitor/VBoxContainer/OptionButtons" unique_id=1535490051]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 0)
@@ -778,7 +778,7 @@ theme = ExtResource("11_5uxhl")
 disabled = true
 text = "Retry"
 
-[node name="OptionRestartGodotBtn" type="Button" parent="UpdateMonitor/VBoxContainer/OptionButtons"]
+[node name="OptionRestartGodotBtn" type="Button" parent="UpdateMonitor/VBoxContainer/OptionButtons" unique_id=803534870]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 0)
@@ -788,7 +788,7 @@ theme = ExtResource("11_5uxhl")
 disabled = true
 text = "Reload Godot"
 
-[node name="OptionExitBtn" type="Button" parent="UpdateMonitor/VBoxContainer/OptionButtons"]
+[node name="OptionExitBtn" type="Button" parent="UpdateMonitor/VBoxContainer/OptionButtons" unique_id=1299699241]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 0)
@@ -801,7 +801,7 @@ theme_override_constants/outline_size = 8
 disabled = true
 text = "Exit"
 
-[node name="LabelUpdateStatus" type="Label" parent="UpdateMonitor/VBoxContainer"]
+[node name="LabelUpdateStatus" type="Label" parent="UpdateMonitor/VBoxContainer" unique_id=1797690065]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("11_5uxhl")
@@ -810,9 +810,7 @@ text = "UPDATE_STATUS_DETAILED"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=459659990]
 unique_name_in_owner = true
 root_node = NodePath("../UpdateMonitor")
-libraries = {
-"": SubResource("AnimationLibrary_lwiu5")
-}
+libraries/ = SubResource("AnimationLibrary_lwiu5")

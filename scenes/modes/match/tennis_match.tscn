@@ -51,7 +51,6 @@ ssr_enabled = true
 ssao_enabled = true
 ssil_enabled = true
 glow_enabled = true
-volumetric_fog_enabled = true
 volumetric_fog_density = 0.01
 volumetric_fog_sky_affect = 0.0
 
@@ -115,9 +114,7 @@ offset_right = 200.0
 offset_bottom = 200.0
 
 [node name="AnimationPlayer" parent="TelevisionHUD/MatchStatsPanel" parent_id_path=PackedInt32Array(684788014, 2140378516) index="3" unique_id=241539447]
-libraries = {
-&"": SubResource("AnimationLibrary_wicjn")
-}
+libraries/ = SubResource("AnimationLibrary_wicjn")
 
 [node name="SplitscreenUI" parent="." unique_id=900824732 node_paths=PackedStringArray("cameras", "player0", "player1") instance=ExtResource("17_splitscreen")]
 cameras = NodePath("../Cameras")
@@ -128,11 +125,15 @@ player1 = NodePath("../Player2")
 
 [node name="Cameras" parent="." unique_id=1229797777 instance=ExtResource("7_6frth")]
 
-[node name="MiddleFront" parent="Cameras" index="3" unique_id=2002676584]
+[node name="TopFront" parent="Cameras" index="1" unique_id=1711630965 node_paths=PackedStringArray("target")]
+target = NodePath("../../Player")
+
+[node name="MiddleFront" parent="Cameras" index="3" unique_id=2002676584 node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.9614011, 0.27515078, 0, -0.27515078, 0.9614011, 0, 6.936, 28.829)
 current = true
 fov = 23.5
 script = ExtResource("8_lvdh6")
+target = NodePath("../../Player")
 
 [node name="MiddleBack" parent="Cameras" index="4" unique_id=1711178741]
 transform = Transform3D(-1, 4.79117e-08, -1.43193e-07, 0, 0.948324, 0.317305, 1.50996e-07, 0.317305, -0.948324, 0, 7.446, -28)

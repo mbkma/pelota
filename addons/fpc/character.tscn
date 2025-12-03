@@ -400,9 +400,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_uy03j")
 
 [node name="CrouchAnimation" type="AnimationPlayer" parent="." unique_id=609958642]
-libraries = {
-&"": SubResource("AnimationLibrary_5e5t5")
-}
+libraries/ = SubResource("AnimationLibrary_5e5t5")
 
 [node name="Head" type="Node3D" parent="." unique_id=672225500]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -410,15 +408,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 [node name="Camera" type="Camera3D" parent="Head" unique_id=245184463]
 
 [node name="HeadbobAnimation" type="AnimationPlayer" parent="Head" unique_id=200193072]
-libraries = {
-&"": SubResource("AnimationLibrary_o0unb")
-}
+libraries/ = SubResource("AnimationLibrary_o0unb")
 blend_times = [&"RESET", &"RESET", 0.5, &"RESET", &"walk", 0.5, &"walk", &"RESET", 0.5]
 
 [node name="JumpAnimation" type="AnimationPlayer" parent="Head" unique_id=566655459]
-libraries = {
-&"": SubResource("AnimationLibrary_qeg5r")
-}
+libraries/ = SubResource("AnimationLibrary_qeg5r")
 speed_scale = 4.0
 
 [node name="UserInterface" type="Control" parent="." unique_id=859472336]
