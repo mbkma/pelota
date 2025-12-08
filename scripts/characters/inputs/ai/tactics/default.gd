@@ -111,7 +111,7 @@ func get_stroke(stroke_type: AiStrokeType) -> Stroke:
 			stroke.stroke_power = GameConstants.AI_DROP_SHOT_PACE
 			stroke.stroke_spin = GameConstants.AI_DROP_SHOT_SPIN
 			stroke.stroke_target = Vector3(
-				-sign(player.position.x) * 3, 0, -sign(player.position.z) * 4
+				-sign(player.position.x) * 3, 0, -sign(player.position.z) * GameConstants.AI_STROKE_DROP_DISTANCE
 			)
 		AiStrokeType.SERVE_WIDE:
 			stroke.stroke_type = stroke.StrokeType.SERVE

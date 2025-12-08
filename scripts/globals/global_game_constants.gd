@@ -87,7 +87,7 @@ const AI_STROKE_STANDARD_LENGTH: float = 10.0
 const AI_STROKE_CROSS_OFFSET: float = 3.0
 
 ## Drop shot target distance
-const AI_STROKE_DROP_DISTANCE: float = 4.0
+const AI_STROKE_DROP_DISTANCE: float = 2.0
 
 ## Serve target distance
 const AI_SERVE_DISTANCE: float = 5.0
@@ -99,28 +99,28 @@ const AI_BALL_COMMIT_DISTANCE: float = 3.0
 const AI_BALL_VELOCITY_MIN: float = 0.1
 
 ## Forehand pace (power)
-const AI_FOREHAND_PACE: float = 20.0
+const AI_FOREHAND_PACE: float = 15.0
 
 ## Forehand spin (x: sidespin, y: topspin, z: forward spin)
 const AI_FOREHAND_SPIN: Vector3 = Vector3(0.2, 1.0, 0.3)
 
 ## Backhand pace (power)
-const AI_BACKHAND_PACE: float = 18.0
+const AI_BACKHAND_PACE: float = 14.0
 
 ## Backhand spin (x: sidespin, y: topspin, z: forward spin)
 const AI_BACKHAND_SPIN: Vector3 = Vector3(-0.2, 0.5, 0.2)
 
 ## Backhand slice pace (power)
-const AI_BACKHAND_SLICE_PACE: float = 15.0
+const AI_BACKHAND_SLICE_PACE: float = 13.0
 
 ## Backhand slice spin (x: sidespin, y: backspin, z: forward spin)
 const AI_BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -1.0, 0.1)
 
 ## Drop shot pace (power)
-const AI_DROP_SHOT_PACE: float = 10.0
+const AI_DROP_SHOT_PACE: float = 13.0
 
 ## Drop shot spin (x: sidespin, y: backspin, z: forward spin)
-const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -1.0, 0.0)
+const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -20.0, -1.0)
 
 ## Serve pace (power)
 const AI_SERVE_PACE: float = 30.0

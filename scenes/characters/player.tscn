@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dkonwbmg06m5n"]
+[gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scripts/characters/player.gd" id="1"]
 [ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="2_uxa8p"]

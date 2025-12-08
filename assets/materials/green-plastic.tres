@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cbortxqfd6a4a"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cbortxqfd6a4a"]
 
 [ext_resource type="Texture2D" uid="uid://ca0hm0poxoenu" path="res://assets/models/stadium/textures/Plastic007_1K_NormalGL.png" id="2_euqre"]
 

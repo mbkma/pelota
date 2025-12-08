@@ -1,57 +1,8 @@
-[gd_scene load_steps=48 format=3 uid="uid://b5t7f8r1backb"]
+[gd_scene load_steps=25 format=3 uid="uid://b5t7f8r1backb"]
 
 [ext_resource type="Script" uid="uid://qr66qvlcjtk7" path="res://scripts/characters/model.gd" id="1_8ddow"]
-[ext_resource type="Animation" uid="uid://dcdx3leud3dln" path="res://assets/resources/anims/g_A_pose.res" id="3_5t61y"]
-[ext_resource type="Animation" uid="uid://c8somcdc7j3yo" path="res://assets/resources/anims/g_T_pose.res" id="4_c7wno"]
 [ext_resource type="PackedScene" uid="uid://d03j662osx28b" path="res://assets/models/player/player_djokovic.glb" id="4_wv0r8"]
-[ext_resource type="Animation" uid="uid://u4sps08gmi0w" path="res://assets/resources/anims/g_active_idle.res" id="5_rs4h4"]
-[ext_resource type="Animation" uid="uid://ccpqycy8l6oef" path="res://assets/resources/anims/g_active_idle_to_forehand.res" id="6_rvb47"]
-[ext_resource type="Animation" uid="uid://bbe1t7uf7ccvk" path="res://assets/resources/anims/g_backhand.res" id="7_ts36h"]
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="8_4mh3o"]
-[ext_resource type="Animation" uid="uid://c2xrwv2bjvql" path="res://assets/resources/anims/g_backhand_down.res" id="8_6xfr8"]
-[ext_resource type="Animation" uid="uid://cp0cr3dckxqsf" path="res://assets/resources/anims/g_backhand_slice.res" id="9_6nqvo"]
-[ext_resource type="Animation" uid="uid://df7a56by5rw7" path="res://assets/resources/anims/g_backhand_up.res" id="10_3ar8w"]
-[ext_resource type="Animation" uid="uid://dy0ed3jguyuk" path="res://assets/resources/anims/g_crossover_right.res" id="11_oa8pa"]
-[ext_resource type="Animation" uid="uid://bl40pa30h7jeo" path="res://assets/resources/anims/g_forehand.res" id="12_dv5qy"]
-[ext_resource type="Animation" uid="uid://br24pxnntbbk8" path="res://assets/resources/anims/g_forehand_down.res" id="13_bjy5n"]
-[ext_resource type="Animation" uid="uid://cs3kuqhgouxri" path="res://assets/resources/anims/g_forehand_open.res" id="14_4lntb"]
-[ext_resource type="Animation" uid="uid://bugva6p66w446" path="res://assets/resources/anims/g_forehand_up.res" id="15_nlmet"]
-[ext_resource type="Animation" uid="uid://bob3nx1vp3rf3" path="res://assets/resources/anims/g_idle.res" id="16_comol"]
-[ext_resource type="Animation" uid="uid://csuo7c2uyvrt4" path="res://assets/resources/anims/g_run_forward.res" id="17_13qiu"]
-[ext_resource type="Animation" uid="uid://bjl2tp7f1ktgb" path="res://assets/resources/anims/g_run_left.res" id="18_ysxat"]
-[ext_resource type="Animation" uid="uid://c0hv45e2l0k11" path="res://assets/resources/anims/g_run_right.res" id="19_20fqr"]
-[ext_resource type="Animation" uid="uid://bsphldyh6uri" path="res://assets/resources/anims/g_serve.res" id="20_s73h0"]
-[ext_resource type="Animation" uid="uid://bp77rricylw1g" path="res://assets/resources/anims/g_sidestep_left.res" id="21_yivxy"]
-[ext_resource type="Animation" uid="uid://bi5wmnk5s502b" path="res://assets/resources/anims/g_sidestep_right.res" id="22_27n50"]
-[ext_resource type="Animation" uid="uid://dsvhufju5eqg8" path="res://assets/resources/anims/g_sproing_right.res" id="23_xxu5o"]
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_6qq1y"]
-_data = {
-&"g_A_pose": ExtResource("3_5t61y"),
-&"g_T_pose": ExtResource("4_c7wno"),
-&"g_active_idle": ExtResource("5_rs4h4"),
-&"g_active_idle_to_forehand": ExtResource("6_rvb47"),
-&"g_backhand": ExtResource("7_ts36h"),
-&"g_backhand_down": ExtResource("8_6xfr8"),
-&"g_backhand_slice": ExtResource("9_6nqvo"),
-&"g_backhand_up": ExtResource("10_3ar8w"),
-&"g_crossover_right": ExtResource("11_oa8pa"),
-&"g_forehand": ExtResource("12_dv5qy"),
-&"g_forehand_down": ExtResource("13_bjy5n"),
-&"g_forehand_open": ExtResource("14_4lntb"),
-&"g_forehand_up": ExtResource("15_nlmet"),
-&"g_idle": ExtResource("16_comol"),
-&"g_run_forward": ExtResource("17_13qiu"),
-&"g_run_left": ExtResource("18_ysxat"),
-&"g_run_right": ExtResource("19_20fqr"),
-&"g_serve": ExtResource("20_s73h0"),
-&"g_sidestep_left": ExtResource("21_yivxy"),
-&"g_sidestep_right": ExtResource("22_27n50"),
-&"g_sproing_right": ExtResource("23_xxu5o")
-}
-
-[sub_resource type="BoxShape3D" id="50"]
-size = Vector3(1.14, 2.037, 0.656)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8sm40"]
 animation = &"g_run_forward"
@@ -180,7 +131,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="player_djokovic" parent="h" unique_id=840938416 instance=ExtResource("4_wv0r8")]
 
-[node name="GeneralSkeleton" parent="h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(840938416, 2017053679) index="0" unique_id=1583518388]
+[node name="GeneralSkeleton" parent="h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(840938416, 203219760) index="0" unique_id=192128921]
 bones/0/position = Vector3(0, 0.94549364, 0.011756051)
 bones/0/rotation = Quaternion(-4.4703476e-08, 0, 0, 1)
 bones/0/scale = Vector3(0.9999985, 0.99998736, 0.9999962)
@@ -364,23 +315,10 @@ bones/174/rotation = Quaternion(-5.120956e-08, 0.70710677, -0.70710677, 4.229579
 bones/175/rotation = Quaternion(2.025024e-07, 1, 2.6822087e-07, -4.026999e-07)
 bones/175/scale = Vector3(0.99999994, 0.9999991, 1.0000032)
 
-[node name="DEF-attachment_hand_R" parent="h/player_djokovic/game-rig/GeneralSkeleton" index="0" unique_id=1967531224]
+[node name="DEF-attachment_hand_R" parent="h/player_djokovic/game-rig/GeneralSkeleton" index="0" unique_id=2147006923]
 transform = Transform3D(0.44097134, 0.21230678, 0.8720473, 0.7512739, 0.44425485, -0.4880566, -0.49103436, 0.8703743, 0.03640352, -0.55147463, 1.0978503, 0.23951948)
 
-[node name="AnimationPlayer" parent="h/player_djokovic" index="1" unique_id=334150727]
-libraries/ = SubResource("AnimationLibrary_6qq1y")
-
-[node name="RacketForehand" type="Area3D" parent="." unique_id=1166534911]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2348056, 1.21593, -0.21618477)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RacketForehand" unique_id=630654229]
-shape = SubResource("50")
-
-[node name="RacketBackhand" type="Area3D" parent="." unique_id=687313289]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8034267, 1.21593, 0.0040946826)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RacketBackhand" unique_id=1805301375]
-shape = SubResource("50")
+[node name="HitPoint" type="Node3D" parent="h/player_djokovic/game-rig/GeneralSkeleton/DEF-attachment_hand_R/racket" parent_id_path=PackedInt32Array(840938416, 151061362) index="0" unique_id=271800588]
 
 [node name="Points" type="Node3D" parent="." unique_id=692645137]
 

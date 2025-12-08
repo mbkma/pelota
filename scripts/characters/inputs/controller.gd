@@ -55,6 +55,9 @@ func get_move_direction() -> Vector3
 @abstract
 func get_stroke() -> Stroke
 
+func ball_changed(ball: Ball) -> void:
+	pass
+
 ## Get aim marker position for UI (override if controller needs UI)
 ## Returns null if no aim marker should be shown
 func get_aim_marker_position() -> Variant:
@@ -132,7 +135,7 @@ func adjust_player_position_to_stroke(target_player: Player, closest_step: Traje
 
 	var new_position: Vector3 = closest_step.point + x_offset * target_player.basis.x
 	new_position.y = target_player.position.y
-	target_player.move_to(new_position)
+	target_player.request_move_to(new_position)
 
 
 ## Get optimal ball position for stroke (TODO: Implement)

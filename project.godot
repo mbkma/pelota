@@ -27,7 +27,7 @@ GlobalPhysics="*res://scripts/physics/global_physics.gd"
 SettingsDataManager="*uid://dl202u8yk6qon"
 DebugMenu="*uid://cggqb75a8w8r"
 GlobalScenes="*res://scenes/global_scenes.tscn"
-SceneManager="*res://scripts/globals/scene_manager.gd"
+SceneManager="*res://scripts/globals/global_scene_manager.gd"
 Loggie="*uid://bmh2auo806k0k"
 
 [debug]
@@ -37,7 +37,6 @@ shapes/navigation/geometry_color=Color(1, 0, 0.960784, 0.4)
 
 [display]
 
-window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="res://assets/textures/ui/menus/crosshair121-scaled.png"
 mouse_cursor/custom_image_hotspot=Vector2(16, 16)
 window/size/fullscreen=true

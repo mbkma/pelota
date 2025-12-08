@@ -20,6 +20,8 @@ var _last_state: String = ""
 ## Track if stroke animation finished signal was already emitted
 var _stroke_finished_emitted: bool = false
 
+@onready var hit_point: Node3D = $"h/player_djokovic/game-rig/GeneralSkeleton/DEF-attachment_hand_R/racket/HitPoint"
+
 @onready var points: Node3D = $Points
 @onready var serve_point: Vector3 = points.get_node("BallServePoint").position
 @onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
@@ -32,9 +34,6 @@ var _stroke_finished_emitted: bool = false
 @onready var backhandslice_down_point: Vector3 = points.get_node("BackhandSliceDownPoint").position
 @onready var backhand_point: Marker3D = $Points/BackhandPoint
 @onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
-
-@onready var racket_forehand: Area3D = $RacketForehand
-@onready var racket_backhand: Area3D = $RacketBackhand
 
 @export var animation_tree: AnimationTree
 @onready var _playback: AnimationNodeStateMachinePlayback = (

@@ -121,7 +121,6 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 
 
 ## Calculates required velocity x,y components to hit ball from initial position to target, given the initial z velocity component
-## Accounts for Magnus effect, air drag, and gravity
 func calculate_velocity(
 	start_position: Vector3, target_position: Vector3, velocity_z0: float, _ball_spin: Vector3
 ) -> Vector3:

@@ -41,7 +41,7 @@ var _ground_contacts: int = 0
 @export var cameras: MatchCameras
 
 func _ready() -> void:
-	if not player0 or not player1 or not court or not stadium or not television_hud or not crowd:
+	if not player0 or not player1 or not court or not stadium or not television_hud:
 		push_error("MatchManager not properly initialized! Missing required nodes.")
 		return
 
@@ -64,7 +64,8 @@ func _ready() -> void:
 	cameras.player0 = player0
 	cameras.player1 = player1
 	place_players()
-	crowd.play_idle_sound()
+	if crowd:
+		crowd.play_idle_sound()
 	start_match()
 
 
@@ -198,8 +199,8 @@ func _handle_fault() -> void:
 	if umpire:
 		if _ground_contacts == 0:
 			umpire.say_fault()
-
-	crowd.play_victory()
+	if crowd:
+		crowd.play_victory()
 
 	var point_winner: Player
 	if _ground_contacts == 0:

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
+[ext_resource type="Resource" uid="uid://7puy4co7ounb" path="res://assets/resources/characters/ruud.tres" id="4_lvdh6"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_xinb2"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
@@ -12,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/debug_hud.tscn" id="11_7qdcc"]
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
-[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environment/crowd/crowd.tscn" id="16_11ka0"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/modes/match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="18_pause"]
 
@@ -47,10 +47,6 @@ sky_material = SubResource("ProceduralSkyMaterial_11ka0")
 background_mode = 2
 background_energy_multiplier = 1.27
 sky = SubResource("Sky_cux4k")
-ssr_enabled = true
-ssao_enabled = true
-ssil_enabled = true
-glow_enabled = true
 volumetric_fog_density = 0.01
 volumetric_fog_sky_affect = 0.0
 
@@ -65,6 +61,7 @@ controller_scene = ExtResource("4_xinb2")
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
 controller_scene = ExtResource("4_xinb2")
+player_data = ExtResource("4_lvdh6")
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
@@ -141,8 +138,6 @@ transform = Transform3D(-1, 4.79117e-08, -1.43193e-07, 0, 0.948324, 0.317305, 1.
 [node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]
 players = [NodePath("../Player"), NodePath("../Player2")]
 
-[node name="Crowd" parent="." unique_id=1204219689 instance=ExtResource("16_11ka0")]
-
 [node name="Umpire" parent="." unique_id=757205017 instance=ExtResource("12_ard7f")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.18558, 0, 0)
 
@@ -152,14 +147,13 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.185
 match_manager = NodePath("../MatchManager")
 _trajectory_drawer = NodePath("../TrajectoryDrawer")
 
-[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "crowd", "cameras") instance=ExtResource("8_2s2ac")]
+[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "cameras") instance=ExtResource("8_2s2ac")]
 player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 court = NodePath("../Stadium/Court")
 stadium = NodePath("../Stadium")
 television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
-crowd = NodePath("../Crowd")
 cameras = NodePath("../Cameras")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]
@@ -180,4 +174,3 @@ shadow_blur = 2.954
 [editable path="Stadium"]
 [editable path="Stadium/stadium"]
 [editable path="Cameras"]
-[editable path="Crowd"]

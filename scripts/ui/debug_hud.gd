@@ -11,17 +11,33 @@ extends CanvasLayer
 @onready var _tab_container: TabContainer = $DebugHud/TabContainer
 
 # Summary tab labels
-@onready var _summary_fps_label: Label = $DebugHud/TabContainer/Summary/VBox/Performance/FPS
-@onready var _summary_frame_label: Label = $DebugHud/TabContainer/Summary/VBox/Performance/Frame
-@onready var _summary_state_label: Label = $DebugHud/TabContainer/Summary/VBox/MatchState/Value
-@onready var _summary_server_label: Label = $DebugHud/TabContainer/Summary/VBox/Server/Value
-@onready var _summary_rally_label: Label = $DebugHud/TabContainer/Summary/VBox/Rally/Value
-@onready var _summary_last_hitter_label: Label = $DebugHud/TabContainer/Summary/VBox/LastHitter/Value
-@onready var _summary_ball_position_label: Label = $DebugHud/TabContainer/Summary/VBox/Ball/Position
-@onready var _summary_ball_velocity_label: Label = $DebugHud/TabContainer/Summary/VBox/Ball/BallVel
+@onready var _summary_fps_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance/FPS
+@onready var _summary_frame_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance/Frame
+@onready var _summary_frame_time_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/FrameTime/FrameValue
+@onready var _summary_state_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/MatchState/Value
+@onready var _summary_server_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Server/Value
+@onready var _summary_rally_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Rally/Value
+@onready var _summary_last_hitter_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/LastHitter/Value
+@onready var _summary_serve_zone_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/ServeZone/Value
+@onready var _summary_rally_zone_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/RallyZone/Value
+@onready var _summary_ground_contacts_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/GroundContacts/Value
+@onready var _summary_ball_position_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Ball/Position
+@onready var _summary_ball_velocity_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/BallVel/Value
+
+# Player 0 summary labels
+@onready var _summary_p0_name_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Name/Value
+@onready var _summary_p0_state_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0State/Value
+@onready var _summary_p0_position_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Position/Value
+@onready var _summary_p0_velocity_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Velocity/Value
+
+# Player 1 summary labels
+@onready var _summary_p1_name_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Name/Value
+@onready var _summary_p1_state_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1State/Value
+@onready var _summary_p1_position_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Position/Value
+@onready var _summary_p1_velocity_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Velocity/Value
 
 # Trajectory toggle
-@onready var _trajectory_button: CheckButton = $DebugHud/TabContainer/Summary/VBox/TrajectoryToggle
+@onready var _trajectory_button: CheckButton = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/TrajectoryToggle
 
 # Performance labels
 @onready var _fps_label: Label = $DebugHud/TabContainer/Performance/VBox/FPS/Value
@@ -113,14 +129,22 @@ func _update_player_stats() -> void:
 	# Player 0 stats
 	var p0: Player = match_manager.player0
 	_p0_name_label.text = p0.player_data.last_name
-	_p0_state_label.text = _player_state_to_string(p0._current_state)
+	var p0_state_text: String = _player_state_to_string(p0._current_state)
+	if p0.controller is AiInput:
+		var ai_controller: AiInput = p0.controller as AiInput
+		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	_p0_state_label.text = p0_state_text
 	_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_p0_velocity_label.text = "%.2f" % p0.velocity.length()
 
 	# Player 1 stats
 	var p1: Player = match_manager.player1
 	_p1_name_label.text = p1.player_data.last_name
-	_p1_state_label.text = _player_state_to_string(p1._current_state)
+	var p1_state_text: String = _player_state_to_string(p1._current_state)
+	if p1.controller is AiInput:
+		var ai_controller: AiInput = p1.controller as AiInput
+		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	_p1_state_label.text = p1_state_text
 	_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_p1_velocity_label.text = "%.2f" % p1.velocity.length()
 
@@ -174,6 +198,18 @@ func _player_state_to_string(value: Player.PlayerState) -> String:
 	return enum_map.get(value, "UNKNOWN")
 
 
+## Convert AI phase enum to human-readable string
+func _ai_phase_to_string(value: AiInput.Phase) -> String:
+	var enum_map: Dictionary[AiInput.Phase, String] = {
+		AiInput.Phase.ANTICIPATION: "ANTICIPATION",
+		AiInput.Phase.LOCK_IN: "LOCK_IN",
+		AiInput.Phase.TRACKING: "TRACKING",
+		AiInput.Phase.PREP_EXECUTION: "PREP_EXECUTION",
+		AiInput.Phase.WAITING_FOR_HIT: "WAITING_FOR_HIT",
+	}
+	return enum_map.get(value, "UNKNOWN")
+
+
 ## Toggle ball trajectory drawing
 func _toggle_trajectory(enabled: bool) -> void:
 	if _trajectory_drawer:
@@ -185,9 +221,12 @@ func _update_summary_stats(_delta: float) -> void:
 	var fps: int = int(Engine.get_frames_per_second())
 	var frametime_ms: float = _delta * 1000.0
 
+	# Performance
 	_summary_fps_label.text = str(fps)
 	_summary_frame_label.text = "%.1fms" % frametime_ms
+	_summary_frame_time_label.text = "%.2f ms" % frametime_ms
 
+	# Match State
 	_summary_state_label.text = _match_state_to_string(match_manager.current_state)
 
 	var server_idx: int = match_manager.match_data.match_score.current_server
@@ -205,7 +244,34 @@ func _update_summary_stats(_delta: float) -> void:
 	else:
 		_summary_last_hitter_label.text = "None"
 
+	_summary_serve_zone_label.text = _court_region_to_string(match_manager._valid_serve_zone)
+	_summary_rally_zone_label.text = _court_region_to_string(match_manager._valid_rally_zone)
+	_summary_ground_contacts_label.text = str(match_manager._ground_contacts)
+
+	# Ball
 	if match_manager.ball:
 		var ball: Ball = match_manager.ball
-		_summary_ball_position_label.text = "%.1f, %.1f" % [ball.position.x, ball.position.z]
-		_summary_ball_velocity_label.text = "%.1f" % ball.velocity.length()
+		_summary_ball_position_label.text = "%.2f, %.2f, %.2f" % [ball.position.x, ball.position.y, ball.position.z]
+		_summary_ball_velocity_label.text = "%.2f" % ball.velocity.length()
+
+	# Player 0
+	var p0: Player = match_manager.player0
+	_summary_p0_name_label.text = p0.player_data.last_name
+	var p0_state_text: String = _player_state_to_string(p0._current_state)
+	if p0.controller is AiInput:
+		var ai_controller: AiInput = p0.controller as AiInput
+		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	_summary_p0_state_label.text = p0_state_text
+	_summary_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
+	_summary_p0_velocity_label.text = "%.2f" % p0.velocity.length()
+
+	# Player 1
+	var p1: Player = match_manager.player1
+	_summary_p1_name_label.text = p1.player_data.last_name
+	var p1_state_text: String = _player_state_to_string(p1._current_state)
+	if p1.controller is AiInput:
+		var ai_controller: AiInput = p1.controller as AiInput
+		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	_summary_p1_state_label.text = p1_state_text
+	_summary_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
+	_summary_p1_velocity_label.text = "%.2f" % p1.velocity.length()

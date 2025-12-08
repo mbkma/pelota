@@ -3,7 +3,14 @@ class_name Player
 extends CharacterBody3D
 
 ## Player state enum
-enum PlayerState { IDLE, MOVING, PREPARING_STROKE, STROKING, RECOVERING, UNREACHABLE }
+enum PlayerState { 
+	IDLE,
+	MOVING,
+	PREPARING_STROKE,
+	STROKING,
+	RECOVERING,
+	UNREACHABLE
+}
 
 ## Emitted when player successfully hits the ball
 signal ball_hit
@@ -51,7 +58,7 @@ var queued_stroke: Stroke:
 		return queued_stroke
 	set(value):
 		queued_stroke = value
-		Loggie.msg("Setting queued stroke to: ", value).debug()
+		Loggie.msg(player_data.last_name + ": ", "Setting queued stroke to: ", value).debug()
 
 ## Current player state
 var _current_state: PlayerState = PlayerState.IDLE
@@ -104,8 +111,8 @@ const DISTANCE_THRESHOLD: float = 0.01
 func _ready() -> void:
 	stats = player_data.stats
 	$Label3D.text = player_data.last_name
-	model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
-	model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
+	#model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
+	#model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
@@ -137,7 +144,7 @@ func _set_state(new_state: PlayerState) -> void:
 			if _path.size() > 0:
 				model.play_run((_path[0] - position).normalized())
 
-
+var old = null
 ## Process stroke decisions from controller each frame
 func _process(_delta: float) -> void:
 	if not controller:
@@ -151,16 +158,20 @@ func _process(_delta: float) -> void:
 
 	# Check if controller has a stroke decision
 	var stroke_decision: Stroke = controller.get_stroke()
-	if stroke_decision:
+	if stroke_decision and old != stroke_decision:
 		# Execute the stroke decision
 		if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
 			serve(stroke_decision)
 		else:
 			queue_stroke(stroke_decision)
+		old = stroke_decision
 
 		# Clear UI after stroke is queued
 		if ball_aim_marker:
 			ball_aim_marker.visible = false
+
+	if queued_stroke and queued_stroke.stroke_type != queued_stroke.StrokeType.SERVE and ball_is_in_reachable_window():
+		_hit_ball(queued_stroke)
 
 
 ## Process movement from controller each physics frame
@@ -182,7 +193,7 @@ func setup(data: PlayerData, _ai_controlled: bool) -> void:
 
 
 ## Setup player for training mode
-func setup_training(_training_data: Dictionary) -> void:
+func setup_mode(mode) -> void:
 	pass
 
 
@@ -278,18 +289,18 @@ func compute_synchronized_stroke_timing(
 	# Check if player can reach the ball
 	if _travel_time > ball_prediction_time:
 		_is_unreachable = true
-		Loggie.msg(
+		Loggie.msg(player_data.last_name + ": ", 
 			"UNREACHABLE: travel_time(%.2f) > prediction_time(%.2f)" % [_travel_time, ball_prediction_time]
-		).warn()
+		).debug()
 		return false
 
 	_is_unreachable = false
 	_is_synchronized_stroke = true
 
-	Loggie.msg(
+	Loggie.msg(player_data.last_name + ": ", 
 		"Synchronized stroke timing: travel=%.2f, anim_hit=%.2f, prediction=%.2f, start_time=%.2f" %
 		[_travel_time, _animation_hit_point_time, ball_prediction_time, _animation_start_time]
-	).info()
+	).debug()
 
 	return true
 
@@ -355,7 +366,7 @@ func _get_move_direction() -> Vector3:
 
 
 ## Queue a movement to target position
-func move_to(target: Vector3) -> void:
+func request_move_to(target: Vector3) -> void:
 	cancel_movement()
 	_path.append(target)
 
@@ -368,28 +379,15 @@ func cancel_movement() -> void:
 ## Move to defensive position after stroke animation finishes
 func move_to_defensive_position(target_position: Vector3) -> void:
 	await model.stroke_animation_finished
-	Loggie.msg("Player now moving to defensive pos ", target_position).info()
-	move_to(target_position)
+	Loggie.msg(player_data.last_name + ": ", "Player now moving to defensive pos ", target_position).info()
+	request_move_to(target_position)
 
 
 ## Called when player reaches movement target point
 func _on_target_point_reached() -> void:
 	# Play stroke animation if one is waiting for position
 	if queued_stroke:
-		# For synchronized strokes, wait until correct animation start time
-		if _is_synchronized_stroke:
-			# Calculate remaining wait time before animation should start
-			var current_time: float = Time.get_ticks_msec() / 1000.0
-			var wait_time: float = _animation_start_time - (current_time - 0)  # Adjust based on game timing
-
-			if wait_time > 0:
-				# Delay animation start until sync point
-				Loggie.msg("Waiting %.2f seconds before stroke animation start" % wait_time).info()
-				await get_tree().create_timer(wait_time).timeout
-
-		_set_state(PlayerState.STROKING)
 		model.play_stroke(queued_stroke)
-
 
 ## Stroke System
 ##################
@@ -398,36 +396,26 @@ func _on_target_point_reached() -> void:
 ## Queue a stroke to execute (non-serve strokes)
 ## For AI: Uses synchronized timing if ball_prediction_time is set
 ## For human: Executes immediately when player is close enough
-func queue_stroke(stroke: Stroke, ball_prediction_time: float = 0.0) -> void:
+func queue_stroke(stroke: Stroke) -> void:
 	if not ball:
 		push_error("Player has no ball to stroke!")
 		return
 
 	queued_stroke = stroke
 
+	var ball_prediction_time := stroke.step.time
 	# AI/Synchronized stroke path
-	if ball_prediction_time > 0 and _path.size() > 0:
-		var hit_location: Vector3 = _path[0]
+	if ball_prediction_time > 0:
+		var hit_location: Vector3 = stroke.step.point
 		if not compute_synchronized_stroke_timing(hit_location, ball_prediction_time, stroke):
 			# Cannot reach - switch to UNREACHABLE state
+			Loggie.msg(player_data.last_name + ": ", "PlayerState.UNREACHABLE").info()
 			_set_state(PlayerState.UNREACHABLE)
 			return
 
 	# Otherwise proceed with normal movement -> stroke execution on arrival
 
 
-## Queue and execute a reactive stroke for human input (immediate execution)
-##
-## HUMAN CONTROLLER BEHAVIOR:
-## When a human player presses a hit button, this method starts the stroke animation immediately
-## without synchronization calculations. The hit frame from the animation will determine timing.
-##
-## EARLY VS LATE:
-## - Early: Human hits button before ball arrives (animation finishes before ball contact)
-## - Late: Human hits button when ball is already close (animation may miss the ball)
-##
-## The racket collision system handles actual ball contact - if the ball is in range when
-## the animation reaches the hit frame, collision detection will execute the hit.
 func queue_reactive_stroke(stroke: Stroke) -> void:
 	if not ball:
 		push_error("Player has no ball to stroke!")
@@ -447,27 +435,33 @@ func queue_reactive_stroke(stroke: Stroke) -> void:
 	_set_state(PlayerState.STROKING)
 	model.play_stroke(stroke)
 
-	Loggie.msg(
+	Loggie.msg(player_data.last_name + ": ", 
 		"Reactive stroke queued: distance_to_ball=%.2f, anim_hit_frame=%.2f" %
 		[ball_distance, _animation_hit_point_time]
 	).info()
 
+func ball_is_in_reachable_window() -> bool:
+	if not ball:
+		return false
+	var dist = ball.global_position.distance_to(model.hit_point.global_position)
+	return dist < 1.5
 
-## Handle racket collision with ball
-func _on_RacketArea_body_entered(body: Node3D) -> void:
-	if not body is Ball:
-		return
-	if not queued_stroke:
-		Loggie.msg("Ball entered but no queued stroke").info()
-		return
-	Loggie.msg(player_data.last_name, ": ball entered").debug()
-	_hit_ball(queued_stroke)
+
+### Handle racket collision with ball
+#func _on_RacketArea_body_entered(body: Node3D) -> void:
+	#if not body is Ball:
+		#return
+	#if not queued_stroke:
+		#Loggie.msg(player_data.last_name + ": ", "Ball entered but no queued stroke").info()
+		#return
+	#Loggie.msg(player_data.last_name + ": ", player_data.last_name, ": ball entered").debug()
+	#_hit_ball(queued_stroke)
 
 
 ## Execute ball hit with given stroke
 func _hit_ball(stroke: Stroke) -> void:
 	if not stroke:
-		Loggie.msg("_hit_ball: No queued stroke").info()
+		Loggie.msg(player_data.last_name + ": ", "_hit_ball: No queued stroke").info()
 		return
 
 	var stroke_velocity: Vector3 = ball.calculate_velocity(
@@ -499,9 +493,9 @@ func serve(stroke: Stroke) -> void:
 
 ## Called by serve animation to hit the ball
 func from_anim_hit_serve() -> void:
-		_hit_ball(queued_stroke)
-		just_served.emit()
-		Loggie.msg("SERVING").info()
+	_hit_ball(queued_stroke)
+	just_served.emit()
+	Loggie.msg(player_data.last_name + ": ", "SERVING").info()
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
@@ -511,7 +505,7 @@ func from_anim_spawn_ball() -> void:
 	get_parent().add_child(ball)
 	ball_spawned.emit(ball)
 	get_tree().call_group("Player", "set_active_ball", ball)
-	Loggie.msg("from_anim_spawn_ball: stroke: ", queued_stroke, ", ball: ", ball).info()
+	Loggie.msg(player_data.last_name + ": ", "from_anim_spawn_ball: stroke: ", queued_stroke, ", ball: ", ball).info()
 
 ## Other Functions
 ####################
@@ -556,6 +550,7 @@ func play_stroke_sound(stroke: Stroke) -> void:
 ## Set the active ball for this player
 func set_active_ball(b: Ball) -> void:
 	ball = b
+	controller.ball_changed(b)
 
 
 ## Update UI based on controller state (uniform interface for all controllers)
