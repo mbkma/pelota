@@ -45,6 +45,9 @@ func _ready() -> void:
 		push_error("MatchManager not properly initialized! Missing required nodes.")
 		return
 
+	# Reset input assignments for new match (important for gamepad assignment)
+	HumanController.reset_input_assignments()
+
 	# Set opponent references for each player
 	player0.opponent = player1
 	player1.opponent = player0
@@ -81,6 +84,10 @@ func set_active_ball(b: Ball) -> void:
 	ball = b
 	ball.on_ground.connect(_on_ball_on_ground)
 	ball.on_net.connect(_on_ball_on_net)
+
+
+func _on_ball_on_net():
+	pass
 
 ## Get the opponent of the given player
 func get_opponent(player: Player) -> Player:
@@ -218,19 +225,6 @@ func _handle_fault() -> void:
 func _stop_players() -> void:
 	player0.stop()
 	player1.stop()
-
-
-## Handle ball hitting the net during serve
-func _on_ball_on_net() -> void:
-	pass
-	#if current_state == MatchState.SERVE:
-		##current_state = MatchState.SECOND_SERVE
-		##_clear_ball()
-		##if umpire:
-			##umpire.say_second_serve()
-		##set_player_serve()
-	#elif current_state == MatchState.SECOND_SERVE:
-		#current_state = MatchState.FAULT
 
 
 ## Add a point to the winner and handle score update

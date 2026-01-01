@@ -65,11 +65,9 @@ func play_sound(stream: AudioStream, loop := false) -> void:
 		push_error("Crowd: Attempted to play null audio stream")
 		return
 
+
 	audio_stream_player.stream = stream
-	# TODO: Implement looping when Godot AudioStreamWAV loop support is available
-	# if loop:
-	#	 audio_stream_player.stream.loop_mode = AudioStreamWAV.LoopMode.LOOP_FORWARD
-	#	 audio_stream_player.stream.loop_end = -1
+
 	audio_stream_player.play()
 
 

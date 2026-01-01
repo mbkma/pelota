@@ -48,6 +48,7 @@ signal ball_spawned(ball: Ball)
 
 ## Flat stroke sound effects
 @export var stroke_sounds_flat: Array[AudioStream]
+@onready var label_3d: Label3D = $Label3D
 
 ## Slice stroke sound effects
 @export var stroke_sounds_slice: Array[AudioStream]
@@ -110,9 +111,7 @@ const DISTANCE_THRESHOLD: float = 0.01
 
 func _ready() -> void:
 	stats = player_data.stats
-	$Label3D.text = player_data.last_name
-	#model.racket_forehand.body_entered.connect(_on_RacketArea_body_entered)
-	#model.racket_backhand.body_entered.connect(_on_RacketArea_body_entered)
+	label_3d.text = player_data.last_name
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
@@ -144,7 +143,6 @@ func _set_state(new_state: PlayerState) -> void:
 			if _path.size() > 0:
 				model.play_run((_path[0] - position).normalized())
 
-var old = null
 ## Process stroke decisions from controller each frame
 func _process(_delta: float) -> void:
 	if not controller:
@@ -158,13 +156,12 @@ func _process(_delta: float) -> void:
 
 	# Check if controller has a stroke decision
 	var stroke_decision: Stroke = controller.get_stroke()
-	if stroke_decision and old != stroke_decision:
+	if stroke_decision:
 		# Execute the stroke decision
 		if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
 			serve(stroke_decision)
 		else:
 			queue_stroke(stroke_decision)
-		old = stroke_decision
 
 		# Clear UI after stroke is queued
 		if ball_aim_marker:
@@ -310,6 +307,7 @@ func compute_synchronized_stroke_timing(
 
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, _delta: float) -> void:
+	
 	# Separate animation direction from movement direction
 	var animation_direction: Vector3 = direction
 	direction = direction.normalized()
@@ -323,8 +321,6 @@ func apply_movement(direction: Vector3, _delta: float) -> void:
 	else:
 		# If there's no input, slow down to (0, 0)
 		_real_velocity = _real_velocity.lerp(Vector3.ZERO, _friction)
-
-	#_real_velocity *= model.get_move_speed_factor()
 
 	velocity = _real_velocity
 	move_and_slide()
@@ -387,7 +383,14 @@ func move_to_defensive_position(target_position: Vector3) -> void:
 func _on_target_point_reached() -> void:
 	# Play stroke animation if one is waiting for position
 	if queued_stroke:
-		model.play_stroke(queued_stroke)
+		var stroke = queued_stroke  # Store locally before await to prevent race condition
+		_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
+		var closest_step := controller.get_closest_trajectory_step(self)
+		var timing = closest_step.time - _animation_hit_point_time
+		if timing > 0:
+			await get_tree().create_timer(timing).timeout
+		_set_state(PlayerState.STROKING)
+		model.play_stroke(stroke)
 
 ## Stroke System
 ##################
@@ -403,59 +406,23 @@ func queue_stroke(stroke: Stroke) -> void:
 
 	queued_stroke = stroke
 
-	var ball_prediction_time := stroke.step.time
-	# AI/Synchronized stroke path
-	if ball_prediction_time > 0:
-		var hit_location: Vector3 = stroke.step.point
-		if not compute_synchronized_stroke_timing(hit_location, ball_prediction_time, stroke):
-			# Cannot reach - switch to UNREACHABLE state
-			Loggie.msg(player_data.last_name + ": ", "PlayerState.UNREACHABLE").info()
-			_set_state(PlayerState.UNREACHABLE)
-			return
-
-	# Otherwise proceed with normal movement -> stroke execution on arrival
-
-
-func queue_reactive_stroke(stroke: Stroke) -> void:
-	if not ball:
-		push_error("Player has no ball to stroke!")
-		return
-
-	queued_stroke = stroke
-	_is_synchronized_stroke = false
-
 	# Determine current ball-player distance
 	var ball_distance: float = position.distance_to(ball.position)
 
 	# Get animation hit frame time
 	_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
 
-	# For human reactive strokes, start animation immediately
-	# The hit will connect when the racket animation reaches the hit frame
-	_set_state(PlayerState.STROKING)
-	model.play_stroke(stroke)
-
 	Loggie.msg(player_data.last_name + ": ", 
-		"Reactive stroke queued: distance_to_ball=%.2f, anim_hit_frame=%.2f" %
+		"Stroke queued: distance_to_ball=%.2f, anim_hit_frame=%.2f" %
 		[ball_distance, _animation_hit_point_time]
 	).info()
+
 
 func ball_is_in_reachable_window() -> bool:
 	if not ball:
 		return false
 	var dist = ball.global_position.distance_to(model.hit_point.global_position)
 	return dist < 1.5
-
-
-### Handle racket collision with ball
-#func _on_RacketArea_body_entered(body: Node3D) -> void:
-	#if not body is Ball:
-		#return
-	#if not queued_stroke:
-		#Loggie.msg(player_data.last_name + ": ", "Ball entered but no queued stroke").info()
-		#return
-	#Loggie.msg(player_data.last_name + ": ", player_data.last_name, ": ball entered").debug()
-	#_hit_ball(queued_stroke)
 
 
 ## Execute ball hit with given stroke
@@ -473,6 +440,7 @@ func _hit_ball(stroke: Stroke) -> void:
 
 	ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
 	play_stroke_sound(stroke)
+	label_3d.text = player_data.last_name + "\n" + str(stroke_velocity.length())
 	ball_hit.emit()
 	cancel_stroke()
 
@@ -493,9 +461,9 @@ func serve(stroke: Stroke) -> void:
 
 ## Called by serve animation to hit the ball
 func from_anim_hit_serve() -> void:
+	Loggie.msg(player_data.last_name + ": ", "SERVING").info()
 	_hit_ball(queued_stroke)
 	just_served.emit()
-	Loggie.msg(player_data.last_name + ": ", "SERVING").info()
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:

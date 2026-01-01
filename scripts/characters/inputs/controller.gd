@@ -12,7 +12,7 @@ enum CheckType { LEFT_RIGHT, FRONT_BEHIND }
 const FLYING_TOWARDS_ANGLE_THRESHOLD: float = PI / 6.0
 
 ## Minimum velocity magnitude to consider object moving
-const VELOCITY_THRESHOLD: float = 0.6
+const VELOCITY_THRESHOLD: float = 3
 
 ## Reference to parent player this input handler controls
 var player: Player

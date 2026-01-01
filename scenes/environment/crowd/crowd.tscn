@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxo4shm4p8nco"]
+[gd_scene format=3 uid="uid://cxo4shm4p8nco"]
 
 [ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scripts/environment/crowd/crowd.gd" id="1_a7rkt"]
 [ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environment/crowd/crowd_block.tscn" id="2_axxkg"]
@@ -17,8 +17,6 @@ metadata/_custom_type_script = "uid://dfeyuegrtu4mk"
 script = ExtResource("1_a7rkt")
 config = SubResource("Resource_cp0o2")
 blocks = [NodePath("EastBlock"), NodePath("NorthBlock")]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=637033766]
 
 [node name="EastBlock" type="Node3D" parent="." unique_id=1070903490]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.915, 0.566, 0)
@@ -58,3 +56,5 @@ transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408,
 
 [node name="CrowdBlock11" parent="NorthBlock" unique_id=744643174 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 0, 0)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1134290882]

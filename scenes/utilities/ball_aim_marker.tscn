@@ -1,10 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://bi8pmdx3d7doc"]
+[gd_scene format=3 uid="uid://bi8pmdx3d7doc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lufo"]
 albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kjtf1"]
 material = SubResource("StandardMaterial3D_7lufo")
+top_radius = 1.0
+bottom_radius = 1.0
 
 [node name="BallAimMarker" type="Node3D" unique_id=160563153]
 

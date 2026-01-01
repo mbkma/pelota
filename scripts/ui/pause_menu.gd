@@ -55,7 +55,11 @@ func pause_game() -> void:
 func resume_game() -> void:
 	is_paused = false
 	get_tree().paused = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Only capture mouse if both players are using gamepads
+	if HumanController._gamepad_controller_count >= 2:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	hide()
 	Loggie.msg("Game resumed").info()
 

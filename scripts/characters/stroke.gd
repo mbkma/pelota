@@ -18,5 +18,8 @@ var stroke_power: float
 var stroke_spin: Vector3
 var stroke_target: Vector3
 
-# step contains information about where and when to hit the ball
+# The TrajectoryStep nearest to the players z-position
 var step: TrajectoryStep
+
+# Time in seconds before the stroke anim should start
+var delay: float = 0.0

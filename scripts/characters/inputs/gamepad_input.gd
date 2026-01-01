@@ -8,34 +8,62 @@ var _current_stroke_type: String = "topspin"
 var _aiming_at: Vector3 = Vector3.ZERO
 var _is_in_aiming_mode: bool = false
 var _serve_mode: bool = false
-var _gamepad_index: int = 0
+var _gamepad_index: int = -1
+var _ignore_movement_until_neutral: bool = false
 
 ## Default aim position (set by parent controller)
 var default_aim_position: Vector3 = Vector3.ZERO
 
+## Deadzone for stick neutral detection (0.2 is 20% of full range)
+const STICK_DEADZONE: float = 0.2
 
-func _ready() -> void:
-	if Input.get_connected_joypads().size() > 0:
-		_gamepad_index = Input.get_connected_joypads()[0]
+## Button state tracking (per-device)
+var _button_b_pressed: bool = false
+var _button_x_pressed: bool = false
+var _button_y_pressed: bool = false
+
+var _button_b_just_pressed: bool = false
+var _button_x_just_pressed: bool = false
+var _button_y_just_pressed: bool = false
+
+var _button_b_just_released: bool = false
+var _button_x_just_released: bool = false
+var _button_y_just_released: bool = false
 
 
-func get_movement_input(camera_basis: Basis, player_position: Vector3) -> Vector3:
+## Initialize with a specific gamepad device index
+func initialize(device_index: int) -> void:
+	_gamepad_index = device_index
+	set_process(true)
+
+
+func _process(_delta: float) -> void:
+	_update_button_states()
+
+
+func get_movement_input(_player_basis: Basis, _player_position: Vector3) -> Vector3:
 	# Don't move while aiming with stroke button or during serve
 	if _is_in_aiming_mode or _serve_mode:
 		return Vector3.ZERO
 
 	var raw_input := _get_gamepad_input()
 
-	var forward: Vector3 = -camera_basis.z.normalized()
-	var right: Vector3 = camera_basis.x.normalized()
+	# Check if we should ignore movement until stick returns to neutral
+	if _ignore_movement_until_neutral:
+		# Check if stick is near neutral position
+		if raw_input.length() < STICK_DEADZONE:
+			# Stick is neutral, allow movement again
+			_ignore_movement_until_neutral = false
+		else:
+			# Still holding stick, ignore movement
+			return Vector3.ZERO
 
-	# Invert left/right for back player to match their reversed camera perspective
-	var lr_multiplier: float = sign(player_position.z)
-	var direction: Vector3 = (
-		(forward * raw_input.y + right * raw_input.x * lr_multiplier).normalized()
-	)
+	# Apply deadzone to prevent stick drift
+	if raw_input.length() < STICK_DEADZONE:
+		return Vector3.ZERO
 
-	return direction
+	# Return raw input - controller will apply player basis
+	return Vector3(raw_input.x, 0.0, raw_input.y)
 
 
 func get_aiming_input() -> Vector2:
@@ -43,53 +71,47 @@ func get_aiming_input() -> Vector2:
 
 
 func handle_stroke_input() -> bool:
+	# Check if any stroke button is pressed (device-specific)
 	var is_any_action_pressed: bool = (
-		Input.is_action_pressed("strike") or
-		Input.is_action_pressed("slice") or
-		Input.is_action_pressed("drop_shot")
+		_button_b_pressed or _button_x_pressed or _button_y_pressed
 	)
 
 	var is_any_action_just_pressed: bool = (
-		Input.is_action_just_pressed("strike") or
-		Input.is_action_just_pressed("slice") or
-		Input.is_action_just_pressed("drop_shot")
+		_button_b_just_pressed or _button_x_just_pressed or _button_y_just_pressed
 	)
 
 	var is_any_action_just_released: bool = (
-		Input.is_action_just_released("strike") or
-		Input.is_action_just_released("slice") or
-		Input.is_action_just_released("drop_shot")
+		_button_b_just_released or _button_x_just_released or _button_y_just_released
 	)
 
 	# During serve, allow aiming before stroke button is pressed
 	if _serve_mode and not is_any_action_pressed:
-		_aiming_at = _calculate_aim_position()
+		pass  # Aiming will be calculated by controller using get_aim_input()
 
 	# Initialize stroke when button is first pressed
 	if is_any_action_just_pressed:
 		_input_pace = 0.0
 		_is_in_aiming_mode = true
-		_aiming_at = default_aim_position
 		stroke_started.emit()
 
 	# Continuously update aim and pace while button is held
 	if is_any_action_pressed:
 		_input_pace += GameConstants.PACE_INCREMENT_RATE
-		_input_pace = clamp(_input_pace, 0.0, 1.0)
-		# Use right analog stick for aiming
-		_aiming_at = _calculate_aim_position()
+		_input_pace = clamp(_input_pace, 0.0, 5.0)
 		stroke_updating.emit(_input_pace)
 
 	# Complete stroke when button is released
 	if is_any_action_just_released:
 		# Determine which stroke type was used
 		_current_stroke_type = "topspin"
-		if Input.is_action_just_released("slice"):
+		if _button_x_just_released:
 			_current_stroke_type = "slice"
-		elif Input.is_action_just_released("drop_shot"):
+		elif _button_y_just_released:
 			_current_stroke_type = "drop_shot"
 
 		_is_in_aiming_mode = false
+		# Ignore movement input until stick returns to neutral
+		_ignore_movement_until_neutral = true
 		stroke_completed.emit(_input_pace, _current_stroke_type)
 		return true
 
@@ -107,36 +129,66 @@ func get_stroke_type() -> String:
 func get_aiming_position() -> Vector3:
 	return _aiming_at
 
+## Get raw aim input (relative to player, not world coordinates)
+func get_aim_input() -> Vector3:
+	return _calculate_aim_position()
+
 
 func clear_stroke_input() -> void:
 	_input_pace = 0.0
 	_is_in_aiming_mode = false
+	_ignore_movement_until_neutral = false
 
 
 func set_serve_mode(enabled: bool) -> void:
 	_serve_mode = enabled
 
 
+func is_challenge_pressed() -> bool:
+	# Challenge button not mapped to gamepad, return false
+	return false
+
+
+## Update button states for this specific gamepad device
+func _update_button_states() -> void:
+	if _gamepad_index < 0:
+		return
+
+	# Get current button states from THIS gamepad only
+	var b_now: bool = Input.is_joy_button_pressed(_gamepad_index, JOY_BUTTON_B)
+	var x_now: bool = Input.is_joy_button_pressed(_gamepad_index, JOY_BUTTON_X)
+	var y_now: bool = Input.is_joy_button_pressed(_gamepad_index, JOY_BUTTON_Y)
+
+	# Detect just_pressed (was false, now true)
+	_button_b_just_pressed = b_now and not _button_b_pressed
+	_button_x_just_pressed = x_now and not _button_x_pressed
+	_button_y_just_pressed = y_now and not _button_y_pressed
+
+	# Detect just_released (was true, now false)
+	_button_b_just_released = not b_now and _button_b_pressed
+	_button_x_just_released = not x_now and _button_x_pressed
+	_button_y_just_released = not y_now and _button_y_pressed
+
+	# Update current state
+	_button_b_pressed = b_now
+	_button_x_pressed = x_now
+	_button_y_pressed = y_now
+
+
+## Get gamepad analog stick input from THIS gamepad only
 func _get_gamepad_input() -> Vector2:
-	# Use same action system as movement for consistency
-	var x_input: float = (
-		Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-	)
-	var y_input: float = (
-		Input.get_action_strength("move_front") - Input.get_action_strength("move_back")
-	)
+	if _gamepad_index < 0:
+		return Vector2.ZERO
+
+	# Use left stick axes from THIS gamepad only
+	var x_input: float = Input.get_joy_axis(_gamepad_index, JOY_AXIS_LEFT_X)
+	var y_input: float = Input.get_joy_axis(_gamepad_index, JOY_AXIS_LEFT_Y)
 
 	return Vector2(x_input, y_input)
 
 
 func _calculate_aim_position() -> Vector3:
 	var aim_input: Vector2 = _get_gamepad_input()
-	var player_side: float = sign(default_aim_position.z)
 
-	var aim_sensitivity: float = GameConstants.MOUSE_SENSITIVITY / 100.0  # Scale for analog stick sensitivity
-
-	var aim_position: Vector3 = default_aim_position
-	aim_position.x += -player_side * aim_input.x * aim_sensitivity
-	aim_position.z += player_side * aim_input.y * aim_sensitivity
-
-	return aim_position
+	# Return raw input offset - controller will apply player basis
+	return Vector3(aim_input.x , 0.0, aim_input.y )

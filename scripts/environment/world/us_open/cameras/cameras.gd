@@ -12,9 +12,14 @@ extends Node3D
 @onready var court_side_back: Camera3D = $CourtSideBack
 @onready var camera_top: Camera3D = $CameraTop
 
+@export var active_cam := court_side_back
+
 var active_cam_index := 0
 var player0: Player
 var player1: Player
+
+func _ready() -> void:
+	active_cam.current = true
 
 func register_camera(camera: Camera3D):
 	cams.append(camera)
@@ -30,9 +35,9 @@ func _input(event: InputEvent) -> void:
 # uses to compute the move direction
 func set_camera_for_player(player: Player) -> void:
 	if sign(player.position.z) < 0:
-		player.camera = middle_back
+		player.camera = court_side_back
 	else:
-		player.camera = middle_front
+		player.camera = court_side_front
 
 func disable_all() -> void:
 	for c in cams:

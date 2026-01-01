@@ -204,7 +204,6 @@ func _ai_phase_to_string(value: AiInput.Phase) -> String:
 		AiInput.Phase.ANTICIPATION: "ANTICIPATION",
 		AiInput.Phase.LOCK_IN: "LOCK_IN",
 		AiInput.Phase.TRACKING: "TRACKING",
-		AiInput.Phase.PREP_EXECUTION: "PREP_EXECUTION",
 		AiInput.Phase.WAITING_FOR_HIT: "WAITING_FOR_HIT",
 	}
 	return enum_map.get(value, "UNKNOWN")

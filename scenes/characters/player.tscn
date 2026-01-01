@@ -15,10 +15,9 @@
 radius = 0.0950554
 height = 1.58024
 
-[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("camera", "ball_aim_marker") groups=["Player"]]
+[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker") groups=["Player"]]
 script = ExtResource("1")
 player_data = ExtResource("2_uxa8p")
-camera = NodePath("ThirdPersonCamera")
 ball_aim_marker = NodePath("BallAimMarker")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])

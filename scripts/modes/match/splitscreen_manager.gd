@@ -192,12 +192,17 @@ func _disable_splitscreen() -> void:
 
 ## Update a viewport camera to match a player's camera
 func _update_camera_from_player(viewport_cam: Camera3D, player: Player) -> void:
-	if not player or not player.camera:
+	if not player:
 		return
 
-	viewport_cam.global_position = player.camera.global_position
-	viewport_cam.global_rotation = player.camera.global_rotation
-	viewport_cam.fov = player.camera.fov
+	# Use the player's third person camera for splitscreen (follows the player)
+	var source_camera: Camera3D = player.third_person_camera if player.third_person_camera else player.camera
+	if not source_camera:
+		return
+
+	viewport_cam.global_position = source_camera.global_position
+	viewport_cam.global_rotation = source_camera.global_rotation
+	viewport_cam.fov = source_camera.fov
 
 
 ## Start following players with viewport cameras

@@ -1,10 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://bcwuxgarbilrg"]
+[gd_scene format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_11ka0"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_11ka0"]
 [ext_resource type="Resource" uid="uid://7puy4co7ounb" path="res://assets/resources/characters/ruud.tres" id="4_lvdh6"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_xinb2"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/modes/match/match_manager.tscn" id="8_2s2ac"]
@@ -13,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/debug_hud.tscn" id="11_7qdcc"]
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
+[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environment/crowd/crowd.tscn" id="17_cux4k"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/modes/match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="18_pause"]
 
@@ -55,12 +57,12 @@ process_mode = 1
 script = ExtResource("1_3pywv")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.890247)
-controller_scene = ExtResource("4_xinb2")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
+controller_scene = ExtResource("3_11ka0")
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
-controller_scene = ExtResource("4_xinb2")
+controller_scene = ExtResource("4_11ka0")
 player_data = ExtResource("4_lvdh6")
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
@@ -120,23 +122,35 @@ player1 = NodePath("../Player2")
 
 [node name="Stadium" parent="." unique_id=1694125535 instance=ExtResource("6_4vere")]
 
-[node name="Cameras" parent="." unique_id=1229797777 instance=ExtResource("7_6frth")]
+[node name="Cameras" parent="." unique_id=1229797777 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
+active_cam = NodePath("MiddleFront")
 
 [node name="TopFront" parent="Cameras" index="1" unique_id=1711630965 node_paths=PackedStringArray("target")]
 target = NodePath("../../Player")
 
 [node name="MiddleFront" parent="Cameras" index="3" unique_id=2002676584 node_paths=PackedStringArray("target")]
-transform = Transform3D(1, 0, 0, 0, 0.9614011, 0.27515078, 0, -0.27515078, 0.9614011, 0, 6.936, 28.829)
-current = true
-fov = 23.5
+transform = Transform3D(1, 0, 0, 0, 0.97437006, 0.22495106, 0, -0.22495106, 0.97437006, 0, 6.672, 29.643)
+fov = 23.6
 script = ExtResource("8_lvdh6")
 target = NodePath("../../Player")
 
 [node name="MiddleBack" parent="Cameras" index="4" unique_id=1711178741]
-transform = Transform3D(-1, 4.79117e-08, -1.43193e-07, 0, 0.948324, 0.317305, 1.50996e-07, 0.317305, -0.948324, 0, 7.446, -28)
+transform = Transform3D(-1, -1.9665855e-08, 8.518218e-08, 0, 0.97437054, 0.22495116, -8.742278e-08, 0.22495116, -0.97437054, 0, 6.672, -29.643)
+fov = 24.3
+script = ExtResource("8_lvdh6")
+
+[node name="CourtSideFront" parent="Cameras" index="5" unique_id=90699718]
+transform = Transform3D(1, 0, 0, 0, 0.99950653, 0.03141076, 0, -0.03141076, 0.99950653, 0, 1.57, 20.203)
+fov = 31.6
+script = ExtResource("8_lvdh6")
+
+[node name="CourtSideBack" parent="Cameras" index="6" unique_id=1456183779]
+script = ExtResource("8_lvdh6")
 
 [node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]
 players = [NodePath("../Player"), NodePath("../Player2")]
+
+[node name="Crowd" parent="." unique_id=1204219689 instance=ExtResource("17_cux4k")]
 
 [node name="Umpire" parent="." unique_id=757205017 instance=ExtResource("12_ard7f")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.18558, 0, 0)
@@ -147,13 +161,14 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.185
 match_manager = NodePath("../MatchManager")
 _trajectory_drawer = NodePath("../TrajectoryDrawer")
 
-[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "cameras") instance=ExtResource("8_2s2ac")]
+[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "crowd", "cameras") instance=ExtResource("8_2s2ac")]
 player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 court = NodePath("../Stadium/Court")
 stadium = NodePath("../Stadium")
 television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
+crowd = NodePath("../Crowd")
 cameras = NodePath("../Cameras")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]

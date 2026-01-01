@@ -61,13 +61,13 @@ const INPUT_STARTUP_DELAY: float = 0.5
 const AIM_FRONT_COURT: float = 9.0
 
 ## Default aim position multiplier for back court strokes
-const AIM_BACK_COURT: float = 3.0
+const AIM_BACK_COURT: float = 2.0
 
 ## Default aim position multiplier for serves
 const AIM_SERVE: float = 5.0
 
 ## Pace increment rate per input frame
-const PACE_INCREMENT_RATE: float = 0.1
+const PACE_INCREMENT_RATE: float = 0.15
 
 ## Ball velocity threshold for canceling stroke (units/sec)
 const BALL_VELOCITY_CANCELLATION_THRESHOLD: float = 0.1
@@ -99,28 +99,28 @@ const AI_BALL_COMMIT_DISTANCE: float = 3.0
 const AI_BALL_VELOCITY_MIN: float = 0.1
 
 ## Forehand pace (power)
-const AI_FOREHAND_PACE: float = 15.0
+const AI_FOREHAND_PACE: float = 18.0
 
 ## Forehand spin (x: sidespin, y: topspin, z: forward spin)
-const AI_FOREHAND_SPIN: Vector3 = Vector3(0.2, 1.0, 0.3)
+const AI_FOREHAND_SPIN: Vector3 = Vector3(0.2, 10, 0)
 
 ## Backhand pace (power)
-const AI_BACKHAND_PACE: float = 14.0
+const AI_BACKHAND_PACE: float = 17.0
 
 ## Backhand spin (x: sidespin, y: topspin, z: forward spin)
-const AI_BACKHAND_SPIN: Vector3 = Vector3(-0.2, 0.5, 0.2)
+const AI_BACKHAND_SPIN: Vector3 = Vector3(-0.2, 10, 0)
 
 ## Backhand slice pace (power)
-const AI_BACKHAND_SLICE_PACE: float = 13.0
+const AI_BACKHAND_SLICE_PACE: float = 16.0
 
 ## Backhand slice spin (x: sidespin, y: backspin, z: forward spin)
-const AI_BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -1.0, 0.1)
+const AI_BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -10.0, 0.1)
 
 ## Drop shot pace (power)
-const AI_DROP_SHOT_PACE: float = 13.0
+const AI_DROP_SHOT_PACE: float = 15.0
 
 ## Drop shot spin (x: sidespin, y: backspin, z: forward spin)
-const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -20.0, -1.0)
+const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -10.0, -1.0)
 
 ## Serve pace (power)
 const AI_SERVE_PACE: float = 30.0

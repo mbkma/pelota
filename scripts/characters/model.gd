@@ -162,14 +162,6 @@ func play_stroke(stroke: Stroke) -> void:
 	_current_stroke = stroke
 	var playback_speed = 1.0
 
-	# Only compute speed from step data if available (regular strokes have step, serves don't)
-	if stroke.step:
-		# Use dynamic hit frame time from animation marker instead of hardcoded value
-		var animation_hit_time: float = get_animation_hit_frame_time(stroke.stroke_type)
-		playback_speed = compute_animation_speed(animation_hit_time, stroke.step.time)
-		#playback_speed = clamp(playback_speed, 0.5, 3)
-		Loggie.msg("playback_speed: ", playback_speed, " time: ", stroke.step.time).info()
-
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
 	_set_stroke_animation(stroke)
 	_playback.travel("stroke")

@@ -5,6 +5,7 @@ extends Node
 @export var training_scence: PackedScene
 @export var career_scence: PackedScene
 @export var tournament_scence: PackedScene
+@export var match_config_scence: PackedScene
 @export var music_enabled := false
 @export var settings_menu: SettingsMenu
 
@@ -88,9 +89,9 @@ func _on_Play_pressed() -> void:
 		players_data.append(player_data)
 
 	match_data = MatchData.new(players_data[0], players_data[1])
-#
-	Loggie.msg("Starting match with scene: ", match_scence).info()
-	SceneManager.goto(match_scence)
+
+	
+	SceneManager.goto(match_config_scence)
 
 
 

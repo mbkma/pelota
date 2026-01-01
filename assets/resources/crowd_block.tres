@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CrowdConfig" load_steps=4 format=3 uid="uid://cd1vrmlg6sfga"]
+[gd_resource type="Resource" script_class="CrowdConfig" format=3 uid="uid://cd1vrmlg6sfga"]
 
 [ext_resource type="Script" uid="uid://cln3iv60dk3kt" path="res://scripts/environment/crowd/crowd_color_palette.gd" id="1_k3fpv"]
 [ext_resource type="Script" uid="uid://wf2jvpga3hfj" path="res://scripts/environment/crowd/crowd_config.gd" id="2_kcumo"]

@@ -120,21 +120,61 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	Loggie.msg("Corrected position.y=", position.y).debug()
 
 
-## Calculates required velocity x,y components to hit ball from initial position to target, given the initial z velocity component
+func simulate_trajectory(start_position: Vector3, v0: Vector3, spin: Vector3) -> Vector3:
+	var pos = start_position
+	var vel = v0
+	var t := 0.0
+	var dt := 1.0 / 240.0  # high resolution
+
+	while t < 5.0: # max time
+		# --- Compute forces ---
+		var magnus = Vector3(
+			spin.x * SPIN_SIDE_MULT,
+			-spin.y * SPIN_DOWN_FORCE,
+			spin.z * SPIN_FORWARD_MULT
+		)
+		vel.y += (-GRAVITY_BASE + magnus.y) * dt
+		vel.x += magnus.x * dt
+		vel.z += magnus.z * dt
+
+		vel -= vel * AIR_DRAG * dt
+
+		# integrate
+		pos += vel * dt
+		
+		if pos.y <= BALL_GROUND_LEVEL:
+			return pos  # return landing position
+
+		t += dt
+
+	return pos  # fallback
+
+
 func calculate_velocity(
-	start_position: Vector3, target_position: Vector3, velocity_z0: float, _ball_spin: Vector3
+	start_position: Vector3, target_position: Vector3, velocity_z0: float, spin: Vector3
 ) -> Vector3:
-	var calculated_velocity: Vector3 = Vector3.ZERO
+	var vx0 := 0.0
+	var vy0 := 0.0
+	var learning_rate := 0.2
 
-	# Initial estimate using simple ballistics
-	var time_to_target: float = (target_position.z - start_position.z) / velocity_z0
-	calculated_velocity.x = (target_position.x - start_position.x) / time_to_target
-	calculated_velocity.y = (
-		(0.5 * GRAVITY_BASE * time_to_target * time_to_target + (target_position.y - start_position.y)) / time_to_target
-	)
-	calculated_velocity.z = velocity_z0
+	var landed = null
+	for iteration in 8: # max 8 iterations
+		var v0 = Vector3(vx0, vy0, velocity_z0)
+		landed = simulate_trajectory(start_position, v0, spin)
 
-	return calculated_velocity
+		var error_x = target_position.x - landed.x
+		var error_z = target_position.z - landed.z
+
+		if abs(error_x) < 0.05 and abs(error_z) < 0.05:
+			break
+
+		# adjust vx and vy
+		# vy0 affects flight time, which affects Z distance traveled
+		# The relationship depends on the sign of velocity_z0
+		vx0 += error_x * learning_rate
+		vy0 += sign(velocity_z0) * error_z * learning_rate
+
+	return Vector3(vx0, vy0, velocity_z0)
 
 
 ## Applies a stroke to the ball with given velocity and spin

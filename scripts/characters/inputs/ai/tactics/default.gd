@@ -36,15 +36,15 @@ func compute_next_stroke(closest_step: TrajectoryStep) -> Stroke:
 		else:
 			stroke = get_stroke(AiStrokeType.FOREHAND_CROSS)
 	else:
-		#if r < 0.4:
-			#stroke = get_stroke(AiStrokeType.BACKHAND_LONGLINE)
-		#elif r < 0.8:
-			#stroke = get_stroke(AiStrokeType.BACKHAND_CROSS)
-		#elif r < 0.9:
-			#stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_CROSS)
-		#elif r < 0.95:
-			#stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_LONGLINE)
-		#else:
+		if r < 0.4:
+			stroke = get_stroke(AiStrokeType.BACKHAND_LONGLINE)
+		elif r < 0.8:
+			stroke = get_stroke(AiStrokeType.BACKHAND_CROSS)
+		elif r < 0.9:
+			stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_CROSS)
+		elif r < 0.95:
+			stroke = get_stroke(AiStrokeType.BACKHAND_SLICE_LONGLINE)
+		else:
 			stroke = get_stroke(AiStrokeType.BACKHAND_DROP_SHOT)
 
 	stroke.step = closest_step

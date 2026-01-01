@@ -13,9 +13,12 @@ signal stroke_updating(pace: float)
 ## Signal emitted when stroke button is released
 signal stroke_completed(pace: float, stroke_type: String)
 
+@abstract
+func initialize(index: int) -> void
+
 ## Called once per physics frame to get movement input direction
 @abstract
-func get_movement_input(_camera_basis: Basis, _player_position: Vector3) -> Vector3
+func get_movement_input(_player_basis: Basis, _player_position: Vector3) -> Vector3
 
 ## Called once per frame to get aiming input
 @abstract
