@@ -30,14 +30,17 @@ func _input(event: InputEvent) -> void:
 			active_cam_index = (active_cam_index + 1) % cams.size()
 			cams[active_cam_index].current = true
 
-# call this after the players have been placed
-# this is not the actual current camera, but rather the camera the player
-# uses to compute the move direction
+
 func set_camera_for_player(player: Player) -> void:
 	if sign(player.position.z) < 0:
 		player.camera = court_side_back
+		#player.camera.target = player
 	else:
 		player.camera = court_side_front
+		#player.camera.target = player
+		
+		if player.controller is HumanController:
+			player.camera.current = true
 
 func disable_all() -> void:
 	for c in cams:

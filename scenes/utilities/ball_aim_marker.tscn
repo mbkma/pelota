@@ -1,15 +1,17 @@
 [gd_scene format=3 uid="uid://bi8pmdx3d7doc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lufo"]
-albedo_color = Color(1, 0, 0, 1)
+albedo_color = Color(0.25027347, 0.36500144, 0, 1)
+roughness = 0.33
+grow_amount = -2.008
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kjtf1"]
 material = SubResource("StandardMaterial3D_7lufo")
-top_radius = 1.0
-bottom_radius = 1.0
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.2
 
 [node name="BallAimMarker" type="Node3D" unique_id=160563153]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1507997537]
-transform = Transform3D(0.14904475, 0, 0, 0, 0.007067608, 0, 0, 0, 0.14904475, 0, 0, 0)
 mesh = SubResource("CylinderMesh_kjtf1")

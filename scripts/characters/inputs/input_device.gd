@@ -8,7 +8,7 @@ extends Node
 signal stroke_started
 
 ## Signal emitted while stroke button is held
-signal stroke_updating(pace: float)
+signal stroke_updating(pace: float, stroke_type: String)
 
 ## Signal emitted when stroke button is released
 signal stroke_completed(pace: float, stroke_type: String)
@@ -20,9 +20,9 @@ func initialize(index: int) -> void
 @abstract
 func get_movement_input(_player_basis: Basis, _player_position: Vector3) -> Vector3
 
-## Called once per frame to get aiming input
+## Called once per physics frame to get movement input direction
 @abstract
-func get_aiming_input() -> Vector2
+func get_aim_input() -> Vector3
 
 ## Called once per frame to handle stroke input (returns true if any stroke action is active)
 @abstract
@@ -36,9 +36,6 @@ func get_stroke_pace() -> float
 @abstract
 func get_stroke_type() -> String
 
-## Returns the current aiming position in 3D space
-@abstract
-func get_aiming_position() -> Vector3
 
 ## Returns true if challenge action was just pressed
 func is_challenge_pressed() -> bool:

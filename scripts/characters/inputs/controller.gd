@@ -38,7 +38,7 @@ func _ready() -> void:
 ## Update controller state - called by Player each frame
 ## Implementing classes should update their internal state here
 @abstract
-func update() -> void
+func update(delta: float) -> void
 
 ## Request the input method to initiate a serve
 ## Implementing classes should handle serve initialization here

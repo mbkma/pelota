@@ -143,29 +143,27 @@ func _set_state(new_state: PlayerState) -> void:
 			if _path.size() > 0:
 				model.play_run((_path[0] - position).normalized())
 
+var old = null
 ## Process stroke decisions from controller each frame
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not controller:
 		return
 
 	# Update controller state (uniform interface for all controllers)
-	controller.update()
+	controller.update(delta)
 
 	# Update UI based on controller state
 	_update_controller_ui()
 
 	# Check if controller has a stroke decision
 	var stroke_decision: Stroke = controller.get_stroke()
-	if stroke_decision:
+	if stroke_decision and old != stroke_decision:
 		# Execute the stroke decision
 		if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
 			serve(stroke_decision)
 		else:
 			queue_stroke(stroke_decision)
-
-		# Clear UI after stroke is queued
-		if ball_aim_marker:
-			ball_aim_marker.visible = false
+		old = stroke_decision
 
 	if queued_stroke and queued_stroke.stroke_type != queued_stroke.StrokeType.SERVE and ball_is_in_reachable_window():
 		_hit_ball(queued_stroke)
@@ -201,105 +199,6 @@ func stop() -> void:
 	ball = null
 
 
-## Timing System
-#################
-##
-## ARCHITECTURE:
-## The timing system synchronizes player movement and animations with predicted ball arrival.
-## This is used for AI opponents that need to meet the ball at a specific location and time.
-##
-## ANIMATION MARKERS:
-## Each stroke animation has a "hit" marker indicating when the racket contacts the ball.
-## The Model script queries this marker at runtime from Animation resources.
-##
-## FLOW:
-## 1. Opponent hits ball -> system predicts ball location and arrival time
-## 2. queue_stroke() is called with ball_prediction_time and hit location
-## 3. compute_synchronized_stroke_timing() calculates travel time and animation sync
-## 4. Player moves to hit location
-## 5. On arrival, _on_target_point_reached() delays animation until sync time
-## 6. Animation plays such that hit-frame aligns with ball arrival
-
-## Compute travel time from current position to target using movement speed and acceleration
-##
-## CALCULATION:
-## - Measures straight-line distance to target
-## - Divides by average movement speed (accounting for acceleration ramp-up)
-## - Returns time in seconds needed to reach the target
-func compute_travel_time(target_position: Vector3) -> float:
-	var distance: float = position.distance_to(target_position)
-
-	# Simplified travel time: distance / average_speed
-	# Account for acceleration ramp-up: assume we reach max speed fairly quickly
-	var average_speed: float = move_speed * 0.8  # Conservative estimate during acceleration
-
-	if average_speed <= 0:
-		return INF
-
-	return distance / average_speed
-
-## Compute animation start time to sync hit frame with ball arrival
-##
-## FORMULA:
-##   animation_start_time = ball_prediction_time - animation_hit_point_time
-##
-## EXPLANATION:
-## - ball_prediction_time: when the ball will arrive at the hit location (absolute time)
-## - animation_hit_point_time: when in the animation the racket contacts the ball (relative to anim start)
-## - animation_start_time: when to START the animation so hit-frame lands at ball arrival
-##
-## EXAMPLE:
-## - Ball arrives at t=5.0s
-## - Hit frame is at 0.45s into animation
-## - Start animation at t=4.55s so racket meets ball at t=5.0s
-func compute_animation_start_time(ball_arrival_time: float, animation_hit_frame_time: float) -> float:
-	return ball_arrival_time - animation_hit_frame_time
-
-## Compute and validate synchronized stroke timing
-## Returns true if player can reach and sync properly, false if unreachable
-##
-## VALIDATION LOGIC:
-## - If travel_time > ball_prediction_time: player cannot reach in time -> UNREACHABLE
-## - If travel_time <= ball_prediction_time: player can reach and sync -> SUCCESS
-##
-## SETS:
-## - _animation_hit_point_time: when in animation the racket contacts the ball
-## - _travel_time: how long it takes to reach the hit location
-## - _animation_start_time: when animation should start for perfect sync
-## - _ball_prediction_time: predicted ball arrival time (stored for reference)
-func compute_synchronized_stroke_timing(
-	hit_location: Vector3,
-	ball_prediction_time: float,
-	stroke: Stroke
-) -> bool:
-	# Get animation hit frame time from Model
-	_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
-
-	# Compute travel time from current position to hit location
-	_travel_time = compute_travel_time(hit_location)
-
-	# Compute when animation should start
-	_animation_start_time = compute_animation_start_time(ball_prediction_time, _animation_hit_point_time)
-
-	_ball_prediction_time = ball_prediction_time
-
-	# Check if player can reach the ball
-	if _travel_time > ball_prediction_time:
-		_is_unreachable = true
-		Loggie.msg(player_data.last_name + ": ", 
-			"UNREACHABLE: travel_time(%.2f) > prediction_time(%.2f)" % [_travel_time, ball_prediction_time]
-		).debug()
-		return false
-
-	_is_unreachable = false
-	_is_synchronized_stroke = true
-
-	Loggie.msg(player_data.last_name + ": ", 
-		"Synchronized stroke timing: travel=%.2f, anim_hit=%.2f, prediction=%.2f, start_time=%.2f" %
-		[_travel_time, _animation_hit_point_time, ball_prediction_time, _animation_start_time]
-	).debug()
-
-	return true
 
 ## Movement System
 ####################
@@ -396,12 +295,9 @@ func _on_target_point_reached() -> void:
 ##################
 
 
-## Queue a stroke to execute (non-serve strokes)
-## For AI: Uses synchronized timing if ball_prediction_time is set
-## For human: Executes immediately when player is close enough
 func queue_stroke(stroke: Stroke) -> void:
 	if not ball:
-		push_error("Player has no ball to stroke!")
+		push_error("Player has no ball to hit!")
 		return
 
 	queued_stroke = stroke
@@ -421,8 +317,8 @@ func queue_stroke(stroke: Stroke) -> void:
 func ball_is_in_reachable_window() -> bool:
 	if not ball:
 		return false
-	var dist = ball.global_position.distance_to(model.hit_point.global_position)
-	return dist < 1.5
+	var dist = ball.global_position.distance_to(global_position)
+	return dist < 3
 
 
 ## Execute ball hit with given stroke
@@ -440,7 +336,7 @@ func _hit_ball(stroke: Stroke) -> void:
 
 	ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
 	play_stroke_sound(stroke)
-	label_3d.text = player_data.last_name + "\n" + str(stroke_velocity.length())
+	label_3d.text = player_data.last_name + "\n" + str(stroke.stroke_power)
 	ball_hit.emit()
 	cancel_stroke()
 

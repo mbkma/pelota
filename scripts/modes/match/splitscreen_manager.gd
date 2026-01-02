@@ -43,11 +43,6 @@ func _ready() -> void:
 	hbox_container.hide()
 	vbox_container.hide()
 
-	# Check if both players are human-controlled
-	if not _are_both_players_human():
-		Loggie.msg("Disabled: not all players are human").info()
-		return
-
 	# Create cameras for all viewports
 	_create_viewport_cameras()
 
@@ -100,10 +95,6 @@ func toggle_splitscreen() -> void:
 
 ## Enable vertical splitscreen (side-by-side)
 func _enable_vertical_splitscreen() -> void:
-	if not _are_both_players_human():
-		push_error("Cannot enable splitscreen: not all players are human")
-		return
-
 	if not left_camera or not right_camera:
 		push_error("Viewport cameras not initialized")
 		return
@@ -136,10 +127,6 @@ func _enable_vertical_splitscreen() -> void:
 
 ## Enable horizontal splitscreen (top-bottom)
 func _enable_horizontal_splitscreen() -> void:
-	if not _are_both_players_human():
-		push_error("Cannot enable splitscreen: not all players are human")
-		return
-
 	if not top_camera or not bottom_camera:
 		push_error("Viewport cameras not initialized")
 		return
@@ -196,7 +183,7 @@ func _update_camera_from_player(viewport_cam: Camera3D, player: Player) -> void:
 		return
 
 	# Use the player's third person camera for splitscreen (follows the player)
-	var source_camera: Camera3D = player.third_person_camera if player.third_person_camera else player.camera
+	var source_camera: Camera3D = player.camera
 	if not source_camera:
 		return
 
@@ -226,25 +213,3 @@ func _process(_delta: float) -> void:
 			_update_camera_from_player(bottom_camera, player1)
 		_:
 			pass
-
-
-## Check if both players are controlled by humans
-func _are_both_players_human() -> bool:
-	if not _is_player_human(player0):
-		return false
-	if not _is_player_human(player1):
-		return false
-	return true
-
-
-## Check if a single player is human-controlled
-func _is_player_human(player: Player) -> bool:
-	if not player or not player.controller:
-		return false
-
-	var controller_script = player.controller.get_script()
-	if not controller_script:
-		return false
-
-	var script_path = controller_script.resource_path
-	return "human_controller" in script_path.to_lower()

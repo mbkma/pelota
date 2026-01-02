@@ -59,11 +59,17 @@ script = ExtResource("1_3pywv")
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
 controller_scene = ExtResource("3_11ka0")
+stats = {}
+move_speed = 5.0
+team_index = 0
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
 controller_scene = ExtResource("4_11ka0")
 player_data = ExtResource("4_lvdh6")
+stats = {}
+move_speed = 5.0
+team_index = 0
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
@@ -140,11 +146,13 @@ fov = 24.3
 script = ExtResource("8_lvdh6")
 
 [node name="CourtSideFront" parent="Cameras" index="5" unique_id=90699718]
-transform = Transform3D(1, 0, 0, 0, 0.99950653, 0.03141076, 0, -0.03141076, 0.99950653, 0, 1.57, 20.203)
-fov = 31.6
+transform = Transform3D(1, 0, 0, 0, 0.99950653, 0.03141076, 0, -0.03141076, 0.99950653, 0, 2.433, 20.203)
+fov = 38.8
 script = ExtResource("8_lvdh6")
 
 [node name="CourtSideBack" parent="Cameras" index="6" unique_id=1456183779]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.433, -20.203)
+fov = 38.8
 script = ExtResource("8_lvdh6")
 
 [node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]

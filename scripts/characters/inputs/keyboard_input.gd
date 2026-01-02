@@ -8,9 +8,6 @@ var _current_stroke_type: String = "topspin"
 var _aiming_at: Vector3 = Vector3.ZERO
 var _serve_mode: bool = false
 
-## Default aim position (set by parent controller)
-var default_aim_position: Vector3 = Vector3.ZERO
-
 ## Movement key states
 var _move_left_pressed: bool = false
 var _move_right_pressed: bool = false
@@ -61,10 +58,6 @@ func get_movement_input(_player_basis: Basis, _player_position: Vector3) -> Vect
 	return _get_keyboard_movement()
 
 
-func get_aiming_input() -> Vector2:
-	return Vector2.ZERO  # Not used for keyboard-only
-
-
 func handle_stroke_input() -> bool:
 	var is_any_action_pressed: bool = (
 		_strike_pressed or _slice_pressed or _drop_shot_pressed
@@ -78,9 +71,9 @@ func handle_stroke_input() -> bool:
 		_strike_just_released or _slice_just_released or _drop_shot_just_released
 	)
 
-	# Capture which button was released before resetting (for stroke type detection)
-	var slice_just_released: bool = _slice_just_released
-	var drop_shot_just_released: bool = _drop_shot_just_released
+	# Capture which button was pressed/released before resetting (for stroke type detection)
+	var slice_just_pressed: bool = _slice_just_pressed
+	var drop_shot_just_pressed: bool = _drop_shot_just_pressed
 
 	# Reset just_pressed and just_released flags after reading
 	_strike_just_pressed = false
@@ -97,23 +90,24 @@ func handle_stroke_input() -> bool:
 	# Initialize stroke when button is first pressed
 	if is_any_action_just_pressed:
 		_input_pace = 0.0
+
+		# Determine stroke type based on which button was pressed
+		_current_stroke_type = "topspin"
+		if slice_just_pressed:
+			_current_stroke_type = "slice"
+		elif drop_shot_just_pressed:
+			_current_stroke_type = "drop_shot"
+
 		stroke_started.emit()
 
 	# Continuously update aim and pace while button is held
 	if is_any_action_pressed:
 		_input_pace += GameConstants.PACE_INCREMENT_RATE
 		_input_pace = clamp(_input_pace, 0.0, 5.0)
-		stroke_updating.emit(_input_pace)
+		stroke_updating.emit(_input_pace, _current_stroke_type)
 
 	# Complete stroke when button is released
 	if is_any_action_just_released:
-		# Determine which stroke type was used (use captured local variables)
-		_current_stroke_type = "topspin"
-		if slice_just_released:
-			_current_stroke_type = "slice"
-		elif drop_shot_just_released:
-			_current_stroke_type = "drop_shot"
-
 		stroke_completed.emit(_input_pace, _current_stroke_type)
 		return true
 
@@ -133,8 +127,10 @@ func get_aiming_position() -> Vector3:
 
 ## Get raw aim input (relative to player, not world coordinates)
 func get_aim_input() -> Vector3:
-	return _calculate_aim_position()
+	var aim_input: Vector3 = _get_keyboard_movement()
 
+	# Return raw input offset - controller will apply player basis
+	return Vector3(aim_input.x, 0.0, aim_input.z)
 
 func clear_stroke_input() -> void:
 	_input_pace = 0.0
@@ -201,11 +197,3 @@ func _get_keyboard_movement() -> Vector3:
 		z_input -= 1.0
 
 	return Vector3(x_input, 0.0, z_input)
-
-
-func _calculate_aim_position() -> Vector3:
-	var aim_input: Vector3 = _get_keyboard_movement()
-	var aim_sensitivity: float = GameConstants.MOUSE_SENSITIVITY / 100.0
-
-	# Return raw input offset - controller will apply player basis
-	return Vector3(aim_input.x * aim_sensitivity, 0.0, aim_input.z * aim_sensitivity)

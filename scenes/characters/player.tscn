@@ -18,6 +18,9 @@ height = 1.58024
 [node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker") groups=["Player"]]
 script = ExtResource("1")
 player_data = ExtResource("2_uxa8p")
+stats = null
+move_speed = null
+team_index = null
 ball_aim_marker = NodePath("BallAimMarker")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
@@ -32,7 +35,7 @@ billboard = 1
 text = "Test"
 
 [node name="FirstPersonCamera" type="Camera3D" parent="." unique_id=573308729]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.24305734)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.34675705)
 
 [node name="ThirdPersonCamera" type="Camera3D" parent="." unique_id=1842340249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
