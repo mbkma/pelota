@@ -2,21 +2,23 @@
 class_name Player
 extends CharacterBody3D
 
-## Player state enum
-enum PlayerState { 
+const PLAYER_STATE_MACHINE_SCRIPT: Script = preload("res://scripts/characters/state/player_state_machine.gd")
+const MOVEMENT_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/movement_service.gd")
+const TRAJECTORY_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/trajectory_service.gd")
+const STROKE_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/stroke_service.gd")
+const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
+
+enum PlayerState {
 	IDLE,
 	MOVING,
 	PREPARING_STROKE,
 	STROKING,
 	RECOVERING,
-	UNREACHABLE
+	UNREACHABLE,
 }
 
 ## Emitted when player successfully hits the ball
 signal ball_hit
-
-## Emitted immediately after serve is executed
-signal just_served
 
 ## Emitted when player reaches movement target point
 signal target_point_reached
@@ -29,6 +31,9 @@ signal challenged
 
 ## Emitted when ball is spawned for serve
 signal ball_spawned(ball: Ball)
+
+## Emitted when match lifecycle phase changes
+signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -53,90 +58,64 @@ signal ball_spawned(ball: Ball)
 ## Slice stroke sound effects
 @export var stroke_sounds_slice: Array[AudioStream]
 
-## Currently queued stroke to execute
-var _queued_stroke: Stroke = null
+## Movement tuning
+@export var friction: float = 1.0
+@export var acceleration: float = 0.1
+
+var _state_machine: Node
+var _movement_service: RefCounted = MOVEMENT_SERVICE_SCRIPT.new()
+var _trajectory_service: RefCounted = TRAJECTORY_SERVICE_SCRIPT.new()
+var _stroke_service: RefCounted = STROKE_SERVICE_SCRIPT.new()
+var _lifecycle_bus: MatchLifecycleBus
 
 var queued_stroke: Stroke:
 	get:
-		return _queued_stroke
+		return _stroke_service.get_queued_stroke()
 	set(value):
-		_queued_stroke = value
+		_stroke_service.set_queued_stroke(value)
 		Loggie.msg(player_data.last_name + ": ", "Setting queued stroke to: ", value).debug()
 
-## Current player state
-var _current_state: PlayerState = PlayerState.IDLE
-
 var controller: Controller
-
-## Current movement velocity
-var _move_velocity: Vector3 = Vector3.ZERO
-
-## Actual movement velocity after acceleration/friction
-var _real_velocity: Vector3 = Vector3.ZERO
-
-## Friction factor for deceleration (0-1, higher = slower deceleration)
-var _friction: float = 1.0
-
-## Acceleration factor for speed ramping (0-1, higher = faster acceleration)
-var _acceleration: float = 0.1
-
-## Movement path waypoints
-var _path: Array[Vector3] = []
 
 ## Time in animation when racket contacts ball (frame-specific, set from Model)
 var _animation_hit_point_time: float = 0.0
 
 ## Whether the player cannot reach the ball in time
-var _is_unreachable: bool = false
-
 ## Angle bisector visualization data for debug drawing
 var bisector_service_line_left: Vector3 = Vector3.ZERO
 var bisector_service_line_right: Vector3 = Vector3.ZERO
 var bisector_direction: Vector3 = Vector3.ZERO
 var opponent_hit_position: Vector3 = Vector3.ZERO
 
-const DISTANCE_THRESHOLD: float = 0.01
-
 
 func _can_update_movement_animation() -> bool:
-	return _current_state != PlayerState.STROKING and _current_state != PlayerState.RECOVERING
+	return not _state_machine.blocks_movement_animation()
 
 
 func _ready() -> void:
 	stats = player_data.stats
 	label_3d.text = player_data.last_name
+	_state_machine = PLAYER_STATE_MACHINE_SCRIPT.new()
+	_state_machine.name = "PlayerStateMachine"
+	add_child(_state_machine)
+	_state_machine.state_entered.connect(_on_state_entered)
+
+	_lifecycle_bus = MATCH_LIFECYCLE_BUS_SCRIPT.new()
+	_lifecycle_bus.name = "MatchLifecycleBus"
+	add_child(_lifecycle_bus)
+	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
+
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
 	add_child(controller)
-	_set_state(PlayerState.IDLE)
+	_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.IDLE)
+	_lifecycle_bus.set_phase(MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE)
 
 
-## Set player state and handle state transitions
-func _set_state(new_state: PlayerState) -> void:
-	if _current_state == new_state:
-		return
-
-	_current_state = new_state
-
-	match _current_state:
-		PlayerState.IDLE:
-			model.play_idle()
-		PlayerState.MOVING:
-			pass  # Animation handled by apply_movement
-		PlayerState.PREPARING_STROKE:
-			pass  # Animation handled when stroke is queued
-		PlayerState.STROKING:
-			pass  # Animation handled by play_stroke_animation
-		PlayerState.RECOVERING:
-			model.play_recovery()
-		PlayerState.UNREACHABLE:
-			# Player cannot reach ball in time - still move in correct direction but with unreachable behavior
-			_is_unreachable = true
-			if _path.size() > 0:
-				model.play_run((_path[0] - position).normalized())
-
-var _last_stroke_decision: Stroke = null
+## Set player state through dedicated state machine
+func _set_state(new_state: int) -> void:
+	_state_machine.transition_to(new_state)
 
 ## Process stroke decisions from controller each frame
 func _process(delta: float) -> void:
@@ -156,21 +135,11 @@ func _process(delta: float) -> void:
 
 
 func _consume_controller_stroke_decision() -> void:
-	var stroke_decision: Stroke = controller.get_stroke()
-	if not stroke_decision:
-		return
-
-	# Controllers may expose the same object reference over multiple frames.
-	# Only consume when the reference changes to avoid repeated queueing.
-	if _last_stroke_decision == stroke_decision:
-		return
-
-	if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
-		serve(stroke_decision)
-	else:
-		queue_stroke(stroke_decision)
-
-	_last_stroke_decision = stroke_decision
+	_stroke_service.consume_controller_stroke_decision(
+		controller,
+		serve,
+		queue_stroke
+	)
 
 
 ## Process movement from controller each physics frame
@@ -184,6 +153,7 @@ func _physics_process(delta: float) -> void:
 
 ## Request the input handler to initiate a serve
 func request_serve() -> void:
+	_lifecycle_bus.begin_serve_setup(self)
 	controller.request_serve()
 
 ## Setup player with given data and control method
@@ -201,6 +171,7 @@ func stop() -> void:
 	cancel_movement()
 	cancel_stroke()
 	ball = null
+	_lifecycle_bus.end_point(self)
 
 
 
@@ -210,30 +181,21 @@ func stop() -> void:
 
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, _delta: float) -> void:
-	# Separate animation direction from movement direction
-	var animation_direction: Vector3 = direction
-	direction = direction.normalized()
-
-	_move_velocity.x = direction.x * move_speed
-	_move_velocity.z = direction.z * move_speed
-
-	# If there's input, accelerate to the input move_velocity
-	if direction.length() > 0:
-		_real_velocity = _real_velocity.lerp(_move_velocity, _acceleration)
-	else:
-		# If there's no input, slow down to (0, 0)
-		_real_velocity = _real_velocity.lerp(Vector3.ZERO, _friction)
-
-	velocity = _real_velocity
-	move_and_slide()
+	var animation_direction: Vector3 = _movement_service.apply_movement(
+		self,
+		direction,
+		move_speed,
+		acceleration,
+		friction
+	)
 
 	# Update animation state based on movement (only if not stroking or recovering)
 	if _can_update_movement_animation():
 		if animation_direction.length() > 0:
-			_set_state(PlayerState.MOVING)
+			_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.MOVING)
 			model.play_run(animation_direction)
 		else:
-			_set_state(PlayerState.IDLE)
+			_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.IDLE)
 
 
 
@@ -241,37 +203,20 @@ func apply_movement(direction: Vector3, _delta: float) -> void:
 
 ## Compute movement direction from path
 func compute_move_dir() -> Vector3:
-	var move_direction: Vector3 = Vector3.ZERO
-	if _path.size() > 0:
-		assert(_path.size() == 1)
-		move_direction = _get_move_direction()
+	if _movement_service.consume_target_reached_if_needed(position):
+		target_point_reached.emit()
 
-	return move_direction
-
-
-## Get movement direction toward next waypoint
-func _get_move_direction() -> Vector3:
-	var direction: Vector3 = Vector3.ZERO
-	if _path.size() > 0:
-		if position.distance_squared_to(_path[0]) < DISTANCE_THRESHOLD:
-			_path.remove_at(0)
-			target_point_reached.emit()
-		else:
-			direction = (_path[0] - position).normalized()
-			direction.y = 0
-
-	return direction
+	return _movement_service.compute_move_dir(position)
 
 
 ## Queue a movement to target position
 func request_move_to(target: Vector3) -> void:
-	cancel_movement()
-	_path.append(target)
+	_movement_service.request_move_to(target)
 
 
 ## Cancel all pending movement
 func cancel_movement() -> void:
-	_path = []
+	_movement_service.cancel_movement()
 
 
 ## Move to defensive position after stroke animation finishes
@@ -287,11 +232,11 @@ func _on_target_point_reached() -> void:
 	if queued_stroke:
 		var stroke = queued_stroke  # Store locally before await to prevent race condition
 		_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
-		var closest_step := controller.get_closest_trajectory_step(self)
+		var closest_step: TrajectoryStep = _trajectory_service.get_closest_step(controller, self)
 		var timing = closest_step.time - _animation_hit_point_time
 		if timing > 0:
 			await get_tree().create_timer(timing).timeout
-		_set_state(PlayerState.STROKING)
+		_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.STROKING)
 		model.play_stroke(stroke)
 
 ## Stroke System
@@ -318,10 +263,7 @@ func queue_stroke(stroke: Stroke) -> void:
 
 
 func ball_is_in_reachable_window() -> bool:
-	if not ball:
-		return false
-	var dist = ball.global_position.distance_to(global_position)
-	return dist < 3
+	return _trajectory_service.is_ball_in_reachable_window(ball, global_position, 3.0)
 
 
 ## Execute ball hit with given stroke
@@ -347,14 +289,15 @@ func _hit_ball(stroke: Stroke) -> void:
 ## Cancel currently queued stroke
 func cancel_stroke() -> void:
 	queued_stroke = null
-	_last_stroke_decision = null
-	_set_state(PlayerState.IDLE)
+	_stroke_service.clear()
+	_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.IDLE)
 
 
 ## Execute a serve with given stroke
 func serve(stroke: Stroke) -> void:
 	queued_stroke = stroke
-	_set_state(PlayerState.STROKING)
+	_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.STROKING)
+	_lifecycle_bus.start_serving(self, stroke)
 	model.play_stroke(stroke)
 	# Animation callbacks will handle spawning ball and hitting it
 
@@ -363,7 +306,7 @@ func serve(stroke: Stroke) -> void:
 func from_anim_hit_serve() -> void:
 	Loggie.msg(player_data.last_name + ": ", "SERVING").info()
 	_hit_ball(queued_stroke)
-	just_served.emit()
+	_lifecycle_bus.complete_serve(self)
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
@@ -439,5 +382,46 @@ func _update_controller_ui() -> void:
 
 ## Called when stroke animation finishes
 func _on_stroke_animation_finished() -> void:
-	if _current_state == PlayerState.STROKING:
-		_set_state(PlayerState.RECOVERING)
+	if _state_machine.get_state() == PLAYER_STATE_MACHINE_SCRIPT.State.STROKING:
+		_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.RECOVERING)
+
+
+func _on_state_entered(new_state: int) -> void:
+	match new_state:
+		PLAYER_STATE_MACHINE_SCRIPT.State.IDLE:
+			model.play_idle()
+		PLAYER_STATE_MACHINE_SCRIPT.State.MOVING:
+			pass
+		PLAYER_STATE_MACHINE_SCRIPT.State.PREPARING_STROKE:
+			pass
+		PLAYER_STATE_MACHINE_SCRIPT.State.STROKING:
+			pass
+		PLAYER_STATE_MACHINE_SCRIPT.State.RECOVERING:
+			model.play_recovery()
+		PLAYER_STATE_MACHINE_SCRIPT.State.UNREACHABLE:
+			var next_target: Variant = _movement_service.peek_next_target()
+			if next_target != null:
+				model.play_run((next_target - position).normalized())
+
+
+func _on_lifecycle_phase_changed(previous_phase: int, current_phase: int) -> void:
+	lifecycle_phase_changed.emit(previous_phase, current_phase)
+	if controller:
+		controller.on_lifecycle_phase_changed(previous_phase, current_phase)
+
+
+func get_lifecycle_bus() -> MatchLifecycleBus:
+	return _lifecycle_bus
+
+
+func get_current_state() -> int:
+	if _state_machine:
+		return _state_machine.get_state()
+	return PLAYER_STATE_MACHINE_SCRIPT.State.IDLE
+
+
+func get_movement_path() -> Array[Vector3]:
+	var next_target: Variant = _movement_service.peek_next_target()
+	if next_target == null:
+		return []
+	return [next_target]

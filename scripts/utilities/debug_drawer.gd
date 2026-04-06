@@ -27,13 +27,15 @@ func _process(_delta: float) -> void:
 
 	# Draw AI movement arrows from player paths
 	for player in players:
-		if player and player._path.size() > 0:
+		if player:
+			var movement_path: Array[Vector3] = player.get_movement_path()
+			if movement_path.size() > 0:
 			# Draw from current position to first waypoint
-			draw_arrow(player.position + Vector3(0,1,0), player._path[0] + Vector3(0,1,0))
+				draw_arrow(player.position + Vector3(0,1,0), movement_path[0] + Vector3(0,1,0))
 
 			# Draw between consecutive waypoints
-			for i in range(player._path.size() - 1):
-				draw_arrow(player._path[i] + Vector3(0,1,0), player._path[i + 1] + Vector3(0,1,0))
+				for i in range(movement_path.size() - 1):
+					draw_arrow(movement_path[i] + Vector3(0,1,0), movement_path[i + 1] + Vector3(0,1,0))
 
 		# Draw angle bisector visualization for each player
 		if player and player.bisector_direction != Vector3.ZERO:

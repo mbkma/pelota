@@ -1,6 +1,8 @@
 ## Debug HUD for displaying match stats and player information during gameplay
 extends CanvasLayer
 
+const PLAYER_STATE_MACHINE_SCRIPT: Script = preload("res://scripts/characters/state/player_state_machine.gd")
+
 ## Reference to match manager for accessing game state
 @export var match_manager: MatchManager
 
@@ -8,6 +10,7 @@ extends CanvasLayer
 @export var _trajectory_drawer: TrajectoryDrawer
 
 # Tab containers and content
+@warning_ignore("unused_private_class_variable")
 @onready var _tab_container: TabContainer = $DebugHud/TabContainer
 
 # Summary tab labels
@@ -129,7 +132,7 @@ func _update_player_stats() -> void:
 	# Player 0 stats
 	var p0: Player = match_manager.player0
 	_p0_name_label.text = p0.player_data.last_name
-	var p0_state_text: String = _player_state_to_string(p0._current_state)
+	var p0_state_text: String = _player_state_to_string(p0.get_current_state())
 	if p0.controller is AiInput:
 		var ai_controller: AiInput = p0.controller as AiInput
 		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
@@ -140,7 +143,7 @@ func _update_player_stats() -> void:
 	# Player 1 stats
 	var p1: Player = match_manager.player1
 	_p1_name_label.text = p1.player_data.last_name
-	var p1_state_text: String = _player_state_to_string(p1._current_state)
+	var p1_state_text: String = _player_state_to_string(p1.get_current_state())
 	if p1.controller is AiInput:
 		var ai_controller: AiInput = p1.controller as AiInput
 		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
@@ -187,13 +190,14 @@ func _match_state_to_string(value: MatchManager.MatchState) -> String:
 
 
 ## Convert player state enum to human-readable string
-func _player_state_to_string(value: Player.PlayerState) -> String:
-	var enum_map: Dictionary[Player.PlayerState, String] = {
-		Player.PlayerState.IDLE: "IDLE",
-		Player.PlayerState.MOVING: "MOVING",
-		Player.PlayerState.PREPARING_STROKE: "PREPARING_STROKE",
-		Player.PlayerState.STROKING: "STROKING",
-		Player.PlayerState.RECOVERING: "RECOVERING",
+func _player_state_to_string(value: int) -> String:
+	var enum_map: Dictionary[int, String] = {
+		PLAYER_STATE_MACHINE_SCRIPT.State.IDLE: "IDLE",
+		PLAYER_STATE_MACHINE_SCRIPT.State.MOVING: "MOVING",
+		PLAYER_STATE_MACHINE_SCRIPT.State.PREPARING_STROKE: "PREPARING_STROKE",
+		PLAYER_STATE_MACHINE_SCRIPT.State.STROKING: "STROKING",
+		PLAYER_STATE_MACHINE_SCRIPT.State.RECOVERING: "RECOVERING",
+		PLAYER_STATE_MACHINE_SCRIPT.State.UNREACHABLE: "UNREACHABLE",
 	}
 	return enum_map.get(value, "UNKNOWN")
 
@@ -256,7 +260,7 @@ func _update_summary_stats(_delta: float) -> void:
 	# Player 0
 	var p0: Player = match_manager.player0
 	_summary_p0_name_label.text = p0.player_data.last_name
-	var p0_state_text: String = _player_state_to_string(p0._current_state)
+	var p0_state_text: String = _player_state_to_string(p0.get_current_state())
 	if p0.controller is AiInput:
 		var ai_controller: AiInput = p0.controller as AiInput
 		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
@@ -267,7 +271,7 @@ func _update_summary_stats(_delta: float) -> void:
 	# Player 1
 	var p1: Player = match_manager.player1
 	_summary_p1_name_label.text = p1.player_data.last_name
-	var p1_state_text: String = _player_state_to_string(p1._current_state)
+	var p1_state_text: String = _player_state_to_string(p1.get_current_state())
 	if p1.controller is AiInput:
 		var ai_controller: AiInput = p1.controller as AiInput
 		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)

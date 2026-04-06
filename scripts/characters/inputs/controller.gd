@@ -55,7 +55,12 @@ func get_move_direction() -> Vector3
 @abstract
 func get_stroke() -> Stroke
 
-func ball_changed(ball: Ball) -> void:
+func ball_changed(_ball: Ball) -> void:
+	pass
+
+
+## Lifecycle callback from player lifecycle bus (serve/rally/point phases)
+func on_lifecycle_phase_changed(_previous_phase: int, _current_phase: int) -> void:
 	pass
 
 ## Get aim marker position for UI (override if controller needs UI)

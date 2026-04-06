@@ -3,6 +3,8 @@
 class_name HumanController
 extends Controller
 
+const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
+
 ## Local signal for aiming position (parent class has aiming_at_position)
 signal aiming_at_pos(position: Vector3)
 
@@ -107,7 +109,7 @@ func _initialize_input_device() -> void:
 	# Connect stroke signals
 	_input_device.stroke_started.connect(_on_stroke_started)
 	_input_device.stroke_updating.connect(_on_stroke_updating)
-	_input_device.stroke_completed.connect(_on_stroke_completed, CONNECT_ONE_SHOT)
+	_input_device.stroke_completed.connect(_on_stroke_completed)
 
 	# Update mouse capture mode based on input devices
 	_update_mouse_capture_mode()
@@ -149,10 +151,6 @@ func _on_stroke_completed(pace: float, stroke_type: InputDevice.StrokeInputType)
 			" pace=", pace,
 			" type=", stroke_type
 		).debug()
-
-	# TODO Reconnect for next stroke since CONNECT_ONE_SHOT disconnects after firing
-	_input_device.stroke_completed.connect(_on_stroke_completed, CONNECT_ONE_SHOT)
-
 
 ## Prepares a serve stroke (to be executed by player)
 func _do_serve(pace: float) -> void:
@@ -226,11 +224,7 @@ func _build_rally_stroke(
 
 ## Called when player successfully hits the ball
 func _on_player_ball_hit() -> void:
-	_stroke_mode_active = false
-	_pending_stroke = null
-	_stroke_trajectory_step = null
-	_current_pace = 0.0
-	_is_stroke_active = false
+	_reset_transient_input_state()
 	_aiming_at = _get_default_aim()
 	_vibrate_joypad(0.8, 0.1)  # Strong brief vibration on ball contact
 
@@ -239,6 +233,28 @@ func request_serve() -> void:
 	_serve_controls = true
 	_aiming_at = _get_default_aim()
 	_input_device.set_serve_mode(true)
+
+
+func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> void:
+	match current_phase:
+		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.RALLY:
+			_serve_controls = false
+			if _input_device:
+				_input_device.set_serve_mode(false)
+		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.POINT_ENDED, MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE:
+			_reset_transient_input_state()
+			_serve_controls = false
+			if _input_device:
+				_input_device.set_serve_mode(false)
+			_aiming_at = _get_default_aim()
+
+
+func _reset_transient_input_state() -> void:
+	_stroke_mode_active = false
+	_pending_stroke = null
+	_stroke_trajectory_step = null
+	_current_pace = 0.0
+	_is_stroke_active = false
 
 
 ## Get movement direction from input device

@@ -2,6 +2,8 @@
 class_name AiInput
 extends Controller
 
+const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
+
 ## Phase-based decision system enum
 enum Phase {
 	SERVING,
@@ -189,6 +191,17 @@ func _on_hit_frame() -> void:
 
 func ball_changed(_ball: Ball) -> void:
 	_reset_to_anticipation()
+
+
+func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> void:
+	match current_phase:
+		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.SERVING:
+			_current_phase = Phase.SERVING
+		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.RALLY:
+			if _current_phase == Phase.SERVING:
+				_current_phase = Phase.ANTICIPATION
+		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.POINT_ENDED, MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE:
+			_reset_to_anticipation()
 
 
 

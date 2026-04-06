@@ -2,6 +2,8 @@
 class_name MatchManager
 extends Node
 
+const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
+
 ## Emitted when players have been positioned
 signal players_placed
 
@@ -69,10 +71,10 @@ func _ready() -> void:
 	match_data = MatchData.new(player0.player_data, player1.player_data)
 	player0.ball_hit.connect(_on_player0_ball_hit)
 	player1.ball_hit.connect(_on_player1_ball_hit)
-	player0.just_served.connect(_on_player_just_served)
-	player1.just_served.connect(_on_player_just_served)
 	player0.ball_spawned.connect(_on_player_ball_spawned)
 	player1.ball_spawned.connect(_on_player_ball_spawned)
+	_connect_player_lifecycle(player0)
+	_connect_player_lifecycle(player1)
 	television_hud.score_display.player_1_score_panel.set_player(player0.player_data)
 	television_hud.score_display.player_2_score_panel.set_player(player1.player_data)
 	
@@ -88,6 +90,8 @@ func _ready() -> void:
 
 ## Handle debug input (T key to add point for testing)
 func _input(event: InputEvent) -> void:
+	if not OS.is_debug_build():
+		return
 	if _is_debug_add_point_event(event):
 		add_point(randi() % 2)
 
@@ -97,6 +101,20 @@ func set_active_ball(b: Ball) -> void:
 	ball = b
 	ball.on_ground.connect(_on_ball_on_ground)
 	ball.on_net.connect(_on_ball_on_net)
+
+
+func _connect_player_lifecycle(player: Player) -> void:
+	var bus: MatchLifecycleBus = player.get_lifecycle_bus()
+	if not bus:
+		push_error("MatchManager: Player lifecycle bus missing for %s" % player.name)
+		return
+
+	if not bus.serve_requested.is_connected(_on_player_lifecycle_serve_requested):
+		bus.serve_requested.connect(_on_player_lifecycle_serve_requested)
+	if not bus.serve_completed.is_connected(_on_player_lifecycle_serve_completed):
+		bus.serve_completed.connect(_on_player_lifecycle_serve_completed)
+	if not bus.point_ended.is_connected(_on_player_lifecycle_point_ended):
+		bus.point_ended.connect(_on_player_lifecycle_point_ended)
 
 
 func _on_ball_on_net() -> void:
@@ -371,10 +389,21 @@ func _on_player_ball_spawned(b: Ball) -> void:
 		ball.queue_free()
 	set_active_ball(b)
 
-## Called when a player just served
-func _on_player_just_served() -> void:
-	stadium.show_serve_speed(ball)
-	stadium.stop_serve_clocks()
+func _on_player_lifecycle_serve_requested(serving_player: Player) -> void:
+	if serving_player == get_server() and stadium:
+		stadium.start_serve_clocks()
+
+
+func _on_player_lifecycle_serve_completed(serving_player: Player) -> void:
+	if serving_player == get_server() and stadium:
+		if ball:
+			stadium.show_serve_speed(ball)
+		stadium.stop_serve_clocks()
+
+
+func _on_player_lifecycle_point_ended(_player: Player) -> void:
+	if stadium:
+		stadium.stop_serve_clocks()
 
 
 ## Called when player 0 hits the ball
