@@ -98,17 +98,17 @@ func handle_stroke_input() -> bool:
 		elif drop_shot_just_pressed:
 			_current_stroke_type = StrokeInputType.DROP_SHOT
 
-		stroke_started.emit()
+		emit_stroke_started()
 
 	# Continuously update aim and pace while button is held
 	if is_any_action_pressed:
 		_input_pace += GameConstants.PACE_INCREMENT_RATE
 		_input_pace = clamp(_input_pace, 0.0, 5.0)
-		stroke_updating.emit(_input_pace, _current_stroke_type)
+		emit_stroke_updating(_input_pace, _current_stroke_type)
 
 	# Complete stroke when button is released
 	if is_any_action_just_released:
-		stroke_completed.emit(_input_pace, _current_stroke_type)
+		emit_stroke_completed(_input_pace, _current_stroke_type)
 		return true
 
 	return is_any_action_pressed

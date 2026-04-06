@@ -7,6 +7,7 @@ const MOVEMENT_SERVICE_SCRIPT: Script = preload("res://scripts/characters/servic
 const TRAJECTORY_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/trajectory_service.gd")
 const STROKE_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/stroke_service.gd")
 const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
+const BALL_FACTORY_SCRIPT: Script = preload("res://scripts/core/ball_factory.gd")
 
 enum PlayerState {
 	IDLE,
@@ -50,6 +51,7 @@ signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 @export var team_index: int = 0
 @export var ball_aim_marker: Node3D
 @export var opponent: Player  # Reference to opponent player
+@export var serve_ball_scene: PackedScene
 
 ## Flat stroke sound effects
 @export var stroke_sounds_flat: Array[AudioStream]
@@ -67,6 +69,7 @@ var _movement_service: RefCounted = MOVEMENT_SERVICE_SCRIPT.new()
 var _trajectory_service: RefCounted = TRAJECTORY_SERVICE_SCRIPT.new()
 var _stroke_service: RefCounted = STROKE_SERVICE_SCRIPT.new()
 var _lifecycle_bus: MatchLifecycleBus
+var _ball_factory: BallFactory
 
 var queued_stroke: Stroke:
 	get:
@@ -104,6 +107,8 @@ func _ready() -> void:
 	_lifecycle_bus.name = "MatchLifecycleBus"
 	add_child(_lifecycle_bus)
 	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
+
+	_ball_factory = BALL_FACTORY_SCRIPT.new(serve_ball_scene)
 
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
@@ -318,12 +323,14 @@ func from_anim_hit_serve() -> void:
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
-	ball = GlobalScenes.BALL_SCENE.instantiate()
-	ball.initial_position = position + model.toss_point
-	ball.initial_velocity = Vector3(0, 5, 0)
+	ball = _ball_factory.create_ball(position + model.toss_point, Vector3(0, 5, 0))
+	if not ball:
+		return
 	get_parent().add_child(ball)
+	set_active_ball(ball)
+	if opponent:
+		opponent.set_active_ball(ball)
 	ball_spawned.emit(ball)
-	get_tree().call_group("Player", "set_active_ball", ball)
 	Loggie.msg(player_data.last_name + ": ", "from_anim_spawn_ball: stroke: ", queued_stroke, ", ball: ", ball).info()
 
 ## Other Functions
@@ -369,7 +376,8 @@ func play_stroke_sound(stroke: Stroke) -> void:
 ## Set the active ball for this player
 func set_active_ball(b: Ball) -> void:
 	ball = b
-	controller.ball_changed(b)
+	if controller:
+		controller.ball_changed(b)
 
 
 ## Update UI based on controller state (uniform interface for all controllers)

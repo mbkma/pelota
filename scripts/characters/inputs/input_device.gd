@@ -19,6 +19,18 @@ signal stroke_updating(pace: float, stroke_type: StrokeInputType)
 ## Signal emitted when stroke button is released
 signal stroke_completed(pace: float, stroke_type: StrokeInputType)
 
+
+func emit_stroke_started() -> void:
+	stroke_started.emit()
+
+
+func emit_stroke_updating(pace: float, stroke_type: StrokeInputType) -> void:
+	stroke_updating.emit(pace, stroke_type)
+
+
+func emit_stroke_completed(pace: float, stroke_type: StrokeInputType) -> void:
+	stroke_completed.emit(pace, stroke_type)
+
 @abstract
 func initialize(index: int) -> void
 

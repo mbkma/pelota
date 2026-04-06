@@ -107,24 +107,13 @@ func _update_performance_stats(_delta: float) -> void:
 ## Update match state statistics display
 func _update_match_stats() -> void:
 	_match_state_label.text = _match_state_to_string(match_manager.current_state)
+	_server_label.text = match_manager.get_server_name()
 
-	var server_idx: int = match_manager.match_data.match_score.current_server
-	var server_name: String = (
-		match_manager.player0.player_data.last_name
-		if server_idx == 0
-		else match_manager.player1.player_data.last_name
-	)
-	_server_label.text = server_name
-
-	_serve_zone_label.text = _court_region_to_string(match_manager._valid_serve_zone)
-	_rally_zone_label.text = _court_region_to_string(match_manager._valid_rally_zone)
-	_ground_contacts_label.text = str(match_manager._ground_contacts)
-	_rally_length_label.text = str(match_manager.match_data.rally_length)
-
-	if match_manager.last_hitter:
-		_last_hitter_label.text = match_manager.last_hitter.player_data.last_name
-	else:
-		_last_hitter_label.text = "None"
+	_serve_zone_label.text = _court_region_to_string(match_manager.get_valid_serve_zone())
+	_rally_zone_label.text = _court_region_to_string(match_manager.get_valid_rally_zone())
+	_ground_contacts_label.text = str(match_manager.get_ground_contacts())
+	_rally_length_label.text = str(match_manager.get_rally_length())
+	_last_hitter_label.text = match_manager.get_last_hitter_name()
 
 
 ## Update player position, velocity, and stat displays
@@ -231,25 +220,13 @@ func _update_summary_stats(_delta: float) -> void:
 
 	# Match State
 	_summary_state_label.text = _match_state_to_string(match_manager.current_state)
+	_summary_server_label.text = match_manager.get_server_name()
+	_summary_rally_label.text = str(match_manager.get_rally_length())
+	_summary_last_hitter_label.text = match_manager.get_last_hitter_name()
 
-	var server_idx: int = match_manager.match_data.match_score.current_server
-	var server_name: String = (
-		match_manager.player0.player_data.last_name
-		if server_idx == 0
-		else match_manager.player1.player_data.last_name
-	)
-	_summary_server_label.text = server_name
-
-	_summary_rally_label.text = str(match_manager.match_data.rally_length)
-
-	if match_manager.last_hitter:
-		_summary_last_hitter_label.text = match_manager.last_hitter.player_data.last_name
-	else:
-		_summary_last_hitter_label.text = "None"
-
-	_summary_serve_zone_label.text = _court_region_to_string(match_manager._valid_serve_zone)
-	_summary_rally_zone_label.text = _court_region_to_string(match_manager._valid_rally_zone)
-	_summary_ground_contacts_label.text = str(match_manager._ground_contacts)
+	_summary_serve_zone_label.text = _court_region_to_string(match_manager.get_valid_serve_zone())
+	_summary_rally_zone_label.text = _court_region_to_string(match_manager.get_valid_rally_zone())
+	_summary_ground_contacts_label.text = str(match_manager.get_ground_contacts())
 
 	# Ball
 	if match_manager.ball:

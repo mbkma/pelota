@@ -333,10 +333,14 @@ func get_aim_marker_scale() -> Vector3:
 ## Update mouse capture mode - only capture if both players use gamepads
 static func _update_mouse_capture_mode() -> void:
 	# Only capture mouse if 2 gamepads are being used (local multiplayer with 2 gamepads)
-	if _gamepad_controller_count >= 2:
+	if should_capture_mouse():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	else:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
+static func should_capture_mouse() -> bool:
+	return _gamepad_controller_count >= 2
 
 
 ## Reset static counters (call this when starting a new match)

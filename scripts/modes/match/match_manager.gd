@@ -98,9 +98,17 @@ func _input(event: InputEvent) -> void:
 
 ## Set active ball and connect its signals
 func set_active_ball(b: Ball) -> void:
+	if ball and ball != b:
+		_clear_ball()
+
 	ball = b
-	ball.on_ground.connect(_on_ball_on_ground)
-	ball.on_net.connect(_on_ball_on_net)
+	if not ball:
+		return
+
+	if not ball.on_ground.is_connected(_on_ball_on_ground):
+		ball.on_ground.connect(_on_ball_on_ground)
+	if not ball.on_net.is_connected(_on_ball_on_net):
+		ball.on_net.connect(_on_ball_on_net)
 
 
 func _connect_player_lifecycle(player: Player) -> void:
@@ -132,6 +140,39 @@ func get_player_index(player: Player) -> int:
 	if player == player0:
 		return 0
 	return 1
+
+
+func get_valid_serve_zone() -> Court.CourtRegion:
+	return _valid_serve_zone
+
+
+func get_valid_rally_zone() -> Court.CourtRegion:
+	return _valid_rally_zone
+
+
+func get_ground_contacts() -> int:
+	return _ground_contacts
+
+
+func get_server_index() -> int:
+	return match_data.match_score.current_server
+
+
+func get_server_name() -> String:
+	var server_player: Player = get_server()
+	if server_player and server_player.player_data:
+		return server_player.player_data.last_name
+	return "Unknown"
+
+
+func get_rally_length() -> int:
+	return match_data.rally_length
+
+
+func get_last_hitter_name() -> String:
+	if last_hitter and last_hitter.player_data:
+		return last_hitter.player_data.last_name
+	return "None"
 
 
 ## Request the current server to serve
