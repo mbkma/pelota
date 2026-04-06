@@ -17,22 +17,22 @@ const VELOCITY_THRESHOLD: float = 3
 ## Reference to parent player this input handler controls
 var player: Player
 
-## Signal emitted when aiming position changes
-signal aiming_at_position(position: Vector3)
 
-## Signal emitted when pace/power changes
-signal pace_changed(pace: float)
-
-## Signal emitted when input method changes timing
-signal input_changed(timing: float)
+func bind(target_player: Player) -> void:
+	if not target_player:
+		push_error("Controller.bind called with null player")
+		return
+	player = target_player
 
 
 ## Initialize input method (called when scene ready)
 func _ready() -> void:
 	if not player:
-		player = get_parent()
-		if not player or not player is Player:
-			push_error("InputMethod parent must be a Player node, got: ", get_parent().name)
+		var parent_node := get_parent()
+		if parent_node is Player:
+			bind(parent_node)
+		else:
+			push_error("Controller parent must be a Player node, got: " + str(parent_node))
 
 
 ## Update controller state - called by Player each frame

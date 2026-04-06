@@ -108,6 +108,7 @@ func _ready() -> void:
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
+	controller.bind(self)
 	add_child(controller)
 	_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.IDLE)
 	_lifecycle_bus.set_phase(MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE)
@@ -233,9 +234,16 @@ func _on_target_point_reached() -> void:
 		var stroke = queued_stroke  # Store locally before await to prevent race condition
 		_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
 		var closest_step: TrajectoryStep = _trajectory_service.get_closest_step(controller, self)
+		if not closest_step:
+			push_warning("Player._on_target_point_reached: closest trajectory step unavailable")
+			return
 		var timing = closest_step.time - _animation_hit_point_time
 		if timing > 0:
 			await get_tree().create_timer(timing).timeout
+			closest_step = _trajectory_service.get_closest_step(controller, self)
+			if not closest_step:
+				push_warning("Player._on_target_point_reached: trajectory changed before stroke")
+				return
 		_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.STROKING)
 		model.play_stroke(stroke)
 

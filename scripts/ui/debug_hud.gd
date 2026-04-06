@@ -133,9 +133,9 @@ func _update_player_stats() -> void:
 	var p0: Player = match_manager.player0
 	_p0_name_label.text = p0.player_data.last_name
 	var p0_state_text: String = _player_state_to_string(p0.get_current_state())
-	if p0.controller is AiInput:
-		var ai_controller: AiInput = p0.controller as AiInput
-		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	if p0.controller is AiController:
+		var ai_controller: AiController = p0.controller as AiController
+		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
 	_p0_state_label.text = p0_state_text
 	_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_p0_velocity_label.text = "%.2f" % p0.velocity.length()
@@ -144,9 +144,9 @@ func _update_player_stats() -> void:
 	var p1: Player = match_manager.player1
 	_p1_name_label.text = p1.player_data.last_name
 	var p1_state_text: String = _player_state_to_string(p1.get_current_state())
-	if p1.controller is AiInput:
-		var ai_controller: AiInput = p1.controller as AiInput
-		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	if p1.controller is AiController:
+		var ai_controller: AiController = p1.controller as AiController
+		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
 	_p1_state_label.text = p1_state_text
 	_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_p1_velocity_label.text = "%.2f" % p1.velocity.length()
@@ -203,12 +203,12 @@ func _player_state_to_string(value: int) -> String:
 
 
 ## Convert AI phase enum to human-readable string
-func _ai_phase_to_string(value: AiInput.Phase) -> String:
-	var enum_map: Dictionary[AiInput.Phase, String] = {
-		AiInput.Phase.ANTICIPATION: "ANTICIPATION",
-		AiInput.Phase.LOCK_IN: "LOCK_IN",
-		AiInput.Phase.TRACKING: "TRACKING",
-		AiInput.Phase.WAITING_FOR_HIT: "WAITING_FOR_HIT",
+func _ai_phase_to_string(value: AiController.Phase) -> String:
+	var enum_map: Dictionary[AiController.Phase, String] = {
+		AiController.Phase.ANTICIPATION: "ANTICIPATION",
+		AiController.Phase.LOCK_IN: "LOCK_IN",
+		AiController.Phase.TRACKING: "TRACKING",
+		AiController.Phase.WAITING_FOR_HIT: "WAITING_FOR_HIT",
 	}
 	return enum_map.get(value, "UNKNOWN")
 
@@ -261,9 +261,9 @@ func _update_summary_stats(_delta: float) -> void:
 	var p0: Player = match_manager.player0
 	_summary_p0_name_label.text = p0.player_data.last_name
 	var p0_state_text: String = _player_state_to_string(p0.get_current_state())
-	if p0.controller is AiInput:
-		var ai_controller: AiInput = p0.controller as AiInput
-		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	if p0.controller is AiController:
+		var ai_controller: AiController = p0.controller as AiController
+		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
 	_summary_p0_state_label.text = p0_state_text
 	_summary_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_summary_p0_velocity_label.text = "%.2f" % p0.velocity.length()
@@ -272,9 +272,9 @@ func _update_summary_stats(_delta: float) -> void:
 	var p1: Player = match_manager.player1
 	_summary_p1_name_label.text = p1.player_data.last_name
 	var p1_state_text: String = _player_state_to_string(p1.get_current_state())
-	if p1.controller is AiInput:
-		var ai_controller: AiInput = p1.controller as AiInput
-		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller._current_phase)
+	if p1.controller is AiController:
+		var ai_controller: AiController = p1.controller as AiController
+		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
 	_summary_p1_state_label.text = p1_state_text
 	_summary_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_summary_p1_velocity_label.text = "%.2f" % p1.velocity.length()

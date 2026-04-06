@@ -5,8 +5,7 @@ extends Controller
 
 const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
 
-## Local signal for aiming position (parent class has aiming_at_position)
-signal aiming_at_pos(position: Vector3)
+signal pace_changed(pace: float)
 
 ## Static counter to assign gamepad indices to multiple players
 static var _next_gamepad_index: int = 0
@@ -128,12 +127,14 @@ func _on_stroke_updating(pace: float, stroke_type: InputDevice.StrokeInputType) 
 
 		# Create/recreate preliminary stroke with updated trajectory and pace
 		if _stroke_trajectory_step:
-			_pending_stroke = _construct_stroke_from_input(
+			var updated_stroke: Stroke = _construct_stroke_from_input(
 				_stroke_trajectory_step,
 				_aiming_at,
 				pace,
 				stroke_type
 			)
+			if updated_stroke:
+				_pending_stroke = updated_stroke
 
 
 ## Handles stroke completion
@@ -169,7 +170,7 @@ func _construct_stroke_from_input(
 	Loggie.msg("_construct_stroke_from_input", aim_position, pace, stroke_input_type).info()
 	if not closest_step:
 		Loggie.msg("_construct_stroke_from_input: closest_step is null")
-		return Stroke.new()
+		return null
 
 	var to_ball_vector: Vector3 = closest_step.point - player.position
 	var dot_product: float = to_ball_vector.dot(player.basis.x)

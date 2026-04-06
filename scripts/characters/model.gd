@@ -57,9 +57,13 @@ var _stroke_animation_names: Dictionary = {
 
 func _ready() -> void:
 	var p = get_parent()
-	if p is Player:
-		player = get_parent()
-		animation_tree.active = true
+	if not p is Player:
+		push_error("Model parent must be Player, got: " + str(p))
+		set_process(false)
+		return
+
+	player = p
+	animation_tree.active = true
 
 
 func _process(_delta: float) -> void:

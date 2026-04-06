@@ -1,5 +1,5 @@
 ## AI input handler that computes strokes and movement decisions automatically
-class_name AiInput
+class_name AiController
 extends Controller
 
 const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
@@ -42,7 +42,7 @@ func _ready() -> void:
 
 	_current_tactic = tactics[DEFAULT_TACTIC_KEY].new()
 	if not _current_tactic:
-		push_error("AiInput: Failed to instantiate default tactic")
+		push_error("AiController: Failed to instantiate default tactic")
 		set_process(false)
 		return
 
@@ -56,7 +56,7 @@ func _ready() -> void:
 func _make_serve() -> void:
 	var stroke: Stroke = _current_tactic.compute_serve()
 	if not stroke:
-		push_error("AiInput.make_serve: Tactic returned null stroke")
+		push_error("AiController._make_serve: Tactic returned null stroke")
 		return
 
 	player.prepare_serve()
@@ -109,7 +109,7 @@ func get_stroke() -> Stroke:
 func _queue_stroke(step: TrajectoryStep) -> void:
 	var stroke: Stroke = _current_tactic.compute_next_stroke(step)
 	if not stroke:
-		push_error("AiInput._do_stroke: Tactic returned null stroke")
+		push_error("AiController._queue_stroke: Tactic returned null stroke")
 		return
 	stroke.delay = step.time
 	# Queue stroke and position adjustment to be executed by player
@@ -137,7 +137,7 @@ func _lock_in_phase() -> void:
 	# Get closest trajectory step (ball arrival point)
 	var closest_step := get_closest_trajectory_step(player)
 	if not closest_step:
-		push_error("AiInput._lock_in_phase: Could not find trajectory step")
+		push_error("AiController._lock_in_phase: Could not find trajectory step")
 		_current_phase = Phase.ANTICIPATION
 		return
 
@@ -146,14 +146,14 @@ func _lock_in_phase() -> void:
 		closest_step = get_closest_apex_after_first_bounce(player)
 
 	if not closest_step:
-		push_error("AiInput._lock_in_phase: Could not find apex after first bounce")
+		push_error("AiController._lock_in_phase: Could not find apex after first bounce")
 		_current_phase = Phase.ANTICIPATION
 		return
 
 	# Verify ball is on our side of court
 	var closest_ball_position := closest_step.point
 	if sign(closest_ball_position.z) != sign(player.position.z):
-		push_warning("AiInput._lock_in_phase: Ball not on my side of court")
+		push_warning("AiController._lock_in_phase: Ball not on my side of court")
 		_current_phase = Phase.ANTICIPATION
 		return
 
@@ -202,6 +202,10 @@ func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> voi
 				_current_phase = Phase.ANTICIPATION
 		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.POINT_ENDED, MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE:
 			_reset_to_anticipation()
+
+
+func get_current_phase() -> Phase:
+	return _current_phase
 
 
 

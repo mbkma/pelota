@@ -14,9 +14,23 @@ var _regenerates_stamina: bool = false
 func _ready() -> void:
 	if player:
 		player.player_data.stats_changed.connect(_on_player_data_stats_changed)
-		player.input_node.pace_changed.connect(_on_player_input_pace_changed)
+		_connect_controller_signals()
 		player.ball_hit.connect(_on_player_ball_hit)
 		_stamina.max_value = float(player.player_data.stats.endurance)
+
+
+func _connect_controller_signals() -> void:
+	if not player:
+		return
+
+	if player.controller and player.controller.has_signal("pace_changed"):
+		var on_pace_changed := Callable(self, "_on_player_input_pace_changed")
+		if not player.controller.is_connected("pace_changed", on_pace_changed):
+			player.controller.connect("pace_changed", on_pace_changed)
+		return
+
+	# Player may still be initializing its controller during this frame.
+	call_deferred("_connect_controller_signals")
 
 
 ## Setup HUD for singles match (placeholder)
