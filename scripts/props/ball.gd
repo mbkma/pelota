@@ -23,6 +23,8 @@ const SPIN_DOWN_FORCE: float = 0.1
 
 # Air resistance
 const AIR_DRAG: float = 0.02
+const TRAJECTORY_MAX_TIME: float = 5.0
+const TRAJECTORY_SIMULATION_DT: float = 1.0 / 240.0
 
 @export var initial_velocity: Vector3
 var initial_position: Vector3
@@ -43,20 +45,55 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	step(delta)
 
+
+func _compute_magnus_force(spin_value: Vector3) -> Vector3:
+	return Vector3(
+		spin_value.x * SPIN_SIDE_MULT,
+		-spin_value.y * SPIN_DOWN_FORCE,
+		spin_value.z * SPIN_FORWARD_MULT
+	)
+
+
+func _apply_magnus_and_gravity(base_velocity: Vector3, spin_value: Vector3, delta: float) -> Vector3:
+	var next_velocity: Vector3 = base_velocity
+	var magnus_force: Vector3 = _compute_magnus_force(spin_value)
+	next_velocity.y += (-GRAVITY_BASE + magnus_force.y) * delta
+	next_velocity.x += magnus_force.x * delta
+	next_velocity.z += magnus_force.z * delta
+	return next_velocity
+
+
+func _apply_air_drag(base_velocity: Vector3, delta: float) -> Vector3:
+	return base_velocity - (base_velocity * AIR_DRAG * delta)
+
+
+func _handle_collision(collision: KinematicCollision3D) -> void:
+	if not collision:
+		return
+
+	var collider := collision.get_collider()
+	if collider.name == "Net":
+		Loggie.msg("Hit net!").debug()
+		velocity = _previous_velocity.bounce(collision.get_normal()) * 0.1
+		on_net.emit()
+		return
+
+	if collider.name == "Ground":
+		Loggie.msg("Hit ground").debug()
+		_realistic_bounce(collision)
+		return
+
+	velocity = _previous_velocity.bounce(collision.get_normal()) * 0.1
+	Loggie.msg("Hit other object").debug()
+
+
 func step(delta: float) -> void:
 	# --- 1. Gravity + Magnus effect ---
-	var magnus_force = Vector3(
-		spin.x * SPIN_SIDE_MULT,
-		-spin.y * SPIN_DOWN_FORCE,
-		spin.z * SPIN_FORWARD_MULT
-	)
-	velocity.y += (-GRAVITY_BASE + magnus_force.y) * delta
-	velocity.x += magnus_force.x * delta
-	velocity.z += magnus_force.z * delta
+	velocity = _apply_magnus_and_gravity(velocity, spin, delta)
 	Loggie.msg("After gravity: velocity=", velocity).debug()
 
 	# --- 2. Air drag ---
-	velocity -= velocity * AIR_DRAG * delta
+	velocity = _apply_air_drag(velocity, delta)
 	Loggie.msg("After drag: velocity=", velocity).debug()
 
 	_previous_velocity = velocity
@@ -69,18 +106,7 @@ func step(delta: float) -> void:
 	if get_slide_collision_count() > 0:
 		var collision: KinematicCollision3D = get_slide_collision(0)
 		Loggie.msg("Collision detected with: ", collision.get_collider()).debug()
-		if collision:
-			var collider := collision.get_collider()
-			if collider.name == "Net":
-				Loggie.msg("Hit net!").debug()
-				velocity = _previous_velocity.bounce(collision.get_normal()) * 0.1
-				on_net.emit()
-			elif collider.name == "Ground":
-				Loggie.msg("Hit ground").debug()
-				_realistic_bounce(collision)
-			else:
-				velocity = _previous_velocity.bounce(collision.get_normal()) * 0.1
-				Loggie.msg("Hit other object").debug()
+		_handle_collision(collision)
 
 
 	# --- 5. Ground signal ---
@@ -120,24 +146,16 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	Loggie.msg("Corrected position.y=", position.y).debug()
 
 
-func simulate_trajectory(start_position: Vector3, v0: Vector3, spin: Vector3) -> Vector3:
-	var pos = start_position
-	var vel = v0
+func simulate_trajectory(start_position: Vector3, v0: Vector3, spin_value: Vector3) -> Vector3:
+	var pos: Vector3 = start_position
+	var vel: Vector3 = v0
 	var t := 0.0
-	var dt := 1.0 / 240.0  # high resolution
+	var dt := TRAJECTORY_SIMULATION_DT
 
-	while t < 5.0: # max time
+	while t < TRAJECTORY_MAX_TIME:
 		# --- Compute forces ---
-		var magnus = Vector3(
-			spin.x * SPIN_SIDE_MULT,
-			-spin.y * SPIN_DOWN_FORCE,
-			spin.z * SPIN_FORWARD_MULT
-		)
-		vel.y += (-GRAVITY_BASE + magnus.y) * dt
-		vel.x += magnus.x * dt
-		vel.z += magnus.z * dt
-
-		vel -= vel * AIR_DRAG * dt
+		vel = _apply_magnus_and_gravity(vel, spin_value, dt)
+		vel = _apply_air_drag(vel, dt)
 
 		# integrate
 		pos += vel * dt
@@ -151,19 +169,19 @@ func simulate_trajectory(start_position: Vector3, v0: Vector3, spin: Vector3) ->
 
 
 func calculate_velocity(
-	start_position: Vector3, target_position: Vector3, velocity_z0: float, spin: Vector3
+	start_position: Vector3, target_position: Vector3, velocity_z0: float, spin_value: Vector3
 ) -> Vector3:
 	var vx0 := 0.0
 	var vy0 := 0.0
-	var learning_rate := 0.2
+	var learning_rate: float = 0.2
 
-	var landed = null
-	for iteration in 8: # max 8 iterations
-		var v0 = Vector3(vx0, vy0, velocity_z0)
-		landed = simulate_trajectory(start_position, v0, spin)
+	var landed: Vector3 = start_position
+	for _iteration in 8:
+		var v0: Vector3 = Vector3(vx0, vy0, velocity_z0)
+		landed = simulate_trajectory(start_position, v0, spin_value)
 
-		var error_x = target_position.x - landed.x
-		var error_z = target_position.z - landed.z
+		var error_x: float = target_position.x - landed.x
+		var error_z: float = target_position.z - landed.z
 
 		if abs(error_x) < 0.05 and abs(error_z) < 0.05:
 			break

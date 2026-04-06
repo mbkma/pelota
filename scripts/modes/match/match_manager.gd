@@ -40,6 +40,20 @@ var _ground_contacts: int = 0
 @export var crowd: Crowd
 @export var cameras: MatchCameras
 
+
+func _update_valid_serve_zone_from_server_position() -> void:
+	_valid_serve_zone = (
+		Court.CourtRegion.BACK_SINGLES_BOX
+		if get_server().position.z > 0
+		else Court.CourtRegion.FRONT_SINGLES_BOX
+	)
+
+
+func _is_debug_add_point_event(event: InputEvent) -> bool:
+	if not (event is InputEventKey and event.pressed):
+		return false
+	return event.keycode == KEY_T
+
 func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
 		push_error("MatchManager not properly initialized! Missing required nodes.")
@@ -74,9 +88,8 @@ func _ready() -> void:
 
 ## Handle debug input (T key to add point for testing)
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_T:
-			add_point(randi() % 2)
+	if _is_debug_add_point_event(event):
+		add_point(randi() % 2)
 
 
 ## Set active ball and connect its signals
@@ -86,7 +99,7 @@ func set_active_ball(b: Ball) -> void:
 	ball.on_net.connect(_on_ball_on_net)
 
 
-func _on_ball_on_net():
+func _on_ball_on_net() -> void:
 	pass
 
 ## Get the opponent of the given player
@@ -117,11 +130,7 @@ func set_player_serve() -> void:
 
 ## Start a new match
 func start_match() -> void:
-	_valid_serve_zone = (
-		Court.CourtRegion.BACK_SINGLES_BOX
-		if get_server().position.z > 0
-		else Court.CourtRegion.FRONT_SINGLES_BOX
-	)
+	_update_valid_serve_zone_from_server_position()
 	_valid_rally_zone = _valid_serve_zone
 	current_state = MatchState.SERVE
 	set_player_serve()
@@ -240,11 +249,7 @@ func add_point(winner: int) -> void:
 	)
 	place_players()
 	await players_placed
-	_valid_serve_zone = (
-		Court.CourtRegion.BACK_SINGLES_BOX
-		if get_server().position.z > 0
-		else Court.CourtRegion.FRONT_SINGLES_BOX
-	)
+	_update_valid_serve_zone_from_server_position()
 	current_state = MatchState.SERVE
 	set_player_serve()
 

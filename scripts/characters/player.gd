@@ -81,21 +81,8 @@ var _acceleration: float = 0.1
 ## Movement path waypoints
 var _path: Array[Vector3] = []
 
-## Timing system variables for animation synchronization
-## Time when ball will arrive at predicted hit location (set by opponent hit prediction)
-var _ball_prediction_time: float = 0.0
-
-## Time required for player to travel from current position to hit location
-var _travel_time: float = 0.0
-
 ## Time in animation when racket contacts ball (frame-specific, set from Model)
 var _animation_hit_point_time: float = 0.0
-
-## Calculated time when animation should start to sync with ball arrival
-var _animation_start_time: float = 0.0
-
-## Whether the player is currently doing a synchronized stroke (AI-driven)
-var _is_synchronized_stroke: bool = false
 
 ## Whether the player cannot reach the ball in time
 var _is_unreachable: bool = false
@@ -107,6 +94,10 @@ var bisector_direction: Vector3 = Vector3.ZERO
 var opponent_hit_position: Vector3 = Vector3.ZERO
 
 const DISTANCE_THRESHOLD: float = 0.01
+
+
+func _can_update_movement_animation() -> bool:
+	return _current_state != PlayerState.STROKING and _current_state != PlayerState.RECOVERING
 
 
 func _ready() -> void:
@@ -143,7 +134,7 @@ func _set_state(new_state: PlayerState) -> void:
 			if _path.size() > 0:
 				model.play_run((_path[0] - position).normalized())
 
-var old = null
+var _last_stroke_decision: Stroke = null
 ## Process stroke decisions from controller each frame
 func _process(delta: float) -> void:
 	if not controller:
@@ -157,13 +148,13 @@ func _process(delta: float) -> void:
 
 	# Check if controller has a stroke decision
 	var stroke_decision: Stroke = controller.get_stroke()
-	if stroke_decision and old != stroke_decision:
+	if stroke_decision and _last_stroke_decision != stroke_decision:
 		# Execute the stroke decision
 		if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
 			serve(stroke_decision)
 		else:
 			queue_stroke(stroke_decision)
-		old = stroke_decision
+		_last_stroke_decision = stroke_decision
 
 	if queued_stroke and queued_stroke.stroke_type != queued_stroke.StrokeType.SERVE and ball_is_in_reachable_window():
 		_hit_ball(queued_stroke)
@@ -188,7 +179,7 @@ func setup(data: PlayerData, _ai_controlled: bool) -> void:
 
 
 ## Setup player for training mode
-func setup_mode(mode) -> void:
+func setup_mode(_mode) -> void:
 	pass
 
 
@@ -206,7 +197,6 @@ func stop() -> void:
 
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, _delta: float) -> void:
-	
 	# Separate animation direction from movement direction
 	var animation_direction: Vector3 = direction
 	direction = direction.normalized()
@@ -225,7 +215,7 @@ func apply_movement(direction: Vector3, _delta: float) -> void:
 	move_and_slide()
 
 	# Update animation state based on movement (only if not stroking or recovering)
-	if _current_state != PlayerState.STROKING and _current_state != PlayerState.RECOVERING:
+	if _can_update_movement_animation():
 		if animation_direction.length() > 0:
 			_set_state(PlayerState.MOVING)
 			model.play_run(animation_direction)
@@ -429,9 +419,6 @@ func _update_controller_ui() -> void:
 			ball_aim_marker.global_position = aim_position
 			ball_aim_marker.scale = controller.get_aim_marker_scale()
 			ball_aim_marker.visible = true
-	else:
-		# Controller doesn't need aim marker visible
-		pass  # Don't hide here, only hide after stroke execution
 
 
 ## Called when stroke animation finishes

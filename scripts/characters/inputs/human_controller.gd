@@ -140,8 +140,15 @@ func _on_stroke_completed(pace: float, stroke_type: String) -> void:
 		_do_serve(_aiming_at, pace)
 		_serve_controls = false
 		_input_device.set_serve_mode(false)
-	elif player.global_position.distance_to(_stroke_trajectory_step.point) < 3:
-		adjust_player_position_to_stroke(player, _stroke_trajectory_step, _pending_stroke)
+	elif _stroke_trajectory_step and _pending_stroke:
+		if player.global_position.distance_to(_stroke_trajectory_step.point) < 3:
+			adjust_player_position_to_stroke(player, _stroke_trajectory_step, _pending_stroke)
+	else:
+		Loggie.msg(
+			"HumanController._on_stroke_completed: missing trajectory/stroke; skipping position adjustment",
+			" pace=", pace,
+			" type=", stroke_type
+		).debug()
 
 	# TODO Reconnect for next stroke since CONNECT_ONE_SHOT disconnects after firing
 	_input_device.stroke_completed.connect(_on_stroke_completed, CONNECT_ONE_SHOT)

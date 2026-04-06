@@ -11,6 +11,8 @@ enum Phase {
 	WAITING_FOR_HIT    ## Animation playing - waiting for hit frame
 }
 
+const DEFAULT_TACTIC_KEY: String = "default"
+
 ## Available tactics for AI decision-making
 @export var tactics: Dictionary[String, Script]
 
@@ -24,6 +26,11 @@ var _pending_stroke: Stroke = null
 var _current_phase: Phase = Phase.ANTICIPATION
 
 
+func _reset_to_anticipation() -> void:
+	_current_phase = Phase.ANTICIPATION
+	_pending_stroke = null
+
+
 func _ready() -> void:
 	super()  # Call base class initialization
 	if not validate_player():
@@ -31,7 +38,7 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 
-	_current_tactic = tactics["default"].new()
+	_current_tactic = tactics[DEFAULT_TACTIC_KEY].new()
 	if not _current_tactic:
 		push_error("AiInput: Failed to instantiate default tactic")
 		set_process(false)
@@ -161,13 +168,12 @@ func _tracking_phase(_delta: float) -> void:
 		_current_phase = Phase.LOCK_IN
 		return
 
-
-
+	# Keep current stroke plan while waiting for animation/hit execution.
 
 func _on_hit_frame() -> void:
 	# Calculate defensive position and request move
 	if not validate_player() or not player.opponent:
-		_current_phase = Phase.ANTICIPATION
+		_reset_to_anticipation()
 		return
 
 	# Use queued stroke position for angle bisector calculation
@@ -178,13 +184,11 @@ func _on_hit_frame() -> void:
 	player.move_to_defensive_position(defensive_position)
 
 	# Reset state for next rally
-	_pending_stroke = null
-	_current_phase = Phase.ANTICIPATION
+	_reset_to_anticipation()
 
 
-func ball_changed(ball: Ball) -> void:
-	_current_phase = Phase.ANTICIPATION
-	_pending_stroke = null
+func ball_changed(_ball: Ball) -> void:
+	_reset_to_anticipation()
 
 
 
@@ -195,7 +199,7 @@ func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vecto
 	var opponent_xz: Vector3 = Vector3(opponent_hit_position.x, 0, opponent_hit_position.z)
 
 	var court_width: float = GameConstants.COURT_WIDTH / 2.0
-	var court_depth: float = GameConstants.COURT_LENGTH_HALF
+	var _court_depth: float = GameConstants.COURT_LENGTH_HALF
 	var service_line_z: float = GameConstants.SERVICE_LINE_Z
 
 	# Determine which side of court the opponent is hitting from

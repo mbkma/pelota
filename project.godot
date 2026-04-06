@@ -12,11 +12,11 @@ config_version=5
 
 config/name="Pelota"
 run/main_scene="uid://cf0l4walrllxc"
-config/features=PackedStringArray("4.6")
+config/features=PackedStringArray("4.7")
 
 [audio]
 
-buses/default_bus_layout="res://assets/resources/default_bus_layout.tres"
+buses/default_bus_layout="uid://udhfafl0u4fa"
 
 [autoload]
 
@@ -37,7 +37,7 @@ shapes/navigation/geometry_color=Color(1, 0, 0.960784, 0.4)
 
 [display]
 
-window/size/mode=3
+window/size/initial_position_type=4
 mouse_cursor/custom_image="res://assets/textures/ui/menus/crosshair121-scaled.png"
 mouse_cursor/custom_image_hotspot=Vector2(16, 16)
 window/size/fullscreen=true
