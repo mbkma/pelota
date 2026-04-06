@@ -4,14 +4,20 @@
 class_name InputDevice
 extends Node
 
+enum StrokeInputType {
+	TOPSPIN,
+	SLICE,
+	DROP_SHOT,
+}
+
 ## Signal emitted when stroke button is first pressed
 signal stroke_started
 
 ## Signal emitted while stroke button is held
-signal stroke_updating(pace: float, stroke_type: String)
+signal stroke_updating(pace: float, stroke_type: StrokeInputType)
 
 ## Signal emitted when stroke button is released
-signal stroke_completed(pace: float, stroke_type: String)
+signal stroke_completed(pace: float, stroke_type: StrokeInputType)
 
 @abstract
 func initialize(index: int) -> void
@@ -32,9 +38,9 @@ func handle_stroke_input() -> bool
 @abstract
 func get_stroke_pace() -> float
 
-## Returns the current stroke type ("topspin", "slice", "drop_shot")
+## Returns the current stroke input type
 @abstract
-func get_stroke_type() -> String
+func get_stroke_type() -> StrokeInputType
 
 
 ## Returns true if challenge action was just pressed

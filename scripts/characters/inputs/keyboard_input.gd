@@ -4,7 +4,7 @@ class_name KeyboardInput
 extends InputDevice
 
 var _input_pace: float = 0.0
-var _current_stroke_type: String = "topspin"
+var _current_stroke_type: StrokeInputType = StrokeInputType.TOPSPIN
 var _aiming_at: Vector3 = Vector3.ZERO
 var _serve_mode: bool = false
 
@@ -92,11 +92,11 @@ func handle_stroke_input() -> bool:
 		_input_pace = 0.0
 
 		# Determine stroke type based on which button was pressed
-		_current_stroke_type = "topspin"
+		_current_stroke_type = StrokeInputType.TOPSPIN
 		if slice_just_pressed:
-			_current_stroke_type = "slice"
+			_current_stroke_type = StrokeInputType.SLICE
 		elif drop_shot_just_pressed:
-			_current_stroke_type = "drop_shot"
+			_current_stroke_type = StrokeInputType.DROP_SHOT
 
 		stroke_started.emit()
 
@@ -118,7 +118,7 @@ func get_stroke_pace() -> float:
 	return _input_pace
 
 
-func get_stroke_type() -> String:
+func get_stroke_type() -> StrokeInputType:
 	return _current_stroke_type
 
 

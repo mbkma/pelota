@@ -116,7 +116,7 @@ func _initialize_input_device() -> void:
 func _on_stroke_started() -> void:
 	_stroke_mode_active = true
 
-func _on_stroke_updating(pace: float, stroke_type: String) -> void:
+func _on_stroke_updating(pace: float, stroke_type: InputDevice.StrokeInputType) -> void:
 	if not player.ball:
 		return
 
@@ -135,9 +135,9 @@ func _on_stroke_updating(pace: float, stroke_type: String) -> void:
 
 
 ## Handles stroke completion
-func _on_stroke_completed(pace: float, stroke_type: String) -> void:
+func _on_stroke_completed(pace: float, stroke_type: InputDevice.StrokeInputType) -> void:
 	if _serve_controls:
-		_do_serve(_aiming_at, pace)
+		_do_serve(pace)
 		_serve_controls = false
 		_input_device.set_serve_mode(false)
 	elif _stroke_trajectory_step and _pending_stroke:
@@ -155,61 +155,82 @@ func _on_stroke_completed(pace: float, stroke_type: String) -> void:
 
 
 ## Prepares a serve stroke (to be executed by player)
-func _do_serve(aim_position: Vector3, pace: float) -> void:
+func _do_serve(pace: float) -> void:
+	_pending_stroke = _build_serve_stroke(_aiming_at, pace)
+
+	_stroke_mode_active = true
+
+
+## Constructs a stroke from player input, determining stroke type based on ball position
+func _construct_stroke_from_input(
+	closest_step: TrajectoryStep,
+	aim_position: Vector3,
+	pace: float,
+	stroke_input_type: InputDevice.StrokeInputType
+) -> Stroke:
+	Loggie.msg("_construct_stroke_from_input", aim_position, pace, stroke_input_type).info()
+	if not closest_step:
+		Loggie.msg("_construct_stroke_from_input: closest_step is null")
+		return Stroke.new()
+
+	var to_ball_vector: Vector3 = closest_step.point - player.position
+	var dot_product: float = to_ball_vector.dot(player.basis.x)
+	var is_forehand: bool = dot_product > 0.0
+
+	var stroke: Stroke = _build_rally_stroke(is_forehand, stroke_input_type, aim_position, pace)
+
+	stroke.step = closest_step
+	return stroke
+
+
+func _build_serve_stroke(aim_position: Vector3, pace: float) -> Stroke:
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_type = Stroke.StrokeType.SERVE
 	stroke.stroke_power = GameConstants.AI_SERVE_PACE + pace
 	stroke.stroke_spin = GameConstants.AI_SERVE_SPIN
 	stroke.stroke_target = aim_position
-
-	_stroke_mode_active = true
-	_pending_stroke = stroke
+	return stroke
 
 
-## Constructs a stroke from player input, determining stroke type based on ball position
-func _construct_stroke_from_input(
-	closest_step: TrajectoryStep, aim_position: Vector3, pace: float, stroke_name: String
+func _build_rally_stroke(
+	is_forehand: bool,
+	stroke_input_type: InputDevice.StrokeInputType,
+	aim_position: Vector3,
+	pace: float
 ) -> Stroke:
-	Loggie.msg("_construct_stroke_from_input", aim_position, pace, stroke_name).info()
-	if not closest_step:
-		Loggie.msg("_construct_stroke_from_input: closest_step is null")
-		return Stroke.new()
-
 	var stroke: Stroke = Stroke.new()
-	var to_ball_vector: Vector3 = closest_step.point - player.position
-	var dot_product: float = to_ball_vector.dot(player.basis.x)
+	stroke.stroke_target = aim_position
 
-	if dot_product > 0.0:
-		# Forehand stroke
+	if is_forehand:
 		stroke.stroke_type = Stroke.StrokeType.FOREHAND
 		stroke.stroke_power = GameConstants.AI_FOREHAND_PACE + pace
 		stroke.stroke_spin = GameConstants.AI_FOREHAND_SPIN
-		stroke.stroke_target = aim_position
-	else:
-		# Backhand or slice stroke
-		if stroke_name == "slice":
+		return stroke
+
+	match stroke_input_type:
+		InputDevice.StrokeInputType.SLICE:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND_SLICE
 			stroke.stroke_power = GameConstants.AI_BACKHAND_SLICE_PACE + pace
 			stroke.stroke_spin = GameConstants.AI_BACKHAND_SLICE_SPIN
-			stroke.stroke_target = aim_position
-		elif stroke_name == "drop_shot":
+		InputDevice.StrokeInputType.DROP_SHOT:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND_DROP_SHOT
 			stroke.stroke_power = GameConstants.AI_DROP_SHOT_PACE + pace
 			stroke.stroke_spin = GameConstants.AI_DROP_SHOT_SPIN
-			stroke.stroke_target = aim_position
-		else:
+		_:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND
 			stroke.stroke_power = GameConstants.AI_BACKHAND_PACE + pace
 			stroke.stroke_spin = GameConstants.AI_BACKHAND_SPIN
-			stroke.stroke_target = aim_position
 
-	stroke.step = closest_step
 	return stroke
 
 
 ## Called when player successfully hits the ball
 func _on_player_ball_hit() -> void:
 	_stroke_mode_active = false
+	_pending_stroke = null
+	_stroke_trajectory_step = null
+	_current_pace = 0.0
+	_is_stroke_active = false
 	_aiming_at = _get_default_aim()
 	_vibrate_joypad(0.8, 0.1)  # Strong brief vibration on ball contact
 

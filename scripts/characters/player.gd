@@ -54,11 +54,13 @@ signal ball_spawned(ball: Ball)
 @export var stroke_sounds_slice: Array[AudioStream]
 
 ## Currently queued stroke to execute
+var _queued_stroke: Stroke = null
+
 var queued_stroke: Stroke:
 	get:
-		return queued_stroke
+		return _queued_stroke
 	set(value):
-		queued_stroke = value
+		_queued_stroke = value
 		Loggie.msg(player_data.last_name + ": ", "Setting queued stroke to: ", value).debug()
 
 ## Current player state
@@ -135,6 +137,7 @@ func _set_state(new_state: PlayerState) -> void:
 				model.play_run((_path[0] - position).normalized())
 
 var _last_stroke_decision: Stroke = null
+
 ## Process stroke decisions from controller each frame
 func _process(delta: float) -> void:
 	if not controller:
@@ -146,18 +149,28 @@ func _process(delta: float) -> void:
 	# Update UI based on controller state
 	_update_controller_ui()
 
-	# Check if controller has a stroke decision
-	var stroke_decision: Stroke = controller.get_stroke()
-	if stroke_decision and _last_stroke_decision != stroke_decision:
-		# Execute the stroke decision
-		if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
-			serve(stroke_decision)
-		else:
-			queue_stroke(stroke_decision)
-		_last_stroke_decision = stroke_decision
+	_consume_controller_stroke_decision()
 
 	if queued_stroke and queued_stroke.stroke_type != queued_stroke.StrokeType.SERVE and ball_is_in_reachable_window():
 		_hit_ball(queued_stroke)
+
+
+func _consume_controller_stroke_decision() -> void:
+	var stroke_decision: Stroke = controller.get_stroke()
+	if not stroke_decision:
+		return
+
+	# Controllers may expose the same object reference over multiple frames.
+	# Only consume when the reference changes to avoid repeated queueing.
+	if _last_stroke_decision == stroke_decision:
+		return
+
+	if stroke_decision.stroke_type == Stroke.StrokeType.SERVE:
+		serve(stroke_decision)
+	else:
+		queue_stroke(stroke_decision)
+
+	_last_stroke_decision = stroke_decision
 
 
 ## Process movement from controller each physics frame
@@ -334,6 +347,7 @@ func _hit_ball(stroke: Stroke) -> void:
 ## Cancel currently queued stroke
 func cancel_stroke() -> void:
 	queued_stroke = null
+	_last_stroke_decision = null
 	_set_state(PlayerState.IDLE)
 
 
@@ -419,6 +433,8 @@ func _update_controller_ui() -> void:
 			ball_aim_marker.global_position = aim_position
 			ball_aim_marker.scale = controller.get_aim_marker_scale()
 			ball_aim_marker.visible = true
+	else:
+		ball_aim_marker.visible = false
 
 
 ## Called when stroke animation finishes
