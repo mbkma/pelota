@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dkonwbmg06m5n"]
+
+[ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://player/player.gd" id="1"]
+[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://player/model.tscn" id="3_lm2ok"]
+[ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
+[ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/effects/strokes/stroke_flat_2.wav" id="4_p4hr7"]
+[ext_resource type="AudioStream" uid="uid://7ulnk6wumimm" path="res://assets/sounds/effects/strokes/stroke_flat_3.wav" id="5_drsim"]
+[ext_resource type="AudioStream" uid="uid://dkhg5enkwrhu8" path="res://assets/sounds/effects/strokes/stroke_slice_1.wav" id="6_xtirx"]
+[ext_resource type="AudioStream" uid="uid://cmob7pfsbsmhu" path="res://assets/sounds/effects/strokes/stroke_slice_2.wav" id="7_4n1kg"]
+[ext_resource type="AudioStream" uid="uid://bffa2ad0odjrc" path="res://assets/sounds/effects/strokes/stroke_slice_3.wav" id="8_cjnul"]
+[ext_resource type="PackedScene" uid="uid://bi8pmdx3d7doc" path="res://tools/ball_aim_marker.tscn" id="10_7vyk4"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0l77o"]
+radius = 0.0950554
+height = 1.58024
+
+[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker") groups=["Player"]]
+script = ExtResource("1")
+player_data = ExtResource("2_uxa8p")
+ball_aim_marker = NodePath("BallAimMarker")
+stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
+stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=971709666]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.876131, 0)
+shape = SubResource("CapsuleShape3D_0l77o")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=131366643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.01951, 0)
+billboard = 1
+text = "Test"
+
+[node name="FirstPersonCamera" type="Camera3D" parent="." unique_id=573308729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.34675705)
+
+[node name="ThirdPersonCamera" type="Camera3D" parent="." unique_id=1842340249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
+
+[node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
+
+[node name="BallAimMarker" parent="." unique_id=160563153 instance=ExtResource("10_7vyk4")]
+top_level = true
+visible = false
+
+[editable path="Model"]
+[editable path="Model/h/player_djokovic"]
