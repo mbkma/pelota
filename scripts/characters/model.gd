@@ -11,29 +11,20 @@ signal recovery_animation_finished
 ## Reference to parent player
 var player: Player
 
-## Track current stroke for animation completion
-var _current_stroke: Stroke
-
 ## Track last animation state for detecting transitions
 var _last_state: String = ""
 
 ## Track if stroke animation finished signal was already emitted
 var _stroke_finished_emitted: bool = false
 
-@onready var hit_point: Node3D = $"h/player_djokovic/game-rig/GeneralSkeleton/DEF-attachment_hand_R/racket/HitPoint"
-
 @onready var points: Node3D = $Points
-@onready var serve_point: Vector3 = points.get_node("BallServePoint").position
 @onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
 @onready var forehand_up_point: Vector3 = points.get_node("ForehandUpPoint").position
 @onready var forehand_point: Marker3D = $Points/ForehandPoint
 @onready var forehand_down_point: Vector3 = points.get_node("ForehandDownPoint").position
 @onready var backhand_up_point: Vector3 = points.get_node("BackhandUpPoint").position
 @onready var backhand_down_point: Vector3 = points.get_node("BackhandDownPoint").position
-@onready var backhandslice_up_point: Vector3 = points.get_node("BackhandSliceUpPoint").position
-@onready var backhandslice_down_point: Vector3 = points.get_node("BackhandSliceDownPoint").position
 @onready var backhand_point: Marker3D = $Points/BackhandPoint
-@onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
 
 @export var animation_tree: AnimationTree
 @onready var _playback: AnimationNodeStateMachinePlayback = (
@@ -100,29 +91,6 @@ func get_animation_hit_frame_time(stroke_type: Stroke.StrokeType) -> float:
 	# Query the "hit" marker time directly
 	return animation.get_marker_time("hit")
 
-## Get total animation length in seconds for a given stroke
-## Queries animation length directly from the animation resource
-func get_animation_length(stroke_type: Stroke.StrokeType) -> float:
-	var anim_name: String = _stroke_animation_names.get(stroke_type, "")
-	var animation: Animation = _animation_player.get_animation(anim_name)
-	return animation.length
-
-## Get timing data dictionary for a stroke type
-## Combines animation length and hit marker time
-func get_animation_timing_data(stroke_type: Stroke.StrokeType) -> Dictionary:
-	var length: float = get_animation_length(stroke_type)
-	var hit_time: float = get_animation_hit_frame_time(stroke_type)
-	return {"length": length, "hit_frame_time": hit_time}
-
-
-func compute_animation_speed(anim_time_to_contact: float, real_time_to_contact: float) -> float:
-	# prevent division by zero
-	if real_time_to_contact <= 0.01:
-		return 1.0
-	Loggie.msg("animation_speed ratio: ", anim_time_to_contact / real_time_to_contact).info()
-	return anim_time_to_contact / real_time_to_contact
-
-
 ## Called from animation timeline to spawn the ball (forwarded to player)
 func _from_anim_spawn_ball() -> void:
 	player.from_anim_spawn_ball()
@@ -132,15 +100,30 @@ func from_anim_hit_serve() -> void:
 	player.from_anim_hit_serve()
 
 func compute_stroke_blend_position(stroke: Stroke) -> float:
+	if not stroke or not stroke.step:
+		return 0.5
+
+	var numerator: float = 0.0
+	var denominator: float = 1.0
+
 	match stroke.stroke_type:
 		stroke.StrokeType.FOREHAND:
-			return ((stroke.step.point.y - forehand_down_point.y) /
-					(forehand_up_point.y - forehand_down_point.y))
+			numerator = stroke.step.point.y - forehand_down_point.y
+			denominator = forehand_up_point.y - forehand_down_point.y
 		stroke.StrokeType.BACKHAND:
-			return ((stroke.step.point.y - 0.4 - backhand_down_point.y) /
-					(backhand_up_point.y - backhand_down_point.y))
+			numerator = stroke.step.point.y - 0.4 - backhand_down_point.y
+			denominator = backhand_up_point.y - backhand_down_point.y
 		_:
 			return 0.5
+
+	if is_zero_approx(denominator):
+		return 0.5
+
+	var blend_position: float = numerator / denominator
+	if not is_finite(blend_position):
+		return 0.5
+
+	return clampf(blend_position, 0.0, 1.0)
 
 
 ## Animation API
@@ -163,7 +146,6 @@ func play_run(direction: Vector3) -> void:
 
 ## Play stroke animation for given stroke
 func play_stroke(stroke: Stroke) -> void:
-	_current_stroke = stroke
 	var playback_speed = 1.0
 
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)

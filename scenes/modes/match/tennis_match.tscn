@@ -2,21 +2,20 @@
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scripts/modes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_hqvfk"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_11ka0"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/inputs/ai_controller.tscn" id="4_cux4k"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/characters/controllers/ai_controller.tscn" id="4_cux4k"]
 [ext_resource type="Resource" uid="uid://7puy4co7ounb" path="res://assets/resources/characters/ruud.tres" id="4_lvdh6"]
-[ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/television-hud.tscn" id="4_upnw7"]
-[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="6_4vere"]
-[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="7_6frth"]
+[ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/hud/television_hud.tscn" id="4_upnw7"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/venues/us_open/stadium.tscn" id="6_4vere"]
+[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environments/venues/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/modes/match/match_manager.tscn" id="8_2s2ac"]
-[ext_resource type="Script" uid="uid://dqtx4wyjr5o1v" path="res://scripts/environment/world/us_open/adaptive_broadcast_camera.gd" id="8_lvdh6"]
+[ext_resource type="Script" uid="uid://dqtx4wyjr5o1v" path="res://scripts/environments/venues/us_open/adaptive_broadcast_camera.gd" id="8_lvdh6"]
 [ext_resource type="PackedScene" uid="uid://cggqb75a8w8r" path="res://addons/debug_menu/debug_menu.tscn" id="10_7cjfu"]
-[ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/debug_hud.tscn" id="11_7qdcc"]
-[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/utilities/debug_drawer.tscn" id="11_324nl"]
+[ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/hud/debug_hud.tscn" id="11_7qdcc"]
+[ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/tools/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/modes/match/umpire/umpire.tscn" id="12_ard7f"]
-[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environment/crowd/crowd.tscn" id="17_cux4k"]
+[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environments/crowd/crowd.tscn" id="17_cux4k"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/modes/match/splitscreen_ui.tscn" id="17_splitscreen"]
-[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="18_pause"]
+[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/menus/pause_menu.tscn" id="18_pause"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -58,7 +57,7 @@ script = ExtResource("1_3pywv")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
-controller_scene = ExtResource("3_11ka0")
+controller_scene = ExtResource("4_cux4k")
 stats = {}
 move_speed = 5.0
 team_index = 0

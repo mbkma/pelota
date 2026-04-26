@@ -20,14 +20,14 @@ buses/default_bus_layout="uid://udhfafl0u4fa"
 
 [autoload]
 
-GlobalUtils="*res://scripts/globals/global_utils.gd"
-GlobalGameData="*res://scripts/globals/global_game_data.gd"
-GlobalHud="*res://scripts/globals/global_hud.gd"
-GlobalPhysics="*res://scripts/physics/global_physics.gd"
+GlobalUtils="*res://scripts/services/utils.gd"
+GlobalGameData="*res://scripts/app/game_data.gd"
+GlobalHud="*res://scripts/services/hud.gd"
+GlobalPhysics="*res://scripts/services/physics/physics_service.gd"
 SettingsDataManager="*uid://dl202u8yk6qon"
 DebugMenu="*uid://cggqb75a8w8r"
 GlobalScenes="*res://scenes/global_scenes.tscn"
-SceneManager="*res://scripts/globals/global_scene_manager.gd"
+SceneManager="*res://scripts/app/scene_manager.gd"
 Loggie="*uid://bmh2auo806k0k"
 
 [debug]

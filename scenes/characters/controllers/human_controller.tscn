@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bhwqx67o5iry8"]
+
+[ext_resource type="Script" uid="uid://dbt16oxqmvu0r" path="res://scripts/characters/controllers/human_controller.gd" id="1_lhbt4"]
+
+[node name="HumanController" type="Node" unique_id=497002247]
+script = ExtResource("1_lhbt4")

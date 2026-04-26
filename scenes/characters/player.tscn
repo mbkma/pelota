@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://dkhg5enkwrhu8" path="res://assets/sounds/effects/strokes/stroke_slice_1.wav" id="6_xtirx"]
 [ext_resource type="AudioStream" uid="uid://cmob7pfsbsmhu" path="res://assets/sounds/effects/strokes/stroke_slice_2.wav" id="7_4n1kg"]
 [ext_resource type="AudioStream" uid="uid://bffa2ad0odjrc" path="res://assets/sounds/effects/strokes/stroke_slice_3.wav" id="8_cjnul"]
-[ext_resource type="PackedScene" uid="uid://bi8pmdx3d7doc" path="res://scenes/utilities/ball_aim_marker.tscn" id="10_7vyk4"]
+[ext_resource type="PackedScene" uid="uid://bi8pmdx3d7doc" path="res://scenes/tools/ball_aim_marker.tscn" id="10_7vyk4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0l77o"]
 radius = 0.0950554

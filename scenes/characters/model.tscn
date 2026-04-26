@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://qr66qvlcjtk7" path="res://scripts/characters/model.gd" id="1_8ddow"]
 [ext_resource type="PackedScene" uid="uid://d03j662osx28b" path="res://assets/models/player/player_djokovic.glb" id="4_wv0r8"]
-[ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/utilities/free_look_camera.gd" id="8_4mh3o"]
+[ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scripts/tools/free_look_camera.gd" id="8_4mh3o"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8sm40"]
 animation = &"g_run_forward"

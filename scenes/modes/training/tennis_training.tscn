@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b2ln7l4birgbu" path="res://scripts/modes/training/tennis_training.gd" id="1_gx02n"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/characters/player.tscn" id="2_tjnrq"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/inputs/human_controller.tscn" id="3_tjnrq"]
-[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environment/world/us_open/stadium.tscn" id="4_guntq"]
-[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environment/world/us_open/cameras/cameras.tscn" id="5_lrvso"]
-[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/utilities/ball_canon.tscn" id="6_l6sfg"]
-[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/pause_menu.tscn" id="9_fqabv"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/characters/controllers/human_controller.tscn" id="3_tjnrq"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/venues/us_open/stadium.tscn" id="4_guntq"]
+[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environments/venues/us_open/cameras/cameras.tscn" id="5_lrvso"]
+[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/tools/ball_canon.tscn" id="6_l6sfg"]
+[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/menus/pause_menu.tscn" id="9_fqabv"]
 
 [sub_resource type="Shader" id="Shader_rdv83"]
 code = "

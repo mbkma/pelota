@@ -2,12 +2,12 @@
 class_name Player
 extends CharacterBody3D
 
-const PLAYER_STATE_MACHINE_SCRIPT: Script = preload("res://scripts/characters/state/player_state_machine.gd")
-const MOVEMENT_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/movement_service.gd")
-const TRAJECTORY_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/trajectory_service.gd")
-const STROKE_SERVICE_SCRIPT: Script = preload("res://scripts/characters/services/stroke_service.gd")
-const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
-const BALL_FACTORY_SCRIPT: Script = preload("res://scripts/core/ball_factory.gd")
+const PLAYER_STATE_MACHINE_SCRIPT: Script = preload("res://scripts/gameplay/players/state_machine.gd")
+const MOVEMENT_SERVICE_SCRIPT: Script = preload("res://scripts/gameplay/players/services/movement_service.gd")
+const TRAJECTORY_SERVICE_SCRIPT: Script = preload("res://scripts/gameplay/players/services/trajectory_service.gd")
+const STROKE_SERVICE_SCRIPT: Script = preload("res://scripts/gameplay/players/services/stroke_service.gd")
+const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/gameplay/match/lifecycle_bus.gd")
+const BALL_FACTORY_SCRIPT: Script = preload("res://scripts/gameplay/ball/ball_factory.gd")
 
 enum PlayerState {
 	IDLE,
@@ -165,11 +165,6 @@ func request_serve() -> void:
 ## Setup player with given data and control method
 func setup(data: PlayerData, _ai_controlled: bool) -> void:
 	player_data = data
-
-
-## Setup player for training mode
-func setup_mode(_mode) -> void:
-	pass
 
 
 ## Stop all player actions and clean up state

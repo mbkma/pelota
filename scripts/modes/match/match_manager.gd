@@ -2,7 +2,7 @@
 class_name MatchManager
 extends Node
 
-const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/core/match_lifecycle_bus.gd")
+const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://scripts/gameplay/match/lifecycle_bus.gd")
 
 ## Emitted when players have been positioned
 signal players_placed

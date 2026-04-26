@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://b3hq27x3f5jti"]
+
+[ext_resource type="Script" uid="uid://cn4py8ksjyp4l" path="res://scripts/ui/menus/match_configuration_menu.gd" id="1_ijkk3"]
+[ext_resource type="PackedScene" uid="uid://du8s7peje0m24" path="res://scenes/ui/menus/player_selector.tscn" id="1_xjo8y"]
+[ext_resource type="PackedScene" uid="uid://bcwuxgarbilrg" path="res://scenes/modes/match/tennis_match.tscn" id="2_3hnp5"]
+
+[node name="MatchConfigurationMenu" type="Control" unique_id=2072216678]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ijkk3")
+match_scence = ExtResource("2_3hnp5")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=665800805]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1700917871]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1069676570]
+layout_mode = 2
+
+[node name="PlayerSelector" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1885251081 instance=ExtResource("1_xjo8y")]
+layout_mode = 2
+
+[node name="PlayerSelector2" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=839742789 instance=ExtResource("1_xjo8y")]
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=94717379]
+layout_mode = 2
+text = "Play"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
