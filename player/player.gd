@@ -31,6 +31,9 @@ signal challenged
 ## Emitted when ball is spawned for serve
 signal ball_spawned(ball: Ball)
 
+## Emitted when active ball reference changes
+signal active_ball_changed(ball: Ball)
+
 ## Emitted when match lifecycle phase changes
 signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 
@@ -50,6 +53,10 @@ signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 @export var ball_aim_marker: Node3D
 @export var opponent: Player  # Reference to opponent player
 @export var serve_ball_scene: PackedScene
+@export var hit_timing_window_seconds: float = 0.1
+@export var hit_range_tolerance_meters: float = 1.3
+@export var snap_ball_to_contact_point_on_anim_hit: bool = true
+@export var snap_max_distance_meters: float = 1.8
 
 ## Flat stroke sound effects
 @export var stroke_sounds_flat: Array[AudioStream]
@@ -112,7 +119,6 @@ func _ready() -> void:
 
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
-	model.hit_area_ball_entered.connect(_on_model_hit_area_ball_entered)
 	controller = controller_scene.instantiate()
 	controller.bind(self)
 	add_child(controller)
@@ -293,6 +299,11 @@ func _hit_ball(stroke: Stroke) -> void:
 		Loggie.msg(player_data.last_name + ": ", "_hit_ball: No queued stroke").info()
 		return
 
+	if not is_instance_valid(ball):
+		ball = null
+		cancel_stroke()
+		return
+
 	var stroke_velocity: Vector3 = ball.calculate_velocity(
 		ball.position,
 		stroke.stroke_target,
@@ -328,6 +339,33 @@ func from_anim_hit_serve() -> void:
 	Loggie.msg(player_data.last_name + ": ", "SERVING").info()
 	_hit_ball(queued_stroke)
 	_lifecycle_bus.complete_serve(self)
+
+
+## Called by rally stroke animations at the exact hit frame.
+## Uses timing/range gates so mistimed strokes can miss.
+func _from_anim_hit_ball() -> void:
+	if not queued_stroke:
+		return
+
+	if not ball:
+		cancel_stroke()
+		return
+
+	var contact_point: Vector3 = model.get_racket_contact_point(queued_stroke)
+	var _distance_to_contact: float = ball.global_position.distance_to(contact_point)
+	#if distance_to_contact > hit_range_tolerance_meters:
+		#cancel_stroke()
+		#return
+
+	#var closest_step: TrajectoryStep = _get_closest_step()
+	#if closest_step and abs(closest_step.time) > hit_timing_window_seconds:
+		#cancel_stroke()
+		#return
+
+	#if snap_ball_to_contact_point_on_anim_hit and distance_to_contact <= snap_max_distance_meters:
+		#ball.global_position = contact_point
+
+	_hit_ball(queued_stroke)
 	
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
@@ -384,6 +422,7 @@ func play_stroke_sound(stroke: Stroke) -> void:
 ## Set the active ball for this player
 func set_active_ball(b: Ball) -> void:
 	ball = b
+	active_ball_changed.emit(b)
 	if controller:
 		controller.ball_changed(b)
 
@@ -408,23 +447,6 @@ func _update_controller_ui() -> void:
 func _on_stroke_animation_finished() -> void:
 	if _state_machine.get_state() == PLAYER_STATE_MACHINE_SCRIPT.State.STROKING:
 		_set_state(PLAYER_STATE_MACHINE_SCRIPT.State.RECOVERING)
-
-
-func _on_model_hit_area_ball_entered(overlapping_ball: Ball) -> void:
-	if not queued_stroke:
-		print(player_data.last_name, "Ball entered hit area, NOT executing stroke", queued_stroke)
-		return
-
-	if queued_stroke.stroke_type == queued_stroke.StrokeType.SERVE:
-		return
-
-	if overlapping_ball != ball:
-		print(player_data.last_name, "Ball entered hit area, NOT executing stroke", queued_stroke)
-		return
-
-	print(player_data.last_name, "Ball entered hit area, executing stroke", queued_stroke)
-
-	_hit_ball(queued_stroke)
 
 
 func _on_state_entered(new_state: int) -> void:
@@ -495,6 +517,9 @@ func _get_move_direction(body_position: Vector3) -> Vector3:
 
 
 func _get_closest_step() -> TrajectoryStep:
+	if not ball:
+		return null
+
 	if controller and controller.has_method("get_closest_trajectory_step"):
 		return controller.get_closest_trajectory_step(self)
 	return null

@@ -48,8 +48,6 @@ var _stroke_animation_names: Dictionary = {
 	Stroke.StrokeType.FOREHAND_DROP_SHOT: "g_forehand",
 }
 
-@onready var hit_area_3d: Area3D = $"h/player_djokovic/game-rig/GeneralSkeleton/DEF-attachment_hand_R/racket/HitPoint/HitArea3D"
-
 
 func _ready() -> void:
 	var p = get_parent()
@@ -60,8 +58,6 @@ func _ready() -> void:
 
 	player = p
 	animation_tree.active = true
-	if hit_area_3d and not hit_area_3d.body_entered.is_connected(_on_hit_area_3d_body_entered):
-		hit_area_3d.body_entered.connect(_on_hit_area_3d_body_entered)
 
 
 func _process(_delta: float) -> void:
@@ -100,6 +96,22 @@ func _from_anim_spawn_ball() -> void:
 ## Called from animation timeline to hit the serve (forwarded to player)
 func from_anim_hit_serve() -> void:
 	player.from_anim_hit_serve()
+
+## Called from animation timeline to hit the ball
+func _from_anim_hit_ball() -> void:
+	print("_from_anim_hit_ball")
+	player._from_anim_hit_ball()
+
+
+func get_racket_contact_point(stroke: Stroke) -> Vector3:
+	if stroke:
+		match stroke.stroke_type:
+			Stroke.StrokeType.FOREHAND, Stroke.StrokeType.FOREHAND_DROP_SHOT, Stroke.StrokeType.VOLLEY:
+				return forehand_point.global_position
+			Stroke.StrokeType.BACKHAND, Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.BACKHAND_DROP_SHOT:
+				return backhand_point.global_position
+
+	return global_position
 
 func compute_stroke_blend_position(stroke: Stroke) -> float:
 	if not stroke or not stroke.step:

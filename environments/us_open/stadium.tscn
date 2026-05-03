@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://d237t32p1sgei"]
+[gd_scene format=3 uid="uid://d237t32p1sgei"]
 
 [ext_resource type="PackedScene" uid="uid://dvo2jq6bdkolh" path="res://assets/models/stadium/stadium.blend" id="2_hi2re"]
 [ext_resource type="Script" uid="uid://h38us3lvmlk7" path="res://environments/us_open/stadium.gd" id="3"]
@@ -25,16 +25,25 @@ fallbacks = Array[Font]([ExtResource("6")])
 subpixel_positioning = 0
 msdf_pixel_range = 14
 msdf_size = 128
-cache/0/32/0/ascent = 0.0
-cache/0/32/0/descent = 0.0
-cache/0/32/0/underline_position = 0.0
-cache/0/32/0/underline_thickness = 0.0
-cache/0/32/0/scale = 1.0
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
 cache/0/16/0/underline_position = 0.0
 cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
+cache/0/32/0/ascent = 0.0
+cache/0/32/0/descent = 0.0
+cache/0/32/0/underline_position = 0.0
+cache/0/32/0/underline_thickness = 0.0
+cache/0/32/0/scale = 1.0
 
 [node name="Stadium" type="Node3D" unique_id=1375206359]
 script = ExtResource("3")
@@ -131,16 +140,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
 
 [node name="ServeClock" type="Label3D" parent="ServeClocks" unique_id=736676380]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.63603, 1.41341, -19.7699)
+outline_modulate = Color(1, 1, 1, 1)
 text = "25
 Serve Clock"
 font_size = 38
-outline_size = 0
+outline_size = 2
 
 [node name="ServeClock2" type="Label3D" parent="ServeClocks" unique_id=1946983221]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.42196, 1.41341, -19.7699)
+outline_modulate = Color(1, 1, 1, 1)
 text = "25
 Serve Clock"
 font = SubResource("5")
+outline_size = 2
 
 [node name="ServeClock3" type="Label3D" parent="ServeClocks" unique_id=799800393]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 9.422, 1.413, 19.77)

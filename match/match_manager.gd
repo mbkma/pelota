@@ -7,6 +7,9 @@ const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://match/lifecycle_bus.gd
 ## Emitted when players have been positioned
 signal players_placed
 
+## Emitted whenever the match active ball reference changes
+signal active_ball_changed(ball: Ball)
+
 enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER }
 
 ## Reference to the last player who hit the ball
@@ -73,6 +76,8 @@ func _ready() -> void:
 	player1.ball_hit.connect(_on_player1_ball_hit)
 	player0.ball_spawned.connect(_on_player_ball_spawned)
 	player1.ball_spawned.connect(_on_player_ball_spawned)
+	player0.active_ball_changed.connect(_on_player_active_ball_changed)
+	player1.active_ball_changed.connect(_on_player_active_ball_changed)
 	_connect_player_lifecycle(player0)
 	_connect_player_lifecycle(player1)
 	television_hud.score_display.player_1_score_panel.set_player(player0.player_data)
@@ -98,10 +103,11 @@ func _input(event: InputEvent) -> void:
 
 ## Set active ball and connect its signals
 func set_active_ball(b: Ball) -> void:
-	if ball and ball != b:
+	if is_instance_valid(ball) and ball != b:
 		_clear_ball()
 
 	ball = b
+	active_ball_changed.emit(ball)
 	if not ball:
 		return
 
@@ -109,6 +115,10 @@ func set_active_ball(b: Ball) -> void:
 		ball.on_ground.connect(_on_ball_on_ground)
 	if not ball.on_net.is_connected(_on_ball_on_net):
 		ball.on_net.connect(_on_ball_on_net)
+
+
+func get_active_ball() -> Ball:
+	return ball
 
 
 func _connect_player_lifecycle(player: Player) -> void:
@@ -323,7 +333,7 @@ func get_server() -> Player:
 
 ## Clear ball signals
 func _clear_ball() -> void:
-	if ball:
+	if is_instance_valid(ball):
 		if ball.on_ground.is_connected(_on_ball_on_ground):
 			ball.on_ground.disconnect(_on_ball_on_ground)
 		if ball.on_net.is_connected(_on_ball_on_net):
@@ -425,10 +435,15 @@ func _get_player_position(
 
 
 func _on_player_ball_spawned(b: Ball) -> void:
-	if ball:
+	if is_instance_valid(ball) and ball != b:
 		_clear_ball()
 		ball.queue_free()
 	set_active_ball(b)
+
+
+func _on_player_active_ball_changed(b: Ball) -> void:
+	if b != ball:
+		set_active_ball(b)
 
 func _on_player_lifecycle_serve_requested(serving_player: Player) -> void:
 	if serving_player == get_server() and stadium:

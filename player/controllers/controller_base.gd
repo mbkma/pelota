@@ -149,6 +149,9 @@ func get_optimal_ball_position(_player: Player) -> Vector3:
 
 
 func get_closest_apex_after_first_bounce(target_player: Player) -> TrajectoryStep:
+	if not target_player or not target_player.ball:
+		return null
+
 	var closest_step: TrajectoryStep = null
 	var closest_z_distance: float = INF
 
@@ -188,10 +191,15 @@ func get_closest_apex_after_first_bounce(target_player: Player) -> TrajectorySte
 
 ## Get closest trajectory step to player by Z distance
 func get_closest_trajectory_step(target_player: Player) -> TrajectoryStep:
+	if not target_player or not target_player.ball:
+		return null
+
 	# Initialize variables to track the closest point
 	var closest_trajectory_step: TrajectoryStep
 	var closest_z_distance: float = INF  # Start with a large number
 	var trajectory: Array[TrajectoryStep] = target_player.ball.predict_trajectory()
+	if trajectory.is_empty():
+		return null
 
 	# Iterate through the ball trajectory to find the closest point in Z
 	for step in trajectory:

@@ -7,6 +7,7 @@ extends MeshInstance3D
 @export var bisector_line_color: Color = Color(0.942, 0.882, 0.342, 1.0)  # Color for lines to corners (bright orange)
 @export var bisector_angle_color: Color = Color(0.904, 0.809, 0.149, 1.0)  # Color for angle bisector (dark orange)
 @export var ball: Ball
+@export var match_manager: MatchManager
 @export var players: Array[Player] = []  # Store player references to visualize their movement paths
 
 
@@ -15,7 +16,14 @@ var arrow_material := ORMMaterial3D.new()
 var bisector_material := ORMMaterial3D.new()
 
 
-func set_active_ball(b):
+func _ready() -> void:
+	if match_manager:
+		if not match_manager.active_ball_changed.is_connected(set_active_ball):
+			match_manager.active_ball_changed.connect(set_active_ball)
+		set_active_ball(match_manager.get_active_ball())
+
+
+func set_active_ball(b: Ball) -> void:
 	ball = b
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://ui/hud/debug_hud.tscn" id="11_7qdcc"]
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://tools/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://match/umpire/umpire.tscn" id="12_ard7f"]
-[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://environments/crowd/crowd.tscn" id="17_cux4k"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://ui/menus/pause_menu.tscn" id="18_pause"]
 
@@ -57,17 +56,13 @@ script = ExtResource("1_3pywv")
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
 controller_scene = ExtResource("4_cux4k")
-stats = {}
 move_speed = 5.0
-team_index = 0
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
 controller_scene = ExtResource("4_cux4k")
 player_data = ExtResource("4_lvdh6")
-stats = {}
 move_speed = 5.0
-team_index = 0
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
 active_cam = NodePath("CourtSideFront")
@@ -129,10 +124,9 @@ player1 = NodePath("../Player2")
 
 [node name="Stadium" parent="." unique_id=1694125535 instance=ExtResource("6_4vere")]
 
-[node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("players") instance=ExtResource("11_324nl")]
+[node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("match_manager", "players") instance=ExtResource("11_324nl")]
+match_manager = NodePath("../MatchManager")
 players = [NodePath("../Player"), NodePath("../Player2")]
-
-[node name="Crowd" parent="." unique_id=1204219689 instance=ExtResource("17_cux4k")]
 
 [node name="Umpire" parent="." unique_id=757205017 instance=ExtResource("12_ard7f")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.18558, 0, 0)
@@ -143,14 +137,13 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.185
 match_manager = NodePath("../MatchManager")
 _trajectory_drawer = NodePath("../TrajectoryDrawer")
 
-[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "crowd", "cameras") instance=ExtResource("8_2s2ac")]
+[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "cameras") instance=ExtResource("8_2s2ac")]
 player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 court = NodePath("../Stadium/Court")
 stadium = NodePath("../Stadium")
 television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
-crowd = NodePath("../Crowd")
 cameras = NodePath("../Cameras")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]
