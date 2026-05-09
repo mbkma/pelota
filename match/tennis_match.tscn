@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://match/umpire/umpire.tscn" id="12_ard7f"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://ui/menus/pause_menu.tscn" id="18_pause"]
+[ext_resource type="PackedScene" path="res://ui/hud/replay_overlay.tscn" id="19_replay_overlay"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -157,6 +158,9 @@ shadow_opacity = 0.45
 shadow_blur = 2.954
 
 [node name="PauseMenu" parent="." unique_id=1371052476 instance=ExtResource("18_pause")]
+
+[node name="ReplayOverlay" parent="." unique_id=1789361542 node_paths=PackedStringArray("match_manager") instance=ExtResource("19_replay_overlay")]
+match_manager = NodePath("../MatchManager")
 
 [editable path="Cameras"]
 [editable path="TelevisionHUD"]

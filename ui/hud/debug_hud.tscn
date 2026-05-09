@@ -1,27 +1,40 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7nclbgkw6veg"]
+[gd_scene format=3 uid="uid://b7nclbgkw6veg"]
 
 [ext_resource type="Script" uid="uid://mpiigeysorux" path="res://ui/hud/debug_hud.gd" id="1_88p7u"]
+[ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_4m5u1"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epfxj"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcxbm"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="MatchDebugHud" type="CanvasLayer" unique_id=1590995445]
 layer = 128
 script = ExtResource("1_88p7u")
 
 [node name="DebugHud" type="PanelContainer" parent="." unique_id=566204564]
+custom_minimum_size = Vector2(480, 360)
 offset_right = 400.0
 offset_bottom = 350.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_epfxj")
 
 [node name="TabContainer" type="TabContainer" parent="DebugHud" unique_id=1561590500]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 11
+theme_override_styles/panel = SubResource("StyleBoxFlat_mcxbm")
 current_tab = 0
 
 [node name="Summary" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1501110690]
@@ -719,11 +732,15 @@ text = "0.00"
 [node name="Ball" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1839428125]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 4
 metadata/_tab_index = 5
 
 [node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Ball" unique_id=591684549]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 2
 
 [node name="Position" type="HBoxContainer" parent="DebugHud/TabContainer/Ball/VBox" unique_id=238378516]
@@ -755,3 +772,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 11
 text = "0.00"
+
+[node name="HSeparator6" type="HSeparator" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782906]
+layout_mode = 2
+
+[node name="BallSpeedLabel" type="Label" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782907]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== SPEED HISTORY ==="
+
+[node name="BallSpeedGraph" type="PanelContainer" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782908]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_type_variation = &"TauPlot"
+script = ExtResource("2_4m5u1")

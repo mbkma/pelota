@@ -47,6 +47,7 @@ var _stroke_animation_names: Dictionary = {
 	Stroke.StrokeType.VOLLEY: "g_volley",
 	Stroke.StrokeType.FOREHAND_DROP_SHOT: "g_forehand",
 }
+var _replay_animation_paused: bool = false
 
 
 func _ready() -> void:
@@ -61,6 +62,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _replay_animation_paused:
+		return
+
 	if not _playback:
 		return
 
@@ -172,6 +176,54 @@ func play_recovery() -> void:
 	_playback.travel("move")
 	animation_tree["parameters/move/blend_position"] = Vector2.ZERO
 	recovery_animation_finished.emit()
+
+
+func get_replay_animation_snapshot() -> Dictionary:
+	var state_node: String = ""
+	if _playback:
+		state_node = str(_playback.get_current_node())
+
+	var current_animation: String = _animation_player.current_animation
+	var current_position: float = 0.0
+	if not current_animation.is_empty() and _animation_player.has_animation(current_animation):
+		current_position = _animation_player.current_animation_position
+
+	return {
+		"state_node": state_node,
+		"current_animation": current_animation,
+		"current_position": current_position,
+		"move_blend": animation_tree.get("parameters/move/blend_position"),
+	}
+
+
+func apply_replay_animation_snapshot(snapshot: Dictionary) -> void:
+	if snapshot.is_empty():
+		return
+
+	var state_node: String = snapshot.get("state_node", "")
+	if not state_node.is_empty() and _playback:
+		_playback.travel(state_node)
+
+	var current_animation: String = snapshot.get("current_animation", "")
+	if not current_animation.is_empty() and _animation_player.has_animation(current_animation):
+		_animation_player.play(current_animation)
+		_animation_player.seek(float(snapshot.get("current_position", 0.0)), true)
+		if _replay_animation_paused:
+			_animation_player.pause()
+
+	if snapshot.has("move_blend"):
+		animation_tree.set("parameters/move/blend_position", snapshot["move_blend"])
+
+
+func set_replay_animation_paused(paused: bool) -> void:
+	_replay_animation_paused = paused
+	if paused:
+		_animation_player.pause()
+	else:
+		# Continue only when an actual animation is active.
+		var current_animation: String = _animation_player.current_animation
+		if not current_animation.is_empty() and _animation_player.has_animation(current_animation):
+			_animation_player.play()
 
 
 ## Internal helper to set stroke animation type and parameters

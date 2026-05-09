@@ -1,6 +1,3 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bxqcmd2k7v707"]
-
-[ext_resource type="FontFile" uid="uid://bkyrq2b8hve32" path="res://assets/fonts/Outfit-Regular.otf" id="2_a2l2q"]
+[gd_resource type="Theme" format=3 uid="uid://bxqcmd2k7v707"]
 
 [resource]
-default_font = ExtResource("2_a2l2q")

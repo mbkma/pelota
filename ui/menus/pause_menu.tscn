@@ -46,10 +46,14 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="ResumeButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=816962526]
+[node name="ReplayModeButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=816962526]
 layout_mode = 2
-text = "Resume (ESC)"
+text = "Enter Replay Mode"
 
-[node name="MainMenuButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=599764900]
+[node name="ResumeButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=599764900]
 layout_mode = 2
-text = "Main Menu"
+text = "Continue"
+
+[node name="MainMenuButton" type="Button" parent="PausePanel/VBoxContainer" unique_id=424936541]
+layout_mode = 2
+text = "Exit To Main Menu"

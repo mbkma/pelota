@@ -2,15 +2,32 @@
 class_name MatchManager
 extends Node
 
-const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://match/lifecycle_bus.gd")
-
 ## Emitted when players have been positioned
 signal players_placed
 
 ## Emitted whenever the match active ball reference changes
 signal active_ball_changed(ball: Ball)
+## Emitted when replay recording starts
+signal replay_recording_started
+## Emitted when replay recording stops
+signal replay_recording_stopped(duration_seconds: float)
+## Emitted when replay playback starts
+signal replay_started(duration_seconds: float)
+## Emitted when replay playback reaches the final frame
+signal replay_finished
+## Emitted when replay playback is stopped manually
+signal replay_stopped
+## Emitted when replay playback is paused
+signal replay_paused(playhead_seconds: float)
+## Emitted when replay playback is resumed
+signal replay_resumed(playhead_seconds: float)
 
 enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER }
+enum ReplayCameraMode {
+	BROADCAST,
+	FOLLOW_BALL,
+	FOLLOW_LAST_HITTER,
+}
 
 ## Reference to the last player who hit the ball
 var last_hitter: Player
@@ -33,6 +50,8 @@ var _valid_rally_zone: Court.CourtRegion
 ## Number of ground contacts in current rally
 var _ground_contacts: int = 0
 
+var _replay_controller: MatchReplayController
+
 @onready var match_data: MatchData
 
 @export var player0: Player
@@ -44,6 +63,18 @@ var _ground_contacts: int = 0
 @export var umpire: Umpire
 @export var crowd: Crowd
 @export var cameras: MatchCameras
+## Enables match replay capture/playback for this manager.
+@export var replay_enabled: bool = true
+## Enables debug replay toggle key (R in debug builds).
+@export var replay_debug_hotkey_enabled: bool = true
+## Replay camera behavior during playback.
+@export var replay_camera_mode: ReplayCameraMode = ReplayCameraMode.BROADCAST
+## Follow-camera offset when replay camera mode tracks ball/player.
+@export var replay_follow_offset: Vector3 = Vector3(0.0, 3.5, 10.0)
+## Automatically save replay to disk after recording stops.
+@export var replay_persistence_enabled: bool = true
+## Save path for persisted replay payload.
+@export var replay_save_path: String = "user://last_match_replay.save"
 
 
 func _update_valid_serve_zone_from_server_position() -> void:
@@ -58,6 +89,12 @@ func _is_debug_add_point_event(event: InputEvent) -> bool:
 	if not (event is InputEventKey and event.pressed):
 		return false
 	return event.keycode == KEY_T
+
+
+func _is_debug_replay_toggle_event(event: InputEvent) -> bool:
+	if not (event is InputEventKey and event.pressed):
+		return false
+	return event.keycode == KEY_R
 
 func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
@@ -78,6 +115,10 @@ func _ready() -> void:
 	player1.ball_spawned.connect(_on_player_ball_spawned)
 	player0.active_ball_changed.connect(_on_player_active_ball_changed)
 	player1.active_ball_changed.connect(_on_player_active_ball_changed)
+	if not active_ball_changed.is_connected(player0.set_active_ball):
+		active_ball_changed.connect(player0.set_active_ball)
+	if not active_ball_changed.is_connected(player1.set_active_ball):
+		active_ball_changed.connect(player1.set_active_ball)
 	_connect_player_lifecycle(player0)
 	_connect_player_lifecycle(player1)
 	television_hud.score_display.player_1_score_panel.set_player(player0.player_data)
@@ -87,9 +128,11 @@ func _ready() -> void:
 	cameras.register_camera(player1.first_person_camera)
 	cameras.player0 = player0
 	cameras.player1 = player1
+	_setup_replay_controller()
 	place_players()
 	if crowd:
 		crowd.play_idle_sound()
+	_begin_replay_recording()
 	start_match()
 
 
@@ -99,6 +142,18 @@ func _input(event: InputEvent) -> void:
 		return
 	if _is_debug_add_point_event(event):
 		add_point(randi() % 2)
+	if replay_debug_hotkey_enabled and _is_debug_replay_toggle_event(event):
+		if is_replay_playing():
+			stop_replay()
+		else:
+			start_replay()
+
+
+func _physics_process(delta: float) -> void:
+	if not _replay_controller:
+		return
+	_replay_controller.process_recording(delta)
+	_replay_controller.process_playback(delta)
 
 
 ## Set active ball and connect its signals
@@ -119,6 +174,55 @@ func set_active_ball(b: Ball) -> void:
 
 func get_active_ball() -> Ball:
 	return ball
+
+
+func _setup_replay_controller() -> void:
+	_replay_controller = MatchReplayController.new()
+	_replay_controller.name = "MatchReplayController"
+	add_child(_replay_controller)
+	_replay_controller.initialize(self, player0, player1, cameras)
+	_replay_controller.enabled = replay_enabled
+	_replay_controller.persistence_enabled = replay_persistence_enabled
+	_replay_controller.save_path = replay_save_path
+	_replay_controller.debug_hotkey_enabled = replay_debug_hotkey_enabled
+	_replay_controller.camera_mode = int(replay_camera_mode) as MatchReplayController.CameraMode
+	_replay_controller.follow_offset = replay_follow_offset
+
+	_replay_controller.recording_started.connect(_on_replay_recording_started)
+	_replay_controller.recording_stopped.connect(_on_replay_recording_stopped)
+	_replay_controller.playback_started.connect(_on_replay_playback_started)
+	_replay_controller.playback_paused.connect(_on_replay_playback_paused)
+	_replay_controller.playback_resumed.connect(_on_replay_playback_resumed)
+	_replay_controller.playback_finished.connect(_on_replay_playback_finished)
+	_replay_controller.playback_stopped.connect(_on_replay_playback_stopped)
+
+
+func _on_replay_recording_started() -> void:
+	replay_recording_started.emit()
+
+
+func _on_replay_recording_stopped(duration_seconds: float) -> void:
+	replay_recording_stopped.emit(duration_seconds)
+
+
+func _on_replay_playback_started(duration_seconds: float) -> void:
+	replay_started.emit(duration_seconds)
+
+
+func _on_replay_playback_paused(playhead_seconds: float) -> void:
+	replay_paused.emit(playhead_seconds)
+
+
+func _on_replay_playback_resumed(playhead_seconds: float) -> void:
+	replay_resumed.emit(playhead_seconds)
+
+
+func _on_replay_playback_finished() -> void:
+	replay_finished.emit()
+
+
+func _on_replay_playback_stopped() -> void:
+	replay_stopped.emit()
 
 
 func _connect_player_lifecycle(player: Player) -> void:
@@ -202,16 +306,21 @@ func start_match() -> void:
 	_update_valid_serve_zone_from_server_position()
 	_valid_rally_zone = _valid_serve_zone
 	current_state = MatchState.SERVE
+	_record_replay_event("match_started", {"state": current_state})
 	set_player_serve()
 
 
 ## End the match
 func end_match(_winner: String) -> void:
 	current_state = MatchState.GAME_OVER
+	_record_replay_event("match_ended", {"state": current_state})
+	_stop_replay_recording()
 
 
 ## Reset match to starting state
 func reset_match() -> void:
+	stop_replay()
+	_begin_replay_recording()
 	current_state = MatchState.NOT_STARTED
 
 
@@ -307,6 +416,7 @@ func _stop_players() -> void:
 
 ## Add a point to the winner and handle score update
 func add_point(winner: int) -> void:
+	_record_replay_event("point_awarded", {"winner": winner})
 	match_data.add_point(winner)
 	television_hud.update_score(match_data.get_score())
 	if umpire:
@@ -435,6 +545,7 @@ func _get_player_position(
 
 
 func _on_player_ball_spawned(b: Ball) -> void:
+	_record_replay_event("ball_spawned", {"player": get_player_index(last_hitter) if last_hitter else -1})
 	if is_instance_valid(ball) and ball != b:
 		_clear_ball()
 		ball.queue_free()
@@ -464,6 +575,15 @@ func _on_player_lifecycle_point_ended(_player: Player) -> void:
 
 ## Called when player 0 hits the ball
 func _on_player0_ball_hit() -> void:
+	var stroke_payload := {}
+	if player0.queued_stroke:
+		stroke_payload = {
+			"stroke_type": player0.queued_stroke.stroke_type,
+			"stroke_power": player0.queued_stroke.stroke_power,
+			"stroke_target": player0.queued_stroke.stroke_target,
+			"stroke_spin": player0.queued_stroke.stroke_spin,
+		}
+	_record_replay_event("stroke", {"player": 0, "stroke": stroke_payload})
 	if current_state == MatchState.PLAY:
 		if _ground_contacts == 0:
 			_swap_valid_rally_zone()
@@ -473,8 +593,148 @@ func _on_player0_ball_hit() -> void:
 
 ## Called when player 1 hits the ball
 func _on_player1_ball_hit() -> void:
+	var stroke_payload := {}
+	if player1.queued_stroke:
+		stroke_payload = {
+			"stroke_type": player1.queued_stroke.stroke_type,
+			"stroke_power": player1.queued_stroke.stroke_power,
+			"stroke_target": player1.queued_stroke.stroke_target,
+			"stroke_spin": player1.queued_stroke.stroke_spin,
+		}
+	_record_replay_event("stroke", {"player": 1, "stroke": stroke_payload})
 	if current_state == MatchState.PLAY:
 		if _ground_contacts == 0:
 			_swap_valid_rally_zone()
 		_ground_contacts = 0
 	last_hitter = player1
+
+
+func _begin_replay_recording() -> void:
+	if not _replay_controller:
+		return
+	_replay_controller.enabled = replay_enabled
+	_replay_controller.persistence_enabled = replay_persistence_enabled
+	_replay_controller.save_path = replay_save_path
+	_replay_controller.camera_mode = int(replay_camera_mode) as MatchReplayController.CameraMode
+	_replay_controller.follow_offset = replay_follow_offset
+	_replay_controller.begin_recording()
+
+
+func _stop_replay_recording() -> void:
+	if not _replay_controller:
+		return
+	_replay_controller.stop_recording()
+
+
+func _record_replay_frame(delta: float) -> void:
+	if _replay_controller:
+		_replay_controller.process_recording(delta)
+
+
+func _record_replay_event(event_type: String, payload: Dictionary) -> void:
+	if _replay_controller:
+		_replay_controller.record_event(event_type, payload)
+
+
+func has_replay() -> bool:
+	return _replay_controller and _replay_controller.has_replay()
+
+
+func get_replay_duration_seconds() -> float:
+	if not _replay_controller:
+		return 0.0
+	return _replay_controller.get_duration_seconds()
+
+
+func get_replay_events() -> Array[Dictionary]:
+	if not _replay_controller:
+		return []
+	return _replay_controller.get_events()
+
+
+func get_replay_playhead_seconds() -> float:
+	if not _replay_controller:
+		return 0.0
+	return _replay_controller.get_playhead_seconds()
+
+
+func get_replay_progress() -> float:
+	if not _replay_controller:
+		return 0.0
+	return _replay_controller.get_progress()
+
+
+func is_replay_playing() -> bool:
+	return _replay_controller and _replay_controller.is_playing()
+
+
+func is_replay_paused() -> bool:
+	return _replay_controller and _replay_controller.is_playback_paused()
+
+
+func save_replay_to_disk(path: String = replay_save_path) -> bool:
+	if not _replay_controller:
+		return false
+	return _replay_controller.save_to_disk(path)
+
+
+func load_replay_from_disk(path: String = replay_save_path) -> bool:
+	if not _replay_controller:
+		return false
+	return _replay_controller.load_from_disk(path)
+
+
+func start_replay() -> void:
+	if not _replay_controller:
+		return
+	_replay_controller.enabled = replay_enabled
+	_replay_controller.camera_mode = int(replay_camera_mode) as MatchReplayController.CameraMode
+	_replay_controller.follow_offset = replay_follow_offset
+	_replay_controller.start_playback()
+
+
+func stop_replay() -> void:
+	if _replay_controller:
+		_replay_controller.stop_playback()
+
+
+func pause_replay() -> void:
+	if _replay_controller:
+		_replay_controller.pause_playback()
+
+
+func resume_replay() -> void:
+	if _replay_controller:
+		_replay_controller.resume_playback()
+
+
+func toggle_replay_pause() -> void:
+	if _replay_controller:
+		_replay_controller.toggle_pause_playback()
+
+
+func rewind_replay(seconds: float = 2.0) -> void:
+	if _replay_controller:
+		_replay_controller.rewind_seconds(seconds)
+
+
+func forward_replay(seconds: float = 2.0) -> void:
+	if _replay_controller:
+		_replay_controller.forward_seconds(seconds)
+
+
+func step_replay_frame(direction: int) -> void:
+	if _replay_controller:
+		_replay_controller.step_frame(direction)
+
+
+func set_replay_camera_mode(mode: ReplayCameraMode) -> void:
+	replay_camera_mode = mode
+	if _replay_controller:
+		_replay_controller.camera_mode = int(mode) as MatchReplayController.CameraMode
+
+
+func get_replay_camera_mode() -> ReplayCameraMode:
+	return replay_camera_mode
+
+

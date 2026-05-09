@@ -44,11 +44,11 @@ window/size/fullscreen=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/godot_xterm/plugin.cfg", "res://addons/loggie/plugin.cfg", "res://addons/modular-settings-menu/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/godot_xterm/plugin.cfg", "res://addons/loggie/plugin.cfg", "res://addons/modular-settings-menu/plugin.cfg", "res://addons/tau-plot/plugin.cfg")
 
 [gui]
 
-theme/custom="res://assets/resources/main_theme.tres"
+theme/custom_font="uid://cv0pw4voe03yw"
 
 [importer_defaults]
 

@@ -50,7 +50,7 @@ func _compute_magnus_force(spin_value: Vector3) -> Vector3:
 	return Vector3(
 		spin_value.x * SPIN_SIDE_MULT,
 		-spin_value.y * SPIN_DOWN_FORCE,
-		spin_value.z * SPIN_FORWARD_MULT
+		0.0
 	)
 
 
@@ -64,7 +64,17 @@ func _apply_magnus_and_gravity(base_velocity: Vector3, spin_value: Vector3, delt
 
 
 func _apply_air_drag(base_velocity: Vector3, delta: float) -> Vector3:
-	return base_velocity - (base_velocity * AIR_DRAG * delta)
+	var speed: float = base_velocity.length()
+	if speed <= 0.0:
+		return base_velocity
+
+	# Quadratic drag is required for ball-like motion; linear drag under-damps and
+	# causes visible re-acceleration late in flight.
+	var delta_speed: float = AIR_DRAG * speed * speed * delta
+	if delta_speed >= speed:
+		return Vector3.ZERO
+
+	return base_velocity * ((speed - delta_speed) / speed)
 
 
 func _handle_collision(collision: KinematicCollision3D) -> void:
@@ -137,7 +147,6 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	var bounce_normal = -v_normal * BALL_DAMPING_VERTICAL
 	var bounce_tangent = v_tangent * BALL_DAMPING_HORIZONTAL
 	bounce_tangent.x += spin.x * SPIN_SIDE_MULT
-	bounce_tangent.z += spin.z * SPIN_FORWARD_MULT
 
 	velocity = bounce_normal + bounce_tangent
 	Loggie.msg("New velocity after bounce: ", velocity).debug()
@@ -227,18 +236,9 @@ func predict_trajectory(
 	var bounces := 0
 
 	for _step_index in range(steps):
-		# --- 1. Apply gravity with spin effect ---
-		var magnus_force = Vector3(
-			spin.x * SPIN_SIDE_MULT,
-			-spin.y * SPIN_DOWN_FORCE,
-			spin.z * SPIN_FORWARD_MULT
-		)
-		current_velocity.y += (-GRAVITY_BASE + magnus_force.y) * time_step
-		current_velocity.x += magnus_force.x * time_step
-		current_velocity.z += magnus_force.z * time_step
-
-		# --- 2. Apply air drag ---
-		current_velocity -= current_velocity * AIR_DRAG * time_step
+		# Keep prediction in lockstep with runtime ball physics.
+		current_velocity = _apply_magnus_and_gravity(current_velocity, spin, time_step)
+		current_velocity = _apply_air_drag(current_velocity, time_step)
 
 		# --- 3. Update position ---
 		current_position += current_velocity * time_step
@@ -282,6 +282,5 @@ func _simulate_bounce(prev_velocity: Vector3) -> Vector3:
 	var bounce_normal = -v_normal * BALL_DAMPING_VERTICAL
 	var bounce_tangent = v_tangent * BALL_DAMPING_HORIZONTAL
 	bounce_tangent.x += spin.x * SPIN_SIDE_MULT
-	bounce_tangent.z += spin.z * SPIN_FORWARD_MULT
 
 	return bounce_normal + bounce_tangent

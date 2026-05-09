@@ -3,10 +3,12 @@ class_name PauseMenu
 extends Control
 
 @onready var pause_panel: Panel = $PausePanel
+@onready var replay_mode_button: Button = $PausePanel/VBoxContainer/ReplayModeButton
 @onready var resume_button: Button = $PausePanel/VBoxContainer/ResumeButton
 @onready var main_menu_button: Button = $PausePanel/VBoxContainer/MainMenuButton
 
 var is_paused: bool = false
+var _match_manager: MatchManager
 
 
 func _ready() -> void:
@@ -22,9 +24,14 @@ func _ready() -> void:
 	if get_tree().paused:
 		get_tree().paused = false
 
-	# Connect button signals
+	_match_manager = get_parent().get_node_or_null("MatchManager") as MatchManager
+
+	# Connect button signal
+	replay_mode_button.pressed.connect(_on_replay_mode_pressed)
 	resume_button.pressed.connect(_on_resume_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
+	if _match_manager and not _match_manager.replay_started.is_connected(_on_replay_started):
+		_match_manager.replay_started.connect(_on_replay_started)
 
 
 func _input(event: InputEvent) -> void:
@@ -64,12 +71,26 @@ func resume_game() -> void:
 	Loggie.msg("Game resumed").info()
 
 
-## Handle resume button press
+func _on_replay_mode_pressed() -> void:
+	if not _match_manager:
+		return
+
+	if _match_manager.has_replay() or _match_manager.load_replay_from_disk():
+		_match_manager.start_replay()
+		_match_manager.pause_replay()
+		is_paused = false
+		hide()
+
+
+func _on_replay_started(_duration_seconds: float) -> void:
+	is_paused = false
+	hide()
+
+
 func _on_resume_pressed() -> void:
 	resume_game()
 
 
-## Handle main menu button press
 func _on_main_menu_pressed() -> void:
 	# Unpause before changing scene
 	get_tree().paused = false
