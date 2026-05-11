@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ShotPattern" format=3]
+
+[ext_resource type="Script" path="res://player/ai/shot_pattern.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+pattern_name = &"backhand_drop_shot"
+stroke_type = 4
+stroke_power = 15.0
+stroke_spin = Vector3(0.1, -10, -1)
+normalized_target = Vector2(-1, -1)
+base_weight = 0.05
+risk_level = 0.75
+tactical_intent = 2
+allowed_ball_side = 2
+max_ball_height = 1.8

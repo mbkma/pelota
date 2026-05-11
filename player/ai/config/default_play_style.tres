@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AiPlayStyle" format=3 uid="uid://dnekgg66rtkw"]
+
+[ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://player/ai/ai_play_style.gd" id="1"]
+[ext_resource type="Script" uid="uid://qfs5wh6pwv1k" path="res://player/ai/shot_pattern.gd" id="1_10isc"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/forehand_line.tres" id="2"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/forehand_cross.tres" id="3"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/backhand_line.tres" id="4"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/backhand_cross.tres" id="5"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/backhand_slice_cross.tres" id="6"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/backhand_slice_line.tres" id="7"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/backhand_drop_shot.tres" id="8"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/serve_wide.tres" id="9"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/serve_t.tres" id="10"]
+[ext_resource type="Resource" path="res://player/ai/config/patterns/serve_body.tres" id="11"]
+
+[resource]
+script = ExtResource("1")
+style_name = &"aggressive_baseliner"
+attack_intent_weight = 1.35
+approach_net_intent_weight = 0.75
+rally_patterns = Array[ExtResource("1_10isc")]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8")])
+serve_patterns = Array[ExtResource("1_10isc")]([ExtResource("9"), ExtResource("10"), ExtResource("11")])

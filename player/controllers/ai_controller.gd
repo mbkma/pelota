@@ -11,13 +11,11 @@ enum Phase {
 	WAITING_FOR_HIT    ## Animation playing - waiting for hit frame
 }
 
-const DEFAULT_TACTIC_KEY: String = "default"
-
-## Available tactics for AI decision-making
-@export var tactics: Dictionary[String, Script]
+## High-level strategy resource used to orchestrate shot planning.
+@export var point_strategy: PointStrategy
 
 ## Current tactic instance for stroke computation
-var _current_tactic: DefaultTactics
+var _current_tactic: PointStrategy
 
 ## Pending stroke to execute (queued by controller, executed by player)
 var _pending_stroke: Stroke = null
@@ -38,9 +36,14 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 
-	_current_tactic = tactics[DEFAULT_TACTIC_KEY].new()
+	if not point_strategy:
+		push_error("AiController: point_strategy must be configured")
+		set_process(false)
+		return
+
+	_current_tactic = point_strategy.duplicate(true)
 	if not _current_tactic:
-		push_error("AiController: Failed to instantiate default tactic")
+		push_error("AiController: Failed to instantiate point strategy")
 		set_process(false)
 		return
 

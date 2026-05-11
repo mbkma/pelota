@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DefaultTactics" format=3 uid="uid://dtku1nk4lvoam"]
+
+[ext_resource type="Script" uid="uid://d3bqf0hxdnfen" path="res://player/ai/tactics/default.gd" id="1"]
+[ext_resource type="Resource" uid="uid://dnekgg66rtkw" path="res://player/ai/config/default_play_style.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+play_style = ExtResource("2")

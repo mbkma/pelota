@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShotPattern" format=3]
+
+[ext_resource type="Script" path="res://player/ai/shot_pattern.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+pattern_name = &"backhand_slice_cross"
+stroke_type = 4
+stroke_power = 16.0
+stroke_spin = Vector3(-0.3, -10, 0.1)
+normalized_target = Vector2(-1, 0.8)
+base_weight = 0.1
+risk_level = 0.35
+tactical_intent = 3
+allowed_ball_side = 2

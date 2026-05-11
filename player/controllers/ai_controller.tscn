@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://chwkc1ds7iedv"]
 
 [ext_resource type="Script" uid="uid://dxy1y5jqcijwi" path="res://player/controllers/ai_controller.gd" id="1"]
-[ext_resource type="Script" uid="uid://d3bqf0hxdnfen" path="res://player/ai/tactics/default.gd" id="2_qmycn"]
+[ext_resource type="Resource" uid="uid://dtku1nk4lvoam" path="res://player/ai/config/default_point_strategy.tres" id="2_ow3xq"]
 
 [node name="AiController" type="Node" unique_id=1580375701]
 script = ExtResource("1")
-tactics = Dictionary[String, Script]({
-"default": ExtResource("2_qmycn")
-})
+point_strategy = ExtResource("2_ow3xq")
