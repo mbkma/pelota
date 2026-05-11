@@ -2,8 +2,6 @@
 class_name AiController
 extends Controller
 
-const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://match/lifecycle_bus.gd")
-
 ## Phase-based decision system enum
 enum Phase {
 	SERVING,
@@ -195,12 +193,12 @@ func ball_changed(_ball: Ball) -> void:
 
 func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> void:
 	match current_phase:
-		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.SERVING:
+		MatchLifecycleBus.Phase.SERVING:
 			_current_phase = Phase.SERVING
-		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.RALLY:
+		MatchLifecycleBus.Phase.RALLY:
 			if _current_phase == Phase.SERVING:
 				_current_phase = Phase.ANTICIPATION
-		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.POINT_ENDED, MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE:
+		MatchLifecycleBus.Phase.POINT_ENDED, MatchLifecycleBus.Phase.IDLE:
 			_reset_to_anticipation()
 
 

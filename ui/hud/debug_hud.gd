@@ -91,6 +91,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	# Start hidden
 	self.visible = false
+	_configure_multiline_labels()
 	if match_manager and not match_manager.active_ball_changed.is_connected(_on_active_ball_changed):
 		match_manager.active_ball_changed.connect(_on_active_ball_changed)
 	_trajectory_button.toggled.connect(_toggle_trajectory)
@@ -171,24 +172,14 @@ func _update_player_stats() -> void:
 	# Player 0 stats
 	var p0: Player = match_manager.player0
 	_p0_name_label.text = p0.player_data.last_name
-	var p0_state_text: String = _player_state_to_string(p0.get_current_state())
-	if p0.controller is AiController:
-		var ai_controller: AiController = p0.controller as AiController
-		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
-	p0_state_text += " | Q: " + _queued_stroke_to_string(p0)
-	_p0_state_label.text = p0_state_text
+	_p0_state_label.text = _format_player_debug_block(p0)
 	_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_p0_velocity_label.text = "%.2f" % p0.velocity.length()
 
 	# Player 1 stats
 	var p1: Player = match_manager.player1
 	_p1_name_label.text = p1.player_data.last_name
-	var p1_state_text: String = _player_state_to_string(p1.get_current_state())
-	if p1.controller is AiController:
-		var ai_controller: AiController = p1.controller as AiController
-		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
-	p1_state_text += " | Q: " + _queued_stroke_to_string(p1)
-	_p1_state_label.text = p1_state_text
+	_p1_state_label.text = _format_player_debug_block(p1)
 	_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_p1_velocity_label.text = "%.2f" % p1.velocity.length()
 
@@ -283,7 +274,7 @@ func _queued_stroke_to_string(player: Player) -> String:
 		step_time = "%.2f" % stroke.step.time
 		step_bounces = str(stroke.step.bounces)
 
-	return "%s p=%.2f d=%.2f tgt=(%.2f,%.2f,%.2f) spin=(%.2f,%.2f,%.2f) step_t=%s b=%s" % [
+	return "%s\n  power=%.2f delay=%.2f\n  target=(%.2f, %.2f, %.2f)\n  spin=(%.2f, %.2f, %.2f)\n  step_t=%s bounces=%s" % [
 		_stroke_type_to_string(stroke.stroke_type),
 		stroke.stroke_power,
 		stroke.delay,
@@ -295,6 +286,21 @@ func _queued_stroke_to_string(player: Player) -> String:
 		stroke.stroke_spin.z,
 		step_time,
 		step_bounces,
+	]
+
+
+func _player_ball_to_string(player: Player) -> String:
+	if player == null or not is_instance_valid(player.ball):
+		return "NONE"
+
+	var player_ball: Ball = player.ball
+	var ball_status: String = "ACTIVE" if player_ball == match_manager.get_active_ball() else "STALE"
+	return "%s\n  id=%s\n  pos=(%.2f, %.2f, %.2f)" % [
+		ball_status,
+		str(player_ball.get_instance_id()),
+		player_ball.position.x,
+		player_ball.position.y,
+		player_ball.position.z,
 	]
 
 
@@ -333,27 +339,40 @@ func _update_summary_stats(_delta: float) -> void:
 	# Player 0
 	var p0: Player = match_manager.player0
 	_summary_p0_name_label.text = p0.player_data.last_name
-	var p0_state_text: String = _player_state_to_string(p0.get_current_state())
-	if p0.controller is AiController:
-		var ai_controller: AiController = p0.controller as AiController
-		p0_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
-	p0_state_text += " | Q: " + _queued_stroke_to_string(p0)
-	_summary_p0_state_label.text = p0_state_text
+	_summary_p0_state_label.text = _format_player_debug_block(p0)
 	_summary_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
 	_summary_p0_velocity_label.text = "%.2f" % p0.velocity.length()
 
 	# Player 1
 	var p1: Player = match_manager.player1
 	_summary_p1_name_label.text = p1.player_data.last_name
-	var p1_state_text: String = _player_state_to_string(p1.get_current_state())
-	if p1.controller is AiController:
-		var ai_controller: AiController = p1.controller as AiController
-		p1_state_text += " | AI: " + _ai_phase_to_string(ai_controller.get_current_phase())
-	p1_state_text += " | Q: " + _queued_stroke_to_string(p1)
-	_summary_p1_state_label.text = p1_state_text
+	_summary_p1_state_label.text = _format_player_debug_block(p1)
 	_summary_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
 	_summary_p1_velocity_label.text = "%.2f" % p1.velocity.length()
 	_refresh_simulation_labels()
+
+
+func _format_player_debug_block(player: Player) -> String:
+	var lines: PackedStringArray = []
+	lines.append("State: %s" % _player_state_to_string(player.get_current_state()))
+	if player.controller is AiController:
+		var ai_controller: AiController = player.controller as AiController
+		lines.append("AI: %s" % _ai_phase_to_string(ai_controller.get_current_phase()))
+	lines.append("Ball:\n%s" % _player_ball_to_string(player))
+	lines.append("Queued Stroke:\n%s" % _queued_stroke_to_string(player))
+	return "\n".join(lines)
+
+
+func _configure_multiline_labels() -> void:
+	var labels: Array[Label] = [
+		_p0_state_label,
+		_p1_state_label,
+		_summary_p0_state_label,
+		_summary_p1_state_label,
+	]
+
+	for label in labels:
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 func _refresh_camera_selector() -> void:
 	_camera_selector.clear()
