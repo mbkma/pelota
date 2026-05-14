@@ -284,6 +284,9 @@ func _on_target_point_reached() -> void:
 		if not closest_step:
 			push_warning("Player._on_target_point_reached: closest trajectory step unavailable")
 			return
+		Loggie.msg(player_data.last_name + ": ", 
+			"Stroke executed closest_step time:", closest_step.time, "_animation_hit_point_time: ", _animation_hit_point_time
+		).info()
 		var timing = closest_step.time - _animation_hit_point_time
 		if timing > 0:
 			await get_tree().create_timer(timing).timeout
@@ -293,9 +296,7 @@ func _on_target_point_reached() -> void:
 				return
 		_set_state(PlayerStateMachine.State.STROKING)
 		model.play_stroke(stroke)
-		Loggie.msg(player_data.last_name + ": ", 
-			"Stroke executed closest_step time:", closest_step.time, "_animation_hit_point_time: ", _animation_hit_point_time
-		).info()
+
 
 
 ## Stroke System

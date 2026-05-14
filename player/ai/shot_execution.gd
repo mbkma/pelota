@@ -23,8 +23,96 @@ func build_stroke(
 		context.player_position,
 		context.is_serve
 	)
+	_apply_execution_jitter(stroke, context, risk)
 	stroke.step = context.closest_step
 	return stroke
+
+
+func _apply_execution_jitter(
+	stroke: Stroke,
+	context: AiPointContext,
+	risk: float
+) -> void:
+	if not stroke:
+		return
+
+	var jitter: float = _compute_execution_jitter(context, risk)
+	var power_precision: float = _get_player_stat01(context, "power_precision", 75.0)
+	var spin_precision: float = _get_player_stat01(context, "spin_precision", 75.0)
+	var target_precision: float = _get_player_stat01(context, "target_precision", 75.0)
+	var power_error_multiplier: float = lerpf(1.25, 0.65, power_precision)
+	var spin_error_multiplier: float = lerpf(1.25, 0.65, spin_precision)
+	var target_error_multiplier: float = lerpf(1.25, 0.65, target_precision)
+
+	# Power jitter: multiplicative error around intended pace.
+	var power_jitter: float = lerpf(0.02, 0.16, jitter) * power_error_multiplier
+	stroke.stroke_power *= (1.0 + randf_range(-power_jitter, power_jitter))
+	stroke.stroke_power = clampf(stroke.stroke_power, 8.0, 40.0)
+
+	# Spin jitter: small scale and additive perturbation on each axis.
+	var spin_scale_jitter: float = lerpf(0.02, 0.18, jitter) * spin_error_multiplier
+	stroke.stroke_spin *= Vector3(
+		1.0 + randf_range(-spin_scale_jitter, spin_scale_jitter),
+		1.0 + randf_range(-spin_scale_jitter, spin_scale_jitter),
+		1.0 + randf_range(-spin_scale_jitter, spin_scale_jitter)
+	)
+	var spin_additive: float = lerpf(0.05, 0.8, jitter) * spin_error_multiplier
+	stroke.stroke_spin += Vector3(
+		randf_range(-spin_additive, spin_additive),
+		randf_range(-spin_additive * 2.0, spin_additive * 2.0),
+		randf_range(-spin_additive, spin_additive)
+	)
+
+	# Target jitter: lateral/depth execution error while keeping shot on opponent side.
+	var lateral_jitter: float = (GameConstants.COURT_WIDTH * 0.5) * lerpf(0.02, 0.22, jitter) * target_error_multiplier
+	var depth_jitter: float = GameConstants.COURT_LENGTH_HALF * lerpf(0.01, 0.08, jitter) * target_error_multiplier
+	stroke.stroke_target.x += randf_range(-lateral_jitter, lateral_jitter)
+	stroke.stroke_target.z += randf_range(-depth_jitter, depth_jitter)
+
+	var half_width: float = (GameConstants.COURT_WIDTH * 0.5) - 0.2
+	stroke.stroke_target.x = clampf(stroke.stroke_target.x, -half_width, half_width)
+
+	var striker_side_z: float = sign(context.player_position.z)
+	if striker_side_z == 0.0:
+		striker_side_z = 1.0
+	var opponent_side_z: float = -striker_side_z
+	var target_depth_abs: float = clampf(absf(stroke.stroke_target.z), 0.5, GameConstants.COURT_LENGTH_HALF - 0.2)
+	stroke.stroke_target.z = opponent_side_z * target_depth_abs
+
+
+func _compute_execution_jitter(
+	context: AiPointContext,
+	risk: float
+) -> float:
+	var incoming_pressure: float = clampf(inverse_lerp(8.0, 35.0, context.incoming_ball_speed), 0.0, 1.0)
+	var movement_pressure: float = clampf(inverse_lerp(1.0, 7.0, context.player_movement_speed), 0.0, 1.0)
+	var pressure: float = maxf(incoming_pressure, movement_pressure)
+	var execution_consistency: float = _get_player_stat01(context, "execution_consistency", 75.0)
+
+	# Higher pressure and high-risk intent increase error; consistent players reduce it.
+	var jitter: float = 0.06
+	jitter += pressure * 0.55
+	jitter += risk * 0.25
+	jitter *= lerpf(1.25, 0.55, execution_consistency)
+
+	if context.is_serve:
+		jitter *= 0.85
+
+	return clampf(jitter, 0.03, 0.95)
+
+
+func _get_player_stat01(context: AiPointContext, key: String, default_score: float) -> float:
+	if not context or not context.player:
+		return clampf(default_score / 100.0, 0.0, 1.0)
+
+	var player_stats: Dictionary = context.player.stats
+	if not player_stats.has(key):
+		return clampf(default_score / 100.0, 0.0, 1.0)
+
+	var raw_value: float = float(player_stats.get(key, default_score))
+	if raw_value >= 0.0 and raw_value <= 1.0:
+		return raw_value
+	return clampf(raw_value / 100.0, 0.0, 1.0)
 
 
 func _build_normalized_target(
@@ -57,13 +145,12 @@ func _build_normalized_target(
 		depth = -0.85
 		lateral_abs = lerpf(0.15, 0.45, risk)
 
-	var jitter_strength: float = lerpf(0.06, 0.2, risk)
-	var lateral: float = (away_from_opponent * lateral_abs) + randf_range(-jitter_strength, jitter_strength)
+	var lateral: float = (away_from_opponent * lateral_abs)
 	var target: Vector2 = Vector2(clampf(lateral, -1.0, 1.0), clampf(depth, -1.0, 1.0))
 
 	if context.is_serve:
 		var serve_depth: float = lerpf(0.65, 1.0, risk)
-		var serve_lateral: float = (away_from_opponent * lerpf(0.1, 0.95, risk)) + randf_range(-0.06, 0.06)
+		var serve_lateral: float = (sign(opponent_x) * lerpf(0.1, 0.95, risk))
 		target = Vector2(clampf(serve_lateral, -1.0, 1.0), clampf(serve_depth, -1.0, 1.0))
 
 	return target
@@ -78,13 +165,39 @@ func _determine_stroke_type(
 		return Stroke.StrokeType.SERVE
 
 	var movement_pressure: float = clampf(inverse_lerp(1.0, 7.0, context.player_movement_speed), 0.0, 1.0)
-	if intent == AiPointContext.ShotIntent.ATTACK and context.short_ball_opportunity and risk > 0.72 and randf() < 0.22:
+
+	# Drop shots are more common on short balls, but still possible outside strict attack intent.
+	var drop_shot_chance: float = 0.0
+	if context.short_ball_opportunity:
+		drop_shot_chance += lerpf(0.03, 0.18, risk)
+		match intent:
+			AiPointContext.ShotIntent.ATTACK:
+				drop_shot_chance += 0.10
+			AiPointContext.ShotIntent.NEUTRAL:
+				drop_shot_chance += 0.05
+			AiPointContext.ShotIntent.APPROACH_NET:
+				drop_shot_chance += 0.04
+			_:
+				pass
+
+	if randf() < clampf(drop_shot_chance, 0.0, 0.45):
 		if context.ball_side == AiPointContext.BallSide.BACKHAND:
 			return Stroke.StrokeType.BACKHAND_DROP_SHOT
 		return Stroke.StrokeType.FOREHAND_DROP_SHOT
 
 	if context.ball_side == AiPointContext.BallSide.BACKHAND:
-		if intent == AiPointContext.ShotIntent.DEFEND and movement_pressure > 0.45:
+		# Slices can appear in neutral phases too; pressure and defensive intent raise frequency.
+		var slice_chance: float = 0.03
+		slice_chance += lerpf(0.08, 0.0, risk)  # Safer players slice more often.
+		slice_chance += movement_pressure * 0.20
+		if context.ball_height > 1.1:
+			slice_chance += 0.06
+		if intent == AiPointContext.ShotIntent.DEFEND:
+			slice_chance += 0.14
+		elif intent == AiPointContext.ShotIntent.NEUTRAL:
+			slice_chance += 0.05
+
+		if randf() < clampf(slice_chance, 0.0, 0.55):
 			return Stroke.StrokeType.BACKHAND_SLICE
 		return Stroke.StrokeType.BACKHAND
 
@@ -101,16 +214,17 @@ func _compute_power(
 		var serve_power: float = GameConstants.AI_SERVE_PACE * lerpf(0.85, 1.18, risk)
 		return clampf(serve_power, 22.0, 40.0)
 
-	var base_power: float = GameConstants.AI_FOREHAND_PACE
+	var base_power: float = 25.0
+	var intent_power_multiplier: float = 1.0
 	match intent:
 		AiPointContext.ShotIntent.ATTACK:
-			base_power = 20.0
+			intent_power_multiplier = 1.2
 		AiPointContext.ShotIntent.DEFEND:
-			base_power = 15.5
+			intent_power_multiplier = 0.775
 		AiPointContext.ShotIntent.APPROACH_NET:
-			base_power = 16.5
+			intent_power_multiplier = 0.825
 		_:
-			base_power = 17.5
+			intent_power_multiplier = 1
 
 	var pace_preference: float = 0.5
 	if play_style:
@@ -123,7 +237,7 @@ func _compute_power(
 	var pressure: float = maxf(incoming_pressure, movement_pressure)
 	var control_bias: float = lerpf(0.82, 1.0, 1.0 - pressure)
 
-	var adjusted_power: float = base_power * pace_bias * risk_bias * control_bias
+	var adjusted_power: float = base_power * intent_power_multiplier * pace_bias * risk_bias * control_bias
 	return clampf(adjusted_power, 8.0, 36.0)
 
 

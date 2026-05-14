@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://foxv46tnu837"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://foxv46tnu837"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
 [ext_resource type="AudioStream" uid="uid://b8qyvdmruk4h5" path="res://assets/sounds/effects/strokes/stroke_flat_djokovic_1.wav" id="2"]
@@ -11,6 +11,12 @@ age = 35
 country = "Serbia"
 height = 185
 rank = 7
+stats = {
+"execution_consistency": 90,
+"power_precision": 85,
+"spin_precision": 84,
+"target_precision": 91
+}
 sounds = {
 "grunt_flat": [ExtResource("2")],
 "grunt_frequency": 0.1,

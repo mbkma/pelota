@@ -11,16 +11,12 @@ signal stats_changed
 @export var hand := "R"
 @export var backhand := 2
 @export var rank := 1
+## Simple execution skill model (0-100) used to perturb intended strokes.
 @export var stats := {
-	"endurance": 100,
-	"speed": 100,
-	"control": 100,
-	"strength": 100,
-	"serve_pace": 40,
-	"forehand_pace": 25,
-	"forehand_spin": 10,
-	"backhand_pace": 23,
-	"backhand_spin": 5,
+	"execution_consistency": 75,
+	"target_precision": 75,
+	"power_precision": 75,
+	"spin_precision": 75,
 }
 @export var sounds := {
 	"grunt_flat": [],

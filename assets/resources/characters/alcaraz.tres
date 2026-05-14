@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://cngw1dhrbgb21"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cngw1dhrbgb21"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
 
@@ -10,3 +10,9 @@ age = 19
 country = "Spain"
 height = 183
 rank = 5
+stats = {
+"execution_consistency": 82,
+"power_precision": 83,
+"spin_precision": 80,
+"target_precision": 84
+}

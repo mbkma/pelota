@@ -11,13 +11,8 @@ country = "Germany"
 height = 198
 rank = 2
 stats = {
-"backhand_pace": 20,
-"backhand_spin": 5,
-"control": 100,
-"endurance": 100,
-"forehand_pace": 20,
-"forehand_spin": 5,
-"serve_pace": 35,
-"speed": 100,
-"strength": 100
+"execution_consistency": 80,
+"power_precision": 79,
+"spin_precision": 76,
+"target_precision": 81
 }

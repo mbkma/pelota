@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://bsmhgwnl5bmx2"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bsmhgwnl5bmx2"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
 [ext_resource type="AudioStream" uid="uid://b4fpnyd387pe4" path="res://assets/sounds/effects/strokes/stroke_flat_nadal_1.wav" id="2"]
@@ -13,15 +13,10 @@ height = 185
 hand = "L"
 rank = 3
 stats = {
-"backhand_pace": 20,
-"backhand_spin": 5,
-"control": 100,
-"endurance": 100,
-"forehand_pace": 20,
-"forehand_spin": 5,
-"serve_pace": 35,
-"speed": 100,
-"strength": 100
+"execution_consistency": 84,
+"power_precision": 80,
+"spin_precision": 88,
+"target_precision": 86
 }
 sounds = {
 "grunt_flat": [ExtResource("2")],

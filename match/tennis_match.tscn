@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://player/player.tscn" id="2_hqvfk"]
-[ext_resource type="Resource" uid="uid://7puy4co7ounb" path="res://assets/resources/characters/ruud.tres" id="4_lvdh6"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://ui/hud/television_hud.tscn" id="4_upnw7"]
+[ext_resource type="Resource" uid="uid://b2vrbrqsx0cpp" path="res://assets/resources/characters/auger-aliassime.tres" id="5_biiqe"]
 [ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://player/ai/ai_play_style.gd" id="5_p4k7w"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://environments/us_open/stadium.tscn" id="6_4vere"]
 [ext_resource type="Script" uid="uid://svnxitgai2kj" path="res://player/ai/point_strategy.gd" id="6_rascf"]
@@ -81,7 +81,7 @@ ai_point_strategy = SubResource("Resource_8u5lr")
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
 ai_point_strategy = SubResource("Resource_a3ma5")
-player_data = ExtResource("4_lvdh6")
+player_data = ExtResource("5_biiqe")
 move_speed = 5.0
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]

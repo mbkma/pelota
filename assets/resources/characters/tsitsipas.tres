@@ -12,13 +12,8 @@ height = 193
 backhand = 1
 rank = 4
 stats = {
-"backhand_pace": 20,
-"backhand_spin": 5,
-"control": 100,
-"endurance": 100,
-"forehand_pace": 20,
-"forehand_spin": 5,
-"serve_pace": 35,
-"speed": 100,
-"strength": 100
+"execution_consistency": 78,
+"power_precision": 77,
+"spin_precision": 75,
+"target_precision": 79
 }

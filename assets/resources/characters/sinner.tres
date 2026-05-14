@@ -10,13 +10,8 @@ country = "Italy"
 height = 188
 rank = 10
 stats = {
-"backhand_pace": 20,
-"backhand_spin": 5,
-"control": 100,
-"endurance": 100,
-"forehand_pace": 20,
-"forehand_spin": 5,
-"serve_pace": 35,
-"speed": 100,
-"strength": 100
+"execution_consistency": 83,
+"power_precision": 81,
+"spin_precision": 79,
+"target_precision": 84
 }

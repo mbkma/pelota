@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://7puy4co7ounb"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://7puy4co7ounb"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
 
@@ -11,13 +11,8 @@ country = "Norway"
 height = 183
 rank = 6
 stats = {
-"backhand_pace": 20,
-"backhand_spin": 5,
-"control": 100,
-"endurance": 100,
-"forehand_pace": 20,
-"forehand_spin": 5,
-"serve_pace": 35,
-"speed": 100,
-"strength": 100
+"execution_consistency": 76,
+"power_precision": 74,
+"spin_precision": 73,
+"target_precision": 75
 }
