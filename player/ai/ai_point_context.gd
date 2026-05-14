@@ -6,6 +6,14 @@ enum BallSide {
 	BACKHAND,
 }
 
+enum ShotIntent {
+	NEUTRAL,
+	ATTACK,
+	DEFEND,
+	APPROACH_NET,
+	SERVE,
+}
+
 var player: Player
 var opponent: Player
 var closest_step: TrajectoryStep
@@ -23,6 +31,9 @@ var recovery_distance: float = 0.0
 
 var short_ball_opportunity: bool = false
 var ball_side: BallSide = BallSide.FOREHAND
+var selected_intent: ShotIntent = ShotIntent.NEUTRAL
+var shot_risk: float = 0.5
+var play_style: AiPlayStyle
 
 
 static func from_step(target_player: Player, step: TrajectoryStep, serve: bool = false) -> AiPointContext:

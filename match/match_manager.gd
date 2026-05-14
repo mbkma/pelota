@@ -38,8 +38,10 @@ var state_history: Array[MatchState] = []
 ## Current match state (use setter to trigger state_changed signal)
 var current_state: MatchState = MatchState.NOT_STARTED:
 	set(value):
-		state_history.append(value)
-		current_state = value
+		if value != current_state:
+			state_history.append(value)
+			current_state = value
+			_log_state_change(value)
 
 ## Valid service zone for current serve
 var _valid_serve_zone: Court.CourtRegion
@@ -100,6 +102,9 @@ func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
 		push_error("MatchManager not properly initialized! Missing required nodes.")
 		return
+
+	# Set up logger name
+	set_meta("logger_name", "MatchManager")
 
 	# Reset input assignments for new match (important for gamepad assignment)
 	HumanController.reset_input_assignments()
@@ -736,5 +741,10 @@ func set_replay_camera_mode(mode: ReplayCameraMode) -> void:
 
 func get_replay_camera_mode() -> ReplayCameraMode:
 	return replay_camera_mode
+
+
+func _log_state_change(new_state: MatchState) -> void:
+	var state_name: String = MatchState.keys()[new_state] if new_state < MatchState.size() else "UNKNOWN"
+	DebugLogger.log(self, "State changed to: %s" % state_name)
 
 

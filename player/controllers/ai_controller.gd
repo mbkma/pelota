@@ -14,9 +14,6 @@ enum Phase {
 ## High-level strategy resource used to orchestrate shot planning.
 @export var point_strategy: PointStrategy
 
-## Current tactic instance for stroke computation
-var _current_tactic: PointStrategy
-
 ## Pending stroke to execute (queued by controller, executed by player)
 var _pending_stroke: Stroke = null
 
@@ -29,6 +26,10 @@ func _reset_to_anticipation() -> void:
 	_pending_stroke = null
 
 
+func _log_strategy(message: String) -> void:
+	DebugLogger.log(self, message)
+
+
 func _ready() -> void:
 	super()  # Call base class initialization
 	if not validate_player():
@@ -36,30 +37,50 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 
+	# Set logger name to identify this AI controller's player
+	set_meta("logger_name", "%s (AI)" % player.player_data.last_name)
+
 	if not point_strategy:
 		push_error("AiController: point_strategy must be configured")
 		set_process(false)
 		return
 
-	_current_tactic = point_strategy.duplicate(true)
-	if not _current_tactic:
+	point_strategy = point_strategy.duplicate(true)
+	if not point_strategy:
 		push_error("AiController: Failed to instantiate point strategy")
 		set_process(false)
 		return
+	if not point_strategy.validate_configuration():
+		push_error("AiController: point_strategy configuration is invalid")
+		set_process(false)
+		set_physics_process(false)
+		return
 
-	_current_tactic.setup(player)
+	point_strategy.setup(player)
 
 	# Connect to ball_hit signal to handle defensive positioning and phase reset
 	player.ball_hit.connect(_on_hit_frame)
+	
+	_log_strategy("AI Controller initialized")
 
 
 ## Initiate a serve using current tactic
 func _make_serve() -> void:
-	var stroke: Stroke = _current_tactic.compute_serve()
+	var stroke: Stroke = point_strategy.compute_serve()
 	if not stroke:
 		push_error("AiController._make_serve: Tactic returned null stroke")
 		return
 
+	_log_strategy("Serve decision: type=%s power=%.1f spin=(%.2f, %.2f, %.2f) target=(%.2f, %.2f, %.2f)" % [
+		_stroke_type_to_string(stroke.stroke_type),
+		stroke.stroke_power,
+		stroke.stroke_spin.x,
+		stroke.stroke_spin.y,
+		stroke.stroke_spin.z,
+		stroke.stroke_target.x,
+		stroke.stroke_target.y,
+		stroke.stroke_target.z
+	])
 	player.prepare_serve()
 	await get_tree().create_timer(GameConstants.INPUT_STARTUP_DELAY + 1.5).timeout
 	_pending_stroke = stroke
@@ -108,13 +129,24 @@ func get_stroke() -> Stroke:
 
 ## Compute and prepare a stroke for the given trajectory step
 func _queue_stroke(step: TrajectoryStep) -> void:
-	var stroke: Stroke = _current_tactic.compute_next_stroke(step)
+	var stroke: Stroke = point_strategy.compute_next_stroke(step)
 	if not stroke:
 		push_error("AiController._queue_stroke: Tactic returned null stroke")
 		return
 	stroke.delay = step.time
 	# Queue stroke and position adjustment to be executed by player
 	_pending_stroke = stroke
+	_log_strategy("Stroke decision: type=%s power=%.1f spin=(%.2f, %.2f, %.2f) delay=%.3f target=(%.2f, %.2f, %.2f)" % [
+		_stroke_type_to_string(stroke.stroke_type),
+		stroke.stroke_power,
+		stroke.stroke_spin.x,
+		stroke.stroke_spin.y,
+		stroke.stroke_spin.z,
+		stroke.delay,
+		stroke.stroke_target.x,
+		stroke.stroke_target.y,
+		stroke.stroke_target.z
+	])
 	adjust_player_position_to_stroke(player, step, stroke)
 
 
@@ -124,6 +156,8 @@ func _anticipation_phase(_delta: float) -> void:
 	# Check if ball is flying towards us
 	if is_flying_towards(player, player.ball):
 		# Ball is coming - transition to lock-in phase
+		var ball_pos = player.ball.global_position
+		_log_strategy("Ball incoming at (%.2f, %.2f, %.2f) - transitioning to LOCK_IN" % [ball_pos.x, ball_pos.y, ball_pos.z])
 		_current_phase = Phase.LOCK_IN
 
 
@@ -139,6 +173,7 @@ func _lock_in_phase() -> void:
 	var closest_step := get_closest_trajectory_step(player)
 	if not closest_step:
 		push_error("AiController._lock_in_phase: Could not find trajectory step")
+		_log_strategy("LOCK_IN failed: no trajectory step found")
 		_current_phase = Phase.ANTICIPATION
 		return
 
@@ -148,6 +183,7 @@ func _lock_in_phase() -> void:
 
 	if not closest_step:
 		push_error("AiController._lock_in_phase: Could not find apex after first bounce")
+		_log_strategy("LOCK_IN failed: no apex after bounce found")
 		_current_phase = Phase.ANTICIPATION
 		return
 
@@ -155,10 +191,17 @@ func _lock_in_phase() -> void:
 	var closest_ball_position := closest_step.point
 	if sign(closest_ball_position.z) != sign(player.position.z):
 		push_warning("AiController._lock_in_phase: Ball not on my side of court")
+		_log_strategy("LOCK_IN failed: ball not on my side")
 		_current_phase = Phase.ANTICIPATION
 		return
 
 	# Compute stroke and queue it
+	_log_strategy("LOCK_IN: Ball arrival point (%.2f, %.2f, %.2f) at t=%.3f" % [
+		closest_step.point.x,
+		closest_step.point.y,
+		closest_step.point.z,
+		closest_step.time
+	])
 	_queue_stroke(closest_step)
 	_current_phase = Phase.TRACKING
 
@@ -251,3 +294,23 @@ func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vecto
 	Loggie.msg("defensive_position: ", defensive_position).info()
 
 	return defensive_position
+
+
+func _stroke_type_to_string(stroke_type: Stroke.StrokeType) -> String:
+	match stroke_type:
+		Stroke.StrokeType.FOREHAND:
+			return "FH"
+		Stroke.StrokeType.BACKHAND:
+			return "BH"
+		Stroke.StrokeType.SERVE:
+			return "SERVE"
+		Stroke.StrokeType.VOLLEY:
+			return "VOLLEY"
+		Stroke.StrokeType.FOREHAND_DROP_SHOT:
+			return "FH_DROP"
+		Stroke.StrokeType.BACKHAND_DROP_SHOT:
+			return "BH_DROP"
+		Stroke.StrokeType.BACKHAND_SLICE:
+			return "BH_SLICE"
+		_:
+			return "UNKNOWN"

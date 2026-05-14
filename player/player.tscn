@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://player/player.gd" id="1"]
 [ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://player/controllers/ai_controller.tscn" id="2_yllr7"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://player/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
 [ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/effects/strokes/stroke_flat_2.wav" id="4_p4hr7"]
@@ -19,6 +20,7 @@ height = 1.58024
 
 [node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker") groups=["Player"]]
 script = ExtResource("1")
+controller_scene = ExtResource("2_yllr7")
 player_data = ExtResource("2_uxa8p")
 ball_aim_marker = NodePath("BallAimMarker")
 hit_range_tolerance_meters = 5.0
@@ -155,7 +157,6 @@ bones/98/rotation = Quaternion(0.84690416, -0.14071538, -0.51025426, -0.05092273
 bones/102/position = Vector3(2.7504019e-10, -0.018215466, 0.12477181)
 bones/102/rotation = Quaternion(0.9998335, 1.5285349e-09, 6.718996e-12, 0.018246971)
 bones/103/rotation = Quaternion(-0.12128053, -0.0953208, 0.9880058, -0.0070344764)
-bones/105/rotation = Quaternion(0.5, 0.5, 0.5, -0.5)
 bones/106/position = Vector3(-0.008305218, 0.17417367, -0.030619672)
 bones/106/rotation = Quaternion(-0.4875059, -0.05716221, -0.15529355, 0.85729474)
 bones/107/rotation = Quaternion(0.21459912, 0.92774636, -0.18242165, 0.24485953)

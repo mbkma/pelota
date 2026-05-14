@@ -29,6 +29,7 @@ DebugMenu="*uid://cggqb75a8w8r"
 GlobalScenes="*res://core/global_scenes.tscn"
 SceneManager="*res://core/scene_manager.gd"
 Loggie="*uid://bmh2auo806k0k"
+DebugLogger="*res://core/debug_logger.gd"
 
 [debug]
 

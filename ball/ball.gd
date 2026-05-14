@@ -34,6 +34,8 @@ var _previous_velocity: Vector3 = Vector3.ZERO
 var _was_on_ground: bool = false
 
 func _ready() -> void:
+	set_meta("logger_name", "Ball")
+	
 	if initial_velocity:
 		velocity = initial_velocity
 	else:

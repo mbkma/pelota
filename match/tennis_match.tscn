@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://player/player.tscn" id="2_hqvfk"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://player/controllers/ai_controller.tscn" id="4_cux4k"]
 [ext_resource type="Resource" uid="uid://7puy4co7ounb" path="res://assets/resources/characters/ruud.tres" id="4_lvdh6"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://ui/hud/television_hud.tscn" id="4_upnw7"]
+[ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://player/ai/ai_play_style.gd" id="5_p4k7w"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://environments/us_open/stadium.tscn" id="6_4vere"]
+[ext_resource type="Script" uid="uid://svnxitgai2kj" path="res://player/ai/point_strategy.gd" id="6_rascf"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://environments/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://match/match_manager.tscn" id="8_2s2ac"]
 [ext_resource type="PackedScene" uid="uid://cggqb75a8w8r" path="res://addons/debug_menu/debug_menu.tscn" id="10_7cjfu"]
@@ -15,6 +16,25 @@
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://ui/menus/pause_menu.tscn" id="18_pause"]
 [ext_resource type="PackedScene" path="res://ui/hud/replay_overlay.tscn" id="19_replay_overlay"]
+
+[sub_resource type="Resource" id="Resource_toe4q"]
+script = ExtResource("5_p4k7w")
+style_name = &"aggressive_baseliner"
+aggression = 1.0
+risk_tolerance = 1.0
+preferred_rally_pace = 1.0
+
+[sub_resource type="Resource" id="Resource_8u5lr"]
+script = ExtResource("6_rascf")
+play_style = SubResource("Resource_toe4q")
+
+[sub_resource type="Resource" id="Resource_cpecb"]
+script = ExtResource("5_p4k7w")
+style_name = &"aggressive_baseliner"
+
+[sub_resource type="Resource" id="Resource_a3ma5"]
+script = ExtResource("6_rascf")
+play_style = SubResource("Resource_cpecb")
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -56,12 +76,11 @@ script = ExtResource("1_3pywv")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
-controller_scene = ExtResource("4_cux4k")
-move_speed = 5.0
+ai_point_strategy = SubResource("Resource_8u5lr")
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
-controller_scene = ExtResource("4_cux4k")
+ai_point_strategy = SubResource("Resource_a3ma5")
 player_data = ExtResource("4_lvdh6")
 move_speed = 5.0
 

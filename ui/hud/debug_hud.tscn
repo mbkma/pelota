@@ -790,3 +790,41 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_4m5u1")
+
+[node name="Logs" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1839428126]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+metadata/_tab_index = 6
+
+[node name="FilterContainer" type="HBoxContainer" parent="DebugHud/TabContainer/Logs" unique_id=1839428127]
+layout_mode = 2
+
+[node name="FilterLabel" type="Label" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428128]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Filter:"
+
+[node name="FilterInput" type="LineEdit" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428129]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search logs..."
+
+[node name="ObjectFilter" type="OptionButton" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428132]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "All Objects"
+
+[node name="ClearButton" type="Button" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428130]
+layout_mode = 2
+text = "Clear"
+
+[node name="LogDisplay" type="TextEdit" parent="DebugHud/TabContainer/Logs" unique_id=1839428131]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+read_only = true
+custom_minimum_size = Vector2(0, 100)

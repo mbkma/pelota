@@ -44,6 +44,8 @@ signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 
 ## Controller scene instantiated to drive movement/stroke decisions.
 @export var controller_scene: PackedScene
+## Optional per-player AI strategy override applied to AiController instances.
+@export var ai_point_strategy: PointStrategy
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
 ## Runtime stats dictionary copied from player_data for quick access.
@@ -119,6 +121,10 @@ func _can_update_movement_animation() -> bool:
 func _ready() -> void:
 	stats = player_data.stats
 	label_3d.text = player_data.last_name
+	
+	# Set logger name for debug logging
+	set_meta("logger_name", player_data.last_name)
+	
 	_state_machine.state_entered.connect(_on_state_entered)
 	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
 
@@ -127,6 +133,8 @@ func _ready() -> void:
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
+	if controller is AiController and ai_point_strategy:
+		(controller as AiController).point_strategy = ai_point_strategy
 	controller.bind(self)
 	add_child(controller)
 	_set_state(PlayerStateMachine.State.IDLE)

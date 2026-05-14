@@ -78,11 +78,24 @@ const BALL_SPEED_SAMPLE_INTERVAL: float = 0.1
 @onready var _ball_velocity_label: Label = $DebugHud/TabContainer/Ball/VBox/Velocity/Value
 @onready var _ball_speed_plot: PanelContainer = $DebugHud/TabContainer/Ball/VBox/BallSpeedGraph
 
+# Logs tab elements
+@onready var _log_filter_input: LineEdit = $DebugHud/TabContainer/Logs/FilterContainer/FilterInput
+@onready var _log_clear_button: Button = $DebugHud/TabContainer/Logs/FilterContainer/ClearButton
+@onready var _log_display: TextEdit = $DebugHud/TabContainer/Logs/LogDisplay
+@onready var _log_object_filter_dropdown: OptionButton = $DebugHud/TabContainer/Logs/FilterContainer/ObjectFilter
+@onready var _log_object_filter: OptionButton = $DebugHud/TabContainer/Logs/FilterContainer/ObjectFilter
+
 var _available_match_cameras: Array[Camera3D] = []
 var _ball_speed_dataset = null
 var _ball_speed_series_id: int = -1
 var _ball_speed_elapsed: float = 0.0
 var _ball_speed_sample_accumulator: float = 0.0
+
+# Log filtering
+var _current_text_filter: String = ""
+var _current_object_filter: String = ""
+var _log_display_dirty: bool = true
+var _last_log_count: int = 0
 
 
 ## Initialize debug HUD
@@ -98,6 +111,16 @@ func _ready() -> void:
 	_camera_selector.item_selected.connect(_on_camera_selected)
 	_setup_ball_speed_plot()
 	_reset_ball_speed_history()
+	
+	# Connect log tab controls
+	_log_filter_input.text_changed.connect(_on_log_filter_changed)
+	_log_clear_button.pressed.connect(_on_log_clear_pressed)
+	if _log_object_filter_dropdown:
+		_log_object_filter_dropdown.item_selected.connect(_on_log_object_filter_changed)
+		_log_object_filter_dropdown.add_item("All Objects", 0)
+	
+	# Debug: verify log UI is ready
+	print("DebugHUD: Log UI initialized - filter: %s, display: %s" % [_log_filter_input != null, _log_display != null])
 	_refresh_camera_selector()
 	_refresh_simulation_labels()
 
@@ -144,6 +167,7 @@ func _process(_delta: float) -> void:
 		_update_player_stats()
 		_update_ball_stats(_delta)
 		_update_summary_stats(_delta)
+		_update_log_display()
 
 
 ## Update performance metrics
@@ -533,3 +557,132 @@ func _record_ball_speed_sample(ball_speed: float, delta: float) -> void:
 		return
 
 	_ball_speed_dataset.set_series_y(_ball_speed_series_id, last_sample_index, ball_speed)
+
+
+## Helper to get DebugLogger autoload
+func _get_logger():
+	return DebugLogger
+
+
+## Log a message from any object
+func log_strategy_message(sender: Object, message: String) -> void:
+	var logger = _get_logger()
+	if logger and logger.has_method("log"):
+		logger.log(sender, message)
+	_log_display_dirty = true
+
+
+## Filter callback for log input
+func _on_log_filter_changed(new_filter: String) -> void:
+	_current_text_filter = new_filter.to_lower()
+	_log_display_dirty = true
+
+
+## Filter callback for object dropdown
+func _on_log_object_filter_changed(index: int) -> void:
+	if index == 0:
+		_current_object_filter = ""
+	else:
+		var text = _log_object_filter.get_item_text(index)
+		_current_object_filter = text
+	_log_display_dirty = true
+
+
+## Clear logs callback
+func _on_log_clear_pressed() -> void:
+	var logger = _get_logger()
+	if logger and logger.has_method("clear_logs"):
+		logger.clear_logs()
+	_log_display_dirty = true
+
+
+## Refresh object filter dropdown with current objects in logs
+func _refresh_object_filter() -> void:
+	if not _log_object_filter_dropdown:
+		return
+	
+	var logger = _get_logger()
+	if not logger:
+		return
+	
+	# Only refresh if object names have changed
+	if not logger.has_method("have_object_names_changed") or not logger.have_object_names_changed():
+		return
+	
+	# Save current selection
+	var current_object = _current_object_filter
+	
+	_log_object_filter_dropdown.clear()
+	_log_object_filter_dropdown.add_item("All Objects", 0)
+	
+	var object_names = logger.get_object_names() if logger.has_method("get_object_names") else PackedStringArray()
+	for i in range(object_names.size()):
+		_log_object_filter_dropdown.add_item(object_names[i], i + 1)
+	
+	# Restore selection
+	if current_object.is_empty():
+		_log_object_filter_dropdown.select(0)
+	else:
+		# Find and select the object
+		for i in range(_log_object_filter_dropdown.get_item_count()):
+			if _log_object_filter_dropdown.get_item_text(i) == current_object:
+				_log_object_filter_dropdown.select(i)
+				break
+
+
+## Update log display with filtered entries
+func _update_log_display() -> void:
+	var logger = _get_logger()
+	if not logger:
+		return
+	
+	# Get current log count
+	var logs = logger.get_logs() if logger.has_method("get_logs") else []
+	var current_log_count = logs.size()
+	
+	# Check if display needs updating (new logs or filter changed)
+	var needs_update = _log_display_dirty or current_log_count != _last_log_count
+	if not needs_update:
+		return
+	
+	_last_log_count = current_log_count
+	
+	if not _log_display or not is_instance_valid(_log_display):
+		return
+	
+	# Refresh object filter options (only if names changed)
+	_refresh_object_filter()
+	
+	var display_text: String = ""
+	var text_filter_lower: String = _current_text_filter.to_lower()
+	var start_time_ms: int = logger.get_start_time_ms() if logger.has_method("get_start_time_ms") else 0
+	
+	for entry in logs:
+		var object_name: String = entry["object_name"]
+		var message: String = entry["message"]
+		var timestamp_ms: int = entry["timestamp"]
+		
+		# Apply object filter
+		if not _current_object_filter.is_empty() and object_name != _current_object_filter:
+			continue
+		
+		# Apply text filter
+		if not text_filter_lower.is_empty() and not message.to_lower().contains(text_filter_lower):
+			continue
+		
+		# Calculate relative time from start
+		var relative_ms: int = timestamp_ms - start_time_ms
+		if relative_ms < 0:
+			relative_ms = 0  # Safety check
+		
+		# Format timestamp as MM:SS.ms
+		var seconds: int = int(relative_ms / 1000.0)
+		var milliseconds: int = relative_ms % 1000
+		var time_str: String = "%02d:%02d.%03d" % [int(seconds / 60.0), seconds % 60, milliseconds]
+		
+		display_text += "[%s] %s: %s\n" % [time_str, object_name, message]
+	
+	_log_display.text = display_text
+	# Scroll to bottom
+	_log_display.set_caret_line(_log_display.get_line_count() - 1)
+	_log_display_dirty = false
