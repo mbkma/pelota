@@ -16,6 +16,7 @@ enum Phase {
 
 ## Pending stroke to execute (queued by controller, executed by player)
 var _pending_stroke: Stroke = null
+var _stroke_animation_started: bool = false
 
 ## Current phase in rally cycle
 var _current_phase: Phase = Phase.ANTICIPATION
@@ -24,6 +25,7 @@ var _current_phase: Phase = Phase.ANTICIPATION
 func _reset_to_anticipation() -> void:
 	_current_phase = Phase.ANTICIPATION
 	_pending_stroke = null
+	_stroke_animation_started = false
 
 
 func _log_strategy(message: String) -> void:
@@ -71,12 +73,18 @@ func _make_serve() -> void:
 		push_error("AiController._make_serve: Tactic returned null stroke")
 		return
 
-	_log_strategy("Serve decision: type=%s power=%.1f spin=(%.2f, %.2f, %.2f) target=(%.2f, %.2f, %.2f)" % [
+	_log_strategy("Serve decision: type=%s intended_power=%.1f spin=(%.2f, %.2f, %.2f) intended_target=(%.2f, %.2f, %.2f)" % [
 		_stroke_type_to_string(stroke.stroke_type),
-		stroke.stroke_power,
+		stroke.intended_stroke_power,
 		stroke.stroke_spin.x,
 		stroke.stroke_spin.y,
 		stroke.stroke_spin.z,
+		stroke.intended_stroke_target.x,
+		stroke.intended_stroke_target.y,
+		stroke.intended_stroke_target.z
+	])
+	_log_strategy("Serve execution: actual_power=%.1f actual_target=(%.2f, %.2f, %.2f)" % [
+		stroke.stroke_power,
 		stroke.stroke_target.x,
 		stroke.stroke_target.y,
 		stroke.stroke_target.z
@@ -136,13 +144,18 @@ func _queue_stroke(step: TrajectoryStep) -> void:
 	stroke.delay = step.time
 	# Queue stroke and position adjustment to be executed by player
 	_pending_stroke = stroke
-	_log_strategy("Stroke decision: type=%s power=%.1f spin=(%.2f, %.2f, %.2f) delay=%.3f target=(%.2f, %.2f, %.2f)" % [
+	_stroke_animation_started = false
+	_log_strategy("Stroke decision: type=%s intended_power=%.1f actual_power=%.1f spin=(%.2f, %.2f, %.2f) delay=%.3f intended_target=(%.2f, %.2f, %.2f) actual_target=(%.2f, %.2f, %.2f)" % [
 		_stroke_type_to_string(stroke.stroke_type),
+		stroke.intended_stroke_power,
 		stroke.stroke_power,
 		stroke.stroke_spin.x,
 		stroke.stroke_spin.y,
 		stroke.stroke_spin.z,
 		stroke.delay,
+		stroke.intended_stroke_target.x,
+		stroke.intended_stroke_target.y,
+		stroke.intended_stroke_target.z,
 		stroke.stroke_target.x,
 		stroke.stroke_target.y,
 		stroke.stroke_target.z
@@ -214,7 +227,30 @@ func _tracking_phase(_delta: float) -> void:
 		_current_phase = Phase.LOCK_IN
 		return
 
-	# Keep current stroke plan while waiting for animation/hit execution.
+	if _stroke_animation_started:
+		return
+
+	var closest_step: TrajectoryStep = get_closest_trajectory_step(player)
+	if not closest_step:
+		return
+
+	var hit_point_time: float = player.model.get_animation_hit_frame_time(_pending_stroke.stroke_type)
+	if closest_step.time <= hit_point_time:
+		_start_pending_stroke_animation()
+
+
+func on_target_point_reached() -> void:
+	pass
+
+
+func _start_pending_stroke_animation() -> void:
+	if not _pending_stroke or _stroke_animation_started:
+		return
+
+	var stroke: Stroke = _pending_stroke
+	_stroke_animation_started = true
+	_current_phase = Phase.WAITING_FOR_HIT
+	player.start_stroke_animation(stroke)
 
 func _on_hit_frame() -> void:
 	# Calculate defensive position and request move

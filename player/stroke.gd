@@ -17,6 +17,8 @@ var stroke_type: StrokeType
 var stroke_power: float
 var stroke_spin: Vector3
 var stroke_target: Vector3
+var intended_stroke_power: float
+var intended_stroke_target: Vector3
 
 # The TrajectoryStep nearest to the players z-position
 var step: TrajectoryStep

@@ -1,6 +1,36 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://cu53kxc2gh82n"]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=4 format=3 uid="uid://cu53kxc2gh82n"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
+[ext_resource type="Script" path="res://player/player_stats_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_tsitsipas_stats"]
+script = ExtResource("2")
+acceleration = 81.0
+top_speed = 83.0
+agility = 80.0
+reach = 85.0
+stamina = 80.0
+forehand = 86.0
+backhand = 74.0
+serve_power = 86.0
+serve_accuracy = 81.0
+return_skill = 76.0
+volley_skill = 82.0
+slice_skill = 83.0
+topspin_skill = 80.0
+accuracy = 79.0
+consistency = 77.0
+timing = 79.0
+composure = 77.0
+focus = 79.0
+clutch = 81.0
+aggression = 84.0
+net_play = 85.0
+defensive_skill = 74.0
+shot_anticipation = 77.0
+clay_skill = 80.0
+grass_skill = 82.0
+hard_court_skill = 79.0
 
 [resource]
 script = ExtResource("1")
@@ -11,9 +41,4 @@ country = "Greek"
 height = 193
 backhand = 1
 rank = 4
-stats = {
-"execution_consistency": 78,
-"power_precision": 77,
-"spin_precision": 75,
-"target_precision": 79
-}
+stats = SubResource("Resource_tsitsipas_stats")

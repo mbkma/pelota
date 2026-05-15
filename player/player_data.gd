@@ -11,13 +11,8 @@ signal stats_changed
 @export var hand := "R"
 @export var backhand := 2
 @export var rank := 1
-## Simple execution skill model (0-100) used to perturb intended strokes.
-@export var stats := {
-	"execution_consistency": 75,
-	"target_precision": 75,
-	"power_precision": 75,
-	"spin_precision": 75,
-}
+## Full gameplay stat profile used by movement, stamina, shot synthesis, and AI behavior.
+@export var stats: PlayerStatsProfile
 @export var sounds := {
 	"grunt_flat": [],
 	"grunt_frequency": 0.0,

@@ -63,6 +63,11 @@ func ball_changed(_ball: Ball) -> void:
 func on_lifecycle_phase_changed(_previous_phase: int, _current_phase: int) -> void:
 	pass
 
+
+## Callback when player reaches requested movement target.
+func on_target_point_reached() -> void:
+	pass
+
 ## Get aim marker position for UI (override if controller needs UI)
 ## Returns null if no aim marker should be shown
 func get_aim_marker_position() -> Variant:
@@ -138,7 +143,12 @@ func adjust_player_position_to_stroke(target_player: Player, closest_step: Traje
 	else:
 		x_offset = -target_player.model.backhand_point.position.x
 
+	var anticipation_bias: float = 1.0
+	if target_player.stats:
+		anticipation_bias = lerpf(1.08, 0.88, target_player.stats.anticipation01())
+
 	var new_position: Vector3 = closest_step.point + x_offset * target_player.basis.x
+	new_position = target_player.position.lerp(new_position, anticipation_bias)
 	new_position.y = target_player.position.y
 	target_player.request_move_to(new_position)
 

@@ -1,7 +1,5 @@
 extends Node3D
 
-const BALL_FACTORY_SCRIPT: Script = preload("res://ball/ball_factory.gd")
-
 @onready var ball_spawn_marker_3d: Marker3D = $Marker3D
 # Given parameters
 @export var velocity_length: float = 10.0  # Example speed of the ball
@@ -16,7 +14,7 @@ var _ball_factory: BallFactory
 func _ready() -> void:
 	Loggie.msg("global basis: ", global_basis).info()
 	Loggie.msg("local basis: ", basis).info()
-	_ball_factory = BALL_FACTORY_SCRIPT.new(ball_scene)
+	_ball_factory = BallFactory.new(ball_scene)
 
 
 func _process(_delta: float) -> void:

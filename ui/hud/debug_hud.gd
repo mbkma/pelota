@@ -298,10 +298,14 @@ func _queued_stroke_to_string(player: Player) -> String:
 		step_time = "%.2f" % stroke.step.time
 		step_bounces = str(stroke.step.bounces)
 
-	return "%s\n  power=%.2f delay=%.2f\n  target=(%.2f, %.2f, %.2f)\n  spin=(%.2f, %.2f, %.2f)\n  step_t=%s bounces=%s" % [
+	return "%s\n  intended_power=%.2f actual_power=%.2f delay=%.2f\n  intended_target=(%.2f, %.2f, %.2f)\n  actual_target=(%.2f, %.2f, %.2f)\n  spin=(%.2f, %.2f, %.2f)\n  step_t=%s bounces=%s" % [
 		_stroke_type_to_string(stroke.stroke_type),
+		stroke.intended_stroke_power,
 		stroke.stroke_power,
 		stroke.delay,
+		stroke.intended_stroke_target.x,
+		stroke.intended_stroke_target.y,
+		stroke.intended_stroke_target.z,
 		stroke.stroke_target.x,
 		stroke.stroke_target.y,
 		stroke.stroke_target.z,

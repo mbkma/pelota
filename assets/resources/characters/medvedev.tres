@@ -1,6 +1,36 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://dfywnruqiset1"]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=4 format=3 uid="uid://dfywnruqiset1"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
+[ext_resource type="Script" path="res://player/player_stats_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_medvedev_stats"]
+script = ExtResource("2")
+acceleration = 76.0
+top_speed = 82.0
+agility = 80.0
+reach = 90.0
+stamina = 84.0
+forehand = 82.0
+backhand = 89.0
+serve_power = 87.0
+serve_accuracy = 84.0
+return_skill = 90.0
+volley_skill = 72.0
+slice_skill = 79.0
+topspin_skill = 72.0
+accuracy = 86.0
+consistency = 88.0
+timing = 86.0
+composure = 89.0
+focus = 88.0
+clutch = 84.0
+aggression = 73.0
+net_play = 65.0
+defensive_skill = 88.0
+shot_anticipation = 91.0
+clay_skill = 72.0
+grass_skill = 83.0
+hard_court_skill = 90.0
 
 [resource]
 script = ExtResource("1")
@@ -9,9 +39,4 @@ last_name = "Medvedev"
 age = 25
 country = "Russia"
 height = 198
-stats = {
-"execution_consistency": 82,
-"power_precision": 78,
-"spin_precision": 76,
-"target_precision": 84
-}
+stats = SubResource("Resource_medvedev_stats")

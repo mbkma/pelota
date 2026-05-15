@@ -3,6 +3,8 @@ class_name Player
 extends CharacterBody3D
 
 const DISTANCE_THRESHOLD: float = 0.01
+const STAMINA_STROKE_COST_BASE: float = 5.5
+const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 
 enum PlayerState {
 	IDLE,
@@ -48,8 +50,8 @@ signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 @export var ai_point_strategy: PointStrategy
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
-## Runtime stats dictionary copied from player_data for quick access.
-@export var stats: Dictionary = {}
+## Runtime stat profile copied from player_data for fast gameplay access.
+@export var stats: Resource
 ## Camera assigned to this player (used by controlling systems/UI).
 @export var camera: Camera3D
 ## Current active ball this player tracks and can hit.
@@ -89,8 +91,11 @@ var _ball_factory: BallFactory
 var _path: Array[Vector3] = []
 var _move_velocity: Vector3 = Vector3.ZERO
 var _real_velocity: Vector3 = Vector3.ZERO
+var _last_move_direction: Vector3 = Vector3.ZERO
 var _queued_stroke: Stroke = null
 var _last_consumed_decision: Stroke = null
+var _stamina_current: float = 100.0
+var _stamina_max: float = 100.0
 
 var queued_stroke: Stroke:
 	get:
@@ -101,8 +106,6 @@ var queued_stroke: Stroke:
 
 var controller: Controller
 
-## Time in animation when racket contacts ball (frame-specific, set from Model)
-var _animation_hit_point_time: float = 0.0
 var _last_replay_visual_state: int = -1
 var _is_replay_mode: bool = false
 
@@ -119,7 +122,11 @@ func _can_update_movement_animation() -> bool:
 
 
 func _ready() -> void:
+	assert(player_data != null, "Player._ready: player_data is required")
 	stats = player_data.stats
+	assert(stats != null, "Player._ready: player_data.stats is required")
+	_stamina_max = stats.stamina_capacity()
+	_stamina_current = _stamina_max
 	label_3d.text = player_data.last_name
 	
 	# Set logger name for debug logging
@@ -220,12 +227,19 @@ func stop() -> void:
 func apply_movement(direction: Vector3, _delta: float) -> void:
 	var animation_direction: Vector3 = direction
 	direction = direction.normalized()
+	var stamina01: float = get_stamina_ratio()
+	var direction_change: float = 0.0
+	if _last_move_direction.length_squared() > 0.001 and direction.length_squared() > 0.001:
+		direction_change = clampf((_last_move_direction - direction).length() * 0.5, 0.0, 1.0)
+	var change_penalty: float = 1.0 - (stats.direction_change_resistance(stamina01) * direction_change)
+	var speed_scalar: float = stats.movement_speed_multiplier(stamina01) * change_penalty
+	var acceleration_scalar: float = stats.acceleration_multiplier(stamina01)
 
-	_move_velocity.x = direction.x * move_speed
-	_move_velocity.z = direction.z * move_speed
+	_move_velocity.x = direction.x * move_speed * speed_scalar
+	_move_velocity.z = direction.z * move_speed * speed_scalar
 
 	if direction.length() > 0:
-		_real_velocity = _real_velocity.lerp(_move_velocity, acceleration)
+		_real_velocity = _real_velocity.lerp(_move_velocity, clampf(acceleration * acceleration_scalar, 0.01, 1.0))
 	else:
 		_real_velocity = _real_velocity.lerp(Vector3.ZERO, friction)
 
@@ -239,6 +253,12 @@ func apply_movement(direction: Vector3, _delta: float) -> void:
 			model.play_run(animation_direction)
 		else:
 			_set_state(PlayerStateMachine.State.IDLE)
+
+	_update_stamina(direction, _delta)
+	if direction.length_squared() > 0.001:
+		_last_move_direction = direction
+	else:
+		_last_move_direction = _last_move_direction.lerp(Vector3.ZERO, 0.2)
 
 
 
@@ -276,26 +296,34 @@ func move_to_defensive_position(target_position: Vector3) -> void:
 
 ## Called when player reaches movement target point
 func _on_target_point_reached() -> void:
-	# Play stroke animation if one is waiting for position
+	if controller is AiController:
+		return
+
 	if queued_stroke:
 		var stroke = queued_stroke  # Store locally before await to prevent race condition
-		_animation_hit_point_time = model.get_animation_hit_frame_time(stroke.stroke_type)
+		var animation_hit_point_time: float = model.get_animation_hit_frame_time(stroke.stroke_type)
 		var closest_step: TrajectoryStep = _get_closest_step()
 		if not closest_step:
 			push_warning("Player._on_target_point_reached: closest trajectory step unavailable")
 			return
 		Loggie.msg(player_data.last_name + ": ", 
-			"Stroke executed closest_step time:", closest_step.time, "_animation_hit_point_time: ", _animation_hit_point_time
+			"Stroke executed closest_step time:", closest_step.time, " animation_hit_point_time: ", animation_hit_point_time
 		).info()
-		var timing = closest_step.time - _animation_hit_point_time
+		var timing = closest_step.time - animation_hit_point_time
 		if timing > 0:
 			await get_tree().create_timer(timing).timeout
 			closest_step = _get_closest_step()
 			if not closest_step:
 				push_warning("Player._on_target_point_reached: trajectory changed before stroke")
 				return
-		_set_state(PlayerStateMachine.State.STROKING)
-		model.play_stroke(stroke)
+		start_stroke_animation(stroke)
+
+
+func start_stroke_animation(stroke: Stroke) -> void:
+	if not stroke:
+		return
+	_set_state(PlayerStateMachine.State.STROKING)
+	model.play_stroke(stroke)
 
 
 
@@ -337,10 +365,59 @@ func _hit_ball(stroke: Stroke) -> void:
 	)
 
 	ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
+	_consume_stamina(_stroke_stamina_cost(stroke))
 	play_stroke_sound(stroke)
 	label_3d.text = player_data.last_name + "\n" + str(stroke.stroke_power)
 	ball_hit.emit()
 	cancel_stroke()
+
+
+func get_stamina_capacity() -> float:
+	return _stamina_max
+
+
+func get_stamina_current() -> float:
+	return _stamina_current
+
+
+func get_stamina_ratio() -> float:
+	if _stamina_max <= 0.0:
+		return 1.0
+	return clampf(_stamina_current / _stamina_max, 0.0, 1.0)
+
+
+func _update_stamina(direction: Vector3, delta: float) -> void:
+	if delta <= 0.0:
+		return
+
+	var stamina01: float = get_stamina_ratio()
+	if direction.length_squared() > 0.001:
+		var movement_load: float = clampf(_real_velocity.length() / maxf(move_speed, 0.001), 0.0, 1.4)
+		var preservation: float = stats.stamina_preservation()
+		var drain_rate: float = STAMINA_MOVE_DRAIN_BASE * movement_load * lerpf(1.25, 0.65, preservation)
+		_consume_stamina(drain_rate * delta)
+		return
+
+	var recovery_rate: float = stats.stamina_recovery_rate() * lerpf(0.8, 1.2, stamina01)
+	_restore_stamina(recovery_rate * delta)
+
+
+func _stroke_stamina_cost(stroke: Stroke) -> float:
+	if not stroke:
+		return STAMINA_STROKE_COST_BASE
+
+	var stroke_load: float = clampf(stroke.stroke_power / 36.0, 0.0, 1.4)
+	var topspin_load: float = clampf(abs(stroke.stroke_spin.y) / 12.0, 0.0, 1.0)
+	var preservation: float = stats.stamina_preservation()
+	return STAMINA_STROKE_COST_BASE * (0.85 + stroke_load * 0.9 + topspin_load * 0.35) * lerpf(1.2, 0.75, preservation)
+
+
+func _consume_stamina(amount: float) -> void:
+	_stamina_current = maxf(0.0, _stamina_current - maxf(amount, 0.0))
+
+
+func _restore_stamina(amount: float) -> void:
+	_stamina_current = minf(_stamina_max, _stamina_current + maxf(amount, 0.0))
 
 
 ## Cancel currently queued stroke
@@ -575,6 +652,8 @@ func play_replay_stroke(stroke_payload: Dictionary) -> void:
 	replay_stroke.stroke_power = float(stroke_payload.get("stroke_power", 0.0))
 	replay_stroke.stroke_target = stroke_payload.get("stroke_target", global_position)
 	replay_stroke.stroke_spin = stroke_payload.get("stroke_spin", Vector3.ZERO)
+	replay_stroke.intended_stroke_power = replay_stroke.stroke_power
+	replay_stroke.intended_stroke_target = replay_stroke.stroke_target
 	model.play_stroke(replay_stroke)
 
 

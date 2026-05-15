@@ -26,6 +26,7 @@ var ball_position: Vector3 = Vector3.ZERO
 var incoming_ball_speed: float = 0.0
 var ball_height: float = 0.0
 var player_movement_speed: float = 0.0
+var player_stamina_ratio: float = 1.0
 var opponent_center_distance: float = 0.0
 var recovery_distance: float = 0.0
 
@@ -51,6 +52,7 @@ static func from_step(target_player: Player, step: TrajectoryStep, serve: bool =
 		context.incoming_ball_speed = target_player.ball.velocity.length()
 	context.ball_height = context.ball_position.y
 	context.player_movement_speed = Vector2(target_player.velocity.x, target_player.velocity.z).length()
+	context.player_stamina_ratio = target_player.get_stamina_ratio() if target_player.has_method("get_stamina_ratio") else 1.0
 
 	var side_dot: float = (context.ball_position - context.player_position).dot(target_player.basis.x)
 	context.ball_side = BallSide.FOREHAND if side_dot > 0.0 else BallSide.BACKHAND

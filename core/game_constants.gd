@@ -123,7 +123,7 @@ const AI_DROP_SHOT_PACE: float = 15.0
 const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -10.0, -1.0)
 
 ## Serve pace (power)
-const AI_SERVE_PACE: float = 30.0
+const AI_SERVE_PACE: float = 35.0
 
 ## Serve spin (x: sidespin, y: topspin, z: forward spin)
 const AI_SERVE_SPIN: Vector3 = Vector3(0.3, 0.8, 0.4)

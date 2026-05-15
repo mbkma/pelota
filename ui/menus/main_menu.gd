@@ -7,9 +7,6 @@ extends Node
 @export var tournament_scence: PackedScene
 @export var match_config_scence: PackedScene
 @export var music_enabled := false
-@export var settings_menu: SettingsMenu
-
-
 @onready var main_menu: VBoxContainer = $CenterContainer/VBoxContainer/MenuContainer
 @onready var start_menu = $StartMenu
 @onready var play = start_menu.get_node("Actions/Play")
@@ -69,8 +66,6 @@ func _on_quit_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	main_menu.hide()
-	settings_menu.show()
-	_focus_settings_menu()
 
 
 func _on_Back_pressed() -> void:
@@ -118,7 +113,6 @@ func _on_training_pressed() -> void:
 
 
 func _on_settings_menu_settings_menu_closed() -> void:
-	settings_menu.hide()
 	_show_main_menu()
 
 
@@ -146,14 +140,6 @@ func _animate_buttons_entrance() -> void:
 		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.6).set_delay(i * 0.5)
 
 	await tween.finished
-
-
-func _focus_settings_menu() -> void:
-	# Find the first focusable element in the settings menu
-	settings_menu.call_deferred("grab_focus")
-	var first_focusable = _find_first_focusable(settings_menu)
-	if first_focusable:
-		first_focusable.call_deferred("grab_focus")
 
 
 func _find_first_focusable(node: Node) -> Control:

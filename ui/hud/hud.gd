@@ -17,7 +17,8 @@ func _ready() -> void:
 		player.player_data.stats_changed.connect(_on_player_data_stats_changed)
 		_connect_controller_signals()
 		player.ball_hit.connect(_on_player_ball_hit)
-		_stamina.max_value = float(player.player_data.stats.endurance)
+		_stamina.max_value = player.get_stamina_capacity()
+		_stamina.value = player.get_stamina_current()
 
 
 func _connect_controller_signals() -> void:
@@ -39,6 +40,13 @@ func _connect_controller_signals() -> void:
 	_stroke.value = 0.0
 
 
+func _process(_delta: float) -> void:
+	if not _regenerates_stamina or not player:
+		return
+	_stamina.max_value = player.get_stamina_capacity()
+	_stamina.value = player.get_stamina_current()
+
+
 ## Setup HUD for singles match (placeholder)
 func setup_singles_match(_match_data: Object) -> void:
 	pass
@@ -46,9 +54,10 @@ func setup_singles_match(_match_data: Object) -> void:
 
 ## Handle player stats change event, update stamina display
 func _on_player_data_stats_changed() -> void:
-	if not _regenerates_stamina:
+	if not _regenerates_stamina or not player:
 		return
-	_stamina.value = float(player.player_data.stats.endurance)
+	_stamina.max_value = player.get_stamina_capacity()
+	_stamina.value = player.get_stamina_current()
 
 
 ## Handle input pace change, update stroke bar

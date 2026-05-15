@@ -3,8 +3,6 @@
 class_name HumanController
 extends Controller
 
-const MATCH_LIFECYCLE_BUS_SCRIPT: Script = preload("res://match/lifecycle_bus.gd")
-
 signal pace_changed(pace: float)
 
 ## Static counter to assign gamepad indices to multiple players
@@ -188,6 +186,8 @@ func _build_serve_stroke(aim_position: Vector3, pace: float) -> Stroke:
 	stroke.stroke_power = GameConstants.AI_SERVE_PACE + pace
 	stroke.stroke_spin = GameConstants.AI_SERVE_SPIN
 	stroke.stroke_target = aim_position
+	stroke.intended_stroke_power = stroke.stroke_power
+	stroke.intended_stroke_target = stroke.stroke_target
 	return stroke
 
 
@@ -220,6 +220,9 @@ func _build_rally_stroke(
 			stroke.stroke_power = GameConstants.AI_BACKHAND_PACE + pace
 			stroke.stroke_spin = GameConstants.AI_BACKHAND_SPIN
 
+	stroke.intended_stroke_power = stroke.stroke_power
+	stroke.intended_stroke_target = stroke.stroke_target
+
 	return stroke
 
 
@@ -238,11 +241,11 @@ func request_serve() -> void:
 
 func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> void:
 	match current_phase:
-		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.RALLY:
+		MatchLifecycleBus.Phase.RALLY:
 			_serve_controls = false
 			if _input_device:
 				_input_device.set_serve_mode(false)
-		MATCH_LIFECYCLE_BUS_SCRIPT.Phase.POINT_ENDED, MATCH_LIFECYCLE_BUS_SCRIPT.Phase.IDLE:
+		MatchLifecycleBus.Phase.POINT_ENDED, MatchLifecycleBus.Phase.IDLE:
 			_reset_transient_input_state()
 			_serve_controls = false
 			if _input_device:

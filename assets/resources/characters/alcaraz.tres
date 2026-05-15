@@ -1,6 +1,35 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cngw1dhrbgb21"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://player/player_stats_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_alcaraz_stats"]
+script = ExtResource("2")
+acceleration = 92.0
+top_speed = 89.0
+agility = 94.0
+stamina = 88.0
+forehand = 93.0
+backhand = 83.0
+serve_power = 82.0
+serve_accuracy = 80.0
+return_skill = 87.0
+volley_skill = 82.0
+slice_skill = 78.0
+topspin_skill = 90.0
+accuracy = 84.0
+consistency = 83.0
+timing = 86.0
+composure = 80.0
+focus = 86.0
+clutch = 84.0
+aggression = 88.0
+net_play = 80.0
+defensive_skill = 84.0
+shot_anticipation = 86.0
+clay_skill = 88.0
+grass_skill = 82.0
+hard_court_skill = 86.0
 
 [resource]
 script = ExtResource("1")
@@ -10,9 +39,4 @@ age = 19
 country = "Spain"
 height = 183
 rank = 5
-stats = {
-"execution_consistency": 82,
-"power_precision": 83,
-"spin_precision": 80,
-"target_precision": 84
-}
+stats = SubResource("Resource_alcaraz_stats")

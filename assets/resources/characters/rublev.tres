@@ -1,6 +1,36 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://dinwm2sqeiwa8"]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=4 format=3 uid="uid://dinwm2sqeiwa8"]
 
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
+[ext_resource type="Script" path="res://player/player_stats_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_rublev_stats"]
+script = ExtResource("2")
+acceleration = 80.0
+top_speed = 84.0
+agility = 79.0
+reach = 79.0
+stamina = 77.0
+forehand = 89.0
+backhand = 75.0
+serve_power = 87.0
+serve_accuracy = 74.0
+return_skill = 74.0
+volley_skill = 66.0
+slice_skill = 68.0
+topspin_skill = 72.0
+accuracy = 74.0
+consistency = 73.0
+timing = 76.0
+composure = 71.0
+focus = 73.0
+clutch = 74.0
+aggression = 92.0
+net_play = 60.0
+defensive_skill = 70.0
+shot_anticipation = 72.0
+clay_skill = 73.0
+grass_skill = 68.0
+hard_court_skill = 82.0
 
 [resource]
 script = ExtResource("1")
@@ -10,9 +40,4 @@ age = 24
 country = "Russia"
 height = 188
 rank = 8
-stats = {
-"execution_consistency": 74,
-"power_precision": 72,
-"spin_precision": 71,
-"target_precision": 73
-}
+stats = SubResource("Resource_rublev_stats")
