@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://3ero8hgeuhg" path="res://scenes/windows/main_menu_credits_window.tscn" id="4_vsp5b"]
 [ext_resource type="PackedScene" uid="uid://cwt4p3bufkke5" path="res://addons/maaacks_game_template/base/nodes/windows/confirmation_overlaid_window.tscn" id="5_6xh1d"]
 [ext_resource type="AudioStream" uid="uid://bt4lccx7bctj5" path="res://assets/sounds/music/on_fire/Infraction-On-Fire-pr.mp3" id="5_ixa71"]
+[ext_resource type="PackedScene" uid="uid://d20e40buc2w5h" path="res://scenes/menus/player_select_menu/player_opponent_select_menu.tscn" id="6_psel"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Intro"
@@ -318,10 +319,12 @@ graph_offset = Vector2(-180.277, 49)
 [node name="MainMenu" unique_id=589811630 instance=ExtResource("1_sr523")]
 script = ExtResource("2_ixa71")
 level_select_packed_scene = null
+player_select_packed_scene = ExtResource("6_psel")
 confirm_new_game = false
-game_scene_path = "uid://bcwuxgarbilrg"
+game_scene_path = "uid://d20e40buc2w5h"
 options_packed_scene = ExtResource("3_2k5l7")
 credits_packed_scene = ExtResource("4_vsp5b")
+confirm_exit = false
 
 [node name="MenuAnimationPlayer" type="AnimationPlayer" parent="." index="1" unique_id=1492532975]
 libraries/ = SubResource("AnimationLibrary_2kqig")
@@ -361,8 +364,17 @@ visible = false
 layout_mode = 2
 text = "Level Select"
 
+[node name="PlayerSelectButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="3" unique_id=1438309953]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Player Select"
+
 [node name="VersionContainer" parent="VersionMargin" parent_id_path=PackedInt32Array(1732528471) index="0" unique_id=1603969262]
 modulate = Color(1, 1, 1, 0)
+
+[node name="VersionLabel" parent="VersionMargin/VersionContainer" index="0" unique_id=793266470]
+text = "v0.0.1"
 
 [node name="NewGameConfirmation" parent="." index="7" unique_id=1747133399 instance=ExtResource("5_6xh1d")]
 unique_name_in_owner = true
@@ -390,4 +402,5 @@ metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ContinueGameButton" to="." method="_on_continue_game_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/LevelSelectButton" to="." method="_on_level_select_button_pressed"]
+[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/PlayerSelectButton" to="." method="_on_player_select_button_pressed"]
 [connection signal="confirmed" from="NewGameConfirmation" to="." method="_on_new_game_confirmation_confirmed"]

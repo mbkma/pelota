@@ -70,8 +70,7 @@ func _apply_air_drag(base_velocity: Vector3, delta: float) -> Vector3:
 	if speed <= 0.0:
 		return base_velocity
 
-	# Quadratic drag is required for ball-like motion; linear drag under-damps and
-	# causes visible re-acceleration late in flight.
+	# Quadratic drag is required for ball-like motion
 	var delta_speed: float = AIR_DRAG * speed * speed * delta
 	if delta_speed >= speed:
 		return Vector3.ZERO

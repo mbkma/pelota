@@ -132,10 +132,18 @@ func _build_normalized_target(
 	risk: float
 ) -> Vector2:
 	var stats = _stats(context)
-	var opponent_x: float = context.opponent_position.x
-	var away_from_opponent: float = -sign(opponent_x)
-	if away_from_opponent == 0.0:
-		away_from_opponent = -1.0 if randf() < 0.5 else 1.0
+	var player_side_x: float = sign(context.player_position.x)
+	if player_side_x == 0.0:
+		player_side_x = 1.0
+
+	var half_court_width: float = maxf(1.0, GameConstants.COURT_WIDTH * 0.5)
+	var opponent_world_x01: float = clampf(context.opponent_position.x / half_court_width, -1.0, 1.0)
+	var opponent_world_side: float = sign(opponent_world_x01)
+	if opponent_world_side == 0.0:
+		opponent_world_side = -1.0 if randf() < 0.5 else 1.0
+	var open_world_side: float = -opponent_world_side
+	var open_relative_side: float = open_world_side * player_side_x
+	var opponent_displacement01: float = abs(opponent_world_x01)
 
 	var aggression01: float = stats.tactical_aggression01()
 	var net_play01: float = stats.tactical_net_play01()
@@ -163,23 +171,49 @@ func _build_normalized_target(
 	lateral_abs = lerpf(lateral_abs * 0.88, minf(1.0, lateral_abs * 1.08), line_bias)
 	depth = lerpf(depth * 0.88, minf(1.0, depth * 1.06), line_bias)
 
+	# Cross-court is the default safe lane; down-the-line needs higher risk/aggression.
+	var cross_court_score: float = 0.45
+	cross_court_score += (1.0 - risk) * 0.45
+	cross_court_score += defense01 * 0.22
+	cross_court_score += (1.0 - line_bias) * 0.12
+
+	var down_the_line_score: float = 0.12
+	down_the_line_score += risk * 0.5
+	down_the_line_score += aggression01 * 0.25
+	down_the_line_score += line_bias * 0.18
+
+	var open_side_bonus: float = opponent_displacement01 * (0.24 + (aggression01 * 0.16) + (risk * 0.1))
+	if open_relative_side < 0.0:
+		cross_court_score += open_side_bonus
+	else:
+		down_the_line_score += open_side_bonus
+
+	var lateral_side: float = -1.0 if cross_court_score >= down_the_line_score else 1.0
+
 	if intent == AiPointContext.ShotIntent.APPROACH_NET:
 		depth *= lerpf(0.9, 0.75, net_play01)
 
 	if intent == AiPointContext.ShotIntent.DEFEND:
 		depth = lerpf(depth, depth * 0.86, defense01)
 
+	# If the opponent is stretched far wide, use a shorter angle to the open court.
+	if intent != AiPointContext.ShotIntent.DEFEND and opponent_displacement01 > 0.62:
+		lateral_side = open_relative_side
+		lateral_abs = maxf(lateral_abs, lerpf(0.68, 0.95, opponent_displacement01))
+		var short_angle_depth: float = lerpf(0.42, 0.16, opponent_displacement01)
+		depth = minf(depth, short_angle_depth)
+
 	if context.short_ball_opportunity and intent == AiPointContext.ShotIntent.ATTACK and risk > 0.68 and randf() < (0.12 + net_play01 * 0.22):
 		depth = -0.85
 		lateral_abs = lerpf(0.14, 0.42, risk)
 
-	var lateral: float = away_from_opponent * lateral_abs
+	var lateral: float = lateral_side * lateral_abs
 	var target: Vector2 = Vector2(clampf(lateral, -1.0, 1.0), clampf(depth, -1.0, 1.0))
 
 	if context.is_serve:
 		var serve_accuracy01: float = stats.serve_accuracy01(context.player_stamina_ratio)
 		var serve_depth: float = lerpf(0.62, 1.0, risk)
-		var serve_lateral: float = sign(opponent_x) * lerpf(0.12, 0.95, risk)
+		var serve_lateral: float = sign(context.opponent_position.x) * lerpf(0.12, 0.95, risk)
 		serve_lateral = lerpf(serve_lateral * 0.86, serve_lateral, serve_accuracy01)
 		target = Vector2(clampf(serve_lateral, -1.0, 1.0), clampf(serve_depth, -1.0, 1.0))
 

@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://ui/menus/pause_menu.tscn" id="18_pause"]
 [ext_resource type="PackedScene" path="res://ui/hud/replay_overlay.tscn" id="19_replay_overlay"]
+[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://player/controllers/ai_controller.tscn" id="20_ai_controller"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://player/controllers/human_controller.tscn" id="21_human_controller"]
 
 [sub_resource type="Resource" id="Resource_toe4q"]
 script = ExtResource("5_p4k7w")
@@ -73,6 +75,8 @@ volumetric_fog_sky_affect = 0.0
 [node name="TennisMatch" type="Node" unique_id=1484614295]
 process_mode = 1
 script = ExtResource("1_3pywv")
+ai_controller_scene = ExtResource("20_ai_controller")
+human_controller_scene = ExtResource("21_human_controller")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)

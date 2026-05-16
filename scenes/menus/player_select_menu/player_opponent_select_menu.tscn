@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://d20e40buc2w5h"]
+
+[ext_resource type="Script" uid="uid://brpopqn7ny3l2" path="res://scenes/menus/player_select_menu/player_opponent_select_menu.gd" id="1_7c5wh"]
+[ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2_5c2p6"]
+
+[node name="PlayerOpponentSelectMenu" type="Control" unique_id=312600420]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7c5wh")
+chart_scene = ExtResource("2_5c2p6")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=233319520]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 24.0
+offset_right = -32.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1113091840]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=211543723]
+layout_mode = 2
+text = "Player Selection"
+horizontal_alignment = 1
+
+[node name="SelectorsRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1446644625]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PlayerSelectColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/SelectorsRow" unique_id=180217771]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Player1HeaderLabel" type="Label" parent="MarginContainer/VBoxContainer/SelectorsRow/PlayerSelectColumn" unique_id=988596473]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Player 1"
+
+[node name="PlayerOptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/SelectorsRow/PlayerSelectColumn" unique_id=71821610]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OpponentSelectColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/SelectorsRow" unique_id=850382350]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Player2HeaderLabel" type="Label" parent="MarginContainer/VBoxContainer/SelectorsRow/OpponentSelectColumn" unique_id=1318130551]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Player 2"
+
+[node name="OpponentOptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/SelectorsRow/OpponentSelectColumn" unique_id=6882025]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InputMethodRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=374616566]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Player1InputMethodColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/InputMethodRow" unique_id=19531299]
+layout_mode = 2
+size_flags_horizontal = 3
+
+
+[node name="Player1InputMethodOptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/InputMethodRow/Player1InputMethodColumn" unique_id=1015425745]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Player2InputMethodColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/InputMethodRow" unique_id=2015427385]
+layout_mode = 2
+size_flags_horizontal = 3
+
+
+[node name="Player2InputMethodOptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/InputMethodRow/Player2InputMethodColumn" unique_id=648213608]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SummaryRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1927969632]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SelectedPlayerLabel" type="Label" parent="MarginContainer/VBoxContainer/SummaryRow" unique_id=689116561]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SelectedOpponentLabel" type="Label" parent="MarginContainer/VBoxContainer/SummaryRow" unique_id=891451950]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChartHost" type="Control" parent="MarginContainer/VBoxContainer" unique_id=224375027]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1464888804]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start Match"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
