@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
-[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://assets/resources/characters/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://scenes/player/resources/characters/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="2_yllr7"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]

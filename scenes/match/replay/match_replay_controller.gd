@@ -18,6 +18,8 @@ enum CameraMode {
 	FOLLOW_LAST_HITTER,
 }
 
+const BALL_SCENE: PackedScene = preload("res://scenes/ball/ball.tscn")
+
 var enabled: bool = true
 var persistence_enabled: bool = true
 var save_path: String = "user://last_match_replay.save"
@@ -435,11 +437,11 @@ func _ensure_replay_ball_visual() -> void:
 	if is_instance_valid(_replay_ball_visual):
 		return
 
-	if not GlobalScenes.BALL_SCENE:
-		push_error("Replay cannot create ball visual: GlobalScenes.BALL_SCENE missing")
+	if not BALL_SCENE:
+		push_error("Replay cannot create ball visual: BALL_SCENE missing")
 		return
 
-	_replay_ball_visual = GlobalScenes.BALL_SCENE.instantiate()
+	_replay_ball_visual = BALL_SCENE.instantiate()
 	_replay_ball_visual.name = "ReplayBall"
 	_replay_ball_visual.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	_replay_ball_visual.set_process(false)

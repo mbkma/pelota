@@ -22,13 +22,9 @@ buses/default_bus_layout="uid://udhfafl0u4fa"
 
 [autoload]
 
-GlobalUtils="*res://scripts/core/utils.gd"
 GlobalGameData="*res://scripts/core/game_data.gd"
-GlobalHud="*res://scripts/core/hud.gd"
-GlobalPhysics="*res://scripts/core/physics/physics_service.gd"
+GlobalPhysics="*res://scripts/core/physics_service.gd"
 DebugMenu="*uid://cggqb75a8w8r"
-GlobalScenes="*res://scripts/core/global_scenes.tscn"
-SceneManager="*res://scripts/core/scene_manager.gd"
 Loggie="*uid://bmh2auo806k0k"
 DebugLogger="*res://scripts/core/debug_logger.gd"
 AppConfig="*uid://cjke6crjg14a0"

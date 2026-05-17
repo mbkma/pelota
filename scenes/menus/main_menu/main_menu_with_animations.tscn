@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://dxgwhssxo575k" path="res://scenes/windows/main_menu_options_window.tscn" id="3_2k5l7"]
 [ext_resource type="PackedScene" uid="uid://3ero8hgeuhg" path="res://scenes/windows/main_menu_credits_window.tscn" id="4_vsp5b"]
 [ext_resource type="PackedScene" uid="uid://cwt4p3bufkke5" path="res://addons/maaacks_game_template/base/nodes/windows/confirmation_overlaid_window.tscn" id="5_6xh1d"]
-[ext_resource type="AudioStream" uid="uid://bt4lccx7bctj5" path="res://assets/sounds/music/on_fire/Infraction-On-Fire-pr.mp3" id="5_ixa71"]
 [ext_resource type="PackedScene" uid="uid://d20e40buc2w5h" path="res://scenes/menus/player_select_menu/player_opponent_select_menu.tscn" id="6_psel"]
 
 [sub_resource type="Animation" id="1"]
@@ -333,9 +332,6 @@ libraries/ = SubResource("AnimationLibrary_2kqig")
 tree_root = SubResource("AnimationNodeStateMachine_vikuh")
 anim_player = NodePath("../MenuAnimationPlayer")
 parameters/conditions/intro_done = false
-
-[node name="BackgroundMusicPlayer" parent="." index="3" unique_id=1141822549]
-stream = ExtResource("5_ixa71")
 
 [node name="TitleContainer" parent="MenuContainer/TitleMargin" parent_id_path=PackedInt32Array(2112060331) index="0" unique_id=556427956]
 modulate = Color(1, 1, 1, 0)

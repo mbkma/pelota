@@ -37,8 +37,6 @@ signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 
 ## Controller scene instantiated to drive movement/stroke decisions.
 @export var controller_scene: PackedScene
-## Optional per-player AI strategy override applied to AiController instances.
-@export var ai_point_strategy: PointStrategy
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
 ## Runtime stat profile copied from player_data for fast gameplay access.
@@ -116,9 +114,11 @@ func _ready() -> void:
 	stats = PlayerRuntimeStats.new()
 	stats.setup(player_data.stats, mental_state)
 	assert(stats != null, "Player._ready: player_data.stats is required")
+	assert(player_data.appearance != null, "Player._ready: player_data.appearance is required")
 	_stamina_max = stats.stamina_capacity()
 	_stamina_current = _stamina_max
 	label_3d.text = player_data.last_name
+	model.load_appearance(player_data.appearance)
 	
 	# Set logger name for debug logging
 	set_meta("logger_name", player_data.last_name)
@@ -132,8 +132,6 @@ func _ready() -> void:
 	target_point_reached.connect(_on_target_point_reached)
 	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
-	if controller is AiController and ai_point_strategy:
-		(controller as AiController).point_strategy = ai_point_strategy
 	controller.bind(self)
 	add_child(controller)
 	_set_state(PlayerStateMachine.State.IDLE)
@@ -426,7 +424,6 @@ func _from_anim_hit_ball() -> void:
 	if _is_replay_mode:
 		return
 	if not queued_stroke:
-		push_error("no queued stroke")
 		return
 
 	if not ball:
@@ -438,9 +435,9 @@ func _from_anim_hit_ball() -> void:
 
 	var contact_point: Vector3 = model.get_racket_contact_point(queued_stroke)
 	var _distance_to_contact: float = ball.global_position.distance_to(contact_point)
-	#if distance_to_contact > hit_range_tolerance_meters:
-		#cancel_stroke()
-		#return
+	if _distance_to_contact > hit_range_tolerance_meters:
+		cancel_stroke()
+		return
 
 	#var closest_step: TrajectoryStep = _get_closest_step()
 	#if closest_step and abs(closest_step.time) > hit_timing_window_seconds:

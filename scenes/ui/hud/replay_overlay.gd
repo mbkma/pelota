@@ -99,9 +99,6 @@ func _on_exit_replay_pressed() -> void:
 	if not match_manager:
 		return
 	match_manager.stop_replay()
-	var pause_menu: PauseMenu = get_parent().get_node_or_null("PauseMenu") as PauseMenu
-	if pause_menu:
-		pause_menu.pause_game()
 	_refresh_ui()
 
 

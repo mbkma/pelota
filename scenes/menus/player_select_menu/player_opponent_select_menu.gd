@@ -3,7 +3,6 @@ extends Control
 signal selection_confirmed
 
 @export var chart_scene: PackedScene
-const CHARACTER_DATA_DIR := "res://assets/resources/characters"
 const PLAYER1_CHART_COLOR := Color("#36A2EB")
 const PLAYER2_CHART_COLOR := Color("#FF6384")
 
@@ -34,35 +33,8 @@ func _ready() -> void:
 
 
 func _load_players() -> Array[PlayerData]:
-	var loaded_players_by_path: Dictionary = {}
-
-	for entry in GlobalScenes.PLAYER_DATA:
-		if entry is PlayerData:
-			var global_player_data := entry as PlayerData
-			if global_player_data.resource_path.is_empty():
-				loaded_players_by_path[str(loaded_players_by_path.size())] = global_player_data
-			else:
-				loaded_players_by_path[global_player_data.resource_path] = global_player_data
-
-	var directory := DirAccess.open(CHARACTER_DATA_DIR)
-	if directory:
-		directory.list_dir_begin()
-		var file_name := directory.get_next()
-		while file_name != "":
-			if not directory.current_is_dir() and file_name.get_extension().to_lower() == "tres":
-				var resource_path := "%s/%s" % [CHARACTER_DATA_DIR, file_name]
-				var loaded_resource := load(resource_path)
-				if loaded_resource is PlayerData:
-					loaded_players_by_path[resource_path] = loaded_resource as PlayerData
-			file_name = directory.get_next()
-		directory.list_dir_end()
-
-	var result: Array[PlayerData] = []
-	for player_data in loaded_players_by_path.values():
-		result.append(player_data as PlayerData)
-
-	result.sort_custom(func(a: PlayerData, b: PlayerData) -> bool: return a.rank < b.rank)
-	return result
+	GlobalGameData.load_players()
+	return GlobalGameData.get_players()
 
 
 func _populate_input_method_option_buttons() -> void:

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://r13b2pnjirfc"]
 
-[ext_resource type="Theme" uid="uid://cpg0wwk4vvpas" path="res://assets/resources/main_ui_theme.tres" id="1"]
+[ext_resource type="Theme" uid="uid://cuwrrwqr33bs2" path="res://resources/themes/expedition.tres" id="1"]
 [ext_resource type="Script" uid="uid://e1hyxnyxh4pd" path="res://scenes/ui/hud/television_hud.gd" id="2"]
 [ext_resource type="Script" uid="uid://xu64bd1yo2ki" path="res://scenes/ui/hud/match_stats_panel.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://bu1ji7n825w7x" path="res://scenes/ui/hud/score_displays/score_display.tscn" id="4_xpbfi"]

@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://13ysoxpdplu4"]
+
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1"]
+
+[resource]
+script = ExtResource("1")

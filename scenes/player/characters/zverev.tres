@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c53uv3c4e0lmn"]
+
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="Resource" path="res://assets/resources/appearances/default.tres" id="3"]
+
+[sub_resource type="Resource" id="Resource_zverev_stats"]
+script = ExtResource("2")
+acceleration = 79.0
+top_speed = 84.0
+agility = 80.0
+reach = 90.0
+stamina = 84.0
+forehand = 84.0
+backhand = 86.0
+serve_power = 91.0
+serve_accuracy = 84.0
+return_skill = 82.0
+volley_skill = 74.0
+slice_skill = 77.0
+topspin_skill = 79.0
+accuracy = 82.0
+consistency = 82.0
+timing = 83.0
+composure = 83.0
+focus = 84.0
+clutch = 82.0
+aggression = 79.0
+net_play = 73.0
+defensive_skill = 82.0
+shot_anticipation = 83.0
+clay_skill = 78.0
+grass_skill = 81.0
+hard_court_skill = 87.0
+
+[resource]
+script = ExtResource("1")
+first_name = "Alexander"
+last_name = "Zverev"
+age = 25
+country = "Germany"
+height = 198
+rank = 2
+stats = SubResource("Resource_zverev_stats")
+appearance = ExtResource("3")

@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://br5g8y5jsuogl"]
 
-[ext_resource type="Script" path="res://addons/maaacks_game_template/base/nodes/utilities/pause_menu_controller.gd" id="1_bmy5n"]
-[ext_resource type="PackedScene" path="res://scenes/windows/pause_menu_layer.tscn" id="2_7aihr"]
-[ext_resource type="PackedScene" path="res://addons/maaacks_game_template/base/nodes/music_players/background_music_player.tscn" id="3_3re04"]
-[ext_resource type="Script" path="res://addons/maaacks_game_template/extras/scripts/level_loader.gd" id="4_ascoc"]
-[ext_resource type="Script" path="res://scripts/level_and_state_manager.gd" id="5_wr4n6"]
-[ext_resource type="PackedScene" path="res://scenes/windows/game_won_window.tscn" id="6_ukb12"]
-[ext_resource type="PackedScene" path="res://scenes/windows/level_lost_window.tscn" id="7_i7m4m"]
-[ext_resource type="PackedScene" path="res://scenes/windows/level_won_window.tscn" id="8_rkfhe"]
-[ext_resource type="Script" path="res://addons/maaacks_game_template/extras/scripts/scene_lister.gd" id="9_g2ndc"]
-[ext_resource type="PackedScene" path="res://scenes/loading_screen/level_loading_screen.tscn" id="10_0v86b"]
-[ext_resource type="Script" path="res://scenes/game_scene/configurable_sub_viewport.gd" id="11_ulq3g"]
-[ext_resource type="Script" path="res://scenes/game_scene/game_timer.gd" id="12_gpor5"]
+[ext_resource type="Script" uid="uid://cyh0d64pfygbl" path="res://addons/maaacks_game_template/base/nodes/utilities/pause_menu_controller.gd" id="1_bmy5n"]
+[ext_resource type="PackedScene" uid="uid://ccqpub7rpk28k" path="res://scenes/windows/pause_menu_layer.tscn" id="2_7aihr"]
+[ext_resource type="PackedScene" uid="uid://bkcsjsk2ciff" path="res://addons/maaacks_game_template/base/nodes/music_players/background_music_player.tscn" id="3_3re04"]
+[ext_resource type="Script" uid="uid://bbymrin0cm704" path="res://addons/maaacks_game_template/extras/scripts/level_loader.gd" id="4_ascoc"]
+[ext_resource type="Script" uid="uid://c58117sei7lwr" path="res://scripts/level_and_state_manager.gd" id="5_wr4n6"]
+[ext_resource type="PackedScene" uid="uid://d1q66784h5esx" path="res://scenes/windows/game_won_window.tscn" id="6_ukb12"]
+[ext_resource type="PackedScene" uid="uid://dkmrjnwivsyga" path="res://scenes/windows/level_lost_window.tscn" id="7_i7m4m"]
+[ext_resource type="PackedScene" uid="uid://pvcoe4p5y6v2" path="res://scenes/windows/level_won_window.tscn" id="8_rkfhe"]
+[ext_resource type="Script" uid="uid://wjq7li836lwj" path="res://addons/maaacks_game_template/extras/scripts/scene_lister.gd" id="9_g2ndc"]
+[ext_resource type="PackedScene" uid="uid://e77dybmoauph" path="res://scenes/loading_screen/level_loading_screen.tscn" id="10_0v86b"]
+[ext_resource type="Script" uid="uid://hka7d6m2y40r" path="res://scenes/game_scene/configurable_sub_viewport.gd" id="11_ulq3g"]
+[ext_resource type="Script" uid="uid://mw1q3mad0q6" path="res://scenes/game_scene/game_timer.gd" id="12_gpor5"]
 
 [node name="GameUI" type="Control" unique_id=1609552811]
 layout_mode = 3
@@ -63,7 +63,7 @@ stretch = true
 handle_input_locally = false
 audio_listener_enable_2d = true
 audio_listener_enable_3d = true
-size = Vector2i(1280, 720)
+size = Vector2i(1152, 648)
 render_target_update_mode = 4
 script = ExtResource("11_ulq3g")
 

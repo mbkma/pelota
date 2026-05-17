@@ -3,10 +3,8 @@
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scenes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/player/player.tscn" id="2_hqvfk"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/hud/television_hud.tscn" id="4_upnw7"]
-[ext_resource type="Resource" uid="uid://b2vrbrqsx0cpp" path="res://assets/resources/characters/auger-aliassime.tres" id="5_biiqe"]
-[ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://scenes/player/ai/ai_play_style.gd" id="5_p4k7w"]
+[ext_resource type="Resource" uid="uid://b2vrbrqsx0cpp" path="res://scenes/player/resources/characters/auger-aliassime.tres" id="5_biiqe"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="6_4vere"]
-[ext_resource type="Script" uid="uid://svnxitgai2kj" path="res://scenes/player/ai/point_strategy.gd" id="6_rascf"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environments/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/match/match_manager.tscn" id="8_2s2ac"]
 [ext_resource type="PackedScene" uid="uid://cggqb75a8w8r" path="res://addons/debug_menu/debug_menu.tscn" id="10_7cjfu"]
@@ -14,29 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/tools/debug_drawer.tscn" id="11_324nl"]
 [ext_resource type="PackedScene" uid="uid://dnkjfx5fk78c1" path="res://scenes/match/umpire/umpire.tscn" id="12_ard7f"]
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/match/splitscreen_ui.tscn" id="17_splitscreen"]
-[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/menus/pause_menu.tscn" id="18_pause"]
+[ext_resource type="PackedScene" uid="uid://fnykupeneorb" path="res://scenes/windows/pause_menu.tscn" id="18_fevwx"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/replay_overlay.tscn" id="19_replay_overlay"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="20_ai_controller"]
 [ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/player/controllers/human_controller.tscn" id="21_human_controller"]
-
-[sub_resource type="Resource" id="Resource_toe4q"]
-script = ExtResource("5_p4k7w")
-style_name = &"aggressive_baseliner"
-aggression = 1.0
-risk_tolerance = 1.0
-preferred_rally_pace = 1.0
-
-[sub_resource type="Resource" id="Resource_8u5lr"]
-script = ExtResource("6_rascf")
-play_style = SubResource("Resource_toe4q")
-
-[sub_resource type="Resource" id="Resource_cpecb"]
-script = ExtResource("5_p4k7w")
-style_name = &"aggressive_baseliner"
-
-[sub_resource type="Resource" id="Resource_a3ma5"]
-script = ExtResource("6_rascf")
-play_style = SubResource("Resource_cpecb")
 
 [sub_resource type="Animation" id="1"]
 resource_name = "start"
@@ -80,16 +59,14 @@ human_controller_scene = ExtResource("21_human_controller")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
-ai_point_strategy = SubResource("Resource_8u5lr")
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
-ai_point_strategy = SubResource("Resource_a3ma5")
 player_data = ExtResource("5_biiqe")
 move_speed = 5.0
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
-active_cam = NodePath("CourtSideFront")
+active_cam = NodePath("TopFront")
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
@@ -109,12 +86,14 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 40.0
 offset_bottom = 23.0
+theme = null
 
 [node name="Label2" parent="TelevisionHUD/MatchStatsPanel/Panel" index="1" unique_id=1390046489]
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 55.0
 offset_bottom = 31.0
+theme = null
 
 [node name="Label3" parent="TelevisionHUD/MatchStatsPanel/Panel" index="2" unique_id=2082832951]
 anchor_left = 0.0
@@ -125,6 +104,7 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 55.0
 offset_bottom = 31.0
+theme = null
 
 [node name="PlayerImage" parent="TelevisionHUD/MatchStatsPanel" parent_id_path=PackedInt32Array(684788014, 2140378516) index="1" unique_id=1401311793]
 offset_left = 0.0
@@ -180,10 +160,11 @@ shadow_enabled = true
 shadow_opacity = 0.45
 shadow_blur = 2.954
 
-[node name="PauseMenu" parent="." unique_id=1371052476 instance=ExtResource("18_pause")]
-
 [node name="ReplayOverlay" parent="." unique_id=1789361542 node_paths=PackedStringArray("match_manager") instance=ExtResource("19_replay_overlay")]
 match_manager = NodePath("../MatchManager")
+
+[node name="PauseMenu" parent="." unique_id=156357199 instance=ExtResource("18_fevwx")]
+visible = false
 
 [editable path="Cameras"]
 [editable path="TelevisionHUD"]

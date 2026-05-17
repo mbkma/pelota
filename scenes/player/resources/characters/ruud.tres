@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://7puy4co7ounb"]
+
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_mltia"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_00sku"]
+script = ExtResource("1_mltia")
+metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
+
+[sub_resource type="Resource" id="Resource_ruud_stats"]
+script = ExtResource("2")
+acceleration = 81.0
+top_speed = 81.0
+agility = 82.0
+stamina = 86.0
+forehand = 87.0
+backhand = 79.0
+serve_power = 83.0
+serve_accuracy = 80.0
+return_skill = 80.0
+volley_skill = 74.0
+slice_skill = 76.0
+topspin_skill = 88.0
+accuracy = 79.0
+consistency = 80.0
+timing = 80.0
+composure = 78.0
+focus = 82.0
+clutch = 79.0
+aggression = 78.0
+net_play = 70.0
+defensive_skill = 82.0
+shot_anticipation = 80.0
+clay_skill = 90.0
+grass_skill = 72.0
+hard_court_skill = 79.0
+
+[resource]
+script = ExtResource("1")
+first_name = "Caspar"
+last_name = "Ruud"
+age = 23
+country = "Norway"
+height = 183
+rank = 6
+stats = SubResource("Resource_ruud_stats")
+appearance = SubResource("Resource_00sku")

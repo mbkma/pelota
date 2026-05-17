@@ -13,6 +13,8 @@ extends Resource
 @export var play_style: PlayStyleProfile
 ## Full gameplay stat profile used by movement, stamina, shot synthesis, and AI behavior.
 @export var stats: PlayerStatsProfile
+## Visual profile that defines body, clothing, and hair mesh variants.
+@export var appearance: PlayerAppearance
 @export var sounds := {
 	"grunt_flat": [],
 	"grunt_frequency": 0.0,

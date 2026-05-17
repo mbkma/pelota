@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://t1k752568ugt"]
+
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_ec65k"]
+
+[sub_resource type="Gradient" id="Gradient_y1hau"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ec65k"]
+gradient = SubResource("Gradient_y1hau")
+
+[resource]
+script = ExtResource("1_ec65k")
+shirt_texture = SubResource("GradientTexture1D_ec65k")
+metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
