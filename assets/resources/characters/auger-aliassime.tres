@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b2vrbrqsx0cpp"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://player/player_stats_profile.gd" id="2"]
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
 
 [sub_resource type="Resource" id="Resource_faa_stats"]
 script = ExtResource("2")

@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://bsmhgwnl5bmx2"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bsmhgwnl5bmx2"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
 [ext_resource type="AudioStream" uid="uid://b4fpnyd387pe4" path="res://assets/sounds/effects/strokes/stroke_flat_nadal_1.wav" id="2"]
-[ext_resource type="Script" path="res://player/player_stats_profile.gd" id="3"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="3"]
 
 [sub_resource type="Resource" id="Resource_nadal_stats"]
 script = ExtResource("3")

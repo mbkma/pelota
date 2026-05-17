@@ -14,19 +14,28 @@ var animation_state_machine : AnimationNodeStateMachinePlayback
 
 @onready var continue_game_button = %ContinueGameButton
 @onready var level_select_button = %LevelSelectButton
-@onready var player_select_button = %PlayerSelectButton
 @onready var new_game_confirmation = %NewGameConfirmation
 
 func load_game_scene() -> void:
 	GameState.start_game()
 	super.load_game_scene()
 
+func _start_new_game_flow() -> void:
+	GameState.reset()
+	if player_select_packed_scene == null:
+		load_game_scene()
+		return
+	var player_select_scene := _open_sub_menu(player_select_packed_scene)
+	if player_select_scene.has_signal("selection_confirmed"):
+		player_select_scene.connect("selection_confirmed", load_game_scene)
+	else:
+		load_game_scene()
+
 func new_game() -> void:
 	if confirm_new_game and continue_game_button.visible:
 		new_game_confirmation.show()
 	else:
-		GameState.reset()
-		load_game_scene()
+		_start_new_game_flow()
 
 func intro_done() -> void:
 	animation_state_machine.travel("OpenMainMenu")
@@ -60,10 +69,6 @@ func _show_level_select_if_set() -> void:
 	level_select_button.show()
 
 
-func _show_player_select_if_set() -> void:
-	if player_select_packed_scene == null: return
-	player_select_button.show()
-
 func _show_continue_if_set() -> void:
 	if GameState.get_current_level_path().is_empty(): return
 	continue_game_button.show()
@@ -71,7 +76,6 @@ func _show_continue_if_set() -> void:
 func _ready() -> void:
 	super._ready()
 	_show_level_select_if_set()
-	_show_player_select_if_set()
 	_show_continue_if_set()
 	animation_state_machine = $MenuAnimationTree.get("parameters/playback")
 
@@ -85,13 +89,5 @@ func _on_level_select_button_pressed() -> void:
 		level_select_scene.connect("level_selected", load_game_scene)
 
 
-func _on_player_select_button_pressed() -> void:
-	if player_select_packed_scene == null:
-		return
-	var player_select_scene := _open_sub_menu(player_select_packed_scene)
-	if player_select_scene.has_signal("selection_confirmed"):
-		player_select_scene.connect("selection_confirmed", load_game_scene)
-
 func _on_new_game_confirmation_confirmed() -> void:
-	GameState.reset()
-	load_game_scene()
+	_start_new_game_flow()

@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="PlayStyleProfile" format=3 uid="uid://dsck0sny3tew4"]
+
+[ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://scenes/player/ai/ai_play_style.gd" id="1"]
+
+[resource]
+script = ExtResource("1")

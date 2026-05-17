@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://cxo4shm4p8nco"]
+
+[ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scenes/environments/crowd/crowd.gd" id="1_a7rkt"]
+[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environments/crowd/crowd_block.tscn" id="2_axxkg"]
+[ext_resource type="AudioStream" uid="uid://501usltpmnhx" path="res://assets/sounds/effects/crowd/crowd-after-point1.wav" id="2_e1n7f"]
+[ext_resource type="AudioStream" uid="uid://birb4657ratbv" path="res://assets/sounds/effects/crowd/crowd-after-point2.wav" id="3_g038y"]
+[ext_resource type="AudioStream" uid="uid://ck1krkhd4cgch" path="res://assets/sounds/effects/crowd/crowd-idle.wav" id="4_xu5ij"]
+[ext_resource type="Script" uid="uid://dfeyuegrtu4mk" path="res://scenes/environments/crowd/crowd_audio_config.gd" id="5_gs5kl"]
+
+[sub_resource type="Resource" id="Resource_cp0o2"]
+script = ExtResource("5_gs5kl")
+idle_sounds = Array[AudioStream]([ExtResource("4_xu5ij")])
+after_point_sounds = Array[AudioStream]([ExtResource("2_e1n7f"), ExtResource("3_g038y")])
+metadata/_custom_type_script = "uid://dfeyuegrtu4mk"
+
+[node name="Crowd" type="Node" unique_id=1204219689 node_paths=PackedStringArray("blocks")]
+script = ExtResource("1_a7rkt")
+config = SubResource("Resource_cp0o2")
+blocks = [NodePath("EastBlock"), NodePath("NorthBlock")]
+
+[node name="EastBlock" type="Node3D" parent="." unique_id=1070903490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.915, 0.566, 0)
+
+[node name="CrowdBlock" parent="EastBlock" unique_id=524828875 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
+
+[node name="CrowdBlock5" parent="EastBlock" unique_id=1059679277 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
+
+[node name="CrowdBlock2" parent="EastBlock" unique_id=1346328431 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
+
+[node name="CrowdBlock3" parent="EastBlock" unique_id=1021341322 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
+
+[node name="CrowdBlock4" parent="EastBlock" unique_id=722183903 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
+
+[node name="NorthBlock" type="Node3D" parent="." unique_id=308978892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5966256, -20.85869)
+
+[node name="CrowdBlock6" parent="NorthBlock" unique_id=113764286 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 0, 0)
+
+[node name="CrowdBlock7" parent="NorthBlock" unique_id=958542378 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 0, 0)
+
+[node name="CrowdBlock8" parent="NorthBlock" unique_id=339555331 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 0, 0)
+
+[node name="CrowdBlock9" parent="NorthBlock" unique_id=1578502360 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 0, 0)
+
+[node name="CrowdBlock10" parent="NorthBlock" unique_id=1355092264 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 0, 0)
+
+[node name="CrowdBlock11" parent="NorthBlock" unique_id=744643174 instance=ExtResource("2_axxkg")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 0, 0)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1134290882]

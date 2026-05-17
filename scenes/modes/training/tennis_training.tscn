@@ -1,0 +1,208 @@
+[gd_scene format=3 uid="uid://58fqxcxqa0qr"]
+
+[ext_resource type="Script" uid="uid://b2ln7l4birgbu" path="res://scenes/modes/training/tennis_training.gd" id="1_gx02n"]
+[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/player/player.tscn" id="2_tjnrq"]
+[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/player/controllers/human_controller.tscn" id="3_tjnrq"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="4_guntq"]
+[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environments/us_open/cameras/cameras.tscn" id="5_lrvso"]
+[ext_resource type="PackedScene" uid="uid://cqtiji5vwaevb" path="res://scenes/tools/ball_canon.tscn" id="6_l6sfg"]
+[ext_resource type="PackedScene" uid="uid://dwo71krc1o5v6" path="res://scenes/ui/menus/pause_menu.tscn" id="9_fqabv"]
+
+[sub_resource type="Shader" id="Shader_rdv83"]
+code = "
+// NOTE: Shader automatically converted from Godot Engine 4.3.stable's ProceduralSkyMaterial.
+
+shader_type sky;
+render_mode use_debanding;
+
+uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
+uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float sky_curve : hint_range(0, 1) = 0.15;
+uniform float sky_energy = 1.0; // In Lux.
+uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
+uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
+uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform float ground_curve : hint_range(0, 1) = 0.02;
+uniform float ground_energy = 1.0;
+uniform float sun_angle_max = 30.0;
+uniform float sun_curve : hint_range(0, 1) = 0.15;
+uniform float exposure : hint_range(0, 128) = 1.0;
+
+uniform sampler2D cloud_texture;
+uniform sampler2D cloud_texture2;
+uniform vec2 cloud_direction;
+uniform vec2 cloud_direction2;
+uniform vec2 cloud_scale;
+uniform float cloud_distance;
+uniform float cloud_speed;
+uniform float cloud_speed2;
+
+void sky() {
+	float v_angle = acos(clamp(EYEDIR.y, -1.0, 1.0));
+	float c = (1.0 - v_angle / (PI * 0.5));
+	vec3 sky = mix(sky_horizon_color.rgb, sky_top_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / sky_curve), 0.0, 1.0));
+	sky *= sky_energy;
+
+	if (LIGHT0_ENABLED) {
+		float sun_angle = acos(dot(LIGHT0_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT0_SIZE) {
+			sky = LIGHT0_COLOR * LIGHT0_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT0_SIZE) / (sun_angle_max - LIGHT0_SIZE);
+			sky = mix(LIGHT0_COLOR * LIGHT0_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT1_ENABLED) {
+		float sun_angle = acos(dot(LIGHT1_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT1_SIZE) {
+			sky = LIGHT1_COLOR * LIGHT1_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT1_SIZE) / (sun_angle_max - LIGHT1_SIZE);
+			sky = mix(LIGHT1_COLOR * LIGHT1_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT2_ENABLED) {
+		float sun_angle = acos(dot(LIGHT2_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT2_SIZE) {
+			sky = LIGHT2_COLOR * LIGHT2_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT2_SIZE) / (sun_angle_max - LIGHT2_SIZE);
+			sky = mix(LIGHT2_COLOR * LIGHT2_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	if (LIGHT3_ENABLED) {
+		float sun_angle = acos(dot(LIGHT3_DIRECTION, EYEDIR));
+		if (sun_angle < LIGHT3_SIZE) {
+			sky = LIGHT3_COLOR * LIGHT3_ENERGY;
+		} else if (sun_angle < sun_angle_max) {
+			float c2 = (sun_angle - LIGHT3_SIZE) / (sun_angle_max - LIGHT3_SIZE);
+			sky = mix(LIGHT3_COLOR * LIGHT3_ENERGY, sky, clamp(1.0 - pow(1.0 - c2, 1.0 / sun_curve), 0.0, 1.0));
+		}
+	}
+
+	vec4 sky_cover_texture = texture(sky_cover, SKY_COORDS);
+	sky += (sky_cover_texture.rgb * sky_cover_modulate.rgb) * sky_cover_texture.a * sky_cover_modulate.a * sky_energy;
+
+	c = (v_angle - (PI * 0.5)) / (PI * 0.5);
+	vec3 ground = mix(ground_horizon_color.rgb, ground_bottom_color.rgb, clamp(1.0 - pow(1.0 - c, 1.0 / ground_curve), 0.0, 1.0));
+	ground *= ground_energy;
+
+	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
+	vec3 clouds = texture(cloud_texture, sky_uv * cloud_scale + TIME * cloud_direction * cloud_speed).rgb - texture(cloud_texture2, sky_uv * cloud_scale + TIME * cloud_direction2 * cloud_speed2).rgb;
+	//clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
+	clouds = clamp(clouds, 0.0, 1.0);
+	sky += clouds;
+	
+	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_37kj5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0cs1n"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_37kj5")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mmi0g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_udx35"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_mmi0g")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lwqkh"]
+shader = SubResource("Shader_rdv83")
+shader_parameter/sky_top_color = Color(0.291673, 0.457424, 0.658811, 1)
+shader_parameter/sky_horizon_color = Color(0.6463, 0.6558, 0.6708, 1)
+shader_parameter/sky_curve = 0.15
+shader_parameter/sky_energy = 1.0
+shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
+shader_parameter/ground_bottom_color = Color(0.2, 0.169, 0.133, 1)
+shader_parameter/ground_horizon_color = Color(0.646, 0.656, 0.67, 1)
+shader_parameter/ground_curve = 0.02
+shader_parameter/ground_energy = 1.0
+shader_parameter/sun_angle_max = 0.523599
+shader_parameter/sun_curve = 0.15
+shader_parameter/exposure = 1.0
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_0cs1n")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_udx35")
+shader_parameter/cloud_direction = Vector2(-1, 1)
+shader_parameter/cloud_direction2 = Vector2(1, 0)
+shader_parameter/cloud_scale = Vector2(0.05, 0.05)
+shader_parameter/cloud_distance = 0.0
+shader_parameter/cloud_speed = 0.001
+shader_parameter/cloud_speed2 = 0.002
+
+[sub_resource type="Sky" id="Sky_m0hxs"]
+sky_material = SubResource("ShaderMaterial_lwqkh")
+
+[sub_resource type="Environment" id="Environment_f635r"]
+background_mode = 2
+sky = SubResource("Sky_m0hxs")
+tonemap_mode = 4
+glow_enabled = true
+glow_normalized = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4om81"]
+size = Vector3(38.3846, 2, 46.8104)
+
+[node name="TennisTraining" type="Node" unique_id=1611399565]
+script = ExtResource("1_gx02n")
+
+[node name="Player" parent="." unique_id=1570492392 instance=ExtResource("2_tjnrq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.84141)
+controller_scene = ExtResource("3_tjnrq")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1709110098]
+environment = SubResource("Environment_f635r")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1392627917]
+transform = Transform3D(-0.866024, -0.433016, 0.25, -0.225714, 0.78472, 0.577295, -0.446156, 0.44352, -0.777324, 0, 5.70078, 0)
+light_energy = 2.143
+shadow_enabled = true
+
+[node name="Positions" type="Node3D" parent="." unique_id=19005137]
+
+[node name="SE" type="Marker3D" parent="Positions" unique_id=1653311780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994293, 0, 12.1442)
+
+[node name="NW" type="Marker3D" parent="Positions" unique_id=1905855358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972189, 0, -13.487)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=709732411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2075691090]
+visible = false
+shape = SubResource("BoxShape3D_4om81")
+
+[node name="Stadium" parent="." unique_id=1825421631 instance=ExtResource("4_guntq")]
+
+[node name="CollisionShape3D" parent="Stadium/WallWest" parent_id_path=PackedInt32Array(1825421631, 1007468064) index="0" unique_id=1462181196]
+visible = true
+
+[node name="Cameras" parent="." unique_id=1828597319 instance=ExtResource("5_lrvso")]
+
+[node name="BallCanon" parent="." unique_id=180960615 instance=ExtResource("6_l6sfg")]
+transform = Transform3D(-0.965659, 0, -0.259814, 0, 1, 0, 0.259814, 0, -0.965659, -3.82491, 0, -4.53048)
+velocity_length = 13.0
+shoot_off_angle = 5.0
+
+[node name="Marker3D2" type="Marker3D" parent="." unique_id=1174166646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.1, -5.27)
+
+[node name="PauseMenu" parent="." unique_id=638761742 instance=ExtResource("9_fqabv")]
+
+[editable path="Player"]
+[editable path="Player/Model"]
+[editable path="Player/Model/h/player_djokovic"]
+[editable path="Stadium"]
+[editable path="Stadium/stadium"]
+[editable path="Cameras"]

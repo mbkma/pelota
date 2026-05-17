@@ -1,0 +1,830 @@
+[gd_scene format=3 uid="uid://b7nclbgkw6veg"]
+
+[ext_resource type="Script" uid="uid://mpiigeysorux" path="res://scenes/ui/hud/debug_hud.gd" id="1_88p7u"]
+[ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_4m5u1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epfxj"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcxbm"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="MatchDebugHud" type="CanvasLayer" unique_id=1590995445]
+layer = 128
+script = ExtResource("1_88p7u")
+
+[node name="DebugHud" type="PanelContainer" parent="." unique_id=566204564]
+custom_minimum_size = Vector2(480, 360)
+offset_right = 400.0
+offset_bottom = 350.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_epfxj")
+
+[node name="TabContainer" type="TabContainer" parent="DebugHud" unique_id=1561590500]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 11
+theme_override_styles/panel = SubResource("StyleBoxFlat_mcxbm")
+current_tab = 0
+
+[node name="Summary" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1501110690]
+layout_mode = 2
+theme_override_constants/separation = 3
+metadata/_tab_index = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DebugHud/TabContainer/Summary" unique_id=540398827]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer" unique_id=540398828]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="PerfSection" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782896]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== PERFORMANCE ==="
+
+[node name="Performance" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=609292306]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance" unique_id=1810782895]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "FPS:"
+
+[node name="FPS" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance" unique_id=1530836116]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0"
+
+[node name="Frame" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance" unique_id=865211455]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0.00ms"
+
+[node name="FrameTime" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1213867166]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/FrameTime" unique_id=1493951184]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Frame:"
+
+[node name="FrameValue" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/FrameTime" unique_id=1934835285]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0.00 ms"
+
+[node name="HSeparator1" type="HSeparator" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=385328384]
+layout_mode = 2
+
+[node name="MatchSection" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782897]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== MATCH STATE ==="
+
+[node name="MatchState" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1964947664]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/MatchState" unique_id=1494638698]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/MatchState" unique_id=2079869489]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
+[node name="Server" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1390707717]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Server" unique_id=494672498]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Server:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Server" unique_id=1654673314]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Player"
+
+[node name="Rally" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1327820183]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Rally" unique_id=1797450026]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Rally:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Rally" unique_id=866891230]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0"
+
+[node name="LastHitter" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=2136238339]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/LastHitter" unique_id=2084572486]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "LastHit:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/LastHitter" unique_id=1291130085]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "None"
+
+[node name="ServeZone" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1697940261]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/ServeZone" unique_id=430915648]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "ServeZ:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/ServeZone" unique_id=564810467]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "BACK"
+
+[node name="RallyZone" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1445950601]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/RallyZone" unique_id=1081319879]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "RallyZ:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/RallyZone" unique_id=185815547]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "BACK"
+
+[node name="GroundContacts" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1447918061]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/GroundContacts" unique_id=1340635217]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Ground:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/GroundContacts" unique_id=361258978]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0"
+
+[node name="HSeparator2" type="HSeparator" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=67253115]
+layout_mode = 2
+
+[node name="BallSection" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782898]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== BALL ==="
+
+[node name="Ball" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=976697285]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Ball" unique_id=84144455]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Pos:"
+
+[node name="Position" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/Ball" unique_id=1939274515]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "0.0, 0.0, 0.0"
+
+[node name="BallVel" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1063296132]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/BallVel" unique_id=1810782899]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Vel:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/BallVel" unique_id=1810782900]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "0.0"
+
+[node name="HSeparator3" type="HSeparator" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782901]
+layout_mode = 2
+
+[node name="Player0Section" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782902]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== PLAYER 0 ==="
+
+[node name="P0Name" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=760904155]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Name" unique_id=574060239]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Name:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Name" unique_id=1990380097]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Player"
+
+[node name="P0State" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1305390405]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0State" unique_id=1305390406]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0State" unique_id=1305390407]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
+[node name="P0Position" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1305390404]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Position" unique_id=756821561]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Pos:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Position" unique_id=1497644320]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "0.00, 0.00, 0.00"
+
+[node name="P0Velocity" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1746512791]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Velocity" unique_id=1341629526]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Vel:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Velocity" unique_id=2030157426]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0.00"
+
+[node name="HSeparator4" type="HSeparator" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782903]
+layout_mode = 2
+
+[node name="Player1Section" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782904]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== PLAYER 1 ==="
+
+[node name="P1Name" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1400839701]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Name" unique_id=1911935204]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Name:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Name" unique_id=960956275]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Player"
+
+[node name="P1State" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1968227921]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1State" unique_id=1968227922]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1State" unique_id=1968227923]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
+[node name="P1Position" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1968227920]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Position" unique_id=1661522761]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Pos:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Position" unique_id=1006807292]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "0.00, 0.00, 0.00"
+
+[node name="P1Velocity" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1761239867]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Velocity" unique_id=974500899]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Vel:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Velocity" unique_id=1381718789]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0.00"
+
+[node name="HSeparator5" type="HSeparator" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1810782905]
+layout_mode = 2
+
+[node name="TrajectoryToggle" type="CheckButton" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=1018981331]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Draw Trajectory"
+
+[node name="CameraSelect" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=142001001]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/CameraSelect" unique_id=142001002]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Camera:"
+
+[node name="CameraSelector" type="OptionButton" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/CameraSelect" unique_id=142001003]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+
+[node name="SimSpeed" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=142001004]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/SimSpeed" unique_id=142001005]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "SimSpeed:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/SimSpeed" unique_id=142001006]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "1.00x"
+
+[node name="SimPaused" type="HBoxContainer" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=142001007]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/SimPaused" unique_id=142001008]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Paused:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox/SimPaused" unique_id=142001009]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "NO"
+
+[node name="Shortcuts" type="Label" parent="DebugHud/TabContainer/Summary/ScrollContainer/VBox" unique_id=142001010]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Shortcuts: , / . speed, - reset, P pause"
+
+[node name="Performance" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=133944556]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+metadata/_tab_index = 1
+
+[node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Performance" unique_id=96915990]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="FPS" type="HBoxContainer" parent="DebugHud/TabContainer/Performance/VBox" unique_id=1433606640]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Performance/VBox/FPS" unique_id=1185590749]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "FPS:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Performance/VBox/FPS" unique_id=2034885989]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "0"
+
+[node name="FrameTime" type="HBoxContainer" parent="DebugHud/TabContainer/Performance/VBox" unique_id=1583159355]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Performance/VBox/FrameTime" unique_id=142217691]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Frame:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Performance/VBox/FrameTime" unique_id=540236274]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "0.00 ms"
+
+[node name="Match" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=36651200]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+metadata/_tab_index = 2
+
+[node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Match" unique_id=286788152]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="State" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=1163013082]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/State" unique_id=1646245672]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/State" unique_id=36342044]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
+[node name="Server" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=1443122573]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/Server" unique_id=379492354]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Server:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/Server" unique_id=1262203195]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Player"
+
+[node name="ServeZone" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=1057571371]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/ServeZone" unique_id=34022089]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "ServeZ:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/ServeZone" unique_id=2123862578]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "BACK"
+
+[node name="RallyZone" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=43189273]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/RallyZone" unique_id=1182236745]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "RallyZ:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/RallyZone" unique_id=480893542]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "BACK"
+
+[node name="GroundContacts" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=2056938401]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/GroundContacts" unique_id=436224295]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Ground:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/GroundContacts" unique_id=682796080]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0"
+
+[node name="LastHitter" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=1015942963]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/LastHitter" unique_id=275819257]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "LastHit:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/LastHitter" unique_id=821254709]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "None"
+
+[node name="RallyLength" type="HBoxContainer" parent="DebugHud/TabContainer/Match/VBox" unique_id=1493498973]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Match/VBox/RallyLength" unique_id=1395166386]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Rally:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Match/VBox/RallyLength" unique_id=1983098953]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0"
+
+[node name="Player0" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1163442231]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+metadata/_tab_index = 3
+
+[node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Player0" unique_id=2026184071]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="HBoxContainer" parent="DebugHud/TabContainer/Player0/VBox" unique_id=2065322052]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player0/VBox/Name" unique_id=1878964634]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Name:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player0/VBox/Name" unique_id=2119868819]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Player"
+
+[node name="State" type="HBoxContainer" parent="DebugHud/TabContainer/Player0/VBox" unique_id=412028757]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player0/VBox/State" unique_id=1230682746]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player0/VBox/State" unique_id=355712834]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
+[node name="Position" type="HBoxContainer" parent="DebugHud/TabContainer/Player0/VBox" unique_id=1447814801]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player0/VBox/Position" unique_id=531359211]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Pos:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player0/VBox/Position" unique_id=574902635]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "0.00, 0.00"
+
+[node name="Velocity" type="HBoxContainer" parent="DebugHud/TabContainer/Player0/VBox" unique_id=1387921499]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player0/VBox/Velocity" unique_id=489854947]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Vel:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player0/VBox/Velocity" unique_id=1057599605]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0.00"
+
+[node name="Player1" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1149115817]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 4
+metadata/_tab_index = 4
+
+[node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Player1" unique_id=1938339064]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="HBoxContainer" parent="DebugHud/TabContainer/Player1/VBox" unique_id=352368369]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player1/VBox/Name" unique_id=1957749768]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Name:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player1/VBox/Name" unique_id=1399789037]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Player"
+
+[node name="State" type="HBoxContainer" parent="DebugHud/TabContainer/Player1/VBox" unique_id=809428355]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player1/VBox/State" unique_id=1930737508]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "State:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player1/VBox/State" unique_id=430911292]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "IDLE"
+
+[node name="Position" type="HBoxContainer" parent="DebugHud/TabContainer/Player1/VBox" unique_id=865997773]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player1/VBox/Position" unique_id=232354229]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Pos:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player1/VBox/Position" unique_id=1038100245]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "0.00, 0.00"
+
+[node name="Velocity" type="HBoxContainer" parent="DebugHud/TabContainer/Player1/VBox" unique_id=346965923]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Player1/VBox/Velocity" unique_id=2056599855]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Vel:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Player1/VBox/Velocity" unique_id=1055649100]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0.00"
+
+[node name="Ball" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1839428125]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+metadata/_tab_index = 5
+
+[node name="VBox" type="VBoxContainer" parent="DebugHud/TabContainer/Ball" unique_id=591684549]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 2
+
+[node name="Position" type="HBoxContainer" parent="DebugHud/TabContainer/Ball/VBox" unique_id=238378516]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Ball/VBox/Position" unique_id=1764283334]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Pos:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Ball/VBox/Position" unique_id=2021474687]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "0.00, 0.00"
+
+[node name="Velocity" type="HBoxContainer" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1127629704]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DebugHud/TabContainer/Ball/VBox/Velocity" unique_id=878426827]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Vel:"
+
+[node name="Value" type="Label" parent="DebugHud/TabContainer/Ball/VBox/Velocity" unique_id=810202964]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "0.00"
+
+[node name="HSeparator6" type="HSeparator" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782906]
+layout_mode = 2
+
+[node name="BallSpeedLabel" type="Label" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782907]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "=== SPEED HISTORY ==="
+
+[node name="BallSpeedGraph" type="PanelContainer" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782908]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_type_variation = &"TauPlot"
+script = ExtResource("2_4m5u1")
+
+[node name="Logs" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1839428126]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+metadata/_tab_index = 6
+
+[node name="FilterContainer" type="HBoxContainer" parent="DebugHud/TabContainer/Logs" unique_id=1839428127]
+layout_mode = 2
+
+[node name="FilterLabel" type="Label" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428128]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Filter:"
+
+[node name="FilterInput" type="LineEdit" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428129]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search logs..."
+
+[node name="ObjectFilter" type="OptionButton" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428132]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "All Objects"
+
+[node name="ClearButton" type="Button" parent="DebugHud/TabContainer/Logs/FilterContainer" unique_id=1839428130]
+layout_mode = 2
+text = "Clear"
+
+[node name="LogDisplay" type="TextEdit" parent="DebugHud/TabContainer/Logs" unique_id=1839428131]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+read_only = true
+custom_minimum_size = Vector2(0, 100)

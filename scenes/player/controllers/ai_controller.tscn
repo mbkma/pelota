@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://chwkc1ds7iedv"]
+
+[ext_resource type="Script" uid="uid://dxy1y5jqcijwi" path="res://scenes/player/controllers/ai_controller.gd" id="1"]
+[ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://scenes/player/ai/ai_play_style.gd" id="10_unhf3"]
+[ext_resource type="Script" uid="uid://svnxitgai2kj" path="res://scenes/player/ai/point_strategy.gd" id="14_3p07y"]
+
+[sub_resource type="Resource" id="Resource_vwt2w"]
+script = ExtResource("10_unhf3")
+aggression = 1.0
+
+[sub_resource type="Resource" id="Resource_3cu02"]
+script = ExtResource("14_3p07y")
+play_style = SubResource("Resource_vwt2w")
+
+[node name="AiController" type="Node" unique_id=1580375701]
+script = ExtResource("1")
+point_strategy = SubResource("Resource_3cu02")
