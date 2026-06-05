@@ -41,6 +41,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03842455, 0, 0)
 [node name="front_sideline" type="Marker3D" parent="." unique_id=1234800024]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.8901)
 
-[node name="court" parent="." unique_id=616367682 instance=ExtResource("2_flwb3")]
+[node name="court" parent="." unique_id=955980070 instance=ExtResource("2_flwb3")]
 
 [editable path="court"]

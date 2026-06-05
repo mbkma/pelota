@@ -16,24 +16,21 @@ noise = SubResource("FastNoiseLite_2q1p4")
 color_ramp = SubResource("Gradient_2q1p4")
 seamless = true
 
-[sub_resource type="Gradient" id="Gradient_5ox32"]
-offsets = PackedFloat32Array(0.0089966785, 0.08421506)
-colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_kn14q"]
-seed = 3
-frequency = 0.1
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5ox32"]
+frequency = 1.0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yv0xr"]
-noise = SubResource("FastNoiseLite_kn14q")
-color_ramp = SubResource("Gradient_5ox32")
+width = 4096
+height = 4096
+noise = SubResource("FastNoiseLite_5ox32")
 seamless = true
+as_normal_map = true
+bump_strength = 1.5
 
 [resource]
 resource_name = "court"
 albedo_texture = ExtResource("1_2q1p4")
-roughness_texture = SubResource("NoiseTexture2D_yv0xr")
-roughness_texture_channel = 1
-detail_enabled = true
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_yv0xr")
 detail_blend_mode = 1
 detail_albedo = SubResource("NoiseTexture2D_kn14q")

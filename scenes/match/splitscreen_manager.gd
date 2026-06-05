@@ -79,8 +79,6 @@ func _create_viewport_cameras() -> void:
 	bottom_camera.name = "BottomCamera"
 	bottom_viewport.add_child(bottom_camera)
 
-	Loggie.msg("Cameras created").info()
-
 
 ## Cycle through splitscreen modes
 func toggle_splitscreen() -> void:
@@ -122,7 +120,6 @@ func _enable_vertical_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.VERTICAL_SPLIT
 	splitscreen_toggled.emit(true)
-	Loggie.msg("Vertical enabled - Press X for horizontal").info()
 
 
 ## Enable horizontal splitscreen (top-bottom)
@@ -156,7 +153,6 @@ func _enable_horizontal_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.HORIZONTAL_SPLIT
 	splitscreen_toggled.emit(true)
-	Loggie.msg("Horizontal enabled - Press X to return to normal").info()
 
 
 ## Disable splitscreen mode
@@ -174,7 +170,6 @@ func _disable_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.NORMAL
 	splitscreen_toggled.emit(false)
-	Loggie.msg("Disabled - Press X to enable").info()
 
 
 ## Update a viewport camera to match a player's camera

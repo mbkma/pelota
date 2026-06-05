@@ -135,6 +135,23 @@ func get_stroke() -> Stroke:
 	return _pending_stroke
 
 
+## Get aim marker position for UI - overrides base class
+func get_aim_marker_position() -> Variant:
+	if not _pending_stroke:
+		return null
+	return _pending_stroke.stroke_target
+
+
+## Get aim marker visibility state - overrides base class
+func should_show_aim_marker() -> bool:
+	return _pending_stroke != null
+
+
+## Get aim marker scale for UI - overrides base class
+func get_aim_marker_scale() -> Vector3:
+	return Vector3.ONE
+
+
 ## Compute and prepare a stroke for the given trajectory step
 func _queue_stroke(step: TrajectoryStep) -> void:
 	var stroke: Stroke = point_strategy.compute_next_stroke(step)
@@ -144,6 +161,13 @@ func _queue_stroke(step: TrajectoryStep) -> void:
 	stroke.delay = step.time
 	# Queue stroke and position adjustment to be executed by player
 	_pending_stroke = stroke
+	match stroke.stroke_intent:
+		AiPointContext.ShotIntent.ATTACK:
+			player.label_3d.modulate = Color.RED
+		AiPointContext.ShotIntent.SAFE:
+			player.label_3d.modulate = Color.GREEN
+		_:
+			player.label_3d.modulate = Color.YELLOW
 	_stroke_animation_started = false
 	_log_strategy("Stroke decision: type=%s intended_power=%.1f actual_power=%.1f spin=(%.2f, %.2f, %.2f) delay=%.3f intended_target=(%.2f, %.2f, %.2f) actual_target=(%.2f, %.2f, %.2f)" % [
 		_stroke_type_to_string(stroke.stroke_type),
@@ -295,9 +319,9 @@ func get_current_phase() -> Phase:
 func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vector3:
 	var opponent_xz: Vector3 = Vector3(opponent_hit_position.x, 0, opponent_hit_position.z)
 
-	var court_width: float = GameConstants.COURT_WIDTH / 2.0
+	var court_width: float = GameConstants.COURT_WIDTH_HALF
 	var _court_depth: float = GameConstants.COURT_LENGTH_HALF
-	var service_line_z: float = GameConstants.SERVICE_LINE_Z
+	var service_line_z: float = GameConstants.SERVICE_LINE
 
 	# Determine which side of court the opponent is hitting from
 	var opponent_side: float = sign(opponent_xz.z)
@@ -326,8 +350,6 @@ func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vecto
 		0.0,  # player height
 		baseline_z
 	)
-
-	Loggie.msg("defensive_position: ", defensive_position).info()
 
 	return defensive_position
 

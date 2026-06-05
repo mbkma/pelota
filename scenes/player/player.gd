@@ -73,10 +73,10 @@ var mental_state: PlayerMentalState
 ## Slice stroke sound effect pool used for slice/drop-shot variants.
 @export var stroke_sounds_slice: Array[AudioStream]
 
-## Interpolation factor for decelerating when no input is present.
-@export var friction: float = 1.0
-## Interpolation factor for accelerating toward target movement velocity.
-@export var acceleration: float = 0.6
+## Deceleration rate in m/s² (ATP realistic: ~12 m/s²).
+@export var friction: float = 12.0
+## Acceleration rate in m/s² (ATP realistic: ~15 m/s²).
+@export var acceleration: float = 15.0
 
 var _ball_factory: BallFactory
 var _movement: MovementController
@@ -90,7 +90,6 @@ var queued_stroke: Stroke:
 		return _queued_stroke
 	set(value):
 		_queued_stroke = value
-		Loggie.msg(player_data.last_name + ": ", "Setting queued stroke to: ", value).debug()
 
 var controller: Controller
 
@@ -219,7 +218,7 @@ func stop() -> void:
 func apply_movement(direction: Vector3, delta: float) -> void:
 	var animation_direction: Vector3 = direction
 	var stamina01: float = get_stamina_ratio()
-	velocity = _movement.tick(direction, stats, stamina01, move_speed, acceleration, friction)
+	velocity = _movement.tick(direction, stats, stamina01, move_speed, acceleration, friction, delta)
 	move_and_slide()
 
 	# Update animation state based on movement (only if not stroking or recovering)
@@ -257,7 +256,6 @@ func cancel_movement() -> void:
 ## Move to defensive position after stroke animation finishes
 func move_to_defensive_position(target_position: Vector3) -> void:
 	await model.stroke_animation_finished
-	Loggie.msg(player_data.last_name + ": ", "Player now moving to defensive pos ", target_position).info()
 	request_move_to(target_position)
 
 
@@ -273,9 +271,6 @@ func _on_target_point_reached() -> void:
 		if not closest_step:
 			push_warning("Player._on_target_point_reached: closest trajectory step unavailable")
 			return
-		Loggie.msg(player_data.last_name + ": ", 
-			"Stroke executed closest_step time:", closest_step.time, " animation_hit_point_time: ", animation_hit_point_time
-		).info()
 		var timing = closest_step.time - animation_hit_point_time
 		if timing > 0:
 			await get_tree().create_timer(timing).timeout
@@ -316,7 +311,6 @@ func queue_stroke(stroke: Stroke) -> bool:
 ## Execute ball hit with given stroke
 func _hit_ball(stroke: Stroke) -> void:
 	if not stroke:
-		Loggie.msg(player_data.last_name + ": ", "_hit_ball: No queued stroke").info()
 		return
 
 	if not is_instance_valid(ball):
@@ -413,7 +407,6 @@ func serve(stroke: Stroke) -> void:
 func from_anim_hit_serve() -> void:
 	if _is_replay_mode:
 		return
-	Loggie.msg(player_data.last_name + ": ", "SERVING").info()
 	_hit_ball(queued_stroke)
 	_lifecycle_bus.complete_serve(self)
 
@@ -461,7 +454,6 @@ func from_anim_spawn_ball() -> void:
 	if opponent:
 		opponent.set_active_ball(ball)
 	ball_spawned.emit(ball)
-	Loggie.msg(player_data.last_name + ": ", "from_anim_spawn_ball: stroke: ", queued_stroke, ", ball: ", ball).info()
 
 ## Other Functions
 ####################

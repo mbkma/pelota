@@ -20604,7 +20604,7 @@ _subresources={
 "g_forehand_down": {
 "save_to_file/enabled": true,
 "save_to_file/fallback_path": "res://scenes/player/resources/anims/g_forehand_down.res",
-"save_to_file/keep_custom_tracks": "",
+"save_to_file/keep_custom_tracks": true,
 "save_to_file/path": "uid://br24pxnntbbk8",
 "settings/loop_mode": 0,
 "slice_1/end_frame": 0,

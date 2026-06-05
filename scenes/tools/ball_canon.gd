@@ -12,8 +12,6 @@ var _ball_factory: BallFactory
 
 
 func _ready() -> void:
-	Loggie.msg("global basis: ", global_basis).info()
-	Loggie.msg("local basis: ", basis).info()
 	_ball_factory = BallFactory.new(ball_scene)
 
 

@@ -16,6 +16,8 @@ dest_files=["res://.godot/imported/court1.blend-0aa359626dcc840cb43d47a03b905f3f
 nodes/root_type=""
 nodes/root_name=""
 nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
@@ -39,13 +41,11 @@ materials/extract_format=0
 materials/extract_path="res://assets/materials"
 _subresources={
 "materials": {
-"Asphalt New Detailed": null,
 "Material.004": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/Material.004.tres",
 "use_external/path": "uid://crq2ua4yep0ce"
 },
-"Matte Noise": null,
 "line": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/line.tres",
@@ -71,6 +71,89 @@ _subresources={
 "use_external/fallback_path": "res://assets/materials/top_net.tres",
 "use_external/path": "uid://b8r2wv4erwfnn"
 }
+},
+"meshes": {
+"court1_Cube": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Cube.res",
+"save_to_file/path": "uid://b6xjjxs1wldd2"
+},
+"court1_Cube_001": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Cube_001.res",
+"save_to_file/path": "uid://bp1ac5t1ur8mt"
+},
+"court1_Cube_003": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Cube_003.res",
+"save_to_file/path": "uid://p446ird0eotd"
+},
+"court1_Cylinder": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Cylinder.res",
+"save_to_file/path": "uid://dt5jyf1oyhonp"
+},
+"court1_Cylinder_001": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Cylinder_001.res",
+"save_to_file/path": "uid://dwem437grj2u0"
+},
+"court1_Plane": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Plane.res",
+"save_to_file/path": "uid://bd4sjnh4n1yf"
+},
+"court1_Plane_002": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_Plane_002.res",
+"save_to_file/path": "uid://bupfqoc61jd36"
+},
+"court1_mercedes-alpha": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_mercedes-alpha.res",
+"save_to_file/path": "uid://brewjqduhq070"
+},
+"court1_mercedes-alpha_001": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://assets/models/court/meshes/court1_mercedes-alpha_001.res",
+"save_to_file/path": "uid://cmwneqnn7k3ub"
+}
 }
 }
 blender/nodes/visible=1
@@ -79,7 +162,7 @@ blender/nodes/punctual_lights=true
 blender/nodes/cameras=true
 blender/nodes/custom_properties=true
 blender/nodes/modifiers=1
-blender/meshes/colors=false
+blender/meshes/vertex_colors=2
 blender/meshes/uvs=true
 blender/meshes/normals=true
 blender/meshes/export_geometry_nodes_instances=false
@@ -93,3 +176,4 @@ blender/animation/limit_playback=true
 blender/animation/always_sample=true
 blender/animation/group_tracks=true
 gltf/naming_version=0
+gltf/texture_map_mode=1

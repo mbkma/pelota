@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scenes/match/tennis_match.gd" id="1_3pywv"]
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/player/player.tscn" id="2_hqvfk"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/hud/television_hud.tscn" id="4_upnw7"]
-[ext_resource type="Resource" uid="uid://b2vrbrqsx0cpp" path="res://scenes/player/resources/characters/auger-aliassime.tres" id="5_biiqe"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="6_4vere"]
 [ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environments/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/match/match_manager.tscn" id="8_2s2ac"]
@@ -61,12 +60,10 @@ human_controller_scene = ExtResource("21_human_controller")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8869265)
-player_data = ExtResource("5_biiqe")
-move_speed = 5.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
-active_cam = NodePath("TopFront")
+active_cam = NodePath("MiddleFront")
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
@@ -127,6 +124,9 @@ player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 
 [node name="Stadium" parent="." unique_id=1694125535 instance=ExtResource("6_4vere")]
+
+[node name="stadium" parent="Stadium" index="15" unique_id=492985688]
+visible = false
 
 [node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("match_manager", "players") instance=ExtResource("11_324nl")]
 match_manager = NodePath("../MatchManager")

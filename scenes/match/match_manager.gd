@@ -364,7 +364,7 @@ func _process_serve_ground_contact() -> void:
 		current_state = MatchState.SECOND_SERVE
 		_clear_ball()
 		if umpire:
-			umpire.say_second_serve()
+			umpire.say_fault()
 		set_player_serve()
 
 
@@ -377,7 +377,9 @@ func _process_second_serve_ground_contact() -> void:
 		_swap_valid_rally_zone()
 	else:
 		current_state = MatchState.FAULT
-
+		_clear_ball()
+		if umpire:
+			umpire.say_fault()
 
 ## Process ground contact during rally play
 func _process_rally_ground_contact() -> void:
@@ -748,5 +750,3 @@ func get_replay_camera_mode() -> ReplayCameraMode:
 func _log_state_change(new_state: MatchState) -> void:
 	var state_name: String = MatchState.keys()[new_state] if new_state < MatchState.size() else "UNKNOWN"
 	DebugLogger.log(self, "State changed to: %s" % state_name)
-
-

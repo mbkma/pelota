@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlayerAppearance" format=4 uid="uid://bumsgiut0ffed"]
 
-[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/resources/player_appearance.gd" id="1"]
 [ext_resource type="ArrayMesh" uid="uid://dgt3dcvdsj3wl" path="res://assets/models/player/meshes/djokovic/player_djokovic_base.res" id="1_7182r"]
 [ext_resource type="ArrayMesh" uid="uid://bh1xkor8k7dlb" path="res://assets/models/player/meshes/djokovic/player_djokovic_male_casualsuit06.res" id="3_mb2jm"]
 [ext_resource type="Texture2D" uid="uid://c4ldg4u3iotg3" path="res://assets/models/player/textures/middleage_lightskinned_male_diffuse.png" id="3_wq1r5"]

@@ -76,7 +76,7 @@ const BALL_SPEED_SAMPLE_INTERVAL: float = 0.1
 # Ball stat labels
 @onready var _ball_position_label: Label = $DebugHud/TabContainer/Ball/VBox/Position/Value
 @onready var _ball_velocity_label: Label = $DebugHud/TabContainer/Ball/VBox/Velocity/Value
-@onready var _ball_speed_plot: PanelContainer = $DebugHud/TabContainer/Ball/VBox/BallSpeedGraph
+@onready var _ball_speed_plot: Chart = $DebugHud/TabContainer/Ball/VBox/BallSpeedGraph
 
 # Logs tab elements
 @onready var _log_filter_input: LineEdit = $DebugHud/TabContainer/Logs/FilterContainer/FilterInput
@@ -86,8 +86,7 @@ const BALL_SPEED_SAMPLE_INTERVAL: float = 0.1
 @onready var _log_object_filter: OptionButton = $DebugHud/TabContainer/Logs/FilterContainer/ObjectFilter
 
 var _available_match_cameras: Array[Camera3D] = []
-var _ball_speed_dataset = null
-var _ball_speed_series_id: int = -1
+var _ball_speed_function: Function = null
 var _ball_speed_elapsed: float = 0.0
 var _ball_speed_sample_accumulator: float = 0.0
 
@@ -489,90 +488,83 @@ func _setup_ball_speed_plot() -> void:
 	if _ball_speed_plot == null:
 		return
 
-	var x_axis: TauAxisConfig = TauAxisConfig.new()
-	x_axis.title = "Time (s)"
-	x_axis.include_zero_in_domain = true
-	x_axis.tick_count_preferred = 6
-
-	var y_axis: TauAxisConfig = TauAxisConfig.new()
-	y_axis.title = "Speed"
-	y_axis.include_zero_in_domain = true
-	y_axis.tick_count_preferred = 5
-
-	var scatter_cfg: TauScatterConfig = TauScatterConfig.new()
-	scatter_cfg.style.marker_size_px = 4.0
-	scatter_cfg.style.hovered_marker_size_px = 4.0
-
-	var grid: TauGridLineConfig = TauGridLineConfig.new()
-	grid.x_major_enabled = true
-	grid.y_major_enabled = true
-
-	var pane: TauPaneConfig = TauPaneConfig.new()
-	pane.y_left_axis = y_axis
-	pane.overlays = [scatter_cfg]
-	pane.grid_line = grid
-
-	var config: TauXYConfig = TauXYConfig.new()
-	config.x_axis = x_axis
-	config.panes = [pane]
-
-	var dataset := TauPlot.Dataset.make_shared_x_continuous(
-		PackedStringArray(["Speed"]),
-		PackedFloat64Array([0.0]),
-		[PackedFloat64Array([0.0])] as Array[PackedFloat64Array],
-		240
+	_ball_speed_function = Function.new(
+		[0.0, 0.001], [0.0, 0.0], "Speed",
+		{
+			color = Color("#36a2eb"),
+			marker = Function.Marker.NONE,
+			type = Function.Type.AREA,
+		}
 	)
-	if dataset == null:
-		push_error("Failed to initialize ball speed plot dataset")
-		return
 
-	_ball_speed_dataset = dataset
-	_ball_speed_series_id = _ball_speed_dataset.get_series_id_by_index(0)
+	var chart_theme := Theme.new()
+	chart_theme.set_color("text_color", "Chart", Color.WHITE)
+	chart_theme.set_color("tick_color", "Chart", Color.WHITE)
+	chart_theme.set_color("origin_color", "Chart", Color.WHITE)
+	chart_theme.set_color("tick_grid_line_color", "Chart", Color(0.3, 0.3, 0.3, 1.0))
+	var chart_area := StyleBoxFlat.new()
+	chart_area.draw_center = false
+	chart_area.bg_color = Color(0.0, 0.0, 0.0, 0.0)
+	chart_area.set_content_margin_all(15)
+	chart_theme.set_stylebox("chart_area", "Chart", chart_area)
+	var plot_area := StyleBoxFlat.new()
+	plot_area.draw_center = false
+	plot_area.bg_color = Color(0.0, 0.0, 0.0, 0.0)
+	plot_area.set_border_width_all(0)
+	chart_theme.set_stylebox("plot_area", "Chart", plot_area)
+	chart_theme.set_stylebox("panel", "Chart", StyleBoxEmpty.new())
+	_ball_speed_plot.theme = chart_theme
 
-	var binding: TauXYSeriesBinding = TauXYSeriesBinding.new()
-	binding.series_id = _ball_speed_series_id
-	binding.pane_index = 0
-	binding.overlay_type = TauXYSeriesBinding.PaneOverlayType.SCATTER
-	binding.y_axis_id = TauPlot.AxisId.LEFT
+	var cp := ChartProperties.new()
+	cp.title = ""
+	cp.x_label = "Time (s)"
+	cp.y_label = "Speed (m/s)"
+	cp.show_title = false
+	cp.show_legend = false
+	cp.interactive = false
+	cp.max_samples = 240
 
-	var bindings: Array[TauXYSeriesBinding] = [binding]
-
-	_ball_speed_plot.title = "Ball Speed"
-	_ball_speed_plot.legend_enabled = false
-	_ball_speed_plot.hover_enabled = false
-	_ball_speed_plot.plot_xy(_ball_speed_dataset, config, bindings)
+	_ball_speed_plot.plot([_ball_speed_function], cp)
 
 
 func _reset_ball_speed_history() -> void:
 	_ball_speed_elapsed = 0.0
 	_ball_speed_sample_accumulator = 0.0
-	if _ball_speed_dataset == null:
+	if _ball_speed_function == null or _ball_speed_plot == null:
 		return
 
-	_ball_speed_dataset.clear_samples()
-	_ball_speed_dataset.append_shared_sample(0.0, PackedFloat64Array([0.0]))
+	_ball_speed_function = Function.new(
+		[0.0, 0.001], [0.0, 0.0], "Speed",
+		{
+			color = Color("#36a2eb"),
+			marker = Function.Marker.NONE,
+			type = Function.Type.AREA,
+		}
+	)
+
+	var cp := ChartProperties.new()
+	cp.title = ""
+	cp.x_label = "Time (s)"
+	cp.y_label = "Speed (m/s)"
+	cp.show_title = false
+	cp.show_legend = false
+	cp.interactive = false
+	cp.max_samples = 240
+
+	_ball_speed_plot.plot([_ball_speed_function], cp)
 
 
 func _record_ball_speed_sample(ball_speed: float, delta: float) -> void:
-	if _ball_speed_dataset == null or _ball_speed_series_id < 0:
+	if _ball_speed_function == null or _ball_speed_plot == null:
 		return
 
 	_ball_speed_elapsed += maxf(delta, 0.0)
 	_ball_speed_sample_accumulator += maxf(delta, 0.0)
 
-	var sample_count: int = _ball_speed_dataset.get_shared_sample_count()
-	if sample_count == 0:
-		_ball_speed_dataset.append_shared_sample(_ball_speed_elapsed, PackedFloat64Array([ball_speed]))
-		_ball_speed_sample_accumulator = 0.0
-		return
-
-	var last_sample_index: int = sample_count - 1
 	if _ball_speed_sample_accumulator >= BALL_SPEED_SAMPLE_INTERVAL:
-		_ball_speed_dataset.append_shared_sample(_ball_speed_elapsed, PackedFloat64Array([ball_speed]))
+		_ball_speed_function.add_point(_ball_speed_elapsed, ball_speed)
 		_ball_speed_sample_accumulator = 0.0
-		return
-
-	_ball_speed_dataset.set_series_y(_ball_speed_series_id, last_sample_index, ball_speed)
+		_ball_speed_plot.queue_redraw()
 
 
 ## Helper to get DebugLogger autoload

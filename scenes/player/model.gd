@@ -105,10 +105,6 @@ func get_animation_hit_frame_time(stroke_type: Stroke.StrokeType) -> float:
 	return animation.get_marker_time("hit")
 
 
-func _on_hit_area_3d_body_entered(body: Node3D) -> void:
-	if body is Ball:
-		hit_area_ball_entered.emit(body)
-
 ## Called from animation timeline to spawn the ball (forwarded to player)
 func _from_anim_spawn_ball() -> void:
 	player.from_anim_spawn_ball()
@@ -119,7 +115,6 @@ func from_anim_hit_serve() -> void:
 
 ## Called from animation timeline to hit the ball
 func _from_anim_hit_ball() -> void:
-	print("_from_anim_hit_ball")
 	player._from_anim_hit_ball()
 
 
@@ -253,7 +248,6 @@ func _set_stroke_animation(stroke: Stroke) -> void:
 	if stroke.stroke_type == stroke.StrokeType.FOREHAND or stroke.stroke_type == stroke.StrokeType.BACKHAND:
 		var blend_position: float = compute_stroke_blend_position(stroke)
 		animation_tree["parameters/stroke/" + animation_name + "/blend_position"] = blend_position
-		Loggie.msg("blend position: ", blend_position).info()
 
 	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name
 
@@ -345,7 +339,9 @@ func _apply_texture_to_slot(slot: MeshInstance3D, texture: Texture2D) -> void:
 		return
 
 	if slot.material_override and slot.material_override is StandardMaterial3D:
-		var override_material: StandardMaterial3D = (slot.material_override as StandardMaterial3D).duplicate(true)
+		var override_material: StandardMaterial3D = (slot.material_override as StandardMaterial3D).duplicate()
+		if override_material == null:
+			return
 		override_material.albedo_texture = texture
 		slot.material_override = override_material
 		return
@@ -358,7 +354,9 @@ func _apply_texture_to_slot(slot: MeshInstance3D, texture: Texture2D) -> void:
 
 	var base_material: Material = slot.get_active_material(0)
 	if base_material is StandardMaterial3D:
-		var duplicated_material: StandardMaterial3D = (base_material as StandardMaterial3D).duplicate(true)
+		var duplicated_material: StandardMaterial3D = (base_material as StandardMaterial3D).duplicate()
+		if duplicated_material == null:
+			return
 		duplicated_material.albedo_texture = texture
 		slot.set_surface_override_material(0, duplicated_material)
 
@@ -479,7 +477,9 @@ func _apply_texture_to_surface(slot: MeshInstance3D, surface_index: int, texture
 
 	var base_material: Material = slot.get_active_material(surface_index)
 	if base_material is StandardMaterial3D:
-		var duplicated_material: StandardMaterial3D = (base_material as StandardMaterial3D).duplicate(true)
+		var duplicated_material: StandardMaterial3D = (base_material as StandardMaterial3D).duplicate()
+		if duplicated_material == null:
+			return false
 		duplicated_material.albedo_texture = texture
 		slot.set_surface_override_material(surface_index, duplicated_material)
 		return true

@@ -18,14 +18,13 @@ config/features=PackedStringArray("4.7")
 
 [audio]
 
-buses/default_bus_layout="uid://udhfafl0u4fa"
+buses/default_bus_layout="uid://dlo5inop6ahho"
 
 [autoload]
 
 GlobalGameData="*res://scripts/core/game_data.gd"
 GlobalPhysics="*res://scripts/core/physics_service.gd"
 DebugMenu="*uid://cggqb75a8w8r"
-Loggie="*uid://bmh2auo806k0k"
 DebugLogger="*res://scripts/core/debug_logger.gd"
 AppConfig="*uid://cjke6crjg14a0"
 SceneLoader="*uid://cbwmrnp0af35y"
@@ -46,7 +45,7 @@ window/size/fullscreen=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/godot_xterm/plugin.cfg", "res://addons/loggie/plugin.cfg", "res://addons/maaacks_game_template/plugin.cfg", "res://addons/tau-plot/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/godot_xterm/plugin.cfg", "res://addons/maaacks_game_template/plugin.cfg", "res://addons/tau-plot/plugin.cfg")
 
 [gui]
 
@@ -170,4 +169,6 @@ copy_path="res://"
 
 [rendering]
 
+anti_aliasing/quality/msaa_2d=1
+anti_aliasing/quality/msaa_3d=1
 environment/default_environment="res://default_env.tres"

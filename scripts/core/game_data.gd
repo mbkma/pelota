@@ -5,7 +5,7 @@ enum InputMethod {
 	HUMAN,
 }
 
-const CHARACTER_DATA_DIR := "res://scenes/player/resources/characters/"
+const CHARACTER_DATA_DIR := "res://scenes/player/resources/data/"
 
 var selected_match_player: PlayerData
 var selected_match_opponent: PlayerData

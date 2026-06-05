@@ -10,7 +10,6 @@
 [ext_resource type="AudioStream" uid="uid://ddnps5yngc7ai" path="res://assets/sounds/effects/umpire/40-0.ogg" id="7_vxyis"]
 [ext_resource type="AudioStream" uid="uid://ei1r0h8av4hv" path="res://assets/sounds/effects/umpire/advantage.ogg" id="8_ardl1"]
 [ext_resource type="AudioStream" uid="uid://bo6m84tlffwxd" path="res://assets/sounds/effects/umpire/out.wav" id="9_yggoj"]
-[ext_resource type="AudioStream" uid="uid://cvonpl75stb7o" path="res://assets/sounds/effects/umpire/second_serve.ogg" id="10_hradu"]
 [ext_resource type="AudioStream" uid="uid://bx2k242xw6w3g" path="res://assets/sounds/effects/umpire/15-15.ogg" id="11_hradu"]
 [ext_resource type="AudioStream" uid="uid://bsnukbfkytqem" path="res://assets/sounds/effects/umpire/15-30.ogg" id="12_a1ni2"]
 [ext_resource type="AudioStream" uid="uid://3t6nfchf0fru" path="res://assets/sounds/effects/umpire/30-15.ogg" id="13_5xaq4"]
@@ -42,8 +41,7 @@ umpire_sounds = Dictionary[String, AudioStream]({
 "3-2": ExtResource("17_rr8j0"),
 "3-3": ExtResource("18_h4dv8"),
 "advantage": ExtResource("8_ardl1"),
-"out": ExtResource("9_yggoj"),
-"second_serve": ExtResource("10_hradu")
+"out": ExtResource("9_yggoj")
 })
 
 [node name="umpire_chair" parent="." unique_id=1793929124 instance=ExtResource("2_qv13u")]
@@ -57,5 +55,4 @@ shape = SubResource("4")
 [node name="Camera3D" type="Camera3D" parent="." unique_id=740636569]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47242, -2.39926)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2104138986]
-bus = &"Umpire"
+[node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=257645386]

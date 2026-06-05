@@ -102,25 +102,25 @@ const AI_BALL_VELOCITY_MIN: float = 0.1
 const AI_FOREHAND_PACE: float = 18.0
 
 ## Forehand spin (x: sidespin, y: topspin, z: forward spin)
-const AI_FOREHAND_SPIN: Vector3 = Vector3(0.2, 10, 0)
+const AI_FOREHAND_SPIN: Vector3 = Vector3(0.2, 0.85, 0.0)
 
 ## Backhand pace (power)
 const AI_BACKHAND_PACE: float = 17.0
 
 ## Backhand spin (x: sidespin, y: topspin, z: forward spin)
-const AI_BACKHAND_SPIN: Vector3 = Vector3(-0.2, 10, 0)
+const AI_BACKHAND_SPIN: Vector3 = Vector3(-0.2, 0.85, 0.0)
 
 ## Backhand slice pace (power)
 const AI_BACKHAND_SLICE_PACE: float = 16.0
 
 ## Backhand slice spin (x: sidespin, y: backspin, z: forward spin)
-const AI_BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -10.0, 0.1)
+const AI_BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -0.85, 0.0)
 
 ## Drop shot pace (power)
 const AI_DROP_SHOT_PACE: float = 15.0
 
 ## Drop shot spin (x: sidespin, y: backspin, z: forward spin)
-const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -10.0, -1.0)
+const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -0.85, 0.0)
 
 ## Serve pace (power)
 const AI_SERVE_PACE: float = 35.0
@@ -174,8 +174,11 @@ const SIDE_SWITCH_GAME_CYCLE: int = 4
 # COURT CONSTANTS
 # ============================================================================
 
-## Court field width (units)
-const COURT_WIDTH: float = 8.11
+## Singles Court field width (units)
+const COURT_WIDTH: float = 8.23
+
+## Singles Court field width half (units)
+const COURT_WIDTH_HALF: float = 4.115
 
 ## Court field length (units)
 const COURT_LENGTH: float = 26.0
@@ -183,15 +186,5 @@ const COURT_LENGTH: float = 26.0
 ## Half court length - baseline distance from net (units)
 const COURT_LENGTH_HALF: float = 13.0
 
-# ============================================================================
-# PLAYER POSITIONS
-# ============================================================================
-
-## Front player Z position
-const FRONT_PLAYER_Z: float = 12.3828
-
-## Back player Z position
-const BACK_PLAYER_Z: float = -15.0306
-
-## Player service line position
-const SERVICE_LINE_Z: float = 6.302
+## Service Box Length - service line distance from net (units)
+const SERVICE_LINE: float = 6.40

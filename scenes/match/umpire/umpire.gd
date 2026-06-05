@@ -2,7 +2,7 @@
 class_name Umpire
 extends Node3D
 
-@onready var _audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var _audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer
 
 ## Preloaded sound dictionary for all score announcements and game calls
 @export var umpire_sounds: Dictionary[String, AudioStream] 
@@ -30,8 +30,9 @@ extends Node3D
 
 ## Announce "second serve"
 func say_second_serve() -> void:
-	_audio_stream_player.stream = umpire_sounds["second_serve"]
-	_audio_stream_player.play()
+	pass
+	#_audio_stream_player.stream = umpire_sounds["second_serve"]
+	#_audio_stream_player.play()
 
 
 ## Announce "fault"

@@ -37,8 +37,6 @@ enum CourtRegion {
 
 
 func _ready() -> void:
-	Loggie.msg("field width: ", _field_width).info()
-	
 	_court_regions = {
 		CourtRegion.LEFT_FRONT_SERVICE_BOX:
 		Rect2(

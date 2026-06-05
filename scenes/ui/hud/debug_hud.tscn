@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b7nclbgkw6veg"]
 
 [ext_resource type="Script" uid="uid://mpiigeysorux" path="res://scenes/ui/hud/debug_hud.gd" id="1_88p7u"]
-[ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_4m5u1"]
+[ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="2_4m5u1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epfxj"]
 content_margin_left = 0.0
@@ -782,14 +782,12 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "=== SPEED HISTORY ==="
 
-[node name="BallSpeedGraph" type="PanelContainer" parent="DebugHud/TabContainer/Ball/VBox" unique_id=1810782908]
+[node name="BallSpeedGraph" parent="DebugHud/TabContainer/Ball/VBox" instance=ExtResource("2_4m5u1")]
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
-theme_type_variation = &"TauPlot"
-script = ExtResource("2_4m5u1")
 
 [node name="Logs" type="VBoxContainer" parent="DebugHud/TabContainer" unique_id=1839428126]
 visible = false

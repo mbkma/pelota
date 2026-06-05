@@ -79,7 +79,6 @@ func update(delta: float) -> void:
 	# Emit pace signal for any listeners
 	if _is_stroke_active and _current_pace > 0.0:
 		pace_changed.emit(_current_pace)
-		Loggie.msg("Aiming position: ", _aiming_at).debug()
 
 
 ## Initializes the appropriate input device based on available hardware
@@ -136,7 +135,7 @@ func _on_stroke_updating(pace: float, stroke_type: InputDevice.StrokeInputType) 
 
 
 ## Handles stroke completion
-func _on_stroke_completed(pace: float, stroke_type: InputDevice.StrokeInputType) -> void:
+func _on_stroke_completed(pace: float, _stroke_type: InputDevice.StrokeInputType) -> void:
 	if _serve_controls:
 		_do_serve(pace)
 		_serve_controls = false
@@ -144,19 +143,13 @@ func _on_stroke_completed(pace: float, stroke_type: InputDevice.StrokeInputType)
 	elif _stroke_trajectory_step and _pending_stroke:
 		if player.global_position.distance_to(_stroke_trajectory_step.point) < 3:
 			adjust_player_position_to_stroke(player, _stroke_trajectory_step, _pending_stroke)
-	else:
-		Loggie.msg(
-			"HumanController._on_stroke_completed: missing trajectory/stroke; skipping position adjustment",
-			" pace=", pace,
-			" type=", stroke_type
-		).debug()
 
 ## Prepares a serve stroke (to be executed by player)
 func _do_serve(pace: float) -> void:
 	_pending_stroke = _build_serve_stroke(_aiming_at, pace)
 	if player.stats:
 		var context: AiPointContext = AiPointContext.from_step(player, null, true)
-		var execution := ShotExecution.new()
+		var execution = preload("res://scenes/player/ai/shot_executor.gd").new()
 		execution._apply_execution_jitter(_pending_stroke, context, 0.25)
 
 	_stroke_mode_active = true
@@ -169,9 +162,7 @@ func _construct_stroke_from_input(
 	pace: float,
 	stroke_input_type: InputDevice.StrokeInputType
 ) -> Stroke:
-	Loggie.msg("_construct_stroke_from_input", aim_position, pace, stroke_input_type).info()
 	if not closest_step:
-		Loggie.msg("_construct_stroke_from_input: closest_step is null")
 		return null
 
 	var to_ball_vector: Vector3 = closest_step.point - player.position
@@ -183,7 +174,7 @@ func _construct_stroke_from_input(
 
 	if player.stats:
 		var context: AiPointContext = AiPointContext.from_step(player, closest_step)
-		var execution := ShotExecution.new()
+		var execution = preload("res://scenes/player/ai/shot_executor.gd").new()
 		execution._apply_execution_jitter(stroke, context, 0.3)
 
 	return stroke
@@ -192,15 +183,42 @@ func _construct_stroke_from_input(
 func _build_serve_stroke(aim_position: Vector3, pace: float) -> Stroke:
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_type = Stroke.StrokeType.SERVE
-	var base_serve_power: float = GameConstants.AI_SERVE_PACE
+	var second_serve: bool = false
+	var match_manager: MatchManager = _resolve_match_manager()
+	if match_manager:
+		second_serve = match_manager.current_state == MatchManager.MatchState.SECOND_SERVE
+
+	var base_serve_power: float = 45.0 if second_serve else 53.0
 	if player.stats:
-		base_serve_power = lerpf(26.0, 38.0, player.stats.serve_power01())
+		if second_serve:
+			# Typical second serve target: ~160 km/h (44.4 m/s).
+			base_serve_power = lerpf(42.0, 45.5, player.stats.serve_power01())
+		else:
+			# Typical first serve target: ~190 km/h (52.8 m/s).
+			base_serve_power = lerpf(50.0, 56.0, player.stats.serve_power01())
 	stroke.stroke_power = base_serve_power + pace
+	if second_serve:
+		stroke.stroke_power = clampf(stroke.stroke_power, 41.0, 46.5)
+	else:
+		stroke.stroke_power = clampf(stroke.stroke_power, 46.0, 60.0)
 	stroke.stroke_spin = GameConstants.AI_SERVE_SPIN
 	stroke.stroke_target = aim_position
 	stroke.intended_stroke_power = stroke.stroke_power
 	stroke.intended_stroke_target = stroke.stroke_target
 	return stroke
+
+
+func _resolve_match_manager() -> MatchManager:
+	if not is_instance_valid(player):
+		return null
+
+	var node: Node = player
+	while node:
+		if node is MatchManager:
+			return node as MatchManager
+		node = node.get_parent()
+
+	return null
 
 
 func _build_rally_stroke(
@@ -217,7 +235,8 @@ func _build_rally_stroke(
 	if is_forehand:
 		stroke.stroke_type = Stroke.StrokeType.FOREHAND
 		var fh_skill: float = player.stats.shot_side_skill01(false) if player.stats else 0.5
-		stroke.stroke_power = lerpf(16.0, 28.0, fh_skill) + pace
+		# Typical rally forehand target: ~100 km/h (27.8 m/s).
+		stroke.stroke_power = lerpf(24.0, 32.0, fh_skill) + pace
 		stroke.stroke_spin = GameConstants.AI_FOREHAND_SPIN
 		stroke.intended_stroke_power = stroke.stroke_power
 		stroke.intended_stroke_target = stroke.stroke_target
@@ -227,7 +246,8 @@ func _build_rally_stroke(
 		InputDevice.StrokeInputType.SLICE:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND_SLICE
 			var bh_skill: float = player.stats.shot_side_skill01(true) if player.stats else 0.5
-			stroke.stroke_power = lerpf(13.0, 22.0, bh_skill) + pace
+			# Keep slices much slower than standard backhands.
+			stroke.stroke_power = lerpf(9.0, 16.0, bh_skill) + pace
 			stroke.stroke_spin = GameConstants.AI_BACKHAND_SLICE_SPIN
 		InputDevice.StrokeInputType.DROP_SHOT:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND_DROP_SHOT
@@ -237,7 +257,8 @@ func _build_rally_stroke(
 		_:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND
 			var bh_skill: float = player.stats.shot_side_skill01(true) if player.stats else 0.5
-			stroke.stroke_power = lerpf(15.0, 26.0, bh_skill) + pace
+			# Typical rally backhand target near forehand baseline pace.
+			stroke.stroke_power = lerpf(23.0, 31.0, bh_skill) + pace
 			stroke.stroke_spin = GameConstants.AI_BACKHAND_SPIN
 
 	stroke.intended_stroke_power = stroke.stroke_power

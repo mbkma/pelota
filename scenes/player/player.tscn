@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
-[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://scenes/player/resources/characters/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="2_yllr7"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
@@ -22,10 +22,17 @@ height = 1.58024
 script = ExtResource("1")
 controller_scene = ExtResource("2_yllr7")
 player_data = ExtResource("2_uxa8p")
+move_speed = null
+team_index = null
 ball_aim_marker = NodePath("BallAimMarker")
+hit_timing_window_seconds = null
 hit_range_tolerance_meters = 5.0
+snap_ball_to_contact_point_on_anim_hit = null
+snap_max_distance_meters = null
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
+friction = null
+acceleration = null
 
 [node name="PlayerStateMachine" type="Node" parent="." unique_id=1516428128]
 script = ExtResource("11_ntx4g")
@@ -50,7 +57,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
 
 [node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
 
-[node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 840938416, 203219760) index="0" unique_id=192128921]
+[node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 840938416, 340929914) index="0" unique_id=287735910]
 bones/0/position = Vector3(0.0007950309, 0.9322403, -0.010953533)
 bones/0/rotation = Quaternion(0.07589308, 0.0048213443, -0.00036696947, 0.9971042)
 bones/0/scale = Vector3(0.9999985, 0.9999873, 0.9999963)
@@ -128,7 +135,6 @@ bones/75/rotation = Quaternion(-0.2503378, -0.04654267, 0.2193002, 0.9418451)
 bones/76/rotation = Quaternion(0.7125854, 0.053315636, 0.6960615, 0.06984164)
 bones/76/scale = Vector3(1.0000122, 1.000007, 1.000009)
 bones/77/position = Vector3(-2.3284656e-08, 0.019569997, 3.5729165e-08)
-bones/77/rotation = Quaternion(-0.05844357, 0.06073943, 0.0814584, 0.99310607)
 bones/80/rotation = Quaternion(-0.111015625, -0.0531304, -0.28139883, 0.9516656)
 bones/80/scale = Vector3(1.0000004, 0.99999994, 1.0000099)
 bones/81/rotation = Quaternion(0.6980161, -0.22433567, -0.6335238, -0.24717341)
@@ -139,7 +145,6 @@ bones/86/position = Vector3(0.024872517, -0.03630035, 0.10571951)
 bones/86/rotation = Quaternion(0.21113108, 0.80446225, -0.43514886, 0.34483287)
 bones/87/position = Vector3(5.662636e-08, 0.038928803, 3.674025e-07)
 bones/87/rotation = Quaternion(-0.39776763, -0.049954243, 0.054353464, 0.9145114)
-bones/87/scale = Vector3(1.000012, 1.000006, 1.0000019)
 bones/88/position = Vector3(-0.024872517, -0.03630035, 0.10571951)
 bones/88/rotation = Quaternion(-0.2111312, 0.80446225, -0.43514886, -0.34483272)
 bones/89/position = Vector3(-3.2290092e-08, 0.03892887, 1.6656827e-08)
@@ -181,7 +186,6 @@ bones/126/rotation = Quaternion(0.71297437, 0.039082408, 0.29708073, 0.6339426)
 bones/128/rotation = Quaternion(0.16869684, -0.008509926, 0.07876244, 0.9824793)
 bones/129/rotation = Quaternion(0.12174225, 0.077938676, 0.08237617, 0.98606217)
 bones/130/rotation = Quaternion(0.7331208, 0.020986138, 0.23771796, 0.6368545)
-bones/131/rotation = Quaternion(0.5, -0.5, -0.5, -0.5)
 bones/132/position = Vector3(0.008305218, 0.17417434, -0.030619442)
 bones/132/rotation = Quaternion(-0.50826234, 0.010756482, 0.082782954, 0.8571469)
 bones/132/scale = Vector3(0.99999815, 0.9999858, 0.9999965)
@@ -232,10 +236,9 @@ bones/173/rotation = Quaternion(-0.0077299215, 0.06919069, 0.0026062515, 0.99757
 bones/173/scale = Vector3(0.9999899, 1.0000025, 1.0000007)
 bones/174/rotation = Quaternion(0.102066524, 0.7822976, -0.60514486, -0.10673629)
 bones/175/rotation = Quaternion(-0.01630464, 0.9911483, 0.13173759, -0.002108057)
-bones/175/scale = Vector3(0.9999999, 0.9999991, 1.0000031)
 
-[node name="DEF-attachment_hand_R" parent="Model/h/player_djokovic/game-rig/GeneralSkeleton" index="0" unique_id=2147006923]
-transform = Transform3D(-0.0928143, 0.41899416, 0.9032308, 0.5026419, 0.8027756, -0.3207442, -0.85949194, 0.4242341, -0.285115, -0.09863529, 1.0832163, 0.41090977)
+[node name="DEF-attachment_hand_R" parent="Model/h/player_djokovic/game-rig/GeneralSkeleton" index="0" unique_id=1671760922]
+transform = Transform3D(0.0032903776, 0.58215904, 0.813066, 0.3916497, 0.7473567, -0.5366959, -0.92010367, 0.3202041, -0.22554408, -0.18819466, 1.15445, 0.46766564)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 

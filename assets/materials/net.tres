@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://idkr1ikbtvxg"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://idkr1ikbtvxg"]
 
 [ext_resource type="Texture2D" uid="uid://du0bsuhit70gm" path="res://assets/models/court/textures/net1.png" id="1_qftx7"]
 
@@ -11,3 +11,4 @@ roughness = 0.8492063
 metadata/extras = {
 "blenderkit": {}
 }
+metadata/_gltf_primary_texture_coord = 0

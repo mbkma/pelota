@@ -25,3 +25,6 @@ var step: TrajectoryStep
 
 # Time in seconds before the stroke anim should start
 var delay: float = 0.0
+
+# Shot intent for debug/UI display (mirrors AiPointContext.ShotIntent, -1 = unknown)
+var stroke_intent: int = -1
