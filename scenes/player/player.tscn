@@ -22,17 +22,10 @@ height = 1.58024
 script = ExtResource("1")
 controller_scene = ExtResource("2_yllr7")
 player_data = ExtResource("2_uxa8p")
-move_speed = null
-team_index = null
 ball_aim_marker = NodePath("BallAimMarker")
-hit_timing_window_seconds = null
 hit_range_tolerance_meters = 5.0
-snap_ball_to_contact_point_on_anim_hit = null
-snap_max_distance_meters = null
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
-friction = null
-acceleration = null
 
 [node name="PlayerStateMachine" type="Node" parent="." unique_id=1516428128]
 script = ExtResource("11_ntx4g")

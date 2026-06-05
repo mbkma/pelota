@@ -12,7 +12,9 @@ var _path: Array[Vector3] = []
 var _velocity: Vector3 = Vector3.ZERO
 var _last_direction: Vector3 = Vector3.ZERO
 var _direction_change_time: float = 0.0
+var _friction_value: float = 12.0
 const DIRECTION_CHANGE_PENALTY_DURATION: float = 0.15  # seconds to apply penalty
+const ARRIVAL_SLOWDOWN_RADIUS: float = 2.2
 
 
 ## Returns the current computed velocity (used by stamina drain calculations).
@@ -45,6 +47,18 @@ func cancel() -> void:
 	_path.clear()
 
 
+## Cancel movement and clear residual velocity for precise timing windows.
+func stop() -> void:
+	_path.clear()
+	_velocity = Vector3.ZERO
+	_last_direction = Vector3.ZERO
+	_direction_change_time = 0.0
+
+
+func set_friction(value: float) -> void:
+	_friction_value = maxf(value, 0.0)
+
+
 ## Check whether body_position has reached the current target.
 ## If so, removes the target and returns true.
 func check_and_consume_reached(body_position: Vector3, threshold_sq: float) -> bool:
@@ -52,6 +66,9 @@ func check_and_consume_reached(body_position: Vector3, threshold_sq: float) -> b
 		return false
 	if body_position.distance_squared_to(_path[0]) < threshold_sq:
 		_path.remove_at(0)
+		_velocity = Vector3.ZERO
+		_last_direction = Vector3.ZERO
+		_direction_change_time = 0.0
 		return true
 	return false
 
@@ -60,9 +77,16 @@ func check_and_consume_reached(body_position: Vector3, threshold_sq: float) -> b
 func compute_direction(body_position: Vector3) -> Vector3:
 	if _path.is_empty():
 		return Vector3.ZERO
-	var direction: Vector3 = (_path[0] - body_position).normalized()
-	direction.y = 0.0
-	return direction
+
+	var offset: Vector3 = _path[0] - body_position
+	offset.y = 0.0
+	var distance: float = offset.length()
+	if distance <= 0.0001:
+		return Vector3.ZERO
+
+	# Arrival behavior: reduce desired input as we approach target to avoid overshoot.
+	var input_strength: float = clampf(distance / ARRIVAL_SLOWDOWN_RADIUS, 0.0, 1.0)
+	return offset.normalized() * input_strength
 
 
 ## Advance velocity for one physics frame using realistic acceleration physics.
@@ -75,17 +99,18 @@ func compute_direction(body_position: Vector3) -> Vector3:
 ## - move_speed: base max speed (m/s)
 ## - acceleration: base accel rate (m/s²)
 ## - friction: base decel rate (m/s²)
-## - delta: frame time delta (seconds)
 func tick(
 	direction: Vector3,
 	stats: PlayerRuntimeStats,
 	stamina01: float,
 	move_speed: float,
-	acceleration: float,
-	friction: float,
-	delta: float
+	acceleration: float
 ) -> Vector3:
-	direction = direction.normalized()
+	var delta: float = 1.0 / maxf(float(Engine.physics_ticks_per_second), 1.0)
+	var input_strength: float = clampf(direction.length(), 0.0, 1.0)
+	var move_direction: Vector3 = Vector3.ZERO
+	if input_strength > 0.001:
+		move_direction = direction / input_strength
 	
 	# Stamina scaling: maintain ability at ~60% stamina, degrade to 50% at 0% stamina
 	var stamina_speed_factor: float = lerpf(0.5, 1.0, stamina01)
@@ -94,12 +119,12 @@ func tick(
 	# Apply stats multipliers
 	var effective_max_speed: float = move_speed * stats.movement_speed_multiplier(stamina01) * stamina_speed_factor
 	var effective_acceleration: float = acceleration * stats.acceleration_multiplier(stamina01) * stamina_accel_factor
-	var effective_friction: float = friction
+	var effective_friction: float = _friction_value
 	
 	# Detect direction change: sharp turns apply extra braking
 	var direction_change_angle: float = 0.0
-	if _last_direction.length_squared() > 0.01 and direction.length_squared() > 0.01:
-		direction_change_angle = _last_direction.angle_to(direction)
+	if _last_direction.length_squared() > 0.01 and move_direction.length_squared() > 0.01:
+		direction_change_angle = _last_direction.angle_to(move_direction)
 	
 	# Apply direction change penalty (extra braking on sharp turns)
 	if direction_change_angle > 0.5:  # ~30 degrees
@@ -111,11 +136,11 @@ func tick(
 		_direction_change_time -= delta
 	
 	# Compute target velocity based on input direction
-	var target_velocity: Vector3 = direction * effective_max_speed
+	var target_velocity: Vector3 = move_direction * effective_max_speed * input_strength
 	target_velocity.y = _velocity.y  # Preserve vertical velocity
 	
 	# Accelerate or decelerate toward target using physics-based approach
-	if direction.length() > 0.001:
+	if input_strength > 0.001:
 		# Accelerate toward target velocity
 		var acceleration_vector: Vector3 = (target_velocity - _velocity).normalized() * effective_acceleration
 		_velocity += acceleration_vector * delta
@@ -137,5 +162,5 @@ func tick(
 		else:
 			_velocity = new_velocity
 	
-	_last_direction = direction
+	_last_direction = move_direction
 	return _velocity

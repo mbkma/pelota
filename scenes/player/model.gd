@@ -30,6 +30,7 @@ var _stroke_finished_emitted: bool = false
 @onready var backhand_up_point: Vector3 = points.get_node("BackhandUpPoint").position
 @onready var backhand_down_point: Vector3 = points.get_node("BackhandDownPoint").position
 @onready var backhand_point: Marker3D = $Points/BackhandPoint
+@onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
 
 @export var animation_tree: AnimationTree
 @onready var _playback: AnimationNodeStateMachinePlayback = (
@@ -123,9 +124,12 @@ func get_racket_contact_point(stroke: Stroke) -> Vector3:
 		match stroke.stroke_type:
 			Stroke.StrokeType.FOREHAND, Stroke.StrokeType.FOREHAND_DROP_SHOT, Stroke.StrokeType.VOLLEY:
 				return forehand_point.global_position
-			Stroke.StrokeType.BACKHAND, Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.BACKHAND_DROP_SHOT:
+			Stroke.StrokeType.BACKHAND:
 				return backhand_point.global_position
-
+			Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.BACKHAND_DROP_SHOT:
+				return backhand_slice_point.global_position
+	
+	printerr("get_racket_contact_point: stroke type does not exist or stroke is NULL")
 	return global_position
 
 func compute_stroke_blend_position(stroke: Stroke) -> float:

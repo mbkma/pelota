@@ -58,12 +58,18 @@ human_controller_scene = ExtResource("21_human_controller")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
+hit_range_tolerance_meters = 1.0
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
+hit_range_tolerance_meters = 1.0
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
-active_cam = NodePath("MiddleFront")
+active_cam = NodePath("TopFront")
+
+[node name="TopFront" parent="Cameras" index="1" unique_id=1711630965]
+transform = Transform3D(1, 0, 0, 0, 0.948324, 0.317305, 0, -0.317305, 0.948324, 0, 12.543, 40.307)
+fov = 18.3
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true

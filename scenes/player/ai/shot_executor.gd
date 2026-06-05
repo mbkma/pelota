@@ -2,7 +2,7 @@ class_name ShotExecutor
 extends RefCounted
 
 ## When true, intended shot equals executed shot (no jitter or consistency error)
-var perfect_accuracy: bool = true
+var perfect_accuracy: bool = false
 
 
 func _stats(context: AiPointContext) -> PlayerRuntimeStats:
@@ -125,14 +125,14 @@ func _compute_shot_speed(
 	var stats = _stats(context)
 	if context.is_serve:
 		var serve_skill: float = stats.serve_power01()
-		var base_serve: float = lerpf(48.0, 57.0, serve_skill)
+		var base_serve: float = lerpf(48.0, 52.0, serve_skill)
 		var serve_style_power: float = play_style.shot_power if play_style else 0.5
 		var serve_speed: float = base_serve + (serve_style_power * 4.0)
 		serve_speed *= lerpf(0.88, 1.0, context.player_stamina_ratio)
-		return clampf(serve_speed, 24.0, 35.0)
+		return clampf(serve_speed, 24.0, 64.0)
 
 	var side_quality: float = stats.shot_side_skill01(context.ball_side == AiPointContext.BallSide.BACKHAND)
-	var base_speed: float = lerpf(24.0, 34.0, side_quality)
+	var base_speed: float = lerpf(24.0, 29.0, side_quality)
 	var style_power: float = play_style.shot_power if play_style else 0.5
 	var intent_power_bonus: float = 12.0
 	match intent:
@@ -148,9 +148,9 @@ func _compute_shot_speed(
 	var shot_speed: float = base_speed + (style_power * intent_power_bonus)
 	shot_speed *= lerpf(0.86, 1.0, context.player_stamina_ratio)
 	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
-		shot_speed *= 0.82
-		return clampf(shot_speed, 9.0, 21.0)
-	return clampf(shot_speed, 13.0, 30.0)
+		shot_speed *= 0.7
+		return clampf(shot_speed, 9.0, 25.0)
+	return clampf(shot_speed, 13.0, 38.0)
 
 
 func _compute_shot_spin(

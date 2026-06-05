@@ -136,19 +136,12 @@ func is_flying_towards(source: Node3D, target: Node3D) -> bool:
 
 ## Adjust player position to optimal stroke execution point
 func adjust_player_position_to_stroke(target_player: Player, closest_step: TrajectoryStep, stroke: Stroke) -> void:
-	## Calculate the direction from the position
-	var x_offset: float
-	if stroke.stroke_type == stroke.StrokeType.FOREHAND:
-		x_offset = -target_player.model.forehand_point.position.x
-	else:
-		x_offset = -target_player.model.backhand_point.position.x
+	# Align player body so the actual racket contact point lands on predicted ball contact.
+	var contact_point: Vector3 = target_player.model.get_racket_contact_point(stroke)
+	var contact_to_body: Vector3 = contact_point - target_player.global_position
+	contact_to_body.y = 0.0
 
-	var anticipation_bias: float = 1.0
-	if target_player.stats:
-		anticipation_bias = lerpf(1.08, 0.88, target_player.stats.anticipation01())
-
-	var new_position: Vector3 = closest_step.point + x_offset * target_player.basis.x
-	new_position = target_player.position.lerp(new_position, anticipation_bias)
+	var new_position: Vector3 = closest_step.point - contact_to_body
 	new_position.y = target_player.position.y
 	target_player.request_move_to(new_position)
 
@@ -222,22 +215,6 @@ func get_closest_trajectory_step(target_player: Player) -> TrajectoryStep:
 
 	# Return the closest trajectory step
 	return closest_trajectory_step
-
-func calculate_velocity(
-	initial_position: Vector3, target_position: Vector3, velocity_z0: float, _spin: Vector3
-) -> Vector3:
-	var velocity: Vector3 = Vector3.ZERO
-
-	# Time to reach target position
-	var time_to_target: float = (target_position.z - initial_position.z) / velocity_z0
-
-	velocity.x = (target_position.x - initial_position.x) / time_to_target
-	velocity.y = (
-		(0.5 * GameConstants.GRAVITY * time_to_target * time_to_target - initial_position.y) / time_to_target
-	)
-	velocity.z = velocity_z0
-
-	return velocity
 
 
 ## Validate player reference and state

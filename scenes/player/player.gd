@@ -60,7 +60,7 @@ var mental_state: PlayerMentalState
 ## Allowed timing error window around ideal contact time.
 @export var hit_timing_window_seconds: float = 0.1
 ## Maximum distance from racket contact point that still counts as a hit.
-@export var hit_range_tolerance_meters: float = 1.3
+@export var hit_range_tolerance_meters: float = 1.0
 ## If enabled, snap ball to racket contact point on animation hit frame.
 @export var snap_ball_to_contact_point_on_anim_hit: bool = true
 ## Max snap distance allowed when contact-point snapping is enabled.
@@ -218,7 +218,8 @@ func stop() -> void:
 func apply_movement(direction: Vector3, delta: float) -> void:
 	var animation_direction: Vector3 = direction
 	var stamina01: float = get_stamina_ratio()
-	velocity = _movement.tick(direction, stats, stamina01, move_speed, acceleration, friction, delta)
+	_movement.set_friction(friction)
+	velocity = _movement.tick(direction, stats, stamina01, move_speed, acceleration)
 	move_and_slide()
 
 	# Update animation state based on movement (only if not stroking or recovering)
@@ -265,6 +266,10 @@ func _on_target_point_reached() -> void:
 		return
 
 	if queued_stroke:
+		# Freeze movement at contact position to avoid drift before hit frame.
+		_movement.stop()
+		velocity = Vector3.ZERO
+
 		var stroke = queued_stroke  # Store locally before await to prevent race condition
 		var animation_hit_point_time: float = model.get_animation_hit_frame_time(stroke.stroke_type)
 		var closest_step: TrajectoryStep = _get_closest_step()
@@ -303,10 +308,6 @@ func queue_stroke(stroke: Stroke) -> bool:
 	queued_stroke = stroke
 	return true
 
-	#Loggie.msg(player_data.last_name + ": ", 
-		#"Stroke queued: distance_to_ball=%.2f, anim_hit_frame=%.2f" %
-		#[position.distance_to(ball.position), model.get_animation_hit_frame_time(stroke.stroke_type)]
-	#).info()
 
 ## Execute ball hit with given stroke
 func _hit_ball(stroke: Stroke) -> void:
@@ -428,9 +429,11 @@ func _from_anim_hit_ball() -> void:
 
 	var contact_point: Vector3 = model.get_racket_contact_point(queued_stroke)
 	var _distance_to_contact: float = ball.global_position.distance_to(contact_point)
+	print(ball.global_position - contact_point)
 	if _distance_to_contact > hit_range_tolerance_meters:
 		cancel_stroke()
 		return
+	print("hit ball:", _distance_to_contact)
 
 	#var closest_step: TrajectoryStep = _get_closest_step()
 	#if closest_step and abs(closest_step.time) > hit_timing_window_seconds:
