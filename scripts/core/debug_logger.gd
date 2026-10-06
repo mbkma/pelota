@@ -2,9 +2,9 @@
 ## Any Godot object can call DebugLogger.log(self, message) to send messages
 extends Node
 
+const MAX_LOG_ENTRIES: int = 1000
 ## Log entry structure: {timestamp, object, object_name, message}
 var _log_buffer: Array[Dictionary] = []
-const MAX_LOG_ENTRIES: int = 1000
 var _log_start_time_ms: int = 0
 var _last_object_names_count: int = 0
 
@@ -17,7 +17,7 @@ func _ready() -> void:
 ## Log a message from any object
 func log(sender: Object, message: String) -> void:
 	var object_name: String = "Unknown"
-	
+
 	if sender:
 		# Try to get a meaningful name from the object
 		if sender.has_meta("logger_name"):
@@ -26,16 +26,16 @@ func log(sender: Object, message: String) -> void:
 			object_name = sender.player_data.last_name
 		else:
 			object_name = sender.name if sender.name else sender.get_class()
-	
+
 	var entry: Dictionary = {
 		"timestamp": Time.get_ticks_msec(),
 		"object": sender,
 		"object_name": object_name,
 		"message": message
 	}
-	
+
 	_log_buffer.append(entry)
-	
+
 	# Maintain max log size
 	if _log_buffer.size() > MAX_LOG_ENTRIES:
 		_log_buffer.pop_front()
@@ -60,13 +60,13 @@ func clear_logs() -> void:
 func get_object_names() -> PackedStringArray:
 	var names: PackedStringArray = []
 	var seen: Dictionary = {}
-	
+
 	for entry in _log_buffer:
 		var obj_name: String = entry["object_name"]
 		if not seen.has(obj_name):
 			seen[obj_name] = true
 			names.append(obj_name)
-	
+
 	return names
 
 

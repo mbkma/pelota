@@ -1,8 +1,6 @@
 class_name Stadium
 extends Node3D
 
-@onready var serve_speed_panels := [$ServeSpeedPanel, $ServeSpeedPanel2]
-
 enum StadiumPosition {
 	SERVE_FRONT_RIGHT,
 	SERVE_FRONT_LEFT,
@@ -13,6 +11,12 @@ enum StadiumPosition {
 	RECEIVE_BACK_RIGHT,
 	RECEIVE_BACK_LEFT
 }
+
+var serve_clocks_active := false
+var timer := Timer.new()
+
+
+@onready var serve_speed_panels := [$ServeSpeedPanel, $ServeSpeedPanel2]
 
 @onready var positions := {
 	StadiumPosition.SERVE_FRONT_RIGHT: $Positions/ServeFrontRight.position,
@@ -26,10 +30,6 @@ enum StadiumPosition {
 }
 
 @onready var serve_clocks := $ServeClocks.get_children()
-
-var serve_clocks_active := false
-var timer := Timer.new()
-
 
 func _ready() -> void:
 	add_child(timer)

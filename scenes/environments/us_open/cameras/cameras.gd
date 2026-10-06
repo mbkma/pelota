@@ -3,6 +3,12 @@ extends Node3D
 
 @export var cams: Array[Camera3D]
 
+@export var active_cam: Camera3D
+
+var active_cam_index := 0
+var player0: Player
+var player1: Player
+
 @onready var flying_cam: Camera3D = $FlyingCam
 @onready var top_front: Camera3D = $TopFront
 @onready var top_back: Camera3D = $TopBack
@@ -11,12 +17,6 @@ extends Node3D
 @onready var court_side_front: Camera3D = $CourtSideFront
 @onready var court_side_back: Camera3D = $CourtSideBack
 @onready var camera_top: Camera3D = $CameraTop
-
-@export var active_cam: Camera3D
-
-var active_cam_index := 0
-var player0: Player
-var player1: Player
 
 func _ready() -> void:
 	if cams.is_empty():
@@ -48,11 +48,6 @@ func set_camera_for_player(player: Player) -> void:
 	else:
 		player.camera = court_side_front
 		#player.camera.target = player
-
-	if player.controller is HumanController and player.camera:
-		active_cam = player.camera
-		active_cam_index = max(0, cams.find(active_cam))
-		player.camera.make_current()
 
 func disable_all() -> void:
 	for c in cams:

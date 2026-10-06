@@ -1,6 +1,6 @@
 ## Realistic movement controller with ATP-based physics.
 ## Handles acceleration, deceleration, and direction changes with stamina scaling.
-## 
+##
 ## Movement Parameters (ATP-based):
 ## - move_speed: max sustained speed (m/s), realistic: 6.0 = ~21.6 km/h
 ## - acceleration: rate of speed gain (m/s²), realistic: 15.0 m/s²
@@ -8,13 +8,14 @@
 class_name MovementController
 extends RefCounted
 
+const DIRECTION_CHANGE_PENALTY_DURATION: float = 0.15  # seconds to apply penalty
+const ARRIVAL_SLOWDOWN_RADIUS: float = 2.2
+
 var _path: Array[Vector3] = []
 var _velocity: Vector3 = Vector3.ZERO
 var _last_direction: Vector3 = Vector3.ZERO
 var _direction_change_time: float = 0.0
 var _friction_value: float = 12.0
-const DIRECTION_CHANGE_PENALTY_DURATION: float = 0.15  # seconds to apply penalty
-const ARRIVAL_SLOWDOWN_RADIUS: float = 2.2
 
 
 ## Returns the current computed velocity (used by stamina drain calculations).
@@ -111,56 +112,64 @@ func tick(
 	var move_direction: Vector3 = Vector3.ZERO
 	if input_strength > 0.001:
 		move_direction = direction / input_strength
-	
+
 	# Stamina scaling: maintain ability at ~60% stamina, degrade to 50% at 0% stamina
 	var stamina_speed_factor: float = lerpf(0.5, 1.0, stamina01)
 	var stamina_accel_factor: float = lerpf(0.5, 1.0, stamina01)
-	
+
 	# Apply stats multipliers
-	var effective_max_speed: float = move_speed * stats.movement_speed_multiplier(stamina01) * stamina_speed_factor
-	var effective_acceleration: float = acceleration * stats.acceleration_multiplier(stamina01) * stamina_accel_factor
+	var effective_max_speed: float = (
+		move_speed * stats.movement_speed_multiplier(stamina01) * stamina_speed_factor
+	)
+	var effective_acceleration: float = (
+		acceleration * stats.acceleration_multiplier(stamina01) * stamina_accel_factor
+	)
 	var effective_friction: float = _friction_value
-	
+
 	# Detect direction change: sharp turns apply extra braking
 	var direction_change_angle: float = 0.0
 	if _last_direction.length_squared() > 0.01 and move_direction.length_squared() > 0.01:
 		direction_change_angle = _last_direction.angle_to(move_direction)
-	
+
 	# Apply direction change penalty (extra braking on sharp turns)
 	if direction_change_angle > 0.5:  # ~30 degrees
 		_direction_change_time = DIRECTION_CHANGE_PENALTY_DURATION
-	
+
 	# Reduce acceleration during direction changes
 	if _direction_change_time > 0.0:
 		effective_acceleration *= 0.6  # Slower acceleration while turning
 		_direction_change_time -= delta
-	
+
 	# Compute target velocity based on input direction
 	var target_velocity: Vector3 = move_direction * effective_max_speed * input_strength
 	target_velocity.y = _velocity.y  # Preserve vertical velocity
-	
+
 	# Accelerate or decelerate toward target using physics-based approach
 	if input_strength > 0.001:
 		# Accelerate toward target velocity
-		var acceleration_vector: Vector3 = (target_velocity - _velocity).normalized() * effective_acceleration
+		var acceleration_vector: Vector3 = (
+			(target_velocity - _velocity).normalized() * effective_acceleration
+		)
 		_velocity += acceleration_vector * delta
-		
+
 		# Clamp to target speed
 		var horizontal_speed: float = Vector3(_velocity.x, 0.0, _velocity.z).length()
 		if horizontal_speed > effective_max_speed:
-			var horizontal_vel: Vector3 = Vector3(_velocity.x, 0.0, _velocity.z).normalized() * effective_max_speed
+			var horizontal_vel: Vector3 = (
+				Vector3(_velocity.x, 0.0, _velocity.z).normalized() * effective_max_speed
+			)
 			_velocity.x = horizontal_vel.x
 			_velocity.z = horizontal_vel.z
 	else:
 		# Decelerate to zero
 		var deceleration_vector: Vector3 = -_velocity.normalized() * effective_friction
 		var new_velocity: Vector3 = _velocity + deceleration_vector * delta
-		
+
 		# Stop if we've reached near-zero
 		if new_velocity.length() < 0.1:
 			_velocity = Vector3.ZERO
 		else:
 			_velocity = new_velocity
-	
+
 	_last_direction = move_direction
 	return _velocity

@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://3mij3cjhkwsm"]
+[gd_scene format=3 uid="uid://3mij3cjhkwsm"]
 
 [sub_resource type="GDScript" id="GDScript_a8kpl"]
 script/source = "extends CenterContainer

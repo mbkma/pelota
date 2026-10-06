@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4oiswtjxqaea"]
+[gd_scene format=3 uid="uid://c4oiswtjxqaea"]
 
 [ext_resource type="Script" uid="uid://tt7k1vdvivmh" path="res://addons/tau-plot/tests/axis/label_overlapping/test_label_overlap_zero_alignment.gd" id="1_e2qdi"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_rwro5"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=533580007]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,25 +11,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_e2qdi")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1766221485]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test overlap strategy with two y axes and zero alignment"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=139910791]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 3
 
-[node name="CenterContainer1" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer1" type="CenterContainer" parent="GridContainer" unique_id=1282644401]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer/CenterContainer1"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer/CenterContainer1" unique_id=1695094952]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
@@ -40,12 +40,12 @@ script = ExtResource("2_rwro5")
 title = "[no zero alignment] NONE on left axis, NONE on right axis"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer2" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer2" type="CenterContainer" parent="GridContainer" unique_id=31177804]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer/CenterContainer2"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer/CenterContainer2" unique_id=1256509543]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
@@ -56,12 +56,12 @@ script = ExtResource("2_rwro5")
 title = "[no zero alignment] SKIP_LABELS on left axis, NONE on right axis"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer3" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer3" type="CenterContainer" parent="GridContainer" unique_id=1625253098]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer/CenterContainer3"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer/CenterContainer3" unique_id=312211734]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
@@ -72,12 +72,12 @@ script = ExtResource("2_rwro5")
 title = "[no zero alignment] NONE on left axis, REDUCE_COUNT on right axis"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer4" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer4" type="CenterContainer" parent="GridContainer" unique_id=1127592414]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer/CenterContainer4"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer/CenterContainer4" unique_id=181988713]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
@@ -88,12 +88,12 @@ script = ExtResource("2_rwro5")
 title = "[with zero alignment] SKIP_LABELS on left axis, SKIP_LABELS on right axis"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer5" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer5" type="CenterContainer" parent="GridContainer" unique_id=811356189]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer/CenterContainer5"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer/CenterContainer5" unique_id=335141213]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
@@ -104,12 +104,12 @@ script = ExtResource("2_rwro5")
 title = "[with zero alignment] REDUCE_COUNT on left axis, SKIP_LABELS on right axis"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer6" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer6" type="CenterContainer" parent="GridContainer" unique_id=186798624]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer/CenterContainer6"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer/CenterContainer6" unique_id=2005731091]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(600, 500)
 layout_mode = 2

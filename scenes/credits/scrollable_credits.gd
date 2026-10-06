@@ -1,11 +1,11 @@
 @tool
 extends Control
 
-@onready var credits_label : RichTextLabel = %CreditsLabel
-
 @export var input_scroll_speed : float = 10.0
 
 var _line_number : float = 0
+
+@onready var credits_label : RichTextLabel = %CreditsLabel
 
 func _on_visibility_changed() -> void:
 	if visible:

@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://eqpclcmu6fq4"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://eqpclcmu6fq4"]
 
 [ext_resource type="Texture2D" uid="uid://6i5116ojg70b" path="res://assets/models/court/textures/Asphalt_05_roughness.jpg" id="1_hc282"]
 [ext_resource type="Texture2D" uid="uid://bwqpcgpwxj1qx" path="res://assets/models/court/textures/Asphalt_05_normalogl.jpg" id="2_xwj7j"]

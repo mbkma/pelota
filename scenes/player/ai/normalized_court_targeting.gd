@@ -2,7 +2,9 @@ class_name NormalizedCourtTargeting
 extends RefCounted
 
 
-func to_world_target(normalized_target: Vector2, striker_position: Vector3, is_serve: bool) -> Vector3:
+func to_world_target(
+	normalized_target: Vector2, striker_position: Vector3, is_serve: bool
+) -> Vector3:
 	var clamped_x: float = clampf(normalized_target.x, -1.0, 1.0)
 	var clamped_y: float = clampf(normalized_target.y, 0.0, 1.0)
 

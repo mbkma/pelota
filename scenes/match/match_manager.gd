@@ -29,6 +29,28 @@ enum ReplayCameraMode {
 	FOLLOW_LAST_HITTER,
 }
 
+@export var player0: Player
+@export var player1: Player
+@export var ball: Ball
+@export var court: Court
+@export var stadium: Stadium
+@export var television_hud: TelevisionHud
+@export var umpire: Umpire
+@export var crowd: Crowd
+@export var cameras: MatchCameras
+## Enables match replay capture/playback for this manager.
+@export var replay_enabled: bool = true
+## Enables debug replay toggle key (R in debug builds).
+@export var replay_debug_hotkey_enabled: bool = true
+## Replay camera behavior during playback.
+@export var replay_camera_mode: ReplayCameraMode = ReplayCameraMode.BROADCAST
+## Follow-camera offset when replay camera mode tracks ball/player.
+@export var replay_follow_offset: Vector3 = Vector3(0.0, 3.5, 10.0)
+## Automatically save replay to disk after recording stops.
+@export var replay_persistence_enabled: bool = true
+## Save path for persisted replay payload.
+@export var replay_save_path: String = "user://last_match_replay.save"
+
 ## Reference to the last player who hit the ball
 var last_hitter: Player
 
@@ -56,28 +78,6 @@ var _replay_controller: MatchReplayController
 
 @onready var match_data: MatchData
 
-@export var player0: Player
-@export var player1: Player
-@export var ball: Ball
-@export var court: Court
-@export var stadium: Stadium
-@export var television_hud: TelevisionHud
-@export var umpire: Umpire
-@export var crowd: Crowd
-@export var cameras: MatchCameras
-## Enables match replay capture/playback for this manager.
-@export var replay_enabled: bool = true
-## Enables debug replay toggle key (R in debug builds).
-@export var replay_debug_hotkey_enabled: bool = true
-## Replay camera behavior during playback.
-@export var replay_camera_mode: ReplayCameraMode = ReplayCameraMode.BROADCAST
-## Follow-camera offset when replay camera mode tracks ball/player.
-@export var replay_follow_offset: Vector3 = Vector3(0.0, 3.5, 10.0)
-## Automatically save replay to disk after recording stops.
-@export var replay_persistence_enabled: bool = true
-## Save path for persisted replay payload.
-@export var replay_save_path: String = "user://last_match_replay.save"
-
 
 func _update_valid_serve_zone_from_server_position() -> void:
 	_valid_serve_zone = (
@@ -97,6 +97,7 @@ func _is_debug_replay_toggle_event(event: InputEvent) -> bool:
 	if not (event is InputEventKey and event.pressed):
 		return false
 	return event.keycode == KEY_R
+
 
 func _ready() -> void:
 	if not player0 or not player1 or not court or not stadium or not television_hud:
@@ -128,7 +129,7 @@ func _ready() -> void:
 	_connect_player_lifecycle(player1)
 	television_hud.score_display.player_1_score_panel.set_player(player0.player_data)
 	television_hud.score_display.player_2_score_panel.set_player(player1.player_data)
-	
+
 	cameras.register_camera(player0.first_person_camera)
 	cameras.register_camera(player1.first_person_camera)
 	cameras.player0 = player0
@@ -246,6 +247,7 @@ func _connect_player_lifecycle(player: Player) -> void:
 
 func _on_ball_on_net() -> void:
 	pass
+
 
 ## Get the opponent of the given player
 func get_opponent(player: Player) -> Player:
@@ -380,6 +382,7 @@ func _process_second_serve_ground_contact() -> void:
 		_clear_ball()
 		if umpire:
 			umpire.say_fault()
+
 
 ## Process ground contact during rally play
 func _process_rally_ground_contact() -> void:
@@ -517,6 +520,7 @@ func place_players() -> void:
 	cameras.set_camera_for_player(player0)
 	cameras.set_camera_for_player(player1)
 
+
 ## Get position for a player based on serve and side information
 func _get_player_position(
 	is_server: bool, serve_from_deuce_side: bool, switch_sides: bool, _is_player0: bool
@@ -554,7 +558,9 @@ func _get_player_position(
 
 
 func _on_player_ball_spawned(b: Ball) -> void:
-	_record_replay_event("ball_spawned", {"player": get_player_index(last_hitter) if last_hitter else -1})
+	_record_replay_event(
+		"ball_spawned", {"player": get_player_index(last_hitter) if last_hitter else -1}
+	)
 	if is_instance_valid(ball) and ball != b:
 		_clear_ball()
 		ball.queue_free()
@@ -564,6 +570,7 @@ func _on_player_ball_spawned(b: Ball) -> void:
 func _on_player_active_ball_changed(b: Ball) -> void:
 	if b != ball:
 		set_active_ball(b)
+
 
 func _on_player_lifecycle_serve_requested(serving_player: Player) -> void:
 	if serving_player == get_server() and stadium:
@@ -748,5 +755,7 @@ func get_replay_camera_mode() -> ReplayCameraMode:
 
 
 func _log_state_change(new_state: MatchState) -> void:
-	var state_name: String = MatchState.keys()[new_state] if new_state < MatchState.size() else "UNKNOWN"
+	var state_name: String = (
+		MatchState.keys()[new_state] if new_state < MatchState.size() else "UNKNOWN"
+	)
 	DebugLogger.log(self, "State changed to: %s" % state_name)

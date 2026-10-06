@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bp3wxjl6bi806"]
+
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_3fd8v"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_bshq6"]
+script = ExtResource("1_3fd8v")
+metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
+
+[sub_resource type="Resource" id="Resource_sinner_stats"]
+script = ExtResource("2")
+acceleration = 84.0
+top_speed = 86.0
+agility = 84.0
+stamina = 84.0
+forehand = 90.0
+backhand = 88.0
+serve_power = 85.0
+serve_accuracy = 82.0
+return_skill = 85.0
+volley_skill = 76.0
+slice_skill = 77.0
+topspin_skill = 86.0
+accuracy = 84.0
+consistency = 84.0
+timing = 86.0
+composure = 83.0
+focus = 85.0
+clutch = 82.0
+aggression = 86.0
+net_play = 74.0
+defensive_skill = 82.0
+shot_anticipation = 84.0
+clay_skill = 81.0
+grass_skill = 80.0
+hard_court_skill = 87.0
+
+[resource]
+script = ExtResource("1")
+first_name = "Jannik"
+last_name = "Sinner"
+country = "Italy"
+height = 188
+rank = 10
+stats = SubResource("Resource_sinner_stats")
+appearance = SubResource("Resource_bshq6")

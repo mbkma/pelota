@@ -59,9 +59,7 @@ func get_movement_input(_player_basis: Basis, _player_position: Vector3) -> Vect
 
 
 func handle_stroke_input() -> bool:
-	var is_any_action_pressed: bool = (
-		_strike_pressed or _slice_pressed or _drop_shot_pressed
-	)
+	var is_any_action_pressed: bool = _strike_pressed or _slice_pressed or _drop_shot_pressed
 
 	var is_any_action_just_pressed: bool = (
 		_strike_just_pressed or _slice_just_pressed or _drop_shot_just_pressed
@@ -83,7 +81,8 @@ func handle_stroke_input() -> bool:
 	_slice_just_released = false
 	_drop_shot_just_released = false
 
-	# During serve, allow aiming before stroke button is pressed (but don't skip if button was just released!)
+	# During serve, allow aiming before stroke button is pressed
+	# (but don't skip if button was just released!)
 	if _serve_mode and not is_any_action_pressed and not is_any_action_just_released:
 		return false  # Aiming will be calculated by controller using get_aim_input()
 
@@ -125,12 +124,14 @@ func get_stroke_type() -> StrokeInputType:
 func get_aiming_position() -> Vector3:
 	return _aiming_at
 
+
 ## Get raw aim input (relative to player, not world coordinates)
 func get_aim_input() -> Vector3:
 	var aim_input: Vector3 = _get_keyboard_movement()
 
 	# Return raw input offset - controller will apply player basis
 	return Vector3(aim_input.x, 0.0, aim_input.z)
+
 
 func clear_stroke_input() -> void:
 	_input_pace = 0.0

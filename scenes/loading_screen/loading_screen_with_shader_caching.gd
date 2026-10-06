@@ -84,7 +84,7 @@ func _traverse_folders(dir_path:String) -> PackedStringArray:
 			if not subfolder_name in _ignore_subfolders:
 				material_list.append_array(_traverse_folders(dir_path + subfolder_name))
 		file_name = dir.get_next()
-	
+
 	return material_list
 
 func _load_material(path:String) -> void:

@@ -1,14 +1,6 @@
 class_name MatchLifecycleBus
 extends Node
 
-enum Phase {
-	IDLE,
-	SERVE_SETUP,
-	SERVING,
-	RALLY,
-	POINT_ENDED,
-}
-
 signal phase_changed(previous_phase: Phase, current_phase: Phase)
 signal serve_requested(player)
 signal serve_started(player, stroke)
@@ -16,6 +8,14 @@ signal serve_completed(player)
 signal rally_started(player)
 signal rally_ended(player)
 signal point_ended(player)
+
+enum Phase {
+	IDLE,
+	SERVE_SETUP,
+	SERVING,
+	RALLY,
+	POINT_ENDED,
+}
 
 var _current_phase: Phase = Phase.IDLE
 

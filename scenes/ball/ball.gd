@@ -6,8 +6,6 @@ extends CharacterBody3D
 signal on_ground
 signal on_net
 
-var trajectory: Array[TrajectoryStep] = []
-
 const BALL_GROUND_LEVEL: float = GameConstants.BALL_GROUND_THRESHOLD
 const GRAVITY_BASE: float = GameConstants.GRAVITY
 
@@ -27,15 +25,19 @@ const TRAJECTORY_MAX_TIME: float = 5.0
 const TRAJECTORY_SIMULATION_DT: float = 1.0 / 240.0
 
 @export var initial_velocity: Vector3
+
+var trajectory: Array[TrajectoryStep] = []
 var initial_position: Vector3
 
-var spin: Vector3 = Vector3.ZERO  # x: sidespin, y: topspin/backspin - 1.0 heavy top spin, -1.0 heavy underspin
+# x: sidespin, y: topspin/backspin - 1.0 heavy top spin, -1.0 heavy underspin
+var spin: Vector3 = Vector3.ZERO
 var _previous_velocity: Vector3 = Vector3.ZERO
 var _was_on_ground: bool = false
 
+
 func _ready() -> void:
 	set_meta("logger_name", "Ball")
-	
+
 	if initial_velocity:
 		velocity = initial_velocity
 	else:
@@ -43,6 +45,7 @@ func _ready() -> void:
 
 	if initial_position:
 		global_position = initial_position
+
 
 func _physics_process(delta: float) -> void:
 	step(delta)
@@ -57,10 +60,7 @@ func _compute_sidespin_direction(base_velocity: Vector3) -> Vector3:
 	return Vector3.UP.cross(forward).normalized()
 
 
-func _compute_spin_force(
-	base_velocity: Vector3,
-	spin_value: Vector3
-) -> Vector3:
+func _compute_spin_force(base_velocity: Vector3, spin_value: Vector3) -> Vector3:
 	var speed: float = base_velocity.length()
 
 	# Scale spin effect with shot speed.
@@ -79,6 +79,7 @@ func _advance_velocity(base_velocity: Vector3, spin_value: Vector3, delta: float
 	next_velocity.x += spin_force.x * delta
 	next_velocity.y += (-GRAVITY_BASE + spin_force.y) * delta
 	return _apply_air_drag(next_velocity, delta)
+
 
 func _apply_air_drag(base_velocity: Vector3, delta: float) -> Vector3:
 	var speed := base_velocity.length()
@@ -120,7 +121,6 @@ func step(delta: float) -> void:
 		var collision: KinematicCollision3D = get_slide_collision(0)
 		_handle_collision(collision)
 
-
 	# --- 5. Ground signal ---
 	var is_on_ground = position.y <= BALL_GROUND_LEVEL + 0.01
 	if is_on_ground and not _was_on_ground:
@@ -146,11 +146,12 @@ func _compute_bounce_velocity(prev_velocity: Vector3) -> Vector3:
 	var bounce_tangent = v_tangent * BALL_DAMPING_HORIZONTAL
 	return bounce_normal + bounce_tangent
 
+
 func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	var normal: Vector3 = collision.get_normal()
 
 	var v_normal = _previous_velocity.dot(normal) * normal
-	var _v_tangent = _previous_velocity - v_normal
+	var v_tangent = _previous_velocity - v_normal
 
 	# Only bounce if normal velocity is significant
 	if v_normal.length() < MIN_BOUNCE_SPEED:
@@ -166,7 +167,9 @@ func _realistic_bounce(collision: KinematicCollision3D) -> void:
 	position.y = max(position.y, BALL_GROUND_LEVEL + 0.001)
 
 
-func _get_first_landing_position(predicted_trajectory: Array[TrajectoryStep], fallback: Vector3) -> Vector3:
+func _get_first_landing_position(
+	predicted_trajectory: Array[TrajectoryStep], fallback: Vector3
+) -> Vector3:
 	for trajectory_step in predicted_trajectory:
 		if trajectory_step.bounces > 0 or trajectory_step.point.y <= BALL_GROUND_LEVEL:
 			return trajectory_step.point
@@ -175,6 +178,7 @@ func _get_first_landing_position(predicted_trajectory: Array[TrajectoryStep], fa
 		return fallback
 
 	return predicted_trajectory[-1].point
+
 
 # Iteratively estimates the initial velocity required for the simulated
 # trajectory to land near the target position while accounting for spin.
@@ -215,7 +219,7 @@ func calculate_velocity(
 		# adjust vx and vy
 		# vx0 directly controls X displacement
 		vx0 += error_x * adaptive_learning_rate
-		
+
 		# vy0 affects flight time, which affects Z distance traveled
 		# The relationship depends on the sign of velocity_z0
 		vy0 += sign(velocity_z0) * error_z * adaptive_learning_rate
@@ -271,7 +275,9 @@ func predict_trajectory(
 			bounces += 1
 
 		# --- 5. Record trajectory point ---
-		var trajectory_step: TrajectoryStep = TrajectoryStep.new(current_position, elapsed_time, bounces)
+		var trajectory_step: TrajectoryStep = TrajectoryStep.new(
+			current_position, elapsed_time, bounces
+		)
 		predicted_trajectory.append(trajectory_step)
 
 		elapsed_time += time_step

@@ -5,11 +5,8 @@ extends Controller
 
 signal pace_changed(pace: float)
 
-## Static counter to assign gamepad indices to multiple players
-static var _next_gamepad_index: int = 0
-
-## Static counter to track how many controllers are using gamepads
-static var _gamepad_controller_count: int = 0
+## Track claimed gamepad device IDs to avoid duplicate fallback assignment.
+static var _claimed_gamepad_ids: Array[int] = []
 
 ## This controller's assigned gamepad index
 var _assigned_gamepad_index: int = -1
@@ -39,8 +36,9 @@ func _ready() -> void:
 	super()  # Call base class initialization
 
 	if not player.ball_aim_marker:
-		push_error("HumanInput: ball_aim_marker not assigned in editor")
-		return
+		push_warning(
+			"HumanController: ball_aim_marker not assigned; aim marker UI will be disabled"
+		)
 
 	# Initialize the appropriate input device
 	_initialize_input_device()
@@ -50,11 +48,16 @@ func _ready() -> void:
 	_aiming_at = _get_default_aim()
 
 
+func _exit_tree() -> void:
+	if _assigned_gamepad_index >= 0:
+		_claimed_gamepad_ids.erase(_assigned_gamepad_index)
+
+
 ## Update controller state - called by Player each frame
 func update(delta: float) -> void:
 	if not _input_device:
 		return
-		
+
 	if _stroke_mode_active:
 		# Calculate world-space aiming position BEFORE handling stroke input
 		# (stroke_completed signal needs current _aiming_at value)
@@ -64,10 +67,7 @@ func update(delta: float) -> void:
 
 		# Apply sensitivity to input, then coverage for max range
 		var sensitive_input: Vector3 = 5 * raw_aim_input * delta
-		var aim_offset: Vector3 = (
-			right * sensitive_input.x +
-			forward * sensitive_input.z
-		)
+		var aim_offset: Vector3 = right * sensitive_input.x + forward * sensitive_input.z
 		_aiming_at += aim_offset
 
 	# Now handle stroke input (may emit stroke_completed which uses _aiming_at)
@@ -84,19 +84,19 @@ func update(delta: float) -> void:
 ## Initializes the appropriate input device based on available hardware
 func _initialize_input_device() -> void:
 	var connected_joypads: Array = Input.get_connected_joypads()
-
-	# Check if gamepad is available for this player
-	if connected_joypads.size() > _next_gamepad_index:
-		# Assign this controller the next available gamepad
-		_assigned_gamepad_index = connected_joypads[_next_gamepad_index]
-		_next_gamepad_index += 1
-		_gamepad_controller_count += 1
+	var desired_gamepad_id := _get_configured_device_id(connected_joypads)
+	if desired_gamepad_id == GlobalGameData.KEYBOARD_DEVICE_ID:
+		_input_device = KeyboardInput.new()
+		add_child(_input_device)
+		_input_device.initialize(0)
+	elif desired_gamepad_id >= 0:
+		_assigned_gamepad_index = desired_gamepad_id
+		if not _claimed_gamepad_ids.has(_assigned_gamepad_index):
+			_claimed_gamepad_ids.append(_assigned_gamepad_index)
 
 		_input_device = GamepadInput.new()
 		add_child(_input_device)
-		# Initialize the gamepad with the assigned device index
 		_input_device.initialize(_assigned_gamepad_index)
-	# Default to keyboard+mouse if no gamepad available
 	else:
 		_input_device = KeyboardInput.new()
 		add_child(_input_device)
@@ -110,9 +110,29 @@ func _initialize_input_device() -> void:
 	# Update mouse capture mode based on input devices
 	_update_mouse_capture_mode()
 
+
+func _get_configured_device_id(connected_joypads: Array) -> int:
+	var configured_ids: Array[int] = GlobalGameData.get_match_input_devices()
+	var slot_index: int = clampi(player.team_index, 0, 1)
+	if slot_index < configured_ids.size():
+		var configured_id: int = configured_ids[slot_index]
+		if configured_id == GlobalGameData.KEYBOARD_DEVICE_ID:
+			return GlobalGameData.KEYBOARD_DEVICE_ID
+		if configured_id >= 0 and connected_joypads.has(configured_id):
+			return configured_id
+
+	for joypad_variant in connected_joypads:
+		var joypad_id: int = int(joypad_variant)
+		if not _claimed_gamepad_ids.has(joypad_id):
+			return joypad_id
+
+	return -1
+
+
 ## Handles stroke start - updates default aim position and begins player positioning
 func _on_stroke_started() -> void:
 	_stroke_mode_active = true
+
 
 func _on_stroke_updating(pace: float, stroke_type: InputDevice.StrokeInputType) -> void:
 	if not player.ball:
@@ -125,10 +145,7 @@ func _on_stroke_updating(pace: float, stroke_type: InputDevice.StrokeInputType) 
 		# Create/recreate preliminary stroke with updated trajectory and pace
 		if _stroke_trajectory_step:
 			var updated_stroke: Stroke = _construct_stroke_from_input(
-				_stroke_trajectory_step,
-				_aiming_at,
-				pace,
-				stroke_type
+				_stroke_trajectory_step, _aiming_at, pace, stroke_type
 			)
 			if updated_stroke:
 				_pending_stroke = updated_stroke
@@ -144,13 +161,11 @@ func _on_stroke_completed(pace: float, _stroke_type: InputDevice.StrokeInputType
 		if player.global_position.distance_to(_stroke_trajectory_step.point) < 3:
 			adjust_player_position_to_stroke(player, _stroke_trajectory_step, _pending_stroke)
 
+
 ## Prepares a serve stroke (to be executed by player)
 func _do_serve(pace: float) -> void:
 	_pending_stroke = _build_serve_stroke(_aiming_at, pace)
-	if player.stats:
-		var context: AiPointContext = AiPointContext.from_step(player, null, true)
-		var execution = preload("res://scenes/player/ai/shot_executor.gd").new()
-		execution._apply_execution_jitter(_pending_stroke, context, 0.25)
+	_apply_execution_jitter(_pending_stroke, null, 0.25)
 
 	_stroke_mode_active = true
 
@@ -173,11 +188,18 @@ func _construct_stroke_from_input(
 	stroke.step = closest_step
 
 	if player.stats:
-		var context: AiPointContext = AiPointContext.from_step(player, closest_step)
-		var execution = preload("res://scenes/player/ai/shot_executor.gd").new()
-		execution._apply_execution_jitter(stroke, context, 0.3)
+		_apply_execution_jitter(stroke, closest_step, 0.3)
 
 	return stroke
+
+
+func _apply_execution_jitter(stroke: Stroke, step: TrajectoryStep, risk: float) -> void:
+	if not stroke or not player.stats:
+		return
+
+	var context: AiPointContext = AiPointContext.from_step(player, step, step == null)
+	var execution: ShotExecutor = ShotExecutor.new()
+	execution._apply_execution_jitter(stroke, context, risk)
 
 
 func _build_serve_stroke(aim_position: Vector3, pace: float) -> Stroke:
@@ -230,7 +252,9 @@ func _build_rally_stroke(
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_target = aim_position
 
-	var stamina_ratio: float = player.get_stamina_ratio() if player.has_method("get_stamina_ratio") else 1.0
+	var stamina_ratio: float = (
+		player.get_stamina_ratio() if player.has_method("get_stamina_ratio") else 1.0
+	)
 
 	if is_forehand:
 		stroke.stroke_type = Stroke.StrokeType.FOREHAND
@@ -251,7 +275,11 @@ func _build_rally_stroke(
 			stroke.stroke_spin = GameConstants.AI_BACKHAND_SLICE_SPIN
 		InputDevice.StrokeInputType.DROP_SHOT:
 			stroke.stroke_type = Stroke.StrokeType.BACKHAND_DROP_SHOT
-			var spin_skill: float = player.stats.spin_control01(Stroke.StrokeType.BACKHAND_DROP_SHOT, stamina_ratio) if player.stats else 0.5
+			var spin_skill: float = (
+				player.stats.spin_control01(Stroke.StrokeType.BACKHAND_DROP_SHOT, stamina_ratio)
+				if player.stats
+				else 0.5
+			)
 			stroke.stroke_power = lerpf(8.0, 14.0, spin_skill) + pace
 			stroke.stroke_spin = GameConstants.AI_DROP_SHOT_SPIN
 		_:
@@ -277,7 +305,8 @@ func _on_player_ball_hit() -> void:
 func request_serve() -> void:
 	_serve_controls = true
 	_aiming_at = _get_default_aim()
-	_input_device.set_serve_mode(true)
+	if _input_device:
+		_input_device.set_serve_mode(true)
 
 
 func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> void:
@@ -309,23 +338,21 @@ func get_move_direction() -> Vector3:
 
 	if _stroke_mode_active:
 		return player.compute_move_dir()
-	else:
-		# Get raw input from device
-		var raw_input: Vector3 = _input_device.get_movement_input(
-			player.global_basis, player.position
-		)
 
-		if raw_input == Vector3.ZERO:
-			return player.compute_move_dir()
+	# Get raw input from device
+	var raw_input: Vector3 = _input_device.get_movement_input(
+		player.global_basis, player.position
+	)
 
-		# Apply player basis to convert raw input to world direction
-		var forward: Vector3 = -player.global_basis.z.normalized()
-		var right: Vector3 = player.global_basis.x.normalized()
-		var direction: Vector3 = (
-			(forward * raw_input.z + right * raw_input.x).normalized()
-		)
+	if raw_input == Vector3.ZERO:
+		return player.compute_move_dir()
 
-		return direction
+	# Apply player basis to convert raw input to world direction
+	var forward: Vector3 = -player.global_basis.z.normalized()
+	var right: Vector3 = player.global_basis.x.normalized()
+	var direction: Vector3 = (forward * raw_input.z + right * raw_input.x).normalized()
+
+	return direction
 
 
 ## Get pending stroke to execute
@@ -370,10 +397,6 @@ func get_aim_marker_scale() -> Vector3:
 	return Vector3.ONE * (1.0 + _current_pace * 0.5)
 
 
-
-
-
-
 ## Update mouse capture mode - only capture if both players use gamepads
 static func _update_mouse_capture_mode() -> void:
 	# Only capture mouse if 2 gamepads are being used (local multiplayer with 2 gamepads)
@@ -384,13 +407,12 @@ static func _update_mouse_capture_mode() -> void:
 
 
 static func should_capture_mouse() -> bool:
-	return _gamepad_controller_count >= 2
+	return _claimed_gamepad_ids.size() >= 2
 
 
 ## Reset static counters (call this when starting a new match)
 static func reset_input_assignments() -> void:
-	_next_gamepad_index = 0
-	_gamepad_controller_count = 0
+	_claimed_gamepad_ids.clear()
 
 
 ## Gets default aiming position based on context (serve vs rally)
@@ -407,7 +429,6 @@ func _get_default_aim() -> Vector3:
 		)
 
 	return default_aim
-
 
 
 ## Vibrates the joypad with specified strength and duration

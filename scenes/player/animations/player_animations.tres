@@ -1,0 +1,48 @@
+[gd_resource type="AnimationLibrary" format=3]
+
+[ext_resource type="Animation" path="res://scenes/player/animations/g_A_pose.tres" id="1_kn1ks"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_T_pose.tres" id="2_3enwd"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_active_idle.tres" id="3_nyavy"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_active_idle_to_forehand.tres" id="4_hljj7"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_backhand.tres" id="5_c6lgv"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_backhand_down.tres" id="6_5a6ya"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_backhand_slice.tres" id="7_blwh8"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_backhand_up.tres" id="8_h1ksm"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_crossover_right.tres" id="9_3rxvi"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_forehand.tres" id="10_32lgg"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_forehand_down.tres" id="11_5h6yf"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_forehand_open.tres" id="12_hdgyc"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_forehand_up.tres" id="13_lpqjw"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_idle.tres" id="14_sgwvk"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_run_forward.tres" id="15_dfmgc"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_run_left.tres" id="16_tdpnw"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_run_right.tres" id="17_aj32x"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_serve.tres" id="18_tsy13"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_sidestep_left.tres" id="19_4nr23"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_sidestep_right.tres" id="20_xoswg"]
+[ext_resource type="Animation" path="res://scenes/player/animations/g_sproing_right.tres" id="21_kujck"]
+
+[resource]
+_data = {
+&"g_A_pose": ExtResource("1_kn1ks"),
+&"g_T_pose": ExtResource("2_3enwd"),
+&"g_active_idle": ExtResource("3_nyavy"),
+&"g_active_idle_to_forehand": ExtResource("4_hljj7"),
+&"g_backhand": ExtResource("5_c6lgv"),
+&"g_backhand_down": ExtResource("6_5a6ya"),
+&"g_backhand_slice": ExtResource("7_blwh8"),
+&"g_backhand_up": ExtResource("8_h1ksm"),
+&"g_crossover_right": ExtResource("9_3rxvi"),
+&"g_forehand": ExtResource("10_32lgg"),
+&"g_forehand_down": ExtResource("11_5h6yf"),
+&"g_forehand_open": ExtResource("12_hdgyc"),
+&"g_forehand_up": ExtResource("13_lpqjw"),
+&"g_idle": ExtResource("14_sgwvk"),
+&"g_run_forward": ExtResource("15_dfmgc"),
+&"g_run_left": ExtResource("16_tdpnw"),
+&"g_run_right": ExtResource("17_aj32x"),
+&"g_serve": ExtResource("18_tsy13"),
+&"g_sidestep_left": ExtResource("19_4nr23"),
+&"g_sidestep_right": ExtResource("20_xoswg"),
+&"g_sproing_right": ExtResource("21_kujck")
+}

@@ -21,18 +21,13 @@ func _apply_execution_jitter(stroke: Stroke, context: AiPointContext, risk: floa
 	var error_radius: float = lerpf(3.0, 0.2, consistency)
 	error_radius *= lerpf(0.7, 1.1, clampf(risk, 0.0, 1.0))
 	stroke.stroke_target += Vector3(
-		randf_range(-error_radius, error_radius),
-		0.0,
-		randf_range(-error_radius, error_radius)
+		randf_range(-error_radius, error_radius), 0.0, randf_range(-error_radius, error_radius)
 	)
 	if not context.is_serve:
 		stroke.stroke_target.z *= lerpf(0.72, 1.0, consistency)
 
 
-func build_stroke(
-	context: AiPointContext,
-	targeting: NormalizedCourtTargeting
-) -> Stroke:
+func build_stroke(context: AiPointContext, targeting: NormalizedCourtTargeting) -> Stroke:
 	if not context or not targeting:
 		return null
 
@@ -41,11 +36,13 @@ func build_stroke(
 	var lane: AiPointContext.TargetLane = context.selected_target_lane
 	var normalized_target: Vector2 = _build_normalized_target(context, play_style, intent, lane)
 	var intended_world_target: Vector3 = targeting.to_world_target(
-		normalized_target,
-		context.player_position,
-		context.is_serve
+		normalized_target, context.player_position, context.is_serve
 	)
-	var actual_target: Vector3 = intended_world_target if perfect_accuracy else _apply_consistency_error(intended_world_target, context, play_style)
+	var actual_target: Vector3 = (
+		intended_world_target
+		if perfect_accuracy
+		else _apply_consistency_error(intended_world_target, context, play_style)
+	)
 	var stroke_type: Stroke.StrokeType = _determine_stroke_type(context, intent)
 	var intended_power: float = _compute_shot_speed(context, play_style, intent, stroke_type)
 
@@ -55,7 +52,9 @@ func build_stroke(
 	stroke.stroke_target = actual_target
 	stroke.intended_stroke_power = intended_power
 	stroke.stroke_power = intended_power
-	stroke.stroke_spin = _compute_shot_spin(context, play_style, intent, normalized_target.x, stroke_type)
+	stroke.stroke_spin = _compute_shot_spin(
+		context, play_style, intent, normalized_target.x, stroke_type
+	)
 	stroke.stroke_intent = intent
 	stroke.step = context.closest_step
 	return stroke
@@ -96,7 +95,7 @@ func _build_normalized_target(
 			pass
 
 	#if context.short_ball_opportunity and intent == AiPointContext.ShotIntent.ATTACK:
-		#depth = minf(depth, 0.7)
+	#depth = minf(depth, 0.7)
 
 	#var court_bias: float = play_style.court_position if play_style else 0.0
 	#depth = clampf(depth + (court_bias * 0.22), -1.0, 1.0)
@@ -104,7 +103,9 @@ func _build_normalized_target(
 	return Vector2(clampf(lane_sign * lateral_abs, -1.0, 1.0), depth)
 
 
-func _determine_stroke_type(context: AiPointContext, intent: AiPointContext.ShotIntent) -> Stroke.StrokeType:
+func _determine_stroke_type(
+	context: AiPointContext, intent: AiPointContext.ShotIntent
+) -> Stroke.StrokeType:
 	if context.is_serve:
 		return Stroke.StrokeType.SERVE
 
@@ -131,7 +132,9 @@ func _compute_shot_speed(
 		serve_speed *= lerpf(0.88, 1.0, context.player_stamina_ratio)
 		return clampf(serve_speed, 24.0, 64.0)
 
-	var side_quality: float = stats.shot_side_skill01(context.ball_side == AiPointContext.BallSide.BACKHAND)
+	var side_quality: float = stats.shot_side_skill01(
+		context.ball_side == AiPointContext.BallSide.BACKHAND
+	)
 	var base_speed: float = lerpf(24.0, 29.0, side_quality)
 	var style_power: float = play_style.shot_power if play_style else 0.5
 	var intent_power_bonus: float = 12.0
@@ -188,27 +191,22 @@ func _compute_shot_spin(
 			pass
 
 	var topspin_value: float = clampf(base_topspin + (style_topspin * intent_spin_bonus), -1.0, 1.0)
-	var _side_spin: float = side_sign * lerpf(0.04, 0.24, style_aggression)
+	var side_spin: float = side_sign * lerpf(0.04, 0.24, style_aggression)
 	return Vector3(0, topspin_value, 0.0)
 
 
 func _apply_consistency_error(
-	intended_target: Vector3,
-	context: AiPointContext,
-	play_style: AiPlayStyle
+	intended_target: Vector3, context: AiPointContext, play_style: AiPlayStyle
 ) -> Vector3:
 	var consistency: float = play_style.consistency if play_style else 0.5
 	var error_radius: float = lerpf(1.0, 0.2, consistency)
 	var target: Vector3 = intended_target
 
-
 	if context.is_serve:
 		error_radius *= 0.1
-		
+
 	target += Vector3(
-		randf_range(-error_radius, error_radius),
-		0.0,
-		randf_range(-error_radius, error_radius)
+		randf_range(-error_radius, error_radius), 0.0, randf_range(-error_radius, error_radius)
 	)
 
 	return target

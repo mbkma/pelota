@@ -1,6 +1,9 @@
 class_name PlayerStateMachine
 extends Node
 
+signal state_changed(previous_state: State, current_state: State)
+signal state_entered(state: State)
+
 enum State {
 	IDLE,
 	MOVING,
@@ -10,8 +13,14 @@ enum State {
 	UNREACHABLE,
 }
 
-signal state_changed(previous_state: State, current_state: State)
-signal state_entered(state: State)
+const ALLOWED_TRANSITIONS := {
+	State.IDLE: [State.MOVING, State.PREPARING_STROKE, State.STROKING, State.UNREACHABLE],
+	State.MOVING: [State.IDLE, State.PREPARING_STROKE, State.STROKING, State.UNREACHABLE],
+	State.PREPARING_STROKE: [State.STROKING, State.MOVING, State.IDLE, State.UNREACHABLE],
+	State.STROKING: [State.RECOVERING, State.IDLE, State.UNREACHABLE],
+	State.RECOVERING: [State.IDLE, State.MOVING, State.UNREACHABLE],
+	State.UNREACHABLE: [State.IDLE, State.MOVING, State.PREPARING_STROKE],
+}
 
 var _current_state: State = State.IDLE
 
@@ -36,21 +45,7 @@ func transition_to(next_state: State) -> bool:
 
 
 func can_transition(from_state: State, to_state: State) -> bool:
-	match from_state:
-		State.IDLE:
-			return to_state in [State.MOVING, State.PREPARING_STROKE, State.STROKING, State.UNREACHABLE]
-		State.MOVING:
-			return to_state in [State.IDLE, State.PREPARING_STROKE, State.STROKING, State.UNREACHABLE]
-		State.PREPARING_STROKE:
-			return to_state in [State.STROKING, State.MOVING, State.IDLE, State.UNREACHABLE]
-		State.STROKING:
-			return to_state in [State.RECOVERING, State.IDLE, State.UNREACHABLE]
-		State.RECOVERING:
-			return to_state in [State.IDLE, State.MOVING, State.UNREACHABLE]
-		State.UNREACHABLE:
-			return to_state in [State.IDLE, State.MOVING, State.PREPARING_STROKE]
-		_:
-			return false
+	return to_state in ALLOWED_TRANSITIONS.get(from_state, [])
 
 
 func blocks_movement_animation() -> bool:

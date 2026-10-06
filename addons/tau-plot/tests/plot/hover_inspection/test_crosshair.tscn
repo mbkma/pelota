@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://oh544cmlpcp0"]
+[gd_scene format=3 uid="uid://oh544cmlpcp0"]
 
 [ext_resource type="Script" uid="uid://bf8d38j4kjpai" path="res://addons/tau-plot/tests/plot/hover_inspection/test_crosshair.gd" id="1_1b87k"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_1b87k"]
@@ -90,7 +90,7 @@ tooltip_style = SubResource("Resource_dctv5")
 crosshair_mode = 3
 crosshair_style = SubResource("Resource_31ks8")
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=2005606501]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -98,20 +98,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1b87k")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1768628168]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test crosshair (run the scene)"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=733393302]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=1336945118]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -122,7 +122,7 @@ title = "BAR GROUPED + LINEAR"
 hover_config = SubResource("Resource_st6n7")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=1753785525]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -133,7 +133,7 @@ title = "BAR STACKED + LINEAR"
 hover_config = SubResource("Resource_m7di0")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=1916694197]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -144,7 +144,7 @@ title = "BAR INDEPENDENT + LINEAR"
 hover_config = SubResource("Resource_2iy5b")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=2097786089]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -155,7 +155,7 @@ title = "SCATTER + LINEAR"
 hover_config = SubResource("Resource_wk5e7")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=1111620500]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -166,7 +166,7 @@ title = "BAR GROUPED + LOGARITHMIC"
 hover_config = SubResource("Resource_onc87")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=2059679879]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -175,7 +175,7 @@ theme_type_variation = &"TauPlot"
 script = ExtResource("2_1b87k")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot7" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot7" type="PanelContainer" parent="GridContainer" unique_id=1909758678]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -186,7 +186,7 @@ title = "BAR INDEPENDENT + LOGARITHMIC"
 hover_config = SubResource("Resource_rcis8")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot8" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot8" type="PanelContainer" parent="GridContainer" unique_id=1112094838]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

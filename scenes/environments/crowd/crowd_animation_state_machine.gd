@@ -16,12 +16,14 @@ var _is_connected: bool = false
 var _idle_animations: PackedStringArray = []
 var _victory_animations: PackedStringArray = []
 
+
 func _init(animation_player: AnimationPlayer, config: CrowdConfig) -> void:
 	_animation_player = animation_player
 	_config = config
 	_blend_time = config.animation_blend_time
 	_idle_animations = config.idle_animations
 	_victory_animations = config.victory_animations
+
 
 ## Play a random idle animation with optional random offset
 func play_idle_animation() -> bool:
@@ -36,6 +38,7 @@ func play_idle_animation() -> bool:
 	var animation_name: String = _idle_animations[randi() % _idle_animations.size()]
 	return play_animation(animation_name, AnimationState.IDLE, true)
 
+
 ## Play a random victory animation
 func play_victory_animation() -> bool:
 	if _victory_animations.is_empty():
@@ -44,8 +47,11 @@ func play_victory_animation() -> bool:
 	var animation_name: String = _victory_animations[randi() % _victory_animations.size()]
 	return play_animation(animation_name, AnimationState.VICTORY, false)
 
+
 ## Play specific animation by name
-func play_animation(animation_name: String, new_state: AnimationState, seek_random: bool = false) -> bool:
+func play_animation(
+	animation_name: String, new_state: AnimationState, seek_random: bool = false
+) -> bool:
 	if not _animation_player or not _animation_player.has_animation(animation_name):
 		push_error("CrowdAnimationStateMachine: Animation '%s' not found" % animation_name)
 		return false
@@ -59,6 +65,7 @@ func play_animation(animation_name: String, new_state: AnimationState, seek_rand
 
 	return true
 
+
 ## Setup idle animation looping
 func setup_idle_loop() -> void:
 	_disconnect_animation_finished()
@@ -70,24 +77,30 @@ func setup_idle_loop() -> void:
 	_animation_player.animation_finished.connect(_animation_finished_callback)
 	_is_connected = true
 
+
 ## Stop animation looping and disconnect signals
 func stop_loop() -> void:
 	_disconnect_animation_finished()
 	_current_state = AnimationState.NONE
 
+
 ## Get current animation state
 func get_state() -> AnimationState:
 	return _current_state
+
 
 ## Check if currently playing
 func is_playing() -> bool:
 	return _animation_player and _animation_player.is_playing()
 
+
 ## Cleanup resources
 func cleanup() -> void:
 	_disconnect_animation_finished()
 
+
 # Private methods
+
 
 func _on_animation_finished(_anim_name: StringName, animation_list: PackedStringArray) -> void:
 	if animation_list.is_empty():
@@ -100,6 +113,7 @@ func _on_animation_finished(_anim_name: StringName, animation_list: PackedString
 
 	var new_animation: String = animation_list[randi() % animation_list.size()]
 	play_animation(new_animation, _current_state, true)
+
 
 func _disconnect_animation_finished() -> void:
 	if _is_connected and _animation_player and _animation_finished_callback:

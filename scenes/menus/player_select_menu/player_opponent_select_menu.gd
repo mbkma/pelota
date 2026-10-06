@@ -2,14 +2,28 @@ extends Control
 
 signal selection_confirmed
 
-@export var chart_scene: PackedScene
 const PLAYER1_CHART_COLOR := Color("#36A2EB")
 const PLAYER2_CHART_COLOR := Color("#FF6384")
+
+const INPUT_METHOD_LABELS := ["AI", "Human"]
+const LEFT_AXIS_ASSIGN_THRESHOLD := -0.65
+const RIGHT_AXIS_ASSIGN_THRESHOLD := 0.65
+const AXIS_NEUTRAL_THRESHOLD := 0.25
+
+@export var chart_scene: PackedScene
+var _players: Array[PlayerData] = []
+var _chart: Chart
+var _connected_device_ids: Array[int] = []
+var _player_device_assignments: Array[int] = [
+	GlobalGameData.NO_DEVICE_ID, GlobalGameData.NO_DEVICE_ID
+]
+var _device_axis_neutral: Dictionary = {}
 
 @onready var player_option_button: OptionButton = %PlayerOptionButton
 @onready var opponent_option_button: OptionButton = %OpponentOptionButton
 @onready var player1_input_method_option_button: OptionButton = %Player1InputMethodOptionButton
 @onready var player2_input_method_option_button: OptionButton = %Player2InputMethodOptionButton
+@onready var connected_devices_option_button: OptionButton = %ConnectedDevicesOptionButton
 @onready var player1_header_label: Label = %Player1HeaderLabel
 @onready var player2_header_label: Label = %Player2HeaderLabel
 @onready var selected_player_label: Label = %SelectedPlayerLabel
@@ -17,12 +31,11 @@ const PLAYER2_CHART_COLOR := Color("#FF6384")
 @onready var chart_host: Control = %ChartHost
 @onready var start_button: Button = %StartButton
 
-var _players: Array[PlayerData] = []
-var _chart: Chart
-
 
 func _ready() -> void:
 	_players = _load_players()
+	_initialize_default_input_assignments()
+	_populate_connected_devices_option_button()
 	_populate_input_method_option_buttons()
 	_populate_option_buttons()
 	_ensure_distinct_defaults()
@@ -32,23 +45,57 @@ func _ready() -> void:
 	_refresh_view()
 
 
+func _initialize_default_input_assignments() -> void:
+	_player_device_assignments = [GlobalGameData.NO_DEVICE_ID, GlobalGameData.NO_DEVICE_ID]
+	GlobalGameData.set_match_input_methods(
+		GlobalGameData.InputMethod.AI, GlobalGameData.InputMethod.AI
+	)
+	GlobalGameData.set_match_input_devices(GlobalGameData.NO_DEVICE_ID, GlobalGameData.NO_DEVICE_ID)
+
+
 func _load_players() -> Array[PlayerData]:
 	GlobalGameData.load_players()
 	return GlobalGameData.get_players()
 
 
 func _populate_input_method_option_buttons() -> void:
-	var labels := ["AI", "Human"]
 	player1_input_method_option_button.clear()
 	player2_input_method_option_button.clear()
 
-	for label in labels:
+	for label in INPUT_METHOD_LABELS:
 		player1_input_method_option_button.add_item(label)
 		player2_input_method_option_button.add_item(label)
 
 	var selected_methods: Array[int] = GlobalGameData.get_match_input_methods()
-	player1_input_method_option_button.select(clampi(selected_methods[0], 0, labels.size() - 1))
-	player2_input_method_option_button.select(clampi(selected_methods[1], 0, labels.size() - 1))
+	player1_input_method_option_button.select(
+		clampi(selected_methods[0], 0, INPUT_METHOD_LABELS.size() - 1)
+	)
+	player2_input_method_option_button.select(
+		clampi(selected_methods[1], 0, INPUT_METHOD_LABELS.size() - 1)
+	)
+
+
+func _populate_connected_devices_option_button() -> void:
+	connected_devices_option_button.clear()
+	_connected_device_ids.clear()
+	_device_axis_neutral.clear()
+
+	connected_devices_option_button.add_item("Keyboard")
+	_connected_device_ids.append(GlobalGameData.KEYBOARD_DEVICE_ID)
+
+	var connected_joypads: Array = Input.get_connected_joypads()
+	connected_devices_option_button.disabled = false
+	for joypad_id_variant in connected_joypads:
+		var joypad_id: int = int(joypad_id_variant)
+		var joypad_name: String = Input.get_joy_name(joypad_id)
+		var label := "Device %d" % joypad_id
+		if not joypad_name.is_empty():
+			label += " - %s" % joypad_name
+		connected_devices_option_button.add_item(label)
+		_connected_device_ids.append(joypad_id)
+		_device_axis_neutral[joypad_id] = true
+
+	connected_devices_option_button.select(0)
 
 
 func _apply_player_colors() -> void:
@@ -110,6 +157,7 @@ func _connect_signals() -> void:
 	opponent_option_button.item_selected.connect(_on_opponent_selected)
 	player1_input_method_option_button.item_selected.connect(_on_player1_input_method_selected)
 	player2_input_method_option_button.item_selected.connect(_on_player2_input_method_selected)
+	connected_devices_option_button.item_selected.connect(_on_connected_device_selected)
 
 
 func _on_player_selected(index: int) -> void:
@@ -125,11 +173,137 @@ func _on_opponent_selected(index: int) -> void:
 
 
 func _on_player1_input_method_selected(index: int) -> void:
-	GlobalGameData.set_match_input_methods(index, player2_input_method_option_button.selected)
+	if index == GlobalGameData.InputMethod.AI:
+		_player_device_assignments[0] = -1
+	_save_input_selection_state()
 
 
 func _on_player2_input_method_selected(index: int) -> void:
-	GlobalGameData.set_match_input_methods(player1_input_method_option_button.selected, index)
+	if index == GlobalGameData.InputMethod.AI:
+		_player_device_assignments[1] = -1
+	_save_input_selection_state()
+
+
+func _on_connected_device_selected(_index: int) -> void:
+	# Selection is consumed via directional input in _unhandled_input.
+	pass
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if connected_devices_option_button.disabled:
+		return
+
+	if event is InputEventJoypadMotion:
+		_handle_joypad_motion(event as InputEventJoypadMotion)
+	elif event is InputEventJoypadButton:
+		_handle_joypad_button(event as InputEventJoypadButton)
+	elif event is InputEventKey:
+		_handle_key(event as InputEventKey)
+
+
+func _handle_joypad_motion(motion_event: InputEventJoypadMotion) -> void:
+	if motion_event.axis != JOY_AXIS_LEFT_X:
+		return
+	if not _is_selected_device_event(motion_event.device):
+		return
+
+	var axis_value: float = motion_event.axis_value
+	var was_neutral := bool(_device_axis_neutral.get(motion_event.device, true))
+	if absf(axis_value) <= AXIS_NEUTRAL_THRESHOLD:
+		_device_axis_neutral[motion_event.device] = true
+		return
+	if not was_neutral:
+		return
+
+	if axis_value <= LEFT_AXIS_ASSIGN_THRESHOLD:
+		_assign_selected_device_to_slot(0)
+		_device_axis_neutral[motion_event.device] = false
+	elif axis_value >= RIGHT_AXIS_ASSIGN_THRESHOLD:
+		_assign_selected_device_to_slot(1)
+		_device_axis_neutral[motion_event.device] = false
+
+
+func _handle_joypad_button(button_event: InputEventJoypadButton) -> void:
+	if not button_event.pressed:
+		return
+	if not _is_selected_device_event(button_event.device):
+		return
+
+	if button_event.button_index == JOY_BUTTON_DPAD_LEFT:
+		_assign_selected_device_to_slot(0)
+	elif button_event.button_index == JOY_BUTTON_DPAD_RIGHT:
+		_assign_selected_device_to_slot(1)
+
+
+func _handle_key(key_event: InputEventKey) -> void:
+	if not key_event.pressed or key_event.echo:
+		return
+	if not _is_keyboard_selected():
+		return
+
+	if key_event.keycode == KEY_A or key_event.keycode == KEY_LEFT:
+		_assign_selected_device_to_slot(0)
+	elif key_event.keycode == KEY_D or key_event.keycode == KEY_RIGHT:
+		_assign_selected_device_to_slot(1)
+
+
+func _is_selected_device_event(device_id: int) -> bool:
+	if connected_devices_option_button.selected < 0:
+		return false
+	if connected_devices_option_button.selected >= _connected_device_ids.size():
+		return false
+	return _connected_device_ids[connected_devices_option_button.selected] == device_id
+
+
+func _is_keyboard_selected() -> bool:
+	if connected_devices_option_button.selected < 0:
+		return false
+	if connected_devices_option_button.selected >= _connected_device_ids.size():
+		return false
+	return (
+		_connected_device_ids[connected_devices_option_button.selected]
+		== GlobalGameData.KEYBOARD_DEVICE_ID
+	)
+
+
+func _assign_selected_device_to_slot(slot_index: int) -> void:
+	if connected_devices_option_button.selected < 0:
+		return
+	if connected_devices_option_button.selected >= _connected_device_ids.size():
+		return
+
+	var selected_device_id: int = _connected_device_ids[connected_devices_option_button.selected]
+	var other_slot: int = 1 - slot_index
+
+	if _player_device_assignments[other_slot] == selected_device_id:
+		_player_device_assignments[other_slot] = GlobalGameData.NO_DEVICE_ID
+		if other_slot == 0:
+			player1_input_method_option_button.select(GlobalGameData.InputMethod.AI)
+		else:
+			player2_input_method_option_button.select(GlobalGameData.InputMethod.AI)
+
+	_player_device_assignments[slot_index] = selected_device_id
+	if slot_index == 0:
+		player1_input_method_option_button.select(GlobalGameData.InputMethod.HUMAN)
+	else:
+		player2_input_method_option_button.select(GlobalGameData.InputMethod.HUMAN)
+
+	_save_input_selection_state()
+
+
+func _save_input_selection_state() -> void:
+	GlobalGameData.set_match_input_methods(
+		player1_input_method_option_button.selected, player2_input_method_option_button.selected
+	)
+
+	if player1_input_method_option_button.selected != GlobalGameData.InputMethod.HUMAN:
+		_player_device_assignments[0] = GlobalGameData.NO_DEVICE_ID
+	if player2_input_method_option_button.selected != GlobalGameData.InputMethod.HUMAN:
+		_player_device_assignments[1] = GlobalGameData.NO_DEVICE_ID
+
+	GlobalGameData.set_match_input_devices(
+		_player_device_assignments[0], _player_device_assignments[1]
+	)
 
 
 func _refresh_view() -> void:
@@ -147,18 +321,23 @@ func _refresh_view() -> void:
 
 
 func _player_summary(player_data: PlayerData) -> String:
-	return "#%s  %s %s\n%s  |  %scm  |  %sH" % [
-		str(player_data.rank),
-		player_data.first_name,
-		player_data.last_name,
-		player_data.country,
-		str(player_data.height),
-		player_data.hand,
-	]
+	return (
+		"#%s  %s %s\n%s  |  %scm  |  %sH"
+		% [
+			str(player_data.rank),
+			player_data.first_name,
+			player_data.last_name,
+			player_data.country,
+			str(player_data.height),
+			player_data.hand,
+		]
+	)
 
 
 func _plot_stats(player_data: PlayerData, opponent_data: PlayerData) -> void:
-	var x_values: Array = ["Serve", "Serve Acc", "Forehand", "Backhand", "Speed", "Agility", "Stamina", "Focus"]
+	var x_values: Array = [
+		"Serve", "Serve Acc", "Forehand", "Backhand", "Speed", "Agility", "Stamina", "Focus"
+	]
 	var player_values: Array = _extract_chart_stats(player_data.stats)
 	var opponent_values: Array = _extract_chart_stats(opponent_data.stats)
 
@@ -271,9 +450,6 @@ func _on_start_button_pressed() -> void:
 
 	var player := _players[player_option_button.selected]
 	var opponent := _players[opponent_option_button.selected]
-	GlobalGameData.set_match_input_methods(
-		player1_input_method_option_button.selected,
-		player2_input_method_option_button.selected
-	)
+	_save_input_selection_state()
 	GlobalGameData.set_match_players(player, opponent)
 	selection_confirmed.emit()

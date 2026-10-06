@@ -1,15 +1,23 @@
-[gd_scene load_steps=29 format=3 uid="uid://cguld5qi12esn"]
+[gd_scene format=3 uid="uid://cguld5qi12esn"]
 
 [ext_resource type="Script" uid="uid://m6ovn6nicc85" path="res://addons/tau-plot/tests/plot/legend/test_legend_position.gd" id="1_sptrt"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_sptrt"]
 [ext_resource type="Script" uid="uid://uhgixxbpx26l" path="res://addons/tau-plot/plot/legend/legend_config.gd" id="3_2h5ys"]
 [ext_resource type="Script" uid="uid://byus5xc02avlw" path="res://addons/tau-plot/plot/legend/legend_style.gd" id="4_c3p3i"]
 
+[sub_resource type="Resource" id="Resource_2h5ys"]
+script = ExtResource("4_c3p3i")
+
+[sub_resource type="Resource" id="Resource_c3p3i"]
+script = ExtResource("3_2h5ys")
+style = SubResource("Resource_2h5ys")
+
 [sub_resource type="Resource" id="Resource_b4qox"]
 script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_m7n3i"]
 script = ExtResource("3_2h5ys")
+position = 3
 style = SubResource("Resource_b4qox")
 
 [sub_resource type="Resource" id="Resource_4a12n"]
@@ -17,7 +25,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_3dv7g"]
 script = ExtResource("3_2h5ys")
-position = 3
+position = 1
 style = SubResource("Resource_4a12n")
 
 [sub_resource type="Resource" id="Resource_emcq8"]
@@ -25,7 +33,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_kc4g5"]
 script = ExtResource("3_2h5ys")
-position = 1
+position = 2
 style = SubResource("Resource_emcq8")
 
 [sub_resource type="Resource" id="Resource_v1y1j"]
@@ -33,7 +41,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_gjbs3"]
 script = ExtResource("3_2h5ys")
-position = 2
+position = 4
 style = SubResource("Resource_v1y1j")
 
 [sub_resource type="Resource" id="Resource_diagf"]
@@ -41,7 +49,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_liqos"]
 script = ExtResource("3_2h5ys")
-position = 4
+position = 7
 style = SubResource("Resource_diagf")
 
 [sub_resource type="Resource" id="Resource_qxf1o"]
@@ -49,7 +57,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_luy8i"]
 script = ExtResource("3_2h5ys")
-position = 7
+position = 5
 style = SubResource("Resource_qxf1o")
 
 [sub_resource type="Resource" id="Resource_yke2a"]
@@ -57,7 +65,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_0qeuj"]
 script = ExtResource("3_2h5ys")
-position = 5
+position = 6
 style = SubResource("Resource_yke2a")
 
 [sub_resource type="Resource" id="Resource_oriij"]
@@ -65,7 +73,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_t8xha"]
 script = ExtResource("3_2h5ys")
-position = 6
+position = 9
 style = SubResource("Resource_oriij")
 
 [sub_resource type="Resource" id="Resource_r8h2e"]
@@ -73,7 +81,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_56wxs"]
 script = ExtResource("3_2h5ys")
-position = 9
+position = 11
 style = SubResource("Resource_r8h2e")
 
 [sub_resource type="Resource" id="Resource_s2kxy"]
@@ -81,7 +89,7 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_iodjx"]
 script = ExtResource("3_2h5ys")
-position = 11
+position = 10
 style = SubResource("Resource_s2kxy")
 
 [sub_resource type="Resource" id="Resource_y4ism"]
@@ -89,18 +97,10 @@ script = ExtResource("4_c3p3i")
 
 [sub_resource type="Resource" id="Resource_vot0b"]
 script = ExtResource("3_2h5ys")
-position = 10
+position = 8
 style = SubResource("Resource_y4ism")
 
-[sub_resource type="Resource" id="Resource_8midp"]
-script = ExtResource("4_c3p3i")
-
-[sub_resource type="Resource" id="Resource_aqnao"]
-script = ExtResource("3_2h5ys")
-position = 8
-style = SubResource("Resource_8midp")
-
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=814470527]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -108,20 +108,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sptrt")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1305659417]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test legend position with flow direction = AUTO"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=2070951605]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 4
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=399531002]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -129,10 +129,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "OUTSIDE_TOP"
-legend_config = SubResource("Resource_m7n3i")
+legend_config = SubResource("Resource_c3p3i")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=1149453894]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -140,10 +140,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "OUTSIDE_RIGHT"
-legend_config = SubResource("Resource_3dv7g")
+legend_config = SubResource("Resource_m7n3i")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=1454452639]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -151,10 +151,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "OUTSIDE_BOTTOM"
-legend_config = SubResource("Resource_kc4g5")
+legend_config = SubResource("Resource_3dv7g")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=966581472]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -162,10 +162,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "OUTSIDE_LEFT"
-legend_config = SubResource("Resource_gjbs3")
+legend_config = SubResource("Resource_kc4g5")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=2109039770]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -173,10 +173,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_TOP"
-legend_config = SubResource("Resource_liqos")
+legend_config = SubResource("Resource_gjbs3")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=323379724]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -184,10 +184,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_RIGHT"
-legend_config = SubResource("Resource_luy8i")
+legend_config = SubResource("Resource_liqos")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot7" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot7" type="PanelContainer" parent="GridContainer" unique_id=1955698060]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -195,10 +195,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_BOTTOM"
-legend_config = SubResource("Resource_0qeuj")
+legend_config = SubResource("Resource_luy8i")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot8" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot8" type="PanelContainer" parent="GridContainer" unique_id=1512825658]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -206,10 +206,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_LEFT"
-legend_config = SubResource("Resource_t8xha")
+legend_config = SubResource("Resource_0qeuj")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot9" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot9" type="PanelContainer" parent="GridContainer" unique_id=537614097]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -217,10 +217,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_TOP_RIGHT"
-legend_config = SubResource("Resource_56wxs")
+legend_config = SubResource("Resource_t8xha")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot10" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot10" type="PanelContainer" parent="GridContainer" unique_id=687632679]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -228,10 +228,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_BOTTOM_RIGHT"
-legend_config = SubResource("Resource_iodjx")
+legend_config = SubResource("Resource_56wxs")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot11" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot11" type="PanelContainer" parent="GridContainer" unique_id=80044082]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -239,10 +239,10 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_BOTTOM_LEFT"
-legend_config = SubResource("Resource_vot0b")
+legend_config = SubResource("Resource_iodjx")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot12" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot12" type="PanelContainer" parent="GridContainer" unique_id=1225546334]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -250,5 +250,5 @@ size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_sptrt")
 title = "INSIDE_TOP_LEFT"
-legend_config = SubResource("Resource_aqnao")
+legend_config = SubResource("Resource_vot0b")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"

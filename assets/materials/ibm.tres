@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bkocmevna7ekb"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bkocmevna7ekb"]
 
 [ext_resource type="Texture2D" uid="uid://b2kkilyhf4234" path="res://assets/models/stadium/textures/ibm-alpha.png" id="1_ktla5"]
 

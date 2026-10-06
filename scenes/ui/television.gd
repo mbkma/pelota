@@ -5,11 +5,6 @@ extends Node
 ## Emitted when the active camera changes
 signal active_camera_changed(camera: Camera3D)
 
-@onready var _player_cameras: Array[Camera3D] = [$StaticSouthCam, $StaticNorthCam, $StaticEastCam]
-@onready var _mobile_camera: Camera3D = $FlyingCam
-@onready var _director: AnimationPlayer = $Director
-@onready var _television_hud: Control = $TelevisionHUD
-
 ## Currently active broadcast camera
 var active_camera: Camera3D:
 	set = set_active_camera
@@ -20,6 +15,11 @@ var _active_player_camera_index: int = 0
 ## Target player node for camera to follow
 var _active_follow_target: Node3D = null
 
+
+@onready var _player_cameras: Array[Camera3D] = [$StaticSouthCam, $StaticNorthCam, $StaticEastCam]
+@onready var _mobile_camera: Camera3D = $FlyingCam
+@onready var _director: AnimationPlayer = $Director
+@onready var _television_hud: Control = $TelevisionHUD
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_select"):

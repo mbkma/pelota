@@ -17,9 +17,11 @@ zip_file_path = "res://kenney_input-prompts.zip"
 metadata/_custom_type_script = "uid://bqu3bc0tttrfk"
 
 [node name="SkipInstallationDialog" type="ConfirmationDialog" parent="." unique_id=1861126542]
+oversampling_override = 1.0
 title = "Skip Installation?"
 initial_position = 2
 size = Vector2i(682, 160)
+visible = true
 ok_button_text = "Skip"
 dialog_text = "The input prompts pack appears to already be installed.
 

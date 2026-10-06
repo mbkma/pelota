@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cikr7ls8kjdnk"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cikr7ls8kjdnk"]
 
 [ext_resource type="Texture2D" uid="uid://xbqxl513b5cv" path="res://assets/models/stadium/textures/Asphalt_08_roughness.jpg" id="1_rvnhh"]
 [ext_resource type="Texture2D" uid="uid://dhxgoc2kqj3x0" path="res://assets/models/stadium/textures/Asphalt_08_normalogl.jpg" id="2_7kghh"]

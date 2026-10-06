@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://6oybgwix1pgs"]
+[gd_scene format=3 uid="uid://6oybgwix1pgs"]
 
 [ext_resource type="Script" uid="uid://c8a76un6fqw2u" path="res://addons/tau-plot/tests/axis/label_overlapping/test_label_overlap_x_continuous_log.gd" id="1_st0nh"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_b7yuj"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=967064632]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,25 +11,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_st0nh")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=47854553]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test overlap strategy for continuous logarithmic x-axis"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=392401886]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 3
 
-[node name="CenterContainer1" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer1" type="CenterContainer" parent="GridContainer" unique_id=4576710]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer/CenterContainer1"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer/CenterContainer1" unique_id=21929738]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
@@ -41,12 +41,12 @@ title = "[NONE] with default min_label_spacing_px"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer2" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer2" type="CenterContainer" parent="GridContainer" unique_id=1659624302]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer/CenterContainer2"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer/CenterContainer2" unique_id=673618805]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
@@ -58,12 +58,12 @@ title = "[REDUCE_COUNT] with default min_label_spacing_px"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer3" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer3" type="CenterContainer" parent="GridContainer" unique_id=337038518]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer/CenterContainer3"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer/CenterContainer3" unique_id=735619635]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
@@ -75,12 +75,12 @@ title = "[SKIP_LABELS] with default min_label_spacing_px"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer4" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer4" type="CenterContainer" parent="GridContainer" unique_id=1682840793]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer/CenterContainer4"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer/CenterContainer4" unique_id=871958429]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
@@ -92,12 +92,12 @@ title = "[NONE] with min_label_spacing_px = 100"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer5" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer5" type="CenterContainer" parent="GridContainer" unique_id=1124288687]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer/CenterContainer5"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer/CenterContainer5" unique_id=847179288]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
@@ -109,12 +109,12 @@ title = "[REDUCE_COUNT] with min_label_spacing_px = 100"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="CenterContainer6" type="CenterContainer" parent="GridContainer"]
+[node name="CenterContainer6" type="CenterContainer" parent="GridContainer" unique_id=757316785]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer/CenterContainer6"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer/CenterContainer6" unique_id=1901967302]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2

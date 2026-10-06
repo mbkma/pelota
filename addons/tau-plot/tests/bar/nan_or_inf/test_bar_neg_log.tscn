@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://jiet287ha5jl"]
+[gd_scene format=3 uid="uid://jiet287ha5jl"]
 
 [ext_resource type="Script" uid="uid://cnti50adajruk" path="res://addons/tau-plot/tests/bar/nan_or_inf/test_bar_neg_log.gd" id="1_ra81e"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_4t7sg"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=1110301951]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,20 +11,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ra81e")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1771799645]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test negative values with logarithmic scale"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1630116915]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=1301957915]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -34,7 +34,7 @@ script = ExtResource("2_4t7sg")
 title = "[LOG X, LINEAR Y] Grouped - 4th x value is negative"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=2115420613]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -44,7 +44,7 @@ script = ExtResource("2_4t7sg")
 title = "[LINEAR X, LOG Y] Grouped - 4th y value is negative for series A"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=856792716]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -54,7 +54,7 @@ script = ExtResource("2_4t7sg")
 title = "[LOG X, LINEAR Y] Stacked - 4th x value is negative"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=445421568]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -63,7 +63,7 @@ theme_type_variation = &"TauPlot"
 script = ExtResource("2_4t7sg")
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=1269965912]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -73,7 +73,7 @@ script = ExtResource("2_4t7sg")
 title = "[LOG X, LINEAR Y] Independent - 4th x value is negative for series A"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=855288945]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

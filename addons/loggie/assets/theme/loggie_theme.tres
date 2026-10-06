@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=10 format=3 uid="uid://bntkg3oi4b314"]
+[gd_resource type="Theme" format=3 uid="uid://bntkg3oi4b314"]
 
 [ext_resource type="FontFile" uid="uid://btuvtbhws7p8s" path="res://addons/loggie/assets/theme/fonts/PatrickHandSC-Regular.ttf" id="1_ucfms"]
 [ext_resource type="Texture2D" uid="uid://bfnp2a0sbhi2x" path="res://addons/loggie/assets/theme/checkbox/checkbox_checked.png" id="2_tqabx"]

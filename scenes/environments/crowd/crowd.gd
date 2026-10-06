@@ -9,14 +9,15 @@ signal crowd_reaction_ended(reaction_type: String)
 
 @export var config: CrowdAudioConfig
 
-## Reference to the audio stream player
-@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
-
 ## Container for all crowd blocks
 @export var blocks: Array[Node3D]
 
 ## Track current reaction state
 var _current_reaction: String = ""
+
+## Reference to the audio stream player
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
+
 
 func _ready() -> void:
 	if not config:
@@ -46,7 +47,7 @@ func play_victory() -> void:
 		play_sound(sound, false)
 
 	# Play animations in all blocks
-	
+
 	for block in blocks:
 		for crowd_block in block.get_children():
 			if crowd_block and crowd_block.has_method("play_victory"):
@@ -60,11 +61,10 @@ func play_victory() -> void:
 
 
 ## Play a sound through the audio stream player
-func play_sound(stream: AudioStream, loop := false) -> void:
+func play_sound(stream: AudioStream, _loop := false) -> void:
 	if not stream:
 		push_error("Crowd: Attempted to play null audio stream")
 		return
-
 
 	audio_stream_player.stream = stream
 
@@ -83,6 +83,7 @@ func cleanup() -> void:
 
 
 # Private methods
+
 
 func _initialize_audio() -> void:
 	if not audio_stream_player:

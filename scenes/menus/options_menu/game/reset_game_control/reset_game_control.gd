@@ -1,9 +1,9 @@
 extends HBoxContainer
 
+signal reset_confirmed
+
 const RESET_STRING := "Reset Game:"
 const CONFIRM_STRING := "Confirm Reset:"
-
-signal reset_confirmed
 
 func _on_cancel_button_pressed():
 	%CancelButton.hide()

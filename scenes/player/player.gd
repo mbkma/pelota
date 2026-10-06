@@ -2,10 +2,6 @@
 class_name Player
 extends CharacterBody3D
 
-const DISTANCE_THRESHOLD: float = 0.01
-const STAMINA_STROKE_COST_BASE: float = 5.5
-const STAMINA_MOVE_DRAIN_BASE: float = 6.0
-
 ## Emitted when player successfully hits the ball
 signal ball_hit
 
@@ -27,22 +23,14 @@ signal active_ball_changed(ball: Ball)
 ## Emitted when match lifecycle phase changes
 signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 
-@onready var model: Model = $Model
-@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
-@onready var first_person_camera: Camera3D = $FirstPersonCamera
-@onready var third_person_camera: Camera3D = $ThirdPersonCamera
-@onready var _state_machine: PlayerStateMachine = $PlayerStateMachine
-@onready var _lifecycle_bus: MatchLifecycleBus = $MatchLifecycleBus
-
+const DISTANCE_THRESHOLD: float = 0.01
+const STAMINA_STROKE_COST_BASE: float = 5.5
+const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 
 ## Controller scene instantiated to drive movement/stroke decisions.
 @export var controller_scene: PackedScene
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
-## Runtime stat profile copied from player_data for fast gameplay access.
-var stats: PlayerRuntimeStats
-## Runtime mental state used by tactical and execution systems.
-var mental_state: PlayerMentalState
 ## Camera assigned to this player (used by controlling systems/UI).
 @export var camera: Camera3D
 ## Current active ball this player tracks and can hit.
@@ -68,8 +56,6 @@ var mental_state: PlayerMentalState
 
 ## Flat stroke sound effect pool (non-slice hits/grunts fallback).
 @export var stroke_sounds_flat: Array[AudioStream]
-@onready var label_3d: Label3D = $Label3D
-
 ## Slice stroke sound effect pool used for slice/drop-shot variants.
 @export var stroke_sounds_slice: Array[AudioStream]
 
@@ -78,13 +64,10 @@ var mental_state: PlayerMentalState
 ## Acceleration rate in m/s² (ATP realistic: ~15 m/s²).
 @export var acceleration: float = 15.0
 
-var _ball_factory: BallFactory
-var _movement: MovementController
-var _queued_stroke: Stroke = null
-var _last_consumed_decision: Stroke = null
-var _stamina_current: float = 100.0
-var _stamina_max: float = 100.0
-
+## Runtime stat profile copied from player_data for fast gameplay access.
+var stats: PlayerRuntimeStats
+## Runtime mental state used by tactical and execution systems.
+var mental_state: PlayerMentalState
 var queued_stroke: Stroke:
 	get:
 		return _queued_stroke
@@ -93,14 +76,30 @@ var queued_stroke: Stroke:
 
 var controller: Controller
 
-var _last_replay_visual_state: int = -1
-var _is_replay_mode: bool = false
-
 ## Angle bisector visualization data for debug drawing
 var bisector_service_line_left: Vector3 = Vector3.ZERO
 var bisector_service_line_right: Vector3 = Vector3.ZERO
 var bisector_direction: Vector3 = Vector3.ZERO
 var opponent_hit_position: Vector3 = Vector3.ZERO
+
+var _ball_factory: BallFactory
+var _movement: MovementController
+var _queued_stroke: Stroke = null
+var _last_consumed_decision: Stroke = null
+var _stamina_current: float = 100.0
+var _stamina_max: float = 100.0
+
+var _last_replay_visual_state: int = -1
+var _is_replay_mode: bool = false
+
+@onready var model: Model = $Model
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var first_person_camera: Camera3D = $FirstPersonCamera
+@onready var third_person_camera: Camera3D = $ThirdPersonCamera
+@onready var label_3d: Label3D = $Label3D
+
+@onready var _state_machine: PlayerStateMachine = $PlayerStateMachine
+@onready var _lifecycle_bus: MatchLifecycleBus = $MatchLifecycleBus
 
 
 func _can_update_movement_animation() -> bool:
@@ -118,10 +117,10 @@ func _ready() -> void:
 	_stamina_current = _stamina_max
 	label_3d.text = player_data.last_name
 	model.load_appearance(player_data.appearance)
-	
+
 	# Set logger name for debug logging
 	set_meta("logger_name", player_data.last_name)
-	
+
 	_state_machine.state_entered.connect(_on_state_entered)
 	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
 
@@ -140,6 +139,7 @@ func _ready() -> void:
 ## Set player state through dedicated state machine
 func _set_state(new_state: int) -> void:
 	_state_machine.transition_to(new_state)
+
 
 ## Process stroke decisions from controller each frame
 func _process(delta: float) -> void:
@@ -189,10 +189,12 @@ func _physics_process(delta: float) -> void:
 	var move_direction: Vector3 = controller.get_move_direction()
 	apply_movement(move_direction, delta)
 
+
 ## Request the input handler to initiate a serve
 func request_serve() -> void:
 	_lifecycle_bus.begin_serve_setup(self)
 	controller.request_serve()
+
 
 ## Setup player with given data and control method
 func setup(data: PlayerData, _ai_controlled: bool) -> void:
@@ -207,7 +209,6 @@ func stop() -> void:
 	cancel_stroke()
 	set_active_ball(null)
 	_lifecycle_bus.end_point(self)
-
 
 
 ## Movement System
@@ -233,8 +234,8 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	_update_stamina(direction, delta)
 
 
-
 ## Apply movement using animation root motion
+
 
 ## Compute movement direction from path
 func compute_move_dir() -> Vector3:
@@ -291,7 +292,6 @@ func start_stroke_animation(stroke: Stroke) -> void:
 		return
 	_set_state(PlayerStateMachine.State.STROKING)
 	model.play_stroke(stroke)
-
 
 
 ## Stroke System
@@ -354,9 +354,13 @@ func _update_stamina(direction: Vector3, delta: float) -> void:
 
 	var stamina01: float = get_stamina_ratio()
 	if direction.length_squared() > 0.001:
-		var movement_load: float = clampf(_movement.get_velocity().length() / maxf(move_speed, 0.001), 0.0, 1.4)
+		var movement_load: float = clampf(
+			_movement.get_velocity().length() / maxf(move_speed, 0.001), 0.0, 1.4
+		)
 		var preservation: float = stats.stamina_preservation()
-		var drain_rate: float = STAMINA_MOVE_DRAIN_BASE * movement_load * lerpf(1.25, 0.65, preservation)
+		var drain_rate: float = (
+			STAMINA_MOVE_DRAIN_BASE * movement_load * lerpf(1.25, 0.65, preservation)
+		)
 		_consume_stamina(drain_rate * delta)
 		stats.set_stamina_ratio(get_stamina_ratio())
 		return
@@ -373,7 +377,11 @@ func _stroke_stamina_cost(stroke: Stroke) -> float:
 	var stroke_load: float = clampf(stroke.stroke_power / 36.0, 0.0, 1.4)
 	var topspin_load: float = clampf(abs(stroke.stroke_spin.y) / 12.0, 0.0, 1.0)
 	var preservation: float = stats.stamina_preservation()
-	return STAMINA_STROKE_COST_BASE * (0.85 + stroke_load * 0.9 + topspin_load * 0.35) * lerpf(1.2, 0.75, preservation)
+	return (
+		STAMINA_STROKE_COST_BASE
+		* (0.85 + stroke_load * 0.9 + topspin_load * 0.35)
+		* lerpf(1.2, 0.75, preservation)
+	)
 
 
 func _consume_stamina(amount: float) -> void:
@@ -428,23 +436,24 @@ func _from_anim_hit_ball() -> void:
 		return
 
 	var contact_point: Vector3 = model.get_racket_contact_point(queued_stroke)
-	var _distance_to_contact: float = ball.global_position.distance_to(contact_point)
+	var distance_to_contact: float = ball.global_position.distance_to(contact_point)
 	print(ball.global_position - contact_point)
-	if _distance_to_contact > hit_range_tolerance_meters:
+	if distance_to_contact > hit_range_tolerance_meters:
 		cancel_stroke()
 		return
-	print("hit ball:", _distance_to_contact)
+	print("hit ball:", distance_to_contact)
 
 	#var closest_step: TrajectoryStep = _get_closest_step()
 	#if closest_step and abs(closest_step.time) > hit_timing_window_seconds:
-		#cancel_stroke()
-		#return
+	#cancel_stroke()
+	#return
 
 	#if snap_ball_to_contact_point_on_anim_hit and distance_to_contact <= snap_max_distance_meters:
-		#ball.global_position = contact_point
+	#ball.global_position = contact_point
 
 	_hit_ball(queued_stroke)
-	
+
+
 ## Called by serve animation to spawn the ball at toss point
 func from_anim_spawn_ball() -> void:
 	if _is_replay_mode:
@@ -457,6 +466,7 @@ func from_anim_spawn_ball() -> void:
 	if opponent:
 		opponent.set_active_ball(ball)
 	ball_spawned.emit(ball)
+
 
 ## Other Functions
 ####################
@@ -484,8 +494,10 @@ func _get_grunt_sound() -> AudioStream:
 func play_stroke_sound(stroke: Stroke) -> void:
 	var stream: AudioStream
 
-	if (stroke.stroke_type == stroke.StrokeType.BACKHAND_SLICE or
-		stroke.stroke_type == stroke.StrokeType.BACKHAND_DROP_SHOT):
+	if (
+		stroke.stroke_type == stroke.StrokeType.BACKHAND_SLICE
+		or stroke.stroke_type == stroke.StrokeType.BACKHAND_DROP_SHOT
+	):
 		stream = stroke_sounds_slice[randi() % stroke_sounds_slice.size()]
 	else:
 		if randf() < player_data.sounds.grunt_frequency:
@@ -582,11 +594,17 @@ func apply_replay_frame(
 	global_transform = replay_transform
 	velocity = replay_velocity
 
-	if replay_state == PlayerStateMachine.State.STROKING and _last_replay_visual_state != replay_state:
+	if (
+		replay_state == PlayerStateMachine.State.STROKING
+		and _last_replay_visual_state != replay_state
+	):
 		if not stroke_payload.is_empty():
 			play_replay_stroke(stroke_payload)
 
-	if replay_state == PlayerStateMachine.State.MOVING or replay_state == PlayerStateMachine.State.UNREACHABLE:
+	if (
+		replay_state == PlayerStateMachine.State.MOVING
+		or replay_state == PlayerStateMachine.State.UNREACHABLE
+	):
 		_apply_state_animation(replay_state, replay_velocity)
 	elif replay_state != _last_replay_visual_state:
 		_apply_state_animation(replay_state, replay_velocity)
@@ -615,7 +633,9 @@ func get_replay_animation_snapshot() -> Dictionary:
 
 func play_replay_stroke(stroke_payload: Dictionary) -> void:
 	var replay_stroke := Stroke.new()
-	replay_stroke.stroke_type = int(stroke_payload.get("stroke_type", Stroke.StrokeType.FOREHAND)) as Stroke.StrokeType
+	replay_stroke.stroke_type = (
+		int(stroke_payload.get("stroke_type", Stroke.StrokeType.FOREHAND)) as Stroke.StrokeType
+	)
 	replay_stroke.stroke_power = float(stroke_payload.get("stroke_power", 0.0))
 	replay_stroke.stroke_target = stroke_payload.get("stroke_target", global_position)
 	replay_stroke.stroke_spin = stroke_payload.get("stroke_spin", Vector3.ZERO)

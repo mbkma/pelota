@@ -8,5 +8,4 @@ size = Vector2i(1024, 640)
 visible = true
 exclusive = false
 ok_button_text = "Select Current Folder"
-mode_overrides_title = false
 file_mode = 2

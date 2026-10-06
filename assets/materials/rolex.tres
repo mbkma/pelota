@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b5no6bxnc4lcw"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b5no6bxnc4lcw"]
 
 [ext_resource type="Texture2D" uid="uid://dvmn1llg4x4g6" path="res://assets/models/stadium/textures/rolex-alpha.png" id="1_2qi7w"]
 

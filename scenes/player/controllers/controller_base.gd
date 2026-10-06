@@ -1,7 +1,6 @@
 ## Base class for player input handling (human/AI)
 ## Defines the interface that all input methods must implement
-@abstract
-class_name Controller
+@abstract class_name Controller
 extends Node
 
 enum Direction { LEFT, RIGHT, FRONT, BEHIND }
@@ -37,23 +36,20 @@ func _ready() -> void:
 
 ## Update controller state - called by Player each frame
 ## Implementing classes should update their internal state here
-@abstract
-func update(delta: float) -> void
+@abstract func update(delta: float) -> void
 
 ## Request the input method to initiate a serve
 ## Implementing classes should handle serve initialization here
-@abstract
-func request_serve() -> void
+@abstract func request_serve() -> void
 
 ## Get movement direction decision from controller
 ## Returns Vector3 representing desired movement direction (normalized)
-@abstract
-func get_move_direction() -> Vector3
+@abstract func get_move_direction() -> Vector3
 
 ## Get stroke decision from controller
 ## Returns Stroke if controller wants to execute a stroke, null otherwise
-@abstract
-func get_stroke() -> Stroke
+@abstract func get_stroke() -> Stroke
+
 
 func ball_changed(_ball: Ball) -> void:
 	pass
@@ -68,14 +64,17 @@ func on_lifecycle_phase_changed(_previous_phase: int, _current_phase: int) -> vo
 func on_target_point_reached() -> void:
 	pass
 
+
 ## Get aim marker position for UI (override if controller needs UI)
 ## Returns null if no aim marker should be shown
 func get_aim_marker_position() -> Variant:
 	return null
 
+
 ## Get aim marker visibility state (override if controller needs UI)
 func should_show_aim_marker() -> bool:
 	return false
+
 
 ## Get aim marker scale for UI (override if controller needs UI)
 func get_aim_marker_scale() -> Vector3:
@@ -135,7 +134,9 @@ func is_flying_towards(source: Node3D, target: Node3D) -> bool:
 
 
 ## Adjust player position to optimal stroke execution point
-func adjust_player_position_to_stroke(target_player: Player, closest_step: TrajectoryStep, stroke: Stroke) -> void:
+func adjust_player_position_to_stroke(
+	target_player: Player, closest_step: TrajectoryStep, stroke: Stroke
+) -> void:
 	# Align player body so the actual racket contact point lands on predicted ball contact.
 	var contact_point: Vector3 = target_player.model.get_racket_contact_point(stroke)
 	var contact_to_body: Vector3 = contact_point - target_player.global_position
@@ -189,7 +190,6 @@ func get_closest_apex_after_first_bounce(target_player: Player) -> TrajectorySte
 				closest_step = step
 
 	return closest_step
-
 
 
 ## Get closest trajectory step to player by Z distance

@@ -27,7 +27,9 @@ var shot_risk: float = 0.5
 var play_style: AiPlayStyle
 
 
-static func from_step(target_player: Player, step: TrajectoryStep, serve: bool = false) -> AiPointContext:
+static func from_step(
+	target_player: Player, step: TrajectoryStep, serve: bool = false
+) -> AiPointContext:
 	var context := AiPointContext.new()
 
 	# Copy base positional/state fields from RallyContext to avoid duplication.
@@ -47,7 +49,9 @@ static func from_step(target_player: Player, step: TrajectoryStep, serve: bool =
 	context.recovery_distance = base.recovery_distance
 
 	# AiPointContext-specific derived fields.
-	var side_dot: float = (context.ball_position - context.player_position).dot(target_player.basis.x)
+	var side_dot: float = (context.ball_position - context.player_position).dot(
+		target_player.basis.x
+	)
 	context.ball_side = BallSide.FOREHAND if side_dot > 0.0 else BallSide.BACKHAND
 	context.short_ball_opportunity = abs(context.ball_position.z) < GameConstants.SERVICE_LINE + 3
 

@@ -4,12 +4,6 @@
 class_name InputDevice
 extends Node
 
-enum StrokeInputType {
-	TOPSPIN,
-	SLICE,
-	DROP_SHOT,
-}
-
 ## Signal emitted when stroke button is first pressed
 signal stroke_started
 
@@ -19,6 +13,12 @@ signal stroke_updating(pace: float, stroke_type: StrokeInputType)
 ## Signal emitted when stroke button is released
 signal stroke_completed(pace: float, stroke_type: StrokeInputType)
 
+
+enum StrokeInputType {
+	TOPSPIN,
+	SLICE,
+	DROP_SHOT,
+}
 
 func emit_stroke_started() -> void:
 	stroke_started.emit()

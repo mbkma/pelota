@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7hl3ojpsl6ia"]
+[gd_scene format=3 uid="uid://b7hl3ojpsl6ia"]
 
 [ext_resource type="Script" uid="uid://cr6trpr4fsghd" path="res://addons/tau-plot/tests/bar/nan_or_inf/test_bar_nan_inf.gd" id="1_06tdf"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_64423"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=1158744462]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,20 +11,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_06tdf")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=663664383]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test nan and inf values"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=802678292]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 4
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=575114913]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -34,7 +34,7 @@ script = ExtResource("2_64423")
 title = "[GROUPED] 2nd and 4th x values are invalid"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=793321226]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -44,7 +44,7 @@ script = ExtResource("2_64423")
 title = "[STACKED] 2nd and 4th x values are invalid"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=1578550920]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -54,7 +54,7 @@ script = ExtResource("2_64423")
 title = "[INDEPENDENT + PER_SERIES_X] 2nd and 4th x values are invalid for series A"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=1346726301]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -64,7 +64,7 @@ script = ExtResource("2_64423")
 title = "[INDEPENDENT + SHARED_X] 2nd and 4th x values are invalid"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=1673272337]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -74,7 +74,7 @@ script = ExtResource("2_64423")
 title = "[GROUPED] 2nd and 4th y values are invalid for series A"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=1960238710]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -84,7 +84,7 @@ script = ExtResource("2_64423")
 title = "[STACKED] 2nd and 4th y values are invalid for series A"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot7" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot7" type="PanelContainer" parent="GridContainer" unique_id=1498403753]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -94,7 +94,7 @@ script = ExtResource("2_64423")
 title = "[INDEPENDENT + PER_SERIES_X] 2nd and 4th y values are invalid for series A"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot8" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot8" type="PanelContainer" parent="GridContainer" unique_id=437506227]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

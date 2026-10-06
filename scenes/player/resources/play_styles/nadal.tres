@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AiPlayStyle" format=3]
+[gd_resource type="Resource" script_class="AiPlayStyle" format=3 uid="uid://cxki0cdlem2gd"]
 
 [ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://scenes/player/resources/ai_play_style.gd" id="1"]
 

@@ -33,7 +33,11 @@ func _choose_intent(context: AiPointContext, play_style: AiPlayStyle) -> int:
 	if context.short_ball_opportunity:
 		attack_probability = minf(0.92, attack_probability + 0.25)
 
-	return AiPointContext.ShotIntent.ATTACK if randf() < attack_probability else AiPointContext.ShotIntent.NEUTRAL
+	return (
+		AiPointContext.ShotIntent.ATTACK
+		if randf() < attack_probability
+		else AiPointContext.ShotIntent.NEUTRAL
+	)
 
 
 func _choose_lane(context: AiPointContext, play_style: AiPlayStyle, intent: int) -> int:

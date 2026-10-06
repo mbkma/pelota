@@ -14,39 +14,56 @@ const BALL_SPEED_SAMPLE_INTERVAL: float = 0.1
 
 # Tab containers and content
 @warning_ignore("unused_private_class_variable")
+var _available_match_cameras: Array[Camera3D] = []
+var _ball_speed_function: Function = null
+var _ball_speed_elapsed: float = 0.0
+var _ball_speed_sample_accumulator: float = 0.0
+
+# Log filtering
+var _current_text_filter: String = ""
+var _current_object_filter: String = ""
+var _log_display_dirty: bool = true
+var _last_log_count: int = 0
+
 @onready var _tab_container: TabContainer = $DebugHud/TabContainer
 
 # Summary tab labels
-@onready var _summary_fps_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance/FPS
-@onready var _summary_frame_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Performance/Frame
-@onready var _summary_frame_time_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/FrameTime/FrameValue
-@onready var _summary_state_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/MatchState/Value
-@onready var _summary_server_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Server/Value
-@onready var _summary_rally_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Rally/Value
-@onready var _summary_last_hitter_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/LastHitter/Value
-@onready var _summary_serve_zone_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/ServeZone/Value
-@onready var _summary_rally_zone_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/RallyZone/Value
-@onready var _summary_ground_contacts_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/GroundContacts/Value
-@onready var _summary_ball_position_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/Ball/Position
-@onready var _summary_ball_velocity_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/BallVel/Value
+@onready var _summary_vbox: VBoxContainer = $DebugHud/TabContainer/Summary/ScrollContainer/VBox
+@onready var _summary_fps_label: Label = _summary_vbox.get_node("Performance/FPS") as Label
+@onready var _summary_frame_label: Label = _summary_vbox.get_node("Performance/Frame") as Label
+@onready
+var _summary_frame_time_label: Label = _summary_vbox.get_node("FrameTime/FrameValue") as Label
+@onready var _summary_state_label: Label = _summary_vbox.get_node("MatchState/Value") as Label
+@onready var _summary_server_label: Label = _summary_vbox.get_node("Server/Value") as Label
+@onready var _summary_rally_label: Label = _summary_vbox.get_node("Rally/Value") as Label
+@onready var _summary_last_hitter_label: Label = _summary_vbox.get_node("LastHitter/Value") as Label
+@onready var _summary_serve_zone_label: Label = _summary_vbox.get_node("ServeZone/Value") as Label
+@onready var _summary_rally_zone_label: Label = _summary_vbox.get_node("RallyZone/Value") as Label
+@onready
+var _summary_ground_contacts_label: Label = _summary_vbox.get_node("GroundContacts/Value") as Label
+@onready var _summary_ball_position_label: Label = _summary_vbox.get_node("Ball/Position") as Label
+@onready var _summary_ball_velocity_label: Label = _summary_vbox.get_node("BallVel/Value") as Label
 
 # Player 0 summary labels
-@onready var _summary_p0_name_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Name/Value
-@onready var _summary_p0_state_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0State/Value
-@onready var _summary_p0_position_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Position/Value
-@onready var _summary_p0_velocity_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P0Velocity/Value
+@onready var _summary_p0_name_label: Label = _summary_vbox.get_node("P0Name/Value") as Label
+@onready var _summary_p0_state_label: Label = _summary_vbox.get_node("P0State/Value") as Label
+@onready var _summary_p0_position_label: Label = _summary_vbox.get_node("P0Position/Value") as Label
+@onready var _summary_p0_velocity_label: Label = _summary_vbox.get_node("P0Velocity/Value") as Label
 
 # Player 1 summary labels
-@onready var _summary_p1_name_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Name/Value
-@onready var _summary_p1_state_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1State/Value
-@onready var _summary_p1_position_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Position/Value
-@onready var _summary_p1_velocity_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/P1Velocity/Value
+@onready var _summary_p1_name_label: Label = _summary_vbox.get_node("P1Name/Value") as Label
+@onready var _summary_p1_state_label: Label = _summary_vbox.get_node("P1State/Value") as Label
+@onready var _summary_p1_position_label: Label = _summary_vbox.get_node("P1Position/Value") as Label
+@onready var _summary_p1_velocity_label: Label = _summary_vbox.get_node("P1Velocity/Value") as Label
 
 # Trajectory toggle
-@onready var _trajectory_button: CheckButton = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/TrajectoryToggle
-@onready var _camera_selector: OptionButton = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/CameraSelect/CameraSelector
-@onready var _sim_speed_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/SimSpeed/Value
-@onready var _sim_pause_label: Label = $DebugHud/TabContainer/Summary/ScrollContainer/VBox/SimPaused/Value
+@onready
+var _trajectory_button: CheckButton = _summary_vbox.get_node("TrajectoryToggle") as CheckButton
+@onready var _camera_selector: OptionButton = (
+	_summary_vbox.get_node("CameraSelect/CameraSelector") as OptionButton
+)
+@onready var _sim_speed_label: Label = _summary_vbox.get_node("SimSpeed/Value") as Label
+@onready var _sim_pause_label: Label = _summary_vbox.get_node("SimPaused/Value") as Label
 
 # Performance labels
 @onready var _fps_label: Label = $DebugHud/TabContainer/Performance/VBox/FPS/Value
@@ -79,22 +96,14 @@ const BALL_SPEED_SAMPLE_INTERVAL: float = 0.1
 @onready var _ball_speed_plot: Chart = $DebugHud/TabContainer/Ball/VBox/BallSpeedGraph
 
 # Logs tab elements
-@onready var _log_filter_input: LineEdit = $DebugHud/TabContainer/Logs/FilterContainer/FilterInput
-@onready var _log_clear_button: Button = $DebugHud/TabContainer/Logs/FilterContainer/ClearButton
+@onready var _log_filters: Control = $DebugHud/TabContainer/Logs/FilterContainer
+@onready var _log_filter_input: LineEdit = _log_filters.get_node("FilterInput") as LineEdit
+@onready var _log_clear_button: Button = _log_filters.get_node("ClearButton") as Button
 @onready var _log_display: TextEdit = $DebugHud/TabContainer/Logs/LogDisplay
-@onready var _log_object_filter_dropdown: OptionButton = $DebugHud/TabContainer/Logs/FilterContainer/ObjectFilter
-@onready var _log_object_filter: OptionButton = $DebugHud/TabContainer/Logs/FilterContainer/ObjectFilter
-
-var _available_match_cameras: Array[Camera3D] = []
-var _ball_speed_function: Function = null
-var _ball_speed_elapsed: float = 0.0
-var _ball_speed_sample_accumulator: float = 0.0
-
-# Log filtering
-var _current_text_filter: String = ""
-var _current_object_filter: String = ""
-var _log_display_dirty: bool = true
-var _last_log_count: int = 0
+@onready var _log_object_filter_dropdown: OptionButton = (
+	_log_filters.get_node("ObjectFilter") as OptionButton
+)
+@onready var _log_object_filter: OptionButton = _log_object_filter_dropdown
 
 
 ## Initialize debug HUD
@@ -104,22 +113,30 @@ func _ready() -> void:
 	# Start hidden
 	self.visible = false
 	_configure_multiline_labels()
-	if match_manager and not match_manager.active_ball_changed.is_connected(_on_active_ball_changed):
+	if (
+		match_manager
+		and not match_manager.active_ball_changed.is_connected(_on_active_ball_changed)
+	):
 		match_manager.active_ball_changed.connect(_on_active_ball_changed)
 	_trajectory_button.toggled.connect(_toggle_trajectory)
 	_camera_selector.item_selected.connect(_on_camera_selected)
 	_setup_ball_speed_plot()
 	_reset_ball_speed_history()
-	
+
 	# Connect log tab controls
 	_log_filter_input.text_changed.connect(_on_log_filter_changed)
 	_log_clear_button.pressed.connect(_on_log_clear_pressed)
 	if _log_object_filter_dropdown:
 		_log_object_filter_dropdown.item_selected.connect(_on_log_object_filter_changed)
 		_log_object_filter_dropdown.add_item("All Objects", 0)
-	
+
 	# Debug: verify log UI is ready
-	print("DebugHUD: Log UI initialized - filter: %s, display: %s" % [_log_filter_input != null, _log_display != null])
+	print(
+		(
+			"DebugHUD: Log UI initialized - filter: %s, display: %s"
+			% [_log_filter_input != null, _log_display != null]
+		)
+	)
 	_refresh_camera_selector()
 	_refresh_simulation_labels()
 
@@ -297,23 +314,30 @@ func _queued_stroke_to_string(player: Player) -> String:
 		step_time = "%.2f" % stroke.step.time
 		step_bounces = str(stroke.step.bounces)
 
-	return "%s\n  intended_power=%.2f actual_power=%.2f delay=%.2f\n  intended_target=(%.2f, %.2f, %.2f)\n  actual_target=(%.2f, %.2f, %.2f)\n  spin=(%.2f, %.2f, %.2f)\n  step_t=%s bounces=%s" % [
-		_stroke_type_to_string(stroke.stroke_type),
-		stroke.intended_stroke_power,
-		stroke.stroke_power,
-		stroke.delay,
-		stroke.intended_stroke_target.x,
-		stroke.intended_stroke_target.y,
-		stroke.intended_stroke_target.z,
-		stroke.stroke_target.x,
-		stroke.stroke_target.y,
-		stroke.stroke_target.z,
-		stroke.stroke_spin.x,
-		stroke.stroke_spin.y,
-		stroke.stroke_spin.z,
-		step_time,
-		step_bounces,
-	]
+	return (
+		(
+			"%s\n  intended_power=%.2f actual_power=%.2f delay=%.2f"
+			+ "\n  intended_target=(%.2f, %.2f, %.2f)\n  actual_target=(%.2f, %.2f, %.2f)"
+			+ "\n  spin=(%.2f, %.2f, %.2f)\n  step_t=%s bounces=%s"
+		)
+		% [
+			_stroke_type_to_string(stroke.stroke_type),
+			stroke.intended_stroke_power,
+			stroke.stroke_power,
+			stroke.delay,
+			stroke.intended_stroke_target.x,
+			stroke.intended_stroke_target.y,
+			stroke.intended_stroke_target.z,
+			stroke.stroke_target.x,
+			stroke.stroke_target.y,
+			stroke.stroke_target.z,
+			stroke.stroke_spin.x,
+			stroke.stroke_spin.y,
+			stroke.stroke_spin.z,
+			step_time,
+			step_bounces,
+		]
+	)
 
 
 func _player_ball_to_string(player: Player) -> String:
@@ -321,14 +345,19 @@ func _player_ball_to_string(player: Player) -> String:
 		return "NONE"
 
 	var player_ball: Ball = player.ball
-	var ball_status: String = "ACTIVE" if player_ball == match_manager.get_active_ball() else "STALE"
-	return "%s\n  id=%s\n  pos=(%.2f, %.2f, %.2f)" % [
-		ball_status,
-		str(player_ball.get_instance_id()),
-		player_ball.position.x,
-		player_ball.position.y,
-		player_ball.position.z,
-	]
+	var ball_status: String = (
+		"ACTIVE" if player_ball == match_manager.get_active_ball() else "STALE"
+	)
+	return (
+		"%s\n  id=%s\n  pos=(%.2f, %.2f, %.2f)"
+		% [
+			ball_status,
+			str(player_ball.get_instance_id()),
+			player_ball.position.x,
+			player_ball.position.y,
+			player_ball.position.z,
+		]
+	)
 
 
 ## Toggle ball trajectory drawing
@@ -360,21 +389,27 @@ func _update_summary_stats(_delta: float) -> void:
 	# Ball
 	var ball: Ball = match_manager.get_active_ball()
 	if ball:
-		_summary_ball_position_label.text = "%.2f, %.2f, %.2f" % [ball.position.x, ball.position.y, ball.position.z]
+		_summary_ball_position_label.text = (
+			"%.2f, %.2f, %.2f" % [ball.position.x, ball.position.y, ball.position.z]
+		)
 		_summary_ball_velocity_label.text = "%.2f" % ball.velocity.length()
 
 	# Player 0
 	var p0: Player = match_manager.player0
 	_summary_p0_name_label.text = p0.player_data.last_name
 	_summary_p0_state_label.text = _format_player_debug_block(p0)
-	_summary_p0_position_label.text = "%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
+	_summary_p0_position_label.text = (
+		"%.2f, %.2f, %.2f" % [p0.position.x, p0.position.y, p0.position.z]
+	)
 	_summary_p0_velocity_label.text = "%.2f" % p0.velocity.length()
 
 	# Player 1
 	var p1: Player = match_manager.player1
 	_summary_p1_name_label.text = p1.player_data.last_name
 	_summary_p1_state_label.text = _format_player_debug_block(p1)
-	_summary_p1_position_label.text = "%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
+	_summary_p1_position_label.text = (
+		"%.2f, %.2f, %.2f" % [p1.position.x, p1.position.y, p1.position.z]
+	)
 	_summary_p1_velocity_label.text = "%.2f" % p1.velocity.length()
 	_refresh_simulation_labels()
 
@@ -388,15 +423,22 @@ func _format_player_debug_block(player: Player) -> String:
 	if player.stats:
 		var stamina_pct: int = int(player.get_stamina_ratio() * 100.0)
 		lines.append("Stamina: %d%%" % stamina_pct)
-		lines.append("Speed×: %.2f | Accel×: %.2f" % [
-			player.stats.movement_speed_multiplier(player.get_stamina_ratio()),
-			player.stats.acceleration_multiplier(player.get_stamina_ratio())
-		])
+		lines.append(
+			(
+				"Speed×: %.2f | Accel×: %.2f"
+				% [
+					player.stats.movement_speed_multiplier(player.get_stamina_ratio()),
+					player.stats.acceleration_multiplier(player.get_stamina_ratio())
+				]
+			)
+		)
 	if player.mental_state:
-		lines.append("Confidence: %.2f | Pressure: %.2f" % [
-			player.mental_state.confidence,
-			player.mental_state.pressure
-		])
+		lines.append(
+			(
+				"Confidence: %.2f | Pressure: %.2f"
+				% [player.mental_state.confidence, player.mental_state.pressure]
+			)
+		)
 	lines.append("Ball:\n%s" % _player_ball_to_string(player))
 	lines.append("Queued Stroke:\n%s" % _queued_stroke_to_string(player))
 	return "\n".join(lines)
@@ -412,6 +454,7 @@ func _configure_multiline_labels() -> void:
 
 	for label in labels:
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+
 
 func _refresh_camera_selector() -> void:
 	_camera_selector.clear()
@@ -488,13 +531,18 @@ func _setup_ball_speed_plot() -> void:
 	if _ball_speed_plot == null:
 		return
 
-	_ball_speed_function = Function.new(
-		[0.0, 0.001], [0.0, 0.0], "Speed",
-		{
-			color = Color("#36a2eb"),
-			marker = Function.Marker.NONE,
-			type = Function.Type.AREA,
-		}
+	_ball_speed_function = (
+		Function
+		. new(
+			[0.0, 0.001],
+			[0.0, 0.0],
+			"Speed",
+			{
+				color = Color("#36a2eb"),
+				marker = Function.Marker.NONE,
+				type = Function.Type.AREA,
+			}
+		)
 	)
 
 	var chart_theme := Theme.new()
@@ -533,13 +581,18 @@ func _reset_ball_speed_history() -> void:
 	if _ball_speed_function == null or _ball_speed_plot == null:
 		return
 
-	_ball_speed_function = Function.new(
-		[0.0, 0.001], [0.0, 0.0], "Speed",
-		{
-			color = Color("#36a2eb"),
-			marker = Function.Marker.NONE,
-			type = Function.Type.AREA,
-		}
+	_ball_speed_function = (
+		Function
+		. new(
+			[0.0, 0.001],
+			[0.0, 0.0],
+			"Speed",
+			{
+				color = Color("#36a2eb"),
+				marker = Function.Marker.NONE,
+				type = Function.Type.AREA,
+			}
+		)
 	)
 
 	var cp := ChartProperties.new()
@@ -608,25 +661,27 @@ func _on_log_clear_pressed() -> void:
 func _refresh_object_filter() -> void:
 	if not _log_object_filter_dropdown:
 		return
-	
+
 	var logger = _get_logger()
 	if not logger:
 		return
-	
+
 	# Only refresh if object names have changed
 	if not logger.has_method("have_object_names_changed") or not logger.have_object_names_changed():
 		return
-	
+
 	# Save current selection
 	var current_object = _current_object_filter
-	
+
 	_log_object_filter_dropdown.clear()
 	_log_object_filter_dropdown.add_item("All Objects", 0)
-	
-	var object_names = logger.get_object_names() if logger.has_method("get_object_names") else PackedStringArray()
+
+	var object_names = (
+		logger.get_object_names() if logger.has_method("get_object_names") else PackedStringArray()
+	)
 	for i in range(object_names.size()):
 		_log_object_filter_dropdown.add_item(object_names[i], i + 1)
-	
+
 	# Restore selection
 	if current_object.is_empty():
 		_log_object_filter_dropdown.select(0)
@@ -643,53 +698,55 @@ func _update_log_display() -> void:
 	var logger = _get_logger()
 	if not logger:
 		return
-	
+
 	# Get current log count
 	var logs = logger.get_logs() if logger.has_method("get_logs") else []
 	var current_log_count = logs.size()
-	
+
 	# Check if display needs updating (new logs or filter changed)
 	var needs_update = _log_display_dirty or current_log_count != _last_log_count
 	if not needs_update:
 		return
-	
+
 	_last_log_count = current_log_count
-	
+
 	if not _log_display or not is_instance_valid(_log_display):
 		return
-	
+
 	# Refresh object filter options (only if names changed)
 	_refresh_object_filter()
-	
+
 	var display_text: String = ""
 	var text_filter_lower: String = _current_text_filter.to_lower()
-	var start_time_ms: int = logger.get_start_time_ms() if logger.has_method("get_start_time_ms") else 0
-	
+	var start_time_ms: int = (
+		logger.get_start_time_ms() if logger.has_method("get_start_time_ms") else 0
+	)
+
 	for entry in logs:
 		var object_name: String = entry["object_name"]
 		var message: String = entry["message"]
 		var timestamp_ms: int = entry["timestamp"]
-		
+
 		# Apply object filter
 		if not _current_object_filter.is_empty() and object_name != _current_object_filter:
 			continue
-		
+
 		# Apply text filter
 		if not text_filter_lower.is_empty() and not message.to_lower().contains(text_filter_lower):
 			continue
-		
+
 		# Calculate relative time from start
 		var relative_ms: int = timestamp_ms - start_time_ms
 		if relative_ms < 0:
 			relative_ms = 0  # Safety check
-		
+
 		# Format timestamp as MM:SS.ms
 		var seconds: int = int(relative_ms / 1000.0)
 		var milliseconds: int = relative_ms % 1000
 		var time_str: String = "%02d:%02d.%03d" % [int(seconds / 60.0), seconds % 60, milliseconds]
-		
+
 		display_text += "[%s] %s: %s\n" % [time_str, object_name, message]
-	
+
 	_log_display.text = display_text
 	# Scroll to bottom
 	_log_display.set_caret_line(_log_display.get_line_count() - 1)

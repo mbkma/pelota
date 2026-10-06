@@ -17,9 +17,6 @@ credits_packed_scene = ExtResource("4_m0ubd")
 [node name="BackgroundMusicPlayer" parent="." index="1" unique_id=1141822549]
 stream = ExtResource("5_x31ro")
 
-[node name="TitleLabel" parent="MenuContainer/TitleMargin/TitleContainer" parent_id_path=PackedInt32Array(556427956) index="0" unique_id=359406872]
-text = "Pelota"
-
 [node name="ContinueGameButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" parent_id_path=PackedInt32Array(2017477786) index="1" unique_id=1495566523]
 unique_name_in_owner = true
 visible = false

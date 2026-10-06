@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bsmhgwnl5bmx2"]
+
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_x8xyc"]
+[ext_resource type="AudioStream" uid="uid://b4fpnyd387pe4" path="res://assets/sounds/effects/strokes/stroke_flat_nadal_1.wav" id="2"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="3"]
+
+[sub_resource type="Resource" id="Resource_tw232"]
+script = ExtResource("1_x8xyc")
+metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
+
+[sub_resource type="Resource" id="Resource_nadal_stats"]
+script = ExtResource("3")
+acceleration = 86.0
+top_speed = 84.0
+agility = 89.0
+stamina = 95.0
+forehand = 94.0
+backhand = 82.0
+serve_power = 84.0
+serve_accuracy = 82.0
+return_skill = 89.0
+volley_skill = 78.0
+slice_skill = 84.0
+topspin_skill = 96.0
+accuracy = 88.0
+consistency = 90.0
+timing = 86.0
+composure = 90.0
+focus = 92.0
+clutch = 93.0
+aggression = 86.0
+net_play = 73.0
+defensive_skill = 92.0
+shot_anticipation = 90.0
+clay_skill = 98.0
+grass_skill = 78.0
+hard_court_skill = 88.0
+
+[resource]
+script = ExtResource("1")
+first_name = "Rafael"
+last_name = "Nadal"
+age = 36
+country = "Spain"
+height = 185
+hand = "L"
+rank = 3
+stats = SubResource("Resource_nadal_stats")
+appearance = SubResource("Resource_tw232")
+sounds = {
+"grunt_flat": [ExtResource("2")],
+"grunt_frequency": 0.9,
+"victory": []
+}

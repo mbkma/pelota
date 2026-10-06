@@ -26,4 +26,3 @@ roughness_texture = SubResource("PortableCompressedTexture2D_gmkwq")
 roughness_texture_channel = 1
 normal_enabled = true
 normal_texture = SubResource("PortableCompressedTexture2D_fmo77")
-metadata/_gltf_primary_texture_coord = 2

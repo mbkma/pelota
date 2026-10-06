@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://d2eq0khfi3s15"]
+[gd_scene format=3 uid="uid://d2eq0khfi3s15"]
 
 [ext_resource type="Script" uid="uid://b48scbgtjloqx" path="res://addons/loggie/version_management/update_prompt_window.gd" id="1_xb7je"]
 [ext_resource type="Texture2D" uid="uid://cgh6hd3u8nlpj" path="res://addons/loggie/assets/updater_bg.png" id="2_lbawe"]

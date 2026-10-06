@@ -12,6 +12,6 @@ func show_serve_speed(speed: float):
 	await get_tree().create_timer(randf_range(1, 2)).timeout
 	speed_label.show()
 	speed *= 2.23  # convert to mph
-	speed_label.text = str(speed)
+	speed_label.text = str(int(speed))
 	await get_tree().create_timer(5).timeout
 	speed_label.hide()

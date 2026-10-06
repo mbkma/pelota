@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbxovnvw5o4mo"]
+[gd_scene format=3 uid="uid://cbxovnvw5o4mo"]
 
 [ext_resource type="Script" uid="uid://cufcnr6pxqofk" path="res://addons/godot_xterm/editor_plugins/terminal/terminal_panel.gd" id="1"]
 

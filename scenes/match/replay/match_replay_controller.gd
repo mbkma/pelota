@@ -45,7 +45,9 @@ var _tree_was_paused_before_playback: bool = false
 var _event_cursor: int = 0
 
 
-func initialize(match_manager: MatchManager, player0: Player, player1: Player, cameras: MatchCameras) -> void:
+func initialize(
+	match_manager: MatchManager, player0: Player, player1: Player, cameras: MatchCameras
+) -> void:
 	_match_manager = match_manager
 	_player0 = player0
 	_player1 = player1
@@ -94,11 +96,16 @@ func record_event(event_type: String, payload: Dictionary) -> void:
 	if not _is_recording:
 		return
 
-	_events.append({
-		"time": _elapsed_seconds,
-		"type": event_type,
-		"payload": payload,
-	})
+	(
+		_events
+		. append(
+			{
+				"time": _elapsed_seconds,
+				"type": event_type,
+				"payload": payload,
+			}
+		)
+	)
 
 
 func has_replay() -> bool:
@@ -249,7 +256,12 @@ func save_to_disk(path: String = save_path) -> bool:
 
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
-		push_error("MatchReplayController.save_to_disk failed: %s" % error_string(FileAccess.get_open_error()))
+		push_error(
+			(
+				"MatchReplayController.save_to_disk failed: %s"
+				% error_string(FileAccess.get_open_error())
+			)
+		)
 		return false
 
 	file.store_string(var_to_str(payload))
@@ -263,7 +275,12 @@ func load_from_disk(path: String = save_path) -> bool:
 
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if file == null:
-		push_error("MatchReplayController.load_from_disk failed: %s" % error_string(FileAccess.get_open_error()))
+		push_error(
+			(
+				"MatchReplayController.load_from_disk failed: %s"
+				% error_string(FileAccess.get_open_error())
+			)
+		)
 		return false
 
 	var payload: Variant = str_to_var(file.get_as_text())
@@ -303,7 +320,12 @@ func _record_frame(delta: float) -> void:
 		"player1_state": _player1.get_current_state(),
 		"player1_stroke_payload": _serialize_stroke(_player1.queued_stroke),
 		"player1_animation_snapshot": _player1.get_replay_animation_snapshot(),
-		"last_hitter_index": _match_manager.get_player_index(_match_manager.last_hitter) if _match_manager.last_hitter else -1,
+		"last_hitter_index":
+		(
+			_match_manager.get_player_index(_match_manager.last_hitter)
+			if _match_manager.last_hitter
+			else -1
+		),
 		"ball_exists": false,
 	}
 
@@ -453,14 +475,18 @@ func _ensure_replay_ball_visual() -> void:
 func _set_live_simulation_enabled(is_enabled: bool) -> void:
 	if _player0:
 		_player0.set_replay_mode(not is_enabled)
-		_player0.process_mode = Node.PROCESS_MODE_INHERIT if is_enabled else Node.PROCESS_MODE_WHEN_PAUSED
+		_player0.process_mode = (
+			Node.PROCESS_MODE_INHERIT if is_enabled else Node.PROCESS_MODE_WHEN_PAUSED
+		)
 		_player0.set_replay_animation_paused(false)
 		_player0.set_process(is_enabled)
 		_player0.set_physics_process(is_enabled)
 
 	if _player1:
 		_player1.set_replay_mode(not is_enabled)
-		_player1.process_mode = Node.PROCESS_MODE_INHERIT if is_enabled else Node.PROCESS_MODE_WHEN_PAUSED
+		_player1.process_mode = (
+			Node.PROCESS_MODE_INHERIT if is_enabled else Node.PROCESS_MODE_WHEN_PAUSED
+		)
 		_player1.set_replay_animation_paused(false)
 		_player1.set_process(is_enabled)
 		_player1.set_physics_process(is_enabled)

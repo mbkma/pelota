@@ -12,7 +12,9 @@ func _init(ball_scene: PackedScene = null) -> void:
 
 func create_ball(initial_position: Vector3, initial_velocity: Vector3) -> Ball:
 	if not _ball_scene:
-		push_error("BallFactory.create_ball: ball scene is not configured and default could not be loaded")
+		push_error(
+			"BallFactory.create_ball: ball scene is not configured and default could not be loaded"
+		)
 		return null
 
 	var ball: Ball = _ball_scene.instantiate()

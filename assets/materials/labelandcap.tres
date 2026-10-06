@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dnxm7n6lvgglg"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dnxm7n6lvgglg"]
 
 [ext_resource type="Texture2D" uid="uid://bca0k6xntjark" path="res://assets/models/stadium/textures/kirkland-signature-label.png" id="1_el48q"]
 

@@ -3,15 +3,15 @@
 class_name GamepadInput
 extends InputDevice
 
+## Deadzone for stick neutral detection (0.2 is 20% of full range)
+const STICK_DEADZONE: float = 0.2
+
 var _input_pace: float = 0.0
 var _current_stroke_type: StrokeInputType = StrokeInputType.TOPSPIN
 var _is_in_aiming_mode: bool = false
 var _serve_mode: bool = false
 var _gamepad_index: int = -1
 var _ignore_movement_until_neutral: bool = false
-
-## Deadzone for stick neutral detection (0.2 is 20% of full range)
-const STICK_DEADZONE: float = 0.2
 
 ## Button state tracking (per-device)
 var _button_b_pressed: bool = false

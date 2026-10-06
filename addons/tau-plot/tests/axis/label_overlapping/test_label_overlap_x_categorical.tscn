@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://du2dtvwkhqo2p"]
+[gd_scene format=3 uid="uid://du2dtvwkhqo2p"]
 
 [ext_resource type="Script" uid="uid://b5junh5431j" path="res://addons/tau-plot/tests/axis/label_overlapping/test_label_overlap_x_categorical.gd" id="1_u36sl"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_6v36r"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=1815257906]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,20 +11,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_u36sl")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=1923881035]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test overlap strategy for categorical x-axis"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=2091405502]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=1854571700]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -35,7 +35,7 @@ title = "[NONE] 12 chars categories => labels overlap freely"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=365220597]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -46,7 +46,7 @@ title = "[SKIP_LABELS] 12 chars categories => some labels hidden"
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=643624129]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -57,7 +57,7 @@ title = "[SKIP_LABELS] Animate category char count [1, 12] => labels grow and ge
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=1229275734]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -68,7 +68,7 @@ title = "[SKIP_LABELS] Animate min_x_label_spacing_px [0, 100] => labels disappe
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=4613609]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -79,7 +79,7 @@ title = "[SKIP_LABELS] 1 category, animate char count [1, 100] => label always s
 legend_enabled = false
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=375947713]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

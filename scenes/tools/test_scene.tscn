@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://s62jolhkswab"]
+[gd_scene format=3 uid="uid://s62jolhkswab"]
 
 [ext_resource type="Texture2D" uid="uid://coc7kp7wjhqxw" path="res://assets/textures/environment/skyboxes/spruit_sunrise_4k.exr" id="1_j8ivh"]
 [ext_resource type="PackedScene" uid="uid://cc1m2a1obsyn4" path="res://addons/fpc/character.tscn" id="2_nd71p"]

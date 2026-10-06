@@ -1,11 +1,11 @@
 extends Camera3D
 
-@export var target: Node3D               # Player node to follow
-@export var safe_zone_ratio := 1.0       # Fraction of horizontal FOV where player can move freely (0..1)
-@export var rotation_speed := 3.0        # Smooth rotation speed
-@export var max_yaw_offset_deg := 25.0   # Max yaw offset from center
+@export var target: Node3D  # Player node to follow
+@export var safe_zone_ratio := 1.0  # Fraction of horizontal FOV where player can move freely (0..1)
+@export var rotation_speed := 3.0  # Smooth rotation speed
+@export var max_yaw_offset_deg := 25.0  # Max yaw offset from center
 
-var _current_y_rotation := 0.0           # Current camera yaw offset in radians
+var _current_y_rotation := 0.0  # Current camera yaw offset in radians
 
 
 func _process(delta: float) -> void:
@@ -50,7 +50,9 @@ func _process(delta: float) -> void:
 		target_yaw_deg = 0.0
 
 	# Smoothly interpolate current rotation toward target
-	_current_y_rotation = lerp(_current_y_rotation, deg_to_rad(target_yaw_deg), rotation_speed * delta)
+	_current_y_rotation = lerp(
+		_current_y_rotation, deg_to_rad(target_yaw_deg), rotation_speed * delta
+	)
 
 	# Apply yaw rotation
 	rotation.y = _current_y_rotation

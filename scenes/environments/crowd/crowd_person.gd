@@ -76,6 +76,7 @@ func cleanup() -> void:
 
 # Private methods
 
+
 func _instantiate_model() -> bool:
 	# Load model resource
 	var model_path = config.model_paths.get(model_key, "")
@@ -136,6 +137,7 @@ func _apply_color_variations() -> void:
 
 # Private methods for color variations
 
+
 func _colorize_node(node: Node, palette: CrowdColorPalette) -> void:
 	if node is MeshInstance3D:
 		_apply_colors_to_mesh_instance(node as MeshInstance3D, palette)
@@ -145,16 +147,29 @@ func _colorize_node(node: Node, palette: CrowdColorPalette) -> void:
 		_colorize_node(child, palette)
 
 
-func _apply_colors_to_mesh_instance(mesh_instance: MeshInstance3D, palette: CrowdColorPalette) -> void:
+func _apply_colors_to_mesh_instance(
+	mesh_instance: MeshInstance3D, palette: CrowdColorPalette
+) -> void:
 	var name_lower = mesh_instance.name.to_lower()
 
 	# Determine what color to apply based on mesh name
 	var color_to_apply: Color
 	var should_apply = true
 
-	if "shirt" in name_lower or "top" in name_lower or "cloth" in name_lower or "upper" in name_lower:
+	if (
+		"shirt" in name_lower
+		or "top" in name_lower
+		or "cloth" in name_lower
+		or "upper" in name_lower
+	):
 		color_to_apply = palette.get_random_shirt_color()
-	elif "pants" in name_lower or "shorts" in name_lower or "legs" in name_lower or "leg" in name_lower or "lower" in name_lower:
+	elif (
+		"pants" in name_lower
+		or "shorts" in name_lower
+		or "legs" in name_lower
+		or "leg" in name_lower
+		or "lower" in name_lower
+	):
 		color_to_apply = palette.get_random_shorts_color()
 	elif "hair" in name_lower:
 		color_to_apply = palette.get_random_hair_color()

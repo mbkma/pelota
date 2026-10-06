@@ -3,7 +3,8 @@ class_name CrowdConfig
 extends Resource
 
 ## Configuration for the crowd system
-## This resource centralizes all crowd system parameters for better editor experience and flexibility
+## This resource centralizes all crowd system parameters for better editor experience
+## and flexibility
 
 ## Grid layout configuration
 ## Number of rows in the crowd grid
@@ -101,7 +102,6 @@ extends Resource
 		animation_percentage = clamp(new_setting, 0.0, 1.0)
 		changed.emit()
 
-
 ## Color palette for crowd member variations
 @export var color_palette: CrowdColorPalette:
 	set(new_setting):
@@ -127,11 +127,13 @@ extends Resource
 		apply_color_variations = new_setting
 		changed.emit()
 
+
 ## Get a random model variant name
 func get_random_model_variant() -> String:
 	if model_variants.is_empty():
 		return "crowd-1"
 	return model_variants[randi() % model_variants.size()]
+
 
 ## Get random idle animation
 func get_random_idle_animation() -> String:
@@ -139,11 +141,13 @@ func get_random_idle_animation() -> String:
 		return ""
 	return idle_animations[randi() % idle_animations.size()]
 
+
 ## Get random victory animation
 func get_random_victory_animation() -> String:
 	if victory_animations.is_empty():
 		return ""
 	return victory_animations[randi() % victory_animations.size()]
+
 
 ## Validate configuration
 func validate() -> bool:

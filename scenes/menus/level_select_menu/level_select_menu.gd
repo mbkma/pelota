@@ -7,13 +7,13 @@ extends Control
 
 signal level_selected
 
-@onready var level_buttons_container: ItemList = %LevelButtonsContainer
-@onready var scene_lister: SceneLister = $SceneLister
 var level_paths : Array[String]
 
+@onready var level_buttons_container: ItemList = %LevelButtonsContainer
+@onready var scene_lister: SceneLister = $SceneLister
 func _ready() -> void:
 	add_levels_to_container()
-	
+
 ## A fresh level list is propgated into the ItemList, and the file names are cleaned
 func add_levels_to_container() -> void:
 	level_buttons_container.clear()

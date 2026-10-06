@@ -1,15 +1,15 @@
 ## Player heads-up display showing stamina and stroke preparation bars
 extends Control
 
-@onready var _stamina: TextureProgressBar = $VBoxContainer/Stamina
-@onready var _stroke: TextureProgressBar = $VBoxContainer/Stroke
-
 ## Reference to player this HUD displays stats for
 @export var player: Player
 
 ## Whether stamina bar updates are active.
 var _regenerates_stamina: bool = false
 
+
+@onready var _stamina: TextureProgressBar = $VBoxContainer/Stamina
+@onready var _stroke: TextureProgressBar = $VBoxContainer/Stroke
 
 func _ready() -> void:
 	if player:

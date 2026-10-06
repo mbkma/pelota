@@ -2,6 +2,19 @@
 class_name Court
 extends Node3D
 
+## Enumeration of distinct court regions for collision detection
+enum CourtRegion {
+	LEFT_FRONT_SERVICE_BOX,
+	RIGHT_FRONT_SERVICE_BOX,
+	LEFT_BACK_SERVICE_BOX,
+	RIGHT_BACK_SERVICE_BOX,
+	BACK_SINGLES_BOX,
+	FRONT_SINGLES_BOX,
+}
+
+## Dictionary of court regions mapped to 2D rectangles for collision detection
+var _court_regions: Dictionary[CourtRegion, Rect2] = {}
+
 ## Court boundary and region markers
 @onready var _back_sideline: Marker3D = $back_sideline
 @onready var _back_left_service_box: Marker3D = $back_left_service_box
@@ -21,19 +34,6 @@ extends Node3D
 
 ## Service box width (from center to sideline)
 @onready var _service_box_width: float = abs(_back_left_service_box.position.x)
-
-## Dictionary of court regions mapped to 2D rectangles for collision detection
-var _court_regions: Dictionary[CourtRegion, Rect2] = {}
-
-## Enumeration of distinct court regions for collision detection
-enum CourtRegion {
-	LEFT_FRONT_SERVICE_BOX,
-	RIGHT_FRONT_SERVICE_BOX,
-	LEFT_BACK_SERVICE_BOX,
-	RIGHT_BACK_SERVICE_BOX,
-	BACK_SINGLES_BOX,
-	FRONT_SINGLES_BOX,
-}
 
 
 func _ready() -> void:

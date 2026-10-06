@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmfnoo08ogsc7"]
 
-[ext_resource type="Script" path="res://addons/maaacks_game_template/base/nodes/labels/credits_label.gd" id="1_yhcaj"]
+[ext_resource type="Script" uid="uid://cc2wtqasev7le" path="res://addons/maaacks_game_template/base/nodes/labels/credits_label.gd" id="1_yhcaj"]
 
 [node name="CreditsLabel" type="RichTextLabel" unique_id=525943618]
 anchors_preset = 15
@@ -14,9 +14,7 @@ bbcode_enabled = true
 text = "[font_size=48]Collaborators[/font_size]
 
 [font_size=32]Role[/font_size]
-Person 1  
-Person 2  
-[url=]Person w/ Link[/url]  
+[url=https://github.com/mbkma]Johannes Unruh (mbkma)[/url]  
 
 [font_size=48]Sourced[/font_size]
 [font_size=32]Asset Type[/font_size]

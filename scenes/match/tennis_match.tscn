@@ -16,27 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="20_ai_controller"]
 [ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/player/controllers/human_controller.tscn" id="21_human_controller"]
 
-[sub_resource type="Animation" id="1"]
-resource_name = "start"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(3),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wicjn"]
-_data = {
-&"start": SubResource("1")
-}
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ka0"]
 energy_multiplier = 2.38
 
@@ -58,71 +37,19 @@ human_controller_scene = ExtResource("21_human_controller")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
-hit_range_tolerance_meters = 1.0
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
-hit_range_tolerance_meters = 1.0
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
 active_cam = NodePath("TopFront")
 
 [node name="TopFront" parent="Cameras" index="1" unique_id=1711630965]
-transform = Transform3D(1, 0, 0, 0, 0.948324, 0.317305, 0, -0.317305, 0.948324, 0, 12.543, 40.307)
+transform = Transform3D(1, 0, 0, 0, 0.94832355, 0.3173049, 0, -0.3173049, 0.94832355, 0, 12.543001, 40.307)
 fov = 18.3
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
-
-[node name="Panel" parent="TelevisionHUD/MatchStatsPanel" parent_id_path=PackedInt32Array(684788014, 2140378516) index="0" unique_id=1044850648]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 500.0
-offset_bottom = 300.0
-
-[node name="Label" parent="TelevisionHUD/MatchStatsPanel/Panel" index="0" unique_id=1328085612]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 40.0
-offset_bottom = 23.0
-theme = null
-
-[node name="Label2" parent="TelevisionHUD/MatchStatsPanel/Panel" index="1" unique_id=1390046489]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 55.0
-offset_bottom = 31.0
-theme = null
-
-[node name="Label3" parent="TelevisionHUD/MatchStatsPanel/Panel" index="2" unique_id=2082832951]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 55.0
-offset_bottom = 31.0
-theme = null
-
-[node name="PlayerImage" parent="TelevisionHUD/MatchStatsPanel" parent_id_path=PackedInt32Array(684788014, 2140378516) index="1" unique_id=1401311793]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 200.0
-offset_bottom = 200.0
-
-[node name="PlayerImage2" parent="TelevisionHUD/MatchStatsPanel" parent_id_path=PackedInt32Array(684788014, 2140378516) index="2" unique_id=643599586]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 200.0
-offset_bottom = 200.0
-
-[node name="AnimationPlayer" parent="TelevisionHUD/MatchStatsPanel" parent_id_path=PackedInt32Array(684788014, 2140378516) index="3" unique_id=241539447]
-libraries/ = SubResource("AnimationLibrary_wicjn")
 
 [node name="SplitscreenUI" parent="." unique_id=900824732 node_paths=PackedStringArray("cameras", "player0", "player1") instance=ExtResource("17_splitscreen")]
 cameras = NodePath("../Cameras")
@@ -130,9 +57,6 @@ player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 
 [node name="Stadium" parent="." unique_id=1694125535 instance=ExtResource("6_4vere")]
-
-[node name="stadium" parent="Stadium" index="15" unique_id=492985688]
-visible = false
 
 [node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("match_manager", "players") instance=ExtResource("11_324nl")]
 match_manager = NodePath("../MatchManager")

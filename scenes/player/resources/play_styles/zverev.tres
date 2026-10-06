@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AiPlayStyle" format=3]
+[gd_resource type="Resource" script_class="AiPlayStyle" format=3 uid="uid://cp5xo4rh8to34"]
 
 [ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://scenes/player/resources/ai_play_style.gd" id="1"]
 
@@ -6,7 +6,5 @@
 script = ExtResource("1")
 aggression = 0.74
 shot_power = 0.88
-topspin = 0.5
 court_position = 0.2
 consistency = 0.84
-preferred_pattern = 0

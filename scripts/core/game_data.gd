@@ -6,11 +6,15 @@ enum InputMethod {
 }
 
 const CHARACTER_DATA_DIR := "res://scenes/player/resources/data/"
+const NO_DEVICE_ID := -1
+const KEYBOARD_DEVICE_ID := -2
 
 var selected_match_player: PlayerData
 var selected_match_opponent: PlayerData
 var selected_player1_input_method: int = InputMethod.AI
 var selected_player2_input_method: int = InputMethod.AI
+var selected_player1_device_id: int = -1
+var selected_player2_device_id: int = -1
 var _players: Array[PlayerData] = []
 
 # Called when the node enters the scene tree for the first time.
@@ -76,10 +80,27 @@ func get_match_input_methods() -> Array[int]:
 	return [selected_player1_input_method, selected_player2_input_method]
 
 
+func set_match_input_devices(player1_device_id: int, player2_device_id: int) -> void:
+	selected_player1_device_id = _sanitize_device_id(player1_device_id)
+	selected_player2_device_id = _sanitize_device_id(player2_device_id)
+
+
+func get_match_input_devices() -> Array[int]:
+	return [selected_player1_device_id, selected_player2_device_id]
+
+
 func _sanitize_input_method(input_method: int) -> int:
 	if input_method == InputMethod.HUMAN:
 		return InputMethod.HUMAN
 	return InputMethod.AI
+
+
+func _sanitize_device_id(device_id: int) -> int:
+	if device_id == KEYBOARD_DEVICE_ID:
+		return KEYBOARD_DEVICE_ID
+	if device_id >= 0:
+		return device_id
+	return NO_DEVICE_ID
 
 
 func clear_match_players() -> void:

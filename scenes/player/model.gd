@@ -2,8 +2,6 @@
 class_name Model
 extends Node3D
 
-const DEFAULT_APPEARANCE: PlayerAppearance = preload("res://scenes/player/resources/appearances/djokovic.tres")
-
 ## Emitted when stroke animation finishes
 signal stroke_animation_finished
 
@@ -13,6 +11,14 @@ signal recovery_animation_finished
 ## Emitted when the active ball enters the racket hit area
 signal hit_area_ball_entered(ball: Ball)
 
+const DEFAULT_APPEARANCE: PlayerAppearance = preload(
+	"res://scenes/player/resources/appearances/djokovic.tres"
+)
+
+@export var animation_tree: AnimationTree
+## Reference to the AnimationPlayer that drives the animation tree
+@export var _animation_player: AnimationPlayer
+
 ## Reference to parent player
 var player: Player
 
@@ -21,24 +27,6 @@ var _last_state: String = ""
 
 ## Track if stroke animation finished signal was already emitted
 var _stroke_finished_emitted: bool = false
-
-@onready var points: Node3D = $Points
-@onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
-@onready var forehand_up_point: Vector3 = points.get_node("ForehandUpPoint").position
-@onready var forehand_point: Marker3D = $Points/ForehandPoint
-@onready var forehand_down_point: Vector3 = points.get_node("ForehandDownPoint").position
-@onready var backhand_up_point: Vector3 = points.get_node("BackhandUpPoint").position
-@onready var backhand_down_point: Vector3 = points.get_node("BackhandDownPoint").position
-@onready var backhand_point: Marker3D = $Points/BackhandPoint
-@onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
-
-@export var animation_tree: AnimationTree
-@onready var _playback: AnimationNodeStateMachinePlayback = (
-	animation_tree.get("parameters/playback")
-)
-
-## Reference to the AnimationPlayer that drives the animation tree
-@onready var _animation_player: AnimationPlayer = animation_tree.get_node(animation_tree.anim_player)
 
 ## Mapping from stroke type to animation name for lookup
 var _stroke_animation_names: Dictionary = {
@@ -52,6 +40,20 @@ var _stroke_animation_names: Dictionary = {
 }
 var _replay_animation_paused: bool = false
 var _active_body_proportions: Dictionary = {}
+
+@onready var points: Node3D = $Points
+@onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
+@onready var forehand_up_point: Vector3 = points.get_node("ForehandUpPoint").position
+@onready var forehand_point: Marker3D = $Points/ForehandPoint
+@onready var forehand_down_point: Vector3 = points.get_node("ForehandDownPoint").position
+@onready var backhand_up_point: Vector3 = points.get_node("BackhandUpPoint").position
+@onready var backhand_down_point: Vector3 = points.get_node("BackhandDownPoint").position
+@onready var backhand_point: Marker3D = $Points/BackhandPoint
+@onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
+
+@onready var _playback: AnimationNodeStateMachinePlayback = (
+	animation_tree.get("parameters/playback")
+)
 
 @onready var _legacy_root: Node3D = $h
 @onready var _legacy_visual_root: Node3D = $h/player_djokovic
@@ -72,7 +74,8 @@ func _ready() -> void:
 
 	player = p
 	animation_tree.active = true
-	# MeshRoot must match the legacy rig root transform, otherwise skinned modular meshes face backward.
+	# MeshRoot must match the legacy rig root transform,
+	# otherwise skinned modular meshes face backward.
 	_mesh_root.transform = _legacy_root.transform
 	_mesh_root.visible = false
 	_set_legacy_visual_state(true)
@@ -110,9 +113,11 @@ func get_animation_hit_frame_time(stroke_type: Stroke.StrokeType) -> float:
 func _from_anim_spawn_ball() -> void:
 	player.from_anim_spawn_ball()
 
+
 ## Called from animation timeline to hit the serve (forwarded to player)
 func from_anim_hit_serve() -> void:
 	player.from_anim_hit_serve()
+
 
 ## Called from animation timeline to hit the ball
 func _from_anim_hit_ball() -> void:
@@ -128,9 +133,10 @@ func get_racket_contact_point(stroke: Stroke) -> Vector3:
 				return backhand_point.global_position
 			Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.BACKHAND_DROP_SHOT:
 				return backhand_slice_point.global_position
-	
+
 	printerr("get_racket_contact_point: stroke type does not exist or stroke is NULL")
 	return global_position
+
 
 func compute_stroke_blend_position(stroke: Stroke) -> float:
 	if not stroke or not stroke.step:
@@ -162,6 +168,7 @@ func compute_stroke_blend_position(stroke: Stroke) -> float:
 ## Animation API
 ################
 
+
 ## Play idle animation
 func play_idle() -> void:
 	_playback.travel("move")
@@ -179,11 +186,32 @@ func play_run(direction: Vector3) -> void:
 
 ## Play stroke animation for given stroke
 func play_stroke(stroke: Stroke) -> void:
-	var playback_speed = 1.0
-
+	var playback_speed: float = _compute_stroke_playback_speed(stroke)
+	print(playback_speed)
 	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
 	_set_stroke_animation(stroke)
 	_playback.travel("stroke")
+
+
+func _compute_stroke_playback_speed(stroke: Stroke) -> float:
+	if not stroke or not stroke.step:
+		return 1.0
+
+	var available_time: float = maxf(stroke.step.time, 0.0)
+	var hit_frame_time: float = get_animation_hit_frame_time(stroke.stroke_type)
+	if hit_frame_time <= 0.0 or not is_finite(hit_frame_time):
+		return 1.0
+
+	if available_time >= hit_frame_time:
+		return 1.0
+
+	# Increase playback speed so the animation reaches the hit marker before the ball arrives.
+	var safe_available_time: float = maxf(available_time, 0.001)
+	var required_speed: float = hit_frame_time / safe_available_time
+	if not is_finite(required_speed) or required_speed < 1.0:
+		return 1.0
+
+	return required_speed
 
 
 ## Play recovery animation after stroke finishes
@@ -249,7 +277,10 @@ func _set_stroke_animation(stroke: Stroke) -> void:
 		push_warning("Stroke animation ", stroke.stroke_type, " not available!")
 		return
 
-	if stroke.stroke_type == stroke.StrokeType.FOREHAND or stroke.stroke_type == stroke.StrokeType.BACKHAND:
+	if (
+		stroke.stroke_type == stroke.StrokeType.FOREHAND
+		or stroke.stroke_type == stroke.StrokeType.BACKHAND
+	):
 		var blend_position: float = compute_stroke_blend_position(stroke)
 		animation_tree["parameters/stroke/" + animation_name + "/blend_position"] = blend_position
 
@@ -272,20 +303,30 @@ func load_appearance(appearance: PlayerAppearance) -> void:
 		_resolve_resource(appearance.body_texture, appearance.skin_texture),
 		_resolve_resource(fallback.body_texture, fallback.skin_texture)
 	)
-	var resolved_face_texture: Texture2D = _resolve_resource(appearance.face_texture, fallback.face_texture)
-	var resolved_shirt_texture: Texture2D = _resolve_resource(appearance.shirt_texture, fallback.shirt_texture)
-	var resolved_shorts_texture: Texture2D = _resolve_resource(appearance.shorts_texture, fallback.shorts_texture)
-	var resolved_shoes_texture: Texture2D = _resolve_resource(appearance.shoes_texture, fallback.shoes_texture)
-	var resolved_hair_texture: Texture2D = _resolve_resource(appearance.hair_texture, fallback.hair_texture)
-	var resolved_racket_texture: Texture2D = _resolve_resource(appearance.racket_texture, fallback.racket_texture)
+	var resolved_face_texture: Texture2D = _resolve_resource(
+		appearance.face_texture, fallback.face_texture
+	)
+	var resolved_shirt_texture: Texture2D = _resolve_resource(
+		appearance.shirt_texture, fallback.shirt_texture
+	)
+	var resolved_shorts_texture: Texture2D = _resolve_resource(
+		appearance.shorts_texture, fallback.shorts_texture
+	)
+	var resolved_shoes_texture: Texture2D = _resolve_resource(
+		appearance.shoes_texture, fallback.shoes_texture
+	)
+	var resolved_hair_texture: Texture2D = _resolve_resource(
+		appearance.hair_texture, fallback.hair_texture
+	)
+	var resolved_racket_texture: Texture2D = _resolve_resource(
+		appearance.racket_texture, fallback.racket_texture
+	)
 	var resolved_racket_strings_texture: Texture2D = _resolve_resource(
-		appearance.racket_strings_texture,
-		fallback.racket_strings_texture
+		appearance.racket_strings_texture, fallback.racket_strings_texture
 	)
 
 	var resolved_body_proportions: Dictionary = _resolve_dictionary(
-		appearance.body_proportions,
-		fallback.body_proportions
+		appearance.body_proportions, fallback.body_proportions
 	)
 
 	clear_appearance()
@@ -317,7 +358,9 @@ func load_appearance(appearance: PlayerAppearance) -> void:
 	_set_legacy_visual_state(not using_modular_meshes)
 
 	if not using_modular_meshes:
-		push_warning("Model.load_appearance: appearance has no modular meshes yet; using legacy model mesh")
+		push_warning(
+			"Model.load_appearance: appearance has no modular meshes yet; using legacy model mesh"
+		)
 
 
 func clear_appearance() -> void:
@@ -343,7 +386,9 @@ func _apply_texture_to_slot(slot: MeshInstance3D, texture: Texture2D) -> void:
 		return
 
 	if slot.material_override and slot.material_override is StandardMaterial3D:
-		var override_material: StandardMaterial3D = (slot.material_override as StandardMaterial3D).duplicate()
+		var override_material: StandardMaterial3D = (
+			(slot.material_override as StandardMaterial3D).duplicate()
+		)
 		if override_material == null:
 			return
 		override_material.albedo_texture = texture
@@ -358,7 +403,9 @@ func _apply_texture_to_slot(slot: MeshInstance3D, texture: Texture2D) -> void:
 
 	var base_material: Material = slot.get_active_material(0)
 	if base_material is StandardMaterial3D:
-		var duplicated_material: StandardMaterial3D = (base_material as StandardMaterial3D).duplicate()
+		var duplicated_material: StandardMaterial3D = (
+			(base_material as StandardMaterial3D).duplicate()
+		)
 		if duplicated_material == null:
 			return
 		duplicated_material.albedo_texture = texture
@@ -369,11 +416,14 @@ func _apply_face_texture_hook(texture: Texture2D) -> void:
 	if not _is_texture_usable(texture):
 		return
 
-	# Keep modular body material untouched; apply face textures only to explicit legacy face/head meshes.
+	# Keep modular body material untouched;
+	# apply face textures only to explicit legacy face/head meshes.
 	_apply_face_texture_recursive(_legacy_root, texture)
 
 
-func _apply_racket_texture_hooks(racket_texture: Texture2D, racket_strings_texture: Texture2D) -> void:
+func _apply_racket_texture_hooks(
+	racket_texture: Texture2D, racket_strings_texture: Texture2D
+) -> void:
 	_apply_racket_textures_recursive(_legacy_root, racket_texture, racket_strings_texture)
 	_apply_racket_textures_recursive(_mesh_root, racket_texture, racket_strings_texture)
 
@@ -393,34 +443,34 @@ func _apply_face_texture_recursive(node: Node, texture: Texture2D) -> void:
 		_apply_face_texture_recursive(child, texture)
 
 
-func _apply_racket_textures_recursive(node: Node, racket_texture: Texture2D, racket_strings_texture: Texture2D) -> void:
+func _apply_racket_textures_recursive(
+	node: Node, racket_texture: Texture2D, racket_strings_texture: Texture2D
+) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance: MeshInstance3D = node as MeshInstance3D
 		var node_name: String = mesh_instance.name.to_lower()
-		var is_racket_mesh: bool = _mesh_matches_keywords(mesh_instance, ["racket", "frame", "head"])
+		var is_racket_mesh: bool = _mesh_matches_keywords(
+			mesh_instance, ["racket", "frame", "head"]
+		)
 		if node_name.contains("racket"):
 			is_racket_mesh = true
 
 		if is_racket_mesh:
 			if _is_texture_usable(racket_texture):
 				var frame_matches: int = _apply_texture_to_matching_surfaces(
-					mesh_instance,
-					racket_texture,
-					["racket", "frame", "head"],
-					["string", "gut"]
+					mesh_instance, racket_texture, ["racket", "frame", "head"], ["string", "gut"]
 				)
 				if frame_matches == 0:
 					_apply_texture_to_slot(mesh_instance, racket_texture)
 
 			if _is_texture_usable(racket_strings_texture):
 				var string_matches: int = _apply_texture_to_matching_surfaces(
-					mesh_instance,
-					racket_strings_texture,
-					["string", "gut"],
-					[]
+					mesh_instance, racket_strings_texture, ["string", "gut"], []
 				)
 				if string_matches == 0:
-					_apply_texture_to_fallback_strings_surface(mesh_instance, racket_strings_texture)
+					_apply_texture_to_fallback_strings_surface(
+						mesh_instance, racket_strings_texture
+					)
 
 	for child in node.get_children():
 		_apply_racket_textures_recursive(child, racket_texture, racket_strings_texture)
@@ -447,8 +497,14 @@ func _apply_texture_to_matching_surfaces(
 		if active_material != null:
 			material_name = active_material.resource_name.to_lower()
 
-		var matches_include: bool = _name_matches_keywords(surface_name, include_keywords) or _name_matches_keywords(material_name, include_keywords)
-		var matches_exclude: bool = _name_matches_keywords(surface_name, exclude_keywords) or _name_matches_keywords(material_name, exclude_keywords)
+		var matches_include: bool = (
+			_name_matches_keywords(surface_name, include_keywords)
+			or _name_matches_keywords(material_name, include_keywords)
+		)
+		var matches_exclude: bool = (
+			_name_matches_keywords(surface_name, exclude_keywords)
+			or _name_matches_keywords(material_name, exclude_keywords)
+		)
 		if matches_include and not matches_exclude:
 			if _apply_texture_to_surface(mesh_instance, surface_index, texture):
 				applied_count += 1
@@ -456,7 +512,9 @@ func _apply_texture_to_matching_surfaces(
 	return applied_count
 
 
-func _apply_texture_to_fallback_strings_surface(mesh_instance: MeshInstance3D, texture: Texture2D) -> void:
+func _apply_texture_to_fallback_strings_surface(
+	mesh_instance: MeshInstance3D, texture: Texture2D
+) -> void:
 	if mesh_instance == null or mesh_instance.mesh == null or not _is_texture_usable(texture):
 		return
 
@@ -472,7 +530,9 @@ func _apply_texture_to_fallback_strings_surface(mesh_instance: MeshInstance3D, t
 	_apply_texture_to_surface(mesh_instance, fallback_surface_index, texture)
 
 
-func _apply_texture_to_surface(slot: MeshInstance3D, surface_index: int, texture: Texture2D) -> bool:
+func _apply_texture_to_surface(
+	slot: MeshInstance3D, surface_index: int, texture: Texture2D
+) -> bool:
 	if slot == null or slot.mesh == null or not _is_texture_usable(texture):
 		return false
 
@@ -481,7 +541,9 @@ func _apply_texture_to_surface(slot: MeshInstance3D, surface_index: int, texture
 
 	var base_material: Material = slot.get_active_material(surface_index)
 	if base_material is StandardMaterial3D:
-		var duplicated_material: StandardMaterial3D = (base_material as StandardMaterial3D).duplicate()
+		var duplicated_material: StandardMaterial3D = (
+			(base_material as StandardMaterial3D).duplicate()
+		)
 		if duplicated_material == null:
 			return false
 		duplicated_material.albedo_texture = texture
@@ -502,7 +564,10 @@ func _mesh_matches_keywords(mesh_instance: MeshInstance3D, keywords: Array) -> b
 			return true
 
 		var active_material: Material = mesh_instance.get_active_material(surface_index)
-		if active_material != null and _name_matches_keywords(active_material.resource_name.to_lower(), keywords):
+		if (
+			active_material != null
+			and _name_matches_keywords(active_material.resource_name.to_lower(), keywords)
+		):
 			return true
 
 	return false

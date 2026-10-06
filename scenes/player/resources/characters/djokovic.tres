@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://foxv46tnu837"]
+
+[ext_resource type="Resource" uid="uid://bumsgiut0ffed" path="res://scenes/player/resources/appearances/djokovic.tres" id="1_fsr4u"]
+[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_w4xln"]
+[ext_resource type="AudioStream" uid="uid://b8qyvdmruk4h5" path="res://assets/sounds/effects/strokes/stroke_flat_djokovic_1.wav" id="3_cf7pp"]
+[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="4_kjnfy"]
+
+[sub_resource type="Resource" id="Resource_djokovic_stats"]
+script = ExtResource("4_kjnfy")
+acceleration = 84.0
+top_speed = 82.0
+agility = 90.0
+stamina = 92.0
+forehand = 90.0
+backhand = 95.0
+serve_power = 84.0
+serve_accuracy = 90.0
+return_skill = 97.0
+volley_skill = 84.0
+slice_skill = 86.0
+topspin_skill = 83.0
+accuracy = 94.0
+consistency = 96.0
+timing = 95.0
+composure = 96.0
+focus = 95.0
+clutch = 93.0
+aggression = 82.0
+net_play = 77.0
+defensive_skill = 94.0
+shot_anticipation = 96.0
+clay_skill = 86.0
+grass_skill = 90.0
+hard_court_skill = 97.0
+
+[resource]
+script = ExtResource("2_w4xln")
+first_name = "Novak"
+last_name = "Djokovic"
+age = 35
+country = "Serbia"
+height = 185
+rank = 7
+stats = SubResource("Resource_djokovic_stats")
+appearance = ExtResource("1_fsr4u")
+sounds = {
+"grunt_flat": [ExtResource("3_cf7pp")],
+"grunt_frequency": 0.1,
+"victory": []
+}

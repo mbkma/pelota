@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AiPlayStyle" format=3]
+[gd_resource type="Resource" script_class="AiPlayStyle" format=3 uid="uid://dlknm0vi72mmj"]
 
 [ext_resource type="Script" uid="uid://b8ajwhseg4rnn" path="res://scenes/player/resources/ai_play_style.gd" id="1"]
 
@@ -9,4 +9,3 @@ shot_power = 0.86
 topspin = 0.7
 court_position = 0.1
 consistency = 0.87
-preferred_pattern = 0

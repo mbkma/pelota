@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://baw65qdb0tqrx"]
+[gd_scene format=3 uid="uid://baw65qdb0tqrx"]
 
 [ext_resource type="Script" uid="uid://d1s38rvekhgbn" path="res://addons/tau-plot/tests/bar/bar_width/test_bar_width_grouped.gd" id="1_as3ss"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_i6vl8"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=990140754]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,20 +11,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_as3ss")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=696123866]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test bar width computations with all policies except THEME"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=457661703]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=259968717]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -34,7 +34,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = CATEGORY_WIDTH_FRACTION] Animate category_width_fraction [0, 1] with intra_group_gap_fraction = 0.0"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=1336767725]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -44,7 +44,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = CATEGORY_WIDTH_FRACTION] Animate intra_group_gap_fraction [0, 1] with category_width_fraction = 0.8"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=1572427275]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -54,7 +54,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = DATA_UNITS][LINEAR] Animate bar_width_x_units [0, 0.5] with bar_gap_x_units = 0"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=1154554324]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -64,7 +64,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = DATA_UNITS][LOGARITHMIC] Animate bar_width_log_factor [1, 2] with bar_gap_log_factor = 1"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=291867681]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -74,7 +74,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = DATA_UNITS][LINEAR] Animate bar_gap_x_units [0, 0.1] with bar_width_x_units = 0.1"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=140433421]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -84,7 +84,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = DATA_UNITS][LOGARITHMIC] Animate bar_gap_log_factor [1, 2] with bar_width_log_factor = 1.1"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot7" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot7" type="PanelContainer" parent="GridContainer" unique_id=1642276066]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -94,7 +94,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = NEIGHBOR_SPACING_FRACTION][LINEAR] Animate neighbor_spacing_fraction [0, 1] with neighbor_gap_fraction = 0"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot8" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot8" type="PanelContainer" parent="GridContainer" unique_id=1342111187]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -104,7 +104,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = NEIGHBOR_SPACING_FRACTION][LOGARITHMIC] Animate neighbor_spacing_fraction [0, 1] with neighbor_gap_fraction = 0"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot9" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot9" type="PanelContainer" parent="GridContainer" unique_id=233544358]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -114,7 +114,7 @@ script = ExtResource("2_i6vl8")
 title = "[Policy = NEIGHBOR_SPACING_FRACTION][LINEAR] Animate neighbor_gap_fraction [0, 1.0] with neighbor_spacing_fraction = 1"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot10" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot10" type="PanelContainer" parent="GridContainer" unique_id=1765873474]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

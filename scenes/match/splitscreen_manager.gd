@@ -2,15 +2,28 @@
 class_name SplitscreenManager
 extends Control
 
-## Splitscreen modes
-enum SplitscreenMode { NORMAL, VERTICAL_SPLIT, HORIZONTAL_SPLIT }
-
 ## Signal emitted when splitscreen mode is toggled
 signal splitscreen_toggled(enabled: bool)
+
+## Splitscreen modes
+enum SplitscreenMode { NORMAL, VERTICAL_SPLIT, HORIZONTAL_SPLIT }
 
 @export var cameras: MatchCameras
 @export var player0: Player
 @export var player1: Player
+
+## Cameras for each viewport
+var left_camera: Camera3D
+var right_camera: Camera3D
+var top_camera: Camera3D
+var bottom_camera: Camera3D
+
+## State tracking
+var current_mode: SplitscreenMode = SplitscreenMode.NORMAL
+
+
+## Original world camera reference
+var _original_camera: Camera3D
 
 ## UI nodes for splitscreen display
 @onready var hbox_container: HBoxContainer = $HBoxContainer
@@ -19,19 +32,6 @@ signal splitscreen_toggled(enabled: bool)
 @onready var right_viewport: SubViewport = $HBoxContainer/RightViewportContainer/RightViewport
 @onready var top_viewport: SubViewport = $VBoxContainer/TopViewportContainer/TopViewport
 @onready var bottom_viewport: SubViewport = $VBoxContainer/BottomViewportContainer/BottomViewport
-
-## Cameras for each viewport
-var left_camera: Camera3D
-var right_camera: Camera3D
-var top_camera: Camera3D
-var bottom_camera: Camera3D
-
-## Original world camera reference
-var _original_camera: Camera3D
-
-## State tracking
-var current_mode: SplitscreenMode = SplitscreenMode.NORMAL
-
 
 func _ready() -> void:
 	# Verify required exports

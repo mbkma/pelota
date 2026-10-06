@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://f1765wvay6fi"]
+[gd_scene format=3 uid="uid://f1765wvay6fi"]
 
 [ext_resource type="Script" uid="uid://y1rt8q6tavqw" path="res://addons/tau-plot/tests/bar/bar_width/test_bar_width_grouped_theme.gd" id="1_p1mea"]
 [ext_resource type="Theme" uid="uid://blxu22ni3xrsd" path="res://addons/tau-plot/tests/bar/bar_width/theme_width_10_gap_0.tres" id="3_6hpae"]
@@ -6,7 +6,7 @@
 [ext_resource type="Theme" uid="uid://c7aq0hq2a8cq" path="res://addons/tau-plot/tests/bar/bar_width/theme_width_30_gap_10.tres" id="4_jlifq"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="6_6ncpf"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=1686035929]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,20 +14,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p1mea")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=881930622]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test GROUPED bar width computations with THEME"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=682659282]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=1707008132]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -38,7 +38,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LINEAR] Toggle themes every 1s with bar_width_px = 10 and 30"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=691420646]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -49,7 +49,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LOGARITHMIC] Toggle themes every 1s with bar_width_px = 10 and 30"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=2107659801]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -60,7 +60,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LINEAR] Toggle themes every 1s with bar_intragroup_gap_px = 0 and 10"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=1466440455]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -71,7 +71,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LOGARITHMIC] Toggle themes every 1s with bar_intragroup_gap_px = 0 and 10"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot5" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot5" type="PanelContainer" parent="GridContainer" unique_id=1010800847]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -82,7 +82,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LINEAR] Override bar_width_px [0, 50]"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot6" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot6" type="PanelContainer" parent="GridContainer" unique_id=1047904154]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -93,7 +93,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LOGARITHMIC] Override bar_width_px [0, 50]"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot7" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot7" type="PanelContainer" parent="GridContainer" unique_id=1280281030]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -103,7 +103,7 @@ script = ExtResource("6_6ncpf")
 title = "[Policy = THEME][LINEAR] Override bar_intragroup_gap_px [0, 50] with width = 50 px"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot8" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot8" type="PanelContainer" parent="GridContainer" unique_id=2083254765]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

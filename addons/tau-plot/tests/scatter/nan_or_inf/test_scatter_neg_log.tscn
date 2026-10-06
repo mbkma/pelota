@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dc27uij7lsyu8"]
+[gd_scene format=3 uid="uid://dc27uij7lsyu8"]
 
 [ext_resource type="Script" uid="uid://du6ro4kuuecie" path="res://addons/tau-plot/tests/scatter/nan_or_inf/test_scatter_neg_log.gd" id="1_b8mi8"]
 [ext_resource type="Script" uid="uid://dnhvsf2wip771" path="res://addons/tau-plot/plot/plot.gd" id="2_d88ns"]
 
-[node name="Bars" type="VBoxContainer"]
+[node name="Bars" type="VBoxContainer" unique_id=1811872298]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,20 +11,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_b8mi8")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=634083079]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Test negative values with logarithmic scale"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=2087447067]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="TestPlot1" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot1" type="PanelContainer" parent="GridContainer" unique_id=688918604]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -34,7 +34,7 @@ script = ExtResource("2_d88ns")
 title = "[LOG X, LINEAR Y] with PER_SERIES_X dataset (4th x value is negative for series A)"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot2" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot2" type="PanelContainer" parent="GridContainer" unique_id=1816719767]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -44,22 +44,22 @@ script = ExtResource("2_d88ns")
 title = "[LINEAR X, LOG Y] with PER_SERIES_X dataset (4th y value is negative for series A)"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot3" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot3" type="PanelContainer" parent="GridContainer" unique_id=2080222142]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_d88ns")
-title = "[LOG X, LINEAR Y] with SHARED_X dataset"
+title = "[LOG X, LINEAR Y] with SHARED_X dataset (4th x value is negative)"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"
 
-[node name="TestPlot4" type="PanelContainer" parent="GridContainer"]
+[node name="TestPlot4" type="PanelContainer" parent="GridContainer" unique_id=597972066]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_type_variation = &"TauPlot"
 script = ExtResource("2_d88ns")
-title = "[LINEAR X, LOG Y] with SHARED_X dataset"
+title = "[LINEAR X, LOG Y] with SHARED_X dataset (4th y value is negative for series A)"
 metadata/_custom_type_script = "uid://dnhvsf2wip771"

@@ -1,6 +1,5 @@
 extends Node3D
 
-@onready var ball_spawn_marker_3d: Marker3D = $Marker3D
 # Given parameters
 @export var velocity_length: float = 10.0  # Example speed of the ball
 @export var shoot_off_angle: float = 45.0  # Angle from the horizontal plane in degrees
@@ -10,6 +9,8 @@ extends Node3D
 
 var _ball_factory: BallFactory
 
+@onready var ball_spawn_marker_3d: Marker3D = $Marker3D
+
 
 func _ready() -> void:
 	_ball_factory = BallFactory.new(ball_scene)
@@ -18,8 +19,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("request_ball"):
 		# Calculate launch velocity from explicit horizontal and elevation angles.
-		var _shoot_off_angle_radians: float = deg_to_rad(shoot_off_angle)
-		var _horizontal_angle_radians: float = deg_to_rad(horizontal_angle)
+		var shoot_off_angle_radians: float = deg_to_rad(shoot_off_angle)
+		var horizontal_angle_radians: float = deg_to_rad(horizontal_angle)
 
 		var forward_flat: Vector3 = -global_basis.z
 		forward_flat.y = 0.0
@@ -28,14 +29,18 @@ func _process(_delta: float) -> void:
 		else:
 			forward_flat = forward_flat.normalized()
 
-		var horizontal_basis := Basis(Vector3.UP, _horizontal_angle_radians)
+		var horizontal_basis := Basis(Vector3.UP, horizontal_angle_radians)
 		var launch_direction_flat: Vector3 = (horizontal_basis * forward_flat).normalized()
 
-		var horizontal_speed: float = cos(_shoot_off_angle_radians) * velocity_length
-		var vertical_speed: float = sin(_shoot_off_angle_radians) * velocity_length
-		var initial_velocity: Vector3 = launch_direction_flat * horizontal_speed + Vector3.UP * vertical_speed
+		var horizontal_speed: float = cos(shoot_off_angle_radians) * velocity_length
+		var vertical_speed: float = sin(shoot_off_angle_radians) * velocity_length
+		var initial_velocity: Vector3 = (
+			launch_direction_flat * horizontal_speed + Vector3.UP * vertical_speed
+		)
 
-		var ball: Ball = _ball_factory.create_ball(ball_spawn_marker_3d.global_position, initial_velocity)
+		var ball: Ball = _ball_factory.create_ball(
+			ball_spawn_marker_3d.global_position, initial_velocity
+		)
 		if not ball:
 			return
 		get_parent().add_child(ball)

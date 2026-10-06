@@ -5,10 +5,20 @@ extends Controller
 ## Phase-based decision system enum
 enum Phase {
 	SERVING,
-	ANTICIPATION,      ## Before opponent contact - tentative positioning
-	LOCK_IN,           ## Opponent contacts ball - compute exact stroke
-	TRACKING,          ## Monitor trajectory - update if changes
-	WAITING_FOR_HIT    ## Animation playing - waiting for hit frame
+	ANTICIPATION,  ## Before opponent contact - tentative positioning
+	LOCK_IN,  ## Opponent contacts ball - compute exact stroke
+	TRACKING,  ## Monitor trajectory - update if changes
+	WAITING_FOR_HIT,  ## Animation playing - waiting for hit frame
+}
+
+const STROKE_TYPE_LABELS := {
+	Stroke.StrokeType.FOREHAND: "FH",
+	Stroke.StrokeType.BACKHAND: "BH",
+	Stroke.StrokeType.SERVE: "SERVE",
+	Stroke.StrokeType.VOLLEY: "VOLLEY",
+	Stroke.StrokeType.FOREHAND_DROP_SHOT: "FH_DROP",
+	Stroke.StrokeType.BACKHAND_DROP_SHOT: "BH_DROP",
+	Stroke.StrokeType.BACKHAND_SLICE: "BH_SLICE",
 }
 
 ## High-level strategy resource used to orchestrate shot planning.
@@ -62,7 +72,7 @@ func _ready() -> void:
 
 	# Connect to ball_hit signal to handle defensive positioning and phase reset
 	player.ball_hit.connect(_on_hit_frame)
-	
+
 	_log_strategy("AI Controller initialized")
 
 
@@ -73,25 +83,39 @@ func _make_serve() -> void:
 		push_error("AiController._make_serve: Tactic returned null stroke")
 		return
 
-	_log_strategy("Serve decision: type=%s intended_power=%.1f spin=(%.2f, %.2f, %.2f) intended_target=(%.2f, %.2f, %.2f)" % [
-		_stroke_type_to_string(stroke.stroke_type),
-		stroke.intended_stroke_power,
-		stroke.stroke_spin.x,
-		stroke.stroke_spin.y,
-		stroke.stroke_spin.z,
-		stroke.intended_stroke_target.x,
-		stroke.intended_stroke_target.y,
-		stroke.intended_stroke_target.z
-	])
-	_log_strategy("Serve execution: actual_power=%.1f actual_target=(%.2f, %.2f, %.2f)" % [
-		stroke.stroke_power,
-		stroke.stroke_target.x,
-		stroke.stroke_target.y,
-		stroke.stroke_target.z
-	])
+	_log_strategy(
+		(
+			(
+				"Serve decision: type=%s intended_power=%.1f spin=(%.2f, %.2f, %.2f) "
+				+ "intended_target=(%.2f, %.2f, %.2f)"
+			)
+			% [
+				_stroke_type_to_string(stroke.stroke_type),
+				stroke.intended_stroke_power,
+				stroke.stroke_spin.x,
+				stroke.stroke_spin.y,
+				stroke.stroke_spin.z,
+				stroke.intended_stroke_target.x,
+				stroke.intended_stroke_target.y,
+				stroke.intended_stroke_target.z
+			]
+		)
+	)
+	_log_strategy(
+		(
+			"Serve execution: actual_power=%.1f actual_target=(%.2f, %.2f, %.2f)"
+			% [
+				stroke.stroke_power,
+				stroke.stroke_target.x,
+				stroke.stroke_target.y,
+				stroke.stroke_target.z
+			]
+		)
+	)
 	player.prepare_serve()
 	await get_tree().create_timer(GameConstants.INPUT_STARTUP_DELAY + 1.5).timeout
 	_pending_stroke = stroke
+
 
 ## Request the AI to serve
 func request_serve() -> void:
@@ -169,21 +193,30 @@ func _queue_stroke(step: TrajectoryStep) -> void:
 		_:
 			player.label_3d.modulate = Color.YELLOW
 	_stroke_animation_started = false
-	_log_strategy("Stroke decision: type=%s intended_power=%.1f actual_power=%.1f spin=(%.2f, %.2f, %.2f) delay=%.3f intended_target=(%.2f, %.2f, %.2f) actual_target=(%.2f, %.2f, %.2f)" % [
-		_stroke_type_to_string(stroke.stroke_type),
-		stroke.intended_stroke_power,
-		stroke.stroke_power,
-		stroke.stroke_spin.x,
-		stroke.stroke_spin.y,
-		stroke.stroke_spin.z,
-		stroke.delay,
-		stroke.intended_stroke_target.x,
-		stroke.intended_stroke_target.y,
-		stroke.intended_stroke_target.z,
-		stroke.stroke_target.x,
-		stroke.stroke_target.y,
-		stroke.stroke_target.z
-	])
+	_log_strategy(
+		(
+			(
+				"Stroke decision: type=%s intended_power=%.1f actual_power=%.1f "
+				+ "spin=(%.2f, %.2f, %.2f) delay=%.3f "
+				+ "intended_target=(%.2f, %.2f, %.2f) actual_target=(%.2f, %.2f, %.2f)"
+			)
+			% [
+				_stroke_type_to_string(stroke.stroke_type),
+				stroke.intended_stroke_power,
+				stroke.stroke_power,
+				stroke.stroke_spin.x,
+				stroke.stroke_spin.y,
+				stroke.stroke_spin.z,
+				stroke.delay,
+				stroke.intended_stroke_target.x,
+				stroke.intended_stroke_target.y,
+				stroke.intended_stroke_target.z,
+				stroke.stroke_target.x,
+				stroke.stroke_target.y,
+				stroke.stroke_target.z
+			]
+		)
+	)
 	adjust_player_position_to_stroke(player, step, stroke)
 
 
@@ -194,7 +227,12 @@ func _anticipation_phase(_delta: float) -> void:
 	if is_flying_towards(player, player.ball):
 		# Ball is coming - transition to lock-in phase
 		var ball_pos = player.ball.global_position
-		_log_strategy("Ball incoming at (%.2f, %.2f, %.2f) - transitioning to LOCK_IN" % [ball_pos.x, ball_pos.y, ball_pos.z])
+		_log_strategy(
+			(
+				"Ball incoming at (%.2f, %.2f, %.2f) - transitioning to LOCK_IN"
+				% [ball_pos.x, ball_pos.y, ball_pos.z]
+			)
+		)
 		_current_phase = Phase.LOCK_IN
 
 
@@ -233,12 +271,12 @@ func _lock_in_phase() -> void:
 		return
 
 	# Compute stroke and queue it
-	_log_strategy("LOCK_IN: Ball arrival point (%.2f, %.2f, %.2f) at t=%.3f" % [
-		closest_step.point.x,
-		closest_step.point.y,
-		closest_step.point.z,
-		closest_step.time
-	])
+	_log_strategy(
+		(
+			"LOCK_IN: Ball arrival point (%.2f, %.2f, %.2f) at t=%.3f"
+			% [closest_step.point.x, closest_step.point.y, closest_step.point.z, closest_step.time]
+		)
+	)
 	_queue_stroke(closest_step)
 	_current_phase = Phase.TRACKING
 
@@ -258,7 +296,9 @@ func _tracking_phase(_delta: float) -> void:
 	if not closest_step:
 		return
 
-	var hit_point_time: float = player.model.get_animation_hit_frame_time(_pending_stroke.stroke_type)
+	var hit_point_time: float = player.model.get_animation_hit_frame_time(
+		_pending_stroke.stroke_type
+	)
 	if closest_step.time <= hit_point_time:
 		_start_pending_stroke_animation()
 
@@ -275,6 +315,7 @@ func _start_pending_stroke_animation() -> void:
 	_stroke_animation_started = true
 	_current_phase = Phase.WAITING_FOR_HIT
 	player.start_stroke_animation(stroke)
+
 
 func _on_hit_frame() -> void:
 	# Calculate defensive position and request move
@@ -312,15 +353,13 @@ func get_current_phase() -> Phase:
 	return _current_phase
 
 
-
-
 ## Calculate the angle bisector position (best defensive position)
 ## Returns the point that maximizes angle coverage to both corners
 func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vector3:
 	var opponent_xz: Vector3 = Vector3(opponent_hit_position.x, 0, opponent_hit_position.z)
 
 	var court_width: float = GameConstants.COURT_WIDTH_HALF
-	var _court_depth: float = GameConstants.COURT_LENGTH_HALF
+	var court_depth: float = GameConstants.COURT_LENGTH_HALF
 	var service_line_z: float = GameConstants.SERVICE_LINE
 
 	# Determine which side of court the opponent is hitting from
@@ -346,29 +385,11 @@ func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vecto
 	var baseline_z: float = 14.0 * -opponent_side  # baseline for this player
 	var t: float = (baseline_z - opponent_xz.z) / bisector_direction.z
 	var defensive_position: Vector3 = Vector3(
-		opponent_xz.x + t * bisector_direction.x,
-		0.0,  # player height
-		baseline_z
+		opponent_xz.x + t * bisector_direction.x, 0.0, baseline_z  # player height
 	)
 
 	return defensive_position
 
 
 func _stroke_type_to_string(stroke_type: Stroke.StrokeType) -> String:
-	match stroke_type:
-		Stroke.StrokeType.FOREHAND:
-			return "FH"
-		Stroke.StrokeType.BACKHAND:
-			return "BH"
-		Stroke.StrokeType.SERVE:
-			return "SERVE"
-		Stroke.StrokeType.VOLLEY:
-			return "VOLLEY"
-		Stroke.StrokeType.FOREHAND_DROP_SHOT:
-			return "FH_DROP"
-		Stroke.StrokeType.BACKHAND_DROP_SHOT:
-			return "BH_DROP"
-		Stroke.StrokeType.BACKHAND_SLICE:
-			return "BH_SLICE"
-		_:
-			return "UNKNOWN"
+	return STROKE_TYPE_LABELS.get(stroke_type, "UNKNOWN")
