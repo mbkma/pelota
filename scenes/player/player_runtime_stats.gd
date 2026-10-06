@@ -35,8 +35,7 @@ func stamina_capacity() -> float:
 
 func stamina_preservation() -> float:
 	var base_value: float = _base().stamina_preservation()
-	var mental_bonus: float = mental_state.pressure_modifier() if mental_state else 0.5
-	return clampf(base_value * lerpf(0.92, 1.08, mental_bonus), 0.0, 1.0)
+	return clampf(base_value * lerpf(0.9, 1.0, _pressure_modifier()), 0.0, 1.0)
 
 
 func stamina_recovery_rate() -> float:
@@ -63,12 +62,7 @@ func shot_side_skill01(is_backhand: bool) -> float:
 
 func shot_control01(stamina01: float) -> float:
 	var control: float = _base().shot_control01(stamina01)
-	var mental_bonus: float = (
-		mental_state.pressure_modifier()
-		if mental_state and mental_state.has_method("pressure_modifier")
-		else 0.5
-	)
-	return clampf(control * lerpf(0.92, 1.06, mental_bonus), 0.0, 1.0)
+	return clampf(control * lerpf(0.75, 1.0, _pressure_modifier()), 0.0, 1.0)
 
 
 func spin_control01(stroke_type: int, stamina01: float) -> float:
@@ -79,8 +73,30 @@ func serve_power01() -> float:
 	return _base().serve_power01()
 
 
+## Feel for the moment of contact: widens the window of a perfectly timed shot.
+func timing01(stamina01: float) -> float:
+	return _base().timing01(stamina01)
+
+
+## Precision of a rally shot in [0, 1]: shot control, mixed with the return skill for a
+## return of serve and with the net game (volley and net play) for a volley.
+func rally_precision01(stamina01: float, is_return: bool, is_volley: bool) -> float:
+	var precision: float = shot_control01(stamina01)
+	if is_return:
+		precision = lerpf(precision, _base().return01(), 0.5)
+	if is_volley:
+		precision = lerpf(precision, _base().net_game01(), 0.5)
+	return precision
+
+
+## Volley technique: sets the pace of volleys.
+func volley01() -> float:
+	return _base().volley01()
+
+
 func serve_accuracy01(stamina01: float) -> float:
-	return _base().serve_accuracy01(stamina01)
+	var accuracy: float = _base().serve_accuracy01(stamina01)
+	return clampf(accuracy * lerpf(0.8, 1.0, _pressure_modifier()), 0.0, 1.0)
 
 
 func tactical_aggression01() -> float:
@@ -105,5 +121,9 @@ func anticipation01() -> float:
 
 func pressure_resistance01() -> float:
 	var base_value: float = _base().pressure_resistance01()
-	var mental_bonus: float = mental_state.pressure_modifier() if mental_state else 0.5
-	return clampf((base_value * 0.7) + (mental_bonus * 0.3), 0.0, 1.0)
+	return clampf((base_value * 0.7) + (_pressure_modifier() * 0.3), 0.0, 1.0)
+
+
+## How well the player copes with the current pressure, in [0, 1] (1 = unaffected).
+func _pressure_modifier() -> float:
+	return mental_state.pressure_modifier() if mental_state else 1.0

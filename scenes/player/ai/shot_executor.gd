@@ -1,7 +1,16 @@
 class_name ShotExecutor
 extends RefCounted
 
-## When true, intended shot equals executed shot (no jitter or consistency error)
+## Chance that a volley which is not an attack is played as a drop volley.
+const DROP_VOLLEY_CHANCE: float = 0.25
+## Normalized depth (0 = net, 1 = baseline) of drop volley targets.
+const DROP_VOLLEY_DEPTH: float = 0.2
+
+## Largest landing error (m) of a rally shot and a serve, for a player with no precision.
+const AI_RALLY_ERROR_RADIUS: float = 1.8
+const AI_SERVE_ERROR_RADIUS: float = 0.9
+
+## When true, intended shot equals executed shot (no consistency error)
 var perfect_accuracy: bool = false
 
 
@@ -12,21 +21,6 @@ func _stats(context: AiPointContext) -> PlayerRuntimeStats:
 	return context.player.stats
 
 
-func _apply_execution_jitter(stroke: Stroke, context: AiPointContext, risk: float) -> void:
-	if not stroke or not context or perfect_accuracy:
-		return
-	var consistency: float = 0.5
-	if context.play_style:
-		consistency = context.play_style.consistency
-	var error_radius: float = lerpf(3.0, 0.2, consistency)
-	error_radius *= lerpf(0.7, 1.1, clampf(risk, 0.0, 1.0))
-	stroke.stroke_target += Vector3(
-		randf_range(-error_radius, error_radius), 0.0, randf_range(-error_radius, error_radius)
-	)
-	if not context.is_serve:
-		stroke.stroke_target.z *= lerpf(0.72, 1.0, consistency)
-
-
 func build_stroke(context: AiPointContext, targeting: NormalizedCourtTargeting) -> Stroke:
 	if not context or not targeting:
 		return null
@@ -34,7 +28,13 @@ func build_stroke(context: AiPointContext, targeting: NormalizedCourtTargeting) 
 	var play_style: AiPlayStyle = context.play_style
 	var intent: AiPointContext.ShotIntent = context.selected_intent
 	var lane: AiPointContext.TargetLane = context.selected_target_lane
+	var stroke_type: Stroke.StrokeType = _determine_stroke_type(context, intent)
 	var normalized_target: Vector2 = _build_normalized_target(context, play_style, intent, lane)
+	if (
+		stroke_type == Stroke.StrokeType.FOREHAND_DROP_VOLLEY
+		or stroke_type == Stroke.StrokeType.BACKHAND_DROP_VOLLEY
+	):
+		normalized_target.y = DROP_VOLLEY_DEPTH
 	var intended_world_target: Vector3 = targeting.to_world_target(
 		normalized_target, context.player_position, context.is_serve
 	)
@@ -43,7 +43,6 @@ func build_stroke(context: AiPointContext, targeting: NormalizedCourtTargeting) 
 		if perfect_accuracy
 		else _apply_consistency_error(intended_world_target, context, play_style)
 	)
-	var stroke_type: Stroke.StrokeType = _determine_stroke_type(context, intent)
 	var intended_power: float = _compute_shot_speed(context, play_style, intent, stroke_type)
 
 	var stroke := Stroke.new()
@@ -109,6 +108,18 @@ func _determine_stroke_type(
 	if context.is_serve:
 		return Stroke.StrokeType.SERVE
 
+	var is_forehand: bool = context.ball_side == AiPointContext.BallSide.FOREHAND
+	if _is_volley(context):
+		if intent != AiPointContext.ShotIntent.ATTACK and randf() < DROP_VOLLEY_CHANCE:
+			return (
+				Stroke.StrokeType.FOREHAND_DROP_VOLLEY
+				if is_forehand
+				else Stroke.StrokeType.BACKHAND_DROP_VOLLEY
+			)
+		return (
+			Stroke.StrokeType.FOREHAND_VOLLEY if is_forehand else Stroke.StrokeType.BACKHAND_VOLLEY
+		)
+
 	if context.ball_side == AiPointContext.BallSide.BACKHAND:
 		if intent == AiPointContext.ShotIntent.SAFE and randf() < 0.45:
 			return Stroke.StrokeType.BACKHAND_SLICE
@@ -132,11 +143,17 @@ func _compute_shot_speed(
 		serve_speed *= lerpf(0.88, 1.0, context.player_stamina_ratio)
 		return clampf(serve_speed, 24.0, 64.0)
 
+	var style_power: float = play_style.shot_power if play_style else 0.5
+	match stroke_type:
+		Stroke.StrokeType.FOREHAND_VOLLEY, Stroke.StrokeType.BACKHAND_VOLLEY:
+			return lerpf(16.0, 24.0, stats.volley01()) + style_power * 4.0
+		Stroke.StrokeType.FOREHAND_DROP_VOLLEY, Stroke.StrokeType.BACKHAND_DROP_VOLLEY:
+			return lerpf(6.0, 10.0, stats.volley01())
+
 	var side_quality: float = stats.shot_side_skill01(
 		context.ball_side == AiPointContext.BallSide.BACKHAND
 	)
 	var base_speed: float = lerpf(24.0, 29.0, side_quality)
-	var style_power: float = play_style.shot_power if play_style else 0.5
 	var intent_power_bonus: float = 12.0
 	match intent:
 		AiPointContext.ShotIntent.SAFE:
@@ -171,8 +188,13 @@ func _compute_shot_spin(
 	if side_sign == 0.0:
 		side_sign = 1.0
 
-	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
-		return Vector3(-0.22 * side_sign, -0.86, 0.0)
+	match stroke_type:
+		Stroke.StrokeType.BACKHAND_SLICE:
+			return Vector3(-0.22 * side_sign, -0.86, 0.0)
+		Stroke.StrokeType.FOREHAND_VOLLEY, Stroke.StrokeType.BACKHAND_VOLLEY:
+			return GameConstants.VOLLEY_SPIN
+		Stroke.StrokeType.FOREHAND_DROP_VOLLEY, Stroke.StrokeType.BACKHAND_DROP_VOLLEY:
+			return GameConstants.DROP_VOLLEY_SPIN
 	if stroke_type == Stroke.StrokeType.SERVE:
 		var serve_topspin: float = lerpf(0.55, 0.9, style_topspin)
 		var serve_side: float = side_sign * lerpf(0.08, 0.3, style_aggression)
@@ -191,22 +213,30 @@ func _compute_shot_spin(
 			pass
 
 	var topspin_value: float = clampf(base_topspin + (style_topspin * intent_spin_bonus), -1.0, 1.0)
-	var side_spin: float = side_sign * lerpf(0.04, 0.24, style_aggression)
 	return Vector3(0, topspin_value, 0.0)
 
 
+## Misses the intended target by a random offset inside a radius set by the player's
+## precision (serve accuracy, or shot control with return and volley skill) and play style.
 func _apply_consistency_error(
 	intended_target: Vector3, context: AiPointContext, play_style: AiPlayStyle
 ) -> Vector3:
-	var consistency: float = play_style.consistency if play_style else 0.5
-	var error_radius: float = lerpf(1.0, 0.2, consistency)
-	var target: Vector3 = intended_target
-
+	var stats: PlayerRuntimeStats = _stats(context)
+	var precision: float
+	var max_radius: float = AI_RALLY_ERROR_RADIUS
 	if context.is_serve:
-		error_radius *= 0.1
+		precision = stats.serve_accuracy01(context.player_stamina_ratio)
+		max_radius = AI_SERVE_ERROR_RADIUS
+	else:
+		precision = stats.rally_precision01(
+			context.player_stamina_ratio, context.player.is_returning_serve(), _is_volley(context)
+		)
+	var consistency: float = play_style.consistency if play_style else 0.5
+	var error_radius: float = lerpf(max_radius, 0.15, precision) * lerpf(1.2, 0.8, consistency)
+	var offset: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
+	return intended_target + Vector3(offset.x, 0.0, offset.y)
 
-	target += Vector3(
-		randf_range(-error_radius, error_radius), 0.0, randf_range(-error_radius, error_radius)
-	)
 
-	return target
+## Whether the stroke is a volley: taken close to the net before the ball bounces.
+func _is_volley(context: AiPointContext) -> bool:
+	return context.closest_step != null and context.closest_step.is_volley_contact()

@@ -1,0 +1,133 @@
+[gd_resource type="AnimationNodeBlendTree" format=3 uid="uid://cl8jd25st54sp"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_civy7"]
+animation = &"g_run_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vliv1"]
+animation = &"g_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_k3ymg"]
+animation = &"g_run_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g00t3"]
+animation = &"g_run_forward"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_3ltei"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_civy7")
+blend_point_0/pos = Vector2(-1, 0)
+blend_point_0/name = &"g_run_left"
+blend_point_1/node = SubResource("AnimationNodeAnimation_vliv1")
+blend_point_1/pos = Vector2(0, 0)
+blend_point_1/name = &"g_idle"
+blend_point_2/node = SubResource("AnimationNodeAnimation_k3ymg")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_2/name = &"g_run_right"
+blend_point_3/node = SubResource("AnimationNodeAnimation_g00t3")
+blend_point_3/pos = Vector2(0, 1)
+blend_point_3/name = &"g_run_forward"
+triangles = PackedInt32Array(1, 2, 3, 0, 1, 3)
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_nhq7s"]
+fadein_time = 0.1
+fadeout_time = 0.25
+
+[sub_resource type="AnimationNodeTimeSeek" id="AnimationNodeTimeSeek_ch82x"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_5wcsu"]
+input_0/name = "g_forehand_down"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "g_forehand"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "g_forehand_up"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "g_backhand_down"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+input_4/name = "g_backhand"
+input_4/auto_advance = false
+input_4/break_loop_at_end = false
+input_4/reset = true
+input_5/name = "g_backhand_up"
+input_5/auto_advance = false
+input_5/break_loop_at_end = false
+input_5/reset = true
+input_6/name = "g_backhand_slice"
+input_6/auto_advance = false
+input_6/break_loop_at_end = false
+input_6/reset = true
+input_7/name = "g_forehand_open"
+input_7/auto_advance = false
+input_7/break_loop_at_end = false
+input_7/reset = true
+input_8/name = "g_serve"
+input_8/auto_advance = false
+input_8/break_loop_at_end = false
+input_8/reset = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_m62yk"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yxgy2"]
+animation = &"g_backhand"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b0wyn"]
+animation = &"g_backhand_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2kep4"]
+animation = &"g_backhand_slice"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_oomoy"]
+animation = &"g_backhand_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nowfb"]
+animation = &"g_forehand"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yewcw"]
+animation = &"g_forehand_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sqj06"]
+animation = &"g_forehand_open"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qkwjg"]
+animation = &"g_forehand_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v5hjg"]
+animation = &"g_serve"
+
+[resource]
+nodes/output/position = Vector2(750, 0)
+nodes/g_forehand_down/node = SubResource("AnimationNodeAnimation_yewcw")
+nodes/g_forehand_down/position = Vector2(-500, -200)
+nodes/g_forehand/node = SubResource("AnimationNodeAnimation_nowfb")
+nodes/g_forehand/position = Vector2(-500, -80)
+nodes/g_forehand_up/node = SubResource("AnimationNodeAnimation_qkwjg")
+nodes/g_forehand_up/position = Vector2(-500, 40)
+nodes/g_backhand_down/node = SubResource("AnimationNodeAnimation_b0wyn")
+nodes/g_backhand_down/position = Vector2(-500, 160)
+nodes/g_backhand/node = SubResource("AnimationNodeAnimation_yxgy2")
+nodes/g_backhand/position = Vector2(-500, 280)
+nodes/g_backhand_up/node = SubResource("AnimationNodeAnimation_oomoy")
+nodes/g_backhand_up/position = Vector2(-500, 400)
+nodes/g_backhand_slice/node = SubResource("AnimationNodeAnimation_2kep4")
+nodes/g_backhand_slice/position = Vector2(-500, 520)
+nodes/g_forehand_open/node = SubResource("AnimationNodeAnimation_sqj06")
+nodes/g_forehand_open/position = Vector2(-500, 640)
+nodes/g_serve/node = SubResource("AnimationNodeAnimation_v5hjg")
+nodes/g_serve/position = Vector2(-500, 760)
+nodes/Locomotion/node = SubResource("AnimationNodeBlendSpace2D_3ltei")
+nodes/Locomotion/position = Vector2(200, -300)
+nodes/StrokeSelect/node = SubResource("AnimationNodeTransition_5wcsu")
+nodes/StrokeSelect/position = Vector2(-200, 200)
+nodes/StrokeSeek/node = SubResource("AnimationNodeTimeSeek_ch82x")
+nodes/StrokeSeek/position = Vector2(50, 200)
+nodes/StrokeSpeed/node = SubResource("AnimationNodeTimeScale_m62yk")
+nodes/StrokeSpeed/position = Vector2(250, 200)
+nodes/Stroke/node = SubResource("AnimationNodeOneShot_nhq7s")
+nodes/Stroke/position = Vector2(500, 0)
+node_connections = [&"output", 0, &"Stroke", &"StrokeSelect", 0, &"g_forehand_down", &"StrokeSelect", 1, &"g_forehand", &"StrokeSelect", 2, &"g_forehand_up", &"StrokeSelect", 3, &"g_backhand_down", &"StrokeSelect", 4, &"g_backhand", &"StrokeSelect", 5, &"g_backhand_up", &"StrokeSelect", 6, &"g_backhand_slice", &"StrokeSelect", 7, &"g_forehand_open", &"StrokeSelect", 8, &"g_serve", &"StrokeSeek", 0, &"StrokeSelect", &"StrokeSpeed", 0, &"StrokeSeek", &"Stroke", 0, &"Locomotion", &"Stroke", 1, &"StrokeSpeed"]

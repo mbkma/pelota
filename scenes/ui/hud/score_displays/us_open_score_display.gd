@@ -8,6 +8,8 @@ extends Control
 func _set_score(score: Score):
 	player_1_score_panel.set_score(score, 0)
 	player_2_score_panel.set_score(score, 1)
+	player_1_score_panel.set_serve(score.current_server == 0)
+	player_2_score_panel.set_serve(score.current_server == 1)
 
 
 func set_player(player_data: PlayerData, index: int):

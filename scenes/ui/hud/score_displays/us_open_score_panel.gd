@@ -15,32 +15,36 @@ extends Control
 
 ## Update score display for given player index
 func set_score(score: Score, player_index: int) -> void:
-	var points: Array[int] = score.points
-	var games: Array[int] = score.games
-	var sets: Array[int] = score.games_in_set
+	if score.is_tiebreak:
+		_points_label.text = str(score.tiebreak_points[player_index])
+	else:
+		_points_label.text = _point_text(score.points[player_index])
 
-	# Update current points display
-	match points[player_index]:
-		score.TennisPoint.LOVE:
-			_points_label.text = "0"
-		score.TennisPoint.FIFTEEN:
-			_points_label.text = "15"
-		score.TennisPoint.THIRTY:
-			_points_label.text = "30"
-		score.TennisPoint.FORTY:
-			_points_label.text = "40"
-		score.TennisPoint.AD:
-			_points_label.text = "AD"
+	# One label per completed set, then the current set unless the match is over.
+	var shown_sets: int = score.completed_sets.size()
+	for i in _games_labels.size():
+		var label: Label = _games_labels[i]
+		if i < shown_sets:
+			label.text = str(score.completed_sets[i][player_index])
+			label.visible = true
+		elif i == shown_sets and not score.is_match_over():
+			label.text = str(score.games[player_index])
+			label.visible = true
+		else:
+			label.visible = false
 
-	# Update set and game labels
-	for i in range(sets.size()):
-		if i < _games_labels.size():
-			_games_labels[i].text = str(sets[i])
 
-	# Display current games in set
-	if sets.size() < _games_labels.size():
-		_games_labels[sets.size()].visible = true
-		_games_labels[sets.size()].text = str(games[player_index])
+func _point_text(point: int) -> String:
+	match point:
+		Score.TennisPoint.FIFTEEN:
+			return "15"
+		Score.TennisPoint.THIRTY:
+			return "30"
+		Score.TennisPoint.FORTY:
+			return "40"
+		Score.TennisPoint.AD:
+			return "AD"
+	return "0"
 
 
 ## Update player information display (name, rank, country)

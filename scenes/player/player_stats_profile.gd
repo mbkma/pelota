@@ -97,13 +97,14 @@ func spin_control01(stroke_type: int, stamina01: float) -> float:
 	var topspin_weight: float = value01(topspin_skill)
 	var slice_weight: float = value01(slice_skill)
 	var stroke_spin_skill: float = topspin_weight
-	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
-		stroke_spin_skill = slice_weight
-	if (
-		stroke_type == Stroke.StrokeType.FOREHAND_DROP_SHOT
-		or stroke_type == Stroke.StrokeType.BACKHAND_DROP_SHOT
-	):
-		stroke_spin_skill = (slice_weight + topspin_weight) * 0.5
+	match stroke_type:
+		Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.FOREHAND_VOLLEY, \
+		Stroke.StrokeType.BACKHAND_VOLLEY:
+			# Slices and volleys are played with backspin.
+			stroke_spin_skill = slice_weight
+		Stroke.StrokeType.FOREHAND_DROP_SHOT, Stroke.StrokeType.BACKHAND_DROP_SHOT, \
+		Stroke.StrokeType.FOREHAND_DROP_VOLLEY, Stroke.StrokeType.BACKHAND_DROP_VOLLEY:
+			stroke_spin_skill = (slice_weight + topspin_weight) * 0.5
 
 	var fatigue_penalty: float = lerpf(0.75, 1.0, stamina01)
 	return clampf(stroke_spin_skill * fatigue_penalty, 0.0, 1.0)
@@ -111,6 +112,24 @@ func spin_control01(stroke_type: int, stamina01: float) -> float:
 
 func serve_power01() -> float:
 	return value01(serve_power)
+
+
+func timing01(stamina01: float) -> float:
+	var fatigue_penalty: float = lerpf(0.85, 1.0, stamina01)
+	return clampf(value01(timing) * fatigue_penalty, 0.0, 1.0)
+
+
+func return01() -> float:
+	return value01(return_skill)
+
+
+func volley01() -> float:
+	return value01(volley_skill)
+
+
+## Overall net game: volley technique and feel for playing at the net.
+func net_game01() -> float:
+	return (value01(volley_skill) + value01(net_play)) * 0.5
 
 
 func serve_accuracy01(stamina01: float) -> float:

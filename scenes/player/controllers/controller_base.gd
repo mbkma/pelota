@@ -60,11 +60,6 @@ func on_lifecycle_phase_changed(_previous_phase: int, _current_phase: int) -> vo
 	pass
 
 
-## Callback when player reaches requested movement target.
-func on_target_point_reached() -> void:
-	pass
-
-
 ## Get aim marker position for UI (override if controller needs UI)
 ## Returns null if no aim marker should be shown
 func get_aim_marker_position() -> Variant:
@@ -76,9 +71,14 @@ func should_show_aim_marker() -> bool:
 	return false
 
 
-## Get aim marker scale for UI (override if controller needs UI)
-func get_aim_marker_scale() -> Vector3:
-	return Vector3.ONE
+## Radius (m) in which the aimed stroke may land, shown by the aim marker
+func get_aim_marker_radius() -> float:
+	return BallAimMarker.DEFAULT_RADIUS
+
+
+## Whether the aim marker should be highlighted (e.g. perfectly timed stroke)
+func is_aim_marker_highlighted() -> bool:
+	return false
 
 
 ## Check relative position of target relative to player's orientation

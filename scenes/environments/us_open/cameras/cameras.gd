@@ -41,13 +41,12 @@ func _input(event: InputEvent) -> void:
 				next_cam.make_current()
 
 
-func set_camera_for_player(player: Player) -> void:
-	if sign(player.position.z) < 0:
-		player.camera = court_side_back
-		#player.camera.target = player
-	else:
-		player.camera = court_side_front
-		#player.camera.target = player
+## Makes the broadcast camera behind the given player's baseline the active camera.
+func show_from_behind(player: Player) -> void:
+	var camera: Camera3D = top_front if player.global_position.z > 0.0 else top_back
+	active_cam = camera
+	active_cam_index = max(0, cams.find(camera))
+	camera.make_current()
 
 func disable_all() -> void:
 	for c in cams:

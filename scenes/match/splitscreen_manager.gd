@@ -1,4 +1,5 @@
-## Manages dynamic splitscreen mode for two human players
+## Manages dynamic splitscreen mode for two human players.
+## Starts side by side when both players are human; X cycles the modes.
 class_name SplitscreenManager
 extends Control
 
@@ -7,6 +8,13 @@ signal splitscreen_toggled(enabled: bool)
 
 ## Splitscreen modes
 enum SplitscreenMode { NORMAL, VERTICAL_SPLIT, HORIZONTAL_SPLIT }
+
+## Follow camera placement relative to its player: distance behind, height, and how far
+## ahead of the player (toward the net) it looks.
+const FOLLOW_DISTANCE: float = 7.0
+const FOLLOW_HEIGHT: float = 4.5
+const FOLLOW_LOOK_AHEAD: float = 9.0
+const FOLLOW_FOV: float = 60.0
 
 @export var cameras: MatchCameras
 @export var player0: Player
@@ -48,6 +56,8 @@ func _ready() -> void:
 
 	# Start in normal mode
 	current_mode = SplitscreenMode.NORMAL
+	if player0.controller is HumanController and player1.controller is HumanController:
+		_enable_vertical_splitscreen()
 
 
 func _input(event: InputEvent) -> void:
@@ -172,19 +182,15 @@ func _disable_splitscreen() -> void:
 	splitscreen_toggled.emit(false)
 
 
-## Update a viewport camera to match a player's camera
+## Place a viewport camera behind and above its player, looking toward the net
 func _update_camera_from_player(viewport_cam: Camera3D, player: Player) -> void:
-	if not player:
-		return
-
-	# Use the player's third person camera for splitscreen (follows the player)
-	var source_camera: Camera3D = player.camera
-	if not source_camera:
-		return
-
-	viewport_cam.global_position = source_camera.global_position
-	viewport_cam.global_rotation = source_camera.global_rotation
-	viewport_cam.fov = source_camera.fov
+	var backward: Vector3 = player.global_basis.z
+	var player_position: Vector3 = player.global_position
+	viewport_cam.global_position = (
+		player_position + backward * FOLLOW_DISTANCE + Vector3.UP * FOLLOW_HEIGHT
+	)
+	viewport_cam.look_at(player_position - backward * FOLLOW_LOOK_AHEAD, Vector3.UP)
+	viewport_cam.fov = FOLLOW_FOV
 
 
 ## Start following players with viewport cameras

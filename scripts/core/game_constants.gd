@@ -51,23 +51,8 @@ const PLAYER_DISTANCE_THRESHOLD: float = 0.01
 # INPUT CONSTANTS
 # ============================================================================
 
-## Mouse sensitivity multiplier for stroke aiming
-const MOUSE_SENSITIVITY: float = 100.0
-
 ## Delay before input becomes available after scene load (seconds)
 const INPUT_STARTUP_DELAY: float = 0.5
-
-## Default aim position multiplier for front court strokes
-const AIM_FRONT_COURT: float = 9.0
-
-## Default aim position multiplier for back court strokes
-const AIM_BACK_COURT: float = 2.0
-
-## Default aim position multiplier for serves
-const AIM_SERVE: float = 5.0
-
-## Pace increment rate per input frame
-const PACE_INCREMENT_RATE: float = 0.15
 
 ## Ball velocity threshold for canceling stroke (units/sec)
 const BALL_VELOCITY_CANCELLATION_THRESHOLD: float = 0.1
@@ -122,6 +107,12 @@ const AI_DROP_SHOT_PACE: float = 15.0
 ## Drop shot spin (x: sidespin, y: backspin, z: forward spin)
 const AI_DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -0.85, 0.0)
 
+## Volley spin (x: sidespin, y: backspin, z: forward spin)
+const VOLLEY_SPIN: Vector3 = Vector3(0.0, -0.35, 0.0)
+
+## Drop volley spin (x: sidespin, y: backspin, z: forward spin)
+const DROP_VOLLEY_SPIN: Vector3 = Vector3(0.0, -0.8, 0.0)
+
 ## Serve pace (power)
 const AI_SERVE_PACE: float = 35.0
 
@@ -164,11 +155,11 @@ const TRAJECTORY_STOP_VELOCITY_THRESHOLD: float = 0.01
 # MATCH GAMEPLAY CONSTANTS
 # ============================================================================
 
+## Players closer than this to the net (m) volley balls they take before the bounce
+const NET_ZONE_DEPTH: float = 6.0
+
 ## Minimum ground contacts before counting as double bounce
 const GROUND_CONTACT_THRESHOLD: int = 2
-
-## Game cycle for side switching (every 4th game)
-const SIDE_SWITCH_GAME_CYCLE: int = 4
 
 # ============================================================================
 # COURT CONSTANTS

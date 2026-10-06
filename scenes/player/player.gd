@@ -5,6 +5,9 @@ extends CharacterBody3D
 ## Emitted when player successfully hits the ball
 signal ball_hit
 
+## Emitted when a stroke animation (swing and follow-through) has finished
+signal stroke_finished
+
 ## Emitted when player reaches movement target point
 signal target_point_reached
 
@@ -31,8 +34,6 @@ const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 @export var controller_scene: PackedScene
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
-## Camera assigned to this player (used by controlling systems/UI).
-@export var camera: Camera3D
 ## Current active ball this player tracks and can hit.
 @export var ball: Ball
 ## Base horizontal movement speed in meters per second.
@@ -40,19 +41,15 @@ const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 ## Team slot index used to group players in doubles/splitscreen contexts.
 @export var team_index: int = 0
 ## World-space marker used to visualize shot aim target.
-@export var ball_aim_marker: Node3D
+@export var ball_aim_marker: BallAimMarker
 ## Opposing player reference for serve/rally synchronization.
 @export var opponent: Player
 ## Ball scene used to spawn a toss ball when serving.
 @export var serve_ball_scene: PackedScene
-## Allowed timing error window around ideal contact time.
-@export var hit_timing_window_seconds: float = 0.1
-## Maximum distance from racket contact point that still counts as a hit.
+## Maximum distance between ball and racket contact point that still counts as a hit.
 @export var hit_range_tolerance_meters: float = 1.0
-## If enabled, snap ball to racket contact point on animation hit frame.
-@export var snap_ball_to_contact_point_on_anim_hit: bool = true
-## Max snap distance allowed when contact-point snapping is enabled.
-@export var snap_max_distance_meters: float = 1.8
+## Maximum stroke playback speed used to reach the ball when the swing starts late.
+@export var max_stroke_speed: float = 1.8
 
 ## Flat stroke sound effect pool (non-slice hits/grunts fallback).
 @export var stroke_sounds_flat: Array[AudioStream]
@@ -68,13 +65,12 @@ const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 var stats: PlayerRuntimeStats
 ## Runtime mental state used by tactical and execution systems.
 var mental_state: PlayerMentalState
-var queued_stroke: Stroke:
-	get:
-		return _queued_stroke
-	set(value):
-		_queued_stroke = value
+## Stroke waiting for the ball or being swung until racket contact.
+var queued_stroke: Stroke = null
 
 var controller: Controller
+## Match this player plays in; set by the MatchManager (null outside of a match).
+var match_manager: MatchManager
 
 ## Angle bisector visualization data for debug drawing
 var bisector_service_line_left: Vector3 = Vector3.ZERO
@@ -84,12 +80,14 @@ var opponent_hit_position: Vector3 = Vector3.ZERO
 
 var _ball_factory: BallFactory
 var _movement: MovementController
-var _queued_stroke: Stroke = null
+## Clip of the queued stroke once its swing has started.
+var _swing_clip: StrokeClip = null
+## Seconds until the racket is expected to meet the ball; INF while no contact is predicted.
+var _seconds_to_contact: float = INF
 var _last_consumed_decision: Stroke = null
 var _stamina_current: float = 100.0
 var _stamina_max: float = 100.0
 
-var _last_replay_visual_state: int = -1
 var _is_replay_mode: bool = false
 
 @onready var model: Model = $Model
@@ -102,13 +100,10 @@ var _is_replay_mode: bool = false
 @onready var _lifecycle_bus: MatchLifecycleBus = $MatchLifecycleBus
 
 
-func _can_update_movement_animation() -> bool:
-	return not _state_machine.blocks_movement_animation()
-
-
 func _ready() -> void:
 	assert(player_data != null, "Player._ready: player_data is required")
 	mental_state = PlayerMentalState.new()
+	mental_state.setup(player_data.stats)
 	stats = PlayerRuntimeStats.new()
 	stats.setup(player_data.stats, mental_state)
 	assert(stats != null, "Player._ready: player_data.stats is required")
@@ -121,14 +116,13 @@ func _ready() -> void:
 	# Set logger name for debug logging
 	set_meta("logger_name", player_data.last_name)
 
-	_state_machine.state_entered.connect(_on_state_entered)
 	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
 
 	_movement = MovementController.new()
 	_ball_factory = BallFactory.new(serve_ball_scene)
 
-	target_point_reached.connect(_on_target_point_reached)
-	model.stroke_animation_finished.connect(_on_stroke_animation_finished)
+	model.animator.stroke_marker_reached.connect(_on_stroke_marker_reached)
+	model.animator.stroke_finished.connect(_on_stroke_animation_finished)
 	controller = controller_scene.instantiate()
 	controller.bind(self)
 	add_child(controller)
@@ -188,6 +182,7 @@ func _physics_process(delta: float) -> void:
 	# Get movement direction from controller and execute it
 	var move_direction: Vector3 = controller.get_move_direction()
 	apply_movement(move_direction, delta)
+	_update_stroke_timing()
 
 
 ## Request the input handler to initiate a serve
@@ -205,7 +200,7 @@ func setup(data: PlayerData, _ai_controlled: bool) -> void:
 
 ## Stop all player actions and clean up state
 func stop() -> void:
-	cancel_movement()
+	_halt()
 	cancel_stroke()
 	set_active_ball(null)
 	_lifecycle_bus.end_point(self)
@@ -215,26 +210,41 @@ func stop() -> void:
 ####################
 
 
+## Puts the player at a court position facing the net, without any leftover movement.
+func place_at(target_position: Vector3) -> void:
+	_halt()
+	global_position = target_position
+	rotation.y = PI if target_position.z < 0.0 else 0.0
+
+
+## Drops the movement target and all momentum.
+func _halt() -> void:
+	_movement.stop()
+	velocity = Vector3.ZERO
+
+
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, delta: float) -> void:
-	var animation_direction: Vector3 = direction
 	var stamina01: float = get_stamina_ratio()
 	_movement.set_friction(friction)
 	velocity = _movement.tick(direction, stats, stamina01, move_speed, acceleration)
 	move_and_slide()
 
-	# Update animation state based on movement (only if not stroking or recovering)
-	if _can_update_movement_animation():
-		if animation_direction.length() > 0:
+	model.animator.set_locomotion(_locomotion_blend(velocity))
+	if not _state_machine.is_stroke_in_progress():
+		if direction.length() > 0:
 			_set_state(PlayerStateMachine.State.MOVING)
-			model.play_run(animation_direction)
 		else:
 			_set_state(PlayerStateMachine.State.IDLE)
 
 	_update_stamina(direction, delta)
 
 
-## Apply movement using animation root motion
+## Locomotion blend position (x = right, y = forward) for a world-space velocity.
+func _locomotion_blend(world_velocity: Vector3) -> Vector2:
+	var local_velocity: Vector3 = global_basis.inverse() * world_velocity
+	var blend := Vector2(local_velocity.x, -local_velocity.z) / move_speed
+	return blend.limit_length(1.0)
 
 
 ## Compute movement direction from path
@@ -257,48 +267,21 @@ func cancel_movement() -> void:
 
 ## Move to defensive position after stroke animation finishes
 func move_to_defensive_position(target_position: Vector3) -> void:
-	await model.stroke_animation_finished
+	await stroke_finished
 	request_move_to(target_position)
-
-
-## Called when player reaches movement target point
-func _on_target_point_reached() -> void:
-	if controller is AiController:
-		return
-
-	if queued_stroke:
-		# Freeze movement at contact position to avoid drift before hit frame.
-		_movement.stop()
-		velocity = Vector3.ZERO
-
-		var stroke = queued_stroke  # Store locally before await to prevent race condition
-		var animation_hit_point_time: float = model.get_animation_hit_frame_time(stroke.stroke_type)
-		var closest_step: TrajectoryStep = _get_closest_step()
-		if not closest_step:
-			push_warning("Player._on_target_point_reached: closest trajectory step unavailable")
-			return
-		var timing = closest_step.time - animation_hit_point_time
-		if timing > 0:
-			await get_tree().create_timer(timing).timeout
-			closest_step = _get_closest_step()
-			if not closest_step:
-				push_warning("Player._on_target_point_reached: trajectory changed before stroke")
-				return
-		start_stroke_animation(stroke)
-
-
-func start_stroke_animation(stroke: Stroke) -> void:
-	if not stroke:
-		return
-	_set_state(PlayerStateMachine.State.STROKING)
-	model.play_stroke(stroke)
 
 
 ## Stroke System
 ##################
 
 
+## Queue a rally stroke. It is swung automatically so that the animation's `hit`
+## marker coincides with the ball reaching the racket contact point.
+## Returns false while a swing is already on its way to contact.
 func queue_stroke(stroke: Stroke) -> bool:
+	if _swing_clip:
+		return false
+
 	if not is_instance_valid(ball):
 		_sync_ball_from_match_manager()
 
@@ -306,7 +289,118 @@ func queue_stroke(stroke: Stroke) -> bool:
 		return false
 
 	queued_stroke = stroke
+	if _state_machine.get_state() != PlayerStateMachine.State.STROKING:
+		_set_state(PlayerStateMachine.State.PREPARING_STROKE)
 	return true
+
+
+## Seconds until the racket is expected to meet the ball; INF while no contact is predicted.
+func get_seconds_to_contact() -> float:
+	return _seconds_to_contact
+
+
+## Start the swing of the queued stroke once the ball is within the clip's hit time.
+func _update_stroke_timing() -> void:
+	if _swing_clip:
+		_seconds_to_contact -= get_physics_process_delta_time()
+		return
+	if not queued_stroke or not is_instance_valid(ball):
+		_seconds_to_contact = INF
+		return
+
+	var clip: StrokeClip = model.get_stroke_clip(queued_stroke)
+	var contact_point: Vector3 = clip.global_position
+	if _is_ball_moving_away_from(contact_point):
+		# Ball already passed the contact point: the stroke is too late.
+		cancel_stroke()
+		return
+
+	var time_to_contact: float = _predict_time_to_contact(contact_point)
+	if time_to_contact < 0.0:
+		_seconds_to_contact = INF
+		return
+	# A fired OneShot starts advancing one animation frame later.
+	time_to_contact -= get_process_delta_time()
+	_seconds_to_contact = time_to_contact
+
+	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
+	if time_to_contact > hit_time:
+		return
+
+	# Late swings are sped up so the hit marker still lines up with the ball.
+	var speed: float = clampf(hit_time / maxf(time_to_contact, 0.001), 1.0, max_stroke_speed)
+	_start_swing(clip, speed)
+
+
+func _start_swing(clip: StrokeClip, speed: float) -> void:
+	_swing_clip = clip
+	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
+	_seconds_to_contact = hit_time / speed
+	_set_state(PlayerStateMachine.State.STROKING)
+	model.animator.play_stroke(clip.animation, speed)
+
+
+func _is_ball_moving_away_from(contact_point: Vector3) -> bool:
+	var offset: float = ball.global_position.z - contact_point.z
+	return offset * ball.velocity.z > 0.0
+
+
+## Seconds until the ball crosses the depth (z) of the contact point, or -1 if it does not.
+func _predict_time_to_contact(contact_point: Vector3) -> float:
+	var side: float = signf(ball.global_position.z - contact_point.z)
+	var previous_offset: float = ball.global_position.z - contact_point.z
+	var previous_time: float = 0.0
+	var trajectory: Array[TrajectoryStep] = ball.predict_trajectory(
+		GameConstants.TRAJECTORY_PREDICTION_STEPS,
+		GameConstants.TRAJECTORY_TIME_STEP,
+		{"store_result": false}
+	)
+	for step in trajectory:
+		var offset: float = step.point.z - contact_point.z
+		if signf(offset) != side:
+			var crossing: float = previous_offset / (previous_offset - offset)
+			return lerpf(previous_time, step.time, crossing)
+		previous_offset = offset
+		previous_time = step.time
+	return -1.0
+
+
+## Whether the ball passes within hit range of the racket contact point during this physics tick.
+func _is_ball_in_hit_range(contact_point: Vector3) -> bool:
+	var travel: Vector3 = ball.velocity / Engine.physics_ticks_per_second
+	var closest: Vector3 = Geometry3D.get_closest_point_to_segment(
+		contact_point, ball.global_position - travel, ball.global_position + travel
+	)
+	return closest.distance_to(contact_point) <= hit_range_tolerance_meters
+
+
+func _on_stroke_marker_reached(marker: StringName) -> void:
+	if _is_replay_mode:
+		return
+
+	match marker:
+		PlayerAnimator.TOSS_MARKER:
+			_spawn_serve_ball()
+		PlayerAnimator.HIT_MARKER:
+			_on_stroke_contact()
+
+
+## Racket reaches the contact point of the swinging stroke.
+func _on_stroke_contact() -> void:
+	var stroke: Stroke = queued_stroke
+	var clip: StrokeClip = _swing_clip
+	if not stroke or not clip:
+		return
+
+	if stroke.stroke_type == Stroke.StrokeType.SERVE:
+		_hit_ball(stroke)
+		_lifecycle_bus.complete_serve(self)
+		return
+
+	if is_instance_valid(ball) and _is_ball_in_hit_range(clip.global_position):
+		_hit_ball(stroke)
+	else:
+		cancel_stroke()
 
 
 ## Execute ball hit with given stroke
@@ -396,68 +490,24 @@ func _restore_stamina(amount: float) -> void:
 		stats.set_stamina_ratio(get_stamina_ratio())
 
 
-## Cancel currently queued stroke
+## Drop the queued stroke. A swing already playing finishes its animation.
 func cancel_stroke() -> void:
 	queued_stroke = null
-	_last_consumed_decision = null
-	_set_state(PlayerStateMachine.State.IDLE)
+	_swing_clip = null
+	_seconds_to_contact = INF
+	if _state_machine.get_state() == PlayerStateMachine.State.PREPARING_STROKE:
+		_set_state(PlayerStateMachine.State.IDLE)
 
 
-## Execute a serve with given stroke
+## Execute a serve with given stroke. The serve animation's `toss` marker spawns the ball,
+## its `hit` marker hits it.
 func serve(stroke: Stroke) -> void:
 	queued_stroke = stroke
-	_set_state(PlayerStateMachine.State.STROKING)
 	_lifecycle_bus.start_serving(self, stroke)
-	model.play_stroke(stroke)
-	# Animation callbacks will handle spawning ball and hitting it
+	_start_swing(model.get_stroke_clip(stroke), 1.0)
 
 
-## Called by serve animation to hit the ball
-func from_anim_hit_serve() -> void:
-	if _is_replay_mode:
-		return
-	_hit_ball(queued_stroke)
-	_lifecycle_bus.complete_serve(self)
-
-
-## Called by rally stroke animations at the exact hit frame.
-## Uses timing/range gates so mistimed strokes can miss.
-func _from_anim_hit_ball() -> void:
-	if _is_replay_mode:
-		return
-	if not queued_stroke:
-		return
-
-	if not ball:
-		_sync_ball_from_match_manager()
-
-	if not ball:
-		cancel_stroke()
-		return
-
-	var contact_point: Vector3 = model.get_racket_contact_point(queued_stroke)
-	var distance_to_contact: float = ball.global_position.distance_to(contact_point)
-	print(ball.global_position - contact_point)
-	if distance_to_contact > hit_range_tolerance_meters:
-		cancel_stroke()
-		return
-	print("hit ball:", distance_to_contact)
-
-	#var closest_step: TrajectoryStep = _get_closest_step()
-	#if closest_step and abs(closest_step.time) > hit_timing_window_seconds:
-	#cancel_stroke()
-	#return
-
-	#if snap_ball_to_contact_point_on_anim_hit and distance_to_contact <= snap_max_distance_meters:
-	#ball.global_position = contact_point
-
-	_hit_ball(queued_stroke)
-
-
-## Called by serve animation to spawn the ball at toss point
-func from_anim_spawn_ball() -> void:
-	if _is_replay_mode:
-		return
+func _spawn_serve_ball() -> void:
 	ball = _ball_factory.create_ball(position + model.toss_point, Vector3(0, 5, 0))
 	if not ball:
 		return
@@ -494,10 +544,7 @@ func _get_grunt_sound() -> AudioStream:
 func play_stroke_sound(stroke: Stroke) -> void:
 	var stream: AudioStream
 
-	if (
-		stroke.stroke_type == stroke.StrokeType.BACKHAND_SLICE
-		or stroke.stroke_type == stroke.StrokeType.BACKHAND_DROP_SHOT
-	):
+	if stroke.stroke_type == Stroke.StrokeType.BACKHAND_SLICE or stroke.is_drop():
 		stream = stroke_sounds_slice[randi() % stroke_sounds_slice.size()]
 	else:
 		if randf() < player_data.sounds.grunt_frequency:
@@ -522,7 +569,6 @@ func _sync_ball_from_match_manager() -> void:
 	if is_instance_valid(ball):
 		return
 
-	var match_manager: MatchManager = get_parent() as MatchManager
 	if not match_manager:
 		return
 
@@ -541,7 +587,8 @@ func _update_controller_ui() -> void:
 		var aim_position: Variant = controller.get_aim_marker_position()
 		if aim_position != null:
 			ball_aim_marker.global_position = aim_position
-			ball_aim_marker.scale = controller.get_aim_marker_scale()
+			ball_aim_marker.set_radius(controller.get_aim_marker_radius())
+			ball_aim_marker.set_highlighted(controller.is_aim_marker_highlighted())
 			ball_aim_marker.visible = true
 	else:
 		ball_aim_marker.visible = false
@@ -549,74 +596,22 @@ func _update_controller_ui() -> void:
 
 ## Called when stroke animation finishes
 func _on_stroke_animation_finished() -> void:
-	if _state_machine.get_state() == PlayerStateMachine.State.STROKING:
-		_set_state(PlayerStateMachine.State.RECOVERING)
+	if _is_replay_mode:
+		return
 
-
-func _on_state_entered(new_state: int) -> void:
-	_apply_state_animation(new_state, velocity)
-
-
-func _apply_state_animation(state: int, movement_velocity: Vector3) -> void:
-	match state:
-		PlayerStateMachine.State.IDLE:
-			model.play_idle()
-		PlayerStateMachine.State.MOVING:
-			var run_dir: Vector3 = movement_velocity
-			run_dir.y = 0.0
-			if run_dir.length() <= 0.001:
-				run_dir = Vector3.FORWARD
-			model.play_run(run_dir)
-		PlayerStateMachine.State.PREPARING_STROKE:
-			pass
-		PlayerStateMachine.State.STROKING:
-			pass
-		PlayerStateMachine.State.RECOVERING:
-			model.play_recovery()
-		PlayerStateMachine.State.UNREACHABLE:
-			var fallback_dir: Vector3 = movement_velocity
-			fallback_dir.y = 0.0
-			if fallback_dir.length() > 0.001:
-				model.play_run(fallback_dir)
-			else:
-				var next_target: Variant = _movement.peek_next_target()
-				if next_target != null:
-					model.play_run((next_target - position).normalized())
+	if queued_stroke:
+		_set_state(PlayerStateMachine.State.PREPARING_STROKE)
+	else:
+		_set_state(PlayerStateMachine.State.IDLE)
+	stroke_finished.emit()
 
 
 func apply_replay_frame(
-	replay_transform: Transform3D,
-	replay_velocity: Vector3,
-	replay_state: int,
-	stroke_payload: Dictionary = {},
-	animation_snapshot: Dictionary = {}
+	replay_transform: Transform3D, replay_velocity: Vector3, animation_snapshot: Dictionary
 ) -> void:
 	global_transform = replay_transform
 	velocity = replay_velocity
-
-	if (
-		replay_state == PlayerStateMachine.State.STROKING
-		and _last_replay_visual_state != replay_state
-	):
-		if not stroke_payload.is_empty():
-			play_replay_stroke(stroke_payload)
-
-	if (
-		replay_state == PlayerStateMachine.State.MOVING
-		or replay_state == PlayerStateMachine.State.UNREACHABLE
-	):
-		_apply_state_animation(replay_state, replay_velocity)
-	elif replay_state != _last_replay_visual_state:
-		_apply_state_animation(replay_state, replay_velocity)
-
-	if not animation_snapshot.is_empty():
-		model.apply_replay_animation_snapshot(animation_snapshot)
-
-	_last_replay_visual_state = replay_state
-
-
-func reset_replay_visual_state() -> void:
-	_last_replay_visual_state = -1
+	model.animator.apply_snapshot(animation_snapshot)
 
 
 func set_replay_mode(enabled: bool) -> void:
@@ -624,24 +619,11 @@ func set_replay_mode(enabled: bool) -> void:
 
 
 func set_replay_animation_paused(paused: bool) -> void:
-	model.set_replay_animation_paused(paused)
+	model.animator.active = not paused
 
 
 func get_replay_animation_snapshot() -> Dictionary:
-	return model.get_replay_animation_snapshot()
-
-
-func play_replay_stroke(stroke_payload: Dictionary) -> void:
-	var replay_stroke := Stroke.new()
-	replay_stroke.stroke_type = (
-		int(stroke_payload.get("stroke_type", Stroke.StrokeType.FOREHAND)) as Stroke.StrokeType
-	)
-	replay_stroke.stroke_power = float(stroke_payload.get("stroke_power", 0.0))
-	replay_stroke.stroke_target = stroke_payload.get("stroke_target", global_position)
-	replay_stroke.stroke_spin = stroke_payload.get("stroke_spin", Vector3.ZERO)
-	replay_stroke.intended_stroke_power = replay_stroke.stroke_power
-	replay_stroke.intended_stroke_target = replay_stroke.stroke_target
-	model.play_stroke(replay_stroke)
+	return model.animator.get_snapshot()
 
 
 func _on_lifecycle_phase_changed(previous_phase: int, current_phase: int) -> void:
@@ -659,6 +641,11 @@ func on_point_result(won: bool) -> void:
 			mental_state.on_point_lost()
 
 
+## Whether the next shot of this player is the return of a serve.
+func is_returning_serve() -> bool:
+	return match_manager != null and match_manager.match_data.rally_length == 1
+
+
 func get_lifecycle_bus() -> MatchLifecycleBus:
 	return _lifecycle_bus
 
@@ -671,12 +658,3 @@ func get_current_state() -> int:
 
 func get_movement_path() -> Array[Vector3]:
 	return _movement.get_path()
-
-
-func _get_closest_step() -> TrajectoryStep:
-	if not ball:
-		return null
-
-	if controller and controller.has_method("get_closest_trajectory_step"):
-		return controller.get_closest_trajectory_step(self)
-	return null

@@ -2,6 +2,7 @@
 
 [resource]
 resource_name = "g_sidestep_right-loop"
+loop_mode = 1
 length = 0.4
 tracks/0/type = "position_3d"
 tracks/0/imported = true

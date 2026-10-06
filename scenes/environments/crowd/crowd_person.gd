@@ -17,9 +17,6 @@ var model: Node3D
 ## Animation player from the model
 var animation_player: AnimationPlayer
 
-## Process mode override for culling
-var _culling_enabled: bool = true
-
 
 func _init(p_config: CrowdConfig = null) -> void:
 	if p_config:

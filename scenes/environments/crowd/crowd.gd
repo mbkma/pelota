@@ -20,22 +20,21 @@ var _current_reaction: String = ""
 
 
 func _ready() -> void:
-	if not config:
-		return
-	_initialize_audio()
+	audio_stream_player.finished.connect(_on_audio_finished)
+	play_idle_sound()
 
 
-## Play idle crowd sound with looping enabled
+## Play an idle crowd sound; another one follows when it ends and no reaction is playing
 func play_idle_sound() -> void:
 	var sound = config.get_random_idle_sound()
 	if sound:
-		play_sound(sound, true)
+		play_sound(sound)
 
 
 ## Trigger a crowd victory reaction
 func play_victory() -> void:
 	if _current_reaction == "victory":
-		push_warning("Crowd: Victory reaction already playing")
+		# Still cheering from the previous point.
 		return
 
 	_current_reaction = "victory"
@@ -44,24 +43,17 @@ func play_victory() -> void:
 	# Play audio
 	var sound = config.get_random_after_point_sound()
 	if sound:
-		play_sound(sound, false)
+		play_sound(sound)
 
 	# Play animations in all blocks
-
 	for block in blocks:
 		for crowd_block in block.get_children():
 			if crowd_block and crowd_block.has_method("play_victory"):
 				crowd_block.play_victory()
 
-	# Get animation duration and schedule end signal
-	if audio_stream_player.stream:
-		var duration = audio_stream_player.stream.get_length()
-		await get_tree().create_timer(duration).timeout
-		_on_reaction_finished()
-
 
 ## Play a sound through the audio stream player
-func play_sound(stream: AudioStream, _loop := false) -> void:
+func play_sound(stream: AudioStream) -> void:
 	if not stream:
 		push_error("Crowd: Attempted to play null audio stream")
 		return
@@ -85,13 +77,9 @@ func cleanup() -> void:
 # Private methods
 
 
-func _initialize_audio() -> void:
-	if not audio_stream_player:
-		push_error("Crowd: AudioStreamPlayer not found")
-		return
-
-
-func _on_reaction_finished() -> void:
+## A reaction ends with its sound; the idle ambience continues afterwards.
+func _on_audio_finished() -> void:
 	if _current_reaction != "":
 		crowd_reaction_ended.emit(_current_reaction)
 		_current_reaction = ""
+	play_idle_sound()

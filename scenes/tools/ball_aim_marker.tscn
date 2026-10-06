@@ -1,17 +1,38 @@
 [gd_scene format=3 uid="uid://bi8pmdx3d7doc"]
 
+[ext_resource type="Script" path="res://scenes/tools/ball_aim_marker.gd" id="1_aimmk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_area"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.25, 0.37, 0, 0.45)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_area"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_area")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.01
+radial_segments = 48
+rings = 1
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lufo"]
 albedo_color = Color(0.25027347, 0.36500144, 0, 1)
 roughness = 0.33
-grow_amount = -2.008
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kjtf1"]
 material = SubResource("StandardMaterial3D_7lufo")
-top_radius = 0.2
-bottom_radius = 0.2
-height = 0.2
+top_radius = 0.08
+bottom_radius = 0.08
+height = 0.02
 
 [node name="BallAimMarker" type="Node3D" unique_id=160563153]
+script = ExtResource("1_aimmk")
+
+[node name="Area" type="MeshInstance3D" parent="." unique_id=1263005917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("CylinderMesh_area")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1507997537]
 mesh = SubResource("CylinderMesh_kjtf1")

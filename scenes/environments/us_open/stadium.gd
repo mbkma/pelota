@@ -30,6 +30,9 @@ var timer := Timer.new()
 }
 
 @onready var serve_clocks := $ServeClocks.get_children()
+@onready var _time_label: Label3D = $TimePanel/Label3D
+@onready var _front_player_camera: TargetTracker = $FrontPlayerCamera
+@onready var _back_player_camera: TargetTracker = $BackPlayerCamera
 
 func _ready() -> void:
 	add_child(timer)
@@ -45,6 +48,18 @@ func _process(_delta: float) -> void:
 func show_serve_speed(ball: Ball):
 	for panel in serve_speed_panels:
 		panel.show_serve_speed(ball.velocity.length())
+
+
+## Shows the match time as hours:minutes on the time panel.
+func show_match_time(elapsed_seconds: float) -> void:
+	var total_minutes: int = floori(elapsed_seconds / 60.0)
+	_time_label.text = "%d:%02d" % [floori(total_minutes / 60.0), total_minutes % 60]
+
+
+## Points the courtside TV cameras at the player on their end of the court.
+func track_players(front_player: Player, back_player: Player) -> void:
+	_front_player_camera.target = front_player
+	_back_player_camera.target = back_player
 
 
 func get_stadium_position(pos: String):

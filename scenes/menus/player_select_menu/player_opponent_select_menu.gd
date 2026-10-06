@@ -1,108 +1,94 @@
 extends Control
+## Player select menu. Every connected input device is shown as an icon in the middle column.
+## Moving a device left or right (stick, d-pad, WASD or arrow keys) gives it control of that
+## player; a player without a device is AI controlled. A device on a side picks that side's
+## character with up and down.
 
 signal selection_confirmed
 
+enum Lane {
+	PLAYER1,
+	UNASSIGNED,
+	PLAYER2,
+}
+
 const PLAYER1_CHART_COLOR := Color("#36A2EB")
 const PLAYER2_CHART_COLOR := Color("#FF6384")
+const UNASSIGNED_COLOR := Color.WHITE
 
-const INPUT_METHOD_LABELS := ["AI", "Human"]
-const LEFT_AXIS_ASSIGN_THRESHOLD := -0.65
-const RIGHT_AXIS_ASSIGN_THRESHOLD := 0.65
-const AXIS_NEUTRAL_THRESHOLD := 0.25
+## Direction length that triggers a menu step.
+const DIRECTION_TRIGGER: float = 0.6
+## Direction length below which the device counts as neutral again.
+const DIRECTION_RELEASE: float = 0.3
+const DEVICE_ICON_SIZE := Vector2(48, 48)
+const DEVICE_CARD_WIDTH: float = 140.0
+
+
+## One input device and its place in the device lanes.
+class DeviceEntry:
+	var device: InputDevice
+	var lane: Lane = Lane.UNASSIGNED
+	## Row with one slot per lane; the card sits in the slot of its lane.
+	var row: HBoxContainer
+	var card: VBoxContainer
+	var icon: TextureRect
+	## Set after a step until the direction returns to neutral.
+	var latched: bool = false
+
 
 @export var chart_scene: PackedScene
+@export var keyboard_icon: Texture2D
+@export var gamepad_icon: Texture2D
+
 var _players: Array[PlayerData] = []
 var _chart: Chart
-var _connected_device_ids: Array[int] = []
-var _player_device_assignments: Array[int] = [
-	GlobalGameData.NO_DEVICE_ID, GlobalGameData.NO_DEVICE_ID
-]
-var _device_axis_neutral: Dictionary = {}
+var _entries: Array[DeviceEntry] = []
 
 @onready var player_option_button: OptionButton = %PlayerOptionButton
 @onready var opponent_option_button: OptionButton = %OpponentOptionButton
-@onready var player1_input_method_option_button: OptionButton = %Player1InputMethodOptionButton
-@onready var player2_input_method_option_button: OptionButton = %Player2InputMethodOptionButton
-@onready var connected_devices_option_button: OptionButton = %ConnectedDevicesOptionButton
 @onready var player1_header_label: Label = %Player1HeaderLabel
 @onready var player2_header_label: Label = %Player2HeaderLabel
+@onready var player1_control_label: Label = %Player1ControlLabel
+@onready var player2_control_label: Label = %Player2ControlLabel
 @onready var selected_player_label: Label = %SelectedPlayerLabel
 @onready var selected_opponent_label: Label = %SelectedOpponentLabel
+@onready var device_rows: VBoxContainer = %DeviceRows
 @onready var chart_host: Control = %ChartHost
 @onready var start_button: Button = %StartButton
 
 
 func _ready() -> void:
-	_players = _load_players()
-	_initialize_default_input_assignments()
-	_populate_connected_devices_option_button()
-	_populate_input_method_option_buttons()
+	GlobalGameData.load_players()
+	_players = GlobalGameData.get_players()
 	_populate_option_buttons()
-	_ensure_distinct_defaults()
 	_apply_player_colors()
 	_build_chart()
-	_connect_signals()
+	_rebuild_device_entries()
+	player_option_button.item_selected.connect(_on_player_selected)
+	opponent_option_button.item_selected.connect(_on_opponent_selected)
+	player_option_button.get_popup().popup_hide.connect(start_button.grab_focus)
+	opponent_option_button.get_popup().popup_hide.connect(start_button.grab_focus)
+	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	_refresh_view()
+	# The start button keeps the focus, so ui_accept on any device starts the match.
+	start_button.grab_focus()
 
 
-func _initialize_default_input_assignments() -> void:
-	_player_device_assignments = [GlobalGameData.NO_DEVICE_ID, GlobalGameData.NO_DEVICE_ID]
-	GlobalGameData.set_match_input_methods(
-		GlobalGameData.InputMethod.AI, GlobalGameData.InputMethod.AI
-	)
-	GlobalGameData.set_match_input_devices(GlobalGameData.NO_DEVICE_ID, GlobalGameData.NO_DEVICE_ID)
+func _process(_delta: float) -> void:
+	for entry in _entries:
+		entry.device.poll()
+		var direction: Vector2 = entry.device.get_direction()
+		if entry.latched:
+			entry.latched = direction.length() >= DIRECTION_RELEASE
+			continue
 
-
-func _load_players() -> Array[PlayerData]:
-	GlobalGameData.load_players()
-	return GlobalGameData.get_players()
-
-
-func _populate_input_method_option_buttons() -> void:
-	player1_input_method_option_button.clear()
-	player2_input_method_option_button.clear()
-
-	for label in INPUT_METHOD_LABELS:
-		player1_input_method_option_button.add_item(label)
-		player2_input_method_option_button.add_item(label)
-
-	var selected_methods: Array[int] = GlobalGameData.get_match_input_methods()
-	player1_input_method_option_button.select(
-		clampi(selected_methods[0], 0, INPUT_METHOD_LABELS.size() - 1)
-	)
-	player2_input_method_option_button.select(
-		clampi(selected_methods[1], 0, INPUT_METHOD_LABELS.size() - 1)
-	)
-
-
-func _populate_connected_devices_option_button() -> void:
-	connected_devices_option_button.clear()
-	_connected_device_ids.clear()
-	_device_axis_neutral.clear()
-
-	connected_devices_option_button.add_item("Keyboard")
-	_connected_device_ids.append(GlobalGameData.KEYBOARD_DEVICE_ID)
-
-	var connected_joypads: Array = Input.get_connected_joypads()
-	connected_devices_option_button.disabled = false
-	for joypad_id_variant in connected_joypads:
-		var joypad_id: int = int(joypad_id_variant)
-		var joypad_name: String = Input.get_joy_name(joypad_id)
-		var label := "Device %d" % joypad_id
-		if not joypad_name.is_empty():
-			label += " - %s" % joypad_name
-		connected_devices_option_button.add_item(label)
-		_connected_device_ids.append(joypad_id)
-		_device_axis_neutral[joypad_id] = true
-
-	connected_devices_option_button.select(0)
-
-
-func _apply_player_colors() -> void:
-	player1_header_label.add_theme_color_override("font_color", PLAYER1_CHART_COLOR)
-	player2_header_label.add_theme_color_override("font_color", PLAYER2_CHART_COLOR)
-	selected_player_label.add_theme_color_override("font_color", PLAYER1_CHART_COLOR)
-	selected_opponent_label.add_theme_color_override("font_color", PLAYER2_CHART_COLOR)
+		if absf(direction.x) >= DIRECTION_TRIGGER and absf(direction.x) >= absf(direction.y):
+			_move_entry(entry, int(signf(direction.x)))
+			entry.latched = true
+		elif absf(direction.y) >= DIRECTION_TRIGGER:
+			# Up selects the previous character in the list.
+			_cycle_character(entry, -int(signf(direction.y)))
+			entry.latched = true
 
 
 func _populate_option_buttons() -> void:
@@ -117,47 +103,152 @@ func _populate_option_buttons() -> void:
 	player_option_button.disabled = not has_any_players
 	opponent_option_button.disabled = not has_any_players
 	start_button.disabled = not has_any_players
-
-
-func _ensure_distinct_defaults() -> void:
-	if _players.is_empty():
+	if not has_any_players:
 		return
 
 	player_option_button.select(0)
-	if _players.size() > 1:
-		opponent_option_button.select(1)
-	else:
-		opponent_option_button.select(0)
+	opponent_option_button.select(1 if _players.size() > 1 else 0)
 
 
-func _build_chart() -> void:
-	_chart = chart_scene.instantiate() as Chart
-	if _chart == null:
-		push_error("Failed to instantiate Easy Charts chart scene")
+func _apply_player_colors() -> void:
+	player1_header_label.add_theme_color_override("font_color", PLAYER1_CHART_COLOR)
+	player2_header_label.add_theme_color_override("font_color", PLAYER2_CHART_COLOR)
+	selected_player_label.add_theme_color_override("font_color", PLAYER1_CHART_COLOR)
+	selected_opponent_label.add_theme_color_override("font_color", PLAYER2_CHART_COLOR)
+
+
+## Device lanes
+##################
+
+
+## Rebuilds the device rows from the connected devices, keeping known devices in their lanes.
+func _rebuild_device_entries() -> void:
+	var previous_lanes: Dictionary[int, Lane] = {}
+	for entry in _entries:
+		previous_lanes[entry.device.get_device_id()] = entry.lane
+		entry.row.queue_free()
+	_entries.clear()
+
+	for device_id in InputDevice.get_connected_device_ids():
+		var entry := _create_entry(InputDevice.create(device_id))
+		entry.lane = previous_lanes.get(device_id, Lane.UNASSIGNED)
+		# Stay latched so a direction held while plugging in does not move the device.
+		entry.latched = true
+		_entries.append(entry)
+		_place_card(entry)
+	_refresh_control_labels()
+
+
+func _create_entry(device: InputDevice) -> DeviceEntry:
+	var entry := DeviceEntry.new()
+	entry.device = device
+
+	entry.row = HBoxContainer.new()
+	for lane in Lane.values():
+		var slot := CenterContainer.new()
+		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slot.custom_minimum_size.x = DEVICE_CARD_WIDTH
+		entry.row.add_child(slot)
+	device_rows.add_child(entry.row)
+
+	entry.card = VBoxContainer.new()
+	entry.card.alignment = BoxContainer.ALIGNMENT_CENTER
+	entry.icon = TextureRect.new()
+	entry.icon.texture = keyboard_icon if device is KeyboardInput else gamepad_icon
+	entry.icon.custom_minimum_size = DEVICE_ICON_SIZE
+	entry.icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	entry.icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	entry.icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	entry.card.add_child(entry.icon)
+
+	var name_label := Label.new()
+	name_label.text = device.get_display_name()
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.custom_minimum_size.x = DEVICE_CARD_WIDTH
+	entry.card.add_child(name_label)
+	return entry
+
+
+## Moves a device one lane left (step -1) or right (step 1). A side holds one device.
+func _move_entry(entry: DeviceEntry, step: int) -> void:
+	var target: Lane = clampi(entry.lane + step, Lane.PLAYER1, Lane.PLAYER2) as Lane
+	if target == entry.lane:
 		return
-	_chart.name = "StatsRadarChart"
-	_chart.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_chart.mouse_filter = Control.MOUSE_FILTER_PASS
-	var transparent_style := StyleBoxEmpty.new()
-
-	# Easy Charts uses these theme styleboxes internally when plotting.
-	_chart.add_theme_stylebox_override("panel", transparent_style)
-	_chart.add_theme_stylebox_override("normal", transparent_style)
-	_chart.add_theme_stylebox_override("chart_area", transparent_style)
-	_chart.add_theme_stylebox_override("plot_area", transparent_style)
-
-	var canvas := _chart.get_node_or_null("Canvas") as PanelContainer
-	if canvas:
-		canvas.add_theme_stylebox_override("panel", transparent_style)
-	chart_host.add_child(_chart)
+	if target != Lane.UNASSIGNED and _get_lane_entry(target):
+		return
+	entry.lane = target
+	_place_card(entry)
+	_refresh_control_labels()
 
 
-func _connect_signals() -> void:
-	player_option_button.item_selected.connect(_on_player_selected)
-	opponent_option_button.item_selected.connect(_on_opponent_selected)
-	player1_input_method_option_button.item_selected.connect(_on_player1_input_method_selected)
-	player2_input_method_option_button.item_selected.connect(_on_player2_input_method_selected)
-	connected_devices_option_button.item_selected.connect(_on_connected_device_selected)
+func _place_card(entry: DeviceEntry) -> void:
+	var slot: Node = entry.row.get_child(entry.lane)
+	if entry.card.get_parent():
+		entry.card.reparent(slot, false)
+	else:
+		slot.add_child(entry.card)
+	entry.icon.modulate = _lane_color(entry.lane)
+
+
+func _get_lane_entry(lane: Lane) -> DeviceEntry:
+	for entry in _entries:
+		if entry.lane == lane:
+			return entry
+	return null
+
+
+func _get_lane_device_id(lane: Lane) -> int:
+	var entry: DeviceEntry = _get_lane_entry(lane)
+	return entry.device.get_device_id() if entry else InputDevice.NO_DEVICE_ID
+
+
+func _lane_color(lane: Lane) -> Color:
+	match lane:
+		Lane.PLAYER1:
+			return PLAYER1_CHART_COLOR
+		Lane.PLAYER2:
+			return PLAYER2_CHART_COLOR
+	return UNASSIGNED_COLOR
+
+
+func _refresh_control_labels() -> void:
+	player1_control_label.text = _control_text(Lane.PLAYER1)
+	player2_control_label.text = _control_text(Lane.PLAYER2)
+
+
+func _control_text(lane: Lane) -> String:
+	var entry: DeviceEntry = _get_lane_entry(lane)
+	return entry.device.get_display_name() if entry else "CPU"
+
+
+func _on_joy_connection_changed(_device: int, _connected: bool) -> void:
+	_rebuild_device_entries()
+
+
+## Character selection
+########################
+
+
+## Cycles the character of the side the device controls. Devices in the middle do nothing.
+func _cycle_character(entry: DeviceEntry, step: int) -> void:
+	if _players.is_empty():
+		return
+	match entry.lane:
+		Lane.PLAYER1:
+			_select_character(player_option_button, opponent_option_button, step)
+			_on_player_selected(player_option_button.selected)
+		Lane.PLAYER2:
+			_select_character(opponent_option_button, player_option_button, step)
+			_on_opponent_selected(opponent_option_button.selected)
+
+
+## Selects the next character in `step` direction that the other side has not picked.
+func _select_character(button: OptionButton, other_button: OptionButton, step: int) -> void:
+	var index: int = posmod(button.selected + step, _players.size())
+	if index == other_button.selected and _players.size() > 1:
+		index = posmod(index + step, _players.size())
+	button.select(index)
 
 
 func _on_player_selected(index: int) -> void:
@@ -170,140 +261,6 @@ func _on_opponent_selected(index: int) -> void:
 	if _players.size() > 1 and index == player_option_button.selected:
 		player_option_button.select((index + 1) % _players.size())
 	_refresh_view()
-
-
-func _on_player1_input_method_selected(index: int) -> void:
-	if index == GlobalGameData.InputMethod.AI:
-		_player_device_assignments[0] = -1
-	_save_input_selection_state()
-
-
-func _on_player2_input_method_selected(index: int) -> void:
-	if index == GlobalGameData.InputMethod.AI:
-		_player_device_assignments[1] = -1
-	_save_input_selection_state()
-
-
-func _on_connected_device_selected(_index: int) -> void:
-	# Selection is consumed via directional input in _unhandled_input.
-	pass
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if connected_devices_option_button.disabled:
-		return
-
-	if event is InputEventJoypadMotion:
-		_handle_joypad_motion(event as InputEventJoypadMotion)
-	elif event is InputEventJoypadButton:
-		_handle_joypad_button(event as InputEventJoypadButton)
-	elif event is InputEventKey:
-		_handle_key(event as InputEventKey)
-
-
-func _handle_joypad_motion(motion_event: InputEventJoypadMotion) -> void:
-	if motion_event.axis != JOY_AXIS_LEFT_X:
-		return
-	if not _is_selected_device_event(motion_event.device):
-		return
-
-	var axis_value: float = motion_event.axis_value
-	var was_neutral := bool(_device_axis_neutral.get(motion_event.device, true))
-	if absf(axis_value) <= AXIS_NEUTRAL_THRESHOLD:
-		_device_axis_neutral[motion_event.device] = true
-		return
-	if not was_neutral:
-		return
-
-	if axis_value <= LEFT_AXIS_ASSIGN_THRESHOLD:
-		_assign_selected_device_to_slot(0)
-		_device_axis_neutral[motion_event.device] = false
-	elif axis_value >= RIGHT_AXIS_ASSIGN_THRESHOLD:
-		_assign_selected_device_to_slot(1)
-		_device_axis_neutral[motion_event.device] = false
-
-
-func _handle_joypad_button(button_event: InputEventJoypadButton) -> void:
-	if not button_event.pressed:
-		return
-	if not _is_selected_device_event(button_event.device):
-		return
-
-	if button_event.button_index == JOY_BUTTON_DPAD_LEFT:
-		_assign_selected_device_to_slot(0)
-	elif button_event.button_index == JOY_BUTTON_DPAD_RIGHT:
-		_assign_selected_device_to_slot(1)
-
-
-func _handle_key(key_event: InputEventKey) -> void:
-	if not key_event.pressed or key_event.echo:
-		return
-	if not _is_keyboard_selected():
-		return
-
-	if key_event.keycode == KEY_A or key_event.keycode == KEY_LEFT:
-		_assign_selected_device_to_slot(0)
-	elif key_event.keycode == KEY_D or key_event.keycode == KEY_RIGHT:
-		_assign_selected_device_to_slot(1)
-
-
-func _is_selected_device_event(device_id: int) -> bool:
-	if connected_devices_option_button.selected < 0:
-		return false
-	if connected_devices_option_button.selected >= _connected_device_ids.size():
-		return false
-	return _connected_device_ids[connected_devices_option_button.selected] == device_id
-
-
-func _is_keyboard_selected() -> bool:
-	if connected_devices_option_button.selected < 0:
-		return false
-	if connected_devices_option_button.selected >= _connected_device_ids.size():
-		return false
-	return (
-		_connected_device_ids[connected_devices_option_button.selected]
-		== GlobalGameData.KEYBOARD_DEVICE_ID
-	)
-
-
-func _assign_selected_device_to_slot(slot_index: int) -> void:
-	if connected_devices_option_button.selected < 0:
-		return
-	if connected_devices_option_button.selected >= _connected_device_ids.size():
-		return
-
-	var selected_device_id: int = _connected_device_ids[connected_devices_option_button.selected]
-	var other_slot: int = 1 - slot_index
-
-	if _player_device_assignments[other_slot] == selected_device_id:
-		_player_device_assignments[other_slot] = GlobalGameData.NO_DEVICE_ID
-		if other_slot == 0:
-			player1_input_method_option_button.select(GlobalGameData.InputMethod.AI)
-		else:
-			player2_input_method_option_button.select(GlobalGameData.InputMethod.AI)
-
-	_player_device_assignments[slot_index] = selected_device_id
-	if slot_index == 0:
-		player1_input_method_option_button.select(GlobalGameData.InputMethod.HUMAN)
-	else:
-		player2_input_method_option_button.select(GlobalGameData.InputMethod.HUMAN)
-
-	_save_input_selection_state()
-
-
-func _save_input_selection_state() -> void:
-	GlobalGameData.set_match_input_methods(
-		player1_input_method_option_button.selected, player2_input_method_option_button.selected
-	)
-
-	if player1_input_method_option_button.selected != GlobalGameData.InputMethod.HUMAN:
-		_player_device_assignments[0] = GlobalGameData.NO_DEVICE_ID
-	if player2_input_method_option_button.selected != GlobalGameData.InputMethod.HUMAN:
-		_player_device_assignments[1] = GlobalGameData.NO_DEVICE_ID
-
-	GlobalGameData.set_match_input_devices(
-		_player_device_assignments[0], _player_device_assignments[1]
-	)
 
 
 func _refresh_view() -> void:
@@ -332,6 +289,32 @@ func _player_summary(player_data: PlayerData) -> String:
 			player_data.hand,
 		]
 	)
+
+
+## Stats chart
+################
+
+
+func _build_chart() -> void:
+	_chart = chart_scene.instantiate() as Chart
+	if _chart == null:
+		push_error("Failed to instantiate Easy Charts chart scene")
+		return
+	_chart.name = "StatsRadarChart"
+	_chart.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_chart.mouse_filter = Control.MOUSE_FILTER_PASS
+	var transparent_style := StyleBoxEmpty.new()
+
+	# Easy Charts uses these theme styleboxes internally when plotting.
+	_chart.add_theme_stylebox_override("panel", transparent_style)
+	_chart.add_theme_stylebox_override("normal", transparent_style)
+	_chart.add_theme_stylebox_override("chart_area", transparent_style)
+	_chart.add_theme_stylebox_override("plot_area", transparent_style)
+
+	var canvas := _chart.get_node_or_null("Canvas") as PanelContainer
+	if canvas:
+		canvas.add_theme_stylebox_override("panel", transparent_style)
+	chart_host.add_child(_chart)
 
 
 func _plot_stats(player_data: PlayerData, opponent_data: PlayerData) -> void:
@@ -448,8 +431,10 @@ func _on_start_button_pressed() -> void:
 	if _players.is_empty():
 		return
 
-	var player := _players[player_option_button.selected]
-	var opponent := _players[opponent_option_button.selected]
-	_save_input_selection_state()
-	GlobalGameData.set_match_players(player, opponent)
+	GlobalGameData.set_match_players(
+		_players[player_option_button.selected], _players[opponent_option_button.selected]
+	)
+	GlobalGameData.set_match_input_devices(
+		_get_lane_device_id(Lane.PLAYER1), _get_lane_device_id(Lane.PLAYER2)
+	)
 	selection_confirmed.emit()

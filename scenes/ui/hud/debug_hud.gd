@@ -25,8 +25,6 @@ var _current_object_filter: String = ""
 var _log_display_dirty: bool = true
 var _last_log_count: int = 0
 
-@onready var _tab_container: TabContainer = $DebugHud/TabContainer
-
 # Summary tab labels
 @onready var _summary_vbox: VBoxContainer = $DebugHud/TabContainer/Summary/ScrollContainer/VBox
 @onready var _summary_fps_label: Label = _summary_vbox.get_node("Performance/FPS") as Label
@@ -119,6 +117,7 @@ func _ready() -> void:
 	):
 		match_manager.active_ball_changed.connect(_on_active_ball_changed)
 	_trajectory_button.toggled.connect(_toggle_trajectory)
+	_toggle_trajectory(_trajectory_button.button_pressed)
 	_camera_selector.item_selected.connect(_on_camera_selected)
 	_setup_ball_speed_plot()
 	_reset_ball_speed_history()
@@ -273,8 +272,6 @@ func _player_state_to_string(value: int) -> String:
 		PlayerStateMachine.State.MOVING: "MOVING",
 		PlayerStateMachine.State.PREPARING_STROKE: "PREPARING_STROKE",
 		PlayerStateMachine.State.STROKING: "STROKING",
-		PlayerStateMachine.State.RECOVERING: "RECOVERING",
-		PlayerStateMachine.State.UNREACHABLE: "UNREACHABLE",
 	}
 	return enum_map.get(value, "UNKNOWN")
 
@@ -284,7 +281,6 @@ func _ai_phase_to_string(value: AiController.Phase) -> String:
 	var enum_map: Dictionary[AiController.Phase, String] = {
 		AiController.Phase.ANTICIPATION: "ANTICIPATION",
 		AiController.Phase.LOCK_IN: "LOCK_IN",
-		AiController.Phase.TRACKING: "TRACKING",
 		AiController.Phase.WAITING_FOR_HIT: "WAITING_FOR_HIT",
 	}
 	return enum_map.get(value, "UNKNOWN")
@@ -298,7 +294,10 @@ func _stroke_type_to_string(value: Stroke.StrokeType) -> String:
 		Stroke.StrokeType.SERVE: "SERVE",
 		Stroke.StrokeType.BACKHAND_SLICE: "BACKHAND_SLICE",
 		Stroke.StrokeType.BACKHAND_DROP_SHOT: "BACKHAND_DROP_SHOT",
-		Stroke.StrokeType.VOLLEY: "VOLLEY",
+		Stroke.StrokeType.FOREHAND_VOLLEY: "FOREHAND_VOLLEY",
+		Stroke.StrokeType.BACKHAND_VOLLEY: "BACKHAND_VOLLEY",
+		Stroke.StrokeType.FOREHAND_DROP_VOLLEY: "FOREHAND_DROP_VOLLEY",
+		Stroke.StrokeType.BACKHAND_DROP_VOLLEY: "BACKHAND_DROP_VOLLEY",
 	}
 	return enum_map.get(value, "UNKNOWN")
 
@@ -316,7 +315,7 @@ func _queued_stroke_to_string(player: Player) -> String:
 
 	return (
 		(
-			"%s\n  intended_power=%.2f actual_power=%.2f delay=%.2f"
+			"%s\n  intended_power=%.2f actual_power=%.2f"
 			+ "\n  intended_target=(%.2f, %.2f, %.2f)\n  actual_target=(%.2f, %.2f, %.2f)"
 			+ "\n  spin=(%.2f, %.2f, %.2f)\n  step_t=%s bounces=%s"
 		)
@@ -324,7 +323,6 @@ func _queued_stroke_to_string(player: Player) -> String:
 			_stroke_type_to_string(stroke.stroke_type),
 			stroke.intended_stroke_power,
 			stroke.stroke_power,
-			stroke.delay,
 			stroke.intended_stroke_target.x,
 			stroke.intended_stroke_target.y,
 			stroke.intended_stroke_target.z,

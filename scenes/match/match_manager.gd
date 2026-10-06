@@ -23,11 +23,24 @@ signal replay_paused(playhead_seconds: float)
 signal replay_resumed(playhead_seconds: float)
 
 enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER }
+
 enum ReplayCameraMode {
 	BROADCAST,
 	FOLLOW_BALL,
 	FOLLOW_LAST_HITTER,
 }
+
+## Shots in a rally (serve included) from which the crowd cheers at the end of the point
+const GOOD_RALLY_SHOTS: int = 6
+## Pressure both players feel before a point, by what the point decides for either of them
+const POINT_PRESSURE: Dictionary[Score.PointImportance, float] = {
+	Score.PointImportance.GAME: 0.04,
+	Score.PointImportance.BREAK: 0.1,
+	Score.PointImportance.SET: 0.18,
+	Score.PointImportance.MATCH: 0.28,
+}
+## Pressure released before an ordinary point
+const NORMAL_POINT_PRESSURE_RELIEF: float = 0.04
 
 @export var player0: Player
 @export var player1: Player
@@ -79,12 +92,15 @@ var _replay_controller: MatchReplayController
 @onready var match_data: MatchData
 
 
-func _update_valid_serve_zone_from_server_position() -> void:
+## Sets the zones for the next point from where the server stands: the serve must land on
+## the far half, and the rally zone flips from there with every valid bounce.
+func _prepare_point_zones() -> void:
 	_valid_serve_zone = (
 		Court.CourtRegion.BACK_SINGLES_BOX
 		if get_server().position.z > 0
 		else Court.CourtRegion.FRONT_SINGLES_BOX
 	)
+	_valid_rally_zone = _valid_serve_zone
 
 
 func _is_debug_add_point_event(event: InputEvent) -> bool:
@@ -107,12 +123,11 @@ func _ready() -> void:
 	# Set up logger name
 	set_meta("logger_name", "MatchManager")
 
-	# Reset input assignments for new match (important for gamepad assignment)
-	HumanController.reset_input_assignments()
-
-	# Set opponent references for each player
+	# Set opponent and match references for each player
 	player0.opponent = player1
 	player1.opponent = player0
+	player0.match_manager = self
+	player1.match_manager = self
 
 	match_data = MatchData.new(player0.player_data, player1.player_data)
 	player0.ball_hit.connect(_on_player0_ball_hit)
@@ -129,6 +144,7 @@ func _ready() -> void:
 	_connect_player_lifecycle(player1)
 	television_hud.score_display.player_1_score_panel.set_player(player0.player_data)
 	television_hud.score_display.player_2_score_panel.set_player(player1.player_data)
+	television_hud.update_score(match_data.get_score())
 
 	cameras.register_camera(player0.first_person_camera)
 	cameras.register_camera(player1.first_person_camera)
@@ -136,8 +152,6 @@ func _ready() -> void:
 	cameras.player1 = player1
 	_setup_replay_controller()
 	place_players()
-	if crowd:
-		crowd.play_idle_sound()
 	_begin_replay_recording()
 	start_match()
 
@@ -298,6 +312,7 @@ func get_last_hitter_name() -> String:
 
 ## Request the current server to serve
 func set_player_serve() -> void:
+	match_data.rally_length = 0
 	_stop_players()
 	_clear_ball()
 	place_players()
@@ -310,8 +325,7 @@ func set_player_serve() -> void:
 
 ## Start a new match
 func start_match() -> void:
-	_update_valid_serve_zone_from_server_position()
-	_valid_rally_zone = _valid_serve_zone
+	_prepare_point_zones()
 	current_state = MatchState.SERVE
 	_record_replay_event("match_started", {"state": current_state})
 	set_player_serve()
@@ -403,7 +417,7 @@ func _handle_fault() -> void:
 	if umpire:
 		if _ground_contacts == 0:
 			umpire.say_fault()
-	if crowd:
+	if crowd and match_data.rally_length >= GOOD_RALLY_SHOTS:
 		crowd.play_victory()
 
 	var point_winner: Player
@@ -413,7 +427,6 @@ func _handle_fault() -> void:
 		point_winner = last_hitter
 
 	current_state = MatchState.IDLE
-	_valid_rally_zone = _valid_serve_zone
 	_ground_contacts = 0
 	add_point(get_player_index(point_winner))
 
@@ -430,7 +443,9 @@ func add_point(winner: int) -> void:
 	match_data.add_point(winner)
 	player0.on_point_result(winner == 0)
 	player1.on_point_result(winner == 1)
+	_apply_point_pressure()
 	television_hud.update_score(match_data.get_score())
+	stadium.show_match_time(match_data.elapsed_seconds)
 	if umpire:
 		umpire.say_score(match_data.get_score())
 	await (
@@ -440,9 +455,25 @@ func add_point(winner: int) -> void:
 	)
 	place_players()
 	await players_placed
-	_update_valid_serve_zone_from_server_position()
+	_prepare_point_zones()
 	current_state = MatchState.SERVE
 	set_player_serve()
+
+
+## Big points (game, break, set and match points for either player) add pressure to both
+## players; ordinary points release a little.
+func _apply_point_pressure() -> void:
+	var score: Score = match_data.get_score()
+	if score.is_match_over():
+		return
+	var importance: Score.PointImportance = maxi(
+		score.point_importance(0), score.point_importance(1)
+	) as Score.PointImportance
+	for player: Player in [player0, player1]:
+		if importance == Score.PointImportance.NORMAL:
+			player.mental_state.release_pressure(NORMAL_POINT_PRESSURE_RELIEF)
+		else:
+			player.mental_state.apply_pressure(POINT_PRESSURE[importance])
 
 
 ## Get the current server player
@@ -462,11 +493,9 @@ func _clear_ball() -> void:
 			ball.on_net.disconnect(_on_ball_on_net)
 
 
-## Check if server serves from deuce side (even total points)
+## Check if server serves from deuce side
 func is_serve_from_deuce_side() -> bool:
-	var score = match_data.get_score()
-	var total_points: int = score.points[0] + score.points[1]
-	return (total_points % 2) == 0
+	return match_data.get_score().is_deuce_court()
 
 
 ## Get the valid service box for current serve
@@ -493,63 +522,66 @@ func get_valid_service_box() -> Court.CourtRegion:
 ## Position players based on current server and game state
 func place_players() -> void:
 	var server_index: int = match_data.get_server()
-	var score = match_data.get_score()
-	var total_games: int = score.games[0] + score.games[1]
-	var switch_sides: bool = (
-		(total_games % GameConstants.SIDE_SWITCH_GAME_CYCLE) == 1
-		or (total_games % GameConstants.SIDE_SWITCH_GAME_CYCLE) == 2
-	)
+	var ends_switched: bool = match_data.get_score().are_ends_switched()
 	var serve_from_deuce_side: bool = is_serve_from_deuce_side()
 
-	# Determine player positions
 	var player0_position: Stadium.StadiumPosition = _get_player_position(
-		server_index == 0, serve_from_deuce_side, switch_sides, true
+		server_index == 0, serve_from_deuce_side, not ends_switched
 	)
 	var player1_position: Stadium.StadiumPosition = _get_player_position(
-		server_index == 1, serve_from_deuce_side, switch_sides, false
+		server_index == 1, serve_from_deuce_side, ends_switched
 	)
 
-	# Assign positions to players using stadium positions dictionary
-	player0.global_position = stadium.positions[player0_position]
+	player0.place_at(stadium.positions[player0_position])
 	# Wait one frame to avoid collisions
 	await get_tree().physics_frame
-	player1.global_position = stadium.positions[player1_position]
-	player0.rotation.y = PI if player0.position.z < 0 else 0.0
-	player1.rotation.y = PI if player1.position.z < 0 else 0.0
+	player1.place_at(stadium.positions[player1_position])
 	players_placed.emit()
-	cameras.set_camera_for_player(player0)
-	cameras.set_camera_for_player(player1)
+	if player0.global_position.z > 0.0:
+		stadium.track_players(player0, player1)
+	else:
+		stadium.track_players(player1, player0)
+	var human_player: Player = _get_single_human_player()
+	if human_player:
+		cameras.show_from_behind(human_player)
 
 
-## Get position for a player based on serve and side information
+## The human controlled player when exactly one player is human, otherwise null.
+func _get_single_human_player() -> Player:
+	var human_players: Array[Player] = []
+	for player in [player0, player1]:
+		if player.controller is HumanController:
+			human_players.append(player)
+	return human_players[0] if human_players.size() == 1 else null
+
+
+## Get the stadium position of a player from its role, the serve side and its end.
+## Deuce is the right side as seen from the player's own baseline.
 func _get_player_position(
-	is_server: bool, serve_from_deuce_side: bool, switch_sides: bool, _is_player0: bool
+	is_server: bool, serve_from_deuce_side: bool, on_front_end: bool
 ) -> Stadium.StadiumPosition:
-	if is_server:
-		if switch_sides:
-			# Server is on back side
+	if on_front_end:
+		if is_server:
 			return (
-				stadium.StadiumPosition.SERVE_BACK_LEFT
+				Stadium.StadiumPosition.SERVE_FRONT_RIGHT
 				if serve_from_deuce_side
-				else stadium.StadiumPosition.SERVE_BACK_RIGHT
+				else Stadium.StadiumPosition.SERVE_FRONT_LEFT
 			)
-		# Server is on front side
 		return (
-			stadium.StadiumPosition.SERVE_FRONT_RIGHT
+			Stadium.StadiumPosition.RECEIVE_FRONT_RIGHT
 			if serve_from_deuce_side
-			else stadium.StadiumPosition.SERVE_FRONT_LEFT
+			else Stadium.StadiumPosition.RECEIVE_FRONT_LEFT
 		)
-	# Receiver
-	if switch_sides:
+	if is_server:
 		return (
-			stadium.StadiumPosition.RECEIVE_FRONT_RIGHT
+			Stadium.StadiumPosition.SERVE_BACK_LEFT
 			if serve_from_deuce_side
-			else stadium.StadiumPosition.RECEIVE_FRONT_LEFT
+			else Stadium.StadiumPosition.SERVE_BACK_RIGHT
 		)
 	return (
-		stadium.StadiumPosition.RECEIVE_BACK_LEFT
+		Stadium.StadiumPosition.RECEIVE_BACK_LEFT
 		if serve_from_deuce_side
-		else stadium.StadiumPosition.RECEIVE_BACK_RIGHT
+		else Stadium.StadiumPosition.RECEIVE_BACK_RIGHT
 	)
 
 
@@ -600,6 +632,7 @@ func _on_player0_ball_hit() -> void:
 			"stroke_spin": player0.queued_stroke.stroke_spin,
 		}
 	_record_replay_event("stroke", {"player": 0, "stroke": stroke_payload})
+	match_data.rally_length += 1
 	if current_state == MatchState.PLAY:
 		if _ground_contacts == 0:
 			_swap_valid_rally_zone()
@@ -618,6 +651,7 @@ func _on_player1_ball_hit() -> void:
 			"stroke_spin": player1.queued_stroke.stroke_spin,
 		}
 	_record_replay_event("stroke", {"player": 1, "stroke": stroke_payload})
+	match_data.rally_length += 1
 	if current_state == MatchState.PLAY:
 		if _ground_contacts == 0:
 			_swap_valid_rally_zone()

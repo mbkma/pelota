@@ -31,6 +31,8 @@ func set_active_ball(b: Ball) -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	mesh.clear_surfaces()
+	if not is_visible_in_tree():
+		return
 
 	if ball and ball.trajectory and ball.trajectory.size() > 1:
 		draw_trajectory(ball.trajectory)

@@ -42,7 +42,6 @@ var _is_playing: bool = false
 var _is_playback_paused: bool = false
 var _replay_ball_visual: Ball
 var _tree_was_paused_before_playback: bool = false
-var _event_cursor: int = 0
 
 
 func initialize(
@@ -73,7 +72,6 @@ func begin_recording() -> void:
 	_elapsed_seconds = 0.0
 	_cursor = 0
 	_playhead_seconds = 0.0
-	_event_cursor = 0
 	_is_recording = true
 	_is_playing = false
 	_is_playback_paused = false
@@ -155,7 +153,6 @@ func start_playback() -> void:
 	_is_playback_paused = false
 	_cursor = 0
 	_playhead_seconds = 0.0
-	_event_cursor = 0
 	_tree_was_paused_before_playback = _match_manager.get_tree().paused
 	_match_manager.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	_match_manager.get_tree().paused = true
@@ -179,10 +176,6 @@ func stop_playback() -> void:
 		_replay_ball_visual = null
 	_match_manager.get_tree().paused = _tree_was_paused_before_playback
 	_match_manager.process_mode = Node.PROCESS_MODE_INHERIT
-	if _player0:
-		_player0.reset_replay_visual_state()
-	if _player1:
-		_player1.reset_replay_visual_state()
 	playback_stopped.emit()
 
 
@@ -237,8 +230,6 @@ func step_frame(direction: int) -> void:
 		_cursor = maxi(_cursor - 1, 0)
 
 	_playhead_seconds = _frames[_cursor]["time"]
-	_event_cursor = 0
-	_process_events_until_playhead()
 	_apply_frame(_frames[_cursor])
 	playback_frame_applied.emit(_cursor, _playhead_seconds)
 
@@ -298,7 +289,6 @@ func load_from_disk(path: String = save_path) -> bool:
 	_elapsed_seconds = float(payload_dict.get("duration", 0.0))
 	_cursor = 0
 	_playhead_seconds = 0.0
-	_event_cursor = 0
 	replay_loaded.emit(_elapsed_seconds)
 	return not _frames.is_empty()
 
@@ -312,13 +302,9 @@ func _record_frame(delta: float) -> void:
 		"time": _elapsed_seconds,
 		"player0_transform": _player0.global_transform,
 		"player0_velocity": _player0.velocity,
-		"player0_state": _player0.get_current_state(),
-		"player0_stroke_payload": _serialize_stroke(_player0.queued_stroke),
 		"player0_animation_snapshot": _player0.get_replay_animation_snapshot(),
 		"player1_transform": _player1.global_transform,
 		"player1_velocity": _player1.velocity,
-		"player1_state": _player1.get_current_state(),
-		"player1_stroke_payload": _serialize_stroke(_player1.queued_stroke),
 		"player1_animation_snapshot": _player1.get_replay_animation_snapshot(),
 		"last_hitter_index":
 		(
@@ -350,7 +336,6 @@ func _playback_step(delta: float) -> void:
 	while (_cursor + 1) < _frames.size() and _frames[_cursor + 1]["time"] <= _playhead_seconds:
 		_cursor += 1
 
-	_process_events_until_playhead()
 	_apply_frame(_frames[_cursor])
 	playback_frame_applied.emit(_cursor, _playhead_seconds)
 
@@ -368,36 +353,8 @@ func _seek_to_time(target_time: float) -> void:
 	while (_cursor + 1) < _frames.size() and _frames[_cursor + 1]["time"] <= _playhead_seconds:
 		_cursor += 1
 
-	_event_cursor = 0
-	_process_events_until_playhead()
 	_apply_frame(_frames[_cursor])
 	playback_frame_applied.emit(_cursor, _playhead_seconds)
-
-
-func _process_events_until_playhead() -> void:
-	while _event_cursor < _events.size() and _events[_event_cursor]["time"] <= _playhead_seconds:
-		_apply_event(_events[_event_cursor])
-		_event_cursor += 1
-
-
-func _apply_event(event_data: Dictionary) -> void:
-	if not event_data.has("type"):
-		return
-
-	var event_type: String = event_data["type"]
-	var payload: Dictionary = event_data.get("payload", {})
-	if event_type != "stroke":
-		return
-
-	var player_index: int = int(payload.get("player", -1))
-	var stroke_payload: Dictionary = payload.get("stroke", {})
-	if stroke_payload.is_empty():
-		return
-
-	if player_index == 0 and _player0:
-		_player0.play_replay_stroke(stroke_payload)
-	elif player_index == 1 and _player1:
-		_player1.play_replay_stroke(stroke_payload)
 
 
 func _apply_frame(frame: Dictionary) -> void:
@@ -405,17 +362,13 @@ func _apply_frame(frame: Dictionary) -> void:
 		_player0.apply_replay_frame(
 			frame["player0_transform"],
 			frame["player0_velocity"],
-			int(frame["player0_state"]),
-			frame.get("player0_stroke_payload", {}),
-			frame.get("player0_animation_snapshot", {})
+			frame["player0_animation_snapshot"]
 		)
 	if _player1:
 		_player1.apply_replay_frame(
 			frame["player1_transform"],
 			frame["player1_velocity"],
-			int(frame["player1_state"]),
-			frame.get("player1_stroke_payload", {}),
-			frame.get("player1_animation_snapshot", {})
+			frame["player1_animation_snapshot"]
 		)
 
 	if frame["ball_exists"]:
@@ -518,15 +471,3 @@ func _set_replay_animation_paused(paused: bool) -> void:
 		_player0.set_replay_animation_paused(paused)
 	if _player1:
 		_player1.set_replay_animation_paused(paused)
-
-
-func _serialize_stroke(stroke: Stroke) -> Dictionary:
-	if not stroke:
-		return {}
-
-	return {
-		"stroke_type": stroke.stroke_type,
-		"stroke_power": stroke.stroke_power,
-		"stroke_target": stroke.stroke_target,
-		"stroke_spin": stroke.stroke_spin,
-	}

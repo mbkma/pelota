@@ -1,4 +1,4 @@
-## Tennis match scoring system handling points, games, sets, and tiebreak logic
+## Tennis match scoring system handling points, games, sets, tiebreaks and change of ends
 class_name Score
 extends Resource
 
@@ -11,16 +11,26 @@ signal game_changed
 ## Tennis point values for deuce/advantage tracking
 enum TennisPoint { LOVE = 0, FIFTEEN = 1, THIRTY = 2, FORTY = 3, AD = 4 }
 
+## What winning the next point would decide for a player
+enum PointImportance { NORMAL, GAME, BREAK, SET, MATCH }
+
+## Games needed to win a set (a tiebreak is played at GAMES_PER_SET all)
+const GAMES_PER_SET: int = 6
+## Points needed to win a tiebreak (with a 2 point lead)
+const TIEBREAK_POINTS: int = 7
+## Ends change every this many points during a tiebreak
+const TIEBREAK_END_CHANGE_POINTS: int = 6
+
 ## Number of sets to win the match (typically 3 or 5)
 var best_of_sets: int = 3
 
-## Array of games won in each completed set
-var games_in_set: Array[int] = []
+## Games of each completed set as (player0, player1)
+var completed_sets: Array[Vector2i] = []
 
-## Current set score for each player [player0, player1]
+## Sets won by each player [player0, player1]
 var sets: Array[int] = [0, 0]
 
-## Current game score for each player [player0, player1]
+## Games of the current set for each player [player0, player1]
 var games: Array[int] = [0, 0]
 
 ## Current point score for each player in standard tennis (0-40-AD)
@@ -35,70 +45,122 @@ var is_tiebreak: bool = false
 ## Index of current server (0 or 1)
 var current_server: int = 0
 
+## Games played in the whole match, used for the change of ends
+var games_played: int = 0
 
-## Record completed games to games_in_set array
-func add_games_in_set(games_count: int) -> void:
-	games_in_set.append(games_count)
-
-
-## Process winning a game, handling set win and tiebreak transition
-func add_game(player_index: int) -> void:
-	# Check if we need to transition to tiebreak (both at 6 games)
-	if games[player_index] == 6 and games[1 - player_index] == 6:
-		is_tiebreak = true
-		return
-	# Winning condition: first to 6 games with 2+ game lead
-	if games[player_index] >= 6:
-		sets[player_index] += 1
-		add_games_in_set(games[player_index])
-		games = [0, 0]
-	# Normal game win, continue set
-	else:
-		games[player_index] += 1
-		current_server = 1 - current_server
-		game_changed.emit()
-
-
-## Process point scored during tiebreak (first to 7 with 2+ point lead)
-func add_tiebreak_point(player_index: int) -> void:
-	if abs(tiebreak_points[player_index] - tiebreak_points[1 - player_index]) < 2:
-		tiebreak_points[player_index] += 1
-
-	# Winning condition: 7+ points with 2+ point lead
-	if (
-		tiebreak_points[player_index] >= 7
-		and tiebreak_points[player_index] - tiebreak_points[1 - player_index] >= 2
-	):
-		add_game(player_index)
-		tiebreak_points = [0, 0]
-		is_tiebreak = false
+## Player who served the first point of the current tiebreak
+var _tiebreak_first_server: int = 0
 
 
 ## Check if match has been won by either player
 func is_match_over() -> bool:
-	return sets[0] >= (best_of_sets + 1) / 2 or sets[1] >= (best_of_sets + 1) / 2
+	var sets_to_win: int = ceili(best_of_sets / 2.0)
+	return sets[0] >= sets_to_win or sets[1] >= sets_to_win
 
 
 ## Process point scored, handling tiebreak, deuce, and game win conditions
 func add_point(player_index: int) -> void:
 	if is_tiebreak:
-		add_tiebreak_point(player_index)
-		return
+		_add_tiebreak_point(player_index)
+	else:
+		_add_game_point(player_index)
+	score_changed.emit()
 
-	# Deuce condition: both at 40 (FORTY enum value), player scored again
-	if points[player_index] == TennisPoint.FORTY and points[1 - player_index] == TennisPoint.FORTY:
-		points[player_index] += 1
-	# Deuce: opponent had advantage, player tied it up
-	elif points[player_index] == TennisPoint.FORTY and points[1 - player_index] == TennisPoint.AD:
-		points[1 - player_index] -= 1
-	# Win game: player had AD or 40 and scored again
-	elif points[player_index] == TennisPoint.AD or points[player_index] == TennisPoint.FORTY:
-		add_game(player_index)
-		points = [0, 0]
-	# Normal point progression
+
+## What winning the next point would decide for `player_index`.
+func point_importance(player_index: int) -> PointImportance:
+	var after: Score = _copy()
+	after.add_point(player_index)
+	if after.is_match_over():
+		return PointImportance.MATCH
+	if after.sets[player_index] > sets[player_index]:
+		return PointImportance.SET
+	if after.games_played > games_played:
+		return PointImportance.GAME if player_index == current_server else PointImportance.BREAK
+	return PointImportance.NORMAL
+
+
+## Whether the next point is served from the deuce (right) side
+func is_deuce_court() -> bool:
+	var total_points: int = (
+		tiebreak_points[0] + tiebreak_points[1] if is_tiebreak else points[0] + points[1]
+	)
+	return total_points % 2 == 0
+
+
+## Whether the players have swapped ends relative to the start of the match.
+## Ends change after every odd game of the match (so a set with an even number of games
+## carries over into the next set) and every 6 points of a tiebreak.
+func are_ends_switched() -> bool:
+	var changes: int = floori((games_played + 1) / 2.0)
+	if is_tiebreak:
+		var tiebreak_total: int = tiebreak_points[0] + tiebreak_points[1]
+		changes += floori(tiebreak_total / float(TIEBREAK_END_CHANGE_POINTS))
+	return changes % 2 == 1
+
+
+func _add_game_point(player_index: int) -> void:
+	var opponent_index: int = 1 - player_index
+	if points[player_index] == TennisPoint.FORTY and points[opponent_index] == TennisPoint.AD:
+		# Back to deuce
+		points[opponent_index] = TennisPoint.FORTY
+	elif (
+		points[player_index] == TennisPoint.AD
+		or (points[player_index] == TennisPoint.FORTY and points[opponent_index] < TennisPoint.FORTY)
+	):
+		_win_game(player_index)
 	else:
 		points[player_index] += 1
 
-	if is_match_over():
+
+func _add_tiebreak_point(player_index: int) -> void:
+	tiebreak_points[player_index] += 1
+	var lead: int = tiebreak_points[player_index] - tiebreak_points[1 - player_index]
+	if tiebreak_points[player_index] >= TIEBREAK_POINTS and lead >= 2:
+		is_tiebreak = false
+		tiebreak_points = [0, 0]
+		# The player who received first in the tiebreak serves first in the next set;
+		# _win_game passes the serve on from the tiebreak's first server.
+		current_server = _tiebreak_first_server
+		_win_game(player_index)
 		return
-	score_changed.emit()
+
+	# Serve changes after the first point, then every two points.
+	if (tiebreak_points[0] + tiebreak_points[1]) % 2 == 1:
+		current_server = 1 - current_server
+
+
+func _win_game(player_index: int) -> void:
+	points = [0, 0]
+	games[player_index] += 1
+	games_played += 1
+	current_server = 1 - current_server
+
+	var lead: int = games[player_index] - games[1 - player_index]
+	if (games[player_index] >= GAMES_PER_SET and lead >= 2) or games[player_index] > GAMES_PER_SET:
+		_win_set(player_index)
+	elif games[0] == GAMES_PER_SET and games[1] == GAMES_PER_SET:
+		is_tiebreak = true
+		_tiebreak_first_server = current_server
+	game_changed.emit()
+
+
+func _win_set(player_index: int) -> void:
+	completed_sets.append(Vector2i(games[0], games[1]))
+	sets[player_index] += 1
+	games = [0, 0]
+
+
+func _copy() -> Score:
+	var copy := Score.new()
+	copy.best_of_sets = best_of_sets
+	copy.completed_sets = completed_sets.duplicate()
+	copy.sets = sets.duplicate()
+	copy.games = games.duplicate()
+	copy.points = points.duplicate()
+	copy.tiebreak_points = tiebreak_points.duplicate()
+	copy.is_tiebreak = is_tiebreak
+	copy.current_server = current_server
+	copy.games_played = games_played
+	copy._tiebreak_first_server = _tiebreak_first_server
+	return copy

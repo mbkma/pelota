@@ -1,0 +1,128 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/hud/player_status_panel.gd" id="1_status"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0, 0, 0, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_background"]
+bg_color = Color(1, 1, 1, 0.15)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina"]
+bg_color = Color(0.3, 0.8, 0.35, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressure"]
+bg_color = Color(0.9, 0.35, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confidence"]
+bg_color = Color(0.35, 0.6, 0.95, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="PlayerStatusPanel" type="PanelContainer" unique_id=1736402851]
+custom_minimum_size = Vector2(210, 0)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+script = ExtResource("1_status")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=420661953]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="NameLabel" type="Label" parent="VBox" unique_id=1985104417]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StaminaRow" type="HBoxContainer" parent="VBox" unique_id=601775281]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBox/StaminaRow" unique_id=1376908129]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Stamina"
+
+[node name="StaminaBar" type="ProgressBar" parent="VBox/StaminaRow" unique_id=1225806262]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stamina")
+max_value = 1.0
+step = 0.001
+value = 1.0
+show_percentage = false
+
+[node name="PressureRow" type="HBoxContainer" parent="VBox" unique_id=1648361930]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBox/PressureRow" unique_id=1105640823]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Pressure"
+
+[node name="PressureBar" type="ProgressBar" parent="VBox/PressureRow" unique_id=319247870]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pressure")
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="ConfidenceRow" type="HBoxContainer" parent="VBox" unique_id=1820367515]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBox/ConfidenceRow" unique_id=1597130446]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "Confidence"
+
+[node name="ConfidenceBar" type="ProgressBar" parent="VBox/ConfidenceRow" unique_id=1489220338]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_confidence")
+max_value = 1.0
+step = 0.001
+value = 0.5
+show_percentage = false

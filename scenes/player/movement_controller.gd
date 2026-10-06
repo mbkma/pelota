@@ -135,9 +135,9 @@ func tick(
 	if direction_change_angle > 0.5:  # ~30 degrees
 		_direction_change_time = DIRECTION_CHANGE_PENALTY_DURATION
 
-	# Reduce acceleration during direction changes
+	# Reduce acceleration during direction changes; agile players lose less
 	if _direction_change_time > 0.0:
-		effective_acceleration *= 0.6  # Slower acceleration while turning
+		effective_acceleration *= 1.0 - stats.direction_change_resistance(stamina01)
 		_direction_change_time -= delta
 
 	# Compute target velocity based on input direction

@@ -9,7 +9,10 @@ enum StrokeType {
 	SERVE,
 	BACKHAND_SLICE,
 	BACKHAND_DROP_SHOT,
-	VOLLEY,
+	FOREHAND_VOLLEY,
+	BACKHAND_VOLLEY,
+	FOREHAND_DROP_VOLLEY,
+	BACKHAND_DROP_VOLLEY,
 }
 
 # Variables for stroke properties
@@ -23,8 +26,25 @@ var intended_stroke_target: Vector3
 # The TrajectoryStep nearest to the players z-position
 var step: TrajectoryStep
 
-# Time in seconds before the stroke anim should start
-var delay: float = 0.0
-
 # Shot intent for debug/UI display (mirrors AiPointContext.ShotIntent, -1 = unknown)
 var stroke_intent: int = -1
+
+
+## Whether the stroke is played before the ball bounces, close to the net.
+func is_volley() -> bool:
+	return stroke_type in [
+		StrokeType.FOREHAND_VOLLEY,
+		StrokeType.BACKHAND_VOLLEY,
+		StrokeType.FOREHAND_DROP_VOLLEY,
+		StrokeType.BACKHAND_DROP_VOLLEY,
+	]
+
+
+## Whether the stroke is a soft touch shot (drop shot or drop volley).
+func is_drop() -> bool:
+	return stroke_type in [
+		StrokeType.FOREHAND_DROP_SHOT,
+		StrokeType.BACKHAND_DROP_SHOT,
+		StrokeType.FOREHAND_DROP_VOLLEY,
+		StrokeType.BACKHAND_DROP_VOLLEY,
+	]

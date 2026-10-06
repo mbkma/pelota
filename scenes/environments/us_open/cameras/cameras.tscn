@@ -21,8 +21,8 @@ size = 97.38
 script = ExtResource("3_gvk2c")
 
 [node name="TopBack" type="Camera3D" parent="." unique_id=600431920]
-transform = Transform3D(-1, 2.77397e-08, -8.29051e-08, 0, 0.948324, 0.317305, 8.74228e-08, 0.317305, -0.948324, 0, 9.836, -35.084)
-fov = 22.5
+transform = Transform3D(-1, 2.773968e-08, -8.29051e-08, 0, 0.9483236, 0.31730488, 8.74228e-08, 0.31730488, -0.9483236, 0, 8.982306, -31.835499)
+fov = 29.9
 size = 97.38
 script = ExtResource("3_gvk2c")
 

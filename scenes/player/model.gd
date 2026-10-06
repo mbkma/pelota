@@ -1,59 +1,17 @@
-## Player model with animations, skeleton points, and stroke handling
+## Player model: appearance, animation and stroke clips (racket contact points)
 class_name Model
 extends Node3D
-
-## Emitted when stroke animation finishes
-signal stroke_animation_finished
-
-## Emitted when recovery animation finishes
-signal recovery_animation_finished
-
-## Emitted when the active ball enters the racket hit area
-signal hit_area_ball_entered(ball: Ball)
 
 const DEFAULT_APPEARANCE: PlayerAppearance = preload(
 	"res://scenes/player/resources/appearances/djokovic.tres"
 )
 
-@export var animation_tree: AnimationTree
-## Reference to the AnimationPlayer that drives the animation tree
-@export var _animation_player: AnimationPlayer
+@export var animator: PlayerAnimator
 
-## Reference to parent player
-var player: Player
-
-## Track last animation state for detecting transitions
-var _last_state: String = ""
-
-## Track if stroke animation finished signal was already emitted
-var _stroke_finished_emitted: bool = false
-
-## Mapping from stroke type to animation name for lookup
-var _stroke_animation_names: Dictionary = {
-	Stroke.StrokeType.FOREHAND: "g_forehand",
-	Stroke.StrokeType.BACKHAND: "g_backhand",
-	Stroke.StrokeType.BACKHAND_SLICE: "g_backhand_slice",
-	Stroke.StrokeType.BACKHAND_DROP_SHOT: "g_backhand_slice",
-	Stroke.StrokeType.SERVE: "g_serve",
-	Stroke.StrokeType.VOLLEY: "g_volley",
-	Stroke.StrokeType.FOREHAND_DROP_SHOT: "g_forehand",
-}
-var _replay_animation_paused: bool = false
 var _active_body_proportions: Dictionary = {}
+var _stroke_clips: Array[StrokeClip] = []
 
-@onready var points: Node3D = $Points
-@onready var toss_point: Vector3 = points.get_node("BallTossPoint").position
-@onready var forehand_up_point: Vector3 = points.get_node("ForehandUpPoint").position
-@onready var forehand_point: Marker3D = $Points/ForehandPoint
-@onready var forehand_down_point: Vector3 = points.get_node("ForehandDownPoint").position
-@onready var backhand_up_point: Vector3 = points.get_node("BackhandUpPoint").position
-@onready var backhand_down_point: Vector3 = points.get_node("BackhandDownPoint").position
-@onready var backhand_point: Marker3D = $Points/BackhandPoint
-@onready var backhand_slice_point: Marker3D = $Points/BackhandSlicePoint
-
-@onready var _playback: AnimationNodeStateMachinePlayback = (
-	animation_tree.get("parameters/playback")
-)
+@onready var toss_point: Vector3 = $Points/BallTossPoint.position
 
 @onready var _legacy_root: Node3D = $h
 @onready var _legacy_visual_root: Node3D = $h/player_djokovic
@@ -66,225 +24,54 @@ var _active_body_proportions: Dictionary = {}
 
 
 func _ready() -> void:
-	var p = get_parent()
-	if not p is Player:
-		push_error("Model parent must be Player, got: " + str(p))
-		set_process(false)
-		return
-
-	player = p
-	animation_tree.active = true
 	# MeshRoot must match the legacy rig root transform,
 	# otherwise skinned modular meshes face backward.
 	_mesh_root.transform = _legacy_root.transform
 	_mesh_root.visible = false
 	_set_legacy_visual_state(true)
+	_collect_stroke_clips()
 
 
-func _process(_delta: float) -> void:
-	if _replay_animation_paused:
-		return
-
-	if not _playback:
-		return
-
-	var current_state: String = _playback.get_current_node()
-
-	# Detect when we transition away from stroke state
-	if _last_state == "stroke" and current_state != "stroke" and not _stroke_finished_emitted:
-		_stroke_finished_emitted = true
-		stroke_animation_finished.emit()
-
-	# Reset flag when entering stroke state
-	if current_state == "stroke":
-		_stroke_finished_emitted = false
-
-	_last_state = current_state
+func _collect_stroke_clips() -> void:
+	for child in $Points.get_children():
+		if not child is StrokeClip:
+			continue
+		var clip: StrokeClip = child
+		assert(
+			animator.has_stroke_animation(clip.animation),
+			(
+				"StrokeClip %s: '%s' is not a stroke animation of the AnimationTree"
+				% [clip.name, clip.animation]
+			)
+		)
+		assert(
+			animator.get_animation(clip.animation).has_marker(PlayerAnimator.HIT_MARKER),
+			"StrokeClip %s: '%s' has no 'hit' marker" % [clip.name, clip.animation]
+		)
+		_stroke_clips.append(clip)
 
 
-func get_animation_hit_frame_time(stroke_type: Stroke.StrokeType) -> float:
-	var anim_name: String = _stroke_animation_names.get(stroke_type, "")
-	var animation: Animation = _animation_player.get_animation(anim_name)
+## Clip used to play the stroke: the one for its type whose contact height is closest to the ball.
+func get_stroke_clip(stroke: Stroke) -> StrokeClip:
+	var best_clip: StrokeClip = null
+	var best_height_error: float = INF
+	for clip in _stroke_clips:
+		if not clip.supports(stroke.stroke_type):
+			continue
+		var height_error: float = 0.0
+		if stroke.step:
+			height_error = absf(clip.global_position.y - stroke.step.point.y)
+		if height_error < best_height_error:
+			best_height_error = height_error
+			best_clip = clip
 
-	return animation.get_marker_time("hit")
-
-
-## Called from animation timeline to spawn the ball (forwarded to player)
-func _from_anim_spawn_ball() -> void:
-	player.from_anim_spawn_ball()
-
-
-## Called from animation timeline to hit the serve (forwarded to player)
-func from_anim_hit_serve() -> void:
-	player.from_anim_hit_serve()
-
-
-## Called from animation timeline to hit the ball
-func _from_anim_hit_ball() -> void:
-	player._from_anim_hit_ball()
+	assert(best_clip != null, "Model: no StrokeClip for stroke type %d" % stroke.stroke_type)
+	return best_clip
 
 
+## World position where the racket meets the ball for the given stroke.
 func get_racket_contact_point(stroke: Stroke) -> Vector3:
-	if stroke:
-		match stroke.stroke_type:
-			Stroke.StrokeType.FOREHAND, Stroke.StrokeType.FOREHAND_DROP_SHOT, Stroke.StrokeType.VOLLEY:
-				return forehand_point.global_position
-			Stroke.StrokeType.BACKHAND:
-				return backhand_point.global_position
-			Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.BACKHAND_DROP_SHOT:
-				return backhand_slice_point.global_position
-
-	printerr("get_racket_contact_point: stroke type does not exist or stroke is NULL")
-	return global_position
-
-
-func compute_stroke_blend_position(stroke: Stroke) -> float:
-	if not stroke or not stroke.step:
-		return 0.5
-
-	var numerator: float = 0.0
-	var denominator: float = 1.0
-
-	match stroke.stroke_type:
-		stroke.StrokeType.FOREHAND:
-			numerator = stroke.step.point.y - forehand_down_point.y
-			denominator = forehand_up_point.y - forehand_down_point.y
-		stroke.StrokeType.BACKHAND:
-			numerator = stroke.step.point.y - backhand_down_point.y
-			denominator = backhand_up_point.y - backhand_down_point.y
-		_:
-			return 0.5
-
-	if is_zero_approx(denominator):
-		return 0.5
-
-	var blend_position: float = numerator / denominator
-	if not is_finite(blend_position):
-		return 0.5
-
-	return clampf(blend_position, 0.0, 1.0)
-
-
-## Animation API
-################
-
-
-## Play idle animation
-func play_idle() -> void:
-	_playback.travel("move")
-	animation_tree["parameters/move/blend_position"] = Vector2.ZERO
-
-
-## Play run animation in given direction
-func play_run(direction: Vector3) -> void:
-	# Transform world-space direction to player's local space
-	var local_direction: Vector3 = player.global_transform.basis.inverse() * direction
-	var dir: Vector2 = Vector2(local_direction.x, -local_direction.z)
-	animation_tree["parameters/move/blend_position"] = dir
-	_playback.travel("move")
-
-
-## Play stroke animation for given stroke
-func play_stroke(stroke: Stroke) -> void:
-	var playback_speed: float = _compute_stroke_playback_speed(stroke)
-	print(playback_speed)
-	animation_tree.set("parameters/stroke/TimeScale/scale", playback_speed)
-	_set_stroke_animation(stroke)
-	_playback.travel("stroke")
-
-
-func _compute_stroke_playback_speed(stroke: Stroke) -> float:
-	if not stroke or not stroke.step:
-		return 1.0
-
-	var available_time: float = maxf(stroke.step.time, 0.0)
-	var hit_frame_time: float = get_animation_hit_frame_time(stroke.stroke_type)
-	if hit_frame_time <= 0.0 or not is_finite(hit_frame_time):
-		return 1.0
-
-	if available_time >= hit_frame_time:
-		return 1.0
-
-	# Increase playback speed so the animation reaches the hit marker before the ball arrives.
-	var safe_available_time: float = maxf(available_time, 0.001)
-	var required_speed: float = hit_frame_time / safe_available_time
-	if not is_finite(required_speed) or required_speed < 1.0:
-		return 1.0
-
-	return required_speed
-
-
-## Play recovery animation after stroke finishes
-func play_recovery() -> void:
-	_playback.travel("move")
-	animation_tree["parameters/move/blend_position"] = Vector2.ZERO
-	recovery_animation_finished.emit()
-
-
-func get_replay_animation_snapshot() -> Dictionary:
-	var state_node: String = ""
-	if _playback:
-		state_node = str(_playback.get_current_node())
-
-	var current_animation: String = _animation_player.current_animation
-	var current_position: float = 0.0
-	if not current_animation.is_empty() and _animation_player.has_animation(current_animation):
-		current_position = _animation_player.current_animation_position
-
-	return {
-		"state_node": state_node,
-		"current_animation": current_animation,
-		"current_position": current_position,
-		"move_blend": animation_tree.get("parameters/move/blend_position"),
-	}
-
-
-func apply_replay_animation_snapshot(snapshot: Dictionary) -> void:
-	if snapshot.is_empty():
-		return
-
-	var state_node: String = snapshot.get("state_node", "")
-	if not state_node.is_empty() and _playback:
-		_playback.travel(state_node)
-
-	var current_animation: String = snapshot.get("current_animation", "")
-	if not current_animation.is_empty() and _animation_player.has_animation(current_animation):
-		_animation_player.play(current_animation)
-		_animation_player.seek(float(snapshot.get("current_position", 0.0)), true)
-		if _replay_animation_paused:
-			_animation_player.pause()
-
-	if snapshot.has("move_blend"):
-		animation_tree.set("parameters/move/blend_position", snapshot["move_blend"])
-
-
-func set_replay_animation_paused(paused: bool) -> void:
-	_replay_animation_paused = paused
-	if paused:
-		_animation_player.pause()
-	else:
-		# Continue only when an actual animation is active.
-		var current_animation: String = _animation_player.current_animation
-		if not current_animation.is_empty() and _animation_player.has_animation(current_animation):
-			_animation_player.play()
-
-
-## Internal helper to set stroke animation type and parameters
-func _set_stroke_animation(stroke: Stroke) -> void:
-	var animation_name: String = _stroke_animation_names.get(stroke.stroke_type, "")
-
-	if animation_name.is_empty():
-		push_warning("Stroke animation ", stroke.stroke_type, " not available!")
-		return
-
-	if (
-		stroke.stroke_type == stroke.StrokeType.FOREHAND
-		or stroke.stroke_type == stroke.StrokeType.BACKHAND
-	):
-		var blend_position: float = compute_stroke_blend_position(stroke)
-		animation_tree["parameters/stroke/" + animation_name + "/blend_position"] = blend_position
-
-	animation_tree["parameters/stroke/Transition/transition_request"] = animation_name
+	return get_stroke_clip(stroke).global_position
 
 
 func load_appearance(appearance: PlayerAppearance) -> void:

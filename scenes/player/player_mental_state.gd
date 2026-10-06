@@ -10,6 +10,17 @@ extends Resource
 @export_range(0.0, 1.0, 0.01) var pressure: float = 0.0
 
 
+## Starts the match with the player's mental traits; confidence and pressure start neutral.
+func setup(profile: PlayerStatsProfile) -> void:
+	composure = profile.value01(profile.composure)
+	clutch = profile.value01(profile.clutch)
+	aggression = profile.value01(profile.aggression)
+	discipline = profile.value01(profile.consistency)
+	adaptability = profile.value01(profile.focus)
+	confidence = 0.5
+	pressure = 0.0
+
+
 func apply_pressure(amount: float) -> void:
 	pressure = clampf(pressure + maxf(amount, 0.0), 0.0, 1.0)
 	composure = clampf(composure - amount * 0.12, 0.0, 1.0)
@@ -28,9 +39,12 @@ func on_point_won() -> void:
 
 
 func on_point_lost() -> void:
-	pressure = clampf(pressure + 0.08, 0.0, 1.0)
+	pressure = clampf(pressure + 0.03, 0.0, 1.0)
 	composure = clampf(composure - 0.03, 0.0, 1.0)
 
 
+## How well the player copes with the current pressure, in [0, 1] (1 = unaffected).
+## Composure and clutch absorb part of the pressure.
 func pressure_modifier() -> float:
-	return clampf((composure * 0.55) + (clutch * 0.45) - pressure * 0.25, 0.0, 1.0)
+	var resilience: float = (composure * 0.55) + (clutch * 0.45)
+	return clampf(1.0 - pressure * (1.0 - resilience * 0.8), 0.0, 1.0)

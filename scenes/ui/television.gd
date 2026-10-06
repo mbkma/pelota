@@ -17,7 +17,6 @@ var _active_follow_target: Node3D = null
 
 
 @onready var _player_cameras: Array[Camera3D] = [$StaticSouthCam, $StaticNorthCam, $StaticEastCam]
-@onready var _mobile_camera: Camera3D = $FlyingCam
 @onready var _director: AnimationPlayer = $Director
 @onready var _television_hud: Control = $TelevisionHUD
 

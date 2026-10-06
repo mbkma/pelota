@@ -7,35 +7,53 @@ enum Phase {
 	SERVING,
 	ANTICIPATION,  ## Before opponent contact - tentative positioning
 	LOCK_IN,  ## Opponent contacts ball - compute exact stroke
-	TRACKING,  ## Monitor trajectory - update if changes
-	WAITING_FOR_HIT,  ## Animation playing - waiting for hit frame
+	WAITING_FOR_HIT,  ## Stroke queued - player swings and hits when the ball arrives
 }
 
 const STROKE_TYPE_LABELS := {
 	Stroke.StrokeType.FOREHAND: "FH",
 	Stroke.StrokeType.BACKHAND: "BH",
 	Stroke.StrokeType.SERVE: "SERVE",
-	Stroke.StrokeType.VOLLEY: "VOLLEY",
+	Stroke.StrokeType.FOREHAND_VOLLEY: "FH_VOLLEY",
+	Stroke.StrokeType.BACKHAND_VOLLEY: "BH_VOLLEY",
+	Stroke.StrokeType.FOREHAND_DROP_VOLLEY: "FH_DROP_VOLLEY",
+	Stroke.StrokeType.BACKHAND_DROP_VOLLEY: "BH_DROP_VOLLEY",
 	Stroke.StrokeType.FOREHAND_DROP_SHOT: "FH_DROP",
 	Stroke.StrokeType.BACKHAND_DROP_SHOT: "BH_DROP",
 	Stroke.StrokeType.BACKHAND_SLICE: "BH_SLICE",
 }
+
+## Chance range to follow an attacking shot to the net, by net play skill (rare occasions).
+const NET_APPROACH_CHANCE_MIN: float = 0.05
+const NET_APPROACH_CHANCE_MAX: float = 0.35
+## Distance from the net (m) the AI takes up when playing at the net.
+const NET_POSITION_DEPTH: float = 3.5
+## The AI only follows an attack to the net when it hits from at least this far inside the
+## baseline (m), i.e. after attacking a short ball.
+const NET_APPROACH_INSIDE_BASELINE: float = 1.0
+## Baseline depth (m from the net) the AI recovers to.
+const BASELINE_POSITION_DEPTH: float = 14.0
+## Contact height range (m) of a ball the AI takes where it is; outside it waits for the
+## apex after the bounce. At the net it volleys higher balls.
+const CONTACT_HEIGHT_RANGE := Vector2(0.5, 1.5)
+const VOLLEY_HEIGHT_RANGE := Vector2(0.3, 2.3)
 
 ## High-level strategy resource used to orchestrate shot planning.
 @export var point_strategy: PointStrategy
 
 ## Pending stroke to execute (queued by controller, executed by player)
 var _pending_stroke: Stroke = null
-var _stroke_animation_started: bool = false
 
 ## Current phase in rally cycle
 var _current_phase: Phase = Phase.ANTICIPATION
+
+## Whether the AI moved in to play at the net; it stays there until the point ends.
+var _plays_at_net: bool = false
 
 
 func _reset_to_anticipation() -> void:
 	_current_phase = Phase.ANTICIPATION
 	_pending_stroke = null
-	_stroke_animation_started = false
 
 
 func _log_strategy(message: String) -> void:
@@ -140,10 +158,8 @@ func update(delta: float = 0.0) -> void:
 			_anticipation_phase(delta)
 		Phase.LOCK_IN:
 			_lock_in_phase()
-		Phase.TRACKING:
-			_tracking_phase(delta)
 		Phase.WAITING_FOR_HIT:
-			pass  # Player handles execution; we just wait
+			pass  # Player times the swing and hits; we just wait
 
 
 ## Get movement direction from AI decision
@@ -171,18 +187,12 @@ func should_show_aim_marker() -> bool:
 	return _pending_stroke != null
 
 
-## Get aim marker scale for UI - overrides base class
-func get_aim_marker_scale() -> Vector3:
-	return Vector3.ONE
-
-
 ## Compute and prepare a stroke for the given trajectory step
 func _queue_stroke(step: TrajectoryStep) -> void:
 	var stroke: Stroke = point_strategy.compute_next_stroke(step)
 	if not stroke:
 		push_error("AiController._queue_stroke: Tactic returned null stroke")
 		return
-	stroke.delay = step.time
 	# Queue stroke and position adjustment to be executed by player
 	_pending_stroke = stroke
 	match stroke.stroke_intent:
@@ -192,12 +202,11 @@ func _queue_stroke(step: TrajectoryStep) -> void:
 			player.label_3d.modulate = Color.GREEN
 		_:
 			player.label_3d.modulate = Color.YELLOW
-	_stroke_animation_started = false
 	_log_strategy(
 		(
 			(
 				"Stroke decision: type=%s intended_power=%.1f actual_power=%.1f "
-				+ "spin=(%.2f, %.2f, %.2f) delay=%.3f "
+				+ "spin=(%.2f, %.2f, %.2f) contact_time=%.3f "
 				+ "intended_target=(%.2f, %.2f, %.2f) actual_target=(%.2f, %.2f, %.2f)"
 			)
 			% [
@@ -207,7 +216,7 @@ func _queue_stroke(step: TrajectoryStep) -> void:
 				stroke.stroke_spin.x,
 				stroke.stroke_spin.y,
 				stroke.stroke_spin.z,
-				stroke.delay,
+				step.time,
 				stroke.intended_stroke_target.x,
 				stroke.intended_stroke_target.y,
 				stroke.intended_stroke_target.z,
@@ -239,21 +248,27 @@ func _anticipation_phase(_delta: float) -> void:
 ## PHASE 2: Lock-in phase - compute exact stroke when opponent hits ball
 ## Triggered when ball is detected flying towards us
 func _lock_in_phase() -> void:
-	# Already have a pending stroke queued - wait for next phase
+	# Already have a pending stroke queued - wait for the hit
 	if _pending_stroke:
-		_current_phase = Phase.TRACKING
+		_current_phase = Phase.WAITING_FOR_HIT
 		return
 
-	# Get closest trajectory step (ball arrival point)
-	var closest_step := get_closest_trajectory_step(player)
+	# Get closest trajectory step (ball arrival point); at the net, where the ball passes the
+	# net position before the bounce
+	var closest_step: TrajectoryStep = (
+		_get_net_contact_step() if _plays_at_net else get_closest_trajectory_step(player)
+	)
 	if not closest_step:
 		push_error("AiController._lock_in_phase: Could not find trajectory step")
 		_log_strategy("LOCK_IN failed: no trajectory step found")
 		_current_phase = Phase.ANTICIPATION
 		return
 
-	# Validate trajectory step is reachable and on correct side
-	if closest_step.point.y < 0.5 or closest_step.point.y > 1.5:
+	# Take the ball where it is if it is at a playable height, else at the apex after the bounce
+	var height_range: Vector2 = CONTACT_HEIGHT_RANGE
+	if closest_step.is_volley_contact():
+		height_range = VOLLEY_HEIGHT_RANGE
+	if closest_step.point.y < height_range.x or closest_step.point.y > height_range.y:
 		closest_step = get_closest_apex_after_first_bounce(player)
 
 	if not closest_step:
@@ -278,43 +293,25 @@ func _lock_in_phase() -> void:
 		)
 	)
 	_queue_stroke(closest_step)
-	_current_phase = Phase.TRACKING
-
-
-## PHASE 3: Tracking phase - monitor ball trajectory for significant changes
-## Update stroke if trajectory deviates significantly
-func _tracking_phase(_delta: float) -> void:
-	if not _pending_stroke:
-		# Stroke was cleared (shouldn't happen, but reset to lock-in)
-		_current_phase = Phase.LOCK_IN
-		return
-
-	if _stroke_animation_started:
-		return
-
-	var closest_step: TrajectoryStep = get_closest_trajectory_step(player)
-	if not closest_step:
-		return
-
-	var hit_point_time: float = player.model.get_animation_hit_frame_time(
-		_pending_stroke.stroke_type
-	)
-	if closest_step.time <= hit_point_time:
-		_start_pending_stroke_animation()
-
-
-func on_target_point_reached() -> void:
-	pass
-
-
-func _start_pending_stroke_animation() -> void:
-	if not _pending_stroke or _stroke_animation_started:
-		return
-
-	var stroke: Stroke = _pending_stroke
-	_stroke_animation_started = true
 	_current_phase = Phase.WAITING_FOR_HIT
-	player.start_stroke_animation(stroke)
+
+
+## Step before the bounce closest to the AI's net position. If the ball bounces before
+## reaching the net zone, or the AI cannot get there in time, it plays the ball where it is.
+func _get_net_contact_step() -> TrajectoryStep:
+	var net_z: float = signf(player.global_position.z) * NET_POSITION_DEPTH
+	var closest_step: TrajectoryStep = null
+	for step in player.ball.predict_trajectory():
+		if step.bounces > 0:
+			break
+		if not closest_step or absf(step.point.z - net_z) < absf(closest_step.point.z - net_z):
+			closest_step = step
+	if closest_step and closest_step.is_volley_contact():
+		var distance: float = player.global_position.distance_to(closest_step.point)
+		var reach_time: float = distance / player.move_speed
+		if reach_time <= closest_step.time:
+			return closest_step
+	return get_closest_trajectory_step(player)
 
 
 func _on_hit_frame() -> void:
@@ -324,8 +321,26 @@ func _on_hit_frame() -> void:
 		return
 
 	# Use queued stroke position for angle bisector calculation
-	var opponent_hit_position: Vector3 = player.queued_stroke.stroke_target
-	var defensive_position: Vector3 = _calculate_angle_bisector_position(opponent_hit_position)
+	var hit_stroke: Stroke = player.queued_stroke
+	var inside_court: bool = (
+		absf(player.global_position.z)
+		<= GameConstants.COURT_LENGTH_HALF - NET_APPROACH_INSIDE_BASELINE
+	)
+	if (
+		not _plays_at_net
+		and inside_court
+		and hit_stroke.stroke_intent == AiPointContext.ShotIntent.ATTACK
+	):
+		var approach_chance: float = lerpf(
+			NET_APPROACH_CHANCE_MIN, NET_APPROACH_CHANCE_MAX, player.stats.tactical_net_play01()
+		)
+		_plays_at_net = randf() < approach_chance
+		if _plays_at_net:
+			_log_strategy("Following the attack to the net")
+	var position_depth: float = NET_POSITION_DEPTH if _plays_at_net else BASELINE_POSITION_DEPTH
+	var defensive_position: Vector3 = _calculate_angle_bisector_position(
+		hit_stroke.stroke_target, position_depth
+	)
 
 	# Tell player to move to defensive position after stroke animation finishes
 	player.move_to_defensive_position(defensive_position)
@@ -347,19 +362,19 @@ func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> voi
 				_current_phase = Phase.ANTICIPATION
 		MatchLifecycleBus.Phase.POINT_ENDED, MatchLifecycleBus.Phase.IDLE:
 			_reset_to_anticipation()
+			_plays_at_net = false
 
 
 func get_current_phase() -> Phase:
 	return _current_phase
 
 
-## Calculate the angle bisector position (best defensive position)
-## Returns the point that maximizes angle coverage to both corners
-func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vector3:
+## Calculate the angle bisector position (best defensive position) at `depth` meters from
+## the net. Returns the point that maximizes angle coverage to both corners
+func _calculate_angle_bisector_position(opponent_hit_position: Vector3, depth: float) -> Vector3:
 	var opponent_xz: Vector3 = Vector3(opponent_hit_position.x, 0, opponent_hit_position.z)
 
 	var court_width: float = GameConstants.COURT_WIDTH_HALF
-	var court_depth: float = GameConstants.COURT_LENGTH_HALF
 	var service_line_z: float = GameConstants.SERVICE_LINE
 
 	# Determine which side of court the opponent is hitting from
@@ -382,10 +397,10 @@ func _calculate_angle_bisector_position(opponent_hit_position: Vector3) -> Vecto
 	player.bisector_service_line_right = service_line_right
 	player.bisector_direction = bisector_direction
 
-	var baseline_z: float = 14.0 * -opponent_side  # baseline for this player
-	var t: float = (baseline_z - opponent_xz.z) / bisector_direction.z
+	var position_z: float = depth * -opponent_side
+	var t: float = (position_z - opponent_xz.z) / bisector_direction.z
 	var defensive_position: Vector3 = Vector3(
-		opponent_xz.x + t * bisector_direction.x, 0.0, baseline_z  # player height
+		opponent_xz.x + t * bisector_direction.x, 0.0, position_z
 	)
 
 	return defensive_position

@@ -3,6 +3,11 @@
 [resource]
 resource_name = "g_backhand_up"
 length = 0.8
+markers = [{
+"color": Color(1, 1, 1, 1),
+"name": &"hit",
+"time": 0.5
+}]
 tracks/0/type = "position_3d"
 tracks/0/imported = true
 tracks/0/enabled = true
@@ -1284,17 +1289,3 @@ tracks/182/path = NodePath("%GeneralSkeleton:RightToes")
 tracks/182/interp = 0
 tracks/182/loop_wrap = true
 tracks/182/keys = PackedFloat32Array(0, 1, 1.0000001, 0.9999991, 1.0000035)
-tracks/183/type = "method"
-tracks/183/imported = false
-tracks/183/enabled = true
-tracks/183/path = NodePath("../..")
-tracks/183/interp = 1
-tracks/183/loop_wrap = true
-tracks/183/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_from_anim_hit_ball"
-}]
-}
