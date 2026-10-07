@@ -1,6 +1,11 @@
 @tool
 class_name CrowdPerson
 extends Node3D
+## One spectator. For performance with large crowds, spectators cast no shadows and share
+## their tinted materials; only a share of them is animated (see CrowdAnimationStateMachine).
+
+## Tinted materials shared by all spectators, by source material and color
+static var _tinted_materials: Dictionary = {}
 
 ## Configuration resource
 var config: CrowdConfig
@@ -48,21 +53,12 @@ func _ready() -> void:
 	_apply_color_variations()
 
 
-func play_idle_animation() -> bool:
-	if not animation_state_machine:
-		return false
-	return animation_state_machine.play_idle_animation()
+func start_idle() -> void:
+	animation_state_machine.start_idle()
 
 
-func play_victory_animation() -> bool:
-	if not animation_state_machine:
-		return false
-	return animation_state_machine.play_victory_animation()
-
-
-func setup_idle_loop() -> void:
-	if animation_state_machine:
-		animation_state_machine.setup_idle_loop()
+func play_victory_animation() -> void:
+	animation_state_machine.play_victory_animation()
 
 
 func cleanup() -> void:
@@ -96,7 +92,15 @@ func _instantiate_model() -> bool:
 		return false
 
 	add_child(model)
+	_disable_shadows(model)
 	return true
+
+
+func _disable_shadows(node: Node) -> void:
+	if node is GeometryInstance3D:
+		(node as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	for child in node.get_children():
+		_disable_shadows(child)
 
 
 func _setup_animation_player() -> bool:
@@ -178,19 +182,19 @@ func _apply_colors_to_mesh_instance(
 	if not should_apply:
 		return
 
-	# Apply color to all surfaces of this mesh instance
 	for i in range(mesh_instance.get_surface_override_material_count()):
-		var material = mesh_instance.get_surface_override_material(i)
-		if material and material is StandardMaterial3D:
-			var unique_material = material.duplicate() as StandardMaterial3D
-			unique_material.albedo_color = color_to_apply
-			mesh_instance.set_surface_override_material(i, unique_material)
+		var material: Material = mesh_instance.get_active_material(i)
+		if material is StandardMaterial3D:
+			mesh_instance.set_surface_override_material(
+				i, _tinted_material(material as StandardMaterial3D, color_to_apply)
+			)
 
-	# Also handle materials that aren't overrides
-	if mesh_instance.mesh:
-		for i in range(mesh_instance.mesh.get_surface_count()):
-			var material = mesh_instance.mesh.surface_get_material(i)
-			if material and material is StandardMaterial3D:
-				var unique_material = material.duplicate() as StandardMaterial3D
-				unique_material.albedo_color = color_to_apply
-				mesh_instance.set_surface_override_material(i, unique_material)
+
+## Shared copy of `material` tinted with `color`.
+static func _tinted_material(material: StandardMaterial3D, color: Color) -> StandardMaterial3D:
+	var key: String = "%d:%s" % [material.get_instance_id(), color.to_html()]
+	if not _tinted_materials.has(key):
+		var tinted := material.duplicate() as StandardMaterial3D
+		tinted.albedo_color = color
+		_tinted_materials[key] = tinted
+	return _tinted_materials[key]

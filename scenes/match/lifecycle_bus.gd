@@ -20,10 +20,6 @@ enum Phase {
 var _current_phase: Phase = Phase.IDLE
 
 
-func get_phase() -> Phase:
-	return _current_phase
-
-
 func set_phase(next_phase: Phase) -> void:
 	if _current_phase == next_phase:
 		return

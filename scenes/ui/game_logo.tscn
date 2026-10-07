@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/ui/logo/tennis_ball.svg" id="1_ball"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Regular.otf" id="2_font"]
+
+[sub_resource type="FontVariation" id="FontVariation_logo"]
+base_font = ExtResource("2_font")
+variation_embolden = 0.8
+spacing_glyph = 6
+
+[node name="GameLogo" type="HBoxContainer" unique_id=1592783471]
+alignment = 1
+theme_override_constants/separation = 16
+mouse_filter = 2
+
+[node name="Ball" type="TextureRect" parent="." unique_id=1172463919]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("1_ball")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Wordmark" type="Label" parent="." unique_id=1945603226]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.09, 0.2, 0.42, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.35)
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = SubResource("FontVariation_logo")
+theme_override_font_sizes/font_size = 84
+text = "PELOTA"

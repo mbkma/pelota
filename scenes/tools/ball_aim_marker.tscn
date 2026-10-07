@@ -4,9 +4,11 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_area"]
 resource_local_to_scene = true
+render_priority = 9
 transparency = 1
+no_depth_test = true
 shading_mode = 0
-albedo_color = Color(0.25, 0.37, 0, 0.45)
+albedo_color = Color(0.85, 0.95, 0.3, 0.5)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_area"]
 resource_local_to_scene = true
@@ -18,8 +20,10 @@ radial_segments = 48
 rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lufo"]
-albedo_color = Color(0.25027347, 0.36500144, 0, 1)
-roughness = 0.33
+render_priority = 10
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kjtf1"]
 material = SubResource("StandardMaterial3D_7lufo")

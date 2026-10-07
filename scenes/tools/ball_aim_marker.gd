@@ -6,8 +6,8 @@ extends Node3D
 ## Radius used when a controller does not report an uncertainty.
 const DEFAULT_RADIUS: float = 0.3
 
-@export var normal_color: Color = Color(0.25, 0.37, 0.0, 0.45)
-@export var highlight_color: Color = Color(1.0, 0.8, 0.1, 0.6)
+@export var normal_color: Color = Color(0.85, 0.95, 0.3, 0.5)
+@export var highlight_color: Color = Color(1.0, 0.8, 0.1, 0.75)
 
 @onready var _area: MeshInstance3D = $Area
 @onready var _area_material: StandardMaterial3D = _area.get_active_material(0)

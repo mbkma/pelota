@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://foxv46tnu837"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cibbhkfv1ny2q"]
 
 [ext_resource type="Resource" uid="uid://bumsgiut0ffed" path="res://scenes/player/resources/appearances/djokovic.tres" id="1_fsr4u"]
 [ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_fsr4u"]

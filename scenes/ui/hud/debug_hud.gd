@@ -623,14 +623,6 @@ func _get_logger():
 	return DebugLogger
 
 
-## Log a message from any object
-func log_strategy_message(sender: Object, message: String) -> void:
-	var logger = _get_logger()
-	if logger and logger.has_method("log"):
-		logger.log(sender, message)
-	_log_display_dirty = true
-
-
 ## Filter callback for log input
 func _on_log_filter_changed(new_filter: String) -> void:
 	_current_text_filter = new_filter.to_lower()

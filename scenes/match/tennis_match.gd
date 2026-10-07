@@ -6,6 +6,12 @@ extends Node
 
 
 func _enter_tree() -> void:
+	# The menu music stops when the match begins (no music director when the match is run
+	# directly).
+	var music_director: MusicDirector = get_tree().root.get_node_or_null(^"MusicDirector")
+	if music_director:
+		music_director.stop()
+
 	if not GlobalGameData.has_match_players():
 		return
 

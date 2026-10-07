@@ -52,5 +52,9 @@ func _is_action_held(action: Action) -> bool:
 	return _is_button_pressed(ACTION_BUTTONS[action])
 
 
+func _is_accept_held() -> bool:
+	return _is_button_pressed(JOY_BUTTON_A)
+
+
 func _is_button_pressed(button: JoyButton) -> bool:
 	return Input.is_joy_button_pressed(_joypad_id, button)

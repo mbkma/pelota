@@ -55,7 +55,9 @@ text = "SRB"
 vertical_alignment = 1
 
 [node name="ServeIndicator" type="TextureRect" parent="MarginContainer/HBoxContainer11" unique_id=57478154]
+custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
+size_flags_vertical = 4
 texture = ExtResource("2_fm0o1")
 expand_mode = 1
 stretch_mode = 6

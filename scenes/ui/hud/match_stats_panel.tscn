@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/hud/match_stats_panel.gd" id="1_stats"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.04, 0.07, 0.12, 0.88)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 24.0
+content_margin_top = 18.0
+content_margin_right = 24.0
+content_margin_bottom = 18.0
+
+[node name="MatchStatsPanel" type="Control" unique_id=1209351170]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_stats")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1873360284]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=503927615]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel" unique_id=1450239946]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Center/Panel/VBox" unique_id=1966417123]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Match Statistics"
+horizontal_alignment = 1
+
+[node name="Header" type="HBoxContainer" parent="Center/Panel/VBox" unique_id=1340776509]
+layout_mode = 2
+
+[node name="Player1Label" type="Label" parent="Center/Panel/VBox/Header" unique_id=1057612301]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.21, 0.635, 0.922, 1)
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/Panel/VBox/Header" unique_id=1767409420]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Player2Label" type="Label" parent="Center/Panel/VBox/Header" unique_id=286312475]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.388, 0.518, 1)
+horizontal_alignment = 1
+
+[node name="StatsGrid" type="GridContainer" parent="Center/Panel/VBox" unique_id=1592641027]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="FooterLabel" type="Label" parent="Center/Panel/VBox" unique_id=1416322098]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="Center/Panel/VBox" unique_id=1504721266]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Continue"
+
+[node name="HintLabel" type="Label" parent="Center/Panel/VBox" unique_id=1938817626]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.55)
+theme_override_font_sizes/font_size = 12
+text = "Tab / Back: show or hide"
+horizontal_alignment = 1

@@ -7,6 +7,12 @@ signal players_placed
 
 ## Emitted whenever the match active ball reference changes
 signal active_ball_changed(ball: Ball)
+## Emitted when a player has won the match
+signal match_finished(winner_index: int)
+## Emitted when a set has ended and the match pauses until continue_after_set_break()
+signal set_break_started(set_number: int)
+## Emitted when play resumes after a set break
+signal set_break_ended
 ## Emitted when replay recording starts
 signal replay_recording_started
 ## Emitted when replay recording stops
@@ -30,8 +36,8 @@ enum ReplayCameraMode {
 	FOLLOW_LAST_HITTER,
 }
 
-## Shots in a rally (serve included) from which the crowd cheers at the end of the point
-const GOOD_RALLY_SHOTS: int = 6
+## Rally length (shots, serve included) that excites the crowd the most
+const MOST_EXCITING_RALLY_SHOTS: int = 12
 ## Pressure both players feel before a point, by what the point decides for either of them
 const POINT_PRESSURE: Dictionary[Score.PointImportance, float] = {
 	Score.PointImportance.GAME: 0.04,
@@ -87,7 +93,19 @@ var _valid_rally_zone: Court.CourtRegion
 ## Number of ground contacts in current rally
 var _ground_contacts: int = 0
 
+## Ball of a finished point; stays on court until the next serve
+var _finished_ball: Ball
+
 var _replay_controller: MatchReplayController
+
+## Whether the current serve clipped the net cord (a let if it lands in the service box)
+var _serve_clipped_net: bool = false
+## Serve (1 or 2) that started the current rally, 0 while no serve was in
+var _point_serve_number: int = 0
+## Whether the current point is a break point
+var _point_is_break_point: bool = false
+## Whether each player volleyed during the current point
+var _point_volleyed: Array[bool] = [false, false]
 
 @onready var match_data: MatchData
 
@@ -170,6 +188,12 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if current_state != MatchState.NOT_STARTED and current_state != MatchState.GAME_OVER:
+		for i in 2:
+			var moving_player: Player = player0 if i == 0 else player1
+			var horizontal := Vector3(moving_player.velocity.x, 0.0, moving_player.velocity.z)
+			match_data.statistics[i].distance_covered += horizontal.length() * delta
+
 	if not _replay_controller:
 		return
 	_replay_controller.process_recording(delta)
@@ -179,7 +203,7 @@ func _physics_process(delta: float) -> void:
 ## Set active ball and connect its signals
 func set_active_ball(b: Ball) -> void:
 	if is_instance_valid(ball) and ball != b:
-		_clear_ball()
+		_remove_ball()
 
 	ball = b
 	active_ball_changed.emit(ball)
@@ -188,8 +212,8 @@ func set_active_ball(b: Ball) -> void:
 
 	if not ball.on_ground.is_connected(_on_ball_on_ground):
 		ball.on_ground.connect(_on_ball_on_ground)
-	if not ball.on_net.is_connected(_on_ball_on_net):
-		ball.on_net.connect(_on_ball_on_net)
+	if not ball.on_net_cord.is_connected(_on_ball_on_net_cord):
+		ball.on_net_cord.connect(_on_ball_on_net_cord)
 
 
 func get_active_ball() -> Ball:
@@ -259,8 +283,10 @@ func _connect_player_lifecycle(player: Player) -> void:
 		bus.point_ended.connect(_on_player_lifecycle_point_ended)
 
 
-func _on_ball_on_net() -> void:
-	pass
+## A serve that clips the net cord and lands in the service box is a let and is replayed.
+func _on_ball_on_net_cord() -> void:
+	if current_state == MatchState.SERVE or current_state == MatchState.SECOND_SERVE:
+		_serve_clipped_net = true
 
 
 ## Get the opponent of the given player
@@ -289,10 +315,6 @@ func get_ground_contacts() -> int:
 	return _ground_contacts
 
 
-func get_server_index() -> int:
-	return match_data.match_score.current_server
-
-
 func get_server_name() -> String:
 	var server_player: Player = get_server()
 	if server_player and server_player.player_data:
@@ -313,8 +335,14 @@ func get_last_hitter_name() -> String:
 ## Request the current server to serve
 func set_player_serve() -> void:
 	match_data.rally_length = 0
+	_serve_clipped_net = false
+	if current_state == MatchState.SERVE:
+		# A new point starts (not a second serve or a let).
+		_point_serve_number = 0
+		_point_is_break_point = match_data.get_score().is_break_point()
+		_point_volleyed = [false, false]
 	_stop_players()
-	_clear_ball()
+	_remove_ball()
 	place_players()
 	await players_placed
 	if match_data.get_server() == 0:
@@ -332,17 +360,13 @@ func start_match() -> void:
 
 
 ## End the match
-func end_match(_winner: String) -> void:
+func end_match(winner_index: int) -> void:
 	current_state = MatchState.GAME_OVER
+	_stop_players()
+	_retire_ball()
 	_record_replay_event("match_ended", {"state": current_state})
 	_stop_replay_recording()
-
-
-## Reset match to starting state
-func reset_match() -> void:
-	stop_replay()
-	_begin_replay_recording()
-	current_state = MatchState.NOT_STARTED
+	match_finished.emit(winner_index)
 
 
 ## Swap rally zone from back to front or vice versa
@@ -372,13 +396,20 @@ func _on_ball_on_ground() -> void:
 ## Process ground contact during first serve
 func _process_serve_ground_contact() -> void:
 	var valid_box: Court.CourtRegion = get_valid_service_box()
-	if court.is_ball_in_court_region(ball.position, valid_box):
+	var in_box: bool = court.is_ball_in_court_region(ball.position, valid_box)
+	if in_box and _serve_clipped_net:
+		_replay_let()
+		return
+	var server_statistics: MatchStatistics = match_data.statistics[match_data.get_server()]
+	server_statistics.first_serves_total += 1
+	if in_box:
+		server_statistics.first_serves_in += 1
+		_point_serve_number = 1
 		current_state = MatchState.PLAY
 		_ground_contacts += 1
 		_swap_valid_rally_zone()
 	else:
 		current_state = MatchState.SECOND_SERVE
-		_clear_ball()
 		if umpire:
 			umpire.say_fault()
 		set_player_serve()
@@ -387,15 +418,25 @@ func _process_serve_ground_contact() -> void:
 ## Process ground contact during second serve
 func _process_second_serve_ground_contact() -> void:
 	var valid_box: Court.CourtRegion = get_valid_service_box()
-	if court.is_ball_in_court_region(ball.position, valid_box):
+	var in_box: bool = court.is_ball_in_court_region(ball.position, valid_box)
+	if in_box and _serve_clipped_net:
+		_replay_let()
+		return
+	if in_box:
+		_point_serve_number = 2
 		current_state = MatchState.PLAY
 		_ground_contacts += 1
 		_swap_valid_rally_zone()
 	else:
+		match_data.statistics[match_data.get_server()].double_faults += 1
 		current_state = MatchState.FAULT
-		_clear_ball()
 		if umpire:
 			umpire.say_fault()
+
+
+## Replays the serve after a let (same serve number, same point).
+func _replay_let() -> void:
+	set_player_serve()
 
 
 ## Process ground contact during rally play
@@ -413,18 +454,27 @@ func _process_rally_ground_contact() -> void:
 ## Handle fault condition (out of bounds or double fault)
 func _handle_fault() -> void:
 	_stop_players()
-	_clear_ball()
+	_retire_ball()
 	if umpire:
 		if _ground_contacts == 0:
 			umpire.say_fault()
-	if crowd and match_data.rally_length >= GOOD_RALLY_SHOTS:
-		crowd.play_victory()
+	if crowd:
+		crowd.cheer(_point_excitement())
 
 	var point_winner: Player
+	var last_hitter_statistics: MatchStatistics = match_data.statistics[
+		get_player_index(last_hitter)
+	]
 	if _ground_contacts == 0:
 		point_winner = get_opponent(last_hitter)
+		# Out or into the net; a missed second serve is already counted as a double fault.
+		if _point_serve_number > 0:
+			last_hitter_statistics.errors += 1
 	else:
 		point_winner = last_hitter
+		# Not reached by the opponent; an unreturned serve is counted as an ace.
+		if match_data.rally_length > 1:
+			last_hitter_statistics.winners += 1
 
 	current_state = MatchState.IDLE
 	_ground_contacts = 0
@@ -440,12 +490,17 @@ func _stop_players() -> void:
 ## Add a point to the winner and handle score update
 func add_point(winner: int) -> void:
 	_record_replay_event("point_awarded", {"winner": winner})
+	_record_point_statistics(winner)
+	var completed_sets_before: int = match_data.get_score().completed_sets.size()
 	match_data.add_point(winner)
 	player0.on_point_result(winner == 0)
 	player1.on_point_result(winner == 1)
 	_apply_point_pressure()
 	television_hud.update_score(match_data.get_score())
 	stadium.show_match_time(match_data.elapsed_seconds)
+	if match_data.get_score().is_match_over():
+		end_match(winner)
+		return
 	if umpire:
 		umpire.say_score(match_data.get_score())
 	await (
@@ -453,11 +508,73 @@ func add_point(winner: int) -> void:
 		. create_timer(GameConstants.FAULT_DELAY + GameConstants.POINT_RESET_EXTRA_DELAY)
 		. timeout
 	)
+	if match_data.get_score().completed_sets.size() > completed_sets_before:
+		await _hold_set_break()
 	place_players()
 	await players_placed
 	_prepare_point_zones()
 	current_state = MatchState.SERVE
 	set_player_serve()
+
+
+## Pauses the match after a set: the music plays and the statistics are shown until
+## continue_after_set_break() is called.
+func _hold_set_break() -> void:
+	var music_director: MusicDirector = get_tree().root.get_node_or_null(^"MusicDirector")
+	if music_director:
+		music_director.resume()
+	set_break_started.emit(match_data.get_score().completed_sets.size())
+	await set_break_ended
+	if music_director:
+		music_director.stop()
+
+
+## Resumes the match after a set break.
+func continue_after_set_break() -> void:
+	set_break_ended.emit()
+
+
+## How exciting the finished point was, in [0, 1]: long rallies, and big points.
+func _point_excitement() -> float:
+	var rally: float = clampf(
+		float(match_data.rally_length - 1) / (MOST_EXCITING_RALLY_SHOTS - 1), 0.0, 1.0
+	)
+	var big_point_bonus: float = 0.25 if _point_is_break_point else 0.0
+	return clampf(rally + big_point_bonus, 0.0, 1.0)
+
+
+## Records serve, return, net and point statistics for a point won by `winner`.
+func _record_point_statistics(winner: int) -> void:
+	var server: int = match_data.get_server()
+	var receiver: int = 1 - server
+	var stats: Array[MatchStatistics] = match_data.statistics
+	stats[winner].total_points_won += 1
+
+	match _point_serve_number:
+		1:
+			stats[server].first_serve_points_played += 1
+			if winner == server:
+				stats[server].first_serve_points_won += 1
+		2:
+			stats[server].second_serve_points_played += 1
+			if winner == server:
+				stats[server].second_serve_points_won += 1
+	if _point_serve_number > 0 and match_data.rally_length == 1 and winner == server:
+		stats[server].aces += 1
+
+	if _point_is_break_point:
+		stats[receiver].break_points_played += 1
+		stats[server].break_points_faced += 1
+		if winner == receiver:
+			stats[receiver].break_points_won += 1
+		else:
+			stats[server].break_points_saved += 1
+
+	for i in 2:
+		if _point_volleyed[i]:
+			stats[i].net_points_played += 1
+			if winner == i:
+				stats[i].net_points_won += 1
 
 
 ## Big points (game, break, set and match points for either player) add pressure to both
@@ -484,13 +601,25 @@ func get_server() -> Player:
 	return player1
 
 
-## Clear ball signals
-func _clear_ball() -> void:
-	if is_instance_valid(ball):
-		if ball.on_ground.is_connected(_on_ball_on_ground):
-			ball.on_ground.disconnect(_on_ball_on_ground)
-		if ball.on_net.is_connected(_on_ball_on_net):
-			ball.on_net.disconnect(_on_ball_on_net)
+## Ends the ball's part in the point: it no longer counts but stays on court until the next
+## serve.
+func _retire_ball() -> void:
+	if not is_instance_valid(ball):
+		return
+	ball.on_ground.disconnect(_on_ball_on_ground)
+	ball.on_net_cord.disconnect(_on_ball_on_net_cord)
+	_finished_ball = ball
+	ball = null
+	active_ball_changed.emit(null)
+
+
+## Removes the balls from the court when the next serve starts.
+func _remove_ball() -> void:
+	for old_ball in [ball, _finished_ball]:
+		if is_instance_valid(old_ball):
+			old_ball.queue_free()
+	ball = null
+	_finished_ball = null
 
 
 ## Check if server serves from deuce side
@@ -593,14 +722,13 @@ func _on_player_ball_spawned(b: Ball) -> void:
 	_record_replay_event(
 		"ball_spawned", {"player": get_player_index(last_hitter) if last_hitter else -1}
 	)
-	if is_instance_valid(ball) and ball != b:
-		_clear_ball()
-		ball.queue_free()
 	set_active_ball(b)
 
 
+## Adopts a ball a player brought into play (the serve); a player dropping its ball (when it
+## stops after a point) leaves the match's ball alone.
 func _on_player_active_ball_changed(b: Ball) -> void:
-	if b != ball:
+	if b and b != ball:
 		set_active_ball(b)
 
 
@@ -613,6 +741,9 @@ func _on_player_lifecycle_serve_completed(serving_player: Player) -> void:
 	if serving_player == get_server() and stadium:
 		if ball:
 			stadium.show_serve_speed(ball)
+			match_data.statistics[get_player_index(serving_player)].record_serve_speed(
+				ball.velocity.length() * 3.6, current_state == MatchState.SERVE
+			)
 		stadium.stop_serve_clocks()
 
 
@@ -633,6 +764,8 @@ func _on_player0_ball_hit() -> void:
 		}
 	_record_replay_event("stroke", {"player": 0, "stroke": stroke_payload})
 	match_data.rally_length += 1
+	if player0.queued_stroke.is_volley():
+		_point_volleyed[0] = true
 	if current_state == MatchState.PLAY:
 		if _ground_contacts == 0:
 			_swap_valid_rally_zone()
@@ -652,6 +785,8 @@ func _on_player1_ball_hit() -> void:
 		}
 	_record_replay_event("stroke", {"player": 1, "stroke": stroke_payload})
 	match_data.rally_length += 1
+	if player1.queued_stroke.is_volley():
+		_point_volleyed[1] = true
 	if current_state == MatchState.PLAY:
 		if _ground_contacts == 0:
 			_swap_valid_rally_zone()
@@ -676,11 +811,6 @@ func _stop_replay_recording() -> void:
 	_replay_controller.stop_recording()
 
 
-func _record_replay_frame(delta: float) -> void:
-	if _replay_controller:
-		_replay_controller.process_recording(delta)
-
-
 func _record_replay_event(event_type: String, payload: Dictionary) -> void:
 	if _replay_controller:
 		_replay_controller.record_event(event_type, payload)
@@ -694,12 +824,6 @@ func get_replay_duration_seconds() -> float:
 	if not _replay_controller:
 		return 0.0
 	return _replay_controller.get_duration_seconds()
-
-
-func get_replay_events() -> Array[Dictionary]:
-	if not _replay_controller:
-		return []
-	return _replay_controller.get_events()
 
 
 func get_replay_playhead_seconds() -> float:
@@ -722,18 +846,6 @@ func is_replay_paused() -> bool:
 	return _replay_controller and _replay_controller.is_playback_paused()
 
 
-func save_replay_to_disk(path: String = replay_save_path) -> bool:
-	if not _replay_controller:
-		return false
-	return _replay_controller.save_to_disk(path)
-
-
-func load_replay_from_disk(path: String = replay_save_path) -> bool:
-	if not _replay_controller:
-		return false
-	return _replay_controller.load_from_disk(path)
-
-
 func start_replay() -> void:
 	if not _replay_controller:
 		return
@@ -746,16 +858,6 @@ func start_replay() -> void:
 func stop_replay() -> void:
 	if _replay_controller:
 		_replay_controller.stop_playback()
-
-
-func pause_replay() -> void:
-	if _replay_controller:
-		_replay_controller.pause_playback()
-
-
-func resume_replay() -> void:
-	if _replay_controller:
-		_replay_controller.resume_playback()
 
 
 func toggle_replay_pause() -> void:
@@ -776,16 +878,6 @@ func forward_replay(seconds: float = 2.0) -> void:
 func step_replay_frame(direction: int) -> void:
 	if _replay_controller:
 		_replay_controller.step_frame(direction)
-
-
-func set_replay_camera_mode(mode: ReplayCameraMode) -> void:
-	replay_camera_mode = mode
-	if _replay_controller:
-		_replay_controller.camera_mode = int(mode) as MatchReplayController.CameraMode
-
-
-func get_replay_camera_mode() -> ReplayCameraMode:
-	return replay_camera_mode
 
 
 func _log_state_change(new_state: MatchState) -> void:

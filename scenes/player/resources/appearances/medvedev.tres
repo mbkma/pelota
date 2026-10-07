@@ -1,6 +1,13 @@
 [gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://13ysoxpdplu4"]
 
-[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cu4qp1jbt23yl" path="res://assets/textures/racket/tf_racket.png" id="2_mxtcl"]
+[ext_resource type="Texture2D" uid="uid://djhxjlu4shi2d" path="res://assets/textures/racket/tecnifibre_strings.png" id="2_strings"]
 
 [resource]
-script = ExtResource("1")
+script = ExtResource("1_script")
+skin_color = Color(1, 0.97, 0.95, 1)
+shirt_color = Color(0.12, 0.16, 0.38, 1)
+hair_color = Color(0.35, 0.25, 0.15, 1)
+racket_texture = ExtResource("2_mxtcl")
+racket_strings_texture = ExtResource("2_strings")

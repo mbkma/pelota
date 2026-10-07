@@ -48,13 +48,6 @@ static func get_checkpoint_level_path() -> String:
 	return game_state.checkpoint_level_path
 
 
-static func get_levels_reached() -> int:
-	if not has_game_state():
-		return 0
-	var game_state := get_or_create_state()
-	return game_state.level_states.size()
-
-
 static func set_checkpoint_level_path(level_path: String) -> void:
 	var game_state := get_or_create_state()
 	game_state.checkpoint_level_path = level_path

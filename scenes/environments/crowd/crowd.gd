@@ -1,85 +1,51 @@
 class_name Crowd
 extends Node
+## Crowd sound and reactions. Plays an idle ambience and cheers after every point; the more
+## exciting the point, the louder the cheer and the more spectators get up.
 
-## Signal emitted when crowd reaction starts
-signal crowd_reaction_started(reaction_type: String)
-
-## Signal emitted when crowd reaction ends
-signal crowd_reaction_ended(reaction_type: String)
+## Cheer volume (dB) for the least and the most exciting point
+const CHEER_VOLUME_DB_CALM: float = -15.0
+const CHEER_VOLUME_DB_EXCITED: float = 0.0
+## Share of spectators that cheer for the least and the most exciting point
+const CHEER_SHARE_CALM: float = 0.15
+const CHEER_SHARE_EXCITED: float = 1.0
 
 @export var config: CrowdAudioConfig
+## Whether the crowd plays its idle ambience (off where other music plays, e.g. menus)
+@export var play_ambience: bool = true
 
-## Container for all crowd blocks
+## Containers of the crowd blocks
 @export var blocks: Array[Node3D]
 
-## Track current reaction state
-var _current_reaction: String = ""
-
-## Reference to the audio stream player
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 
 func _ready() -> void:
-	audio_stream_player.finished.connect(_on_audio_finished)
+	if not play_ambience:
+		return
+	audio_stream_player.finished.connect(play_idle_sound)
 	play_idle_sound()
 
 
-## Play an idle crowd sound; another one follows when it ends and no reaction is playing
+## Plays an idle crowd sound; another one follows when it (or a cheer) ends.
 func play_idle_sound() -> void:
-	var sound = config.get_random_idle_sound()
-	if sound:
-		play_sound(sound)
+	_play_sound(config.get_random_idle_sound(), 0.0)
 
 
-## Trigger a crowd victory reaction
-func play_victory() -> void:
-	if _current_reaction == "victory":
-		# Still cheering from the previous point.
-		return
-
-	_current_reaction = "victory"
-	crowd_reaction_started.emit("victory")
-
-	# Play audio
-	var sound = config.get_random_after_point_sound()
-	if sound:
-		play_sound(sound)
-
-	# Play animations in all blocks
+## Cheers after a point. `excitement` in [0, 1] sets the volume and how many spectators cheer.
+func cheer(excitement: float) -> void:
+	_play_sound(
+		config.get_random_after_point_sound(),
+		lerpf(CHEER_VOLUME_DB_CALM, CHEER_VOLUME_DB_EXCITED, excitement)
+	)
+	var share: float = lerpf(CHEER_SHARE_CALM, CHEER_SHARE_EXCITED, excitement)
 	for block in blocks:
 		for crowd_block in block.get_children():
-			if crowd_block and crowd_block.has_method("play_victory"):
-				crowd_block.play_victory()
+			if crowd_block is CrowdBlock:
+				(crowd_block as CrowdBlock).cheer(share)
 
 
-## Play a sound through the audio stream player
-func play_sound(stream: AudioStream) -> void:
-	if not stream:
-		push_error("Crowd: Attempted to play null audio stream")
-		return
-
+func _play_sound(stream: AudioStream, volume_db: float) -> void:
 	audio_stream_player.stream = stream
-
+	audio_stream_player.volume_db = volume_db
 	audio_stream_player.play()
-
-
-## Cleanup all resources
-func cleanup() -> void:
-	for block in blocks:
-		for crowd_block in block.get_children():
-			if crowd_block and crowd_block.has_method("cleanup"):
-				crowd_block.cleanup()
-
-	if audio_stream_player:
-		audio_stream_player.stop()
-
-
-# Private methods
-
-
-## A reaction ends with its sound; the idle ambience continues afterwards.
-func _on_audio_finished() -> void:
-	if _current_reaction != "":
-		crowd_reaction_ended.emit(_current_reaction)
-		_current_reaction = ""
-	play_idle_sound()

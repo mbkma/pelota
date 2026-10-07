@@ -51,12 +51,6 @@ func get_players() -> Array[PlayerData]:
 	return _players.duplicate()
 
 
-func get_player_data_by_index(index: int) -> PlayerData:
-	if index < 0 or index >= _players.size():
-		return null
-	return _players[index]
-
-
 func set_match_players(player: PlayerData, opponent: PlayerData) -> void:
 	selected_match_player = player
 	selected_match_opponent = opponent
@@ -72,11 +66,6 @@ func get_match_input_device(team_index: int) -> int:
 
 func is_human_controlled(team_index: int) -> bool:
 	return _match_input_devices[team_index] != InputDevice.NO_DEVICE_ID
-
-
-func clear_match_players() -> void:
-	selected_match_player = null
-	selected_match_opponent = null
 
 
 func has_match_players() -> bool:

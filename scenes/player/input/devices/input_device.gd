@@ -19,6 +19,8 @@ const DEADZONE: float = 0.2
 
 var _held: Array[bool] = []
 var _previously_held: Array[bool] = []
+var _accept_held: bool = false
+var _accept_previously_held: bool = false
 
 
 func _init() -> void:
@@ -45,6 +47,8 @@ func poll() -> void:
 	for action in Action.values():
 		_previously_held[action] = _held[action]
 		_held[action] = _is_action_held(action)
+	_accept_previously_held = _accept_held
+	_accept_held = _is_accept_held()
 
 
 func is_action_held(action: Action) -> bool:
@@ -55,8 +59,9 @@ func is_action_just_pressed(action: Action) -> bool:
 	return _held[action] and not _previously_held[action]
 
 
-func is_action_just_released(action: Action) -> bool:
-	return not _held[action] and _previously_held[action]
+## Whether the menu confirm button was pressed this frame.
+func is_accept_just_pressed() -> bool:
+	return _accept_held and not _accept_previously_held
 
 
 ## Direction with x = right and y = forward (up on the stick), length in [0, 1].
@@ -85,3 +90,6 @@ func vibrate(_weak_magnitude: float, _strong_magnitude: float, _duration: float)
 
 
 @abstract func _is_action_held(action: Action) -> bool
+
+
+@abstract func _is_accept_held() -> bool

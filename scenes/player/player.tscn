@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
-[ext_resource type="Resource" uid="uid://foxv46tnu837" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="Resource" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="2_yllr7"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
@@ -13,16 +13,18 @@
 [ext_resource type="PackedScene" uid="uid://bi8pmdx3d7doc" path="res://scenes/tools/ball_aim_marker.tscn" id="10_7vyk4"]
 [ext_resource type="Script" uid="uid://c183q5ubdpdu2" path="res://scenes/player/state_machine.gd" id="11_ntx4g"]
 [ext_resource type="Script" uid="uid://stg5qkjv1kvi" path="res://scenes/match/lifecycle_bus.gd" id="12_pyy3x"]
+[ext_resource type="PackedScene" path="res://scenes/tools/ideal_position_marker.tscn" id="16_ideal"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0l77o"]
 radius = 0.0950554
 height = 1.58024
 
-[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker")]
+[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker", "ideal_position_marker") groups=["Players"]]
 script = ExtResource("1")
 controller_scene = ExtResource("2_yllr7")
 player_data = ExtResource("2_uxa8p")
 ball_aim_marker = NodePath("BallAimMarker")
+ideal_position_marker = NodePath("IdealPositionMarker")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
 
@@ -38,56 +40,54 @@ shape = SubResource("CapsuleShape3D_0l77o")
 
 [node name="Label3D" type="Label3D" parent="." unique_id=131366643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.01951, 0)
+visible = false
 billboard = 1
 text = "Test"
+
+[node name="ShotFeedbackLabel" type="Label3D" parent="." unique_id=1730245831]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+visible = false
+pixel_size = 0.004
+billboard = 1
+no_depth_test = true
+fixed_size = false
+render_priority = 10
+outline_render_priority = 9
+modulate = Color(1, 0.84, 0.2, 1)
+outline_modulate = Color(0.05, 0.08, 0.16, 1)
+text = "PERFECT!"
+font_size = 96
+outline_size = 18
 
 [node name="FirstPersonCamera" type="Camera3D" parent="." unique_id=573308729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.34675705)
 
-[node name="ThirdPersonCamera" type="Camera3D" parent="." unique_id=1842340249]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.988517, 2.22838)
-
 [node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
 
 [node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 340929914) index="0" unique_id=287735910]
-bones/1/rotation = Quaternion(-0.00022758522, -2.5230387e-10, 2.2410353e-10, 1)
-bones/2/rotation = Quaternion(2.8778535e-07, 6.993305e-05, 9.361836e-06, 1)
-bones/3/rotation = Quaternion(-0.0007496369, 0.0002045948, -9.211608e-06, 0.99999976)
-bones/4/rotation = Quaternion(-0.0007148687, 0.00013726045, 9.815505e-08, 0.99999976)
-bones/5/rotation = Quaternion(0.0012836412, -0.00020589064, 2.6433187e-07, 0.99999917)
-bones/6/rotation = Quaternion(-0.0004215439, -0.0019310649, -8.1376226e-07, 0.99999803)
-bones/105/rotation = Quaternion(0.5004015, 0.50041425, 0.4995872, -0.49959636)
-bones/106/position = Vector3(-0.008342602, 0.17495783, -0.030757554)
-bones/106/rotation = Quaternion(-0.4877751, -0.056758042, -0.15494558, 0.8572315)
-bones/107/rotation = Quaternion(0.21411894, 0.9278604, -0.18298279, 0.24442904)
-bones/108/rotation = Quaternion(-0.00028374215, 0.08651548, 0.09911332, 0.99130803)
-bones/109/rotation = Quaternion(0.08215898, -0.7250275, 0.19489159, 0.6554406)
-bones/110/rotation = Quaternion(-0.17115909, -0.17937538, -0.25472566, 0.9346893)
-bones/111/rotation = Quaternion(0.17976739, 0.57258356, -0.3095396, 0.7375752)
-bones/131/rotation = Quaternion(0.5004015, -0.50041425, -0.4995872, -0.49959636)
-bones/132/position = Vector3(0.008342643, 0.1749586, -0.030757502)
-bones/132/rotation = Quaternion(-0.50837517, 0.010622944, 0.0826898, 0.85709065)
-bones/133/rotation = Quaternion(-0.10319933, 0.96257174, -0.22145633, -0.1173144)
-bones/134/rotation = Quaternion(-0.0005116429, -0.15600389, -0.1787205, 0.97145337)
-bones/135/rotation = Quaternion(0.06625685, 0.69833493, -0.34172443, 0.6254301)
-bones/158/rotation = Quaternion(0.9984913, 0.043551683, -0.0014632944, 0.03341119)
-bones/159/rotation = Quaternion(4.128642e-06, 4.5158455e-08, -2.0720365e-05, 1)
-bones/160/rotation = Quaternion(0.99846554, -0.043559797, 0.001477239, 0.034161102)
-bones/161/rotation = Quaternion(-9.597414e-06, -1.3377966e-07, -4.79116e-05, 1)
-bones/164/rotation = Quaternion(4.100577e-05, -0.00041873756, 1, -7.0177615e-05)
-bones/165/position = Vector3(-0.021527516, 0.24426076, 0.016920676)
-bones/165/rotation = Quaternion(4.365583e-07, -5.9372246e-06, -4.1947087e-07, 1)
-bones/166/rotation = Quaternion(-1.8417102e-05, 0.99999815, -0.0019137575, 0.00019609508)
-bones/167/position = Vector3(0.025695663, 0.2300043, 0.008663922)
-bones/167/rotation = Quaternion(-4.3927716e-06, -3.880279e-05, -1.4282523e-06, 1)
-bones/168/rotation = Quaternion(-1.3750417e-05, 0.7073171, -0.7068964, 6.3540036e-05)
-bones/170/rotation = Quaternion(0.00011619378, 0.0011811397, 0.99999934, -0.00016364706)
-bones/171/rotation = Quaternion(2.0192938e-06, 2.3909726e-05, 1.6663113e-06, 1)
-bones/172/rotation = Quaternion(4.525522e-06, 0.9999986, -0.0017056781, -0.00019618656)
-bones/173/rotation = Quaternion(4.222387e-06, -3.8272257e-05, -1.4606463e-06, 1)
-bones/174/rotation = Quaternion(-0.00014615971, 0.7068305, -0.7073829, 0.000103006125)
+bones/1/rotation = Quaternion(-0.0008505026, 0, 0, 0.9999997)
+bones/3/rotation = Quaternion(-0.0056524496, 0, 0, 0.999984)
+bones/4/rotation = Quaternion(-0.0045398506, 0, 0, 0.99998975)
+bones/5/rotation = Quaternion(0.013029374, 0, 0, 0.9999151)
+bones/6/rotation = Quaternion(-0.0019259293, 0, 0, 0.9999982)
+bones/105/rotation = Quaternion(0.5027839, 0.5028671, 0.49712837, -0.4971887)
+bones/106/position = Vector3(-0.008593366, 0.18021636, -0.031681728)
+bones/106/rotation = Quaternion(-0.48850963, -0.054363314, -0.15250254, 0.8574066)
+bones/107/rotation = Quaternion(0.209558, 0.9298811, -0.18456014, 0.23946667)
+bones/108/rotation = Quaternion(-0.00030897156, 0.09418306, 0.10789763, 0.98969066)
+bones/109/rotation = Quaternion(0.10990434, -0.72223496, 0.203888, 0.6517112)
+bones/110/rotation = Quaternion(-0.16946852, -0.17760329, -0.2522097, 0.9360171)
+bones/111/rotation = Quaternion(0.112056546, 0.5530166, -0.300381, 0.76901716)
+bones/131/rotation = Quaternion(0.502784, -0.502867, -0.49712837, -0.49718863)
+bones/132/position = Vector3(0.008593389, 0.18021718, -0.031682026)
+bones/132/rotation = Quaternion(-0.5090925, 0.010336036, 0.0827859, 0.85665894)
+bones/133/rotation = Quaternion(-0.10307121, 0.96215427, -0.22330514, -0.11734705)
+bones/134/rotation = Quaternion(-0.00051820185, -0.15799725, -0.18100384, 0.97070813)
+bones/135/rotation = Quaternion(0.06180107, 0.69059426, -0.3355204, 0.6377196)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
+
+[node name="IdealPositionMarker" parent="." unique_id=1093858306 instance=ExtResource("16_ideal")]
 
 [node name="BallAimMarker" parent="." unique_id=160563153 instance=ExtResource("10_7vyk4")]
 top_level = true

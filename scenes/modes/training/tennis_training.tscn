@@ -176,7 +176,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.994293, 0, 12.1442)
 [node name="NW" type="Marker3D" parent="Positions" unique_id=1905855358]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.972189, 0, -13.487)
 
-[node name="Ground" type="StaticBody3D" parent="." unique_id=709732411]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=709732411 groups=["Ground"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2075691090]

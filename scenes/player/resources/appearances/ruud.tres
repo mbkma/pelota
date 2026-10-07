@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://7e3c3vwitqa5"]
+
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+skin_color = Color(1, 0.97, 0.95, 1)
+shirt_color = Color(0.15, 0.35, 0.8, 1)
+hair_color = Color(0.25, 0.17, 0.1, 1)

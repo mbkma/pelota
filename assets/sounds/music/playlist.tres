@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="MusicPlaylist" format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/music/music_playlist.gd" id="1_playlist"]
+[ext_resource type="Script" path="res://scenes/ui/music/music_track.gd" id="2_track"]
+[ext_resource type="AudioStream" path="res://assets/sounds/music/goodnight_moon.ogg" id="3_a"]
+[ext_resource type="Texture2D" path="res://assets/sounds/music/covers/goodnight_moon.png" id="4_a"]
+[ext_resource type="AudioStream" path="res://assets/sounds/music/riders_on_the_storm.ogg" id="5_b"]
+[ext_resource type="Texture2D" path="res://assets/sounds/music/covers/riders_on_the_storm.png" id="6_b"]
+[ext_resource type="AudioStream" path="res://assets/sounds/music/wicked_game.ogg" id="9_d"]
+[ext_resource type="Texture2D" path="res://assets/sounds/music/covers/wicked_game.png" id="10_d"]
+
+[sub_resource type="Resource" id="Resource_goodnight_moon"]
+script = ExtResource("2_track")
+stream = ExtResource("3_a")
+title = "Goodnight Moon"
+artist = "Shivaree"
+cover = ExtResource("4_a")
+
+[sub_resource type="Resource" id="Resource_riders_on_the_storm"]
+script = ExtResource("2_track")
+stream = ExtResource("5_b")
+title = "Riders On The Storm"
+artist = "Snoop Dogg ft. The Doors"
+cover = ExtResource("6_b")
+
+[sub_resource type="Resource" id="Resource_wicked_game"]
+script = ExtResource("2_track")
+stream = ExtResource("9_d")
+title = "Wicked Game"
+artist = ""
+cover = ExtResource("10_d")
+
+[resource]
+script = ExtResource("1_playlist")
+tracks = Array[ExtResource("2_track")]([SubResource("Resource_goodnight_moon"), SubResource("Resource_riders_on_the_storm"), SubResource("Resource_wicked_game")])

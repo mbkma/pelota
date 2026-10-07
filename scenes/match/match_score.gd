@@ -80,6 +80,15 @@ func point_importance(player_index: int) -> PointImportance:
 	return PointImportance.NORMAL
 
 
+## Whether the receiver would win the server's game with the next point (not in a tiebreak).
+func is_break_point() -> bool:
+	if is_tiebreak:
+		return false
+	var after: Score = _copy()
+	after.add_point(1 - current_server)
+	return after.games_played > games_played
+
+
 ## Whether the next point is served from the deuce (right) side
 func is_deuce_court() -> bool:
 	var total_points: int = (

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dfywnruqiset1"]
 
-[ext_resource type="Resource" uid="uid://13ysoxpdplu4" path="res://scenes/player/resources/appearances/medvedev.tres" id="1_7vms7"]
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_7vms7"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="3_gd4y4"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/medvedev.tres" id="1_7vms7"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_7vms7"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_gd4y4"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/medvedev.tres" id="4_wq2sn"]
 
 [sub_resource type="Resource" id="Resource_medvedev_stats"]

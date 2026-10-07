@@ -50,7 +50,7 @@ script = ExtResource("3")
 
 [node name="Court" parent="." unique_id=412000164 instance=ExtResource("5_2qn74")]
 
-[node name="Ground" type="StaticBody3D" parent="." unique_id=1699210346]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1699210346 groups=["Ground"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1119701321]

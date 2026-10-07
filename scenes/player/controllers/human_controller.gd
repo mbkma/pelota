@@ -18,6 +18,10 @@
 ## middle after this player hits the ball, a new serve, or the end of the point.
 ## The aim marker shows the landing area: every shot draws one random direction inside it,
 ## and the ball lands at the aim plus that direction times the current radius.
+## Positioning: after the stroke button is pressed the player only shuffles toward the ball at
+## SHOT_ADJUST_SPEED, so getting into position beforehand matters; a ball met off the racket's
+## sweet spot loses pace and accuracy (see Player). While the ball comes in, a marker shows
+## the ideal position.
 ## Close to the net, a stroke on a ball that has not bounced yet is played as a volley; the
 ## drop shot button plays a drop volley.
 ## Player stats shape all of it: shot side and volley skill set the stroke speed, spin skills
@@ -62,6 +66,9 @@ const SERVE_SLIDE_LOOKAHEAD: float = 1.1
 const SERVE_CENTER_MARGIN: float = 0.3
 ## Aim targets stay this far inside the lines (m).
 const AIM_LINE_MARGIN: float = 0.5
+## Speed factor of the automatic adjustment toward the ball once a stroke button is pressed;
+## the player has to get into position on their own to arrive in time.
+const SHOT_ADJUST_SPEED: float = 0.5
 ## Minimum alignment (cosine) of the direction with the one held when a shot ended for the
 ## direction to stay ignored.
 const HELD_AIM_ALIGNMENT: float = 0.7
@@ -76,6 +83,18 @@ const PERFECT_TIMING_WINDOW: float = 0.12
 const EARLIEST_TIMING: float = 0.8
 ## Extra stroke speed (m/s) of a perfectly timed shot; lower timing quality scales it down.
 const TIMING_PACE_BONUS: float = 9.0
+## Share of the stroke's spin at the worst and at perfect timing: well-timed topspin dips and
+## kicks more, slices skid lower and drop shots die after the bounce.
+const TIMING_SPIN_WORST: float = 0.85
+const TIMING_SPIN_PERFECT: float = 1.3
+## Shot quality (worse of timing and positioning) for the ratings shown above the player
+const RATING_PERFECT: float = 0.95
+const RATING_GREAT: float = 0.7
+const RATING_GOOD: float = 0.4
+const RATING_COLOR_PERFECT := Color(1.0, 0.84, 0.2)
+const RATING_COLOR_GREAT := Color(0.55, 0.95, 0.35)
+const RATING_COLOR_GOOD := Color(1, 1, 1)
+const RATING_COLOR_BAD := Color(1.0, 0.45, 0.35)
 ## Landing area radius (m) of a rally shot with perfect and with the worst timing.
 const RALLY_ERROR_RADIUS_PERFECT: float = 0.25
 const RALLY_ERROR_RADIUS_WORST: float = 2.5
@@ -128,8 +147,9 @@ var _serve_side: float = 1.0
 
 ## Stroke handed to the player (queued by the controller, executed by the player).
 var _pending_stroke: Stroke = null
-## Stroke speed of the current shot or serve before the timing bonus.
+## Stroke speed and spin of the current shot or serve before the timing bonus.
 var _base_stroke_power: float = 0.0
+var _base_stroke_spin: Vector3 = Vector3.ZERO
 ## Precision in [0, 1] of the current rally shot (shot control, return and volley skill).
 var _shot_precision: float = 0.5
 
@@ -203,7 +223,7 @@ func get_move_direction() -> Vector3:
 		Mode.FREE:
 			return _to_world(_free_move_direction())
 		Mode.SHOT:
-			return player.compute_move_dir()
+			return player.compute_move_dir() * SHOT_ADJUST_SPEED
 		Mode.SERVE_READY:
 			return _serve_slide_direction()
 	return Vector3.ZERO
@@ -215,6 +235,16 @@ func get_stroke() -> Stroke:
 
 func get_aim_marker_position() -> Variant:
 	return _aiming_at
+
+
+## While the ball comes toward the player, where they should stand to meet it.
+func get_ideal_position() -> Variant:
+	if not (_mode == Mode.FREE or _mode == Mode.SHOT) or not _is_ball_incoming():
+		return null
+	var step: TrajectoryStep = get_ideal_contact_step(player)
+	if not step:
+		return null
+	return ideal_position_for_step(player, step)
 
 
 func should_show_aim_marker() -> bool:
@@ -340,6 +370,7 @@ func _apply_shot_timing(stroke: Stroke) -> void:
 	stroke.intended_stroke_target = _aiming_at
 	stroke.stroke_target = _aiming_at + Vector3(error.x, 0.0, error.y)
 	stroke.stroke_power = _base_stroke_power + TIMING_PACE_BONUS * quality
+	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
 
 
 ## Builds the rally stroke for the given contact step, forehand or backhand by ball side.
@@ -367,6 +398,7 @@ func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
 	)
 	stroke.intended_stroke_power = stroke.stroke_power
 	_base_stroke_power = stroke.stroke_power
+	_base_stroke_spin = stroke.stroke_spin
 	_apply_shot_timing(stroke)
 	return stroke
 
@@ -489,6 +521,7 @@ func _apply_serve_timing(stroke: Stroke) -> void:
 	stroke.intended_stroke_target = _aiming_at
 	stroke.stroke_target = _aiming_at + Vector3(error.x, 0.0, error.y)
 	stroke.stroke_power = _base_stroke_power + SERVE_TIMING_PACE_BONUS * quality
+	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
 
 
 func _build_serve_stroke() -> Stroke:
@@ -518,7 +551,7 @@ func _build_serve_stroke() -> Stroke:
 			spin *= lerpf(0.6, 1.1, topspin_skill)
 	if player.player_data.hand == "L":
 		spin.x = -spin.x
-	stroke.stroke_spin = spin
+	_base_stroke_spin = spin
 
 	_apply_serve_timing(stroke)
 	return stroke
@@ -670,7 +703,29 @@ func _opponent_court_point(lateral: float, depth: float) -> Vector3:
 
 
 func _on_player_ball_hit() -> void:
+	_show_shot_rating()
 	if _mode == Mode.SHOT:
 		_enter_free_mode()
 	_reset_aim()
 	_device.vibrate(0.64, 0.4, 0.1)
+
+
+## Shows how good the shot was: the worse of timing and positioning decides the rating, and a
+## poor rating names what went wrong.
+func _show_shot_rating() -> void:
+	var timing: float = _timing_quality if _timed else 0.0
+	var positioning: float = player.last_positioning_quality
+	var quality: float = minf(timing, positioning)
+	if quality >= RATING_PERFECT:
+		player.show_shot_feedback("PERFECT!", RATING_COLOR_PERFECT)
+	elif quality >= RATING_GREAT:
+		player.show_shot_feedback("GREAT", RATING_COLOR_GREAT)
+	elif quality >= RATING_GOOD:
+		player.show_shot_feedback("GOOD", RATING_COLOR_GOOD)
+	elif positioning < timing:
+		player.show_shot_feedback("OUT OF POSITION", RATING_COLOR_BAD)
+	elif not _timed:
+		var miss_text: String = "MISTIMED" if _mode == Mode.SERVE_SWING else "LATE"
+		player.show_shot_feedback(miss_text, RATING_COLOR_BAD)
+	else:
+		player.show_shot_feedback("EARLY", RATING_COLOR_BAD)

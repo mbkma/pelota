@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="1_stadium"]
+[ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environments/crowd/crowd.tscn" id="2_crowd"]
+[ext_resource type="Environment" path="res://assets/environments/stadium_environment.tres" id="3_environment"]
+[ext_resource type="Script" path="res://scenes/menus/main_menu/menu_camera_orbit.gd" id="4_orbit"]
+
+[node name="MenuBackground" type="Node3D" unique_id=1795337440]
+
+[node name="Stadium" parent="." unique_id=1203660137 instance=ExtResource("1_stadium")]
+
+[node name="Crowd" parent="." unique_id=1561406129 instance=ExtResource("2_crowd")]
+play_ambience = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1092381622]
+environment = ExtResource("3_environment")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1981302366]
+transform = Transform3D(-0.866025, 0.000000, 0.500000, 0.394005, 0.615661, 0.682437, -0.307831, 0.788011, -0.533178, 0, 12, 0)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.8
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 1.2
+shadow_opacity = 0.7
+shadow_blur = 1.6
+directional_shadow_max_distance = 70.0
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1468214075]
+current = true
+fov = 55.0
+script = ExtResource("4_orbit")
+
+[node name="Shade" type="CanvasLayer" parent="." unique_id=1323076509]
+layer = -1
+
+[node name="ShadeRect" type="ColorRect" parent="Shade" unique_id=1756103394]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.04, 0.1, 0.42)

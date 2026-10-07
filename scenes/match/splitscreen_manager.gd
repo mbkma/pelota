@@ -1,5 +1,5 @@
 ## Manages dynamic splitscreen mode for two human players.
-## Starts side by side when both players are human; X cycles the modes.
+## Off by default; X cycles the modes.
 class_name SplitscreenManager
 extends Control
 
@@ -56,8 +56,6 @@ func _ready() -> void:
 
 	# Start in normal mode
 	current_mode = SplitscreenMode.NORMAL
-	if player0.controller is HumanController and player1.controller is HumanController:
-		_enable_vertical_splitscreen()
 
 
 func _input(event: InputEvent) -> void:

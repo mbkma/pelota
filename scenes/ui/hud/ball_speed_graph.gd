@@ -9,25 +9,11 @@ const GRAPH_LINE_COLOR: Color = Color(0.35, 0.92, 1.0, 1.0)
 const GRAPH_FILL_COLOR: Color = Color(0.35, 0.92, 1.0, 0.16)
 const GRAPH_LAST_POINT_COLOR: Color = Color(1, 1, 1, 0.95)
 
-@export var history_capacity: int = 240
-
 var _samples: Array[Vector2] = []
 
 
 func clear() -> void:
 	_samples.clear()
-	queue_redraw()
-
-
-func append_speed(speed: float, delta: float) -> void:
-	var elapsed: float = 0.0
-	if not _samples.is_empty():
-		elapsed = _samples[_samples.size() - 1].x + maxf(delta, 0.0)
-
-	_samples.append(Vector2(elapsed, maxf(speed, 0.0)))
-	while _samples.size() > max(history_capacity, 2):
-		_samples.pop_front()
-
 	queue_redraw()
 
 

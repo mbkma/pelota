@@ -62,10 +62,6 @@ func track_players(front_player: Player, back_player: Player) -> void:
 	_back_player_camera.target = back_player
 
 
-func get_stadium_position(pos: String):
-	return positions[pos]
-
-
 func start_serve_clocks():
 	for clock in serve_clocks:
 		clock.visible = true

@@ -1,13 +1,9 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dinwm2sqeiwa8"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
-[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_3n6it"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/rublev.tres" id="1_lksp7"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/rublev.tres" id="3_t55ec"]
-
-[sub_resource type="Resource" id="Resource_yxoga"]
-script = ExtResource("1_3n6it")
-metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
 
 [sub_resource type="Resource" id="Resource_rublev_stats"]
 script = ExtResource("2")
@@ -45,4 +41,4 @@ height = 188
 rank = 8
 play_style = ExtResource("3_t55ec")
 stats = SubResource("Resource_rublev_stats")
-appearance = SubResource("Resource_yxoga")
+appearance = ExtResource("1_lksp7")

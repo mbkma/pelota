@@ -28,13 +28,6 @@ extends Node3D
 
 @onready var _audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer
 
-## Announce "second serve"
-func say_second_serve() -> void:
-	pass
-	#_audio_stream_player.stream = umpire_sounds["second_serve"]
-	#_audio_stream_player.play()
-
-
 ## Announce "fault"
 func say_fault() -> void:
 	_audio_stream_player.stream = umpire_sounds["out"]

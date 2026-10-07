@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c53uv3c4e0lmn"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
-[ext_resource type="Resource" uid="uid://t1k752568ugt" path="res://scenes/player/resources/appearances/zverev.tres" id="1_28pbg"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/zverev.tres" id="1_28pbg"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/zverev.tres" id="3_j2vlj"]
 
 [sub_resource type="Resource" id="Resource_zverev_stats"]

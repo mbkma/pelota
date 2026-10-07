@@ -3,17 +3,18 @@ extends MainMenu
 ## The scene adds a 'Continue' button if a game is in progress.
 ## The animation can be skipped by the player with any input.
 
-## Optional scene to open when the player clicks a 'Level Select' button.
-@export var level_select_packed_scene: PackedScene
 ## Optional scene to open when the player clicks a 'Player Select' button.
 @export var player_select_packed_scene: PackedScene
 ## If true, have the player confirm before starting a new game if a game is in progress.
 @export var confirm_new_game : bool = true
+## Plays the music (a random song per game launch) and keeps running across scenes.
+@export var music_director_scene: PackedScene
+## How-to-play screen opened by the 'How to Play' button.
+@export var tutorial_packed_scene: PackedScene
 
 var animation_state_machine : AnimationNodeStateMachinePlayback
 
 @onready var continue_game_button = %ContinueGameButton
-@onready var level_select_button = %LevelSelectButton
 @onready var new_game_confirmation = %NewGameConfirmation
 
 func load_game_scene() -> void:
@@ -63,11 +64,6 @@ func _input(event : InputEvent) -> void:
 		return
 	super._input(event)
 
-func _show_level_select_if_set() -> void:
-	if level_select_packed_scene == null: return
-	if GameState.get_levels_reached() <= 1 : return
-	level_select_button.show()
-
 
 func _show_continue_if_set() -> void:
 	if GameState.get_current_level_path().is_empty(): return
@@ -75,7 +71,7 @@ func _show_continue_if_set() -> void:
 
 func _ready() -> void:
 	super._ready()
-	_show_level_select_if_set()
+	_start_music_once()
 	_show_continue_if_set()
 	animation_state_machine = $MenuAnimationTree.get("parameters/playback")
 
@@ -83,11 +79,19 @@ func _on_continue_game_button_pressed() -> void:
 	GameState.continue_game()
 	load_game_scene()
 
-func _on_level_select_button_pressed() -> void:
-	var level_select_scene := _open_sub_menu(level_select_packed_scene)
-	if level_select_scene.has_signal("level_selected"):
-		level_select_scene.connect("level_selected", load_game_scene)
+## Starts the music director the first time the main menu opens; afterwards (e.g. back from a
+## match) resumes the music.
+func _start_music_once() -> void:
+	var director: MusicDirector = get_tree().root.get_node_or_null(^"MusicDirector")
+	if director:
+		director.resume()
+		return
+	get_tree().root.add_child.call_deferred(music_director_scene.instantiate())
 
 
 func _on_new_game_confirmation_confirmed() -> void:
 	_start_new_game_flow()
+
+
+func _on_how_to_play_button_pressed() -> void:
+	_open_sub_menu(tutorial_packed_scene)

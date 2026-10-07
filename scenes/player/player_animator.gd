@@ -73,10 +73,6 @@ func stop_stroke() -> void:
 	_finish_stroke()
 
 
-func is_playing_stroke() -> bool:
-	return not _stroke_animation.is_empty()
-
-
 func get_snapshot() -> Dictionary:
 	return {
 		"locomotion": get(_LOCOMOTION_BLEND),

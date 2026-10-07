@@ -1,13 +1,9 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cngw1dhrbgb21"]
 
-[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_yk5l3"]
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_4xwx5"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="3_vajur"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/alcaraz.tres" id="1_ek37y"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_4xwx5"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_vajur"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/alcaraz.tres" id="4_2h7j1"]
-
-[sub_resource type="Resource" id="Resource_4xwx5"]
-script = ExtResource("1_yk5l3")
-metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
 
 [sub_resource type="Resource" id="Resource_alcaraz_stats"]
 script = ExtResource("3_vajur")
@@ -47,4 +43,4 @@ height = 183
 rank = 5
 play_style = ExtResource("4_2h7j1")
 stats = SubResource("Resource_alcaraz_stats")
-appearance = SubResource("Resource_4xwx5")
+appearance = ExtResource("1_ek37y")

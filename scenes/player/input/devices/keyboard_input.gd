@@ -9,6 +9,7 @@ const RIGHT_KEYS: Array[Key] = [KEY_D, KEY_RIGHT]
 const LEFT_KEYS: Array[Key] = [KEY_A, KEY_LEFT]
 const FORWARD_KEYS: Array[Key] = [KEY_W, KEY_UP]
 const BACK_KEYS: Array[Key] = [KEY_S, KEY_DOWN]
+const ACCEPT_KEYS: Array[Key] = [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]
 
 const ACTION_KEYS: Dictionary[Action, Key] = {
 	Action.STRIKE: KEY_SPACE,
@@ -35,6 +36,10 @@ func _read_direction() -> Vector2:
 
 func _is_action_held(action: Action) -> bool:
 	return Input.is_physical_key_pressed(ACTION_KEYS[action])
+
+
+func _is_accept_held() -> bool:
+	return _any_pressed(ACCEPT_KEYS)
 
 
 func _any_pressed(keys: Array[Key]) -> bool:

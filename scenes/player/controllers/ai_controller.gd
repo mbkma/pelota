@@ -280,8 +280,8 @@ func _lock_in_phase() -> void:
 	# Verify ball is on our side of court
 	var closest_ball_position := closest_step.point
 	if sign(closest_ball_position.z) != sign(player.position.z):
-		push_warning("AiController._lock_in_phase: Ball not on my side of court")
-		_log_strategy("LOCK_IN failed: ball not on my side")
+		# e.g. the ball will end up in the net
+		_log_strategy("LOCK_IN skipped: ball does not reach my side")
 		_current_phase = Phase.ANTICIPATION
 		return
 

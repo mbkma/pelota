@@ -23,13 +23,6 @@ func get_velocity() -> Vector3:
 	return _velocity
 
 
-## Returns the next movement target, or null if no target is queued.
-func peek_next_target() -> Variant:
-	if _path.is_empty():
-		return null
-	return _path[0]
-
-
 ## Returns the current path as a copy (single entry or empty).
 func get_path() -> Array[Vector3]:
 	if _path.is_empty():

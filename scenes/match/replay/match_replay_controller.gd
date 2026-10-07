@@ -124,10 +124,6 @@ func get_progress() -> float:
 	return clampf(_playhead_seconds / _elapsed_seconds, 0.0, 1.0)
 
 
-func get_events() -> Array[Dictionary]:
-	return _events.duplicate(true)
-
-
 func is_playing() -> bool:
 	return _is_playing
 

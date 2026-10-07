@@ -1,0 +1,135 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/music/music_director.gd" id="1_director"]
+[ext_resource type="Resource" path="res://assets/sounds/music/playlist.tres" id="2_playlist"]
+[ext_resource type="Script" path="res://scenes/ui/music/now_playing_banner.gd" id="3_banner"]
+[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Regular.otf" id="4_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+bg_color = Color(0.05, 0.08, 0.16, 0.92)
+border_width_left = 6
+border_color = Color(0.83, 0.93, 0.16, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 14
+shadow_offset = Vector2(0, 4)
+content_margin_left = 16.0
+content_margin_top = 14.0
+content_margin_right = 22.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cover"]
+bg_color = Color(1, 1, 1, 0.08)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.25)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+base_font = ExtResource("4_font")
+variation_embolden = 0.7
+
+[sub_resource type="FontVariation" id="FontVariation_caps"]
+base_font = ExtResource("4_font")
+variation_embolden = 0.5
+spacing_glyph = 3
+
+[node name="MusicDirector" type="CanvasLayer" unique_id=1630458105]
+layer = 50
+script = ExtResource("1_director")
+playlist = ExtResource("2_playlist")
+
+[node name="NowPlayingBanner" type="PanelContainer" parent="." unique_id=1146306172]
+custom_minimum_size = Vector2(420, 0)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_banner")
+script = ExtResource("3_banner")
+
+[node name="HBox" type="HBoxContainer" parent="NowPlayingBanner" unique_id=1846716430]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="CoverFrame" type="PanelContainer" parent="NowPlayingBanner/HBox" unique_id=1213914702]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cover")
+
+[node name="Cover" type="TextureRect" parent="NowPlayingBanner/HBox/CoverFrame" unique_id=1406513860]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 104)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Texts" type="VBoxContainer" parent="NowPlayingBanner/HBox" unique_id=1917380924]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="NowPlayingRow" type="HBoxContainer" parent="NowPlayingBanner/HBox/Texts" unique_id=1540330561]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Equalizer" type="HBoxContainer" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow" unique_id=1067208436]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="Bar1" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1262650127]
+custom_minimum_size = Vector2(4, 14)
+layout_mode = 2
+mouse_filter = 2
+pivot_offset = Vector2(2, 14)
+color = Color(0.83, 0.93, 0.16, 1)
+
+[node name="Bar2" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1729616352]
+custom_minimum_size = Vector2(4, 14)
+layout_mode = 2
+mouse_filter = 2
+pivot_offset = Vector2(2, 14)
+color = Color(0.83, 0.93, 0.16, 1)
+
+[node name="Bar3" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1435183206]
+custom_minimum_size = Vector2(4, 14)
+layout_mode = 2
+mouse_filter = 2
+pivot_offset = Vector2(2, 14)
+color = Color(0.83, 0.93, 0.16, 1)
+
+[node name="NowPlayingLabel" type="Label" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow" unique_id=1376226316]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.93, 0.16, 1)
+theme_override_fonts/font = SubResource("FontVariation_caps")
+theme_override_font_sizes/font_size = 13
+text = "NOW PLAYING"
+
+[node name="TitleLabel" type="Label" parent="NowPlayingBanner/HBox/Texts" unique_id=1110434386]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("FontVariation_bold")
+theme_override_font_sizes/font_size = 26
+text = "Title"
+
+[node name="ArtistLabel" type="Label" parent="NowPlayingBanner/HBox/Texts" unique_id=1938452311]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 17
+text = "Artist"

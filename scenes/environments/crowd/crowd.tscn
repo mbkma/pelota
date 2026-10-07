@@ -50,6 +50,29 @@ script = ExtResource("1_a7rkt")
 config = SubResource("Resource_cp0o2")
 blocks = [NodePath("EastBlock"), NodePath("NorthBlock")]
 
+[node name="EastBlock2" type="Node3D" parent="." unique_id=948425021]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.795447, -0.067768574, -17.666695)
+
+[node name="CrowdBlock" parent="EastBlock2" unique_id=900926214 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
+config = SubResource("Resource_q84iu")
+
+[node name="CrowdBlock5" parent="EastBlock2" unique_id=660516629 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
+config = SubResource("Resource_q84iu")
+
+[node name="CrowdBlock2" parent="EastBlock2" unique_id=967489851 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
+config = SubResource("Resource_q84iu")
+
+[node name="CrowdBlock3" parent="EastBlock2" unique_id=383427788 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
+config = SubResource("Resource_q84iu")
+
+[node name="CrowdBlock4" parent="EastBlock2" unique_id=536227548 instance=ExtResource("2_axxkg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
+config = SubResource("Resource_q84iu")
+
 [node name="EastBlock" type="Node3D" parent="." unique_id=1070903490]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.915, 0.566, 0)
 

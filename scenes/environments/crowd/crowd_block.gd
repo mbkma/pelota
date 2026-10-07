@@ -68,28 +68,19 @@ func _ready() -> void:
 
 
 
-## Tool function to regenerate the crowd preview in editor
-func regenerate_preview() -> void:
-	if Engine.is_editor_hint():
-		call_deferred("_regenerate_crowd")
-
-
 ## Play random idle animation for a crowd member
 func _play_random_idle_animation(person: CrowdPerson) -> void:
 	if not person or not person.animation_state_machine:
 		return
 
-	if not person.play_idle_animation():
-		# Animation was skipped (either error or LOD chance failed)
-		return
-
-	person.setup_idle_loop()
+	person.start_idle()
 
 
 ## Play victory celebration animations for all crowd members
-func play_victory() -> void:
+## Lets about `share` (0 to 1) of the spectators cheer.
+func cheer(share: float) -> void:
 	for person in _crowd_members:
-		if person and person.animation_state_machine:
+		if randf() < share:
 			person.play_victory_animation()
 
 

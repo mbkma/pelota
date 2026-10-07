@@ -1,7 +1,5 @@
 extends Node
 
-@onready var pause_menu = $PauseMenu
-
 
 func _enter_tree() -> void:
 	# The training player is controlled with the keyboard; set before the player creates its

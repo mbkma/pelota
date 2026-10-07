@@ -7,6 +7,10 @@ enum Direction { LEFT, RIGHT, FRONT, BEHIND }
 
 enum CheckType { LEFT_RIGHT, FRONT_BEHIND }
 
+## Contact height range (m) of a comfortable groundstroke, used for the ideal position
+const IDEAL_CONTACT_HEIGHT_MIN: float = 0.7
+const IDEAL_CONTACT_HEIGHT_MAX: float = 1.4
+
 ## Threshold angle (in radians) for considering object "flying towards" (30 degrees)
 const FLYING_TOWARDS_ANGLE_THRESHOLD: float = PI / 6.0
 
@@ -69,6 +73,12 @@ func get_aim_marker_position() -> Variant:
 ## Get aim marker visibility state (override if controller needs UI)
 func should_show_aim_marker() -> bool:
 	return false
+
+
+## Where the player should stand to meet the incoming ball, shown by the ideal position
+## marker; null hides the marker (override if controller needs UI)
+func get_ideal_position() -> Variant:
+	return null
 
 
 ## Radius (m) in which the aimed stroke may land, shown by the aim marker
@@ -137,19 +147,61 @@ func is_flying_towards(source: Node3D, target: Node3D) -> bool:
 func adjust_player_position_to_stroke(
 	target_player: Player, closest_step: TrajectoryStep, stroke: Stroke
 ) -> void:
-	# Align player body so the actual racket contact point lands on predicted ball contact.
+	target_player.request_move_to(position_for_contact(target_player, closest_step, stroke))
+
+
+## Where the player has to stand so the racket contact point of `stroke` meets the ball at
+## `step`.
+func position_for_contact(target_player: Player, step: TrajectoryStep, stroke: Stroke) -> Vector3:
 	var contact_point: Vector3 = target_player.model.get_racket_contact_point(stroke)
 	var contact_to_body: Vector3 = contact_point - target_player.global_position
 	contact_to_body.y = 0.0
 
-	var new_position: Vector3 = closest_step.point - contact_to_body
-	new_position.y = target_player.position.y
-	target_player.request_move_to(new_position)
+	var body_position: Vector3 = step.point - contact_to_body
+	body_position.y = target_player.position.y
+	return body_position
 
 
-## Get optimal ball position for stroke (TODO: Implement)
-func get_optimal_ball_position(_player: Player) -> Vector3:
-	return Vector3.ZERO
+## Best point to meet the incoming ball: a volley if the ball can be taken before the bounce
+## in the net zone, otherwise where it passes a comfortable height after the bounce, nearest
+## to the player (else the apex after the bounce).
+func get_ideal_contact_step(target_player: Player) -> TrajectoryStep:
+	var closest_step: TrajectoryStep = get_closest_trajectory_step(target_player)
+	if closest_step and closest_step.is_volley_contact():
+		return closest_step
+
+	var best_step: TrajectoryStep = null
+	for step in target_player.ball.trajectory:
+		if step.bounces != 1:
+			continue
+		if step.point.y < IDEAL_CONTACT_HEIGHT_MIN or step.point.y > IDEAL_CONTACT_HEIGHT_MAX:
+			continue
+		var z_distance: float = absf(step.point.z - target_player.global_position.z)
+		if not best_step or z_distance < absf(best_step.point.z - target_player.global_position.z):
+			best_step = step
+	if best_step:
+		return best_step
+	var apex: TrajectoryStep = get_closest_apex_after_first_bounce(target_player)
+	return apex if apex else closest_step
+
+
+## Where the player should stand to meet the ball at `step` with a forehand or backhand
+## (whichever side the ball is on).
+func ideal_position_for_step(target_player: Player, step: TrajectoryStep) -> Vector3:
+	var stroke := Stroke.new()
+	stroke.step = step
+	var is_forehand: bool = (
+		(step.point - target_player.global_position).dot(target_player.global_basis.x) > 0.0
+	)
+	if step.is_volley_contact():
+		stroke.stroke_type = (
+			Stroke.StrokeType.FOREHAND_VOLLEY if is_forehand else Stroke.StrokeType.BACKHAND_VOLLEY
+		)
+	else:
+		stroke.stroke_type = (
+			Stroke.StrokeType.FOREHAND if is_forehand else Stroke.StrokeType.BACKHAND
+		)
+	return position_for_contact(target_player, step, stroke)
 
 
 func get_closest_apex_after_first_bounce(target_player: Player) -> TrajectoryStep:

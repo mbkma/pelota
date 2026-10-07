@@ -1,0 +1,133 @@
+[gd_resource type="Resource" script_class="Tutorial" format=3]
+
+[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial.gd" id="0_tutorial"]
+[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial_page.gd" id="1_page"]
+[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial_control.gd" id="2_control"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_w.svg" id="3_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_a.svg" id="4_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_s.svg" id="5_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_d.svg" id="6_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_stick_l.svg" id="7_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_space.svg" id="8_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_a.svg" id="9_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_shift.svg" id="10_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_x.svg" id="11_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_ctrl.svg" id="12_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_y.svg" id="13_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_enter.svg" id="14_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_tab.svg" id="15_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_view.svg" id="16_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_escape.svg" id="17_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_menu.svg" id="18_res"]
+[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_x.svg" id="19_res"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/logo/tennis_ball.svg" id="20_res"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/movement.png" id="21_res"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/stroke.png" id="22_res"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/serve.png" id="23_res"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/volley.png" id="24_res"]
+
+[sub_resource type="Resource" id="Control_0"]
+script = ExtResource("2_control")
+description = "Move"
+keyboard_icons = Array[Texture2D]([ExtResource("3_res"), ExtResource("4_res"), ExtResource("5_res"), ExtResource("6_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("7_res")])
+
+[sub_resource type="Resource" id="Control_1"]
+script = ExtResource("2_control")
+description = "Topspin shot / flat serve"
+keyboard_icons = Array[Texture2D]([ExtResource("8_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("9_res")])
+
+[sub_resource type="Resource" id="Control_2"]
+script = ExtResource("2_control")
+description = "Slice shot / slice serve"
+keyboard_icons = Array[Texture2D]([ExtResource("10_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("11_res")])
+
+[sub_resource type="Resource" id="Control_3"]
+script = ExtResource("2_control")
+description = "Drop shot / kick serve"
+keyboard_icons = Array[Texture2D]([ExtResource("12_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("13_res")])
+
+[sub_resource type="Resource" id="Control_4"]
+script = ExtResource("2_control")
+description = "Confirm in menus"
+keyboard_icons = Array[Texture2D]([ExtResource("14_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("9_res")])
+
+[sub_resource type="Resource" id="Control_5"]
+script = ExtResource("2_control")
+description = "Match statistics"
+keyboard_icons = Array[Texture2D]([ExtResource("15_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("16_res")])
+
+[sub_resource type="Resource" id="Control_6"]
+script = ExtResource("2_control")
+description = "Pause"
+keyboard_icons = Array[Texture2D]([ExtResource("17_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("18_res")])
+
+[sub_resource type="Resource" id="Control_7"]
+script = ExtResource("2_control")
+description = "Change split-screen layout"
+keyboard_icons = Array[Texture2D]([ExtResource("19_res")])
+gamepad_icons = Array[Texture2D]([])
+
+[sub_resource type="Resource" id="Page_0"]
+script = ExtResource("1_page")
+title = "Welcome to Pelota"
+text = "Win points by hitting the ball into your opponent's court so that they cannot return it. Play against the CPU or against a friend.
+
+In the player selection, move your keyboard or controller to the left or right to take that player, pick your character with up and down and confirm. A player without a device is played by the CPU."
+image = ExtResource("20_res")
+controls = Array[ExtResource("2_control")]([SubResource("Control_0"), SubResource("Control_4")])
+
+[sub_resource type="Resource" id="Page_1"]
+script = ExtResource("1_page")
+title = "Movement & positioning"
+text = "Run with the direction keys or the left stick. When your opponent hits, a blue ring shows the ideal spot to meet the ball.
+
+Get there early: once you press a shot button your player only shuffles slowly towards the ball. Balls met off the racket's sweet spot lose pace and accuracy."
+image = ExtResource("21_res")
+controls = Array[ExtResource("2_control")]([SubResource("Control_0")])
+
+[sub_resource type="Resource" id="Page_2"]
+script = ExtResource("1_page")
+title = "Groundstrokes"
+text = "Press a shot button when the ball comes towards you and steer the aim with the direction - it stays where you leave it. Hold the button to build power and release it just before the racket meets the ball.
+
+The circle on your opponent's side shows where the ball can land. The better your timing, the smaller it gets; it turns gold for a perfect shot with extra pace and spin. A rating above your player tells you how you did."
+image = ExtResource("22_res")
+controls = Array[ExtResource("2_control")]([SubResource("Control_1"), SubResource("Control_2"), SubResource("Control_3")])
+
+[sub_resource type="Resource" id="Page_3"]
+script = ExtResource("1_page")
+title = "Serve"
+text = "Slide along the baseline with left and right. Press and hold a serve button and aim inside the service box: flat for pace, slice for a curving serve, kick for a safe, high-bouncing serve.
+
+Release the button to toss the ball and press it again right before the racket meets the ball. The closer to contact, the faster and more precise the serve."
+image = ExtResource("23_res")
+controls = Array[ExtResource("2_control")]([SubResource("Control_1"), SubResource("Control_2"), SubResource("Control_3")])
+
+[sub_resource type="Resource" id="Page_4"]
+script = ExtResource("1_page")
+title = "At the net"
+text = "Close to the net, a ball you take before it bounces is volleyed automatically. The drop shot button plays a delicate drop volley that dies right behind the net.
+
+Move forward after a strong shot to finish the point - but watch out for passing shots and lobs."
+image = ExtResource("24_res")
+controls = Array[ExtResource("2_control")]([SubResource("Control_3")])
+
+[sub_resource type="Resource" id="Page_5"]
+script = ExtResource("1_page")
+title = "During the match"
+text = "Big points like break points and set points add pressure - it lowers your precision, the calmer players cope better. Running drains stamina, which costs speed and accuracy. Keep an eye on the panels in the corners.
+
+Long rallies make the crowd go wild. Good luck!"
+image = ExtResource("22_res")
+controls = Array[ExtResource("2_control")]([SubResource("Control_5"), SubResource("Control_6"), SubResource("Control_7")])
+
+[resource]
+script = ExtResource("0_tutorial")
+pages = Array[ExtResource("1_page")]([SubResource("Page_0"), SubResource("Page_1"), SubResource("Page_2"), SubResource("Page_3"), SubResource("Page_4"), SubResource("Page_5")])

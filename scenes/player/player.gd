@@ -29,6 +29,21 @@ signal lifecycle_phase_changed(previous_phase: int, current_phase: int)
 const DISTANCE_THRESHOLD: float = 0.01
 const STAMINA_STROKE_COST_BASE: float = 5.5
 const STAMINA_MOVE_DRAIN_BASE: float = 6.0
+## Ball within this distance (m) of the racket contact point at contact: perfect positioning.
+const PERFECT_CONTACT_DISTANCE: float = 0.15
+## Share of the stroke speed kept at the worst positioning (ball at the edge of the hit range).
+const POOR_POSITION_POWER_FACTOR: float = 0.6
+## Extra landing error (m) at the worst positioning.
+const POOR_POSITION_ERROR_RADIUS: float = 3.0
+## Share of the target depth (distance from the net) reached at the worst positioning: a weak
+## shot lands shorter instead of being looped up high.
+const POOR_POSITION_DEPTH_FACTOR: float = 0.7
+## Shot rating label: start height above the player (m) and how long it shows (s)
+const SHOT_FEEDBACK_HEIGHT: float = 2.2
+const SHOT_FEEDBACK_TIME: float = 1.4
+## Height (m) by which strokes and serves aim to pass over the net cord
+const STROKE_NET_CLEARANCE: float = 0.15
+const SERVE_NET_CLEARANCE: float = 0.03
 
 ## Controller scene instantiated to drive movement/stroke decisions.
 @export var controller_scene: PackedScene
@@ -42,6 +57,8 @@ const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 @export var team_index: int = 0
 ## World-space marker used to visualize shot aim target.
 @export var ball_aim_marker: BallAimMarker
+## Shows where to stand to meet the incoming ball (for controllers that provide it).
+@export var ideal_position_marker: Node3D
 ## Opposing player reference for serve/rally synchronization.
 @export var opponent: Player
 ## Ball scene used to spawn a toss ball when serving.
@@ -84,6 +101,9 @@ var _movement: MovementController
 var _swing_clip: StrokeClip = null
 ## Seconds until the racket is expected to meet the ball; INF while no contact is predicted.
 var _seconds_to_contact: float = INF
+## Positioning quality in [0, 1] of the last ball hit (1 for serves)
+var last_positioning_quality: float = 1.0
+var _feedback_tween: Tween
 var _last_consumed_decision: Stroke = null
 var _stamina_current: float = 100.0
 var _stamina_max: float = 100.0
@@ -93,8 +113,8 @@ var _is_replay_mode: bool = false
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var first_person_camera: Camera3D = $FirstPersonCamera
-@onready var third_person_camera: Camera3D = $ThirdPersonCamera
 @onready var label_3d: Label3D = $Label3D
+@onready var _shot_feedback_label: Label3D = $ShotFeedbackLabel
 
 @onready var _state_machine: PlayerStateMachine = $PlayerStateMachine
 @onready var _lifecycle_bus: MatchLifecycleBus = $MatchLifecycleBus
@@ -366,12 +386,30 @@ func _predict_time_to_contact(contact_point: Vector3) -> float:
 
 
 ## Whether the ball passes within hit range of the racket contact point during this physics tick.
-func _is_ball_in_hit_range(contact_point: Vector3) -> bool:
+## How far (m) the ball passes from the racket contact point during this physics tick.
+func _contact_distance(contact_point: Vector3) -> float:
 	var travel: Vector3 = ball.velocity / Engine.physics_ticks_per_second
 	var closest: Vector3 = Geometry3D.get_closest_point_to_segment(
 		contact_point, ball.global_position - travel, ball.global_position + travel
 	)
-	return closest.distance_to(contact_point) <= hit_range_tolerance_meters
+	return closest.distance_to(contact_point)
+
+
+## Positioning quality in [0, 1] for a ball meeting the racket `contact_distance` meters off
+## the contact point: 1 within PERFECT_CONTACT_DISTANCE, 0 at the edge of the hit range.
+func _positioning_quality(contact_distance: float) -> float:
+	var off_by: float = contact_distance - PERFECT_CONTACT_DISTANCE
+	var tolerance: float = hit_range_tolerance_meters - PERFECT_CONTACT_DISTANCE
+	return 1.0 - clampf(off_by / tolerance, 0.0, 1.0)
+
+
+## Weakens, shortens and scatters a stroke played out of position.
+func _apply_positioning(stroke: Stroke, quality: float) -> void:
+	stroke.stroke_power *= lerpf(POOR_POSITION_POWER_FACTOR, 1.0, quality)
+	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, quality)
+	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - quality)
+	var error: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
+	stroke.stroke_target += Vector3(error.x, 0.0, error.y)
 
 
 func _on_stroke_marker_reached(marker: StringName) -> void:
@@ -393,14 +431,21 @@ func _on_stroke_contact() -> void:
 		return
 
 	if stroke.stroke_type == Stroke.StrokeType.SERVE:
+		last_positioning_quality = 1.0
 		_hit_ball(stroke)
 		_lifecycle_bus.complete_serve(self)
 		return
 
-	if is_instance_valid(ball) and _is_ball_in_hit_range(clip.global_position):
-		_hit_ball(stroke)
-	else:
+	if not is_instance_valid(ball):
 		cancel_stroke()
+		return
+	var contact_distance: float = _contact_distance(clip.global_position)
+	if contact_distance > hit_range_tolerance_meters:
+		cancel_stroke()
+		return
+	last_positioning_quality = _positioning_quality(contact_distance)
+	_apply_positioning(stroke, last_positioning_quality)
+	_hit_ball(stroke)
 
 
 ## Execute ball hit with given stroke
@@ -413,27 +458,22 @@ func _hit_ball(stroke: Stroke) -> void:
 		cancel_stroke()
 		return
 
+	var is_serve: bool = stroke.stroke_type == Stroke.StrokeType.SERVE
+	# Spin is defined in [-1, 1]; skill and timing bonuses cannot push it further.
+	var spin: Vector3 = stroke.stroke_spin.clamp(-Vector3.ONE, Vector3.ONE)
 	var stroke_velocity: Vector3 = ball.calculate_velocity(
 		ball.position,
 		stroke.stroke_target,
 		-sign(position.z) * stroke.stroke_power,
-		stroke.stroke_spin
+		spin,
+		SERVE_NET_CLEARANCE if is_serve else STROKE_NET_CLEARANCE
 	)
 
-	ball.apply_stroke(stroke_velocity, stroke.stroke_spin)
+	ball.apply_stroke(stroke_velocity, spin)
 	_consume_stamina(_stroke_stamina_cost(stroke))
 	play_stroke_sound(stroke)
-	label_3d.text = player_data.last_name + "\n" + str(stroke.stroke_power)
 	ball_hit.emit()
 	cancel_stroke()
-
-
-func get_stamina_capacity() -> float:
-	return _stamina_max
-
-
-func get_stamina_current() -> float:
-	return _stamina_current
 
 
 func get_stamina_ratio() -> float:
@@ -579,8 +619,13 @@ func _sync_ball_from_match_manager() -> void:
 
 ## Update UI based on controller state (uniform interface for all controllers)
 func _update_controller_ui() -> void:
-	if not ball_aim_marker or not controller:
+	if not controller:
 		return
+
+	var ideal_position: Variant = controller.get_ideal_position()
+	ideal_position_marker.visible = ideal_position != null
+	if ideal_position != null:
+		ideal_position_marker.global_position = ideal_position
 
 	# Check if controller wants to show aim marker
 	if controller.should_show_aim_marker():
@@ -639,6 +684,24 @@ func on_point_result(won: bool) -> void:
 			mental_state.on_point_won()
 		else:
 			mental_state.on_point_lost()
+
+
+## Shows a short rating of the last shot (e.g. "PERFECT!") rising above the player.
+func show_shot_feedback(text: String, color: Color) -> void:
+	_shot_feedback_label.text = text
+	_shot_feedback_label.modulate = color
+	_shot_feedback_label.position.y = SHOT_FEEDBACK_HEIGHT
+	_shot_feedback_label.visible = true
+	if _feedback_tween:
+		_feedback_tween.kill()
+	_feedback_tween = create_tween().set_parallel(true)
+	_feedback_tween.tween_property(
+		_shot_feedback_label, "position:y", SHOT_FEEDBACK_HEIGHT + 0.8, SHOT_FEEDBACK_TIME
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	_feedback_tween.tween_property(
+		_shot_feedback_label, "modulate:a", 0.0, SHOT_FEEDBACK_TIME * 0.5
+	).set_delay(SHOT_FEEDBACK_TIME * 0.5)
+	_feedback_tween.chain().tween_callback(_shot_feedback_label.hide)
 
 
 ## Whether the next shot of this player is the return of a serve.

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PlayerAppearance" format=3]
+
+[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_script"]
+[ext_resource type="ArrayMesh" path="res://assets/models/player/meshes/djokovic/player_djokovic_base.res" id="2_body"]
+[ext_resource type="ArrayMesh" path="res://assets/models/player/meshes/djokovic/player_djokovic_male_casualsuit06.res" id="3_shirt"]
+[ext_resource type="ArrayMesh" path="res://assets/models/player/meshes/djokovic/player_djokovic_m_swimming_trunks_01.res" id="4_shorts"]
+[ext_resource type="ArrayMesh" path="res://assets/models/player/meshes/djokovic/player_djokovic_shoes05.res" id="5_shoes"]
+[ext_resource type="ArrayMesh" path="res://assets/models/player/meshes/djokovic/player_djokovic_short01_002.res" id="6_hair"]
+[ext_resource type="Texture2D" path="res://assets/models/player/textures/middleage_lightskinned_male_diffuse.png" id="7_skin"]
+[ext_resource type="Texture2D" path="res://assets/models/player/textures/short01_diffuse.png" id="8_hair"]
+[ext_resource type="Texture2D" path="res://assets/textures/racket/head_racket.png" id="9_racket"]
+[ext_resource type="Texture2D" path="res://assets/textures/racket/head_strings.png" id="10_strings"]
+
+[resource]
+script = ExtResource("1_script")
+body_mesh = ExtResource("2_body")
+shirt_mesh = ExtResource("3_shirt")
+shorts_mesh = ExtResource("4_shorts")
+shoes_mesh = ExtResource("5_shoes")
+hair_mesh = ExtResource("6_hair")
+skin_texture = ExtResource("7_skin")
+skin_color = Color(1, 1, 1, 1)
+shirt_color = Color(1, 1, 1, 1)
+shorts_color = Color(0.1, 0.12, 0.25, 1)
+shoes_color = Color(0.95, 0.95, 0.95, 1)
+hair_texture = ExtResource("8_hair")
+hair_color = Color(0.12, 0.08, 0.05, 1)
+racket_texture = ExtResource("9_racket")
+racket_strings_texture = ExtResource("10_strings")

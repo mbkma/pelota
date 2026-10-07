@@ -1,13 +1,9 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b2vrbrqsx0cpp"]
 
-[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_4mq0m"]
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_jl1rq"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="3_tyoyc"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/auger-aliassime.tres" id="1_gigr2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_jl1rq"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_tyoyc"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/auger-aliassime.tres" id="4_2vnw3"]
-
-[sub_resource type="Resource" id="Resource_jl1rq"]
-script = ExtResource("1_4mq0m")
-metadata/_custom_type_script = "uid://dg7ef54pw6mxq"
 
 [sub_resource type="Resource" id="Resource_faa_stats"]
 script = ExtResource("3_tyoyc")
@@ -47,4 +43,4 @@ height = 193
 rank = 9
 play_style = ExtResource("4_2vnw3")
 stats = SubResource("Resource_faa_stats")
-appearance = SubResource("Resource_jl1rq")
+appearance = ExtResource("1_gigr2")

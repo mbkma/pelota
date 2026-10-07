@@ -23,7 +23,6 @@ buses/default_bus_layout="uid://dlo5inop6ahho"
 [autoload]
 
 GlobalGameData="*res://scripts/core/game_data.gd"
-GlobalPhysics="*res://scripts/core/physics_service.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 DebugLogger="*res://scripts/core/debug_logger.gd"
 AppConfig="*uid://cjke6crjg14a0"
@@ -49,8 +48,7 @@ enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/go
 
 [gui]
 
-theme/custom="res://resources/themes/expedition.tres"
-theme/custom_font="uid://cv0pw4voe03yw"
+theme/custom="res://resources/themes/pelota.tres"
 
 [importer_defaults]
 

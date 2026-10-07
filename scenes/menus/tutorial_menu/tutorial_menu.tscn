@@ -1,0 +1,160 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial_menu.gd" id="1_menu"]
+[ext_resource type="Resource" path="res://scenes/menus/tutorial_menu/tutorial_pages.tres" id="2_pages"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_logo.tscn" id="3_logo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_image"]
+bg_color = Color(0, 0, 0, 0.3)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83, 0.93, 0.16, 0.6)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[node name="TutorialMenu" type="Control" unique_id=1360210945]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+tutorial = ExtResource("2_pages")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1081402116]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.03, 0.05, 0.11, 0.62)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1563339201]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=1985547303]
+custom_minimum_size = Vector2(1320, 0)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel" unique_id=1191508047]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Header" type="HBoxContainer" parent="Center/Panel/VBox" unique_id=1316216013]
+layout_mode = 2
+
+[node name="GameLogo" parent="Center/Panel/VBox/Header" unique_id=1218693404 instance=ExtResource("3_logo")]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 0
+
+[node name="Ball" parent="Center/Panel/VBox/Header/GameLogo" index="0" unique_id=1172463919]
+custom_minimum_size = Vector2(44, 44)
+
+[node name="Wordmark" parent="Center/Panel/VBox/Header/GameLogo" index="1" unique_id=1945603226]
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 36
+
+[node name="Title" type="Label" parent="Center/Panel/VBox/Header" unique_id=1693812604]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "How to Play"
+horizontal_alignment = 1
+
+[node name="HeaderSpacer" type="Control" parent="Center/Panel/VBox/Header" unique_id=1874310591]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Content" type="HBoxContainer" parent="Center/Panel/VBox" unique_id=1409474016]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="ImageFrame" type="PanelContainer" parent="Center/Panel/VBox/Content" unique_id=1525263711]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_image")
+
+[node name="PageImage" type="TextureRect" parent="Center/Panel/VBox/Content/ImageFrame" unique_id=1027290614]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(672, 378)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Center/Panel/VBox/Content" unique_id=1316940611]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="PageTitle" type="Label" parent="Center/Panel/VBox/Content/Text" unique_id=1218101283]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.93, 0.16, 1)
+theme_override_font_sizes/font_size = 30
+text = "Title"
+
+[node name="PageText" type="Label" parent="Center/Panel/VBox/Content/Text" unique_id=1556419506]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Text"
+autowrap_mode = 3
+
+[node name="Separator" type="HSeparator" parent="Center/Panel/VBox/Content/Text" unique_id=1882113802]
+layout_mode = 2
+
+[node name="Controls" type="VBoxContainer" parent="Center/Panel/VBox/Content/Text" unique_id=1145513930]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Footer" type="HBoxContainer" parent="Center/Panel/VBox" unique_id=1262396506]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Center/Panel/VBox/Footer" unique_id=1914520310]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Back"
+
+[node name="Dots" type="HBoxContainer" parent="Center/Panel/VBox/Footer" unique_id=1617113021]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="PreviousButton" type="Button" parent="Center/Panel/VBox/Footer" unique_id=1530004404]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Previous"
+
+[node name="NextButton" type="Button" parent="Center/Panel/VBox/Footer" unique_id=1373110133]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Next"
+
+[editable path="Center/Panel/VBox/Header/GameLogo"]

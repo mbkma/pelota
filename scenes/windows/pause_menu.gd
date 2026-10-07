@@ -1,4 +1,5 @@
 @tool
+class_name PauseMenu
 extends OverlaidWindow
 
 @export var options_menu_scene: PackedScene
@@ -11,7 +12,6 @@ extends OverlaidWindow
 @export var menu_container_node_path: NodePath = ^".."
 
 var open_window: Node
-var _ignore_first_cancel: bool = false
 
 @onready
 var restart_confirmation: ConfirmationOverlaidWindow = get_node(restart_confirmation_node_path)
@@ -73,20 +73,31 @@ func _load_and_show_menu(scene: PackedScene) -> void:
 	window_instance.queue_free()
 
 
-func _handle_cancel_input() -> void:
-	if _ignore_first_cancel:
-		_ignore_first_cancel = false
+## Esc or the gamepad start button opens the menu, and closes it again when no sub window
+## is open.
+func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint():
 		return
+	if event.is_action_pressed(&"pause"):
+		if not visible:
+			show()
+		elif open_window == null:
+			close()
+		get_viewport().set_input_as_handled()
+		return
+	# Esc is also ui_cancel: its release must not close the menu it just opened. With a sub
+	# window open the release closes that window.
+	if event.is_action_released(&"pause") and open_window == null:
+		get_viewport().set_input_as_handled()
+		return
+	super._unhandled_input(event)
+
+
+func _handle_cancel_input() -> void:
 	if open_window != null:
 		close_window()
 	else:
 		super._handle_cancel_input()
-
-
-func show() -> void:
-	super.show()
-	if Input.is_action_pressed("ui_cancel"):
-		_ignore_first_cancel = true
 
 
 func _refresh_exit_button() -> void:

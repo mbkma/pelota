@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ring"]
+render_priority = 10
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(0.3, 0.75, 1, 0.85)
+
+[sub_resource type="TorusMesh" id="TorusMesh_ring"]
+material = SubResource("StandardMaterial3D_ring")
+inner_radius = 0.3
+outer_radius = 0.45
+rings = 48
+ring_segments = 8
+
+[node name="IdealPositionMarker" type="Node3D" unique_id=1314660412]
+top_level = true
+visible = false
+
+[node name="Ring" type="MeshInstance3D" parent="." unique_id=772134096]
+transform = Transform3D(1, 0, 0, 0, 0.3, 0, 0, 0, 1, 0, 0.05, 0)
+cast_shadow = 0
+mesh = SubResource("TorusMesh_ring")

@@ -95,9 +95,9 @@ extends Resource
 		model_paths = new_setting
 		changed.emit()
 
-## Animation configuration
-## Percentage of crowd members that will be animated (0.0 to 1.0, where 0.5 = 50% of crowd animates)
-@export var animation_percentage: float = 1.0:
+## Share of crowd members that move (0.0 to 1.0); the others hold a still idle pose, which
+## costs nothing per frame. Lower it for large crowds.
+@export var animation_percentage: float = 0.3:
 	set(new_setting):
 		animation_percentage = clamp(new_setting, 0.0, 1.0)
 		changed.emit()
@@ -108,31 +108,11 @@ extends Resource
 		color_palette = new_setting
 		changed.emit()
 
-## Performance configuration
-## Enable/disable signal cleanup for animation state machines
-@export var signal_cleanup_enabled: bool = true:
-	set(new_setting):
-		signal_cleanup_enabled = new_setting
-		changed.emit()
-
-## Enable/disable frustum culling for off-screen crowd members
-@export var culling_enabled: bool = true:
-	set(new_setting):
-		culling_enabled = new_setting
-		changed.emit()
-
 ## Apply random color variations to crowd member clothing and appearance
 @export var apply_color_variations: bool = true:
 	set(new_setting):
 		apply_color_variations = new_setting
 		changed.emit()
-
-
-## Get a random model variant name
-func get_random_model_variant() -> String:
-	if model_variants.is_empty():
-		return "crowd-1"
-	return model_variants[randi() % model_variants.size()]
 
 
 ## Get random idle animation
