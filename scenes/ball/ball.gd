@@ -3,7 +3,6 @@
 ## flight match. Only the stadium walls use the physics engine; the ground, the net and the
 ## players are excluded from physics collisions (the ground and net are simulated
 ## analytically), so the ball cannot snag on them.
-
 class_name Ball
 extends CharacterBody3D
 
@@ -81,10 +80,10 @@ class State:
 		rolling = p_rolling
 
 
-@export var initial_velocity: Vector3
-
-var trajectory: Array[TrajectoryStep] = []
 var initial_position: Vector3
+var initial_velocity: Vector3
+## Last predicted trajectory of the ball itself (see predict_trajectory)
+var trajectory: Array[TrajectoryStep] = []
 
 # x: sidespin, y: topspin/backspin - 1.0 heavy top spin, -1.0 heavy underspin
 var spin: Vector3 = Vector3.ZERO
@@ -96,8 +95,7 @@ var _rolling: bool = false
 func _ready() -> void:
 	set_meta("logger_name", "Ball")
 	velocity = initial_velocity
-	if initial_position:
-		global_position = initial_position
+	global_position = initial_position
 	for group in ["Ground", "Net", "Players"]:
 		for body in get_tree().get_nodes_in_group(group):
 			add_collision_exception_with(body)
@@ -163,7 +161,9 @@ func _simulate_step(state: State, delta: float, with_net: bool = true) -> StepEv
 
 
 func _advance_velocity(base_velocity: Vector3, spin_value: Vector3, delta: float) -> Vector3:
-	var next_velocity: Vector3 = base_velocity + _compute_spin_force(base_velocity, spin_value) * delta
+	var next_velocity: Vector3 = (
+		base_velocity + _compute_spin_force(base_velocity, spin_value) * delta
+	)
 	next_velocity.y -= GRAVITY * delta
 	return next_velocity / (1.0 + AIR_DRAG * next_velocity.length() * delta)
 
@@ -251,32 +251,12 @@ func _collide_with_net(state: State, previous_position: Vector3) -> StepEvent:
 	return StepEvent.HIT_NET
 
 
-## First step of a trajectory that touches the ground (or the last step if none does).
-func _first_landing_step(predicted_trajectory: Array[TrajectoryStep]) -> TrajectoryStep:
-	for trajectory_step in predicted_trajectory:
-		if trajectory_step.bounces > 0:
-			return trajectory_step
-	return predicted_trajectory[-1]
-
-
 ## Where and when a ball hit from `start_position` with `start_velocity` first lands,
 ## ignoring the net (the aim of a shot; the net may still stop it).
 func _simulate_landing(
 	start_position: Vector3, start_velocity: Vector3, spin_value: Vector3
 ) -> TrajectoryStep:
-	var predicted_trajectory := predict_trajectory(
-		ceili(TRAJECTORY_MAX_TIME / TRAJECTORY_SIMULATION_DT),
-		TRAJECTORY_SIMULATION_DT,
-		{
-			"position": start_position,
-			"velocity": start_velocity,
-			"spin": spin_value,
-			"store_result": false,
-			"with_net": false,
-			"stop_at_first_bounce": true,
-		}
-	)
-	return _first_landing_step(predicted_trajectory)
+	return _simulate_flight(start_position, start_velocity, spin_value)[-1]
 
 
 ## Velocity that makes a ball with the given spin land on `target_position`, passing over the
@@ -306,19 +286,7 @@ func calculate_velocity(
 ## cross the net before landing, negative if it would hit the net.
 func _net_clearance(start_position: Vector3, start_velocity: Vector3, spin_value: Vector3) -> float:
 	var previous: Vector3 = start_position
-	var predicted_trajectory := predict_trajectory(
-		ceili(TRAJECTORY_MAX_TIME / TRAJECTORY_SIMULATION_DT),
-		TRAJECTORY_SIMULATION_DT,
-		{
-			"position": start_position,
-			"velocity": start_velocity,
-			"spin": spin_value,
-			"store_result": false,
-			"with_net": false,
-			"stop_at_first_bounce": true,
-		}
-	)
-	for trajectory_step in predicted_trajectory:
+	for trajectory_step in _simulate_flight(start_position, start_velocity, spin_value):
 		var point: Vector3 = trajectory_step.point
 		if previous.z * point.z <= 0.0 and previous.z != 0.0:
 			var crossing: Vector3 = previous.lerp(point, previous.z / (previous.z - point.z))
@@ -343,10 +311,7 @@ func _solve_velocity(
 		)
 		var error_x: float = target_position.x - landing.point.x
 		var error_z: float = target_position.z - landing.point.z
-		if (
-			absf(error_x) < VELOCITY_SOLVER_TOLERANCE
-			and absf(error_z) < VELOCITY_SOLVER_TOLERANCE
-		):
+		if absf(error_x) < VELOCITY_SOLVER_TOLERANCE and absf(error_z) < VELOCITY_SOLVER_TOLERANCE:
 			break
 
 		vx0 += error_x / maxf(landing.time, 0.05)
@@ -363,38 +328,45 @@ func _solve_velocity(
 	return Vector3(vx0, vy0, velocity_z0)
 
 
-## Predicts the ball's trajectory with the same simulation the ball runs (walls excluded).
-## Step bounces count since the last stroke (since launch for a given velocity).
-## Options: position, velocity, spin (default: the ball's), store_result (default true: keep
-## it in `trajectory`), with_net (default true), stop_at_first_bounce (default false).
+## Predicts the ball's trajectory with the same simulation the ball runs (walls excluded) and
+## keeps it in `trajectory`. Step bounces count since the last stroke.
 func predict_trajectory(
 	steps: int = GameConstants.TRAJECTORY_PREDICTION_STEPS,
-	time_step: float = GameConstants.TRAJECTORY_TIME_STEP,
-	options: Dictionary = {}
+	time_step: float = GameConstants.TRAJECTORY_TIME_STEP
 ) -> Array[TrajectoryStep]:
-	var state := State.new(
-		options.get("position", global_position),
-		options.get("velocity", velocity),
-		options.get("spin", spin),
-		false if options.has("velocity") else _rolling
-	)
-	var with_net: bool = options.get("with_net", true)
-	var stop_at_first_bounce: bool = options.get("stop_at_first_bounce", false)
+	var state := State.new(global_position, velocity, spin, _rolling)
+	trajectory = _simulate(state, steps, time_step, true, bounces_since_stroke, false)
+	return trajectory
 
-	var predicted_trajectory: Array[TrajectoryStep] = []
-	var elapsed_time: float = 0.0
-	var bounces: int = 0 if options.has("velocity") else bounces_since_stroke
-	for _step_index in range(steps):
+
+## Flight of a ball launched from `start_position` until it first lands, ignoring the net.
+func _simulate_flight(
+	start_position: Vector3, start_velocity: Vector3, spin_value: Vector3
+) -> Array[TrajectoryStep]:
+	var state := State.new(start_position, start_velocity, spin_value, false)
+	var steps: int = ceili(TRAJECTORY_MAX_TIME / TRAJECTORY_SIMULATION_DT)
+	return _simulate(state, steps, TRAJECTORY_SIMULATION_DT, false, 0, true)
+
+
+## Runs the simulation from `state` for up to `steps` steps; stops when the ball comes to rest
+## (or at its first bounce if `stop_at_first_bounce`).
+func _simulate(
+	state: State,
+	steps: int,
+	time_step: float,
+	with_net: bool,
+	bounces: int,
+	stop_at_first_bounce: bool
+) -> Array[TrajectoryStep]:
+	var simulated: Array[TrajectoryStep] = []
+	var landed_bounces: int = bounces + 1
+	for step_index in steps:
 		var event: StepEvent = _simulate_step(state, time_step, with_net)
-		elapsed_time += time_step
 		if event == StepEvent.BOUNCED or event == StepEvent.ROLLING_STARTED:
 			bounces += 1
-		predicted_trajectory.append(TrajectoryStep.new(state.position, elapsed_time, bounces))
-		if stop_at_first_bounce and bounces > 0:
+		simulated.append(TrajectoryStep.new(state.position, (step_index + 1) * time_step, bounces))
+		if stop_at_first_bounce and bounces >= landed_bounces:
 			break
 		if state.velocity.length() < GameConstants.TRAJECTORY_STOP_VELOCITY_THRESHOLD:
 			break
-
-	if options.get("store_result", true):
-		trajectory = predicted_trajectory
-	return predicted_trajectory
+	return simulated

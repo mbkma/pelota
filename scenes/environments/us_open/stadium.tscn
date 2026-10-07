@@ -17,9 +17,6 @@ size = Vector3(30.0088, 12.7414, 2)
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(2, 12.186, 38.508)
 
-[sub_resource type="BoxShape3D" id="4"]
-size = Vector3(33.5164, 2, 44.3764)
-
 [sub_resource type="FontFile" id="5"]
 fallbacks = Array[Font]([ExtResource("6")])
 subpixel_positioning = 0
@@ -87,13 +84,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, 20.7466)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth" unique_id=1793847488]
 visible = false
 shape = SubResource("2")
-
-[node name="GroundArea" type="Area3D" parent="." unique_id=1589190859]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.891512, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundArea" unique_id=913066920]
-visible = false
-shape = SubResource("4")
 
 [node name="ServeSpeedPanel2" parent="." unique_id=1128045737 instance=ExtResource("5")]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 5.762, 0, 19.7)
@@ -166,9 +156,11 @@ text = "25
 Serve Clock"
 font = SubResource("5")
 
+[node name="ServeClockTimer" type="Timer" parent="." unique_id=1386027715]
+one_shot = true
+
 [node name="PlayerCamera" type="Node3D" parent="." unique_id=1549887150]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, 0)
-script = ExtResource("7_af67j")
 
 [node name="camera" parent="PlayerCamera" unique_id=768048712 instance=ExtResource("8_rminr")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)

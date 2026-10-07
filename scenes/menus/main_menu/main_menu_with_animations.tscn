@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://c3e46xroxm2ym" path="res://scenes/menus/main_menu/main_menu_with_animations.gd" id="2_ixa71"]
 [ext_resource type="PackedScene" uid="uid://dxgwhssxo575k" path="res://scenes/windows/main_menu_options_window.tscn" id="3_2k5l7"]
 [ext_resource type="PackedScene" uid="uid://3ero8hgeuhg" path="res://scenes/windows/main_menu_credits_window.tscn" id="4_vsp5b"]
-[ext_resource type="PackedScene" uid="uid://cwt4p3bufkke5" path="res://addons/maaacks_game_template/base/nodes/windows/confirmation_overlaid_window.tscn" id="5_6xh1d"]
 [ext_resource type="PackedScene" uid="uid://d20e40buc2w5h" path="res://scenes/menus/player_select_menu/player_opponent_select_menu.tscn" id="6_psel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_logo.tscn" id="7_logo"]
 [ext_resource type="PackedScene" path="res://scenes/ui/music/music_director.tscn" id="8_music"]
@@ -322,7 +321,6 @@ graph_offset = Vector2(-180.277, 49)
 [node name="MainMenu" unique_id=589811630 instance=ExtResource("1_sr523")]
 script = ExtResource("2_ixa71")
 player_select_packed_scene = ExtResource("6_psel")
-confirm_new_game = false
 music_director_scene = ExtResource("8_music")
 tutorial_packed_scene = ExtResource("10_tutorial")
 game_scene_path = "uid://bcwuxgarbilrg"
@@ -372,40 +370,14 @@ modulate = Color(1, 1, 1, 0)
 [node name="MenuButtonsBoxContainer" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer" index="0" unique_id=2017477786]
 lock = true
 
-[node name="ContinueGameButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1" unique_id=1206401873]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Continue"
-
-[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="2" unique_id=1846290378]
+[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1" unique_id=1846290378]
 layout_mode = 2
 text = "How to Play"
-
-[node name="PlayerSelectButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="3" unique_id=1438309953]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Player Select"
 
 [node name="VersionContainer" parent="VersionMargin" parent_id_path=PackedInt32Array(1732528471) index="0" unique_id=1603969262]
 modulate = Color(1, 1, 1, 0)
 
-[node name="NewGameConfirmation" parent="." index="7" unique_id=1747133399 instance=ExtResource("5_6xh1d")]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(420, 200)
-layout_mode = 1
-offset_left = -210.0
-offset_top = -100.0
-offset_right = 210.0
-offset_bottom = 100.0
-text = "Are you sure you want to start a new game?
-
-All progress in the current game will be lost."
-title = "New Game"
-
-[node name="MouseFilter" type="Control" parent="." index="8" unique_id=33285267]
+[node name="MouseFilter" type="Control" parent="." index="7" unique_id=33285267]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -415,9 +387,6 @@ grow_vertical = 2
 mouse_filter = 2
 metadata/_edit_lock_ = true
 
-[node name="MenuBackground" parent="." index="10" unique_id=1977320418 instance=ExtResource("9_background")]
+[node name="MenuBackground" parent="." index="9" unique_id=1977320418 instance=ExtResource("9_background")]
 
-[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ContinueGameButton" to="." method="_on_continue_game_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/HowToPlayButton" to="." method="_on_how_to_play_button_pressed"]
-[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/PlayerSelectButton" to="." method="_on_player_select_button_pressed"]
-[connection signal="confirmed" from="NewGameConfirmation" to="." method="_on_new_game_confirmation_confirmed"]

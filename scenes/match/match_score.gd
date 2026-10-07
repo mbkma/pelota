@@ -1,12 +1,6 @@
 ## Tennis match scoring system handling points, games, sets, tiebreaks and change of ends
 class_name Score
-extends Resource
-
-## Emitted when point score changes
-signal score_changed
-
-## Emitted when game score changes
-signal game_changed
+extends RefCounted
 
 ## Tennis point values for deuce/advantage tracking
 enum TennisPoint { LOVE = 0, FIFTEEN = 1, THIRTY = 2, FORTY = 3, AD = 4 }
@@ -64,7 +58,6 @@ func add_point(player_index: int) -> void:
 		_add_tiebreak_point(player_index)
 	else:
 		_add_game_point(player_index)
-	score_changed.emit()
 
 
 ## What winning the next point would decide for `player_index`.
@@ -115,7 +108,9 @@ func _add_game_point(player_index: int) -> void:
 		points[opponent_index] = TennisPoint.FORTY
 	elif (
 		points[player_index] == TennisPoint.AD
-		or (points[player_index] == TennisPoint.FORTY and points[opponent_index] < TennisPoint.FORTY)
+		or (
+			points[player_index] == TennisPoint.FORTY and points[opponent_index] < TennisPoint.FORTY
+		)
 	):
 		_win_game(player_index)
 	else:
@@ -151,7 +146,6 @@ func _win_game(player_index: int) -> void:
 	elif games[0] == GAMES_PER_SET and games[1] == GAMES_PER_SET:
 		is_tiebreak = true
 		_tiebreak_first_server = current_server
-	game_changed.emit()
 
 
 func _win_set(player_index: int) -> void:

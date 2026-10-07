@@ -13,23 +13,23 @@
 [ext_resource type="PackedScene" uid="uid://dsxmrb6wm8npr" path="res://scenes/match/splitscreen_ui.tscn" id="17_splitscreen"]
 [ext_resource type="PackedScene" uid="uid://fnykupeneorb" path="res://scenes/windows/pause_menu.tscn" id="18_fevwx"]
 [ext_resource type="PackedScene" uid="uid://b6qt4d7lxmlyh" path="res://scenes/ui/hud/replay_overlay.tscn" id="19_replay_overlay"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="20_ai_controller"]
-[ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/player/controllers/human_controller.tscn" id="21_human_controller"]
+[ext_resource type="Script" uid="uid://ghfnq4x36r3e" path="res://scenes/match/replay/match_replay_controller.gd" id="20_replay"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/player_status_panel.tscn" id="22_status_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
 [ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
 
-[node name="TennisMatch" type="Node" unique_id=1484614295]
+[node name="TennisMatch" type="Node" unique_id=1484614295 node_paths=PackedStringArray("player0", "player1")]
 process_mode = 1
 script = ExtResource("1_3pywv")
-ai_controller_scene = ExtResource("20_ai_controller")
-human_controller_scene = ExtResource("21_human_controller")
+player0 = NodePath("Player")
+player1 = NodePath("Player2")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
 
 [node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
+team_index = 1
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
 active_cam = NodePath("TopFront")
@@ -79,9 +79,8 @@ match_manager = NodePath("../MatchManager")
 
 [node name="Stadium" parent="." unique_id=1694125535 instance=ExtResource("6_4vere")]
 
-[node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("match_manager", "players") instance=ExtResource("11_324nl")]
+[node name="TrajectoryDrawer" parent="." unique_id=1508546488 node_paths=PackedStringArray("match_manager") instance=ExtResource("11_324nl")]
 match_manager = NodePath("../MatchManager")
-players = [NodePath("../Player"), NodePath("../Player2")]
 
 [node name="Umpire" parent="." unique_id=757205017 instance=ExtResource("12_ard7f")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.18558, 0, 0)
@@ -114,8 +113,13 @@ shadow_opacity = 0.7
 shadow_blur = 1.6
 directional_shadow_max_distance = 70.0
 
-[node name="ReplayOverlay" parent="." unique_id=1789361542 node_paths=PackedStringArray("match_manager") instance=ExtResource("19_replay_overlay")]
+[node name="MatchReplay" type="Node" parent="." unique_id=1093746211 node_paths=PackedStringArray("match_manager")]
+process_mode = 3
+script = ExtResource("20_replay")
 match_manager = NodePath("../MatchManager")
+
+[node name="ReplayOverlay" parent="." unique_id=1789361542 node_paths=PackedStringArray("replay") instance=ExtResource("19_replay_overlay")]
+replay = NodePath("../MatchReplay")
 
 [node name="PauseMenu" parent="." unique_id=156357199 instance=ExtResource("18_fevwx")]
 visible = false

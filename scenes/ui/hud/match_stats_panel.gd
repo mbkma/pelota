@@ -4,8 +4,6 @@
 class_name MatchStatsPanel
 extends Control
 
-@export var match_manager: MatchManager
-
 ## Statistic rows, in the order of _stat_texts
 const ROW_LABELS: Array[String] = [
 	"Aces",
@@ -23,6 +21,8 @@ const ROW_LABELS: Array[String] = [
 	"Total points won",
 	"Distance covered",
 ]
+
+@export var match_manager: MatchManager
 
 ## Value labels per row: [player0 label, player1 label]
 var _value_labels: Array[Array] = []
@@ -77,7 +77,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_set_break_started(set_number: int) -> void:
-	var games: Vector2i = match_manager.match_data.get_score().completed_sets[set_number - 1]
+	var games: Vector2i = match_manager.match_data.score.completed_sets[set_number - 1]
 	var set_winner: Player = match_manager.player0 if games.x > games.y else match_manager.player1
 	var winner_games: int = maxi(games.x, games.y)
 	var loser_games: int = mini(games.x, games.y)

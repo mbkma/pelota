@@ -73,7 +73,6 @@ var _cancel_consumed_device_ids: Array[int] = []
 
 
 func _ready() -> void:
-	GlobalGameData.load_players()
 	_players = GlobalGameData.get_players()
 	_populate_option_buttons()
 	_apply_player_colors()
@@ -155,16 +154,8 @@ func _populate_option_buttons() -> void:
 		var display_name := "%s %s" % [p.first_name, p.last_name]
 		player_option_button.add_item(display_name)
 		opponent_option_button.add_item(display_name)
-
-	var has_any_players: bool = _players.size() > 0
-	player_option_button.disabled = not has_any_players
-	opponent_option_button.disabled = not has_any_players
-	start_button.disabled = not has_any_players
-	if not has_any_players:
-		return
-
 	player_option_button.select(0)
-	opponent_option_button.select(1 if _players.size() > 1 else 0)
+	opponent_option_button.select(1)
 
 
 func _apply_player_colors() -> void:
@@ -261,9 +252,12 @@ func _refresh_ready_state(entry: DeviceEntry) -> void:
 func _pop_ready_badge(entry: DeviceEntry) -> void:
 	entry.ready_badge.scale = Vector2.ZERO
 	var tween: Tween = entry.ready_badge.create_tween()
-	tween.tween_property(entry.ready_badge, ^"scale", Vector2.ONE, 0.3).set_trans(
-		Tween.TRANS_BACK
-	).set_ease(Tween.EASE_OUT)
+	(
+		tween
+		. tween_property(entry.ready_badge, ^"scale", Vector2.ONE, 0.3)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
+	)
 
 
 ## Moves a device one lane left (step -1) or right (step 1). A side holds one device.
@@ -354,7 +348,7 @@ func _on_joy_connection_changed(_device: int, _connected: bool) -> void:
 
 ## Cycles the character of the side the device controls. Devices in the middle do nothing.
 func _cycle_character(entry: DeviceEntry, step: int) -> void:
-	if _players.is_empty() or entry.confirmed:
+	if entry.confirmed:
 		return
 	match entry.lane:
 		Lane.PLAYER1:
@@ -368,29 +362,24 @@ func _cycle_character(entry: DeviceEntry, step: int) -> void:
 ## Selects the next character in `step` direction that the other side has not picked.
 func _select_character(button: OptionButton, other_button: OptionButton, step: int) -> void:
 	var index: int = posmod(button.selected + step, _players.size())
-	if index == other_button.selected and _players.size() > 1:
+	if index == other_button.selected:
 		index = posmod(index + step, _players.size())
 	button.select(index)
 
 
 func _on_player_selected(index: int) -> void:
-	if _players.size() > 1 and index == opponent_option_button.selected:
+	if index == opponent_option_button.selected:
 		opponent_option_button.select((index + 1) % _players.size())
 	_refresh_view()
 
 
 func _on_opponent_selected(index: int) -> void:
-	if _players.size() > 1 and index == player_option_button.selected:
+	if index == player_option_button.selected:
 		player_option_button.select((index + 1) % _players.size())
 	_refresh_view()
 
 
 func _refresh_view() -> void:
-	if _players.is_empty():
-		selected_player_label.text = "No player1 available"
-		selected_opponent_label.text = "No player2 available"
-		return
-
 	var player := _players[player_option_button.selected]
 	var opponent := _players[opponent_option_button.selected]
 
@@ -418,10 +407,7 @@ func _player_summary(player_data: PlayerData) -> String:
 
 
 func _build_chart() -> void:
-	_chart = chart_scene.instantiate() as Chart
-	if _chart == null:
-		push_error("Failed to instantiate Easy Charts chart scene")
-		return
+	_chart = chart_scene.instantiate()
 	_chart.name = "StatsRadarChart"
 	_chart.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_chart.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -446,52 +432,22 @@ func _plot_stats(player_data: PlayerData, opponent_data: PlayerData) -> void:
 	var player_values: Array = _extract_chart_stats(player_data.stats)
 	var opponent_values: Array = _extract_chart_stats(opponent_data.stats)
 
-	var player_min: float = _array_min(player_values)
-	var player_max: float = _array_max(player_values)
-	var range_min: float = player_min - 10.0
-	var range_max: float = minf(player_max + 10.0, 100.0)
+	var range_min: float = player_values.min() - 10.0
+	var range_max: float = minf(player_values.max() + 10.0, 100.0)
 	if range_max <= range_min:
 		range_max = range_min + 1.0
 
-	var player_function = Function.new(
+	var player_function := Function.new(
 		x_values,
 		player_values,
 		"player1",
-		{
-			color = PLAYER1_CHART_COLOR,
-			marker = Function.Marker.CIRCLE,
-			type = Function.Type.RADAR,
-			radar_fill_alpha = 0.20,
-			radar_grid_levels = 5,
-			radar_grid_color = Color("#d9d9d9"),
-			radar_axis_color = Color("#d9d9d9"),
-			radar_label_color = Color.WHITE,
-			radar_scale_label_color = Color.WHITE,
-			radar_show_scale_labels = true,
-			radar_min_value = range_min,
-			radar_max_value = range_max,
-			line_width = 2.0
-		}
+		_radar_style(PLAYER1_CHART_COLOR, Function.Marker.CIRCLE, range_min, range_max)
 	)
-	var opponent_function = Function.new(
+	var opponent_function := Function.new(
 		x_values,
 		opponent_values,
 		"player2",
-		{
-			color = PLAYER2_CHART_COLOR,
-			marker = Function.Marker.CROSS,
-			type = Function.Type.RADAR,
-			radar_fill_alpha = 0.20,
-			radar_grid_levels = 5,
-			radar_grid_color = Color("#d9d9d9"),
-			radar_axis_color = Color("#d9d9d9"),
-			radar_label_color = Color.WHITE,
-			radar_scale_label_color = Color.WHITE,
-			radar_show_scale_labels = true,
-			radar_min_value = range_min,
-			radar_max_value = range_max,
-			line_width = 2.0
-		}
+		_radar_style(PLAYER2_CHART_COLOR, Function.Marker.CROSS, range_min, range_max)
 	)
 
 	var chart_properties := ChartProperties.new()
@@ -513,10 +469,27 @@ func _plot_stats(player_data: PlayerData, opponent_data: PlayerData) -> void:
 	_chart.plot([player_function, opponent_function], chart_properties)
 
 
-func _extract_chart_stats(stats: PlayerStatsProfile) -> Array:
-	if stats == null:
-		return [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+func _radar_style(
+	color: Color, marker: Function.Marker, range_min: float, range_max: float
+) -> Dictionary:
+	return {
+		color = color,
+		marker = marker,
+		type = Function.Type.RADAR,
+		radar_fill_alpha = 0.20,
+		radar_grid_levels = 5,
+		radar_grid_color = Color("#d9d9d9"),
+		radar_axis_color = Color("#d9d9d9"),
+		radar_label_color = Color.WHITE,
+		radar_scale_label_color = Color.WHITE,
+		radar_show_scale_labels = true,
+		radar_min_value = range_min,
+		radar_max_value = range_max,
+		line_width = 2.0
+	}
 
+
+func _extract_chart_stats(stats: PlayerStatsProfile) -> Array:
 	return [
 		stats.serve_power,
 		stats.serve_accuracy,
@@ -529,30 +502,7 @@ func _extract_chart_stats(stats: PlayerStatsProfile) -> Array:
 	]
 
 
-func _array_min(values: Array) -> float:
-	if values.is_empty():
-		return 0.0
-
-	var min_value: float = float(values[0])
-	for value in values:
-		min_value = minf(min_value, float(value))
-	return min_value
-
-
-func _array_max(values: Array) -> float:
-	if values.is_empty():
-		return 0.0
-
-	var max_value: float = float(values[0])
-	for value in values:
-		max_value = maxf(max_value, float(value))
-	return max_value
-
-
 func _on_start_button_pressed() -> void:
-	if _players.is_empty():
-		return
-
 	GlobalGameData.set_match_players(
 		_players[player_option_button.selected], _players[opponent_option_button.selected]
 	)

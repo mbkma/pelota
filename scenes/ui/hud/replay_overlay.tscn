@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bqxn712ctgv5x" path="res://scenes/ui/hud/replay_overlay.gd" id="1"]
 
 [node name="ReplayOverlay" type="CanvasLayer" unique_id=1208520614]
+process_mode = 3
 layer = 140
 script = ExtResource("1")
 
@@ -70,7 +71,3 @@ text = ">>"
 [node name="StopButton" type="Button" parent="BottomBar/Margin/HBox" unique_id=219929343]
 layout_mode = 2
 text = "Stop"
-
-[node name="ExitReplayButton" type="Button" parent="BottomBar/Margin/HBox" unique_id=1498892057]
-layout_mode = 2
-text = "Exit Replay"

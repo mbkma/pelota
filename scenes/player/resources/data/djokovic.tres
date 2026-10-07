@@ -26,13 +26,7 @@ timing = 95.0
 composure = 96.0
 focus = 95.0
 clutch = 93.0
-aggression = 82.0
 net_play = 77.0
-defensive_skill = 94.0
-shot_anticipation = 96.0
-clay_skill = 86.0
-grass_skill = 90.0
-hard_court_skill = 97.0
 
 [resource]
 script = ExtResource("2_fsr4u")

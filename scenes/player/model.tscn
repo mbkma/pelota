@@ -5,7 +5,6 @@
 [ext_resource type="Material" uid="uid://cjmc6wkoalgbr" path="res://assets/materials/Frame.001.tres" id="3_2soge"]
 [ext_resource type="ArrayMesh" uid="uid://davv7k53727qv" path="res://assets/models/player/meshes/djokovic/player_djokovic_eyebrow012_001.res" id="6_5l8r3"]
 [ext_resource type="ArrayMesh" uid="uid://b4owf406mogj1" path="res://assets/models/player/meshes/djokovic/player_djokovic_eyelashes01_001.res" id="7_d4a1o"]
-[ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scenes/environments/us_open/cameras/free_look_camera.gd" id="8_4mh3o"]
 [ext_resource type="ArrayMesh" uid="uid://cuo6ycx507k33" path="res://assets/models/player/meshes/djokovic/player_djokovic_teeth_base_002.res" id="13_lffkq"]
 [ext_resource type="ArrayMesh" uid="uid://jtiw8s05dyjw" path="res://assets/models/player/meshes/djokovic/player_djokovic_tongue01_002.res" id="14_kh6wg"]
 [ext_resource type="AnimationLibrary" path="res://scenes/player/animations/player_animations.tres" id="15_gggra"]
@@ -2074,12 +2073,6 @@ script = ExtResource("16_strk")
 animation = &"g_backhand_slice"
 stroke_types = Array[int]([4, 5, 9])
 
-[node name="BackhandSliceDownPoint" type="Marker3D" parent="Points" unique_id=26002251]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.666439, 0.491877, -0.24975309)
-
-[node name="BackhandSliceUpPoint" type="Marker3D" parent="Points" unique_id=1629217222]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03961, 1.62896, -0.24975309)
-
 [node name="BackhandPoint" type="Marker3D" parent="Points" unique_id=1192745020]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.83030283, 0.9525981, -0.45003307)
 script = ExtResource("16_strk")
@@ -2154,7 +2147,3 @@ script = ExtResource("17_anim")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=317073246]
 root_node = NodePath("../h/player_djokovic")
 libraries/ = ExtResource("15_gggra")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=723465327]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.86121607, -2.023045)
-script = ExtResource("8_4mh3o")

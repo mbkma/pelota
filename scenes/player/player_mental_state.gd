@@ -1,34 +1,28 @@
+## Mental state of a player during a match: pressure from big points weighs on composure
+## and confidence, won points restore them.
 class_name PlayerMentalState
-extends Resource
+extends RefCounted
 
-@export_range(0.0, 1.0, 0.01) var composure: float = 0.5
-@export_range(0.0, 1.0, 0.01) var confidence: float = 0.5
-@export_range(0.0, 1.0, 0.01) var aggression: float = 0.5
-@export_range(0.0, 1.0, 0.01) var discipline: float = 0.5
-@export_range(0.0, 1.0, 0.01) var adaptability: float = 0.5
-@export_range(0.0, 1.0, 0.01) var clutch: float = 0.5
-@export_range(0.0, 1.0, 0.01) var pressure: float = 0.0
+var composure: float
+var clutch: float
+var confidence: float = 0.5
+var pressure: float = 0.0
 
 
 ## Starts the match with the player's mental traits; confidence and pressure start neutral.
-func setup(profile: PlayerStatsProfile) -> void:
+func _init(profile: PlayerStatsProfile) -> void:
 	composure = profile.value01(profile.composure)
 	clutch = profile.value01(profile.clutch)
-	aggression = profile.value01(profile.aggression)
-	discipline = profile.value01(profile.consistency)
-	adaptability = profile.value01(profile.focus)
-	confidence = 0.5
-	pressure = 0.0
 
 
 func apply_pressure(amount: float) -> void:
-	pressure = clampf(pressure + maxf(amount, 0.0), 0.0, 1.0)
+	pressure = clampf(pressure + amount, 0.0, 1.0)
 	composure = clampf(composure - amount * 0.12, 0.0, 1.0)
 	confidence = clampf(confidence - amount * 0.08, 0.0, 1.0)
 
 
 func release_pressure(amount: float) -> void:
-	pressure = clampf(pressure - maxf(amount, 0.0), 0.0, 1.0)
+	pressure = clampf(pressure - amount, 0.0, 1.0)
 	composure = clampf(composure + amount * 0.04, 0.0, 1.0)
 	confidence = clampf(confidence + amount * 0.03, 0.0, 1.0)
 

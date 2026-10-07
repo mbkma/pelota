@@ -2,54 +2,31 @@
 class_name Umpire
 extends Node3D
 
-## Preloaded sound dictionary for all score announcements and game calls
+## Calls by key: the point score as "<player0 points>-<player1 points>" (TennisPoint values,
+## e.g. "1-2" for 15-30), "advantage" and "out"
 @export var umpire_sounds: Dictionary[String, AudioStream]
-#= {
-	#"0-1": AudioStream,
-	#"0-2": AudioStream,
-	#"0-3": AudioStream,
-	#"1-0": AudioStream,
-	#"1-1": AudioStream,
-	#"1-2": AudioStream,
-	#"1-3": AudioStream,
-	#"2-0": AudioStream,
-	#"2-1": AudioStream,
-	#"2-2": AudioStream,
-	#"2-3": AudioStream,
-	#"3-0": AudioStream,
-	#"3-1": AudioStream,
-	#"3-2": AudioStream,
-	#"3-3": AudioStream,
-	#"advantage": AudioStream,
-	#"out": AudioStream,
-	#"second_serve": AudioStream,
-#}
-
 
 @onready var _audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer
 
+
 ## Announce "fault"
 func say_fault() -> void:
-	_audio_stream_player.stream = umpire_sounds["out"]
-	_audio_stream_player.play()
+	_play(umpire_sounds["out"])
 
 
-## Announce current score after brief delay
+## Announce the point score after a short delay (nothing at the start of a game)
 func say_score(score: Score) -> void:
 	var points: Array[int] = score.points
-	if points[0] == score.TennisPoint.LOVE and points[1] == score.TennisPoint.LOVE:
+	if points[0] == Score.TennisPoint.LOVE and points[1] == Score.TennisPoint.LOVE:
 		return
 
-	# Wait before announcing score
 	await get_tree().create_timer(1.0).timeout
-	var key: String = str(points[0]) + "-" + str(points[1])
-	var stream: AudioStream = umpire_sounds.get(key)
+	var key: String = "%d-%d" % [points[0], points[1]]
+	if points[0] == Score.TennisPoint.AD or points[1] == Score.TennisPoint.AD:
+		key = "advantage"
+	_play(umpire_sounds[key])
 
-	if points[0] == score.TennisPoint.AD or points[1] == score.TennisPoint.AD:
-		stream = umpire_sounds["advantage"]
 
-	if stream:
-		_audio_stream_player.stream = stream
-		_audio_stream_player.play()
-	else:
-		push_error("Sound not found for score: ", key)
+func _play(stream: AudioStream) -> void:
+	_audio_stream_player.stream = stream
+	_audio_stream_player.play()

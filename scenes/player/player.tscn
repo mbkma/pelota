@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
 [ext_resource type="Resource" uid="uid://cibbhkfv1ny2q" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
-[ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="2_yllr7"]
+[ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://scenes/ball/ball.tscn" id="2_ball"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
 [ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/effects/strokes/stroke_flat_2.wav" id="4_p4hr7"]
@@ -21,7 +21,7 @@ height = 1.58024
 
 [node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker", "ideal_position_marker") groups=["Players"]]
 script = ExtResource("1")
-controller_scene = ExtResource("2_yllr7")
+ball_scene = ExtResource("2_ball")
 player_data = ExtResource("2_uxa8p")
 ball_aim_marker = NodePath("BallAimMarker")
 ideal_position_marker = NodePath("IdealPositionMarker")

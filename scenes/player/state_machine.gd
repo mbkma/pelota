@@ -1,8 +1,6 @@
 class_name PlayerStateMachine
 extends Node
 
-signal state_changed(previous_state: State, current_state: State)
-
 enum State {
 	IDLE,
 	MOVING,
@@ -12,7 +10,7 @@ enum State {
 	STROKING,
 }
 
-const ALLOWED_TRANSITIONS := {
+const ALLOWED_TRANSITIONS: Dictionary[State, Array] = {
 	State.IDLE: [State.MOVING, State.PREPARING_STROKE, State.STROKING],
 	State.MOVING: [State.IDLE, State.PREPARING_STROKE, State.STROKING],
 	State.PREPARING_STROKE: [State.STROKING, State.IDLE],
@@ -26,22 +24,13 @@ func get_state() -> State:
 	return _current_state
 
 
-func transition_to(next_state: State) -> bool:
+func transition_to(next_state: State) -> void:
 	if _current_state == next_state:
-		return false
-
-	if not can_transition(_current_state, next_state):
+		return
+	if next_state not in ALLOWED_TRANSITIONS[_current_state]:
 		push_warning("Invalid player state transition: ", _current_state, " -> ", next_state)
-		return false
-
-	var previous_state: State = _current_state
+		return
 	_current_state = next_state
-	state_changed.emit(previous_state, _current_state)
-	return true
-
-
-func can_transition(from_state: State, to_state: State) -> bool:
-	return to_state in ALLOWED_TRANSITIONS.get(from_state, [])
 
 
 ## Movement only drives IDLE/MOVING while no stroke is queued or playing.

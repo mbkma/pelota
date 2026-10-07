@@ -1,154 +1,44 @@
 @tool
 class_name CrowdConfig
 extends Resource
+## Layout, models, animations and colors of a crowd block.
 
-## Configuration for the crowd system
-## This resource centralizes all crowd system parameters for better editor experience
-## and flexibility
-
-## Grid layout configuration
-## Number of rows in the crowd grid
+## Rows and columns of spectators in the block
 @export var grid_rows: int = 10:
-	set(new_setting):
-		grid_rows = new_setting
-		changed.emit()
-
-## Number of columns in the crowd grid
+	set(value):
+		grid_rows = value
+		emit_changed()
 @export var grid_columns: int = 4:
-	set(new_setting):
-		grid_columns = new_setting
-		changed.emit()
+	set(value):
+		grid_columns = value
+		emit_changed()
 
-## Spacing between crowd members on X axis (left/right)
-@export var seat_spacing_x: float = 0.7:
-	set(new_setting):
-		seat_spacing_x = new_setting
-		changed.emit()
+## Seat spacing (m): sideways (x), up per row (y), back per row (z)
+@export var seat_spacing: Vector3 = Vector3(0.7, 0.29, 1.029):
+	set(value):
+		seat_spacing = value
+		emit_changed()
 
-## Spacing between crowd members on Y axis (up/down)
-@export var seat_spacing_y: float = 0.29:
-	set(new_setting):
-		seat_spacing_y = new_setting
-		changed.emit()
-
-## Spacing between crowd members on Z axis (depth)
-@export var seat_spacing_z: float = 1.029:
-	set(new_setting):
-		seat_spacing_z = new_setting
-		changed.emit()
-
-## Animation configuration
 ## Time to blend between animations (seconds)
-@export var animation_blend_time: float = 0.5:
-	set(new_setting):
-		animation_blend_time = new_setting
-		changed.emit()
+@export var animation_blend_time: float = 0.5
+## Whether idle animations start at a random point for variety
+@export var animation_seek_enabled: bool = true
+## Idle animations played at random
+@export var idle_animations: PackedStringArray = []
+## Animations played when the crowd cheers
+@export var victory_animations: PackedStringArray = []
+## Share of spectators that move (0.0 to 1.0); the others hold a still idle pose, which costs
+## nothing per frame. Lower it for large crowds.
+@export_range(0.0, 1.0, 0.01) var animation_percentage: float = 0.3
 
-## Whether to randomly seek into animations for variety
-@export var animation_seek_enabled: bool = true:
-	set(new_setting):
-		animation_seek_enabled = new_setting
-		changed.emit()
+## Spectator models (each with an AnimationPlayer holding the animations above)
+@export var models: Array[PackedScene] = []:
+	set(value):
+		models = value
+		emit_changed()
 
-## Idle animation names to randomly play
-@export var idle_animations: PackedStringArray = [
-	"sit-idle-2",
-	"sit-idle-3",
-	"sit-talk-1",
-	"sit-talk-2",
-	"sit-talk-3",
-]:
-	set(new_setting):
-		idle_animations = new_setting
-		changed.emit()
-
-## Victory animation names to play when crowd celebrates
-@export var victory_animations: PackedStringArray = [
-	"sit-victory-1",
-	"sit-victory-2",
-	"sit-victory-3",
-	"sit-victory-4",
-]:
-	set(new_setting):
-		victory_animations = new_setting
-		changed.emit()
-
-## Character model variants to randomly select from
-@export var model_variants: PackedStringArray = [
-	"crowd-1",
-	#"crowd-2",
-	"crowd-3",
-	"crowd-4",
-]:
-	set(new_setting):
-		model_variants = new_setting
-		changed.emit()
-
-## File paths for each model variant
-@export var model_paths: Dictionary = {
-	"crowd-1": "res://assets/models/crowd/crowd-1.blend",
-	"crowd-2": "res://assets/models/crowd/crowd-2.blend",
-	"crowd-3": "res://assets/models/crowd/crowd-3.blend",
-	"crowd-4": "res://assets/models/crowd/crowd-4.blend",
-}:
-	set(new_setting):
-		model_paths = new_setting
-		changed.emit()
-
-## Share of crowd members that move (0.0 to 1.0); the others hold a still idle pose, which
-## costs nothing per frame. Lower it for large crowds.
-@export var animation_percentage: float = 0.3:
-	set(new_setting):
-		animation_percentage = clamp(new_setting, 0.0, 1.0)
-		changed.emit()
-
-## Color palette for crowd member variations
+## Colors spectators' clothes, hair and skin are tinted with
 @export var color_palette: CrowdColorPalette:
-	set(new_setting):
-		color_palette = new_setting
-		changed.emit()
-
-## Apply random color variations to crowd member clothing and appearance
-@export var apply_color_variations: bool = true:
-	set(new_setting):
-		apply_color_variations = new_setting
-		changed.emit()
-
-
-## Get random idle animation
-func get_random_idle_animation() -> String:
-	if idle_animations.is_empty():
-		return ""
-	return idle_animations[randi() % idle_animations.size()]
-
-
-## Get random victory animation
-func get_random_victory_animation() -> String:
-	if victory_animations.is_empty():
-		return ""
-	return victory_animations[randi() % victory_animations.size()]
-
-
-## Validate configuration
-func validate() -> bool:
-	if grid_rows <= 0 or grid_columns <= 0:
-		push_error("CrowdConfig: Invalid grid dimensions")
-		return false
-	if idle_animations.is_empty():
-		push_warning("CrowdConfig: No idle animations configured")
-	if model_variants.is_empty():
-		push_error("CrowdConfig: No model variants configured")
-		return false
-
-	# Ensure color palette exists
-	if not color_palette:
-		color_palette = CrowdColorPalette.new()
-
-	return true
-
-
-## Get the color palette, creating one if needed
-func get_color_palette() -> CrowdColorPalette:
-	if not color_palette:
-		color_palette = CrowdColorPalette.new()
-	return color_palette
+	set(value):
+		color_palette = value
+		emit_changed()

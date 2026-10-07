@@ -1,12 +1,8 @@
-## Manages dynamic splitscreen mode for two human players.
-## Off by default; X cycles the modes.
+## Split screen for two human players: X cycles between the normal view, side by side and
+## top/bottom views, each half following one player from behind.
 class_name SplitscreenManager
 extends Control
 
-## Signal emitted when splitscreen mode is toggled
-signal splitscreen_toggled(enabled: bool)
-
-## Splitscreen modes
 enum SplitscreenMode { NORMAL, VERTICAL_SPLIT, HORIZONTAL_SPLIT }
 
 ## Follow camera placement relative to its player: distance behind, height, and how far
@@ -20,212 +16,76 @@ const FOLLOW_FOV: float = 60.0
 @export var player0: Player
 @export var player1: Player
 
-## Cameras for each viewport
-var left_camera: Camera3D
-var right_camera: Camera3D
-var top_camera: Camera3D
-var bottom_camera: Camera3D
+var _mode: SplitscreenMode = SplitscreenMode.NORMAL
+## Follow cameras [player0, player1] per split mode
+var _split_cameras: Dictionary[SplitscreenMode, Array] = {}
 
-## State tracking
-var current_mode: SplitscreenMode = SplitscreenMode.NORMAL
+@onready var _split_containers: Dictionary[SplitscreenMode, Control] = {
+	SplitscreenMode.VERTICAL_SPLIT: $HBoxContainer,
+	SplitscreenMode.HORIZONTAL_SPLIT: $VBoxContainer,
+}
 
-
-## Original world camera reference
-var _original_camera: Camera3D
-
-## UI nodes for splitscreen display
-@onready var hbox_container: HBoxContainer = $HBoxContainer
-@onready var vbox_container: VBoxContainer = $VBoxContainer
-@onready var left_viewport: SubViewport = $HBoxContainer/LeftViewportContainer/LeftViewport
-@onready var right_viewport: SubViewport = $HBoxContainer/RightViewportContainer/RightViewport
-@onready var top_viewport: SubViewport = $VBoxContainer/TopViewportContainer/TopViewport
-@onready var bottom_viewport: SubViewport = $VBoxContainer/BottomViewportContainer/BottomViewport
 
 func _ready() -> void:
-	# Verify required exports
-	if not cameras or not player0 or not player1:
-		push_error("SplitscreenManager missing required exports!")
-		return
-
-	# Hide splitscreen UI initially
-	hbox_container.hide()
-	vbox_container.hide()
-
-	# Create cameras for all viewports
-	_create_viewport_cameras()
-
-	# Start in normal mode
-	current_mode = SplitscreenMode.NORMAL
-
-
-func _input(event: InputEvent) -> void:
-	# Toggle splitscreen with 'X' key
-	if event is InputEventKey and event.pressed and event.keycode == KEY_X:
-		toggle_splitscreen()
-		get_tree().root.set_input_as_handled()
-
-
-## Create dedicated cameras for each viewport (children of each SubViewport)
-func _create_viewport_cameras() -> void:
-	# Create left camera for horizontal split
-	left_camera = Camera3D.new()
-	left_camera.name = "LeftCamera"
-	left_viewport.add_child(left_camera)
-
-	# Create right camera for horizontal split
-	right_camera = Camera3D.new()
-	right_camera.name = "RightCamera"
-	right_viewport.add_child(right_camera)
-
-	# Create top camera for vertical split
-	top_camera = Camera3D.new()
-	top_camera.name = "TopCamera"
-	top_viewport.add_child(top_camera)
-
-	# Create bottom camera for vertical split
-	bottom_camera = Camera3D.new()
-	bottom_camera.name = "BottomCamera"
-	bottom_viewport.add_child(bottom_camera)
-
-
-## Cycle through splitscreen modes
-func toggle_splitscreen() -> void:
-	match current_mode:
-		SplitscreenMode.NORMAL:
-			_enable_vertical_splitscreen()
+	_split_cameras = {
 		SplitscreenMode.VERTICAL_SPLIT:
-			_enable_horizontal_splitscreen()
+		[
+			_create_camera($HBoxContainer/LeftViewportContainer/LeftViewport),
+			_create_camera($HBoxContainer/RightViewportContainer/RightViewport),
+		],
 		SplitscreenMode.HORIZONTAL_SPLIT:
-			_disable_splitscreen()
+		[
+			_create_camera($VBoxContainer/TopViewportContainer/TopViewport),
+			_create_camera($VBoxContainer/BottomViewportContainer/BottomViewport),
+		],
+	}
+	_set_mode(SplitscreenMode.NORMAL)
 
 
-## Enable vertical splitscreen (side-by-side)
-func _enable_vertical_splitscreen() -> void:
-	if not left_camera or not right_camera:
-		push_error("Viewport cameras not initialized")
-		return
-
-	# Store and disable the original broadcast camera
-	_original_camera = get_viewport().get_camera_3d()
-	if _original_camera:
-		_original_camera.current = false
-
-	_set_view_cameras(left_camera, right_camera)
-
-	# Setup and activate cameras
-	_update_camera_from_player(left_camera, player0)
-	left_camera.make_current()
-
-	_update_camera_from_player(right_camera, player1)
-	right_camera.make_current()
-
-	# Hide any other splitscreen containers
-	vbox_container.hide()
-
-	# Show vertical split UI
-	hbox_container.show()
-
-	# Set up camera following
-	_start_camera_following()
-
-	current_mode = SplitscreenMode.VERTICAL_SPLIT
-	splitscreen_toggled.emit(true)
-
-
-## Enable horizontal splitscreen (top-bottom)
-func _enable_horizontal_splitscreen() -> void:
-	if not top_camera or not bottom_camera:
-		push_error("Viewport cameras not initialized")
-		return
-
-	# Store and disable the original broadcast camera if not already done
-	if current_mode == SplitscreenMode.NORMAL:
-		_original_camera = get_viewport().get_camera_3d()
-		if _original_camera:
-			_original_camera.current = false
-
-	_set_view_cameras(top_camera, bottom_camera)
-
-	# Setup and activate cameras
-	_update_camera_from_player(top_camera, player0)
-	top_camera.make_current()
-
-	_update_camera_from_player(bottom_camera, player1)
-	bottom_camera.make_current()
-
-	# Hide any other splitscreen containers
-	hbox_container.hide()
-
-	# Show horizontal split UI
-	vbox_container.show()
-
-	# Set up camera following (if not already running)
-	if current_mode == SplitscreenMode.NORMAL:
-		_start_camera_following()
-
-	current_mode = SplitscreenMode.HORIZONTAL_SPLIT
-	splitscreen_toggled.emit(true)
-
-
-## Disable splitscreen mode
-func _disable_splitscreen() -> void:
-	# Stop camera following
-	_stop_camera_following()
-	_set_view_cameras(null, null)
-
-	# Hide all splitscreen UI
-	hbox_container.hide()
-	vbox_container.hide()
-
-	# Re-enable the original broadcast camera
-	if _original_camera:
-		_original_camera.make_current()
-
-	current_mode = SplitscreenMode.NORMAL
-	splitscreen_toggled.emit(false)
-
-
-## Human players steer relative to the camera of their split view (null: the main camera).
-func _set_view_cameras(player0_camera: Camera3D, player1_camera: Camera3D) -> void:
-	_set_view_camera(player0, player0_camera)
-	_set_view_camera(player1, player1_camera)
-
-
-func _set_view_camera(player: Player, camera: Camera3D) -> void:
-	var human_controller := player.controller as HumanController
-	if human_controller:
-		human_controller.view_camera = camera
-
-
-## Place a viewport camera behind and above its player, looking toward the net
-func _update_camera_from_player(viewport_cam: Camera3D, player: Player) -> void:
-	var backward: Vector3 = player.global_basis.z
-	var player_position: Vector3 = player.global_position
-	viewport_cam.global_position = (
-		player_position + backward * FOLLOW_DISTANCE + Vector3.UP * FOLLOW_HEIGHT
-	)
-	viewport_cam.look_at(player_position - backward * FOLLOW_LOOK_AHEAD, Vector3.UP)
-	viewport_cam.fov = FOLLOW_FOV
-
-
-## Start following players with viewport cameras
-func _start_camera_following() -> void:
-	set_process(true)
-
-
-## Stop following players with viewport cameras
-func _stop_camera_following() -> void:
-	set_process(false)
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_pressed() and event.keycode == KEY_X:
+		_set_mode(((_mode + 1) % SplitscreenMode.size()) as SplitscreenMode)
+		get_viewport().set_input_as_handled()
 
 
 func _process(_delta: float) -> void:
-	# Continuously sync viewport cameras with player cameras
-	match current_mode:
-		SplitscreenMode.VERTICAL_SPLIT:
-			_update_camera_from_player(left_camera, player0)
-			_update_camera_from_player(right_camera, player1)
-		SplitscreenMode.HORIZONTAL_SPLIT:
-			_update_camera_from_player(top_camera, player0)
-			_update_camera_from_player(bottom_camera, player1)
-		_:
-			pass
+	var split_cameras: Array = _split_cameras[_mode]
+	_follow(split_cameras[0], player0)
+	_follow(split_cameras[1], player1)
+
+
+func _create_camera(viewport: SubViewport) -> Camera3D:
+	var camera := Camera3D.new()
+	camera.fov = FOLLOW_FOV
+	viewport.add_child(camera)
+	return camera
+
+
+func _set_mode(mode: SplitscreenMode) -> void:
+	_mode = mode
+	for container_mode in _split_containers:
+		_split_containers[container_mode].visible = container_mode == mode
+	var split: bool = mode != SplitscreenMode.NORMAL
+	set_process(split)
+	if split:
+		for camera: Camera3D in _split_cameras[mode]:
+			camera.make_current()
+	else:
+		cameras.active_cam.make_current()
+	# Human players steer relative to the camera of their split view (null: the main camera).
+	_set_view_camera(player0, _split_cameras[mode][0] if split else null)
+	_set_view_camera(player1, _split_cameras[mode][1] if split else null)
+
+
+func _set_view_camera(player: Player, camera: Camera3D) -> void:
+	if player.controller is HumanController:
+		(player.controller as HumanController).view_camera = camera
+
+
+## Places a camera behind and above its player, looking toward the net.
+func _follow(camera: Camera3D, player: Player) -> void:
+	var backward: Vector3 = player.global_basis.z
+	camera.global_position = (
+		player.global_position + backward * FOLLOW_DISTANCE + Vector3.UP * FOLLOW_HEIGHT
+	)
+	camera.look_at(player.global_position - backward * FOLLOW_LOOK_AHEAD, Vector3.UP)

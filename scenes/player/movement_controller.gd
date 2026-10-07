@@ -18,11 +18,11 @@ const ARRIVAL_DECELERATION: float = 8.0
 const LATERAL_SPEED_FACTOR: float = 0.8
 const BACKWARD_SPEED_FACTOR: float = 0.6
 
-var _path: Array[Vector3] = []
+## Current movement target, null while there is none.
+var _target: Variant = null
 var _velocity: Vector3 = Vector3.ZERO
 var _last_direction: Vector3 = Vector3.ZERO
 var _direction_change_time: float = 0.0
-var _friction_value: float = 12.0
 
 
 ## Returns the current computed velocity (used by stamina drain calculations).
@@ -30,57 +30,47 @@ func get_velocity() -> Vector3:
 	return _velocity
 
 
-## Returns the current path as a copy (single entry or empty).
-func get_path() -> Array[Vector3]:
-	if _path.is_empty():
-		return []
-	return [_path[0]]
+## Current movement target, null while there is none.
+func get_target() -> Variant:
+	return _target
 
 
-## Queue movement to the given target, replacing any existing target.
+## Move to the given target, replacing any existing target.
 func request_move_to(target: Vector3) -> void:
-	_path.clear()
-	_path.append(target)
+	_target = target
 
 
-## Cancel all pending movement.
+## Cancel the pending movement.
 func cancel() -> void:
-	_path.clear()
+	_target = null
 
 
 ## Cancel movement and clear residual velocity for precise timing windows.
 func stop() -> void:
-	_path.clear()
+	_target = null
+	_reset_momentum()
+
+
+## Drops the current target once body_position is within sqrt(threshold_sq) of it.
+func check_and_consume_reached(body_position: Vector3, threshold_sq: float) -> void:
+	if _target != null and body_position.distance_squared_to(_target) < threshold_sq:
+		_target = null
+		_reset_momentum()
+
+
+func _reset_momentum() -> void:
 	_velocity = Vector3.ZERO
 	_last_direction = Vector3.ZERO
 	_direction_change_time = 0.0
 
 
-func set_friction(value: float) -> void:
-	_friction_value = maxf(value, 0.0)
-
-
-## Check whether body_position has reached the current target.
-## If so, removes the target and returns true.
-func check_and_consume_reached(body_position: Vector3, threshold_sq: float) -> bool:
-	if _path.is_empty():
-		return false
-	if body_position.distance_squared_to(_path[0]) < threshold_sq:
-		_path.remove_at(0)
-		_velocity = Vector3.ZERO
-		_last_direction = Vector3.ZERO
-		_direction_change_time = 0.0
-		return true
-	return false
-
-
 ## Direction toward the current movement target, its length the share of `max_speed` that
 ## still allows stopping at the target.
 func compute_direction(body_position: Vector3, max_speed: float) -> Vector3:
-	if _path.is_empty():
+	if _target == null:
 		return Vector3.ZERO
 
-	var offset: Vector3 = _path[0] - body_position
+	var offset: Vector3 = _target - body_position
 	offset.y = 0.0
 	var distance: float = offset.length()
 	if distance <= 0.0001:
@@ -101,13 +91,15 @@ func compute_direction(body_position: Vector3, max_speed: float) -> Vector3:
 ## - stamina01: stamina ratio [0, 1]
 ## - move_speed: base max speed running forward (m/s)
 ## - acceleration: base accel rate (m/s²)
+## - friction: deceleration without input (m/s²)
 func tick(
 	direction: Vector3,
 	facing: Vector3,
 	stats: PlayerRuntimeStats,
 	stamina01: float,
 	move_speed: float,
-	acceleration: float
+	acceleration: float,
+	friction: float
 ) -> Vector3:
 	var delta: float = 1.0 / maxf(float(Engine.physics_ticks_per_second), 1.0)
 	var input_strength: float = clampf(direction.length(), 0.0, 1.0)
@@ -129,7 +121,6 @@ func tick(
 	var effective_acceleration: float = (
 		acceleration * stats.acceleration_multiplier(stamina01) * stamina_accel_factor
 	)
-	var effective_friction: float = _friction_value
 
 	# Detect direction change: sharp turns apply extra braking
 	var direction_change_angle: float = 0.0
@@ -167,7 +158,7 @@ func tick(
 			_velocity.z = horizontal_vel.z
 	else:
 		# Decelerate to zero
-		var deceleration_vector: Vector3 = -_velocity.normalized() * effective_friction
+		var deceleration_vector: Vector3 = -_velocity.normalized() * friction
 		var new_velocity: Vector3 = _velocity + deceleration_vector * delta
 
 		# Stop if we've reached near-zero

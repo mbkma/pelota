@@ -1,13 +1,12 @@
+## Phases of a player's part in a point (serve setup, serve, rally, point end) and the events
+## between them.
 class_name MatchLifecycleBus
 extends Node
 
-signal phase_changed(previous_phase: Phase, current_phase: Phase)
-signal serve_requested(player)
-signal serve_started(player, stroke)
-signal serve_completed(player)
-signal rally_started(player)
-signal rally_ended(player)
-signal point_ended(player)
+signal phase_changed(current_phase: Phase)
+signal serve_requested(player: Player)
+signal serve_completed(player: Player)
+signal point_ended(player: Player)
 
 enum Phase {
 	IDLE,
@@ -23,29 +22,24 @@ var _current_phase: Phase = Phase.IDLE
 func set_phase(next_phase: Phase) -> void:
 	if _current_phase == next_phase:
 		return
-
-	var previous_phase: Phase = _current_phase
 	_current_phase = next_phase
-	phase_changed.emit(previous_phase, _current_phase)
+	phase_changed.emit(_current_phase)
 
 
-func begin_serve_setup(player) -> void:
+func begin_serve_setup(player: Player) -> void:
 	set_phase(Phase.SERVE_SETUP)
 	serve_requested.emit(player)
 
 
-func start_serving(player, stroke: Stroke) -> void:
+func start_serving() -> void:
 	set_phase(Phase.SERVING)
-	serve_started.emit(player, stroke)
 
 
-func complete_serve(player) -> void:
+func complete_serve(player: Player) -> void:
 	serve_completed.emit(player)
 	set_phase(Phase.RALLY)
-	rally_started.emit(player)
 
 
-func end_point(player) -> void:
-	rally_ended.emit(player)
+func end_point(player: Player) -> void:
 	set_phase(Phase.POINT_ENDED)
 	point_ended.emit(player)

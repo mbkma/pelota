@@ -18,6 +18,7 @@
 [ext_resource type="AudioStream" uid="uid://wv2dpw77keu7" path="res://assets/sounds/effects/umpire/40-15.ogg" id="16_curdj"]
 [ext_resource type="AudioStream" uid="uid://c2ex7irmrjsw2" path="res://assets/sounds/effects/umpire/40-30.ogg" id="17_rr8j0"]
 [ext_resource type="AudioStream" uid="uid://dw3dk5rijt2ey" path="res://assets/sounds/effects/umpire/40-40.ogg" id="18_h4dv8"]
+[ext_resource type="AudioStream" uid="uid://6bcdjlt0ib2g" path="res://assets/sounds/effects/umpire/15-40.ogg" id="19_fifteen_forty"]
 
 [sub_resource type="BoxShape3D" id="4"]
 size = Vector3(1.20747, 2.9555, 1.21453)
@@ -31,7 +32,7 @@ umpire_sounds = Dictionary[String, AudioStream]({
 "1-0": ExtResource("5_65orh"),
 "1-1": ExtResource("11_hradu"),
 "1-2": ExtResource("12_a1ni2"),
-"1-3": ExtResource("12_a1ni2"),
+"1-3": ExtResource("19_fifteen_forty"),
 "2-0": ExtResource("6_grhre"),
 "2-1": ExtResource("13_5xaq4"),
 "2-2": ExtResource("14_6pv4p"),
@@ -51,8 +52,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49691, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1378992289]
 shape = SubResource("4")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=740636569]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.47242, -2.39926)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer3D" parent="." unique_id=257645386]

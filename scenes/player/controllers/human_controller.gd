@@ -200,7 +200,6 @@ var _held_aim_direction: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-	super()
 	var device_id: int = GlobalGameData.get_match_input_device(player.team_index)
 	assert(
 		device_id != InputDevice.NO_DEVICE_ID,
@@ -239,7 +238,7 @@ func request_serve() -> void:
 	_aiming_at = _serve_aim_target()
 
 
-func on_lifecycle_phase_changed(_previous_phase: int, current_phase: int) -> void:
+func on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 	match current_phase:
 		MatchLifecycleBus.Phase.RALLY:
 			if _mode == Mode.SERVE_SWING:
@@ -265,21 +264,17 @@ func get_stroke() -> Stroke:
 
 
 func get_aim_marker_position() -> Variant:
-	return _aiming_at
+	return null if _mode == Mode.FREE else _aiming_at
 
 
 ## While the ball comes toward the player, where they should stand to meet it.
 func get_ideal_position() -> Variant:
 	if not (_mode == Mode.FREE or _mode == Mode.SHOT) or not _is_ball_incoming():
 		return null
-	var step: TrajectoryStep = get_ideal_contact_step(player)
+	var step: TrajectoryStep = get_ideal_contact_step()
 	if not step:
 		return null
-	return ideal_position_for_step(player, step)
-
-
-func should_show_aim_marker() -> bool:
-	return _mode != Mode.FREE
+	return ideal_position_for_step(step)
 
 
 func get_aim_marker_radius() -> float:
@@ -364,12 +359,12 @@ func _update_shot(delta: float) -> void:
 			_enter_free_mode()
 		return
 
-	var step: TrajectoryStep = get_closest_trajectory_step(player)
+	var step: TrajectoryStep = get_closest_trajectory_step()
 	if not step:
 		return
 
 	_pending_stroke = _build_rally_stroke(step)
-	adjust_player_position_to_stroke(player, step, _pending_stroke)
+	move_to_contact(step, _pending_stroke)
 
 
 ## Timing quality in [0, 1] of releasing the stroke button `seconds_to_contact` before contact.
@@ -478,7 +473,7 @@ func _set_groundstroke(stroke: Stroke, is_forehand: bool, stamina: float) -> voi
 		)
 		var touch_skill: float = player.stats.spin_control01(stroke.stroke_type, stamina)
 		stroke.stroke_power = lerpf(DROP_SHOT_SPEED.x, DROP_SHOT_SPEED.y, touch_skill)
-		stroke.stroke_spin = GameConstants.AI_DROP_SHOT_SPIN
+		stroke.stroke_spin = GameConstants.DROP_SHOT_SPIN
 		return
 
 	if is_forehand:
@@ -486,7 +481,7 @@ func _set_groundstroke(stroke: Stroke, is_forehand: bool, stamina: float) -> voi
 		var fh_skill: float = player.stats.shot_side_skill01(false)
 		stroke.stroke_power = lerpf(FOREHAND_SPEED.x, FOREHAND_SPEED.y, fh_skill)
 		stroke.attack_power = lerpf(FOREHAND_ATTACK.x, FOREHAND_ATTACK.y, fh_skill)
-		stroke.stroke_spin = GameConstants.AI_FOREHAND_SPIN
+		stroke.stroke_spin = GameConstants.FOREHAND_SPIN
 		return
 
 	var bh_skill: float = player.stats.shot_side_skill01(true)
@@ -494,13 +489,13 @@ func _set_groundstroke(stroke: Stroke, is_forehand: bool, stamina: float) -> voi
 		stroke.stroke_type = Stroke.StrokeType.BACKHAND_SLICE
 		stroke.stroke_power = lerpf(SLICE_SPEED.x, SLICE_SPEED.y, bh_skill)
 		stroke.attack_power = SLICE_ATTACK
-		stroke.stroke_spin = GameConstants.AI_BACKHAND_SLICE_SPIN
+		stroke.stroke_spin = GameConstants.BACKHAND_SLICE_SPIN
 		return
 
 	stroke.stroke_type = Stroke.StrokeType.BACKHAND
 	stroke.stroke_power = lerpf(BACKHAND_SPEED.x, BACKHAND_SPEED.y, bh_skill)
 	stroke.attack_power = lerpf(BACKHAND_ATTACK.x, BACKHAND_ATTACK.y, bh_skill)
-	stroke.stroke_spin = GameConstants.AI_BACKHAND_SPIN
+	stroke.stroke_spin = GameConstants.BACKHAND_SPIN
 
 
 ## Serve

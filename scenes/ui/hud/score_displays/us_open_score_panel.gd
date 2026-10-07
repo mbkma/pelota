@@ -13,8 +13,9 @@ extends Control
 @onready var _serve_indicator: Control = $MarginContainer/HBoxContainer11/ServeIndicator
 
 
-## Update score display for given player index
+## Shows the score of `player_index` and whether the player serves.
 func set_score(score: Score, player_index: int) -> void:
+	_serve_indicator.visible = score.current_server == player_index
 	if score.is_tiebreak:
 		_points_label.text = str(score.tiebreak_points[player_index])
 	else:
@@ -50,10 +51,5 @@ func _point_text(point: int) -> String:
 ## Update player information display (name, rank, country)
 func set_player(player_data: PlayerData) -> void:
 	$MarginContainer/HBoxContainer11/Ranking.text = str(player_data.rank)
-	$MarginContainer/HBoxContainer11/Name.text = str(player_data.last_name)
-	$MarginContainer/HBoxContainer11/Country.text = str(player_data.country)
-
-
-## Show or hide serve indicator
-func set_serve(is_serving: bool) -> void:
-	_serve_indicator.visible = is_serving
+	$MarginContainer/HBoxContainer11/Name.text = player_data.last_name
+	$MarginContainer/HBoxContainer11/Country.text = player_data.country

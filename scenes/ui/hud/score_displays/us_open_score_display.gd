@@ -1,16 +1,16 @@
+## Score board with one row per player.
 class_name ScoreDisplay
 extends Control
 
-@onready var player_1_score_panel: PlayerScorePanel = $VBoxContainer/Player1ScorePanel
-@onready var player_2_score_panel: PlayerScorePanel = $VBoxContainer/Player2ScorePanel
-@onready var _player_score_panels := [player_1_score_panel, player_2_score_panel]
-
-func _set_score(score: Score):
-	player_1_score_panel.set_score(score, 0)
-	player_2_score_panel.set_score(score, 1)
-	player_1_score_panel.set_serve(score.current_server == 0)
-	player_2_score_panel.set_serve(score.current_server == 1)
+@onready var _player_score_panels: Array[PlayerScorePanel] = [
+	$VBoxContainer/Player1ScorePanel, $VBoxContainer/Player2ScorePanel
+]
 
 
-func set_player(player_data: PlayerData, index: int):
-	_player_score_panels[index].set_player(player_data)
+func set_score(score: Score) -> void:
+	for i in _player_score_panels.size():
+		_player_score_panels[i].set_score(score, i)
+
+
+func set_player(player_index: int, player_data: PlayerData) -> void:
+	_player_score_panels[player_index].set_player(player_data)

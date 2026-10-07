@@ -1,50 +1,22 @@
+## Global game data: the available players and the selection for the next match.
 extends Node
 
 const CHARACTER_DATA_DIR := "res://scenes/player/resources/data/"
 
+## Players of the next match; null until picked in the player select menu
 var selected_match_player: PlayerData
 var selected_match_opponent: PlayerData
 ## Input device id per team; InputDevice.NO_DEVICE_ID means the team is AI controlled.
 var _match_input_devices: Array[int] = [InputDevice.NO_DEVICE_ID, InputDevice.NO_DEVICE_ID]
+## All players, best ranked first
 var _players: Array[PlayerData] = []
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	randomize()
-	load_players()
 
-
-class MyCustomSorter:
-	static func sort_ascending_by_rank(a, b):
-		if a.rank < b.rank:
-			return true
-		return false
-
-
-func load_players() -> void:
-	_players.clear()
-
-	var directory := DirAccess.open(CHARACTER_DATA_DIR)
-	if directory == null:
-		push_warning("GlobalGameData: Unable to open player directory at %s" % CHARACTER_DATA_DIR)
-		return
-
-	var resource_paths: Array[String] = []
-	directory.list_dir_begin()
-	var file_name := directory.get_next()
-	while file_name != "":
-		if not directory.current_is_dir() and file_name.get_extension().to_lower() == "tres":
-			resource_paths.append("%s/%s" % [CHARACTER_DATA_DIR, file_name])
-		file_name = directory.get_next()
-	directory.list_dir_end()
-
-	resource_paths.sort()
-	for resource_path in resource_paths:
-		var loaded_resource := load(resource_path)
-		if loaded_resource is PlayerData:
-			_players.append(loaded_resource as PlayerData)
-
-	_players.sort_custom(Callable(MyCustomSorter, "sort_ascending_by_rank"))
+func _ready() -> void:
+	for file_name in ResourceLoader.list_directory(CHARACTER_DATA_DIR):
+		if file_name.get_extension() == "tres":
+			_players.append(load(CHARACTER_DATA_DIR.path_join(file_name)))
+	_players.sort_custom(func(a: PlayerData, b: PlayerData) -> bool: return a.rank < b.rank)
 
 
 func get_players() -> Array[PlayerData]:
@@ -70,9 +42,3 @@ func is_human_controlled(team_index: int) -> bool:
 
 func has_match_players() -> bool:
 	return selected_match_player != null and selected_match_opponent != null
-
-
-func get_match_players() -> Array[PlayerData]:
-	if not has_match_players():
-		return []
-	return [selected_match_player, selected_match_opponent]

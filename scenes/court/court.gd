@@ -1,8 +1,7 @@
-## Tennis court geometry and collision zone detection
+## Tennis court regions (service boxes and singles halves) built from the court markers.
 class_name Court
 extends Node3D
 
-## Enumeration of distinct court regions for collision detection
 enum CourtRegion {
 	LEFT_FRONT_SERVICE_BOX,
 	RIGHT_FRONT_SERVICE_BOX,
@@ -12,86 +11,33 @@ enum CourtRegion {
 	FRONT_SINGLES_BOX,
 }
 
-## Dictionary of court regions mapped to 2D rectangles for collision detection
+## Court regions as rectangles on the ground (x, z)
 var _court_regions: Dictionary[CourtRegion, Rect2] = {}
-
-## Court boundary and region markers
-@onready var _back_sideline: Marker3D = $back_sideline
-@onready var _back_left_service_box: Marker3D = $back_left_service_box
-@onready var _back_right_service_box: Marker3D = $back_right_service_box
-@onready var _front_left_service_box: Marker3D = $front_left_service_box
-@onready var _front_right_service_box: Marker3D = $front_right_service_box
-@onready var _front_sideline: Marker3D = $front_sideline
-
-## Total field length (net to baseline, both sides)
-@onready var _field_length: float = 2 * abs(_front_sideline.position.z)
-
-## Total field width (sideline to sideline)
-@onready var _field_width: float = 2 * abs(_front_left_service_box.position.x)
-
-## Service box length (from service line to baseline)
-@onready var _service_box_length: float = abs(_back_left_service_box.position.z)
-
-## Service box width (from center to sideline)
-@onready var _service_box_width: float = abs(_back_left_service_box.position.x)
 
 
 func _ready() -> void:
+	var front_left_box: Vector3 = $front_left_service_box.position
+	var front_right_box: Vector3 = $front_right_service_box.position
+	var back_left_box: Vector3 = $back_left_service_box.position
+	var back_right_box: Vector3 = $back_right_service_box.position
+	var half_length: float = absf($front_sideline.position.z)
+	var field_width: float = 2.0 * absf(front_left_box.x)
+	var box_size := Vector2(absf(back_left_box.x), absf(back_left_box.z))
+
 	_court_regions = {
-		CourtRegion.LEFT_FRONT_SERVICE_BOX:
-		Rect2(
-			_front_left_service_box.position.x,
-			_front_left_service_box.position.z,
-			_service_box_width,
-			_service_box_length
-		),  # Left service box near the net
-		CourtRegion.RIGHT_FRONT_SERVICE_BOX:
-		Rect2(
-			_front_right_service_box.position.x,
-			_front_right_service_box.position.z,
-			_service_box_width,
-			_service_box_length
-		),  # Right service box near the net
-		CourtRegion.LEFT_BACK_SERVICE_BOX:
-		Rect2(
-			_back_left_service_box.position.x,
-			_back_left_service_box.position.z,
-			_service_box_width,
-			_service_box_length
-		),  # Left service box near the baseline
-		CourtRegion.RIGHT_BACK_SERVICE_BOX:
-		Rect2(
-			_back_right_service_box.position.x,
-			_back_right_service_box.position.z,
-			_service_box_width,
-			_service_box_length
-		),  # Right service box near the baseline
+		CourtRegion.LEFT_FRONT_SERVICE_BOX: Rect2(_ground(front_left_box), box_size),
+		CourtRegion.RIGHT_FRONT_SERVICE_BOX: Rect2(_ground(front_right_box), box_size),
+		CourtRegion.LEFT_BACK_SERVICE_BOX: Rect2(_ground(back_left_box), box_size),
+		CourtRegion.RIGHT_BACK_SERVICE_BOX: Rect2(_ground(back_right_box), box_size),
 		CourtRegion.BACK_SINGLES_BOX:
-		Rect2(
-			-_field_width / 2.0,
-			_back_sideline.position.z,
-			_field_width,
-			_field_length / 2.0
-		),  # Back singles area (entire back half of the court)
-		CourtRegion.FRONT_SINGLES_BOX:
-		Rect2(
-			-_field_width / 2.0,
-			0,
-			_field_width,
-			_field_length / 2.0
-		),  # Front singles area (entire front half of the court)
+		Rect2(-field_width / 2.0, $back_sideline.position.z, field_width, half_length),
+		CourtRegion.FRONT_SINGLES_BOX: Rect2(-field_width / 2.0, 0.0, field_width, half_length),
 	}
 
 
-## Check if ball position is within specified court region
-func is_ball_in_court_region(ball_position: Vector3, court_region_enum: CourtRegion) -> bool:
-	if court_region_enum not in _court_regions:
-		push_error("Invalid court region: ", court_region_enum)
-		return false
+func is_ball_in_court_region(ball_position: Vector3, court_region: CourtRegion) -> bool:
+	return _court_regions[court_region].has_point(_ground(ball_position))
 
-	var region: Rect2 = _court_regions[court_region_enum]
 
-	# Convert the ball's 3D position to 2D (we only care about X and Z axes)
-	var ball_position_2d: Vector2 = Vector2(ball_position.x, ball_position.z)
-
-	return region.has_point(ball_position_2d)
+func _ground(point: Vector3) -> Vector2:
+	return Vector2(point.x, point.z)

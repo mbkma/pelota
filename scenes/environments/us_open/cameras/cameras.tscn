@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://bhlvub0gn61wg" path="res://scenes/environments/us_open/cameras/cameras.gd" id="1_ibrh3"]
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scenes/environments/us_open/cameras/free_look_camera.gd" id="2_rx4uh"]
-[ext_resource type="Script" uid="uid://dqtx4wyjr5o1v" path="res://scenes/environments/us_open/adaptive_broadcast_camera.gd" id="3_gvk2c"]
 
 [node name="Cameras" type="Node3D" unique_id=1668762139 node_paths=PackedStringArray("cams")]
 script = ExtResource("1_ibrh3")
@@ -18,13 +17,11 @@ script = ExtResource("2_rx4uh")
 transform = Transform3D(1, 0, 0, 0, 0.948324, 0.317305, 0, -0.317305, 0.948324, 0, 9.836, 35.084)
 fov = 29.9
 size = 97.38
-script = ExtResource("3_gvk2c")
 
 [node name="TopBack" type="Camera3D" parent="." unique_id=600431920]
 transform = Transform3D(-1, 2.773968e-08, -8.29051e-08, 0, 0.9483236, 0.31730488, 8.74228e-08, 0.31730488, -0.9483236, 0, 8.982306, -31.835499)
 fov = 29.9
 size = 97.38
-script = ExtResource("3_gvk2c")
 
 [node name="MiddleFront" type="Camera3D" parent="." unique_id=2002676584]
 transform = Transform3D(1, 0, 0, 0, 0.963631, 0.267239, 0, -0.267239, 0.963631, 0, 6.936, 28.829)

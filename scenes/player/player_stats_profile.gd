@@ -1,5 +1,19 @@
+## Skill ratings (1-100) of a player and how they translate into gameplay values in [0, 1].
 class_name PlayerStatsProfile
 extends Resource
+
+## Strokes played with backspin (slice skill) and touch strokes (slice and topspin skill)
+const BACKSPIN_STROKES: Array[Stroke.StrokeType] = [
+	Stroke.StrokeType.BACKHAND_SLICE,
+	Stroke.StrokeType.FOREHAND_VOLLEY,
+	Stroke.StrokeType.BACKHAND_VOLLEY,
+]
+const TOUCH_STROKES: Array[Stroke.StrokeType] = [
+	Stroke.StrokeType.FOREHAND_DROP_SHOT,
+	Stroke.StrokeType.BACKHAND_DROP_SHOT,
+	Stroke.StrokeType.FOREHAND_DROP_VOLLEY,
+	Stroke.StrokeType.BACKHAND_DROP_VOLLEY,
+]
 
 # Core physical (0-100)
 @export_range(1.0, 100.0, 1.0) var acceleration: float = 70.0
@@ -27,16 +41,8 @@ extends Resource
 @export_range(1.0, 100.0, 1.0) var focus: float = 70.0
 @export_range(1.0, 100.0, 1.0) var clutch: float = 70.0
 
-# Tactical / style (0-100)
-@export_range(1.0, 100.0, 1.0) var aggression: float = 68.0
+# Tactical (0-100)
 @export_range(1.0, 100.0, 1.0) var net_play: float = 60.0
-@export_range(1.0, 100.0, 1.0) var defensive_skill: float = 70.0
-@export_range(1.0, 100.0, 1.0) var shot_anticipation: float = 70.0
-
-# Surface affinity (0-100)
-@export_range(1.0, 100.0, 1.0) var clay_skill: float = 70.0
-@export_range(1.0, 100.0, 1.0) var grass_skill: float = 70.0
-@export_range(1.0, 100.0, 1.0) var hard_court_skill: float = 70.0
 
 
 func value01(value: float) -> float:
@@ -93,18 +99,14 @@ func shot_control01(stamina01: float) -> float:
 	return clampf(base_control * fatigue_penalty, 0.0, 1.0)
 
 
-func spin_control01(stroke_type: int, stamina01: float) -> float:
+func spin_control01(stroke_type: Stroke.StrokeType, stamina01: float) -> float:
 	var topspin_weight: float = value01(topspin_skill)
 	var slice_weight: float = value01(slice_skill)
 	var stroke_spin_skill: float = topspin_weight
-	match stroke_type:
-		Stroke.StrokeType.BACKHAND_SLICE, Stroke.StrokeType.FOREHAND_VOLLEY, \
-		Stroke.StrokeType.BACKHAND_VOLLEY:
-			# Slices and volleys are played with backspin.
-			stroke_spin_skill = slice_weight
-		Stroke.StrokeType.FOREHAND_DROP_SHOT, Stroke.StrokeType.BACKHAND_DROP_SHOT, \
-		Stroke.StrokeType.FOREHAND_DROP_VOLLEY, Stroke.StrokeType.BACKHAND_DROP_VOLLEY:
-			stroke_spin_skill = (slice_weight + topspin_weight) * 0.5
+	if stroke_type in BACKSPIN_STROKES:
+		stroke_spin_skill = slice_weight
+	elif stroke_type in TOUCH_STROKES:
+		stroke_spin_skill = (slice_weight + topspin_weight) * 0.5
 
 	var fatigue_penalty: float = lerpf(0.75, 1.0, stamina01)
 	return clampf(stroke_spin_skill * fatigue_penalty, 0.0, 1.0)
@@ -138,21 +140,5 @@ func serve_accuracy01(stamina01: float) -> float:
 	return clampf(composure_mix * fatigue_penalty, 0.0, 1.0)
 
 
-func tactical_aggression01() -> float:
-	return clampf(value01(aggression), 0.0, 1.0)
-
-
-func tactical_net_play01() -> float:
-	return clampf(value01(net_play), 0.0, 1.0)
-
-
-func tactical_defense01() -> float:
-	return clampf(value01(defensive_skill), 0.0, 1.0)
-
-
-func anticipation01() -> float:
-	return clampf(value01(shot_anticipation), 0.0, 1.0)
-
-
-func pressure_resistance01() -> float:
-	return clampf((value01(composure) * 0.6) + (value01(clutch) * 0.4), 0.0, 1.0)
+func net_play01() -> float:
+	return value01(net_play)

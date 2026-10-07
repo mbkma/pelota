@@ -25,13 +25,7 @@ timing = 86.0
 composure = 80.0
 focus = 86.0
 clutch = 84.0
-aggression = 88.0
 net_play = 80.0
-defensive_skill = 84.0
-shot_anticipation = 86.0
-clay_skill = 88.0
-grass_skill = 82.0
-hard_court_skill = 86.0
 
 [resource]
 script = ExtResource("2_4xwx5")
