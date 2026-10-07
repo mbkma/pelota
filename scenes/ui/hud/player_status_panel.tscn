@@ -1,17 +1,17 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://daep44axg5840"]
 
-[ext_resource type="Script" path="res://scenes/ui/hud/player_status_panel.gd" id="1_status"]
+[ext_resource type="Script" uid="uid://epct746dwh3x" path="res://scenes/ui/hud/player_status_panel.gd" id="1_status"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
 bg_color = Color(0, 0, 0, 0.55)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-content_margin_left = 10.0
-content_margin_top = 8.0
-content_margin_right = 10.0
-content_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_background"]
 bg_color = Color(1, 1, 1, 0.15)

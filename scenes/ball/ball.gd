@@ -88,6 +88,8 @@ var initial_position: Vector3
 
 # x: sidespin, y: topspin/backspin - 1.0 heavy top spin, -1.0 heavy underspin
 var spin: Vector3 = Vector3.ZERO
+## Ground contacts since the last stroke; predicted trajectory steps count on from it.
+var bounces_since_stroke: int = 0
 var _rolling: bool = false
 
 
@@ -116,6 +118,7 @@ func _physics_process(delta: float) -> void:
 
 	match event:
 		StepEvent.BOUNCED, StepEvent.ROLLING_STARTED:
+			bounces_since_stroke += 1
 			on_ground.emit()
 		StepEvent.HIT_NET:
 			on_net.emit()
@@ -128,6 +131,7 @@ func apply_stroke(stroke_velocity: Vector3, spin_amount: Vector3) -> void:
 	spin = spin_amount.clamp(-Vector3.ONE, Vector3.ONE)
 	velocity = stroke_velocity
 	_rolling = false
+	bounces_since_stroke = 0
 
 
 ## Height of the net cord at `x`, or -INF outside the net posts.
@@ -360,6 +364,7 @@ func _solve_velocity(
 
 
 ## Predicts the ball's trajectory with the same simulation the ball runs (walls excluded).
+## Step bounces count since the last stroke (since launch for a given velocity).
 ## Options: position, velocity, spin (default: the ball's), store_result (default true: keep
 ## it in `trajectory`), with_net (default true), stop_at_first_bounce (default false).
 func predict_trajectory(
@@ -378,7 +383,7 @@ func predict_trajectory(
 
 	var predicted_trajectory: Array[TrajectoryStep] = []
 	var elapsed_time: float = 0.0
-	var bounces: int = 0
+	var bounces: int = 0 if options.has("velocity") else bounces_since_stroke
 	for _step_index in range(steps):
 		var event: StepEvent = _simulate_step(state, time_step, with_net)
 		elapsed_time += time_step

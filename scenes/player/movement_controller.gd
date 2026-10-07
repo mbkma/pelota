@@ -1,15 +1,22 @@
-## Realistic movement controller with ATP-based physics.
+## Realistic movement controller based on tennis sprint data.
 ## Handles acceleration, deceleration, and direction changes with stamina scaling.
 ##
-## Movement Parameters (ATP-based):
-## - move_speed: max sustained speed (m/s), realistic: 6.0 = ~21.6 km/h
-## - acceleration: rate of speed gain (m/s²), realistic: 15.0 m/s²
-## - friction: deceleration rate (m/s²), realistic: 12.0 m/s²
+## Movement Parameters (base values, scaled by the player's stats):
+## - move_speed: top speed running forward (m/s), ~5.5-6.5 m/s for pros over a few meters
+## - acceleration: rate of speed gain (m/s²), ~11-14 m/s² (5 m sprint in ~1.0 s)
+## - friction: deceleration rate without input (m/s²)
+## Players run fastest toward the net, slower sideways (side steps / crossovers) and slowest
+## backpedalling.
 class_name MovementController
 extends RefCounted
 
 const DIRECTION_CHANGE_PENALTY_DURATION: float = 0.15  # seconds to apply penalty
-const ARRIVAL_SLOWDOWN_RADIUS: float = 2.2
+## Braking (m/s²) the arrival at a movement target is planned with: the player runs as fast as
+## it can still stop at the target, so it neither crawls the last meter nor overshoots.
+const ARRIVAL_DECELERATION: float = 8.0
+## Share of the top speed reached moving sideways and backward (forward is 1.0).
+const LATERAL_SPEED_FACTOR: float = 0.8
+const BACKWARD_SPEED_FACTOR: float = 0.6
 
 var _path: Array[Vector3] = []
 var _velocity: Vector3 = Vector3.ZERO
@@ -67,8 +74,9 @@ func check_and_consume_reached(body_position: Vector3, threshold_sq: float) -> b
 	return false
 
 
-## Compute the normalized direction toward the current movement target.
-func compute_direction(body_position: Vector3) -> Vector3:
+## Direction toward the current movement target, its length the share of `max_speed` that
+## still allows stopping at the target.
+func compute_direction(body_position: Vector3, max_speed: float) -> Vector3:
 	if _path.is_empty():
 		return Vector3.ZERO
 
@@ -78,8 +86,8 @@ func compute_direction(body_position: Vector3) -> Vector3:
 	if distance <= 0.0001:
 		return Vector3.ZERO
 
-	# Arrival behavior: reduce desired input as we approach target to avoid overshoot.
-	var input_strength: float = clampf(distance / ARRIVAL_SLOWDOWN_RADIUS, 0.0, 1.0)
+	var stopping_speed: float = sqrt(2.0 * ARRIVAL_DECELERATION * distance)
+	var input_strength: float = clampf(stopping_speed / maxf(max_speed, 0.001), 0.0, 1.0)
 	return offset.normalized() * input_strength
 
 
@@ -88,13 +96,14 @@ func compute_direction(body_position: Vector3) -> Vector3:
 ##
 ## Parameters:
 ## - direction: input direction (will be normalized)
+## - facing: horizontal direction the player faces (toward the net)
 ## - stats: player stats for stamina scaling
 ## - stamina01: stamina ratio [0, 1]
-## - move_speed: base max speed (m/s)
+## - move_speed: base max speed running forward (m/s)
 ## - acceleration: base accel rate (m/s²)
-## - friction: base decel rate (m/s²)
 func tick(
 	direction: Vector3,
+	facing: Vector3,
 	stats: PlayerRuntimeStats,
 	stamina01: float,
 	move_speed: float,
@@ -112,7 +121,10 @@ func tick(
 
 	# Apply stats multipliers
 	var effective_max_speed: float = (
-		move_speed * stats.movement_speed_multiplier(stamina01) * stamina_speed_factor
+		move_speed
+		* stats.movement_speed_multiplier(stamina01)
+		* stamina_speed_factor
+		* _direction_speed_factor(move_direction, facing)
 	)
 	var effective_acceleration: float = (
 		acceleration * stats.acceleration_multiplier(stamina01) * stamina_accel_factor
@@ -166,3 +178,13 @@ func tick(
 
 	_last_direction = move_direction
 	return _velocity
+
+
+## Share of the forward top speed reachable moving in `move_direction`: full toward the net,
+## LATERAL_SPEED_FACTOR sideways, BACKWARD_SPEED_FACTOR away from the net, blended in between.
+func _direction_speed_factor(move_direction: Vector3, facing: Vector3) -> float:
+	if move_direction.length_squared() < 0.0001:
+		return 1.0
+	var alignment: float = move_direction.dot(facing)
+	var straight_factor: float = 1.0 if alignment >= 0.0 else BACKWARD_SPEED_FACTOR
+	return lerpf(LATERAL_SPEED_FACTOR, straight_factor, alignment * alignment)

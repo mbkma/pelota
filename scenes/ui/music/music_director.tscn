@@ -1,11 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://daeh1yeyax474"]
 
-[ext_resource type="Script" path="res://scenes/ui/music/music_director.gd" id="1_director"]
-[ext_resource type="Resource" path="res://assets/sounds/music/playlist.tres" id="2_playlist"]
-[ext_resource type="Script" path="res://scenes/ui/music/now_playing_banner.gd" id="3_banner"]
-[ext_resource type="FontFile" path="res://assets/fonts/Outfit-Regular.otf" id="4_font"]
+[ext_resource type="Script" uid="uid://dut8n5t52dm7l" path="res://scenes/ui/music/music_director.gd" id="1_director"]
+[ext_resource type="Resource" uid="uid://xk4bhxhvo68n" path="res://assets/sounds/music/playlist.tres" id="2_playlist"]
+[ext_resource type="Script" uid="uid://d28ts2p0hjye8" path="res://scenes/ui/music/now_playing_banner.gd" id="3_banner"]
+[ext_resource type="FontFile" uid="uid://bkyrq2b8hve32" path="res://assets/fonts/Outfit-Regular.otf" id="4_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banner"]
+content_margin_left = 16.0
+content_margin_top = 14.0
+content_margin_right = 22.0
+content_margin_bottom = 14.0
 bg_color = Color(0.05, 0.08, 0.16, 0.92)
 border_width_left = 6
 border_color = Color(0.83, 0.93, 0.16, 1)
@@ -16,10 +20,6 @@ corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.45)
 shadow_size = 14
 shadow_offset = Vector2(0, 4)
-content_margin_left = 16.0
-content_margin_top = 14.0
-content_margin_right = 22.0
-content_margin_bottom = 14.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cover"]
 bg_color = Color(1, 1, 1, 0.08)
@@ -33,14 +33,14 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[sub_resource type="FontVariation" id="FontVariation_bold"]
-base_font = ExtResource("4_font")
-variation_embolden = 0.7
-
 [sub_resource type="FontVariation" id="FontVariation_caps"]
 base_font = ExtResource("4_font")
 variation_embolden = 0.5
 spacing_glyph = 3
+
+[sub_resource type="FontVariation" id="FontVariation_bold"]
+base_font = ExtResource("4_font")
+variation_embolden = 0.7
 
 [node name="MusicDirector" type="CanvasLayer" unique_id=1630458105]
 layer = 50
@@ -95,21 +95,18 @@ theme_override_constants/separation = 3
 custom_minimum_size = Vector2(4, 14)
 layout_mode = 2
 mouse_filter = 2
-pivot_offset = Vector2(2, 14)
 color = Color(0.83, 0.93, 0.16, 1)
 
 [node name="Bar2" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1729616352]
 custom_minimum_size = Vector2(4, 14)
 layout_mode = 2
 mouse_filter = 2
-pivot_offset = Vector2(2, 14)
 color = Color(0.83, 0.93, 0.16, 1)
 
 [node name="Bar3" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1435183206]
 custom_minimum_size = Vector2(4, 14)
 layout_mode = 2
 mouse_filter = 2
-pivot_offset = Vector2(2, 14)
 color = Color(0.83, 0.93, 0.16, 1)
 
 [node name="NowPlayingLabel" type="Label" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow" unique_id=1376226316]

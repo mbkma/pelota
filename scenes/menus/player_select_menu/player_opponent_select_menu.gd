@@ -3,7 +3,8 @@ extends Control
 ## Moving a device left or right (stick, d-pad, WASD or arrow keys) gives it control of that
 ## player; a player without a device is AI controlled. A device on a side picks that side's
 ## character with up and down and confirms with its accept button (A / Enter). The start
-## button gets the focus once every human player has confirmed.
+## button gets the focus once every human player has confirmed. Cancel (B / Esc) on a confirmed
+## device takes the confirmation back; otherwise it leaves the menu.
 
 signal selection_confirmed
 
@@ -54,6 +55,9 @@ class DeviceEntry:
 var _players: Array[PlayerData] = []
 var _chart: Chart
 var _entries: Array[DeviceEntry] = []
+## Devices whose cancel press took back a confirmation; their cancel release is swallowed so
+## it does not also leave the menu.
+var _cancel_consumed_device_ids: Array[int] = []
 
 @onready var player_option_button: OptionButton = %PlayerOptionButton
 @onready var opponent_option_button: OptionButton = %OpponentOptionButton
@@ -84,10 +88,38 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event.is_action("ui_cancel") and _handle_cancel(event):
+		get_viewport().set_input_as_handled()
+		return
 	# Until everybody confirmed nothing has the focus; keep accept presses from reaching other
 	# menus.
 	if event.is_action("ui_accept") and get_viewport().gui_get_focus_owner() == null:
 		get_viewport().set_input_as_handled()
+
+
+## Takes back the confirmation of the device that pressed cancel. Returns whether the event
+## was used, i.e. it must not leave the menu.
+func _handle_cancel(event: InputEvent) -> bool:
+	var device_id: int = _event_device_id(event)
+	if event.is_released():
+		if not _cancel_consumed_device_ids.has(device_id):
+			return false
+		_cancel_consumed_device_ids.erase(device_id)
+		return true
+	for entry in _entries:
+		if entry.device.get_device_id() == device_id and entry.confirmed:
+			entry.confirmed = false
+			_refresh_ready_state(entry)
+			_refresh_control_labels()
+			_cancel_consumed_device_ids.append(device_id)
+			return true
+	return false
+
+
+func _event_device_id(event: InputEvent) -> int:
+	if event is InputEventKey:
+		return KeyboardInput.DEVICE_ID
+	return event.device
 
 
 func _process(_delta: float) -> void:

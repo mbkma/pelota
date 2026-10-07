@@ -10,6 +10,8 @@ enum CheckType { LEFT_RIGHT, FRONT_BEHIND }
 ## Contact height range (m) of a comfortable groundstroke, used for the ideal position
 const IDEAL_CONTACT_HEIGHT_MIN: float = 0.7
 const IDEAL_CONTACT_HEIGHT_MAX: float = 1.4
+## Lowest ball height (m) a stroke can still reach
+const MIN_CONTACT_HEIGHT: float = 0.2
 
 ## Threshold angle (in radians) for considering object "flying towards" (30 degrees)
 const FLYING_TOWARDS_ANGLE_THRESHOLD: float = PI / 6.0
@@ -244,7 +246,9 @@ func get_closest_apex_after_first_bounce(target_player: Player) -> TrajectorySte
 	return closest_step
 
 
-## Get closest trajectory step to player by Z distance
+## Playable trajectory step (before the second bounce, high enough to reach) closest to the
+## player by Z distance. A ball dying short of the player (e.g. a drop shot) is met at the last
+## step it can still be played.
 func get_closest_trajectory_step(target_player: Player) -> TrajectoryStep:
 	if not target_player or not target_player.ball:
 		return null
@@ -258,7 +262,11 @@ func get_closest_trajectory_step(target_player: Player) -> TrajectoryStep:
 
 	# Iterate through the ball trajectory to find the closest point in Z
 	for step in trajectory:
+		if step.bounces > 1:
+			break
 		var ball_position: Vector3 = step.point
+		if ball_position.y < MIN_CONTACT_HEIGHT:
+			continue
 		# Calculate the Z distance
 		var z_distance: float = abs(ball_position.z - target_player.position.z)
 		if z_distance < closest_z_distance:

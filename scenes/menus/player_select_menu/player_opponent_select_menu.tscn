@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://dq6e6bfnkdf32" path="res://addons/at-icons/control/keyboard.svg" id="3_kbicn"]
 [ext_resource type="Texture2D" uid="uid://bhbxyb5vmh40a" path="res://addons/at-icons/control/joypad.svg" id="4_jpicn"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_logo.tscn" id="5_logo"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/ready_badge.svg" id="7_ready"]
-[ext_resource type="Texture2D" path="res://assets/models/stadium/textures/us_open_logo-alpha.png" id="6_usopen"]
+[ext_resource type="Texture2D" uid="uid://dntjbx6djkg0e" path="res://assets/models/stadium/textures/us_open_logo-alpha.png" id="6_usopen"]
+[ext_resource type="Texture2D" uid="uid://deesrrft052ce" path="res://assets/textures/ui/ready_badge.svg" id="7_ready"]
 
 [node name="PlayerOpponentSelectMenu" type="Control" unique_id=312600420]
 layout_mode = 3

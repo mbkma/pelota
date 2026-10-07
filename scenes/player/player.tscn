@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
-[ext_resource type="Resource" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
+[ext_resource type="Resource" uid="uid://cibbhkfv1ny2q" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://chwkc1ds7iedv" path="res://scenes/player/controllers/ai_controller.tscn" id="2_yllr7"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
 [ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
@@ -50,7 +50,6 @@ visible = false
 pixel_size = 0.004
 billboard = 1
 no_depth_test = true
-fixed_size = false
 render_priority = 10
 outline_render_priority = 9
 modulate = Color(1, 0.84, 0.2, 1)
@@ -65,25 +64,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.34675705)
 [node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
 
 [node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 340929914) index="0" unique_id=287735910]
-bones/1/rotation = Quaternion(-0.0008505026, 0, 0, 0.9999997)
-bones/3/rotation = Quaternion(-0.0056524496, 0, 0, 0.999984)
-bones/4/rotation = Quaternion(-0.0045398506, 0, 0, 0.99998975)
-bones/5/rotation = Quaternion(0.013029374, 0, 0, 0.9999151)
-bones/6/rotation = Quaternion(-0.0019259293, 0, 0, 0.9999982)
-bones/105/rotation = Quaternion(0.5027839, 0.5028671, 0.49712837, -0.4971887)
-bones/106/position = Vector3(-0.008593366, 0.18021636, -0.031681728)
-bones/106/rotation = Quaternion(-0.48850963, -0.054363314, -0.15250254, 0.8574066)
-bones/107/rotation = Quaternion(0.209558, 0.9298811, -0.18456014, 0.23946667)
-bones/108/rotation = Quaternion(-0.00030897156, 0.09418306, 0.10789763, 0.98969066)
-bones/109/rotation = Quaternion(0.10990434, -0.72223496, 0.203888, 0.6517112)
-bones/110/rotation = Quaternion(-0.16946852, -0.17760329, -0.2522097, 0.9360171)
-bones/111/rotation = Quaternion(0.112056546, 0.5530166, -0.300381, 0.76901716)
-bones/131/rotation = Quaternion(0.502784, -0.502867, -0.49712837, -0.49718863)
-bones/132/position = Vector3(0.008593389, 0.18021718, -0.031682026)
-bones/132/rotation = Quaternion(-0.5090925, 0.010336036, 0.0827859, 0.85665894)
-bones/133/rotation = Quaternion(-0.10307121, 0.96215427, -0.22330514, -0.11734705)
-bones/134/rotation = Quaternion(-0.00051820185, -0.15799725, -0.18100384, 0.97070813)
-bones/135/rotation = Quaternion(0.06180107, 0.69059426, -0.3355204, 0.6377196)
+bones/1/rotation = Quaternion(-0.0004905142, 0, 0, 0.9999999)
+bones/3/rotation = Quaternion(-0.0024782056, 0, 0, 0.999997)
+bones/4/rotation = Quaternion(-0.0019880857, 0, 0, 0.9999981)
+bones/5/rotation = Quaternion(0.0056920047, 0, 0, 0.9999838)
+bones/6/rotation = Quaternion(-0.0009085278, 0, 0, 0.99999964)
+bones/105/rotation = Quaternion(0.5012057, 0.50124335, 0.4987589, -0.4987861)
+bones/106/position = Vector3(-0.008429566, 0.17678122, -0.031078072)
+bones/106/rotation = Quaternion(-0.48831648, -0.056072645, -0.15439864, 0.8570671)
+bones/107/rotation = Quaternion(0.21273331, 0.9282801, -0.18422912, 0.24310562)
+bones/108/rotation = Quaternion(-0.00029382392, 0.08958987, 0.10263543, 0.9906764)
+bones/109/rotation = Quaternion(0.09206011, -0.72381395, 0.19864377, 0.65433854)
+bones/110/rotation = Quaternion(-0.17066696, -0.17885885, -0.25399333, 0.93507737)
+bones/111/rotation = Quaternion(0.15482713, 0.56594986, -0.306384, 0.749572)
+bones/131/rotation = Quaternion(0.5012057, -0.50124335, -0.4987589, -0.4987861)
+bones/132/position = Vector3(0.008429595, 0.17678197, -0.031077966)
+bones/132/rotation = Quaternion(-0.50827146, 0.010322674, 0.08225913, 0.8571973)
+bones/133/rotation = Quaternion(-0.10248408, 0.9627701, -0.22126082, -0.116681084)
+bones/134/rotation = Quaternion(-0.0005141345, -0.15676466, -0.17959201, 0.97117007)
+bones/135/rotation = Quaternion(0.06424873, 0.69579357, -0.3404871, 0.6291359)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 

@@ -17,7 +17,11 @@ enum StrokeType {
 
 # Variables for stroke properties
 var stroke_type: StrokeType
+## Forward speed (m/s) of the ball off the racket for a shot played as planned.
 var stroke_power: float
+## Extra forward speed (m/s) the shot only gets when the player meets the ball in position and
+## set early with time to spare (see Player); weaker contact gets a share of it.
+var attack_power: float = 0.0
 var stroke_spin: Vector3
 var stroke_target: Vector3
 var intended_stroke_power: float

@@ -45,7 +45,7 @@ theme_override_constants/separation = 10
 
 [node name="YLabel" parent="Canvas/CanvasContainer/DataContainer" unique_id=2021384616 instance=ExtResource("3_s3pq5")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(59, 0)
+custom_minimum_size = Vector2(66, 0)
 layout_mode = 2
 text = "{ylabel}"
 
@@ -84,8 +84,8 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = -67.0
 offset_top = -33.0
-offset_right = -3.0
-offset_bottom = 25.0
+offset_right = -2.0
+offset_bottom = 30.0
 
 [node name="XLabel" type="Label" parent="Canvas/CanvasContainer/DataContainer/PlotContainer" unique_id=1010303497]
 layout_mode = 2

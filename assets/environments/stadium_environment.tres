@@ -1,4 +1,4 @@
-[gd_resource type="Environment" format=3]
+[gd_resource type="Environment" format=3 uid="uid://d3u2fkt5mn6ct"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ka0"]
 sky_top_color = Color(0.22, 0.42, 0.78, 1)
@@ -30,7 +30,6 @@ ssao_detail = 0.6
 glow_enabled = true
 glow_intensity = 0.35
 glow_bloom = 0.04
-glow_blend_mode = 1
 glow_hdr_threshold = 1.2
 volumetric_fog_density = 0.0
 volumetric_fog_sky_affect = 0.0

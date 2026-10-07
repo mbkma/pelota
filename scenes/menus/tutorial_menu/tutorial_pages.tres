@@ -1,30 +1,30 @@
-[gd_resource type="Resource" script_class="Tutorial" format=3]
+[gd_resource type="Resource" script_class="Tutorial" format=3 uid="uid://dqixh11j4u5wu"]
 
-[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial.gd" id="0_tutorial"]
-[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial_page.gd" id="1_page"]
-[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial_control.gd" id="2_control"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_w.svg" id="3_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_a.svg" id="4_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_s.svg" id="5_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_d.svg" id="6_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_stick_l.svg" id="7_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_space.svg" id="8_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_a.svg" id="9_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_shift.svg" id="10_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_x.svg" id="11_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_ctrl.svg" id="12_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_y.svg" id="13_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_enter.svg" id="14_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_tab.svg" id="15_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_view.svg" id="16_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_escape.svg" id="17_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_menu.svg" id="18_res"]
-[ext_resource type="Texture2D" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_x.svg" id="19_res"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/logo/tennis_ball.svg" id="20_res"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/movement.png" id="21_res"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/stroke.png" id="22_res"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/serve.png" id="23_res"]
-[ext_resource type="Texture2D" path="res://assets/textures/ui/tutorial/volley.png" id="24_res"]
+[ext_resource type="Script" uid="uid://bnuwlx7n02gpi" path="res://scenes/menus/tutorial_menu/tutorial.gd" id="0_tutorial"]
+[ext_resource type="Script" uid="uid://6lvcmk8cql4r" path="res://scenes/menus/tutorial_menu/tutorial_page.gd" id="1_page"]
+[ext_resource type="Script" uid="uid://dn4of7n4f4ukh" path="res://scenes/menus/tutorial_menu/tutorial_control.gd" id="2_control"]
+[ext_resource type="Texture2D" uid="uid://p0dkce51bivq" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_w.svg" id="3_res"]
+[ext_resource type="Texture2D" uid="uid://c5ma8oplxavqf" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_a.svg" id="4_res"]
+[ext_resource type="Texture2D" uid="uid://cxdew0f40cx5g" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_s.svg" id="5_res"]
+[ext_resource type="Texture2D" uid="uid://cnh0sl1ot1iid" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_d.svg" id="6_res"]
+[ext_resource type="Texture2D" uid="uid://c1uxg0rtv3n5f" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_stick_l.svg" id="7_res"]
+[ext_resource type="Texture2D" uid="uid://cbaik2bw0kh6q" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_space.svg" id="8_res"]
+[ext_resource type="Texture2D" uid="uid://k1qtcr2wivxx" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_a.svg" id="9_res"]
+[ext_resource type="Texture2D" uid="uid://dhedh547wthtf" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_shift.svg" id="10_res"]
+[ext_resource type="Texture2D" uid="uid://dxgbd6470yls1" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_x.svg" id="11_res"]
+[ext_resource type="Texture2D" uid="uid://bt4wmqy3ctv6d" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_ctrl.svg" id="12_res"]
+[ext_resource type="Texture2D" uid="uid://da8j1yfxleoeg" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_y.svg" id="13_res"]
+[ext_resource type="Texture2D" uid="uid://8jgo43kaxqqt" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_enter.svg" id="14_res"]
+[ext_resource type="Texture2D" uid="uid://bbs2ce7236ytp" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_tab.svg" id="15_res"]
+[ext_resource type="Texture2D" uid="uid://dml4bqggseclv" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_view.svg" id="16_res"]
+[ext_resource type="Texture2D" uid="uid://bgny2jpo75ifi" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_escape.svg" id="17_res"]
+[ext_resource type="Texture2D" uid="uid://blh6usfhyhpyg" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_menu.svg" id="18_res"]
+[ext_resource type="Texture2D" uid="uid://bdgbelhpjchyb" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_x.svg" id="19_res"]
+[ext_resource type="Texture2D" uid="uid://bug103pl5fe2y" path="res://assets/textures/ui/logo/tennis_ball.svg" id="20_res"]
+[ext_resource type="Texture2D" uid="uid://borojrttgvqrp" path="res://assets/textures/ui/tutorial/movement.png" id="21_res"]
+[ext_resource type="Texture2D" uid="uid://b7748qrjik1no" path="res://assets/textures/ui/tutorial/stroke.png" id="22_res"]
+[ext_resource type="Texture2D" uid="uid://dfibr80eqm2h6" path="res://assets/textures/ui/tutorial/serve.png" id="23_res"]
+[ext_resource type="Texture2D" uid="uid://chq3edlfnnvqn" path="res://assets/textures/ui/tutorial/volley.png" id="24_res"]
 
 [sub_resource type="Resource" id="Control_0"]
 script = ExtResource("2_control")
@@ -32,47 +32,11 @@ description = "Move"
 keyboard_icons = Array[Texture2D]([ExtResource("3_res"), ExtResource("4_res"), ExtResource("5_res"), ExtResource("6_res")])
 gamepad_icons = Array[Texture2D]([ExtResource("7_res")])
 
-[sub_resource type="Resource" id="Control_1"]
-script = ExtResource("2_control")
-description = "Topspin shot / flat serve"
-keyboard_icons = Array[Texture2D]([ExtResource("8_res")])
-gamepad_icons = Array[Texture2D]([ExtResource("9_res")])
-
-[sub_resource type="Resource" id="Control_2"]
-script = ExtResource("2_control")
-description = "Slice shot / slice serve"
-keyboard_icons = Array[Texture2D]([ExtResource("10_res")])
-gamepad_icons = Array[Texture2D]([ExtResource("11_res")])
-
-[sub_resource type="Resource" id="Control_3"]
-script = ExtResource("2_control")
-description = "Drop shot / kick serve"
-keyboard_icons = Array[Texture2D]([ExtResource("12_res")])
-gamepad_icons = Array[Texture2D]([ExtResource("13_res")])
-
 [sub_resource type="Resource" id="Control_4"]
 script = ExtResource("2_control")
 description = "Confirm in menus"
 keyboard_icons = Array[Texture2D]([ExtResource("14_res")])
 gamepad_icons = Array[Texture2D]([ExtResource("9_res")])
-
-[sub_resource type="Resource" id="Control_5"]
-script = ExtResource("2_control")
-description = "Match statistics"
-keyboard_icons = Array[Texture2D]([ExtResource("15_res")])
-gamepad_icons = Array[Texture2D]([ExtResource("16_res")])
-
-[sub_resource type="Resource" id="Control_6"]
-script = ExtResource("2_control")
-description = "Pause"
-keyboard_icons = Array[Texture2D]([ExtResource("17_res")])
-gamepad_icons = Array[Texture2D]([ExtResource("18_res")])
-
-[sub_resource type="Resource" id="Control_7"]
-script = ExtResource("2_control")
-description = "Change split-screen layout"
-keyboard_icons = Array[Texture2D]([ExtResource("19_res")])
-gamepad_icons = Array[Texture2D]([])
 
 [sub_resource type="Resource" id="Page_0"]
 script = ExtResource("1_page")
@@ -91,6 +55,24 @@ text = "Run with the direction keys or the left stick. When your opponent hits, 
 Get there early: once you press a shot button your player only shuffles slowly towards the ball. Balls met off the racket's sweet spot lose pace and accuracy."
 image = ExtResource("21_res")
 controls = Array[ExtResource("2_control")]([SubResource("Control_0")])
+
+[sub_resource type="Resource" id="Control_1"]
+script = ExtResource("2_control")
+description = "Topspin shot / flat serve"
+keyboard_icons = Array[Texture2D]([ExtResource("8_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("9_res")])
+
+[sub_resource type="Resource" id="Control_2"]
+script = ExtResource("2_control")
+description = "Slice shot / slice serve"
+keyboard_icons = Array[Texture2D]([ExtResource("10_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("11_res")])
+
+[sub_resource type="Resource" id="Control_3"]
+script = ExtResource("2_control")
+description = "Drop shot / kick serve"
+keyboard_icons = Array[Texture2D]([ExtResource("12_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("13_res")])
 
 [sub_resource type="Resource" id="Page_2"]
 script = ExtResource("1_page")
@@ -118,6 +100,23 @@ text = "Close to the net, a ball you take before it bounces is volleyed automati
 Move forward after a strong shot to finish the point - but watch out for passing shots and lobs."
 image = ExtResource("24_res")
 controls = Array[ExtResource("2_control")]([SubResource("Control_3")])
+
+[sub_resource type="Resource" id="Control_5"]
+script = ExtResource("2_control")
+description = "Match statistics"
+keyboard_icons = Array[Texture2D]([ExtResource("15_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("16_res")])
+
+[sub_resource type="Resource" id="Control_6"]
+script = ExtResource("2_control")
+description = "Pause"
+keyboard_icons = Array[Texture2D]([ExtResource("17_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("18_res")])
+
+[sub_resource type="Resource" id="Control_7"]
+script = ExtResource("2_control")
+description = "Change split-screen layout"
+keyboard_icons = Array[Texture2D]([ExtResource("19_res")])
 
 [sub_resource type="Resource" id="Page_5"]
 script = ExtResource("1_page")

@@ -55,14 +55,19 @@ func has_stroke_animation(animation_name: StringName) -> bool:
 	return has_animation(animation_name) and select.find_input(animation_name) != -1
 
 
-## Play a stroke animation on top of locomotion. `speed` scales the stroke playback rate.
-func play_stroke(animation_name: StringName, speed: float = 1.0) -> void:
+## Play a stroke animation on top of locomotion. `speed` scales the stroke playback rate;
+## `start_time` (s) skips the start of the clip, its markers before that do not fire.
+func play_stroke(
+	animation_name: StringName, speed: float = 1.0, start_time: float = 0.0
+) -> void:
 	_stroke_animation = animation_name
-	_stroke_position = -1.0
+	_stroke_position = start_time if start_time > 0.0 else -1.0
 	_stroke_running = false
 	set(_STROKE_SELECT, String(animation_name))
 	set(_STROKE_SPEED, speed)
 	set(_STROKE_REQUEST, AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	if start_time > 0.0:
+		set(_STROKE_SEEK, start_time)
 
 
 ## Fade the current stroke out back into locomotion.

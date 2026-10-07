@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="MusicPlaylist" format=3]
+[gd_resource type="Resource" script_class="MusicPlaylist" format=3 uid="uid://xk4bhxhvo68n"]
 
-[ext_resource type="Script" path="res://scenes/ui/music/music_playlist.gd" id="1_playlist"]
-[ext_resource type="Script" path="res://scenes/ui/music/music_track.gd" id="2_track"]
-[ext_resource type="AudioStream" path="res://assets/sounds/music/goodnight_moon.ogg" id="3_a"]
-[ext_resource type="Texture2D" path="res://assets/sounds/music/covers/goodnight_moon.png" id="4_a"]
-[ext_resource type="AudioStream" path="res://assets/sounds/music/riders_on_the_storm.ogg" id="5_b"]
-[ext_resource type="Texture2D" path="res://assets/sounds/music/covers/riders_on_the_storm.png" id="6_b"]
-[ext_resource type="AudioStream" path="res://assets/sounds/music/wicked_game.ogg" id="9_d"]
-[ext_resource type="Texture2D" path="res://assets/sounds/music/covers/wicked_game.png" id="10_d"]
+[ext_resource type="Script" uid="uid://d3p0bhe2y18kq" path="res://scenes/ui/music/music_playlist.gd" id="1_playlist"]
+[ext_resource type="Script" uid="uid://blqe5a8nk505h" path="res://scenes/ui/music/music_track.gd" id="2_track"]
+[ext_resource type="AudioStream" uid="uid://cmjat6pdv3ppn" path="res://assets/sounds/music/goodnight_moon.ogg" id="3_a"]
+[ext_resource type="Texture2D" uid="uid://bdpb72sfonwxu" path="res://assets/sounds/music/covers/goodnight_moon.png" id="4_a"]
+[ext_resource type="AudioStream" uid="uid://dehmdcj5uugdp" path="res://assets/sounds/music/riders_on_the_storm.ogg" id="5_b"]
+[ext_resource type="Texture2D" uid="uid://dcidjbpn3ow4" path="res://assets/sounds/music/covers/riders_on_the_storm.png" id="6_b"]
+[ext_resource type="AudioStream" uid="uid://bh6pjjj4axvw4" path="res://assets/sounds/music/wicked_game.ogg" id="9_d"]
+[ext_resource type="Texture2D" uid="uid://ba0abb872f0iv" path="res://assets/sounds/music/covers/wicked_game.png" id="10_d"]
 
 [sub_resource type="Resource" id="Resource_goodnight_moon"]
 script = ExtResource("2_track")
@@ -27,7 +27,6 @@ cover = ExtResource("6_b")
 script = ExtResource("2_track")
 stream = ExtResource("9_d")
 title = "Wicked Game"
-artist = ""
 cover = ExtResource("10_d")
 
 [resource]

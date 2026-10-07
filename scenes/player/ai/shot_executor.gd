@@ -10,6 +10,31 @@ const DROP_VOLLEY_DEPTH: float = 0.2
 const AI_RALLY_ERROR_RADIUS: float = 1.8
 const AI_SERVE_ERROR_RADIUS: float = 0.9
 
+## First serve speed (m/s) from the weakest to the strongest server (169-209 km/h; ATP average
+## first serve ~186 km/h), the share a second serve keeps (ATP average ~152 km/h) and the
+## random variation per serve.
+const SERVE_SPEED: Vector2 = Vector2(47.0, 58.0)
+const SECOND_SERVE_SPEED_FACTOR: float = 0.82
+const SERVE_SPEED_VARIATION: float = 0.04
+## Rally speed (m/s) of a groundstroke from the weakest to the best stroke (ATP averages:
+## forehand ~115 km/h, backhand ~105 km/h); the play style's shot power adds up to
+## STYLE_RALLY_SPEED.
+const RALLY_SPEED: Vector2 = Vector2(27.0, 31.5)
+const STYLE_RALLY_SPEED: float = 1.5
+## Share of the rally speed of a safe shot and of a slice.
+const SAFE_SPEED_FACTOR: float = 0.92
+const SLICE_SPEED_FACTOR: float = 0.72
+## Attack pace (m/s) of a neutral and of an attacking groundstroke from the weakest to the best
+## stroke; it only comes through when the ball is met in position and set (see Player).
+const NEUTRAL_ATTACK: Vector2 = Vector2(3.0, 5.0)
+const ATTACK_ATTACK: Vector2 = Vector2(9.0, 13.0)
+## Share of the attack pace a slice keeps.
+const SLICE_ATTACK_FACTOR: float = 0.3
+## Volley and drop volley speed (m/s) by volley skill, and the attack pace of an attacking volley.
+const VOLLEY_SPEED: Vector2 = Vector2(17.0, 22.0)
+const DROP_VOLLEY_SPEED: Vector2 = Vector2(6.0, 10.0)
+const VOLLEY_ATTACK: float = 5.0
+
 ## When true, intended shot equals executed shot (no consistency error)
 var perfect_accuracy: bool = false
 
@@ -44,6 +69,7 @@ func build_stroke(context: AiPointContext, targeting: NormalizedCourtTargeting) 
 		else _apply_consistency_error(intended_world_target, context, play_style)
 	)
 	var intended_power: float = _compute_shot_speed(context, play_style, intent, stroke_type)
+	var attack_power: float = _compute_attack_power(context, play_style, intent, stroke_type)
 
 	var stroke := Stroke.new()
 	stroke.stroke_type = stroke_type
@@ -51,6 +77,7 @@ func build_stroke(context: AiPointContext, targeting: NormalizedCourtTargeting) 
 	stroke.stroke_target = actual_target
 	stroke.intended_stroke_power = intended_power
 	stroke.stroke_power = intended_power
+	stroke.attack_power = attack_power
 	stroke.stroke_spin = _compute_shot_spin(
 		context, play_style, intent, normalized_target.x, stroke_type
 	)
@@ -128,6 +155,7 @@ func _determine_stroke_type(
 	return Stroke.StrokeType.FOREHAND
 
 
+## Rally speed of the stroke (serve speed for a serve), before any attack pace.
 func _compute_shot_speed(
 	context: AiPointContext,
 	play_style: AiPlayStyle,
@@ -135,42 +163,66 @@ func _compute_shot_speed(
 	stroke_type: Stroke.StrokeType
 ) -> float:
 	var stats = _stats(context)
-	if context.is_serve:
-		var serve_skill: float = stats.serve_power01()
-		var base_serve: float = lerpf(48.0, 52.0, serve_skill)
-		var serve_style_power: float = play_style.shot_power if play_style else 0.5
-		var serve_speed: float = base_serve + (serve_style_power * 4.0)
-		serve_speed *= lerpf(0.88, 1.0, context.player_stamina_ratio)
-		return clampf(serve_speed, 24.0, 64.0)
-
 	var style_power: float = play_style.shot_power if play_style else 0.5
+	if context.is_serve:
+		var serve_speed: float = lerpf(SERVE_SPEED.x, SERVE_SPEED.y, stats.serve_power01())
+		serve_speed *= lerpf(0.94, 1.0, style_power)
+		serve_speed *= lerpf(0.9, 1.0, context.player_stamina_ratio)
+		serve_speed *= 1.0 + randf_range(-SERVE_SPEED_VARIATION, SERVE_SPEED_VARIATION)
+		var match_manager: MatchManager = context.player.match_manager
+		if match_manager and match_manager.current_state == MatchManager.MatchState.SECOND_SERVE:
+			serve_speed *= SECOND_SERVE_SPEED_FACTOR
+		return serve_speed
+
 	match stroke_type:
 		Stroke.StrokeType.FOREHAND_VOLLEY, Stroke.StrokeType.BACKHAND_VOLLEY:
-			return lerpf(16.0, 24.0, stats.volley01()) + style_power * 4.0
+			return lerpf(VOLLEY_SPEED.x, VOLLEY_SPEED.y, stats.volley01())
 		Stroke.StrokeType.FOREHAND_DROP_VOLLEY, Stroke.StrokeType.BACKHAND_DROP_VOLLEY:
-			return lerpf(6.0, 10.0, stats.volley01())
+			return lerpf(DROP_VOLLEY_SPEED.x, DROP_VOLLEY_SPEED.y, stats.volley01())
 
 	var side_quality: float = stats.shot_side_skill01(
 		context.ball_side == AiPointContext.BallSide.BACKHAND
 	)
-	var base_speed: float = lerpf(24.0, 29.0, side_quality)
-	var intent_power_bonus: float = 12.0
-	match intent:
-		AiPointContext.ShotIntent.SAFE:
-			intent_power_bonus = 6.0
-		AiPointContext.ShotIntent.NEUTRAL:
-			intent_power_bonus = 12.0
-		AiPointContext.ShotIntent.ATTACK:
-			intent_power_bonus = 18.0
-		_:
-			pass
-
-	var shot_speed: float = base_speed + (style_power * intent_power_bonus)
+	var shot_speed: float = lerpf(RALLY_SPEED.x, RALLY_SPEED.y, side_quality)
+	shot_speed += style_power * STYLE_RALLY_SPEED
+	if intent == AiPointContext.ShotIntent.SAFE:
+		shot_speed *= SAFE_SPEED_FACTOR
 	shot_speed *= lerpf(0.86, 1.0, context.player_stamina_ratio)
 	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
-		shot_speed *= 0.7
-		return clampf(shot_speed, 9.0, 25.0)
-	return clampf(shot_speed, 13.0, 38.0)
+		shot_speed *= SLICE_SPEED_FACTOR
+	return shot_speed
+
+
+## Attack pace of the stroke by intent: none for safe shots, touch shots and serves.
+func _compute_attack_power(
+	context: AiPointContext,
+	play_style: AiPlayStyle,
+	intent: AiPointContext.ShotIntent,
+	stroke_type: Stroke.StrokeType
+) -> float:
+	if context.is_serve or intent == AiPointContext.ShotIntent.SAFE:
+		return 0.0
+	var style_power: float = play_style.shot_power if play_style else 0.5
+	var is_attack: bool = intent == AiPointContext.ShotIntent.ATTACK
+	match stroke_type:
+		Stroke.StrokeType.FOREHAND_VOLLEY, Stroke.StrokeType.BACKHAND_VOLLEY:
+			return VOLLEY_ATTACK * style_power if is_attack else 0.0
+		Stroke.StrokeType.FOREHAND_DROP_VOLLEY, Stroke.StrokeType.BACKHAND_DROP_VOLLEY:
+			return 0.0
+
+	var stats = _stats(context)
+	var side_quality: float = stats.shot_side_skill01(
+		context.ball_side == AiPointContext.BallSide.BACKHAND
+	)
+	var attack_power: float = (
+		lerpf(ATTACK_ATTACK.x, ATTACK_ATTACK.y, side_quality) * lerpf(0.7, 1.0, style_power)
+		if is_attack
+		else lerpf(NEUTRAL_ATTACK.x, NEUTRAL_ATTACK.y, side_quality) * style_power
+	)
+	attack_power *= lerpf(0.86, 1.0, context.player_stamina_ratio)
+	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
+		attack_power *= SLICE_ATTACK_FACTOR
+	return attack_power
 
 
 func _compute_shot_spin(

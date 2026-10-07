@@ -1,10 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bdf7ax5oi54kv"]
 
-[ext_resource type="Script" path="res://scenes/menus/tutorial_menu/tutorial_menu.gd" id="1_menu"]
-[ext_resource type="Resource" path="res://scenes/menus/tutorial_menu/tutorial_pages.tres" id="2_pages"]
+[ext_resource type="Script" uid="uid://t81lrrw2om8c" path="res://scenes/menus/tutorial_menu/tutorial_menu.gd" id="1_menu"]
+[ext_resource type="Resource" uid="uid://dqixh11j4u5wu" path="res://scenes/menus/tutorial_menu/tutorial_pages.tres" id="2_pages"]
 [ext_resource type="PackedScene" path="res://scenes/ui/game_logo.tscn" id="3_logo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_image"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
 bg_color = Color(0, 0, 0, 0.3)
 border_width_left = 2
 border_width_top = 2
@@ -15,10 +19,6 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
 
 [node name="TutorialMenu" type="Control" unique_id=1360210945]
 layout_mode = 3
@@ -141,8 +141,8 @@ text = "Back"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-alignment = 1
 theme_override_constants/separation = 8
+alignment = 1
 
 [node name="PreviousButton" type="Button" parent="Center/Panel/VBox/Footer" unique_id=1530004404]
 unique_name_in_owner = true

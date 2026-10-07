@@ -48,10 +48,11 @@ metadata/_custom_type_script = "uid://wf2jvpga3hfj"
 [node name="Crowd" type="Node" unique_id=1204219689 node_paths=PackedStringArray("blocks")]
 script = ExtResource("1_a7rkt")
 config = SubResource("Resource_cp0o2")
+play_ambience = false
 blocks = [NodePath("EastBlock"), NodePath("NorthBlock")]
 
 [node name="EastBlock2" type="Node3D" parent="." unique_id=948425021]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.795447, -0.067768574, -17.666695)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.918195, -0.067768574, -17.666695)
 
 [node name="CrowdBlock" parent="EastBlock2" unique_id=900926214 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)

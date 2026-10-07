@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://bhwqx67o5iry8" path="res://scenes/player/controllers/human_controller.tscn" id="21_human_controller"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/player_status_panel.tscn" id="22_status_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
-[ext_resource type="Environment" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
+[ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
 
 [node name="TennisMatch" type="Node" unique_id=1484614295]
 process_mode = 1
@@ -104,7 +104,7 @@ cameras = NodePath("../Cameras")
 environment = ExtResource("24_environment")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1614528829]
-transform = Transform3D(-0.866025, 0.000000, 0.500000, 0.394005, 0.615661, 0.682437, -0.307831, 0.788011, -0.533178, 0, 12, 0)
+transform = Transform3D(-0.866025, 0, 0.5, 0.394005, 0.615661, 0.682437, -0.307831, 0.788011, -0.533178, 0, 12, 0)
 light_color = Color(1, 0.96, 0.9, 1)
 light_energy = 1.8
 shadow_enabled = true

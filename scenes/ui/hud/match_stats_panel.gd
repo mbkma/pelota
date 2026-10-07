@@ -60,6 +60,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if (toggle_key or toggle_button) and not _continue_button.visible:
 		visible = not visible
 		get_viewport().set_input_as_handled()
+	elif visible and not _continue_button.visible and event.is_action_pressed(&"ui_cancel"):
+		visible = false
+		get_viewport().set_input_as_handled()
 
 
 func _process(_delta: float) -> void:

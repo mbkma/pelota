@@ -38,6 +38,15 @@ const POOR_POSITION_ERROR_RADIUS: float = 3.0
 ## Share of the target depth (distance from the net) reached at the worst positioning: a weak
 ## shot lands shorter instead of being looped up high.
 const POOR_POSITION_DEPTH_FACTOR: float = 0.7
+## Readiness: a player moving slower than SET_SPEED (m/s) is set for the shot; being set for
+## FULL_READINESS_SET_TIME seconds before contact is full readiness.
+const SET_SPEED: float = 1.0
+const FULL_READINESS_SET_TIME: float = 0.5
+## Readiness: seconds the ball flies toward the player before contact. Below RUSHED_FLIGHT_TIME
+## (a hard serve or drive) there is no time to attack, from RELAXED_FLIGHT_TIME on (a slow or
+## short ball) there is plenty.
+const RUSHED_FLIGHT_TIME: float = 0.75
+const RELAXED_FLIGHT_TIME: float = 1.35
 ## Shot rating label: start height above the player (m) and how long it shows (s)
 const SHOT_FEEDBACK_HEIGHT: float = 2.2
 const SHOT_FEEDBACK_TIME: float = 1.4
@@ -51,8 +60,9 @@ const SERVE_NET_CLEARANCE: float = 0.03
 @export var player_data: PlayerData
 ## Current active ball this player tracks and can hit.
 @export var ball: Ball
-## Base horizontal movement speed in meters per second.
-@export var move_speed: float = 6.0
+## Base top speed (m/s) running toward the net; sideways and backward are slower (see
+## MovementController) and the player's stats scale it.
+@export var move_speed: float = 5.6
 ## Team slot index used to group players in doubles/splitscreen contexts.
 @export var team_index: int = 0
 ## World-space marker used to visualize shot aim target.
@@ -73,10 +83,10 @@ const SERVE_NET_CLEARANCE: float = 0.03
 ## Slice stroke sound effect pool used for slice/drop-shot variants.
 @export var stroke_sounds_slice: Array[AudioStream]
 
-## Deceleration rate in m/s² (ATP realistic: ~12 m/s²).
+## Deceleration rate in m/s² without movement input.
 @export var friction: float = 12.0
-## Acceleration rate in m/s² (ATP realistic: ~15 m/s²).
-@export var acceleration: float = 15.0
+## Base acceleration in m/s² (pros sprint 5 m in ~1.0 s); the player's stats scale it.
+@export var acceleration: float = 11.0
 
 ## Runtime stat profile copied from player_data for fast gameplay access.
 var stats: PlayerRuntimeStats
@@ -103,6 +113,12 @@ var _swing_clip: StrokeClip = null
 var _seconds_to_contact: float = INF
 ## Positioning quality in [0, 1] of the last ball hit (1 for serves)
 var last_positioning_quality: float = 1.0
+## Readiness in [0, 1] of the last ball hit (1 for serves): set early with time to spare.
+var last_readiness: float = 1.0
+## Seconds the player has been set (moving slower than SET_SPEED).
+var _set_time: float = 0.0
+## Seconds the active ball has been flying toward this player.
+var _incoming_time: float = 0.0
 var _feedback_tween: Tween
 var _last_consumed_decision: Stroke = null
 var _stamina_current: float = 100.0
@@ -202,6 +218,7 @@ func _physics_process(delta: float) -> void:
 	# Get movement direction from controller and execute it
 	var move_direction: Vector3 = controller.get_move_direction()
 	apply_movement(move_direction, delta)
+	_update_readiness(delta)
 	_update_stroke_timing()
 
 
@@ -247,7 +264,11 @@ func _halt() -> void:
 func apply_movement(direction: Vector3, delta: float) -> void:
 	var stamina01: float = get_stamina_ratio()
 	_movement.set_friction(friction)
-	velocity = _movement.tick(direction, stats, stamina01, move_speed, acceleration)
+	var facing: Vector3 = -global_basis.z
+	facing.y = 0.0
+	velocity = _movement.tick(
+		direction, facing.normalized(), stats, stamina01, move_speed, acceleration
+	)
 	move_and_slide()
 
 	model.animator.set_locomotion(_locomotion_blend(velocity))
@@ -272,7 +293,7 @@ func compute_move_dir() -> Vector3:
 	if _movement.check_and_consume_reached(position, DISTANCE_THRESHOLD):
 		target_point_reached.emit()
 
-	return _movement.compute_direction(position)
+	return _movement.compute_direction(position, move_speed)
 
 
 ## Queue a movement to target position
@@ -347,17 +368,20 @@ func _update_stroke_timing() -> void:
 	if time_to_contact > hit_time:
 		return
 
-	# Late swings are sped up so the hit marker still lines up with the ball.
+	# Late swings are sped up so the hit marker still lines up with the ball; when even the
+	# fastest swing is too slow, the swing starts part of the way through (a shortened backswing).
 	var speed: float = clampf(hit_time / maxf(time_to_contact, 0.001), 1.0, max_stroke_speed)
-	_start_swing(clip, speed)
+	var start_time: float = maxf(hit_time - time_to_contact * max_stroke_speed, 0.0)
+	_start_swing(clip, speed, start_time)
 
 
-func _start_swing(clip: StrokeClip, speed: float) -> void:
+## Plays the stroke clip from `start_time` (s) at `speed`.
+func _start_swing(clip: StrokeClip, speed: float, start_time: float = 0.0) -> void:
 	_swing_clip = clip
 	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
-	_seconds_to_contact = hit_time / speed
+	_seconds_to_contact = (hit_time - start_time) / speed
 	_set_state(PlayerStateMachine.State.STROKING)
-	model.animator.play_stroke(clip.animation, speed)
+	model.animator.play_stroke(clip.animation, speed, start_time)
 
 
 func _is_ball_moving_away_from(contact_point: Vector3) -> bool:
@@ -365,7 +389,8 @@ func _is_ball_moving_away_from(contact_point: Vector3) -> bool:
 	return offset * ball.velocity.z > 0.0
 
 
-## Seconds until the ball crosses the depth (z) of the contact point, or -1 if it does not.
+## Seconds until the ball crosses the depth (z) of the contact point before its second bounce,
+## or -1 if it does not. The contact point moves along with the player running to its target.
 func _predict_time_to_contact(contact_point: Vector3) -> float:
 	var side: float = signf(ball.global_position.z - contact_point.z)
 	var previous_offset: float = ball.global_position.z - contact_point.z
@@ -376,7 +401,9 @@ func _predict_time_to_contact(contact_point: Vector3) -> float:
 		{"store_result": false}
 	)
 	for step in trajectory:
-		var offset: float = step.point.z - contact_point.z
+		if step.bounces > 1:
+			return -1.0
+		var offset: float = step.point.z - (contact_point.z + _body_travel(step.time).z)
 		if signf(offset) != side:
 			var crossing: float = previous_offset / (previous_offset - offset)
 			return lerpf(previous_time, step.time, crossing)
@@ -385,7 +412,18 @@ func _predict_time_to_contact(contact_point: Vector3) -> float:
 	return -1.0
 
 
-## Whether the ball passes within hit range of the racket contact point during this physics tick.
+## How far (m) the player moves in `seconds` at its current velocity, at most to its movement
+## target.
+func _body_travel(seconds: float) -> Vector3:
+	var travel := Vector3(velocity.x, 0.0, velocity.z) * seconds
+	var path: Array[Vector3] = _movement.get_path()
+	if path.is_empty():
+		return travel
+	var to_target: Vector3 = path[0] - global_position
+	to_target.y = 0.0
+	return travel.limit_length(to_target.length())
+
+
 ## How far (m) the ball passes from the racket contact point during this physics tick.
 func _contact_distance(contact_point: Vector3) -> float:
 	var travel: Vector3 = ball.velocity / Engine.physics_ticks_per_second
@@ -403,11 +441,35 @@ func _positioning_quality(contact_distance: float) -> float:
 	return 1.0 - clampf(off_by / tolerance, 0.0, 1.0)
 
 
-## Weakens, shortens and scatters a stroke played out of position.
-func _apply_positioning(stroke: Stroke, quality: float) -> void:
-	stroke.stroke_power *= lerpf(POOR_POSITION_POWER_FACTOR, 1.0, quality)
-	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, quality)
-	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - quality)
+## Readiness in [0, 1] at contact: how long the player has been set and how much time the
+## incoming ball gave; the worse of both counts.
+func _readiness() -> float:
+	var set_quality: float = clampf(_set_time / FULL_READINESS_SET_TIME, 0.0, 1.0)
+	var time_quality: float = clampf(
+		(_incoming_time - RUSHED_FLIGHT_TIME) / (RELAXED_FLIGHT_TIME - RUSHED_FLIGHT_TIME),
+		0.0,
+		1.0
+	)
+	return minf(set_quality, time_quality)
+
+
+func _update_readiness(delta: float) -> void:
+	var horizontal_speed: float = Vector2(velocity.x, velocity.z).length()
+	_set_time = _set_time + delta if horizontal_speed < SET_SPEED else 0.0
+	var ball_incoming: bool = (
+		is_instance_valid(ball) and ball.velocity.z * signf(global_position.z) > 0.0
+	)
+	_incoming_time = _incoming_time + delta if ball_incoming else 0.0
+
+
+## Applies how well the ball was met: the stroke's attack pace only comes through in full when
+## the player is in position and ready; out of position the stroke is also weakened, shortened
+## and scattered.
+func _apply_contact_quality(stroke: Stroke, positioning: float, readiness: float) -> void:
+	stroke.stroke_power += stroke.attack_power * positioning * readiness
+	stroke.stroke_power *= lerpf(POOR_POSITION_POWER_FACTOR, 1.0, positioning)
+	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, positioning)
+	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - positioning)
 	var error: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
 	stroke.stroke_target += Vector3(error.x, 0.0, error.y)
 
@@ -432,6 +494,7 @@ func _on_stroke_contact() -> void:
 
 	if stroke.stroke_type == Stroke.StrokeType.SERVE:
 		last_positioning_quality = 1.0
+		last_readiness = 1.0
 		_hit_ball(stroke)
 		_lifecycle_bus.complete_serve(self)
 		return
@@ -444,7 +507,8 @@ func _on_stroke_contact() -> void:
 		cancel_stroke()
 		return
 	last_positioning_quality = _positioning_quality(contact_distance)
-	_apply_positioning(stroke, last_positioning_quality)
+	last_readiness = _readiness()
+	_apply_contact_quality(stroke, last_positioning_quality, last_readiness)
 	_hit_ball(stroke)
 
 

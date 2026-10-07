@@ -110,6 +110,8 @@ func _enable_vertical_splitscreen() -> void:
 	if _original_camera:
 		_original_camera.current = false
 
+	_set_view_cameras(left_camera, right_camera)
+
 	# Setup and activate cameras
 	_update_camera_from_player(left_camera, player0)
 	left_camera.make_current()
@@ -142,6 +144,8 @@ func _enable_horizontal_splitscreen() -> void:
 		if _original_camera:
 			_original_camera.current = false
 
+	_set_view_cameras(top_camera, bottom_camera)
+
 	# Setup and activate cameras
 	_update_camera_from_player(top_camera, player0)
 	top_camera.make_current()
@@ -167,6 +171,7 @@ func _enable_horizontal_splitscreen() -> void:
 func _disable_splitscreen() -> void:
 	# Stop camera following
 	_stop_camera_following()
+	_set_view_cameras(null, null)
 
 	# Hide all splitscreen UI
 	hbox_container.hide()
@@ -178,6 +183,18 @@ func _disable_splitscreen() -> void:
 
 	current_mode = SplitscreenMode.NORMAL
 	splitscreen_toggled.emit(false)
+
+
+## Human players steer relative to the camera of their split view (null: the main camera).
+func _set_view_cameras(player0_camera: Camera3D, player1_camera: Camera3D) -> void:
+	_set_view_camera(player0, player0_camera)
+	_set_view_camera(player1, player1_camera)
+
+
+func _set_view_camera(player: Player, camera: Camera3D) -> void:
+	var human_controller := player.controller as HumanController
+	if human_controller:
+		human_controller.view_camera = camera
 
 
 ## Place a viewport camera behind and above its player, looking toward the net

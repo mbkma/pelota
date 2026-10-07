@@ -4,15 +4,24 @@
 ## player runs to the incoming ball on its own, the direction aims inside the opponent's
 ## court until the racket meets the ball and holding the button charges power.
 ## Releasing the button times the shot: the closer to contact, the smaller the area the ball
-## may land in and the more extra pace the shot gets. Releasing within the perfect window
-## before contact is a perfect shot; still holding at contact is the worst timing.
+## may land in and the more of the shot's attack pace it gets. Releasing within the perfect
+## window before contact is a perfect shot; still holding at contact plays a weak, safe ball
+## short through the middle.
+## Pace: every shot has a rally speed (ATP averages: forehand ~115 km/h, backhand ~105 km/h)
+## and an attack pace on top (winners up to ~165 km/h) that only comes through in full when
+## the shot is perfectly timed, met in position and the player was set early with time to
+## spare (see Player).
 ## Serve: before the serve the direction slides the server along the baseline. Pressing and
 ## holding a serve button picks the serve (STRIKE flat, SLICE slice, DROP_SHOT kick) and
 ## locks the server in place; the direction aims inside the service box for as long as the
 ## button is held. Releasing tosses the ball. Pressing any serve button again right before
 ## the racket meets the ball times the serve: the closer to contact, the faster and more
-## precise it is. A serve that is not timed is weak and imprecise. The server stays locked
+## precise it is. A serve that is not timed is weak and imprecise. A perfectly timed flat first
+## serve of an average server goes ~195 km/h (ATP average first serve: ~186 km/h, second
+## serve: ~152 km/h). The server stays locked
 ## until the ball is hit.
+## Directions follow the screen: up on the stick points up in the camera view this player is
+## seen through, whichever end of the court the player is on.
 ## The direction sets an aim goal per axis that is kept while the direction eases back
 ## toward neutral; the aim moves toward that goal at AIM_SPEED. The aim only resets to the
 ## middle after this player hits the ball, a new serve, or the end of the point.
@@ -49,10 +58,8 @@ enum ServeType {
 	KICK,
 }
 
-## Seconds a stroke button has to be held for full power.
+## Seconds a stroke button has to be held for the full attack pace.
 const FULL_CHARGE_TIME: float = 0.8
-## Extra stroke speed (m/s) at full charge.
-const MAX_PACE: float = 5.0
 ## How fast the aim moves toward its goal, in aim ranges (center to line) per second.
 const AIM_SPEED: float = 1.4
 ## Direction axis values below this count as neutral for aiming.
@@ -67,8 +74,8 @@ const SERVE_CENTER_MARGIN: float = 0.3
 ## Aim targets stay this far inside the lines (m).
 const AIM_LINE_MARGIN: float = 0.5
 ## Speed factor of the automatic adjustment toward the ball once a stroke button is pressed;
-## the player has to get into position on their own to arrive in time.
-const SHOT_ADJUST_SPEED: float = 0.5
+## the player has to get into position on their own to arrive in time and set.
+const SHOT_ADJUST_SPEED: float = 0.75
 ## Minimum alignment (cosine) of the direction with the one held when a shot ended for the
 ## direction to stay ignored.
 const HELD_AIM_ALIGNMENT: float = 0.7
@@ -81,8 +88,8 @@ const DROP_SHOT_DEPTH_MAX: float = 4.0
 const PERFECT_TIMING_WINDOW: float = 0.12
 ## Releasing this many seconds or more before contact is the worst timing.
 const EARLIEST_TIMING: float = 0.8
-## Extra stroke speed (m/s) of a perfectly timed shot; lower timing quality scales it down.
-const TIMING_PACE_BONUS: float = 9.0
+## Share of the rally speed kept at the worst timing (released far too early).
+const TIMING_SPEED_WORST: float = 0.85
 ## Share of the stroke's spin at the worst and at perfect timing: well-timed topspin dips and
 ## kicks more, slices skid lower and drop shots die after the bounce.
 const TIMING_SPIN_WORST: float = 0.85
@@ -98,23 +105,43 @@ const RATING_COLOR_BAD := Color(1.0, 0.45, 0.35)
 ## Landing area radius (m) of a rally shot with perfect and with the worst timing.
 const RALLY_ERROR_RADIUS_PERFECT: float = 0.25
 const RALLY_ERROR_RADIUS_WORST: float = 2.5
+## Still holding the stroke button at contact: a weak ball (m/s, ~60 km/h) through the middle,
+## landing this deep (m from the net) within this radius (m).
+const LATE_SHOT_SPEED: float = 16.5
+const LATE_SHOT_DEPTH: float = 7.5
+const LATE_SHOT_ERROR_RADIUS: float = 1.0
+
+## Rally speed (m/s) from the weakest to the best stroke; ATP averages are ~115 km/h (32 m/s)
+## on the forehand and ~105 km/h (29 m/s) on the backhand.
+const FOREHAND_SPEED: Vector2 = Vector2(28.0, 33.0)
+const BACKHAND_SPEED: Vector2 = Vector2(26.5, 31.0)
+const SLICE_SPEED: Vector2 = Vector2(20.0, 24.0)
+const DROP_SHOT_SPEED: Vector2 = Vector2(9.0, 13.0)
+const VOLLEY_SPEED: Vector2 = Vector2(17.0, 22.0)
+const DROP_VOLLEY_SPEED: Vector2 = Vector2(6.0, 10.0)
+## Attack pace (m/s) from the weakest to the best stroke: a perfect forehand of the best
+## player reaches 47 m/s (~170 km/h). Touch shots have none.
+const FOREHAND_ATTACK: Vector2 = Vector2(10.0, 14.0)
+const BACKHAND_ATTACK: Vector2 = Vector2(8.0, 12.0)
+const SLICE_ATTACK: float = 4.0
+const VOLLEY_ATTACK: float = 6.0
 
 ## Pressing at most this many seconds before contact is a perfectly timed serve
 ## (for a player with average timing; the timing stat scales it).
 const SERVE_PERFECT_WINDOW: float = 0.08
 ## Pressing this many seconds or more before contact (or not at all) is the worst timing.
 const SERVE_EARLIEST_TIMING: float = 0.5
-## Extra serve speed (m/s) of a perfectly timed serve; lower timing quality scales it down.
-const SERVE_TIMING_PACE_BONUS: float = 7.0
+## Share of the serve speed of an untimed serve.
+const SERVE_UNTIMED_SPEED_FACTOR: float = 0.72
 ## Landing area radius (m) of a serve with perfect and with the worst timing.
 const SERVE_ERROR_RADIUS_PERFECT: float = 0.2
 const SERVE_ERROR_RADIUS_WORST: float = 1.6
-## Untimed serve speed (m/s) per serve type, from the weakest to the strongest server; a
-## perfectly timed serve adds SERVE_TIMING_PACE_BONUS (slice up to ~110 mph, kick ~103 mph).
+## Perfectly timed serve speed (m/s) per serve type, from the weakest to the strongest server:
+## flat 169-209 km/h, slice 148-180 km/h, kick 130-155 km/h.
 const SERVE_SPEED_RANGE: Dictionary[ServeType, Vector2] = {
-	ServeType.FLAT: Vector2(46.0, 54.0),
-	ServeType.SLICE: Vector2(36.0, 42.0),
-	ServeType.KICK: Vector2(34.0, 39.0),
+	ServeType.FLAT: Vector2(47.0, 58.0),
+	ServeType.SLICE: Vector2(41.0, 50.0),
+	ServeType.KICK: Vector2(36.0, 43.0),
 }
 ## Spin per serve type for a right-handed player (x: sidespin, y: topspin).
 const SERVE_SPIN: Dictionary[ServeType, Vector3] = {
@@ -123,8 +150,11 @@ const SERVE_SPIN: Dictionary[ServeType, Vector3] = {
 	ServeType.KICK: Vector3(-0.3, 1.0, 0.0),
 }
 ## Speed factor of a second serve.
-const SECOND_SERVE_SPEED_FACTOR: float = 0.88
+const SECOND_SERVE_SPEED_FACTOR: float = 0.9
 
+## Camera this player is seen through when it is not the viewport's current camera
+## (split screen).
+var view_camera: Camera3D
 var _device: InputDevice
 var _mode: Mode = Mode.FREE
 
@@ -147,8 +177,9 @@ var _serve_side: float = 1.0
 
 ## Stroke handed to the player (queued by the controller, executed by the player).
 var _pending_stroke: Stroke = null
-## Stroke speed and spin of the current shot or serve before the timing bonus.
+## Stroke speed, attack pace and spin of the current shot or serve before timing.
 var _base_stroke_power: float = 0.0
+var _base_attack_power: float = 0.0
 var _base_stroke_spin: Vector3 = Vector3.ZERO
 ## Precision in [0, 1] of the current rally shot (shot control, return and volley skill).
 var _shot_precision: float = 0.5
@@ -307,8 +338,9 @@ func _update_charge(delta: float) -> void:
 	_charge_time += delta
 
 
-func _get_pace() -> float:
-	return MAX_PACE * clampf(_charge_time / FULL_CHARGE_TIME, 0.0, 1.0)
+## Share in [0, 1] of the attack pace charged by holding the stroke button.
+func _charge01() -> float:
+	return clampf(_charge_time / FULL_CHARGE_TIME, 0.0, 1.0)
 
 
 func _update_shot(delta: float) -> void:
@@ -363,14 +395,25 @@ func _rally_error_radius(quality: float) -> float:
 	return radius * lerpf(1.25, 0.75, _shot_precision)
 
 
-## Points a rally stroke at the current aim with its landing error and timing bonus.
+## Points a rally stroke at the current aim with its landing error, speed and attack pace by
+## timing. Still holding the button at contact plays a weak ball short through the middle.
 func _apply_shot_timing(stroke: Stroke) -> void:
 	var quality: float = _effective_shot_quality()
+	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
+	if not _timed:
+		var late_target: Vector3 = _opponent_court_point(0.0, LATE_SHOT_DEPTH)
+		var late_error: Vector2 = _error_direction * LATE_SHOT_ERROR_RADIUS
+		stroke.intended_stroke_target = late_target
+		stroke.stroke_target = late_target + Vector3(late_error.x, 0.0, late_error.y)
+		stroke.stroke_power = minf(_base_stroke_power, LATE_SHOT_SPEED)
+		stroke.attack_power = 0.0
+		return
+
 	var error: Vector2 = _error_direction * _rally_error_radius(quality)
 	stroke.intended_stroke_target = _aiming_at
 	stroke.stroke_target = _aiming_at + Vector3(error.x, 0.0, error.y)
-	stroke.stroke_power = _base_stroke_power + TIMING_PACE_BONUS * quality
-	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
+	stroke.stroke_power = _base_stroke_power * lerpf(TIMING_SPEED_WORST, 1.0, quality)
+	stroke.attack_power = _base_attack_power * quality
 
 
 ## Builds the rally stroke for the given contact step, forehand or backhand by ball side.
@@ -396,8 +439,10 @@ func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
 	_shot_precision = player.stats.rally_precision01(
 		stamina, player.is_returning_serve(), is_volley
 	)
+	stroke.attack_power *= _charge01()
 	stroke.intended_stroke_power = stroke.stroke_power
 	_base_stroke_power = stroke.stroke_power
+	_base_attack_power = stroke.attack_power
 	_base_stroke_spin = stroke.stroke_spin
 	_apply_shot_timing(stroke)
 	return stroke
@@ -412,19 +457,19 @@ func _set_volley(stroke: Stroke, is_forehand: bool) -> void:
 			if is_forehand
 			else Stroke.StrokeType.BACKHAND_DROP_VOLLEY
 		)
-		stroke.stroke_power = lerpf(6.0, 10.0, volley_skill)
+		stroke.stroke_power = lerpf(DROP_VOLLEY_SPEED.x, DROP_VOLLEY_SPEED.y, volley_skill)
 		stroke.stroke_spin = GameConstants.DROP_VOLLEY_SPIN
 		return
 
 	stroke.stroke_type = (
 		Stroke.StrokeType.FOREHAND_VOLLEY if is_forehand else Stroke.StrokeType.BACKHAND_VOLLEY
 	)
-	stroke.stroke_power = lerpf(16.0, 24.0, volley_skill) + _get_pace() * 0.6
+	stroke.stroke_power = lerpf(VOLLEY_SPEED.x, VOLLEY_SPEED.y, volley_skill)
+	stroke.attack_power = VOLLEY_ATTACK
 	stroke.stroke_spin = GameConstants.VOLLEY_SPIN
 
 
 func _set_groundstroke(stroke: Stroke, is_forehand: bool, stamina: float) -> void:
-	var pace: float = _get_pace()
 	if _stroke_action == InputDevice.Action.DROP_SHOT:
 		stroke.stroke_type = (
 			Stroke.StrokeType.FOREHAND_DROP_SHOT
@@ -432,29 +477,29 @@ func _set_groundstroke(stroke: Stroke, is_forehand: bool, stamina: float) -> voi
 			else Stroke.StrokeType.BACKHAND_DROP_SHOT
 		)
 		var touch_skill: float = player.stats.spin_control01(stroke.stroke_type, stamina)
-		stroke.stroke_power = lerpf(8.0, 14.0, touch_skill) + pace
+		stroke.stroke_power = lerpf(DROP_SHOT_SPEED.x, DROP_SHOT_SPEED.y, touch_skill)
 		stroke.stroke_spin = GameConstants.AI_DROP_SHOT_SPIN
 		return
 
 	if is_forehand:
 		stroke.stroke_type = Stroke.StrokeType.FOREHAND
 		var fh_skill: float = player.stats.shot_side_skill01(false)
-		# Typical rally forehand target: ~100 km/h (27.8 m/s).
-		stroke.stroke_power = lerpf(24.0, 32.0, fh_skill) + pace
+		stroke.stroke_power = lerpf(FOREHAND_SPEED.x, FOREHAND_SPEED.y, fh_skill)
+		stroke.attack_power = lerpf(FOREHAND_ATTACK.x, FOREHAND_ATTACK.y, fh_skill)
 		stroke.stroke_spin = GameConstants.AI_FOREHAND_SPIN
 		return
 
 	var bh_skill: float = player.stats.shot_side_skill01(true)
 	if _stroke_action == InputDevice.Action.SLICE:
 		stroke.stroke_type = Stroke.StrokeType.BACKHAND_SLICE
-		# Slices travel a little slower than drives: ~65-85 km/h (18-24 m/s).
-		stroke.stroke_power = lerpf(18.0, 24.0, bh_skill) + pace
+		stroke.stroke_power = lerpf(SLICE_SPEED.x, SLICE_SPEED.y, bh_skill)
+		stroke.attack_power = SLICE_ATTACK
 		stroke.stroke_spin = GameConstants.AI_BACKHAND_SLICE_SPIN
 		return
 
 	stroke.stroke_type = Stroke.StrokeType.BACKHAND
-	# Typical rally backhand target near forehand baseline pace.
-	stroke.stroke_power = lerpf(23.0, 31.0, bh_skill) + pace
+	stroke.stroke_power = lerpf(BACKHAND_SPEED.x, BACKHAND_SPEED.y, bh_skill)
+	stroke.attack_power = lerpf(BACKHAND_ATTACK.x, BACKHAND_ATTACK.y, bh_skill)
 	stroke.stroke_spin = GameConstants.AI_BACKHAND_SPIN
 
 
@@ -514,13 +559,13 @@ func _serve_error_radius(quality: float) -> float:
 	return radius * lerpf(1.25, 0.75, precision)
 
 
-## Points the serve at the current aim with its landing error and timing bonus.
+## Points the serve at the current aim with its landing error and speed by timing.
 func _apply_serve_timing(stroke: Stroke) -> void:
 	var quality: float = _timing_quality if _timed else 0.0
 	var error: Vector2 = _error_direction * _serve_error_radius(quality)
 	stroke.intended_stroke_target = _aiming_at
 	stroke.stroke_target = _aiming_at + Vector3(error.x, 0.0, error.y)
-	stroke.stroke_power = _base_stroke_power + SERVE_TIMING_PACE_BONUS * quality
+	stroke.stroke_power = _base_stroke_power * lerpf(SERVE_UNTIMED_SPEED_FACTOR, 1.0, quality)
 	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
 
 
@@ -576,7 +621,7 @@ func _timing_quality_for(
 ## deflection in any direction reaches the edge of the target area (diagonals reach the
 ## corners). An axis easing back toward neutral keeps its goal.
 func _update_aim(delta: float) -> void:
-	var direction: Vector2 = _device.get_direction()
+	var direction: Vector2 = _get_direction()
 	var largest_axis: float = maxf(absf(direction.x), absf(direction.y))
 	if largest_axis == 0.0:
 		_aim_peak = Vector2.ZERO
@@ -609,7 +654,7 @@ func _reset_aim() -> void:
 func _enter_free_mode() -> void:
 	if _mode != Mode.FREE:
 		player.cancel_movement()
-		_held_aim_direction = _device.get_direction()
+		_held_aim_direction = _get_direction()
 	_mode = Mode.FREE
 	_pending_stroke = null
 	_charging = false
@@ -626,7 +671,21 @@ func _is_ball_incoming() -> bool:
 	return ball.velocity.z * own_side > 0.0 and ball_in_front
 
 
-## Converts a device direction (x = right, y = forward) into a world direction for this player.
+## Device direction relative to this player (x = right, y = forward). The device direction is
+## relative to the screen, so it is turned by the view camera's facing on the ground.
+func _get_direction() -> Vector2:
+	var camera: Camera3D = view_camera if view_camera else player.get_viewport().get_camera_3d()
+	# The camera's right axis stays horizontal (no camera rolls); "up the screen" is the ground
+	# direction perpendicular to it, also for cameras looking straight down.
+	var screen_right: Vector3 = Vector3(camera.global_basis.x.x, 0.0, camera.global_basis.x.z)
+	screen_right = screen_right.normalized()
+	var screen_up: Vector3 = Vector3.UP.cross(screen_right)
+	var device_direction: Vector2 = _device.get_direction()
+	var world: Vector3 = screen_right * device_direction.x + screen_up * device_direction.y
+	return Vector2(world.dot(player.global_basis.x), world.dot(-player.global_basis.z))
+
+
+## Converts a direction relative to this player (x = right, y = forward) into a world direction.
 func _to_world(direction: Vector2) -> Vector3:
 	var right: Vector3 = player.global_basis.x
 	var forward: Vector3 = -player.global_basis.z
@@ -636,7 +695,7 @@ func _to_world(direction: Vector2) -> Vector3:
 
 
 func _free_move_direction() -> Vector2:
-	var direction: Vector2 = _device.get_direction()
+	var direction: Vector2 = _get_direction()
 	if _held_aim_direction == Vector2.ZERO:
 		return direction
 	if (
@@ -651,7 +710,7 @@ func _free_move_direction() -> Vector2:
 ## Slides the server along the baseline, staying between the center mark and the sideline.
 ## Moves toward a clamped target so the server slows down at the limits instead of overshooting.
 func _serve_slide_direction() -> Vector3:
-	var slide: float = _device.get_direction().x
+	var slide: float = _get_direction().x
 	if is_zero_approx(slide):
 		player.cancel_movement()
 		return Vector3.ZERO

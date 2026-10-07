@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://qggb6a4vvyx0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ring"]
 render_priority = 10

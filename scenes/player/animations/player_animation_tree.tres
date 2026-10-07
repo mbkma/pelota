@@ -25,7 +25,6 @@ blend_point_2/name = &"g_run_right"
 blend_point_3/node = SubResource("AnimationNodeAnimation_g00t3")
 blend_point_3/pos = Vector2(0, 1)
 blend_point_3/name = &"g_run_forward"
-triangles = PackedInt32Array(1, 2, 3, 0, 1, 3)
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_nhq7s"]
 fadein_time = 0.1

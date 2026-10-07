@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dtixjev7ooh72"
-valid=false
+path="res://.godot/imported/racket.blend-76bd3018279455b72fd79ca84fd020dd.scn"
 
 [deps]
 
 source_file="res://assets/models/racket/racket.blend"
+dest_files=["res://.godot/imported/racket.blend-76bd3018279455b72fd79ca84fd020dd.scn"]
 
 [params]
 
