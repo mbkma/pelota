@@ -7,6 +7,10 @@ const IDEAL_CONTACT_HEIGHT_MIN: float = 0.7
 const IDEAL_CONTACT_HEIGHT_MAX: float = 1.4
 ## Lowest ball height (m) a stroke can still reach
 const MIN_CONTACT_HEIGHT: float = 0.2
+## Farthest (m) a volleying player steps in toward the net to cut the ball off
+const VOLLEY_STEP_IN: float = 1.5
+## Time (s) a volleying player wants to be in place before contact, to set for the punch
+const VOLLEY_SETUP_TIME: float = 0.2
 
 ## Player this controller drives
 var player: Player
@@ -82,8 +86,9 @@ func position_for_contact(step: TrajectoryStep, stroke: Stroke) -> Vector3:
 func get_ideal_contact_step() -> TrajectoryStep:
 	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
 	var closest_step: TrajectoryStep = _closest_playable_step(trajectory)
-	if closest_step and closest_step.is_volley_contact():
-		return closest_step
+	if closest_step and closest_step.is_volley_contact() and closest_step.is_in_net_zone():
+		var intercept: TrajectoryStep = _volley_intercept_step(trajectory, 1.0)
+		return intercept if intercept else closest_step
 
 	var best_step: TrajectoryStep = null
 	for step in trajectory:
@@ -114,6 +119,36 @@ func ideal_position_for_step(step: TrajectoryStep) -> Vector3:
 			Stroke.StrokeType.FOREHAND if is_forehand else Stroke.StrokeType.BACKHAND
 		)
 	return position_for_contact(step, stroke)
+
+
+## Where a player in the net zone volleys the incoming ball, running at `speed_factor` of its
+## top speed: like a net player cutting the ball off, it steps in and meets the ball as early as
+## it can be there and set, at most VOLLEY_STEP_IN closer to the net. Null if the ball cannot be
+## volleyed in time.
+func get_volley_intercept_step(speed_factor: float) -> TrajectoryStep:
+	return _volley_intercept_step(player.ball.predict_trajectory(), speed_factor)
+
+
+func _volley_intercept_step(
+	trajectory: Array[TrajectoryStep], speed_factor: float
+) -> TrajectoryStep:
+	var side: float = signf(player.global_position.z)
+	var closest_depth: float = maxf(
+		absf(player.global_position.z) - VOLLEY_STEP_IN, GameConstants.VOLLEY_MIN_NET_DISTANCE
+	)
+	for step in trajectory:
+		if not step.is_volley_contact():
+			break
+		if signf(step.point.z) != side or not step.is_in_net_zone():
+			continue
+		if step.point.y < MIN_CONTACT_HEIGHT:
+			continue
+		var body_position: Vector3 = ideal_position_for_step(step)
+		if absf(body_position.z) < closest_depth:
+			continue
+		if player.time_to_reach(body_position, speed_factor) <= step.time - VOLLEY_SETUP_TIME:
+			return step
+	return null
 
 
 ## Apex after the first bounce closest to the player by Z distance.

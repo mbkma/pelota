@@ -57,9 +57,7 @@ func has_stroke_animation(animation_name: StringName) -> bool:
 
 ## Play a stroke animation on top of locomotion. `speed` scales the stroke playback rate;
 ## `start_time` (s) skips the start of the clip, its markers before that do not fire.
-func play_stroke(
-	animation_name: StringName, speed: float = 1.0, start_time: float = 0.0
-) -> void:
+func play_stroke(animation_name: StringName, speed: float = 1.0, start_time: float = 0.0) -> void:
 	_stroke_animation = animation_name
 	_stroke_position = start_time if start_time > 0.0 else -1.0
 	_stroke_running = false

@@ -21,7 +21,10 @@ const GRAVITY: float = GameConstants.GRAVITY
 
 # Air
 const AIR_DRAG: float = 0.02
+## Vertical spin acceleration (m/s²) at full spin on a fast ball: topspin dips the ball, backspin
+## lifts it. A slice spins slower than a topspin drive, so it lifts much less than topspin dips.
 const TOPSPIN_ACCEL_MAX: float = 15.0
+const BACKSPIN_ACCEL_MAX: float = 5.0
 const SIDESPIN_ACCEL_MAX: float = 8.0
 
 # Ground: share of the vertical speed kept by a bounce (gentle impacts keep more than hard
@@ -171,9 +174,10 @@ func _advance_velocity(base_velocity: Vector3, spin_value: Vector3, delta: float
 func _compute_spin_force(base_velocity: Vector3, spin_value: Vector3) -> Vector3:
 	# Spin acts more on fast balls.
 	var speed_factor: float = minf(base_velocity.length() / 40.0, 1.0)
+	var vertical_accel: float = TOPSPIN_ACCEL_MAX if spin_value.y > 0.0 else BACKSPIN_ACCEL_MAX
 	return (
 		_sidespin_direction(base_velocity) * (spin_value.x * SIDESPIN_ACCEL_MAX * speed_factor)
-		+ Vector3(0.0, -spin_value.y * TOPSPIN_ACCEL_MAX * speed_factor, 0.0)
+		+ Vector3(0.0, -spin_value.y * vertical_accel * speed_factor, 0.0)
 	)
 
 

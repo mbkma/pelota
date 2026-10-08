@@ -3,7 +3,7 @@ class_name PlayerStatusPanel
 extends PanelContainer
 
 @export var player: Player
-@export var name_color: Color = Color.WHITE
+@export var name_color: Color = Palette.CREAM
 
 @onready var _name_label: Label = %NameLabel
 @onready var _stamina_bar: ProgressBar = %StaminaBar

@@ -12,6 +12,8 @@ const RACKET_STRINGS_SURFACE: int = 0
 const RACKET_FRAME_SURFACE: int = 1
 
 @export var animator: PlayerAnimator
+## Racket mesh held in the right hand of the rig.
+@export var racket_mesh: MeshInstance3D
 
 var _stroke_clips: Array[StrokeClip] = []
 
@@ -24,7 +26,6 @@ var _stroke_clips: Array[StrokeClip] = []
 @onready var _shorts_mesh: MeshInstance3D = $MeshRoot/ShortsMesh
 @onready var _shoes_mesh: MeshInstance3D = $MeshRoot/ShoesMesh
 @onready var _hair_mesh: MeshInstance3D = $MeshRoot/HairMesh
-@onready var _racket_mesh: MeshInstance3D = $"h/player_djokovic/game-rig/GeneralSkeleton/DEF-attachment_hand_R/racket"
 
 
 func _ready() -> void:
@@ -88,10 +89,8 @@ func load_appearance(player_appearance: PlayerAppearance) -> void:
 	_apply_look(_shirt_mesh, 0, appearance.shirt_texture, appearance.shirt_color)
 	_apply_look(_shorts_mesh, 0, appearance.shorts_texture, appearance.shorts_color)
 	_apply_look(_shoes_mesh, 0, appearance.shoes_texture, appearance.shoes_color)
-	_apply_look(_racket_mesh, RACKET_FRAME_SURFACE, appearance.racket_texture, Color.WHITE)
-	_apply_look(
-		_racket_mesh, RACKET_STRINGS_SURFACE, appearance.racket_strings_texture, Color.WHITE
-	)
+	_apply_look(racket_mesh, RACKET_FRAME_SURFACE, appearance.racket_texture, Color.WHITE)
+	_apply_look(racket_mesh, RACKET_STRINGS_SURFACE, appearance.racket_strings_texture, Color.WHITE)
 	_apply_hair(appearance.hair_texture, appearance.hair_color)
 
 

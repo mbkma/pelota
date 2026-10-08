@@ -2,10 +2,15 @@
 class_name ShotExecutor
 extends RefCounted
 
-## Chance that a volley which is not an attack is played as a drop volley.
+## Chance that a volley below the net cord which is not an attack is played as a drop volley (a
+## higher ball is put away instead).
 const DROP_VOLLEY_CHANCE: float = 0.25
 ## Normalized depth (0 = net, 1 = baseline) of drop volley targets.
 const DROP_VOLLEY_DEPTH: float = 0.2
+## Volleys go toward the open court, this wide (normalized). A high ball is put away short (an
+## attacking volley into a sharp angle), a low one goes deep (see GameConstants).
+const VOLLEY_WIDTH: float = 0.8
+const VOLLEY_DEPTH_NEUTRAL_HIGH_BALL: float = 7.0
 ## Chance that a safe backhand is played as a slice.
 const SAFE_SLICE_CHANCE: float = 0.45
 
@@ -33,10 +38,6 @@ const NEUTRAL_ATTACK: Vector2 = Vector2(3.0, 5.0)
 const ATTACK_ATTACK: Vector2 = Vector2(9.0, 13.0)
 ## Share of the attack pace a slice keeps.
 const SLICE_ATTACK_FACTOR: float = 0.3
-## Volley and drop volley speed (m/s) by volley skill, and the attack pace of an attacking volley.
-const VOLLEY_SPEED: Vector2 = Vector2(17.0, 22.0)
-const DROP_VOLLEY_SPEED: Vector2 = Vector2(6.0, 10.0)
-const VOLLEY_ATTACK: float = 5.0
 
 
 static func build_stroke(context: AiPointContext) -> Stroke:
@@ -63,6 +64,8 @@ static func build_stroke(context: AiPointContext) -> Stroke:
 static func _normalized_target(context: AiPointContext) -> Vector2:
 	if context.is_serve:
 		return Vector2(-signf(context.player_position.x) * 0.5, 0.9)
+	if context.is_volley():
+		return _volley_target(context)
 
 	var lane_sign: float = 0.0
 	match context.target_lane:
@@ -77,6 +80,20 @@ static func _normalized_target(context: AiPointContext) -> Vector2:
 		AiPointContext.ShotIntent.ATTACK:
 			return Vector2(lane_sign * 0.9, maxf(0.6, randf()))
 	return Vector2(lane_sign * 0.75, 0.8)
+
+
+## Volleys are angled away from the opponent into the open court.
+static func _volley_target(context: AiPointContext) -> Vector2:
+	var opponent_x: float = context.player.opponent.global_position.x
+	var open_side: float = -signf(opponent_x) if absf(opponent_x) > 0.3 else signf(randf() - 0.5)
+	var high_ball_depth: float = (
+		GameConstants.VOLLEY_DEPTH_MIN
+		if context.intent == AiPointContext.ShotIntent.ATTACK
+		else VOLLEY_DEPTH_NEUTRAL_HIGH_BALL
+	)
+	var put_away: float = Player.volley_put_away_share(context.ball_position.y)
+	var depth: float = lerpf(GameConstants.VOLLEY_DEPTH_LOW_BALL, high_ball_depth, put_away)
+	return Vector2(open_side * VOLLEY_WIDTH, depth / GameConstants.COURT_LENGTH_HALF)
 
 
 static func _to_world_target(normalized_target: Vector2, context: AiPointContext) -> Vector3:
@@ -97,7 +114,9 @@ static func _determine_stroke_type(context: AiPointContext) -> Stroke.StrokeType
 
 	var is_forehand: bool = context.ball_side == AiPointContext.BallSide.FOREHAND
 	if context.is_volley():
-		if context.intent != AiPointContext.ShotIntent.ATTACK and randf() < DROP_VOLLEY_CHANCE:
+		var below_net: bool = context.ball_position.y < Ball.NET_CENTER_HEIGHT
+		var not_attack: bool = context.intent != AiPointContext.ShotIntent.ATTACK
+		if below_net and not_attack and randf() < DROP_VOLLEY_CHANCE:
 			return (
 				Stroke.StrokeType.FOREHAND_DROP_VOLLEY
 				if is_forehand
@@ -127,10 +146,15 @@ static func _shot_speed(context: AiPointContext, stroke_type: Stroke.StrokeType)
 			serve_speed *= SECOND_SERVE_SPEED_FACTOR
 		return serve_speed
 
+	# A volley's own pace; the incoming pace it redirects is added at contact (see Player).
 	if _is_drop_volley(stroke_type):
-		return lerpf(DROP_VOLLEY_SPEED.x, DROP_VOLLEY_SPEED.y, stats.volley01())
+		return lerpf(
+			GameConstants.DROP_VOLLEY_SPEED.x, GameConstants.DROP_VOLLEY_SPEED.y, stats.volley01()
+		)
 	if context.is_volley():
-		return lerpf(VOLLEY_SPEED.x, VOLLEY_SPEED.y, stats.volley01())
+		return lerpf(
+			GameConstants.VOLLEY_PUNCH_SPEED.x, GameConstants.VOLLEY_PUNCH_SPEED.y, stats.volley01()
+		)
 
 	var side_quality: float = stats.shot_side_skill01(
 		context.ball_side == AiPointContext.BallSide.BACKHAND
@@ -152,9 +176,10 @@ static func _attack_power(context: AiPointContext, stroke_type: Stroke.StrokeTyp
 	if _is_drop_volley(stroke_type):
 		return 0.0
 	var style_power: float = context.play_style.shot_power
-	var is_attack: bool = context.intent == AiPointContext.ShotIntent.ATTACK
+	# A high volley is put away; the contact height decides how much of it comes through.
 	if context.is_volley():
-		return VOLLEY_ATTACK * style_power if is_attack else 0.0
+		return GameConstants.VOLLEY_PUT_AWAY_PACE * lerpf(0.7, 1.0, style_power)
+	var is_attack: bool = context.intent == AiPointContext.ShotIntent.ATTACK
 
 	var side_quality: float = context.player.stats.shot_side_skill01(
 		context.ball_side == AiPointContext.BallSide.BACKHAND

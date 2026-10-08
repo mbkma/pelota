@@ -2,12 +2,13 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2foqpb7m847t"
+uid="uid://dn27cmvbj4ikx"
 path.s3tc="res://.godot/imported/Plastic008_1K_Roughness.png-6823a1a1a9dce84a90d9dc7b493145e2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={}
 
 [deps]
 

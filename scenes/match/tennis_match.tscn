@@ -60,7 +60,7 @@ layout_mode = 0
 offset_left = 16.0
 offset_top = 16.0
 player = NodePath("../../Player")
-name_color = Color(0.21, 0.635, 0.922, 1)
+name_color = Color(0.349, 0.675, 0.725, 1)
 
 [node name="Player2StatusPanel" parent="PlayerStatus" unique_id=1959407326 node_paths=PackedStringArray("player") instance=ExtResource("22_status_panel")]
 layout_mode = 1
@@ -72,7 +72,7 @@ offset_top = 16.0
 offset_right = -16.0
 grow_horizontal = 0
 player = NodePath("../../Player2")
-name_color = Color(1, 0.388, 0.518, 1)
+name_color = Color(0.843, 0.459, 0.447, 1)
 
 [node name="MatchStatsPanel" parent="." unique_id=1844470918 node_paths=PackedStringArray("match_manager") instance=ExtResource("23_stats_panel")]
 match_manager = NodePath("../MatchManager")

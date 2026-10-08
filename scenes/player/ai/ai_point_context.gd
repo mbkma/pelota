@@ -69,6 +69,6 @@ func _init(target_player: Player, step: TrajectoryStep) -> void:
 	short_ball_opportunity = absf(ball_position.z) < GameConstants.SERVICE_LINE + 3
 
 
-## Whether the stroke is a volley: taken close to the net before the ball bounces.
+## Whether the stroke is a volley: the ball is taken before it bounces.
 func is_volley() -> bool:
 	return closest_step != null and closest_step.is_volley_contact()

@@ -2,12 +2,13 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bca0k6xntjark"
+uid="uid://dtnqbo6avk7ka"
 path.s3tc="res://.godot/imported/kirkland-signature-label.png-2e8568a0dca6493e2f60a5f3c4b90dc1.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={}
 
 [deps]
 

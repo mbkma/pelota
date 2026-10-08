@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bcl0df2my33sh"]
 
-[ext_resource type="Texture2D" uid="uid://hckkxqj88q2" path="res://assets/textures/court_hard.png" id="1_2q1p4"]
+[ext_resource type="Texture2D" uid="uid://hckkxqj88q2" path="res://assets/models/court/textures/court_hard.png" id="1_2q1p4"]
 
 [sub_resource type="Gradient" id="Gradient_2q1p4"]
 offsets = PackedFloat32Array(0.8884258, 1)

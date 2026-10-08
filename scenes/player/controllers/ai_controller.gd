@@ -18,9 +18,17 @@ const SERVE_DELAY: float = 2.0
 const INCOMING_ANGLE: float = PI / 6.0
 ## Ball speed (m/s) below which the ball does not count as incoming
 const INCOMING_MIN_SPEED: float = 3.0
-## Chance range to follow an attacking shot to the net, by net play skill (rare occasions).
-const NET_APPROACH_CHANCE_MIN: float = 0.05
-const NET_APPROACH_CHANCE_MAX: float = 0.35
+## Chance range to follow a good offensive shot to the net, by net play skill.
+const NET_APPROACH_CHANCE_MIN: float = 0.25
+const NET_APPROACH_CHANCE_MAX: float = 0.75
+## A good offensive shot to approach behind: an attack met in position (positioning quality),
+## landing deep or wide (share of the half length or width), and fast (m/s) or with the
+## opponent stretched (m from the landing point).
+const APPROACH_MIN_POSITIONING: float = 0.7
+const APPROACH_DEEP: float = 0.7
+const APPROACH_WIDE: float = 0.65
+const APPROACH_MIN_SPEED: float = 28.0
+const APPROACH_STRETCH_DISTANCE: float = 3.0
 ## Distance from the net (m) the AI takes up when playing at the net.
 const NET_POSITION_DEPTH: float = 3.5
 ## The AI only follows an attack to the net when it hits from at least this far inside the
@@ -116,10 +124,7 @@ func _is_ball_incoming() -> bool:
 ## Computes the stroke for the incoming ball and moves to meet it.
 func _lock_in() -> void:
 	_current_phase = Phase.ANTICIPATION
-	# Where the ball arrives; at the net, where it passes the net position before the bounce.
-	var step: TrajectoryStep = (
-		_get_net_contact_step() if _plays_at_net else get_closest_trajectory_step()
-	)
+	var step: TrajectoryStep = _get_contact_step()
 	if not step:
 		return
 
@@ -140,48 +145,67 @@ func _lock_in() -> void:
 	_current_phase = Phase.WAITING_FOR_HIT
 
 
-## Step before the bounce closest to the AI's net position. If the ball bounces before
-## reaching the net zone, or the AI cannot get there in time, it plays the ball where it is.
-func _get_net_contact_step() -> TrajectoryStep:
-	var net_z: float = signf(player.global_position.z) * NET_POSITION_DEPTH
-	var closest_step: TrajectoryStep = null
-	for step in player.ball.predict_trajectory():
-		if step.bounces > 0:
-			break
-		if not closest_step or absf(step.point.z - net_z) < absf(closest_step.point.z - net_z):
-			closest_step = step
-	if closest_step and closest_step.is_volley_contact():
-		var reach_time: float = (
-			player.global_position.distance_to(closest_step.point) / player.move_speed
-		)
-		if reach_time <= closest_step.time:
-			return closest_step
-	return get_closest_trajectory_step()
+## Where the ball arrives. At the net, or when the ball comes into the net zone out of the
+## air, the AI steps in and volleys it before the bounce if it gets there in time; otherwise it
+## plays the ball where it passes.
+func _get_contact_step() -> TrajectoryStep:
+	var step: TrajectoryStep = get_closest_trajectory_step()
+	var volley_chance: bool = step != null and step.is_volley_contact() and step.is_in_net_zone()
+	if not (_plays_at_net or volley_chance):
+		return step
+	var intercept: TrajectoryStep = get_volley_intercept_step(1.0)
+	return intercept if intercept else step
 
 
-## After hitting, maybe follows an attack to the net, then covers the angles of the reply.
+## After hitting, maybe follows a good offensive shot to the net, then covers the angles of the
+## reply. An approach starts right away; otherwise the AI recovers after the follow-through.
 func _on_player_ball_hit() -> void:
 	var hit_stroke: Stroke = player.queued_stroke
+	var approaches: bool = false
+	if not _plays_at_net and _is_approach_shot(hit_stroke):
+		var approach_chance: float = lerpf(
+			NET_APPROACH_CHANCE_MIN, NET_APPROACH_CHANCE_MAX, player.stats.tactical_net_play01()
+		)
+		approaches = randf() < approach_chance
+		_plays_at_net = approaches
+		if approaches:
+			DebugLogger.log(self, "Following the attack to the net")
+	var depth: float = NET_POSITION_DEPTH if _plays_at_net else BASELINE_POSITION_DEPTH
+	var recovery: Vector3 = _calculate_angle_bisector_position(hit_stroke.stroke_target, depth)
+	if approaches:
+		player.request_move_to(recovery)
+	else:
+		player.move_to_defensive_position(recovery)
+	_reset_to_anticipation()
+
+
+## Whether the ball just hit is a good offensive shot to follow to the net: an attack from
+## inside the baseline, met in position, landing deep or wide and either fast or with the
+## opponent far from where it lands.
+func _is_approach_shot(hit_stroke: Stroke) -> bool:
 	var inside_court: bool = (
 		absf(player.global_position.z)
 		<= GameConstants.COURT_LENGTH_HALF - NET_APPROACH_INSIDE_BASELINE
 	)
-	if (
-		not _plays_at_net
-		and inside_court
-		and hit_stroke.stroke_intent == AiPointContext.ShotIntent.ATTACK
-	):
-		var approach_chance: float = lerpf(
-			NET_APPROACH_CHANCE_MIN, NET_APPROACH_CHANCE_MAX, player.stats.tactical_net_play01()
-		)
-		_plays_at_net = randf() < approach_chance
-		if _plays_at_net:
-			DebugLogger.log(self, "Following the attack to the net")
-	var depth: float = NET_POSITION_DEPTH if _plays_at_net else BASELINE_POSITION_DEPTH
-	player.move_to_defensive_position(
-		_calculate_angle_bisector_position(hit_stroke.stroke_target, depth)
-	)
-	_reset_to_anticipation()
+	if not inside_court or hit_stroke.stroke_intent != AiPointContext.ShotIntent.ATTACK:
+		return false
+	if player.last_positioning_quality < APPROACH_MIN_POSITIONING:
+		return false
+
+	var landing: TrajectoryStep = null
+	for step in player.ball.predict_trajectory():
+		if step.bounces > 0:
+			landing = step
+			break
+	if not landing or signf(landing.point.z) == signf(player.global_position.z):
+		return false
+	var deep: bool = absf(landing.point.z) >= GameConstants.COURT_LENGTH_HALF * APPROACH_DEEP
+	var wide: bool = absf(landing.point.x) >= GameConstants.COURT_WIDTH_HALF * APPROACH_WIDE
+	var fast: bool = player.ball.velocity.length() >= APPROACH_MIN_SPEED
+	var to_landing: Vector3 = landing.point - player.opponent.global_position
+	to_landing.y = 0.0
+	var stretches: bool = to_landing.length() >= APPROACH_STRETCH_DISTANCE
+	return (deep or wide) and (fast or stretches)
 
 
 ## Position at `depth` meters from the net on the bisector of the angle the opponent can play

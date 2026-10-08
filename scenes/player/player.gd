@@ -35,6 +35,18 @@ const RELAXED_FLIGHT_TIME: float = 1.35
 ## Shot rating label: start height above the player (m) and how long it shows (s)
 const SHOT_FEEDBACK_HEIGHT: float = 2.2
 const SHOT_FEEDBACK_TIME: float = 1.4
+## Share of the incoming ball's speed a volley sends back: a punch volley redirects the pace,
+## a drop volley absorbs it.
+const VOLLEY_PACE_TRANSFER: float = 0.55
+const DROP_VOLLEY_PACE_TRANSFER: float = 0.1
+## Volley contact heights (m): a ball at LOW_VOLLEY_HEIGHT or lower has to be lifted over the
+## net, so it is played slower (LOW_VOLLEY_PACE_FACTOR) and with more backspin; above the net
+## cord it can be hit down with the put-away pace, fully from HIGH_VOLLEY_HEIGHT on, and flatter.
+const LOW_VOLLEY_HEIGHT: float = 0.4
+const HIGH_VOLLEY_HEIGHT: float = 1.7
+const LOW_VOLLEY_PACE_FACTOR: float = 0.75
+const LOW_VOLLEY_SPIN_FACTOR: float = 2.0
+const HIGH_VOLLEY_SPIN_FACTOR: float = 0.3
 ## Height (m) by which strokes and serves aim to pass over the net cord
 const STROKE_NET_CLEARANCE: float = 0.15
 const SERVE_NET_CLEARANCE: float = 0.03
@@ -196,16 +208,8 @@ func _halt() -> void:
 
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, delta: float) -> void:
-	var facing: Vector3 = -global_basis.z
-	facing.y = 0.0
 	velocity = _movement.tick(
-		direction,
-		facing.normalized(),
-		stats,
-		get_stamina_ratio(),
-		move_speed,
-		acceleration,
-		friction
+		direction, _facing(), stats, get_stamina_ratio(), move_speed, acceleration, friction
 	)
 	move_and_slide()
 
@@ -226,10 +230,30 @@ func _locomotion_blend(world_velocity: Vector3) -> Vector2:
 	return blend.limit_length(1.0)
 
 
-## Direction toward the movement target (see MovementController.compute_direction).
-func compute_move_dir() -> Vector3:
+## Direction toward the movement target at most at `speed_factor` of the top speed (see
+## MovementController.compute_direction).
+func compute_move_dir(speed_factor: float = 1.0) -> Vector3:
 	_movement.check_and_consume_reached(position, DISTANCE_THRESHOLD)
-	return _movement.compute_direction(position, move_speed)
+	return _movement.compute_direction(
+		position, _facing(), stats, get_stamina_ratio(), move_speed, speed_factor
+	)
+
+
+## Horizontal direction the player faces (toward the net).
+func _facing() -> Vector3:
+	var facing: Vector3 = -global_basis.z
+	facing.y = 0.0
+	return facing.normalized()
+
+
+## Seconds this player needs from a standstill to run to `target` and stop there, at
+## `speed_factor` of its top speed (see MovementController.reach_time).
+func time_to_reach(target: Vector3, speed_factor: float = 1.0) -> float:
+	var offset: Vector3 = target - global_position
+	offset.y = 0.0
+	return _movement.reach_time(
+		offset.length(), stats, get_stamina_ratio(), move_speed, acceleration, speed_factor
+	)
 
 
 ## Queue a movement to target position
@@ -386,15 +410,38 @@ func _update_readiness(delta: float) -> void:
 
 
 ## Applies how well the ball was met: the stroke's attack pace only comes through in full when
-## the player is in position and ready; out of position the stroke is also weakened, shortened
-## and scattered.
-func _apply_contact_quality(stroke: Stroke, positioning: float, readiness: float) -> void:
-	stroke.stroke_power += stroke.attack_power * positioning * readiness
+## the player is in position and gets its full share (readiness, or the contact height of a
+## volley); out of position the stroke is also weakened, shortened and scattered.
+func _apply_contact_quality(stroke: Stroke, positioning: float, attack_share: float) -> void:
+	stroke.stroke_power += stroke.attack_power * positioning * attack_share
 	stroke.stroke_power *= lerpf(POOR_POSITION_POWER_FACTOR, 1.0, positioning)
 	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, positioning)
 	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - positioning)
 	var error: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
 	stroke.stroke_target += Vector3(error.x, 0.0, error.y)
+
+
+## A volley is a short punch without a backswing: its pace is mostly the incoming ball's pace
+## sent back. A ball below the net cord has to be lifted, so it is played slower and with more
+## backspin; a high ball is hit flatter.
+func _apply_volley_contact(stroke: Stroke, contact_height: float) -> void:
+	var transfer: float = DROP_VOLLEY_PACE_TRANSFER if stroke.is_drop() else VOLLEY_PACE_TRANSFER
+	stroke.stroke_power += ball.velocity.length() * transfer
+	var lift: float = clampf(
+		inverse_lerp(LOW_VOLLEY_HEIGHT, Ball.NET_CENTER_HEIGHT, contact_height), 0.0, 1.0
+	)
+	stroke.stroke_power *= lerpf(LOW_VOLLEY_PACE_FACTOR, 1.0, lift)
+	var height01: float = clampf(
+		inverse_lerp(LOW_VOLLEY_HEIGHT, HIGH_VOLLEY_HEIGHT, contact_height), 0.0, 1.0
+	)
+	stroke.stroke_spin.y *= lerpf(LOW_VOLLEY_SPIN_FACTOR, HIGH_VOLLEY_SPIN_FACTOR, height01)
+
+
+## Share in [0, 1] of a volley's put-away pace: only a ball above the net cord can be hit down.
+static func volley_put_away_share(contact_height: float) -> float:
+	return clampf(
+		inverse_lerp(Ball.NET_CENTER_HEIGHT, HIGH_VOLLEY_HEIGHT, contact_height), 0.0, 1.0
+	)
 
 
 func _on_stroke_marker_reached(marker: StringName) -> void:
@@ -429,7 +476,12 @@ func _on_stroke_contact() -> void:
 		cancel_stroke()
 		return
 	last_positioning_quality = _positioning_quality(contact_distance)
-	_apply_contact_quality(stroke, last_positioning_quality, _readiness())
+	var attack_share: float = _readiness()
+	if stroke.is_volley():
+		var contact_height: float = ball.global_position.y
+		_apply_volley_contact(stroke, contact_height)
+		attack_share = volley_put_away_share(contact_height)
+	_apply_contact_quality(stroke, last_positioning_quality, attack_share)
 	_hit_ball(stroke)
 
 

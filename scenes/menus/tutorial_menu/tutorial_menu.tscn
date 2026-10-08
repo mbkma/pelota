@@ -9,12 +9,12 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 0.3)
+bg_color = Color(0.141, 0.102, 0.188, 0.6)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.83, 0.93, 0.16, 0.6)
+border_color = Color(1, 0.714, 0.196, 0.8)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -38,7 +38,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.03, 0.05, 0.11, 0.62)
+color = Color(0.141, 0.102, 0.188, 0.7)
 
 [node name="Center" type="CenterContainer" parent="." unique_id=1563339201]
 layout_mode = 1
@@ -106,7 +106,7 @@ theme_override_constants/separation = 12
 [node name="PageTitle" type="Label" parent="Center/Panel/VBox/Content/Text" unique_id=1218101283]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.83, 0.93, 0.16, 1)
+theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
 theme_override_font_sizes/font_size = 30
 text = "Title"
 

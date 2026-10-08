@@ -31,8 +31,10 @@
 ## SHOT_ADJUST_SPEED, so getting into position beforehand matters; a ball met off the racket's
 ## sweet spot loses pace and accuracy (see Player). While the ball comes in, a marker shows
 ## the ideal position.
-## Close to the net, a stroke on a ball that has not bounced yet is played as a volley; the
-## drop shot button plays a drop volley.
+## A ball taken out of the air is volleyed; in the net zone the player steps in to cut it off
+## before the bounce. A volley is a short punch: holding the button charges nothing, its pace
+## is mostly the incoming pace sent back, and only a ball above the net can be put away (see
+## Player). The drop shot button plays a drop volley.
 ## Player stats shape all of it: shot side and volley skill set the stroke speed, spin skills
 ## the spin, timing widens the perfect windows, and precision (shot control, return skill,
 ## net game, serve accuracy, all reduced by pressure) shrinks the landing area.
@@ -76,9 +78,6 @@ const AIM_LINE_MARGIN: float = 0.5
 ## Speed factor of the automatic adjustment toward the ball once a stroke button is pressed;
 ## the player has to get into position on their own to arrive in time and set.
 const SHOT_ADJUST_SPEED: float = 0.75
-## Minimum alignment (cosine) of the direction with the one held when a shot ended for the
-## direction to stay ignored.
-const HELD_AIM_ALIGNMENT: float = 0.7
 ## Depth range (m from the net) of drop shot targets.
 const DROP_SHOT_DEPTH_MIN: float = 1.5
 const DROP_SHOT_DEPTH_MAX: float = 4.0
@@ -98,10 +97,10 @@ const TIMING_SPIN_PERFECT: float = 1.3
 const RATING_PERFECT: float = 0.95
 const RATING_GREAT: float = 0.7
 const RATING_GOOD: float = 0.4
-const RATING_COLOR_PERFECT := Color(1.0, 0.84, 0.2)
-const RATING_COLOR_GREAT := Color(0.55, 0.95, 0.35)
-const RATING_COLOR_GOOD := Color(1, 1, 1)
-const RATING_COLOR_BAD := Color(1.0, 0.45, 0.35)
+const RATING_COLOR_PERFECT := Palette.AMBER
+const RATING_COLOR_GREAT := Palette.TEAL_LIGHT
+const RATING_COLOR_GOOD := Palette.CREAM
+const RATING_COLOR_BAD := Palette.RED_LIGHT
 ## Landing area radius (m) of a rally shot with perfect and with the worst timing.
 const RALLY_ERROR_RADIUS_PERFECT: float = 0.25
 const RALLY_ERROR_RADIUS_WORST: float = 2.5
@@ -117,14 +116,11 @@ const FOREHAND_SPEED: Vector2 = Vector2(28.0, 33.0)
 const BACKHAND_SPEED: Vector2 = Vector2(26.5, 31.0)
 const SLICE_SPEED: Vector2 = Vector2(20.0, 24.0)
 const DROP_SHOT_SPEED: Vector2 = Vector2(9.0, 13.0)
-const VOLLEY_SPEED: Vector2 = Vector2(17.0, 22.0)
-const DROP_VOLLEY_SPEED: Vector2 = Vector2(6.0, 10.0)
 ## Attack pace (m/s) from the weakest to the best stroke: a perfect forehand of the best
 ## player reaches 47 m/s (~170 km/h). Touch shots have none.
 const FOREHAND_ATTACK: Vector2 = Vector2(10.0, 14.0)
 const BACKHAND_ATTACK: Vector2 = Vector2(8.0, 12.0)
 const SLICE_ATTACK: float = 4.0
-const VOLLEY_ATTACK: float = 6.0
 
 ## Pressing at most this many seconds before contact is a perfectly timed serve
 ## (for a player with average timing; the timing stat scales it).
@@ -194,9 +190,8 @@ var _serve_type: ServeType = ServeType.FLAT
 ## Serve button held while aiming the serve.
 var _serve_action: InputDevice.Action = InputDevice.Action.STRIKE
 
-## Aim direction still held from the last shot or serve. Ignored for movement until the
-## direction is released or clearly changed, so aiming does not make the player run off.
-var _held_aim_direction: Vector2 = Vector2.ZERO
+## Whether the current shot meets the ball out of the air (it then aims like a volley).
+var _is_volley_shot: bool = false
 
 
 func _ready() -> void:
@@ -251,9 +246,9 @@ func on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 func get_move_direction() -> Vector3:
 	match _mode:
 		Mode.FREE:
-			return _to_world(_free_move_direction())
+			return _to_world(_get_direction())
 		Mode.SHOT:
-			return player.compute_move_dir() * SHOT_ADJUST_SPEED
+			return player.compute_move_dir(SHOT_ADJUST_SPEED)
 		Mode.SERVE_READY:
 			return _serve_slide_direction()
 	return Vector3.ZERO
@@ -320,6 +315,7 @@ func _begin_shot(action: InputDevice.Action) -> void:
 	_charging = true
 	_charge_time = 0.0
 	_timed = false
+	_is_volley_shot = false
 	_draw_error_direction()
 	_aiming_at = _rally_aim_target()
 
@@ -354,17 +350,28 @@ func _update_shot(delta: float) -> void:
 		return
 
 	if not _is_ball_incoming():
-		# Released before the ball came, or the ball got past the player.
-		if not _charging:
+		# Released before the ball came, or the ball got past the player (the shot is missed
+		# even while the button is still held).
+		if not _charging or _has_ball_passed():
 			_enter_free_mode()
 		return
 
-	var step: TrajectoryStep = get_closest_trajectory_step()
+	var step: TrajectoryStep = _shot_contact_step()
 	if not step:
 		return
 
 	_pending_stroke = _build_rally_stroke(step)
 	move_to_contact(step, _pending_stroke)
+
+
+## Where the shot meets the ball: where it passes the player, or in the net zone where the
+## player can step in and volley it before the bounce.
+func _shot_contact_step() -> TrajectoryStep:
+	var step: TrajectoryStep = get_closest_trajectory_step()
+	if not step or not step.is_in_net_zone() or not step.is_volley_contact():
+		return step
+	var intercept: TrajectoryStep = get_volley_intercept_step(SHOT_ADJUST_SPEED)
+	return intercept if intercept else step
 
 
 ## Timing quality in [0, 1] of releasing the stroke button `seconds_to_contact` before contact.
@@ -412,12 +419,12 @@ func _apply_shot_timing(stroke: Stroke) -> void:
 
 
 ## Builds the rally stroke for the given contact step, forehand or backhand by ball side.
-## Close to the net a ball taken before the bounce is volleyed (a drop shot becomes a drop
-## volley).
+## A ball taken before the bounce is volleyed (a drop shot becomes a drop volley).
 func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
 	var to_ball: Vector3 = step.point - player.global_position
 	var is_forehand: bool = to_ball.dot(player.global_basis.x) > 0.0
 	var is_volley: bool = step.is_volley_contact()
+	_is_volley_shot = is_volley
 	var stamina: float = player.get_stamina_ratio()
 
 	var stroke: Stroke = Stroke.new()
@@ -434,7 +441,9 @@ func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
 	_shot_precision = player.stats.rally_precision01(
 		stamina, player.is_returning_serve(), is_volley
 	)
-	stroke.attack_power *= _charge01()
+	# A volley has no backswing to charge.
+	if not is_volley:
+		stroke.attack_power *= _charge01()
 	stroke.intended_stroke_power = stroke.stroke_power
 	_base_stroke_power = stroke.stroke_power
 	_base_attack_power = stroke.attack_power
@@ -443,7 +452,8 @@ func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
 	return stroke
 
 
-## Volley or drop volley: a short punch with backspin; volley skill sets its pace.
+## Volley or drop volley: a short punch with backspin; volley skill sets its own pace, the
+## incoming pace and contact height do the rest (see Player).
 func _set_volley(stroke: Stroke, is_forehand: bool) -> void:
 	var volley_skill: float = player.stats.volley01()
 	if _stroke_action == InputDevice.Action.DROP_SHOT:
@@ -452,15 +462,19 @@ func _set_volley(stroke: Stroke, is_forehand: bool) -> void:
 			if is_forehand
 			else Stroke.StrokeType.BACKHAND_DROP_VOLLEY
 		)
-		stroke.stroke_power = lerpf(DROP_VOLLEY_SPEED.x, DROP_VOLLEY_SPEED.y, volley_skill)
+		stroke.stroke_power = lerpf(
+			GameConstants.DROP_VOLLEY_SPEED.x, GameConstants.DROP_VOLLEY_SPEED.y, volley_skill
+		)
 		stroke.stroke_spin = GameConstants.DROP_VOLLEY_SPIN
 		return
 
 	stroke.stroke_type = (
 		Stroke.StrokeType.FOREHAND_VOLLEY if is_forehand else Stroke.StrokeType.BACKHAND_VOLLEY
 	)
-	stroke.stroke_power = lerpf(VOLLEY_SPEED.x, VOLLEY_SPEED.y, volley_skill)
-	stroke.attack_power = VOLLEY_ATTACK
+	stroke.stroke_power = lerpf(
+		GameConstants.VOLLEY_PUNCH_SPEED.x, GameConstants.VOLLEY_PUNCH_SPEED.y, volley_skill
+	)
+	stroke.attack_power = GameConstants.VOLLEY_PUT_AWAY_PACE
 	stroke.stroke_spin = GameConstants.VOLLEY_SPIN
 
 
@@ -649,7 +663,6 @@ func _reset_aim() -> void:
 func _enter_free_mode() -> void:
 	if _mode != Mode.FREE:
 		player.cancel_movement()
-		_held_aim_direction = _get_direction()
 	_mode = Mode.FREE
 	_pending_stroke = null
 	_charging = false
@@ -664,6 +677,15 @@ func _is_ball_incoming() -> bool:
 	var own_side: float = signf(player.global_position.z)
 	var ball_in_front: bool = (ball.global_position.z - player.global_position.z) * own_side < 0.0
 	return ball.velocity.z * own_side > 0.0 and ball_in_front
+
+
+## Whether the ball is between the player and its own baseline: it got past the player.
+func _has_ball_passed() -> bool:
+	var ball: Ball = player.ball
+	if not is_instance_valid(ball):
+		return true
+	var own_side: float = signf(player.global_position.z)
+	return (ball.global_position.z - player.global_position.z) * own_side > 0.0
 
 
 ## Device direction relative to this player (x = right, y = forward). The device direction is
@@ -689,19 +711,6 @@ func _to_world(direction: Vector2) -> Vector3:
 	return world
 
 
-func _free_move_direction() -> Vector2:
-	var direction: Vector2 = _get_direction()
-	if _held_aim_direction == Vector2.ZERO:
-		return direction
-	if (
-		direction != Vector2.ZERO
-		and direction.normalized().dot(_held_aim_direction.normalized()) >= HELD_AIM_ALIGNMENT
-	):
-		return Vector2.ZERO
-	_held_aim_direction = Vector2.ZERO
-	return direction
-
-
 ## Slides the server along the baseline, staying between the center mark and the sideline.
 ## Moves toward a clamped target so the server slows down at the limits instead of overshooting.
 func _serve_slide_direction() -> Vector3:
@@ -722,16 +731,41 @@ func _serve_slide_direction() -> Vector3:
 
 
 ## Rally target in the opponent's court: aim x picks the side, aim y the depth.
+## A volley aims shorter, and a neutral aim goes toward the open court away from the opponent.
 func _rally_aim_target() -> Vector3:
 	var depth_min: float = GameConstants.SERVICE_LINE
 	var depth_max: float = GameConstants.COURT_LENGTH_HALF - AIM_LINE_MARGIN
+	var aim_x: float = _aim.x
 	if _stroke_action == InputDevice.Action.DROP_SHOT:
 		depth_min = DROP_SHOT_DEPTH_MIN
 		depth_max = DROP_SHOT_DEPTH_MAX
+	elif _is_volley_shot:
+		depth_min = _volley_depth_min()
+		depth_max = GameConstants.VOLLEY_DEPTH_MAX
+		aim_x = _toward_open_court(aim_x)
 
-	var lateral: float = _aim.x * (GameConstants.COURT_WIDTH_HALF - AIM_LINE_MARGIN)
+	var lateral: float = aim_x * (GameConstants.COURT_WIDTH_HALF - AIM_LINE_MARGIN)
 	var depth: float = lerpf(depth_min, depth_max, (_aim.y + 1.0) * 0.5)
 	return _opponent_court_point(lateral, depth)
+
+
+## Shortest volley target: a high ball can be angled off short, a low one only goes deep.
+func _volley_depth_min() -> float:
+	var put_away: float = 0.0
+	if _pending_stroke and _pending_stroke.step:
+		put_away = Player.volley_put_away_share(_pending_stroke.step.point.y)
+	return lerpf(GameConstants.VOLLEY_DEPTH_LOW_BALL, GameConstants.VOLLEY_DEPTH_MIN, put_away)
+
+
+## Remaps an aim axis in [-1, 1] so that neutral points to the open court side (away from the
+## opponent) while full deflection still reaches both sidelines.
+func _toward_open_court(aim_x: float) -> float:
+	var right_x: float = signf(player.global_basis.x.x)
+	var open_side: float = -signf(player.opponent.global_position.x) * right_x
+	var neutral: float = open_side * GameConstants.VOLLEY_OPEN_COURT_AIM
+	if aim_x < 0.0:
+		return lerpf(neutral, -1.0, -aim_x)
+	return lerpf(neutral, 1.0, aim_x)
 
 
 ## Serve target in the diagonal service box: aim x picks the side, aim y the depth.

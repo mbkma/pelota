@@ -11,8 +11,6 @@ var first_serve_points_played: int = 0
 var second_serve_points_won: int = 0
 var second_serve_points_played: int = 0
 var fastest_serve_kmh: float = 0.0
-var _first_serve_speed_sum_kmh: float = 0.0
-var _first_serve_speed_count: int = 0
 var break_points_won: int = 0
 var break_points_played: int = 0
 var break_points_saved: int = 0
@@ -24,6 +22,9 @@ var net_points_played: int = 0
 var total_points_won: int = 0
 ## Distance covered on court (m)
 var distance_covered: float = 0.0
+
+var _first_serve_speed_sum_kmh: float = 0.0
+var _first_serve_speed_count: int = 0
 
 
 func record_serve_speed(speed_kmh: float, is_first_serve: bool) -> void:
@@ -37,4 +38,3 @@ func average_first_serve_kmh() -> float:
 	if _first_serve_speed_count == 0:
 		return 0.0
 	return _first_serve_speed_sum_kmh / _first_serve_speed_count
-

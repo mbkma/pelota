@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bd2cfdcv8o0l1"]
 
-[ext_resource type="Texture2D" uid="uid://b7pua0gsg0up7" path="res://assets/textures/environment/crowd/brown_eye.png" id="1_vwfx7"]
+[ext_resource type="Texture2D" uid="uid://b7pua0gsg0up7" path="res://assets/models/crowd/textures/brown_eye.png" id="1_vwfx7"]
 
 [resource]
 resource_name = "eye"

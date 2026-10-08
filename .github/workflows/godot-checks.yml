@@ -2,17 +2,48 @@ name: Static checks
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
+    paths:
+      - "**.gd"
+      - gdlintrc
+      - requirements.txt
+      - .github/workflows/godot-checks.yml
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
+    paths:
+      - "**.gd"
+      - gdlintrc
+      - requirements.txt
+      - .github/workflows/godot-checks.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  static-checks:
-    name: 'Static checks'
+  gdscript:
+    name: GDScript format and lint
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-    - uses: actions/checkout@v4
-    - uses: Scony/godot-gdscript-toolkit@master
-    - run: gdformat --check src/
-    #- run: gdlint src/ # disabled for now
+      - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install gdtoolkit
+        run: pip install -r requirements.txt
+
+      # The addons folder is third-party code and is not checked.
+      - name: Check formatting
+        run: gdformat --check --diff scenes scripts
+
+      - name: Lint
+        run: gdlint scenes scripts

@@ -52,12 +52,19 @@ func announce(track: MusicTrack) -> void:
 		_tween.kill()
 	_tween = create_tween()
 	_tween.set_parallel(true)
-	_tween.tween_property(self, "position:x", shown_x, SLIDE_IN_TIME).set_trans(
-		Tween.TRANS_BACK
-	).set_ease(Tween.EASE_OUT)
+	(
+		_tween
+		. tween_property(self, "position:x", shown_x, SLIDE_IN_TIME)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
+	)
 	_tween.tween_property(self, "modulate:a", 1.0, SLIDE_IN_TIME * 0.6)
 	_tween.chain().tween_interval(SHOW_TIME)
-	_tween.chain().tween_property(self, "position:x", hidden_x, SLIDE_OUT_TIME).set_trans(
-		Tween.TRANS_CUBIC
-	).set_ease(Tween.EASE_IN)
+	(
+		_tween
+		. chain()
+		. tween_property(self, "position:x", hidden_x, SLIDE_OUT_TIME)
+		. set_trans(Tween.TRANS_CUBIC)
+		. set_ease(Tween.EASE_IN)
+	)
 	_tween.chain().tween_callback(hide)

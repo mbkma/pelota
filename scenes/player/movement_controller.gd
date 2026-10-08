@@ -64,9 +64,16 @@ func _reset_momentum() -> void:
 	_direction_change_time = 0.0
 
 
-## Direction toward the current movement target, its length the share of `max_speed` that
-## still allows stopping at the target.
-func compute_direction(body_position: Vector3, max_speed: float) -> Vector3:
+## Direction toward the current movement target, its length the share of the top speed toward
+## the target that still allows stopping there, at most `speed_factor`.
+func compute_direction(
+	body_position: Vector3,
+	facing: Vector3,
+	stats: PlayerRuntimeStats,
+	stamina01: float,
+	move_speed: float,
+	speed_factor: float = 1.0
+) -> Vector3:
 	if _target == null:
 		return Vector3.ZERO
 
@@ -76,9 +83,58 @@ func compute_direction(body_position: Vector3, max_speed: float) -> Vector3:
 	if distance <= 0.0001:
 		return Vector3.ZERO
 
+	var direction: Vector3 = offset / distance
+	var max_speed: float = top_speed(direction, facing, stats, stamina01, move_speed)
 	var stopping_speed: float = sqrt(2.0 * ARRIVAL_DECELERATION * distance)
-	var input_strength: float = clampf(stopping_speed / maxf(max_speed, 0.001), 0.0, 1.0)
-	return offset.normalized() * input_strength
+	var input_strength: float = clampf(stopping_speed / maxf(max_speed, 0.001), 0.0, speed_factor)
+	return direction * input_strength
+
+
+## Top speed (m/s) running in `move_direction`: the base speed scaled by the player's stats,
+## stamina and the running direction relative to `facing`.
+func top_speed(
+	move_direction: Vector3,
+	facing: Vector3,
+	stats: PlayerRuntimeStats,
+	stamina01: float,
+	move_speed: float
+) -> float:
+	return (
+		move_speed
+		* stats.movement_speed_multiplier(stamina01)
+		* _stamina_factor(stamina01)
+		* _direction_speed_factor(move_direction, facing)
+	)
+
+
+## Seconds a player standing still needs to run `distance` meters and stop there: it speeds up
+## at its acceleration, runs at most at the sideways top speed (the conservative direction) and
+## brakes at ARRIVAL_DECELERATION. `speed_factor` scales the top speed, like a shorter push of
+## the direction does.
+func reach_time(
+	distance: float,
+	stats: PlayerRuntimeStats,
+	stamina01: float,
+	move_speed: float,
+	acceleration: float,
+	speed_factor: float = 1.0
+) -> float:
+	var max_speed: float = (
+		move_speed
+		* stats.movement_speed_multiplier(stamina01)
+		* _stamina_factor(stamina01)
+		* LATERAL_SPEED_FACTOR
+		* speed_factor
+	)
+	var accel: float = (
+		acceleration * stats.acceleration_multiplier(stamina01) * _stamina_factor(stamina01)
+	)
+	var ramps: float = 1.0 / accel + 1.0 / ARRIVAL_DECELERATION
+	var peak_speed: float = sqrt(2.0 * distance / ramps)
+	if peak_speed <= max_speed:
+		return peak_speed * ramps
+	# Reaches top speed: ramps up, cruises, brakes.
+	return distance / max_speed + max_speed * ramps * 0.5
 
 
 ## Advance velocity for one physics frame using realistic acceleration physics.
@@ -107,19 +163,9 @@ func tick(
 	if input_strength > 0.001:
 		move_direction = direction / input_strength
 
-	# Stamina scaling: maintain ability at ~60% stamina, degrade to 50% at 0% stamina
-	var stamina_speed_factor: float = lerpf(0.5, 1.0, stamina01)
-	var stamina_accel_factor: float = lerpf(0.5, 1.0, stamina01)
-
-	# Apply stats multipliers
-	var effective_max_speed: float = (
-		move_speed
-		* stats.movement_speed_multiplier(stamina01)
-		* stamina_speed_factor
-		* _direction_speed_factor(move_direction, facing)
-	)
+	var effective_max_speed: float = top_speed(move_direction, facing, stats, stamina01, move_speed)
 	var effective_acceleration: float = (
-		acceleration * stats.acceleration_multiplier(stamina01) * stamina_accel_factor
+		acceleration * stats.acceleration_multiplier(stamina01) * _stamina_factor(stamina01)
 	)
 
 	# Detect direction change: sharp turns apply extra braking
@@ -169,6 +215,11 @@ func tick(
 
 	_last_direction = move_direction
 	return _velocity
+
+
+## Share of the top speed and acceleration kept at `stamina01`: half of it when exhausted.
+func _stamina_factor(stamina01: float) -> float:
+	return lerpf(0.5, 1.0, stamina01)
 
 
 ## Share of the forward top speed reachable moving in `move_direction`: full toward the net,

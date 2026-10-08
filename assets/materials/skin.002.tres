@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://dxhrgb4xtpkq"]
 
-[ext_resource type="Texture2D" uid="uid://4eb0gfhghoie" path="res://assets/textures/environment/crowd/crowd-ready-test_whiteskin.png" id="1_vp0x5"]
+[ext_resource type="Texture2D" uid="uid://4eb0gfhghoie" path="res://assets/models/crowd/textures/crowd-ready-test_whiteskin.png" id="1_vp0x5"]
 
 [resource]
 resource_name = "skin.002"

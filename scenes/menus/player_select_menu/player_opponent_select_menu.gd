@@ -14,10 +14,10 @@ enum Lane {
 	PLAYER2,
 }
 
-const PLAYER1_CHART_COLOR := Color("#36A2EB")
-const PLAYER2_CHART_COLOR := Color("#FF6384")
-const UNASSIGNED_COLOR := Color.WHITE
-const READY_COLOR := Color("#2fbf5f")
+const PLAYER1_CHART_COLOR := Palette.PLAYER_1
+const PLAYER2_CHART_COLOR := Palette.PLAYER_2
+const UNASSIGNED_COLOR := Palette.CREAM
+const READY_COLOR := Palette.AMBER
 
 ## Direction length that triggers a menu step.
 const DIRECTION_TRIGGER: float = 0.6
@@ -478,10 +478,10 @@ func _radar_style(
 		type = Function.Type.RADAR,
 		radar_fill_alpha = 0.20,
 		radar_grid_levels = 5,
-		radar_grid_color = Color("#d9d9d9"),
-		radar_axis_color = Color("#d9d9d9"),
-		radar_label_color = Color.WHITE,
-		radar_scale_label_color = Color.WHITE,
+		radar_grid_color = Color(Palette.CREAM, 0.35),
+		radar_axis_color = Color(Palette.CREAM, 0.35),
+		radar_label_color = Palette.CREAM,
+		radar_scale_label_color = Palette.CREAM,
 		radar_show_scale_labels = true,
 		radar_min_value = range_min,
 		radar_max_value = range_max,

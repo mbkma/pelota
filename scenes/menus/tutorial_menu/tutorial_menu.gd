@@ -4,8 +4,8 @@ class_name TutorialMenu
 extends Control
 
 const CONTROL_ICON_SIZE := Vector2(40, 40)
-const DOT_ACTIVE_COLOR := Color(0.83, 0.93, 0.16)
-const DOT_INACTIVE_COLOR := Color(1, 1, 1, 0.3)
+const DOT_ACTIVE_COLOR := Palette.AMBER
+const DOT_INACTIVE_COLOR := Color(Palette.CREAM, 0.3)
 
 @export var tutorial: Tutorial
 

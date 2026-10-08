@@ -8,8 +8,8 @@
 [ext_resource type="ArrayMesh" uid="uid://dwsm03iyjwm27" path="res://assets/models/player/meshes/djokovic/player_djokovic_short01_002.res" id="6_hair"]
 [ext_resource type="Texture2D" uid="uid://c4ldg4u3iotg3" path="res://assets/models/player/textures/middleage_lightskinned_male_diffuse.png" id="7_skin"]
 [ext_resource type="Texture2D" uid="uid://cbxkgjn0iclc6" path="res://assets/models/player/textures/short01_diffuse.png" id="8_hair"]
-[ext_resource type="Texture2D" uid="uid://bc3eufencni24" path="res://assets/textures/racket/head_racket.png" id="9_racket"]
-[ext_resource type="Texture2D" uid="uid://da2xptxpoi4km" path="res://assets/textures/racket/head_strings.png" id="10_strings"]
+[ext_resource type="Texture2D" uid="uid://bc3eufencni24" path="res://assets/models/racket/textures/head_racket.png" id="9_racket"]
+[ext_resource type="Texture2D" uid="uid://da2xptxpoi4km" path="res://assets/models/racket/textures/head_strings.png" id="10_strings"]
 
 [resource]
 script = ExtResource("1_script")

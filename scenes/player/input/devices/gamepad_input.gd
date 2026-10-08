@@ -34,8 +34,14 @@ func vibrate(weak_magnitude: float, strong_magnitude: float, duration: float) ->
 
 func _read_direction() -> Vector2:
 	var dpad := Vector2(
-		float(_is_button_pressed(JOY_BUTTON_DPAD_RIGHT)) - float(_is_button_pressed(JOY_BUTTON_DPAD_LEFT)),
-		float(_is_button_pressed(JOY_BUTTON_DPAD_UP)) - float(_is_button_pressed(JOY_BUTTON_DPAD_DOWN))
+		(
+			float(_is_button_pressed(JOY_BUTTON_DPAD_RIGHT))
+			- float(_is_button_pressed(JOY_BUTTON_DPAD_LEFT))
+		),
+		(
+			float(_is_button_pressed(JOY_BUTTON_DPAD_UP))
+			- float(_is_button_pressed(JOY_BUTTON_DPAD_DOWN))
+		)
 	)
 	if dpad != Vector2.ZERO:
 		return dpad.normalized()

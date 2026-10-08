@@ -10,24 +10,27 @@ content_margin_left = 16.0
 content_margin_top = 14.0
 content_margin_right = 22.0
 content_margin_bottom = 14.0
-bg_color = Color(0.05, 0.08, 0.16, 0.92)
-border_width_left = 6
-border_color = Color(0.83, 0.93, 0.16, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.45)
-shadow_size = 14
-shadow_offset = Vector2(0, 4)
+bg_color = Color(0.294, 0.22, 0.369, 0.96)
+border_width_left = 8
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.141, 0.102, 0.188, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0.141, 0.102, 0.188, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 6)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cover"]
-bg_color = Color(1, 1, 1, 0.08)
+bg_color = Color(0.141, 0.102, 0.188, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(1, 1, 1, 0.25)
+border_color = Color(1, 0.714, 0.196, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -95,23 +98,23 @@ theme_override_constants/separation = 3
 custom_minimum_size = Vector2(4, 14)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.83, 0.93, 0.16, 1)
+color = Color(1, 0.714, 0.196, 1)
 
 [node name="Bar2" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1729616352]
 custom_minimum_size = Vector2(4, 14)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.83, 0.93, 0.16, 1)
+color = Color(1, 0.714, 0.196, 1)
 
 [node name="Bar3" type="ColorRect" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow/Equalizer" unique_id=1435183206]
 custom_minimum_size = Vector2(4, 14)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.83, 0.93, 0.16, 1)
+color = Color(1, 0.714, 0.196, 1)
 
 [node name="NowPlayingLabel" type="Label" parent="NowPlayingBanner/HBox/Texts/NowPlayingRow" unique_id=1376226316]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.83, 0.93, 0.16, 1)
+theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
 theme_override_fonts/font = SubResource("FontVariation_caps")
 theme_override_font_sizes/font_size = 13
 text = "NOW PLAYING"
@@ -119,7 +122,7 @@ text = "NOW PLAYING"
 [node name="TitleLabel" type="Label" parent="NowPlayingBanner/HBox/Texts" unique_id=1110434386]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.933, 0.843, 0.553, 1)
 theme_override_fonts/font = SubResource("FontVariation_bold")
 theme_override_font_sizes/font_size = 26
 text = "Title"

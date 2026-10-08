@@ -1,8 +1,7 @@
 ## A physical input device (the keyboard or one gamepad).
 ## Used by HumanController in a match and by the player select menu to assign devices to players.
 ## Call poll() once per frame, then query the direction and the stroke actions.
-@abstract
-class_name InputDevice
+@abstract class_name InputDevice
 extends RefCounted
 
 enum Action {
@@ -81,15 +80,11 @@ func vibrate(_weak_magnitude: float, _strong_magnitude: float, _duration: float)
 
 @abstract func get_device_id() -> int
 
-
 @abstract func get_display_name() -> String
-
 
 ## Raw direction with x = right and y = forward, length up to 1.
 @abstract func _read_direction() -> Vector2
 
-
 @abstract func _is_action_held(action: Action) -> bool
-
 
 @abstract func _is_accept_held() -> bool

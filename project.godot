@@ -15,6 +15,7 @@ config/description="A tennis simulation game."
 config/version="0.0.1"
 run/main_scene="res://scenes/opening/opening.tscn"
 config/features=PackedStringArray("4.8")
+boot_splash/bg_color=Color(0.141, 0.102, 0.188, 1)
 
 [audio]
 
@@ -565,5 +566,6 @@ copy_path="res://"
 
 anti_aliasing/quality/msaa_2d=2
 anti_aliasing/quality/msaa_3d=2
+environment/defaults/default_clear_color=Color(0.141, 0.102, 0.188, 1)
 anti_aliasing/quality/screen_space_aa=2
 environment/default_environment="res://default_env.tres"

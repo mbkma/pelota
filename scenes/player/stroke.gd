@@ -36,19 +36,25 @@ var stroke_intent: int = -1
 
 ## Whether the stroke is played before the ball bounces, close to the net.
 func is_volley() -> bool:
-	return stroke_type in [
-		StrokeType.FOREHAND_VOLLEY,
-		StrokeType.BACKHAND_VOLLEY,
-		StrokeType.FOREHAND_DROP_VOLLEY,
-		StrokeType.BACKHAND_DROP_VOLLEY,
-	]
+	return (
+		stroke_type
+		in [
+			StrokeType.FOREHAND_VOLLEY,
+			StrokeType.BACKHAND_VOLLEY,
+			StrokeType.FOREHAND_DROP_VOLLEY,
+			StrokeType.BACKHAND_DROP_VOLLEY,
+		]
+	)
 
 
 ## Whether the stroke is a soft touch shot (drop shot or drop volley).
 func is_drop() -> bool:
-	return stroke_type in [
-		StrokeType.FOREHAND_DROP_SHOT,
-		StrokeType.BACKHAND_DROP_SHOT,
-		StrokeType.FOREHAND_DROP_VOLLEY,
-		StrokeType.BACKHAND_DROP_VOLLEY,
-	]
+	return (
+		stroke_type
+		in [
+			StrokeType.FOREHAND_DROP_SHOT,
+			StrokeType.BACKHAND_DROP_SHOT,
+			StrokeType.FOREHAND_DROP_VOLLEY,
+			StrokeType.BACKHAND_DROP_VOLLEY,
+		]
+	)
