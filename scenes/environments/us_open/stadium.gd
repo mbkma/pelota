@@ -1,5 +1,5 @@
-## The stadium: court, player start positions, serve clocks, serve speed and match time panels
-## and the courtside TV cameras.
+## The stadium: court, player start positions, serve clocks, serve speed and match time panels,
+## the courtside TV cameras and the match cameras.
 class_name Stadium
 extends Node3D
 

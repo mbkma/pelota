@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://dvo2jq6bdkolh" path="res://assets/models/stadium/stadium.blend" id="2_hi2re"]
 [ext_resource type="Script" uid="uid://h38us3lvmlk7" path="res://scenes/environments/us_open/stadium.gd" id="3"]
+[ext_resource type="Script" uid="uid://bhlvub0gn61wg" path="res://scenes/environments/us_open/cameras/cameras.gd" id="4_2gjwx"]
 [ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://scenes/environments/us_open/serve_speed_panel.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://scenes/court/court.tscn" id="5_2qn74"]
+[ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scenes/environments/us_open/cameras/free_look_camera.gd" id="5_tvjv8"]
 [ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
 [ext_resource type="Script" uid="uid://cwhjwue5t16nc" path="res://scenes/environments/us_open/look_at.gd" id="7_af67j"]
 [ext_resource type="PackedScene" uid="uid://dlfmxq26xgf2y" path="res://assets/models/stadium/camera.blend" id="8_rminr"]
@@ -45,7 +47,58 @@ cache/0/32/0/scale = 1.0
 [node name="Stadium" type="Node3D" unique_id=1375206359]
 script = ExtResource("3")
 
+[node name="stadium" parent="." unique_id=492985688 instance=ExtResource("2_hi2re")]
+
 [node name="Court" parent="." unique_id=412000164 instance=ExtResource("5_2qn74")]
+
+[node name="Cameras" type="Node3D" parent="." unique_id=1668762139 node_paths=PackedStringArray("cams", "active_cam", "front_player_cam", "back_player_cam")]
+script = ExtResource("4_2gjwx")
+cams = [NodePath("FlyingCam"), NodePath("TopFront"), NodePath("TopBack"), NodePath("MiddleFront"), NodePath("MiddleBack"), NodePath("CourtSideFront"), NodePath("CourtSideBack"), NodePath("CameraTop")]
+active_cam = NodePath("MiddleFront")
+front_player_cam = NodePath("MiddleFront")
+back_player_cam = NodePath("MiddleBack")
+
+[node name="FlyingCam" type="Camera3D" parent="Cameras" unique_id=994003878]
+transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
+fov = 30.0
+far = 8192.0
+script = ExtResource("5_tvjv8")
+
+[node name="TopFront" type="Camera3D" parent="Cameras" unique_id=1711630965]
+transform = Transform3D(1, 0, 0, 0, 0.948324, 0.317305, 0, -0.317305, 0.948324, 0, 9.836, 35.084)
+fov = 22.0
+size = 97.38
+
+[node name="TopBack" type="Camera3D" parent="Cameras" unique_id=600431920]
+transform = Transform3D(-1, 4.7911705e-08, -1.4319288e-07, 0, 0.9483236, 0.31730488, 1.509958e-07, 0.31730488, -0.9483236, -2.426624e-06, 9.836, -35.084)
+fov = 22.0
+size = 97.38
+
+[node name="MiddleFront" type="Camera3D" parent="Cameras" unique_id=2002676584]
+transform = Transform3D(1, 0, 0, 0, 0.963631, 0.267239, 0, -0.267239, 0.963631, 0, 6.936, 28.829)
+fov = 24.5
+size = 97.38
+script = ExtResource("5_tvjv8")
+
+[node name="MiddleBack" type="Camera3D" parent="Cameras" unique_id=1711178741]
+transform = Transform3D(-1, -2.3362732e-08, 8.424329e-08, 0, 0.9636309, 0.2672385, -8.742278e-08, 0.2672385, -0.9636309, 0, 6.936, -28.829)
+fov = 23.5
+size = 97.38
+script = ExtResource("5_tvjv8")
+
+[node name="CourtSideFront" type="Camera3D" parent="Cameras" unique_id=90699718]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 19)
+fov = 39.5
+script = ExtResource("5_tvjv8")
+
+[node name="CourtSideBack" type="Camera3D" parent="Cameras" unique_id=1456183779]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -19)
+fov = 39.5
+script = ExtResource("5_tvjv8")
+
+[node name="CameraTop" type="Camera3D" parent="Cameras" unique_id=1099254777]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 20, 0)
+script = ExtResource("5_tvjv8")
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=1699210346 groups=["Ground"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -178,5 +231,3 @@ script = ExtResource("7_af67j")
 
 [node name="camera" parent="BackPlayerCamera" unique_id=731066851 instance=ExtResource("8_rminr")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-
-[node name="stadium" parent="." unique_id=492985688 instance=ExtResource("2_hi2re")]

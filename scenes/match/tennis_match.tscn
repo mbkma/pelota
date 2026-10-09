@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/player/player.tscn" id="2_hqvfk"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/hud/television_hud.tscn" id="4_upnw7"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="6_4vere"]
-[ext_resource type="PackedScene" uid="uid://bq11dsxkra3s4" path="res://scenes/environments/us_open/cameras/cameras.tscn" id="7_6frth"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/match/match_manager.tscn" id="8_2s2ac"]
 [ext_resource type="PackedScene" uid="uid://b7nclbgkw6veg" path="res://scenes/ui/hud/debug_hud.tscn" id="11_7qdcc"]
 [ext_resource type="PackedScene" uid="uid://brw673es8wnx2" path="res://scenes/tools/debug_drawer.tscn" id="11_324nl"]
@@ -31,14 +30,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
 team_index = 1
 
-[node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
-active_cam = NodePath("MiddleFront")
-
-[node name="TopFront" parent="Cameras" index="1" unique_id=1711630965]
-transform = Transform3D(1, 0, 0, 0, 0.94832355, 0.3173049, 0, -0.3173049, 0.94832355, 0, 9.836, 35.084)
-
 [node name="SplitscreenUI" parent="." unique_id=900824732 node_paths=PackedStringArray("cameras", "player0", "player1") instance=ExtResource("17_splitscreen")]
-cameras = NodePath("../Cameras")
+cameras = NodePath("../Stadium/Cameras")
 player0 = NodePath("../Player")
 player1 = NodePath("../Player2")
 
@@ -96,7 +89,7 @@ stadium = NodePath("../Stadium")
 television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
 crowd = NodePath("../Crowd")
-cameras = NodePath("../Cameras")
+cameras = NodePath("../Stadium/Cameras")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]
 environment = ExtResource("24_environment")
@@ -125,7 +118,6 @@ visible = false
 
 [node name="Crowd" parent="." unique_id=1204219689 instance=ExtResource("16_4veo4")]
 
-[editable path="Cameras"]
 [editable path="TelevisionHUD"]
 [editable path="TelevisionHUD/ScoreDisplay"]
 [editable path="TelevisionHUD/ScoreDisplay/VBoxContainer/Player1ScorePanel"]

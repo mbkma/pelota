@@ -5,9 +5,10 @@ extends Node3D
 @export var cams: Array[Camera3D]
 ## Camera active at the start
 @export var active_cam: Camera3D
-
-@onready var _top_front: Camera3D = $TopFront
-@onready var _top_back: Camera3D = $TopBack
+## Camera showing the player on the front half (z > 0) from behind
+@export var front_player_cam: Camera3D
+## Camera showing the player on the back half (z < 0) from behind
+@export var back_player_cam: Camera3D
 
 
 func _ready() -> void:
@@ -30,4 +31,4 @@ func activate(camera: Camera3D) -> void:
 
 ## Makes the broadcast camera behind the given player's baseline the active camera.
 func show_from_behind(player: Player) -> void:
-	activate(_top_front if player.global_position.z > 0.0 else _top_back)
+	activate(front_player_cam if player.global_position.z > 0.0 else back_player_cam)
