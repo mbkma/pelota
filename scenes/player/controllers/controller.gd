@@ -2,9 +2,13 @@
 @abstract class_name Controller
 extends Node
 
-## Contact height range (m) of a comfortable groundstroke, used for the ideal position
-const IDEAL_CONTACT_HEIGHT_MIN: float = 0.7
-const IDEAL_CONTACT_HEIGHT_MAX: float = 1.4
+## Height (m) at which a groundstroke is comfortably met as the ball drops after the bounce,
+## and how far behind the baseline (m) a player retreats at most for a deep, high ball (beyond
+## it the ball is taken higher), used for the ideal position.
+const IDEAL_CONTACT_HEIGHT: float = 1.1
+const MAX_RETREAT_BEHIND_BASELINE: float = 3.0
+## Time (s) a player wants to be in place before a groundstroke, to set for the swing
+const GROUNDSTROKE_SETUP_TIME: float = 0.25
 ## Lowest ball height (m) a stroke can still reach
 const MIN_CONTACT_HEIGHT: float = 0.2
 ## Farthest (m) a volleying player steps in toward the net to cut the ball off
@@ -81,27 +85,68 @@ func position_for_contact(step: TrajectoryStep, stroke: Stroke) -> Vector3:
 
 
 ## Best point to meet the incoming ball: a volley if the ball can be taken before the bounce
-## in the net zone, otherwise where it passes a comfortable height after the bounce, nearest
-## to the player (else the apex after the bounce).
+## in the net zone, otherwise a groundstroke after the bounce (see
+## groundstroke_contact_step).
 func get_ideal_contact_step() -> TrajectoryStep:
 	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
 	var closest_step: TrajectoryStep = _closest_playable_step(trajectory)
 	if closest_step and closest_step.is_volley_contact() and closest_step.is_in_net_zone():
 		var intercept: TrajectoryStep = _volley_intercept_step(trajectory, 1.0)
 		return intercept if intercept else closest_step
+	return groundstroke_contact_step(
+		trajectory,
+		IDEAL_CONTACT_HEIGHT,
+		GameConstants.COURT_LENGTH_HALF + MAX_RETREAT_BEHIND_BASELINE
+	)
 
-	var best_step: TrajectoryStep = null
+
+## Where a player meets the ball after the bounce: as it drops to `contact_height` after the
+## apex (at the apex of a lower bounce), so the player moves in for a short ball and back for a
+## deep, high one. The player retreats no farther than `max_depth` (m from the net) and takes
+## the ball higher there. If the player cannot get there and set in time, it takes the ball
+## at the nearest point along the flight it can get to (earlier on the rise, or later and
+## lower); if there is none, where it is least late. Null if the ball does not bounce on this
+## side.
+func groundstroke_contact_step(
+	trajectory: Array[TrajectoryStep], contact_height: float, max_depth: float
+) -> TrajectoryStep:
+	var side: float = signf(player.global_position.z)
+	var candidates: Array[TrajectoryStep] = []
+	var preferred_index: int = -1
+	var previous_y: float = -INF
+	var apex_passed: bool = false
 	for step in trajectory:
-		if step.bounces != 1:
+		if step.bounces > 1:
+			break
+		if step.bounces == 0 or signf(step.point.z) != side or step.point.y < MIN_CONTACT_HEIGHT:
 			continue
-		if step.point.y < IDEAL_CONTACT_HEIGHT_MIN or step.point.y > IDEAL_CONTACT_HEIGHT_MAX:
-			continue
-		if not best_step or _z_distance(step) < _z_distance(best_step):
-			best_step = step
-	if best_step:
-		return best_step
-	var apex: TrajectoryStep = _closest_apex_after_first_bounce(trajectory)
-	return apex if apex else closest_step
+		if absf(step.point.z) > max_depth and not candidates.is_empty():
+			break
+		candidates.append(step)
+		apex_passed = apex_passed or step.point.y < previous_y
+		previous_y = step.point.y
+		if preferred_index < 0 and apex_passed and step.point.y <= contact_height:
+			preferred_index = candidates.size() - 1
+	if candidates.is_empty():
+		return null
+	if preferred_index < 0:
+		preferred_index = candidates.size() - 1
+
+	var best: TrajectoryStep = null
+	var best_offset: int = 0
+	var least_late: TrajectoryStep = null
+	var least_lateness: float = INF
+	for i in candidates.size():
+		var step: TrajectoryStep = candidates[i]
+		var reach_time: float = player.time_to_reach(ideal_position_for_step(step))
+		var lateness: float = reach_time - (step.time - GROUNDSTROKE_SETUP_TIME)
+		if lateness <= 0.0 and (not best or absi(i - preferred_index) < best_offset):
+			best = step
+			best_offset = absi(i - preferred_index)
+		if lateness < least_lateness:
+			least_late = step
+			least_lateness = lateness
+	return best if best else least_late
 
 
 ## Where the player should stand to meet the ball at `step` with a forehand or backhand
@@ -151,11 +196,6 @@ func _volley_intercept_step(
 	return null
 
 
-## Apex after the first bounce closest to the player by Z distance.
-func get_closest_apex_after_first_bounce() -> TrajectoryStep:
-	return _closest_apex_after_first_bounce(player.ball.predict_trajectory())
-
-
 ## Playable trajectory step (before the second bounce, high enough to reach) closest to the
 ## player by Z distance. A ball dying short of the player (e.g. a drop shot) is met at the last
 ## step it can still be played.
@@ -171,20 +211,6 @@ func _closest_playable_step(trajectory: Array[TrajectoryStep]) -> TrajectoryStep
 		if step.point.y < MIN_CONTACT_HEIGHT:
 			continue
 		if not closest_step or _z_distance(step) < _z_distance(closest_step):
-			closest_step = step
-	return closest_step
-
-
-func _closest_apex_after_first_bounce(trajectory: Array[TrajectoryStep]) -> TrajectoryStep:
-	var closest_step: TrajectoryStep = null
-	for i in trajectory.size():
-		var step: TrajectoryStep = trajectory[i]
-		if step.bounces != 1:
-			continue
-		var previous_y: float = trajectory[maxi(i - 1, 0)].point.y
-		var next_y: float = trajectory[mini(i + 1, trajectory.size() - 1)].point.y
-		var is_apex: bool = step.point.y >= previous_y and step.point.y >= next_y
-		if is_apex and (not closest_step or _z_distance(step) < _z_distance(closest_step)):
 			closest_step = step
 	return closest_step
 

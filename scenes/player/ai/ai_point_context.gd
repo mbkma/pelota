@@ -26,6 +26,7 @@ var play_style: AiPlayStyle
 ## Step the ball is met at; null for a serve.
 var closest_step: TrajectoryStep
 var is_serve: bool = false
+var is_second_serve: bool = false
 
 var player_position: Vector3
 var ball_position: Vector3
@@ -37,6 +38,8 @@ var opponent_center_distance: float = 0.0
 
 var ball_side: BallSide = BallSide.FOREHAND
 var short_ball_opportunity: bool = false
+## How much a deep incoming ball pushes the player back, in [0, 1] (see Player.depth_pressure)
+var depth_pressure: float = 0.0
 var intent: ShotIntent = ShotIntent.NEUTRAL
 var target_lane: TargetLane = TargetLane.CROSS
 
@@ -47,6 +50,10 @@ func _init(target_player: Player, step: TrajectoryStep) -> void:
 	play_style = target_player.player_data.play_style
 	closest_step = step
 	is_serve = step == null
+	is_second_serve = (
+		is_serve
+		and target_player.match_manager.current_state == MatchManager.MatchState.SECOND_SERVE
+	)
 
 	player_position = target_player.global_position
 	ball_position = step.point if step else player_position
@@ -67,6 +74,18 @@ func _init(target_player: Player, step: TrajectoryStep) -> void:
 	var side_dot: float = (ball_position - player_position).dot(target_player.basis.x)
 	ball_side = BallSide.FOREHAND if side_dot > 0.0 else BallSide.BACKHAND
 	short_ball_opportunity = absf(ball_position.z) < GameConstants.SERVICE_LINE + 3
+	if step and not step.is_volley_contact():
+		depth_pressure = Player.depth_pressure(
+			_bounce_point(target_player.ball).z, target_player.is_returning_serve()
+		)
+
+
+## Where the incoming ball bounces on this side
+static func _bounce_point(ball: Ball) -> Vector3:
+	for step in ball.predict_trajectory():
+		if step.bounces > ball.bounces_since_stroke:
+			return step.point
+	return ball.last_bounce_position
 
 
 ## Whether the stroke is a volley: the ball is taken before it bounces.

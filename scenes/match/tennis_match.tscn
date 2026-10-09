@@ -14,8 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://fnykupeneorb" path="res://scenes/windows/pause_menu.tscn" id="18_fevwx"]
 [ext_resource type="PackedScene" uid="uid://b6qt4d7lxmlyh" path="res://scenes/ui/hud/replay_overlay.tscn" id="19_replay_overlay"]
 [ext_resource type="Script" uid="uid://ghfnq4x36r3e" path="res://scenes/match/replay/match_replay_controller.gd" id="20_replay"]
-[ext_resource type="PackedScene" path="res://scenes/ui/hud/player_status_panel.tscn" id="22_status_panel"]
-[ext_resource type="PackedScene" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
+[ext_resource type="PackedScene" uid="uid://daep44axg5840" path="res://scenes/ui/hud/player_status_panel.tscn" id="22_status_panel"]
+[ext_resource type="PackedScene" uid="uid://dwg7xu576cxge" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
 [ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
 
 [node name="TennisMatch" type="Node" unique_id=1484614295 node_paths=PackedStringArray("player0", "player1")]
@@ -32,11 +32,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
 team_index = 1
 
 [node name="Cameras" parent="." unique_id=1668762139 node_paths=PackedStringArray("active_cam") instance=ExtResource("7_6frth")]
-active_cam = NodePath("TopFront")
+active_cam = NodePath("MiddleFront")
 
 [node name="TopFront" parent="Cameras" index="1" unique_id=1711630965]
-transform = Transform3D(1, 0, 0, 0, 0.94832355, 0.3173049, 0, -0.3173049, 0.94832355, 0, 12.543001, 40.307)
-fov = 18.3
+transform = Transform3D(1, 0, 0, 0, 0.94832355, 0.3173049, 0, -0.3173049, 0.94832355, 0, 9.836, 35.084)
 
 [node name="SplitscreenUI" parent="." unique_id=900824732 node_paths=PackedStringArray("cameras", "player0", "player1") instance=ExtResource("17_splitscreen")]
 cameras = NodePath("../Cameras")

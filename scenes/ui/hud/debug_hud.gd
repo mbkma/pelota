@@ -1,6 +1,6 @@
 ## Debug HUD (toggled with the game_debug_menu action): match, ball and player state, a ball
 ## speed graph and the debug log. In debug builds , and . change the simulation speed, - resets
-## it and P pauses.
+## it and P pauses. The mouse cursor shows while it is open.
 extends CanvasLayer
 
 const MIN_SIM_SPEED: float = 0.1
@@ -79,6 +79,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("game_debug_menu"):
 		visible = not visible
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if visible else Input.MOUSE_MODE_HIDDEN
 		if visible:
 			_refresh_camera_selector()
 		return

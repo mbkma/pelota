@@ -43,7 +43,6 @@ func _event_skips_intro(event: InputEvent) -> bool:
 		event.is_action_released("ui_accept")
 		or event.is_action_released("ui_select")
 		or event.is_action_released("ui_cancel")
-		or _event_is_mouse_button_released(event)
 	)
 
 

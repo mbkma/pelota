@@ -107,24 +107,22 @@ func top_speed(
 	)
 
 
-## Seconds a player standing still needs to run `distance` meters and stop there: it speeds up
-## at its acceleration, runs at most at the sideways top speed (the conservative direction) and
-## brakes at ARRIVAL_DECELERATION. `speed_factor` scales the top speed, like a shorter push of
-## the direction does.
+## Seconds a player standing still needs to run `offset` and stop there: it speeds up at its
+## acceleration, runs at most at its top speed in that direction (slower backward than forward)
+## and brakes at ARRIVAL_DECELERATION. `speed_factor` scales the top speed, like a shorter push
+## of the direction does.
 func reach_time(
-	distance: float,
+	offset: Vector3,
+	facing: Vector3,
 	stats: PlayerRuntimeStats,
 	stamina01: float,
 	move_speed: float,
 	acceleration: float,
 	speed_factor: float = 1.0
 ) -> float:
+	var distance: float = offset.length()
 	var max_speed: float = (
-		move_speed
-		* stats.movement_speed_multiplier(stamina01)
-		* _stamina_factor(stamina01)
-		* LATERAL_SPEED_FACTOR
-		* speed_factor
+		top_speed(offset.normalized(), facing, stats, stamina01, move_speed) * speed_factor
 	)
 	var accel: float = (
 		acceleration * stats.acceleration_multiplier(stamina01) * _stamina_factor(stamina01)

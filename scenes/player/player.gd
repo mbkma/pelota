@@ -16,13 +16,26 @@ const STAMINA_STROKE_COST_BASE: float = 5.5
 const STAMINA_MOVE_DRAIN_BASE: float = 6.0
 ## Ball within this distance (m) of the racket contact point at contact: perfect positioning.
 const PERFECT_CONTACT_DISTANCE: float = 0.15
-## Share of the stroke speed kept at the worst positioning (ball at the edge of the hit range).
-const POOR_POSITION_POWER_FACTOR: float = 0.6
-## Extra landing error (m) at the worst positioning.
+## Extra landing error (m) at the worst control.
 const POOR_POSITION_ERROR_RADIUS: float = 3.0
-## Share of the target depth (distance from the net) reached at the worst positioning: a weak
-## shot lands shorter instead of being looped up high.
-const POOR_POSITION_DEPTH_FACTOR: float = 0.7
+## Share of the target depth (distance from the net) reached at the worst control: a weak shot
+## lands shorter instead of being looped up high.
+const POOR_POSITION_DEPTH_FACTOR: float = 0.55
+## Flight time of a shot at the worst control as a share of the clean shot's, drawn per shot. The
+## shorter ball keeps about the clean flight time, so it is slower without looping up: some come
+## a little flatter, some a little higher.
+const POOR_POSITION_FLIGHT_TIME: Vector2 = Vector2(0.95, 1.2)
+## Share of the spin kept at the worst control: a mishit comes off the racket flat, so it does
+## not loop up.
+const POOR_POSITION_SPIN_FACTOR: float = 0.35
+## Depth pressure: a deep ball pushes the player back and rushes the shot. It rises from none
+## for a ball bouncing DEEP_BALL_START (m from the net) to full at the baseline, and for a
+## serve over the last DEEP_SERVE_RANGE (m) before the service line.
+const DEEP_BALL_START: float = 8.0
+const DEEP_SERVE_RANGE: float = 2.5
+## Share of the shot control a fully deep ball takes away, for the weakest and for the best
+## shot control. A deep ball cannot be attacked at all.
+const DEEP_BALL_CONTROL_LOSS: Vector2 = Vector2(0.6, 0.35)
 ## Readiness: a player moving slower than SET_SPEED (m/s) is set for the shot; being set for
 ## FULL_READINESS_SET_TIME seconds before contact is full readiness.
 const SET_SPEED: float = 1.0
@@ -60,8 +73,9 @@ const SERVE_NET_CLEARANCE: float = 0.03
 @export var team_index: int = 0
 ## World-space marker used to visualize shot aim target.
 @export var ball_aim_marker: BallAimMarker
-## Shows where to stand to meet the incoming ball (for controllers that provide it).
-@export var ideal_position_marker: Node3D
+## Shows where to stand to meet the incoming ball (for controllers that provide it), colored by
+## how well the player stands there.
+@export var ideal_position_marker: IdealPositionMarker
 ## Opposing player reference for serve/rally synchronization.
 @export var opponent: Player
 ## Ball scene spawned as the toss ball when serving.
@@ -252,7 +266,7 @@ func time_to_reach(target: Vector3, speed_factor: float = 1.0) -> float:
 	var offset: Vector3 = target - global_position
 	offset.y = 0.0
 	return _movement.reach_time(
-		offset.length(), stats, get_stamina_ratio(), move_speed, acceleration, speed_factor
+		offset, _facing(), stats, get_stamina_ratio(), move_speed, acceleration, speed_factor
 	)
 
 
@@ -266,9 +280,12 @@ func cancel_movement() -> void:
 	_movement.cancel()
 
 
-## Move to defensive position after stroke animation finishes
+## Move to defensive position after stroke animation finishes, unless the player already
+## moves to meet the next ball by then.
 func move_to_defensive_position(target_position: Vector3) -> void:
 	await stroke_finished
+	if queued_stroke:
+		return
 	request_move_to(target_position)
 
 
@@ -384,7 +401,7 @@ func _contact_distance(contact_point: Vector3) -> float:
 
 ## Positioning quality in [0, 1] for a ball meeting the racket `contact_distance` meters off
 ## the contact point: 1 within PERFECT_CONTACT_DISTANCE, 0 at the edge of the hit range.
-func _positioning_quality(contact_distance: float) -> float:
+func positioning_quality(contact_distance: float) -> float:
 	var off_by: float = contact_distance - PERFECT_CONTACT_DISTANCE
 	var tolerance: float = hit_range_tolerance_meters - PERFECT_CONTACT_DISTANCE
 	return 1.0 - clampf(off_by / tolerance, 0.0, 1.0)
@@ -409,16 +426,41 @@ func _update_readiness(delta: float) -> void:
 	_incoming_time = _incoming_time + delta if ball_incoming else 0.0
 
 
-## Applies how well the ball was met: the stroke's attack pace only comes through in full when
-## the player is in position and gets its full share (readiness, or the contact height of a
-## volley); out of position the stroke is also weakened, shortened and scattered.
-func _apply_contact_quality(stroke: Stroke, positioning: float, attack_share: float) -> void:
-	stroke.stroke_power += stroke.attack_power * positioning * attack_share
-	stroke.stroke_power *= lerpf(POOR_POSITION_POWER_FACTOR, 1.0, positioning)
-	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, positioning)
-	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - positioning)
+## Pressure in [0, 1] of a ball that bounced `bounce_z` (m) from the net: none for a ball
+## landing short, full for one landing on the baseline (for a serve: on the service line).
+static func depth_pressure(bounce_z: float, is_return: bool) -> float:
+	var start: float = (
+		GameConstants.SERVICE_LINE - DEEP_SERVE_RANGE if is_return else DEEP_BALL_START
+	)
+	var end: float = GameConstants.SERVICE_LINE if is_return else GameConstants.COURT_LENGTH_HALF
+	return clampf(inverse_lerp(start, end, absf(bounce_z)), 0.0, 1.0)
+
+
+## Applies how well the ball was met (`control`: the positioning, lowered by a deep incoming
+## ball): the stroke's attack pace only comes through in full with full control and its full
+## share (readiness, or the contact height of a volley); with poor control the stroke is also
+## shortened, flattened and scattered, and weakened so that it takes about as long as the clean
+## shot over its shorter distance (see POOR_POSITION_FLIGHT_TIME).
+func _apply_contact_quality(stroke: Stroke, control: float, attack_share: float) -> void:
+	stroke.stroke_power += stroke.attack_power * control * attack_share
+	var flight_time: float = (
+		_forward_distance(stroke.stroke_target)
+		/ stroke.stroke_power
+		* lerpf(randf_range(POOR_POSITION_FLIGHT_TIME.x, POOR_POSITION_FLIGHT_TIME.y), 1.0, control)
+	)
+	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, control)
+	stroke.stroke_spin.y *= lerpf(POOR_POSITION_SPIN_FACTOR, 1.0, control)
+	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - control)
 	var error: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
 	stroke.stroke_target += Vector3(error.x, 0.0, error.y)
+	stroke.stroke_power = minf(
+		stroke.stroke_power, _forward_distance(stroke.stroke_target) / flight_time
+	)
+
+
+## Distance (m) along the court's length from the ball to `target`.
+func _forward_distance(target: Vector3) -> float:
+	return absf(target.z - ball.global_position.z)
 
 
 ## A volley is a short punch without a backswing: its pace is mostly the incoming ball's pace
@@ -475,13 +517,23 @@ func _on_stroke_contact() -> void:
 	if contact_distance > hit_range_tolerance_meters:
 		cancel_stroke()
 		return
-	last_positioning_quality = _positioning_quality(contact_distance)
+	last_positioning_quality = positioning_quality(contact_distance)
+	var control: float = last_positioning_quality
 	var attack_share: float = _readiness()
 	if stroke.is_volley():
 		var contact_height: float = ball.global_position.y
 		_apply_volley_contact(stroke, contact_height)
 		attack_share = volley_put_away_share(contact_height)
-	_apply_contact_quality(stroke, last_positioning_quality, attack_share)
+	else:
+		var pressure: float = depth_pressure(ball.last_bounce_position.z, is_returning_serve())
+		var control_loss: float = lerpf(
+			DEEP_BALL_CONTROL_LOSS.x,
+			DEEP_BALL_CONTROL_LOSS.y,
+			stats.shot_control01(get_stamina_ratio())
+		)
+		control *= 1.0 - pressure * control_loss
+		attack_share *= 1.0 - pressure
+	_apply_contact_quality(stroke, control, attack_share)
 	_hit_ball(stroke)
 
 
@@ -592,6 +644,9 @@ func _update_controller_ui() -> void:
 	ideal_position_marker.visible = ideal_position != null
 	if ideal_position != null:
 		ideal_position_marker.global_position = ideal_position
+		var offset: Vector3 = ideal_position - global_position
+		offset.y = 0.0
+		ideal_position_marker.set_quality(positioning_quality(offset.length()))
 
 	var aim_position: Variant = controller.get_aim_marker_position()
 	ball_aim_marker.visible = aim_position != null

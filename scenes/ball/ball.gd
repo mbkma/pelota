@@ -92,6 +92,8 @@ var trajectory: Array[TrajectoryStep] = []
 var spin: Vector3 = Vector3.ZERO
 ## Ground contacts since the last stroke; predicted trajectory steps count on from it.
 var bounces_since_stroke: int = 0
+## Where the ball last touched the ground
+var last_bounce_position: Vector3 = Vector3.ZERO
 var _rolling: bool = false
 
 
@@ -120,6 +122,7 @@ func _physics_process(delta: float) -> void:
 	match event:
 		StepEvent.BOUNCED, StepEvent.ROLLING_STARTED:
 			bounces_since_stroke += 1
+			last_bounce_position = global_position
 			on_ground.emit()
 		StepEvent.HIT_NET:
 			on_net.emit()

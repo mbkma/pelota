@@ -22,6 +22,8 @@ extends Camera3D
 
 ## Current movement velocity (dynamically adjusted)
 var _velocity: float
+## Mouse mode to return to when looking around ends
+var _mouse_mode_before_look: Input.MouseMode = Input.MOUSE_MODE_HIDDEN
 
 
 func _ready() -> void:
@@ -44,9 +46,11 @@ func _input(event: InputEvent) -> void:
 		var mouse_button: InputEventMouseButton = event as InputEventMouseButton
 		match mouse_button.button_index:
 			MOUSE_BUTTON_RIGHT:
-				Input.set_mouse_mode(
-					Input.MOUSE_MODE_CAPTURED if mouse_button.pressed else Input.MOUSE_MODE_VISIBLE
-				)
+				if mouse_button.pressed:
+					_mouse_mode_before_look = Input.get_mouse_mode()
+					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				else:
+					Input.set_mouse_mode(_mouse_mode_before_look)
 			MOUSE_BUTTON_WHEEL_UP:
 				_velocity = clamp(_velocity * _speed_scale, _min_speed, _max_speed)
 			MOUSE_BUTTON_WHEEL_DOWN:

@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://qggb6a4vvyx0"]
 
+[ext_resource type="Script" path="res://scenes/tools/ideal_position_marker.gd" id="1_marker"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ring"]
 render_priority = 10
 transparency = 1
@@ -15,6 +17,7 @@ rings = 48
 ring_segments = 8
 
 [node name="IdealPositionMarker" type="Node3D" unique_id=1314660412]
+script = ExtResource("1_marker")
 top_level = true
 visible = false
 

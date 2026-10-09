@@ -26,6 +26,7 @@ buses/default_bus_layout="uid://dlo5inop6ahho"
 GlobalGameData="*res://scripts/core/game_data.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 DebugLogger="*res://scripts/core/debug_logger.gd"
+MouseBlocker="*res://scripts/core/mouse_blocker.gd"
 AppConfig="*uid://cjke6crjg14a0"
 SceneLoader="*uid://cbwmrnp0af35y"
 ProjectMusicController="*uid://r5t485lr3p7t"
@@ -39,8 +40,6 @@ shapes/navigation/geometry_color=Color(1, 0, 0.960784, 0.4)
 [display]
 
 window/size/initial_position_type=4
-mouse_cursor/custom_image="res://assets/textures/ui/menus/crosshair121-scaled.png"
-mouse_cursor/custom_image_hotspot=Vector2(16, 16)
 window/size/fullscreen=true
 
 [editor_plugins]

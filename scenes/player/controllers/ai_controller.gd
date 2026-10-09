@@ -34,12 +34,26 @@ const NET_POSITION_DEPTH: float = 3.5
 ## The AI only follows an attack to the net when it hits from at least this far inside the
 ## baseline (m), i.e. after attacking a short ball.
 const NET_APPROACH_INSIDE_BASELINE: float = 1.0
-## Baseline depth (m from the net) the AI recovers to.
-const BASELINE_POSITION_DEPTH: float = 14.0
-## Contact height range (m) of a ball the AI takes where it is; outside it waits for the
-## apex after the bounce. At the net it volleys higher balls.
-const CONTACT_HEIGHT_RANGE := Vector2(0.5, 1.5)
-const VOLLEY_HEIGHT_RANGE := Vector2(0.3, 2.3)
+## Recovery depth behind the baseline (m) for the play style's court position: this far behind
+## it on the baseline (0), up to COURT_POSITION_IN inside it (-1) and COURT_POSITION_BACK
+## farther back (1).
+const RECOVERY_BEHIND_BASELINE: float = 0.7
+const COURT_POSITION_IN: float = 1.5
+const COURT_POSITION_BACK: float = 2.3
+## After a weak shot (met out of position, played safe or landing short) the AI recovers this
+## much deeper (m) to cover the opponent's attack; after a good attack it steps this much in.
+const WEAK_SHOT_STEP_BACK: float = 1.2
+const ATTACK_STEP_IN: float = 0.9
+const WEAK_SHOT_POSITIONING: float = 0.5
+const SHORT_SHOT_DEPTH: float = 8.0
+## Farthest the AI retreats (m) behind its recovery depth for a deep, high ball; beyond it the
+## ball is taken higher.
+const MAX_RETREAT: float = 2.5
+## Height (m) at which the AI meets a groundstroke as the ball drops after the bounce, from the
+## least to the most aggressive play style (an aggressive player takes the ball earlier).
+const CONTACT_HEIGHT := Vector2(0.95, 1.3)
+## Highest ball (m) the AI volleys; a higher ball is let bounce.
+const VOLLEY_MAX_HEIGHT: float = 2.3
 
 var _strategy: PointStrategy
 ## Stroke handed to the player (queued by the controller, executed by the player)
@@ -124,18 +138,17 @@ func _is_ball_incoming() -> bool:
 ## Computes the stroke for the incoming ball and moves to meet it.
 func _lock_in() -> void:
 	_current_phase = Phase.ANTICIPATION
-	var step: TrajectoryStep = _get_contact_step()
+	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
+	var step: TrajectoryStep = _volley_step(trajectory)
 	if not step:
-		return
-
-	# Take the ball where it is if it is at a playable height, else at the apex after the bounce.
-	var height_range: Vector2 = (
-		VOLLEY_HEIGHT_RANGE if step.is_volley_contact() else CONTACT_HEIGHT_RANGE
-	)
-	if step.point.y < height_range.x or step.point.y > height_range.y:
-		step = get_closest_apex_after_first_bounce()
-	# No apex, or the ball does not reach this side (e.g. it ends up in the net).
-	if not step or signf(step.point.z) != signf(player.position.z):
+		var contact_height: float = lerpf(
+			CONTACT_HEIGHT.x, CONTACT_HEIGHT.y, player.player_data.play_style.aggression
+		)
+		step = groundstroke_contact_step(
+			trajectory, contact_height, _baseline_recovery_depth() + MAX_RETREAT
+		)
+	# The ball does not reach this side (e.g. it ends up in the net).
+	if not step:
 		return
 
 	_pending_stroke = _strategy.compute_stroke(step)
@@ -145,24 +158,27 @@ func _lock_in() -> void:
 	_current_phase = Phase.WAITING_FOR_HIT
 
 
-## Where the ball arrives. At the net, or when the ball comes into the net zone out of the
-## air, the AI steps in and volleys it before the bounce if it gets there in time; otherwise it
-## plays the ball where it passes.
-func _get_contact_step() -> TrajectoryStep:
-	var step: TrajectoryStep = get_closest_trajectory_step()
+## Where the AI volleys the ball: at the net, or when the ball comes into the net zone out of
+## the air, it steps in and takes it before the bounce if it gets there in time and the ball is
+## not too high. Null if the ball is let bounce.
+func _volley_step(trajectory: Array[TrajectoryStep]) -> TrajectoryStep:
+	var step: TrajectoryStep = _closest_playable_step(trajectory)
 	var volley_chance: bool = step != null and step.is_volley_contact() and step.is_in_net_zone()
 	if not (_plays_at_net or volley_chance):
-		return step
-	var intercept: TrajectoryStep = get_volley_intercept_step(1.0)
-	return intercept if intercept else step
+		return null
+	var intercept: TrajectoryStep = _volley_intercept_step(trajectory, 1.0)
+	if intercept and intercept.point.y <= VOLLEY_MAX_HEIGHT:
+		return intercept
+	return null
 
 
 ## After hitting, maybe follows a good offensive shot to the net, then covers the angles of the
 ## reply. An approach starts right away; otherwise the AI recovers after the follow-through.
 func _on_player_ball_hit() -> void:
 	var hit_stroke: Stroke = player.queued_stroke
+	var landing: TrajectoryStep = _predicted_landing()
 	var approaches: bool = false
-	if not _plays_at_net and _is_approach_shot(hit_stroke):
+	if not _plays_at_net and _is_approach_shot(hit_stroke, landing):
 		var approach_chance: float = lerpf(
 			NET_APPROACH_CHANCE_MIN, NET_APPROACH_CHANCE_MAX, player.stats.tactical_net_play01()
 		)
@@ -170,7 +186,7 @@ func _on_player_ball_hit() -> void:
 		_plays_at_net = approaches
 		if approaches:
 			DebugLogger.log(self, "Following the attack to the net")
-	var depth: float = NET_POSITION_DEPTH if _plays_at_net else BASELINE_POSITION_DEPTH
+	var depth: float = NET_POSITION_DEPTH if _plays_at_net else _recovery_depth(hit_stroke, landing)
 	var recovery: Vector3 = _calculate_angle_bisector_position(hit_stroke.stroke_target, depth)
 	if approaches:
 		player.request_move_to(recovery)
@@ -182,7 +198,7 @@ func _on_player_ball_hit() -> void:
 ## Whether the ball just hit is a good offensive shot to follow to the net: an attack from
 ## inside the baseline, met in position, landing deep or wide and either fast or with the
 ## opponent far from where it lands.
-func _is_approach_shot(hit_stroke: Stroke) -> bool:
+func _is_approach_shot(hit_stroke: Stroke, landing: TrajectoryStep) -> bool:
 	var inside_court: bool = (
 		absf(player.global_position.z)
 		<= GameConstants.COURT_LENGTH_HALF - NET_APPROACH_INSIDE_BASELINE
@@ -192,12 +208,7 @@ func _is_approach_shot(hit_stroke: Stroke) -> bool:
 	if player.last_positioning_quality < APPROACH_MIN_POSITIONING:
 		return false
 
-	var landing: TrajectoryStep = null
-	for step in player.ball.predict_trajectory():
-		if step.bounces > 0:
-			landing = step
-			break
-	if not landing or signf(landing.point.z) == signf(player.global_position.z):
+	if not landing:
 		return false
 	var deep: bool = absf(landing.point.z) >= GameConstants.COURT_LENGTH_HALF * APPROACH_DEEP
 	var wide: bool = absf(landing.point.x) >= GameConstants.COURT_WIDTH_HALF * APPROACH_WIDE
@@ -206,6 +217,43 @@ func _is_approach_shot(hit_stroke: Stroke) -> bool:
 	to_landing.y = 0.0
 	var stretches: bool = to_landing.length() >= APPROACH_STRETCH_DISTANCE
 	return (deep or wide) and (fast or stretches)
+
+
+## Where the ball just hit lands in the opponent's court; null if it does not get there.
+func _predicted_landing() -> TrajectoryStep:
+	for step in player.ball.predict_trajectory():
+		if step.bounces > 0:
+			return step if signf(step.point.z) != signf(player.global_position.z) else null
+	return null
+
+
+## Baseline depth (m from the net) the AI's play style recovers to.
+func _baseline_recovery_depth() -> float:
+	var court_position: float = player.player_data.play_style.court_position
+	var shift: float = (
+		court_position * (COURT_POSITION_BACK if court_position > 0.0 else COURT_POSITION_IN)
+	)
+	return GameConstants.COURT_LENGTH_HALF + RECOVERY_BEHIND_BASELINE + shift
+
+
+## Depth (m from the net) the AI recovers to after `hit_stroke`: deeper after a weak shot the
+## opponent can attack, closer in after a good attack.
+func _recovery_depth(hit_stroke: Stroke, landing: TrajectoryStep) -> float:
+	var depth: float = _baseline_recovery_depth()
+	var weak: bool = (
+		player.last_positioning_quality < WEAK_SHOT_POSITIONING
+		or hit_stroke.stroke_intent == AiPointContext.ShotIntent.SAFE
+		or not landing
+		or absf(landing.point.z) < SHORT_SHOT_DEPTH
+	)
+	if weak:
+		return depth + WEAK_SHOT_STEP_BACK
+	if (
+		hit_stroke.stroke_intent == AiPointContext.ShotIntent.ATTACK
+		and player.last_positioning_quality >= APPROACH_MIN_POSITIONING
+	):
+		return depth - ATTACK_STEP_IN
+	return depth
 
 
 ## Position at `depth` meters from the net on the bisector of the angle the opponent can play

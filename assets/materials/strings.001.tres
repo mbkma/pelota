@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://dnvb2ogqs8r7v"]
 
-[ext_resource type="Texture2D" uid="uid://besresqqc37yx" path="res://assets/models/racket/textures/head_strings.png" id="1_bxtvr"]
+[ext_resource type="Texture2D" uid="uid://da2xptxpoi4km" path="res://assets/models/racket/textures/head_strings.png" id="1_bxtvr"]
 [ext_resource type="Texture2D" uid="uid://cwwevdswufp3l" path="res://assets/models/racket/textures/Image_3.001.png" id="2_c4ryv"]
 
 [resource]

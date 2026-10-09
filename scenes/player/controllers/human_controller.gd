@@ -17,8 +17,8 @@
 ## button is held. Releasing tosses the ball. Pressing any serve button again right before
 ## the racket meets the ball times the serve: the closer to contact, the faster and more
 ## precise it is. A serve that is not timed is weak and imprecise. A perfectly timed flat first
-## serve of an average server goes ~195 km/h (ATP average first serve: ~186 km/h, second
-## serve: ~152 km/h). The server stays locked
+## serve of an average server goes ~112 mph (ATP average first serve: ~118 mph, second
+## serve: ~95 mph). The server stays locked
 ## until the ball is hit.
 ## Directions follow the screen: up on the stick points up in the camera view this player is
 ## seen through, whichever end of the court the player is on.
@@ -29,8 +29,10 @@
 ## and the ball lands at the aim plus that direction times the current radius.
 ## Positioning: after the stroke button is pressed the player only shuffles toward the ball at
 ## SHOT_ADJUST_SPEED, so getting into position beforehand matters; a ball met off the racket's
-## sweet spot loses pace and accuracy (see Player). While the ball comes in, a marker shows
-## the ideal position.
+## sweet spot loses pace and accuracy (see Player). A marker shows the ideal position to meet
+## the opponent's ball, placed once from its real flight when the opponent hits it (only then
+## is the shot decided) and kept until this player hits the ball. Its color shows how well the
+## player stands there, red when far off to green when in place.
 ## A ball taken out of the air is volleyed; in the net zone the player steps in to cut it off
 ## before the bounce. A volley is a short punch: holding the button charges nothing, its pace
 ## is mostly the incoming pace sent back, and only a ball above the net can be put away (see
@@ -104,11 +106,13 @@ const RATING_COLOR_BAD := Palette.RED_LIGHT
 ## Landing area radius (m) of a rally shot with perfect and with the worst timing.
 const RALLY_ERROR_RADIUS_PERFECT: float = 0.25
 const RALLY_ERROR_RADIUS_WORST: float = 2.5
-## Still holding the stroke button at contact: a weak ball (m/s, ~60 km/h) through the middle,
-## landing this deep (m from the net) within this radius (m).
-const LATE_SHOT_SPEED: float = 16.5
-const LATE_SHOT_DEPTH: float = 7.5
+## Still holding the stroke button at contact: a weak ball through the middle, landing short
+## (m from the net) within this radius (m). Its speed follows from a flight time (s, without air
+## drag) drawn per shot, about that of a rally ball, so it comes at ~70-90 km/h without looping
+## up: some come a little flatter, some a little higher.
+const LATE_SHOT_DEPTH: float = 6.0
 const LATE_SHOT_ERROR_RADIUS: float = 1.0
+const LATE_SHOT_FLIGHT_TIME: Vector2 = Vector2(0.75, 0.95)
 
 ## Rally speed (m/s) from the weakest to the best stroke; ATP averages are ~115 km/h (32 m/s)
 ## on the forehand and ~105 km/h (29 m/s) on the backhand.
@@ -132,12 +136,12 @@ const SERVE_UNTIMED_SPEED_FACTOR: float = 0.72
 ## Landing area radius (m) of a serve with perfect and with the worst timing.
 const SERVE_ERROR_RADIUS_PERFECT: float = 0.2
 const SERVE_ERROR_RADIUS_WORST: float = 1.6
-## Perfectly timed serve speed (m/s) per serve type, from the weakest to the strongest server:
-## flat 169-209 km/h, slice 148-180 km/h, kick 130-155 km/h.
-const SERVE_SPEED_RANGE: Dictionary[ServeType, Vector2] = {
-	ServeType.FLAT: Vector2(47.0, 58.0),
-	ServeType.SLICE: Vector2(41.0, 50.0),
-	ServeType.KICK: Vector2(36.0, 43.0),
+## Share of the perfectly timed flat serve speed (GameConstants.SERVE_SPEED) per serve type:
+## flat 103-121 mph, slice 90-106 mph, kick 79-92 mph.
+const SERVE_SPEED_SHARE: Dictionary[ServeType, float] = {
+	ServeType.FLAT: 1.0,
+	ServeType.SLICE: 0.875,
+	ServeType.KICK: 0.76,
 }
 ## Spin per serve type for a right-handed player (x: sidespin, y: topspin).
 const SERVE_SPIN: Dictionary[ServeType, Vector3] = {
@@ -182,6 +186,8 @@ var _shot_precision: float = 0.5
 
 ## Random direction inside the unit circle, drawn once per shot or serve.
 var _error_direction: Vector2 = Vector2.ZERO
+## Flight time (s) of the current shot if it ends up late, drawn once per shot.
+var _late_flight_time: float = 0.0
 ## Timing quality in [0, 1] once the stroke button was released (shot) or pressed (serve).
 var _timing_quality: float = 0.0
 var _timed: bool = false
@@ -192,6 +198,11 @@ var _serve_action: InputDevice.Action = InputDevice.Action.STRIKE
 
 ## Whether the current shot meets the ball out of the air (it then aims like a volley).
 var _is_volley_shot: bool = false
+## Ideal position to meet the opponent's ball; null until the opponent hits it, or if it cannot
+## be met.
+var _ideal_position: Variant = null
+## Whether the ideal position was placed for the ball coming in (it then stays).
+var _ideal_placed: bool = false
 
 
 func _ready() -> void:
@@ -207,6 +218,7 @@ func _ready() -> void:
 ## Update controller state - called by Player each frame
 func update(delta: float) -> void:
 	_device.poll()
+	_update_ideal_position()
 
 	match _mode:
 		Mode.FREE:
@@ -227,6 +239,7 @@ func update(delta: float) -> void:
 
 func request_serve() -> void:
 	_enter_free_mode()
+	_clear_ideal_position()
 	_mode = Mode.SERVE_READY
 	_serve_side = signf(player.global_position.x)
 	_reset_aim()
@@ -241,6 +254,7 @@ func on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 		MatchLifecycleBus.Phase.POINT_ENDED, MatchLifecycleBus.Phase.IDLE:
 			_enter_free_mode()
 			_reset_aim()
+			_clear_ideal_position()
 
 
 func get_move_direction() -> Vector3:
@@ -262,14 +276,9 @@ func get_aim_marker_position() -> Variant:
 	return null if _mode == Mode.FREE else _aiming_at
 
 
-## While the ball comes toward the player, where they should stand to meet it.
+## Where the player should stand to meet the opponent's next ball, until the ball got past.
 func get_ideal_position() -> Variant:
-	if not (_mode == Mode.FREE or _mode == Mode.SHOT) or not _is_ball_incoming():
-		return null
-	var step: TrajectoryStep = get_ideal_contact_step()
-	if not step:
-		return null
-	return ideal_position_for_step(step)
+	return null if _has_ball_passed() else _ideal_position
 
 
 func get_aim_marker_radius() -> float:
@@ -317,6 +326,7 @@ func _begin_shot(action: InputDevice.Action) -> void:
 	_timed = false
 	_is_volley_shot = false
 	_draw_error_direction()
+	_late_flight_time = randf_range(LATE_SHOT_FLIGHT_TIME.x, LATE_SHOT_FLIGHT_TIME.y)
 	_aiming_at = _rally_aim_target()
 
 
@@ -355,13 +365,26 @@ func _update_shot(delta: float) -> void:
 		if not _charging or _has_ball_passed():
 			_enter_free_mode()
 		return
-
 	var step: TrajectoryStep = _shot_contact_step()
 	if not step:
 		return
 
 	_pending_stroke = _build_rally_stroke(step)
 	move_to_contact(step, _pending_stroke)
+
+
+## Places the ideal position once, as soon as the opponent's ball comes in.
+func _update_ideal_position() -> void:
+	if _ideal_placed or not _is_ball_incoming():
+		return
+	var step: TrajectoryStep = get_ideal_contact_step()
+	_ideal_position = ideal_position_for_step(step) if step else null
+	_ideal_placed = true
+
+
+func _clear_ideal_position() -> void:
+	_ideal_position = null
+	_ideal_placed = false
 
 
 ## Where the shot meets the ball: where it passes the player, or in the net zone where the
@@ -407,7 +430,8 @@ func _apply_shot_timing(stroke: Stroke) -> void:
 		var late_error: Vector2 = _error_direction * LATE_SHOT_ERROR_RADIUS
 		stroke.intended_stroke_target = late_target
 		stroke.stroke_target = late_target + Vector3(late_error.x, 0.0, late_error.y)
-		stroke.stroke_power = minf(_base_stroke_power, LATE_SHOT_SPEED)
+		var distance: float = absf(stroke.stroke_target.z - stroke.step.point.z)
+		stroke.stroke_power = minf(_base_stroke_power, distance / _late_flight_time)
 		stroke.attack_power = 0.0
 		return
 
@@ -582,8 +606,12 @@ func _build_serve_stroke() -> Stroke:
 	var stroke: Stroke = Stroke.new()
 	stroke.stroke_type = Stroke.StrokeType.SERVE
 
-	var speed_range: Vector2 = SERVE_SPEED_RANGE[_serve_type]
-	_base_stroke_power = lerpf(speed_range.x, speed_range.y, player.stats.serve_power01())
+	_base_stroke_power = (
+		lerpf(
+			GameConstants.SERVE_SPEED.x, GameConstants.SERVE_SPEED.y, player.stats.serve_power01()
+		)
+		* SERVE_SPEED_SHARE[_serve_type]
+	)
 	if player.match_manager.current_state == MatchManager.MatchState.SECOND_SERVE:
 		_base_stroke_power *= SECOND_SERVE_SPEED_FACTOR
 	stroke.intended_stroke_power = _base_stroke_power
@@ -792,6 +820,7 @@ func _opponent_court_point(lateral: float, depth: float) -> Vector3:
 
 func _on_player_ball_hit() -> void:
 	_show_shot_rating()
+	_clear_ideal_position()
 	if _mode == Mode.SHOT:
 		_enter_free_mode()
 	_reset_aim()

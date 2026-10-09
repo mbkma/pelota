@@ -1,4 +1,4 @@
-## Playback controls shown while a replay plays.
+## Playback controls shown while a replay plays; the keyboard or gamepad moves between them.
 class_name ReplayOverlay
 extends CanvasLayer
 
@@ -16,7 +16,7 @@ func _ready() -> void:
 	$BottomBar/Margin/HBox/NextFrameButton.pressed.connect(replay.step_frame.bind(1))
 	$BottomBar/Margin/HBox/ForwardButton.pressed.connect(replay.forward)
 	$BottomBar/Margin/HBox/StopButton.pressed.connect(replay.stop_playback)
-	replay.playback_started.connect(show)
+	replay.playback_started.connect(_on_playback_started)
 	replay.playback_stopped.connect(hide)
 
 
@@ -28,3 +28,8 @@ func _process(_delta: float) -> void:
 	var progress: float = 100.0 * playhead / duration if duration > 0.0 else 0.0
 	_status_label.text = "%.2fs / %.2fs (%.0f%%)" % [playhead, duration, progress]
 	_play_pause_button.text = "Resume" if replay.is_paused() else "Pause"
+
+
+func _on_playback_started() -> void:
+	show()
+	_play_pause_button.grab_focus()

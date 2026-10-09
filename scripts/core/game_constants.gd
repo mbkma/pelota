@@ -12,6 +12,10 @@ const DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -0.85, 0.0)
 const VOLLEY_SPIN: Vector3 = Vector3(0.0, -0.15, 0.0)
 const DROP_VOLLEY_SPIN: Vector3 = Vector3(0.0, -0.8, 0.0)
 
+## Speed (m/s) of a flat first serve from the weakest to the strongest server (103-121 mph;
+## ATP average first serve ~118 mph). Slice and kick serves and second serves are slower.
+const SERVE_SPEED: Vector2 = Vector2(46.0, 54.0)
+
 ## Volleys are short punches that mostly redirect the incoming pace (see Player): own pace
 ## (m/s) of a volley and of a drop volley from the weakest to the best volleyer, before the
 ## redirected pace is added, and the extra pace (m/s) of a high ball put away.

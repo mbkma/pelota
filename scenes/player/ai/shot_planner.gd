@@ -2,6 +2,9 @@
 class_name ShotPlanner
 extends RefCounted
 
+## Chance that a fully deep incoming ball is played safe; a deep ball is not attacked.
+const DEEP_BALL_SAFE_CHANCE: float = 0.75
+
 
 ## Sets `context.intent` and `context.target_lane`.
 static func plan(context: AiPointContext) -> void:
@@ -13,12 +16,13 @@ static func _choose_intent(context: AiPointContext) -> AiPointContext.ShotIntent
 	if context.is_serve:
 		return AiPointContext.ShotIntent.SERVE
 
-	if _is_defensive_ball(context):
+	if _is_defensive_ball(context) or randf() < context.depth_pressure * DEEP_BALL_SAFE_CHANCE:
 		return AiPointContext.ShotIntent.SAFE
 
 	var attack_probability: float = lerpf(0.2, 0.6, context.play_style.aggression)
 	if context.short_ball_opportunity:
 		attack_probability = minf(0.92, attack_probability + 0.25)
+	attack_probability *= 1.0 - context.depth_pressure
 
 	return (
 		AiPointContext.ShotIntent.ATTACK
