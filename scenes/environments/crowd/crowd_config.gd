@@ -1,9 +1,9 @@
 @tool
 class_name CrowdConfig
 extends Resource
-## Layout, models, animations and colors of a crowd block.
+## Layout and spectators of a crowd block.
 
-## Rows and columns of spectators in the block
+## Rows and columns of seats in the block
 @export var grid_rows: int = 10:
 	set(value):
 		grid_rows = value
@@ -19,26 +19,20 @@ extends Resource
 		seat_spacing = value
 		emit_changed()
 
-## Time to blend between animations (seconds)
-@export var animation_blend_time: float = 0.5
-## Whether idle animations start at a random point for variety
-@export var animation_seek_enabled: bool = true
-## Idle animations played at random
-@export var idle_animations: PackedStringArray = []
-## Animations played when the crowd cheers
-@export var victory_animations: PackedStringArray = []
-## Share of spectators that move (0.0 to 1.0); the others hold a still idle pose, which costs
-## nothing per frame. Lower it for large crowds.
-@export_range(0.0, 1.0, 0.01) var animation_percentage: float = 0.3
-
-## Spectator models (each with an AnimationPlayer holding the animations above)
-@export var models: Array[PackedScene] = []:
+## Share of the seats that are taken
+@export_range(0.0, 1.0, 0.01) var occupancy: float = 0.92:
 	set(value):
-		models = value
+		occupancy = value
 		emit_changed()
 
-## Colors spectators' clothes, hair and skin are tinted with
-@export var color_palette: CrowdColorPalette:
+## Spectators the seats are filled with, picked at random
+@export var characters: Array[CrowdCharacter] = []:
 	set(value):
-		color_palette = value
+		characters = value
 		emit_changed()
+
+## How differently spectators sit: sideways shift in the seat (m), turn (degrees) and size
+## (share, both ways)
+@export var seat_jitter: float = 0.06
+@export var turn_jitter_degrees: float = 10.0
+@export var size_jitter: float = 0.05

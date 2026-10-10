@@ -1,7 +1,10 @@
+@tool
 class_name Crowd
 extends Node
-## Crowd sound and reactions. Plays an idle ambience and cheers after every point; the more
-## exciting the point, the louder the cheer and the more spectators get up.
+## The crowd in the stands: its blocks of spectators, its sound and its reactions. It runs the
+## clock the spectators are animated by (also in the editor), plays an idle ambience and cheers
+## after every point; the more exciting the point, the louder the cheer and the more spectators
+## cheer.
 
 ## Cheer volume (dB) for the least and the most exciting point
 const CHEER_VOLUME_DB_CALM: float = -15.0
@@ -14,14 +17,29 @@ const CHEER_SHARE_EXCITED: float = 1.0
 ## Whether the crowd plays its idle ambience (off where other music plays, e.g. menus)
 @export var play_ambience: bool = true
 
+## Seconds of the crowd's clock
+var _time: float = 0.0
+## Materials of the spectators, which animate by the clock
+var _materials: Array[ShaderMaterial] = []
+
 @onready var _audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 
 func _ready() -> void:
-	if not play_ambience:
+	for block in _blocks():
+		for character in block.config.characters:
+			if not _materials.has(character.get_material()):
+				_materials.append(character.get_material())
+	if Engine.is_editor_hint() or not play_ambience:
 		return
 	_audio_stream_player.finished.connect(play_idle_sound)
 	play_idle_sound()
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	for material in _materials:
+		material.set_shader_parameter(&"crowd_time", _time)
 
 
 ## Plays an idle crowd sound; another one follows when it (or a cheer) ends.
@@ -36,10 +54,17 @@ func cheer(excitement: float) -> void:
 		lerpf(CHEER_VOLUME_DB_CALM, CHEER_VOLUME_DB_EXCITED, excitement)
 	)
 	var share: float = lerpf(CHEER_SHARE_CALM, CHEER_SHARE_EXCITED, excitement)
+	for block in _blocks():
+		block.cheer(share, _time)
+
+
+func _blocks() -> Array[CrowdBlock]:
+	var blocks: Array[CrowdBlock] = []
 	for stand in get_children():
-		for crowd_block in stand.get_children():
-			if crowd_block is CrowdBlock:
-				crowd_block.cheer(share)
+		for child in stand.get_children():
+			if child is CrowdBlock:
+				blocks.append(child)
+	return blocks
 
 
 func _play_sound(stream: AudioStream, volume_db: float) -> void:

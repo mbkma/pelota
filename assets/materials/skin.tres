@@ -1,9 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://b2xsaqvvo4pgu"]
-
-[ext_resource type="Texture2D" uid="uid://4eb0gfhghoie" path="res://assets/models/crowd/textures/crowd-ready-test_whiteskin.png" id="1_edkxt"]
-
-[resource]
-resource_name = "skin"
-albedo_texture = ExtResource("1_edkxt")
-metallic = 0.26771653
-roughness = 0.92928934

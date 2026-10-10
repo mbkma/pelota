@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://ds5ryhspuxtpf"]
 
 [ext_resource type="Script" uid="uid://c4yi3riq177jf" path="res://scenes/environments/crowd/crowd_block.gd" id="1_jcoec"]
-[ext_resource type="PackedScene" uid="uid://dnoktlosmy7xg" path="res://scenes/environments/crowd/crowd_person.tscn" id="2_r2fk0"]
 [ext_resource type="Resource" uid="uid://cd1vrmlg6sfga" path="res://scenes/environments/crowd/crowd_block_config.tres" id="2_rk23e"]
 
 [node name="CrowdBlock" type="Node3D" unique_id=900926214]
 script = ExtResource("1_jcoec")
 config = ExtResource("2_rk23e")
-crowd_person_scene = ExtResource("2_r2fk0")

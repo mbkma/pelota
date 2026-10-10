@@ -22,56 +22,72 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.
 
 [node name="CrowdBlock" parent="EastBlock2" unique_id=900926214 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
+seating_seed = 1
 
 [node name="CrowdBlock5" parent="EastBlock2" unique_id=660516629 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
+seating_seed = 2
 
 [node name="CrowdBlock2" parent="EastBlock2" unique_id=967489851 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
+seating_seed = 3
 
 [node name="CrowdBlock3" parent="EastBlock2" unique_id=383427788 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
+seating_seed = 4
 
 [node name="CrowdBlock4" parent="EastBlock2" unique_id=536227548 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
+seating_seed = 5
 
 [node name="EastBlock" type="Node3D" parent="." unique_id=1070903490]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.915, 0.566, 0)
 
 [node name="CrowdBlock" parent="EastBlock" unique_id=524828875 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
+seating_seed = 6
 
 [node name="CrowdBlock5" parent="EastBlock" unique_id=1059679277 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
+seating_seed = 7
 
 [node name="CrowdBlock2" parent="EastBlock" unique_id=1346328431 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
+seating_seed = 8
 
 [node name="CrowdBlock3" parent="EastBlock" unique_id=1021341322 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
+seating_seed = 9
 
 [node name="CrowdBlock4" parent="EastBlock" unique_id=722183903 instance=ExtResource("2_axxkg")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
+seating_seed = 10
 
 [node name="NorthBlock" type="Node3D" parent="." unique_id=308978892]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5966256, -20.85869)
 
 [node name="CrowdBlock6" parent="NorthBlock" unique_id=113764286 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 0, 0)
+seating_seed = 11
 
 [node name="CrowdBlock7" parent="NorthBlock" unique_id=958542378 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 0, 0)
+seating_seed = 12
 
 [node name="CrowdBlock8" parent="NorthBlock" unique_id=339555331 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 0, 0)
+seating_seed = 13
 
 [node name="CrowdBlock9" parent="NorthBlock" unique_id=1578502360 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 0, 0)
+seating_seed = 14
 
 [node name="CrowdBlock10" parent="NorthBlock" unique_id=1355092264 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 0, 0)
+seating_seed = 15
 
 [node name="CrowdBlock11" parent="NorthBlock" unique_id=744643174 instance=ExtResource("2_axxkg")]
 transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 0, 0)
+seating_seed = 16
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1134290882]
