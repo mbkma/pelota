@@ -50,10 +50,7 @@ func _init(target_player: Player, step: TrajectoryStep) -> void:
 	play_style = target_player.player_data.play_style
 	closest_step = step
 	is_serve = step == null
-	is_second_serve = (
-		is_serve
-		and target_player.match_manager.current_state == MatchManager.MatchState.SECOND_SERVE
-	)
+	is_second_serve = is_serve and target_player.session.is_second_serve()
 
 	player_position = target_player.global_position
 	ball_position = step.point if step else player_position

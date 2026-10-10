@@ -1,6 +1,6 @@
 ## Manages match state, scoring, and game flow for tennis matches
 class_name MatchManager
-extends Node
+extends PlaySession
 
 ## Emitted whenever the match active ball reference changes
 signal active_ball_changed(ball: Ball)
@@ -73,7 +73,7 @@ func _ready() -> void:
 	for i in players.size():
 		var player: Player = players[i]
 		player.opponent = players[1 - i]
-		player.match_manager = self
+		player.session = self
 		player.ball_hit.connect(_on_player_ball_hit.bind(i))
 		player.ball_spawned.connect(set_active_ball)
 		active_ball_changed.connect(player.set_active_ball)
@@ -86,6 +86,7 @@ func _ready() -> void:
 	television_hud.update_score(match_data.score)
 
 	await place_players()
+	cameras.open_match()
 	_start_point()
 
 
@@ -128,6 +129,18 @@ func get_server() -> Player:
 	return get_player(match_data.get_server())
 
 
+func is_return_of_serve(_player: Player) -> bool:
+	return match_data.rally_length == 1
+
+
+func is_second_serve() -> bool:
+	return current_state == MatchState.SECOND_SERVE
+
+
+func get_opponent_position(player: Player) -> Vector3:
+	return player.opponent.global_position
+
+
 ## Resumes the match after a set break.
 func continue_after_set_break() -> void:
 	set_break_ended.emit()
@@ -148,6 +161,7 @@ func add_point(winner: int) -> void:
 		_end_match(winner)
 		return
 	umpire.say_score(score)
+	cameras.reframe_tv_cameras()
 	await get_tree().create_timer(GameConstants.POINT_BREAK).timeout
 	if score.completed_sets.size() > completed_sets_before:
 		await _hold_set_break()
@@ -466,11 +480,13 @@ func _on_ball_on_net_cord() -> void:
 func _on_player_serve_requested(serving_player: Player) -> void:
 	if serving_player == get_server():
 		stadium.start_serve_clocks()
+		cameras.frame_return(serving_player.opponent)
 
 
 func _on_player_serve_completed(serving_player: Player) -> void:
 	if serving_player != get_server():
 		return
+	cameras.settle_after_serve()
 	if ball:
 		stadium.show_serve_speed(ball)
 		match_data.statistics[get_player_index(serving_player)].record_serve_speed(

@@ -1,4 +1,4 @@
-## Global game data: the available players and the selection for the next match.
+## Global game data: the available players and the selection for the next match or training.
 extends Node
 
 const CHARACTER_DATA_DIR := "res://scenes/player/resources/data/"
@@ -6,6 +6,8 @@ const CHARACTER_DATA_DIR := "res://scenes/player/resources/data/"
 ## Players of the next match; null until picked in the player select menu
 var selected_match_player: PlayerData
 var selected_match_opponent: PlayerData
+## Player of the next training; null until picked in the training select menu
+var selected_training_player: PlayerData
 ## Input device id per team; InputDevice.NO_DEVICE_ID means the team is AI controlled.
 var _match_input_devices: Array[int] = [InputDevice.NO_DEVICE_ID, InputDevice.NO_DEVICE_ID]
 ## All players, best ranked first
@@ -26,6 +28,10 @@ func get_players() -> Array[PlayerData]:
 func set_match_players(player: PlayerData, opponent: PlayerData) -> void:
 	selected_match_player = player
 	selected_match_opponent = opponent
+
+
+func set_training_player(player: PlayerData) -> void:
+	selected_training_player = player
 
 
 func set_match_input_devices(player1_device_id: int, player2_device_id: int) -> void:

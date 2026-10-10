@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://d20e40buc2w5h" path="res://scenes/menus/player_select_menu/player_opponent_select_menu.tscn" id="1_select"]
+
+[node name="TrainingSelectMenu" instance=ExtResource("1_select")]
+training = true

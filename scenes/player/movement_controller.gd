@@ -186,11 +186,9 @@ func tick(
 
 	# Accelerate or decelerate toward target using physics-based approach
 	if input_strength > 0.001:
-		# Accelerate toward target velocity
-		var acceleration_vector: Vector3 = (
-			(target_velocity - _velocity).normalized() * effective_acceleration
-		)
-		_velocity += acceleration_vector * delta
+		# Accelerate toward target velocity without passing it: at partial input an overshoot
+		# would swing the speed around the target every frame.
+		_velocity = _velocity.move_toward(target_velocity, effective_acceleration * delta)
 
 		# Clamp to target speed
 		var horizontal_speed: float = Vector3(_velocity.x, 0.0, _velocity.z).length()

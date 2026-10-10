@@ -612,7 +612,7 @@ func _build_serve_stroke() -> Stroke:
 		)
 		* SERVE_SPEED_SHARE[_serve_type]
 	)
-	if player.match_manager.current_state == MatchManager.MatchState.SECOND_SERVE:
+	if player.session.is_second_serve():
 		_base_stroke_power *= SECOND_SERVE_SPEED_FACTOR
 	stroke.intended_stroke_power = _base_stroke_power
 
@@ -789,7 +789,7 @@ func _volley_depth_min() -> float:
 ## opponent) while full deflection still reaches both sidelines.
 func _toward_open_court(aim_x: float) -> float:
 	var right_x: float = signf(player.global_basis.x.x)
-	var open_side: float = -signf(player.opponent.global_position.x) * right_x
+	var open_side: float = -signf(player.session.get_opponent_position(player).x) * right_x
 	var neutral: float = open_side * GameConstants.VOLLEY_OPEN_COURT_AIM
 	if aim_x < 0.0:
 		return lerpf(neutral, -1.0, -aim_x)

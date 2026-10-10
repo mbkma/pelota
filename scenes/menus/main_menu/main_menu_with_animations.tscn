@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/music/music_director.tscn" id="8_music"]
 [ext_resource type="PackedScene" path="res://scenes/menus/main_menu/menu_background.tscn" id="9_background"]
 [ext_resource type="PackedScene" path="res://scenes/menus/tutorial_menu/tutorial_menu.tscn" id="10_tutorial"]
+[ext_resource type="PackedScene" path="res://scenes/menus/player_select_menu/training_select_menu.tscn" id="11_training_select"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Intro"
@@ -323,6 +324,8 @@ script = ExtResource("2_ixa71")
 player_select_packed_scene = ExtResource("6_psel")
 music_director_scene = ExtResource("8_music")
 tutorial_packed_scene = ExtResource("10_tutorial")
+training_select_packed_scene = ExtResource("11_training_select")
+training_scene_path = "res://scenes/training/training.tscn"
 game_scene_path = "uid://bcwuxgarbilrg"
 options_packed_scene = ExtResource("3_2k5l7")
 credits_packed_scene = ExtResource("4_vsp5b")
@@ -370,7 +373,11 @@ modulate = Color(1, 1, 1, 0)
 [node name="MenuButtonsBoxContainer" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer" index="0" unique_id=2017477786]
 lock = true
 
-[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1" unique_id=1846290378]
+[node name="TrainingButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1"]
+layout_mode = 2
+text = "Training"
+
+[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="2" unique_id=1846290378]
 layout_mode = 2
 text = "How to Play"
 
@@ -389,4 +396,5 @@ metadata/_edit_lock_ = true
 
 [node name="MenuBackground" parent="." index="9" unique_id=1977320418 instance=ExtResource("9_background")]
 
+[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/TrainingButton" to="." method="_on_training_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/HowToPlayButton" to="." method="_on_how_to_play_button_pressed"]

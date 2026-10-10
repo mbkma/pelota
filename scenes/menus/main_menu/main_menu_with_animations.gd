@@ -1,7 +1,7 @@
 extends MainMenu
 ## Main menu extension: animates the title and menu fading in (the player can skip it with
 ## any input), starts the music, opens the how-to-play screen and the player select before
-## a new match.
+## a new match or a training.
 
 ## Player select opened by 'New Game'; confirming it starts the match.
 @export var player_select_packed_scene: PackedScene
@@ -9,6 +9,9 @@ extends MainMenu
 @export var music_director_scene: PackedScene
 ## How-to-play screen opened by the 'How to Play' button.
 @export var tutorial_packed_scene: PackedScene
+## Player select opened by 'Training'; confirming it starts the training.
+@export var training_select_packed_scene: PackedScene
+@export_file("*.tscn") var training_scene_path: String
 
 var animation_state_machine: AnimationNodeStateMachinePlayback
 
@@ -68,3 +71,9 @@ func _start_music_once() -> void:
 
 func _on_how_to_play_button_pressed() -> void:
 	_open_sub_menu(tutorial_packed_scene)
+
+
+func _on_training_button_pressed() -> void:
+	_open_sub_menu(training_select_packed_scene).selection_confirmed.connect(
+		SceneLoader.load_scene.bind(training_scene_path)
+	)

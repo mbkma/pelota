@@ -34,3 +34,4 @@ normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_yv0xr")
 detail_blend_mode = 1
 detail_albedo = SubResource("NoiseTexture2D_kn14q")
+texture_filter = 5

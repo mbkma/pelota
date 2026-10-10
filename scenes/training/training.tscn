@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/training/training_session.gd" id="1_session"]
+[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="3_stadium"]
+[ext_resource type="PackedScene" path="res://scenes/training/ball_machine.tscn" id="4_machine"]
+[ext_resource type="PackedScene" uid="uid://fnykupeneorb" path="res://scenes/windows/pause_menu.tscn" id="5_pause"]
+[ext_resource type="PackedScene" uid="uid://daep44axg5840" path="res://scenes/ui/hud/player_status_panel.tscn" id="6_status"]
+[ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="7_environment"]
+
+[node name="TennisTraining" type="Node" node_paths=PackedStringArray("player", "ball_machine", "court", "cameras", "shot_result_label")]
+process_mode = 1
+script = ExtResource("1_session")
+player = NodePath("Player")
+ball_machine = NodePath("BallMachine")
+court = NodePath("Stadium/Court")
+cameras = NodePath("Stadium/Cameras")
+shot_result_label = NodePath("Hud/ShotResultLabel")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="BallMachine" parent="." instance=ExtResource("4_machine")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -13.5)
+
+[node name="Stadium" parent="." instance=ExtResource("3_stadium")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("7_environment")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, 0, 0.5, 0.394005, 0.615661, 0.682437, -0.307831, 0.788011, -0.533178, 0, 12, 0)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.8
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 1.2
+shadow_opacity = 0.7
+shadow_blur = 1.6
+directional_shadow_max_distance = 70.0
+
+[node name="Hud" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerStatusPanel" parent="Hud" node_paths=PackedStringArray("player") instance=ExtResource("6_status")]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+player = NodePath("../../Player")
+name_color = Color(0.349, 0.675, 0.725, 1)
+
+[node name="ControlsLabel" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -56.0
+offset_right = 400.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 22
+text = "E / RT  request a ball      Esc / Start  menu"
+horizontal_alignment = 1
+
+[node name="ShotResultLabel" type="Label" parent="Hud"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 24.0
+offset_right = 300.0
+offset_bottom = 84.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_pause")]
+visible = false

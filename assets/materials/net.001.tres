@@ -6,6 +6,7 @@
 resource_name = "net.001"
 transparency = 4
 cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.6)
 albedo_texture = ExtResource("1_q81mf")
 roughness = 0.8492063
 metadata/extras = {

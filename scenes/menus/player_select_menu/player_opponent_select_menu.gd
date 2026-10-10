@@ -5,6 +5,7 @@ extends Control
 ## character with up and down and confirms with its accept button (A / Enter). The start
 ## button gets the focus once every human player has confirmed. Cancel (B / Esc) on a confirmed
 ## device takes the confirmation back; otherwise it leaves the menu.
+## In training only player 1 is picked, and a device has to control it.
 
 signal selection_confirmed
 
@@ -51,6 +52,8 @@ class DeviceEntry:
 @export var keyboard_icon: Texture2D
 @export var gamepad_icon: Texture2D
 @export var ready_badge_icon: Texture2D
+## Picks the player of a training instead of the players of a match.
+@export var training: bool = false
 
 var _players: Array[PlayerData] = []
 var _chart: Chart
@@ -70,9 +73,15 @@ var _cancel_consumed_device_ids: Array[int] = []
 @onready var device_rows: VBoxContainer = %DeviceRows
 @onready var chart_host: Control = %ChartHost
 @onready var start_button: Button = %StartButton
+@onready var title_label: Label = %TitleLabel
+@onready var devices_hint_label: Label = %DevicesHintLabel
+@onready var player2_lane_label: Label = %Player2LaneLabel
+@onready var opponent_select_column: Control = %OpponentSelectColumn
 
 
 func _ready() -> void:
+	if training:
+		_apply_training_layout()
 	_players = GlobalGameData.get_players()
 	_populate_option_buttons()
 	_apply_player_colors()
@@ -158,6 +167,15 @@ func _populate_option_buttons() -> void:
 	opponent_option_button.select(1)
 
 
+## Training: only the player's side, and its device lane.
+func _apply_training_layout() -> void:
+	title_label.text = "Training"
+	devices_hint_label.text = "Move a controller left to train with it, then confirm with A / Enter"
+	player2_lane_label.hide()
+	opponent_select_column.hide()
+	start_button.text = "Start Training"
+
+
 func _apply_player_colors() -> void:
 	player1_header_label.add_theme_color_override("font_color", PLAYER1_CHART_COLOR)
 	player2_header_label.add_theme_color_override("font_color", PLAYER2_CHART_COLOR)
@@ -192,7 +210,7 @@ func _create_entry(device: InputDevice) -> DeviceEntry:
 	entry.device = device
 
 	entry.row = HBoxContainer.new()
-	for lane in Lane.values():
+	for lane in range(_last_lane() + 1):
 		var slot := CenterContainer.new()
 		slot.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		slot.custom_minimum_size.x = DEVICE_CARD_WIDTH
@@ -262,7 +280,7 @@ func _pop_ready_badge(entry: DeviceEntry) -> void:
 
 ## Moves a device one lane left (step -1) or right (step 1). A side holds one device.
 func _move_entry(entry: DeviceEntry, step: int) -> void:
-	var target: Lane = clampi(entry.lane + step, Lane.PLAYER1, Lane.PLAYER2) as Lane
+	var target: Lane = clampi(entry.lane + step, Lane.PLAYER1, _last_lane()) as Lane
 	if target == entry.lane:
 		return
 	if target != Lane.UNASSIGNED and _get_lane_entry(target):
@@ -281,6 +299,11 @@ func _place_card(entry: DeviceEntry) -> void:
 	else:
 		slot.add_child(entry.card)
 	entry.icon.modulate = _lane_color(entry.lane)
+
+
+## Rightmost lane: the device lanes end at the middle in training.
+func _last_lane() -> Lane:
+	return Lane.UNASSIGNED if training else Lane.PLAYER2
 
 
 func _get_lane_entry(lane: Lane) -> DeviceEntry:
@@ -328,8 +351,13 @@ func _control_text(lane: Lane) -> String:
 	return "%s - press A / Enter to confirm" % entry.device.get_display_name()
 
 
-## Focuses the start button once every human player confirmed (right away without humans).
+## Focuses the start button once every human player confirmed (right away without humans). A
+## training can only start once a device controls the player.
 func _update_start_focus() -> void:
+	start_button.disabled = training and not _get_lane_entry(Lane.PLAYER1)
+	if start_button.disabled:
+		start_button.release_focus()
+		return
 	for lane in [Lane.PLAYER1, Lane.PLAYER2]:
 		var entry: DeviceEntry = _get_lane_entry(lane)
 		if entry and not entry.confirmed:
@@ -466,7 +494,10 @@ func _plot_stats(player_data: PlayerData, opponent_data: PlayerData) -> void:
 	chart_properties.colors.frame = Color(0.0, 0.0, 0.0, 0.0)
 	chart_properties.colors.background = Color(0.0, 0.0, 0.0, 0.0)
 
-	_chart.plot([player_function, opponent_function], chart_properties)
+	var functions: Array[Function] = [player_function]
+	if not training:
+		functions.append(opponent_function)
+	_chart.plot(functions, chart_properties)
 
 
 func _radar_style(
@@ -503,9 +534,11 @@ func _extract_chart_stats(stats: PlayerStatsProfile) -> Array:
 
 
 func _on_start_button_pressed() -> void:
-	GlobalGameData.set_match_players(
-		_players[player_option_button.selected], _players[opponent_option_button.selected]
-	)
+	var player: PlayerData = _players[player_option_button.selected]
+	if training:
+		GlobalGameData.set_training_player(player)
+	else:
+		GlobalGameData.set_match_players(player, _players[opponent_option_button.selected])
 	GlobalGameData.set_match_input_devices(
 		_get_lane_device_id(Lane.PLAYER1), _get_lane_device_id(Lane.PLAYER2)
 	)

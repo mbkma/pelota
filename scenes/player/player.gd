@@ -63,6 +63,12 @@ const HIGH_VOLLEY_SPIN_FACTOR: float = 0.3
 ## Height (m) by which strokes and serves aim to pass over the net cord
 const STROKE_NET_CLEARANCE: float = 0.15
 const SERVE_NET_CLEARANCE: float = 0.03
+## Moving backward faster than BACKWARD_RUN_SPEED (m/s), within about 60 degrees of straight
+## back (BACKWARD_RUN_ALIGNMENT: share of the speed pointing backward), the player turns and runs;
+## slower than BACKPEDAL_SPEED it faces the net again and backpedals.
+const BACKWARD_RUN_SPEED: float = 2.0
+const BACKPEDAL_SPEED: float = 1.5
+const BACKWARD_RUN_ALIGNMENT: float = 0.5
 
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
@@ -105,8 +111,8 @@ var mental_state: PlayerMentalState
 var queued_stroke: Stroke = null
 
 var controller: Controller
-## Match this player plays in; set by the MatchManager.
-var match_manager: MatchManager
+## Match or training this player plays in; set by the session.
+var session: PlaySession
 ## Positioning quality in [0, 1] of the last ball hit (1 for serves)
 var last_positioning_quality: float = 1.0
 
@@ -128,6 +134,8 @@ var _incoming_time: float = 0.0
 var _feedback_tween: Tween
 var _last_consumed_decision: Stroke = null
 var _stamina: float = 1.0
+## Whether the player has turned to run backward
+var _running_backward: bool = false
 
 var _is_replay_mode: bool = false
 
@@ -210,6 +218,8 @@ func stop() -> void:
 ## Puts the player at a court position facing the net, without any leftover movement.
 func place_at(target_position: Vector3) -> void:
 	_halt()
+	_running_backward = false
+	model.set_body_yaw(0.0)
 	global_position = target_position
 	rotation.y = PI if target_position.z < 0.0 else 0.0
 
@@ -223,11 +233,13 @@ func _halt() -> void:
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, delta: float) -> void:
 	velocity = _movement.tick(
-		direction, _facing(), stats, get_stamina_ratio(), move_speed, acceleration, friction
+		direction, _body_facing(), stats, get_stamina_ratio(), move_speed, acceleration, friction
 	)
 	move_and_slide()
 
-	model.animator.set_locomotion(_locomotion_blend(velocity))
+	var body_yaw_target: float = _body_yaw_target()
+	model.turn_body_toward(body_yaw_target, delta)
+	model.animator.set_locomotion(_locomotion_velocity(velocity, body_yaw_target), delta)
 	if not _state_machine.is_stroke_in_progress():
 		if direction.length() > 0:
 			_set_state(PlayerStateMachine.State.MOVING)
@@ -237,11 +249,33 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	_update_stamina(direction, delta)
 
 
-## Locomotion blend position (x = right, y = forward) for a world-space velocity.
-func _locomotion_blend(world_velocity: Vector3) -> Vector2:
-	var local_velocity: Vector3 = global_basis.inverse() * world_velocity
-	var blend := Vector2(local_velocity.x, -local_velocity.z) / move_speed
-	return blend.limit_length(1.0)
+## Yaw (rad) the body turns to, relative to the player's facing: toward the running direction
+## when running backward, otherwise (and always during a stroke) toward the net.
+func _body_yaw_target() -> float:
+	var local_velocity: Vector3 = global_basis.inverse() * velocity
+	var horizontal := Vector2(local_velocity.x, local_velocity.z)
+	var speed: float = horizontal.length()
+	if _state_machine.is_stroke_in_progress():
+		_running_backward = false
+	elif _running_backward:
+		_running_backward = speed > BACKPEDAL_SPEED and local_velocity.z > 0.0
+	else:
+		_running_backward = (
+			speed > BACKWARD_RUN_SPEED and local_velocity.z > BACKWARD_RUN_ALIGNMENT * speed
+		)
+	if not _running_backward:
+		return 0.0
+	# The body faces -z at yaw 0.
+	return atan2(-local_velocity.x, -local_velocity.z)
+
+
+## Velocity (m/s, x = right, y = forward) relative to where the body turns to (`body_yaw`), for
+## the locomotion animation: a body turning to run already runs, rather than sweeping through the
+## sideways steps while it turns.
+func _locomotion_velocity(world_velocity: Vector3, body_yaw: float) -> Vector2:
+	var body_basis: Basis = global_basis * Basis(Vector3.UP, body_yaw)
+	var local_velocity: Vector3 = body_basis.inverse() * world_velocity
+	return Vector2(local_velocity.x, -local_velocity.z)
 
 
 ## Direction toward the movement target at most at `speed_factor` of the top speed (see
@@ -249,8 +283,16 @@ func _locomotion_blend(world_velocity: Vector3) -> Vector2:
 func compute_move_dir(speed_factor: float = 1.0) -> Vector3:
 	_movement.check_and_consume_reached(position, DISTANCE_THRESHOLD)
 	return _movement.compute_direction(
-		position, _facing(), stats, get_stamina_ratio(), move_speed, speed_factor
+		position, _body_facing(), stats, get_stamina_ratio(), move_speed, speed_factor
 	)
+
+
+## Horizontal direction the body faces (turned e.g. to run backward); the player runs fastest
+## that way.
+func _body_facing() -> Vector3:
+	var facing: Vector3 = -(global_basis * Basis(Vector3.UP, model.body_yaw)).z
+	facing.y = 0.0
+	return facing.normalized()
 
 
 ## Horizontal direction the player faces (toward the net).
@@ -349,6 +391,8 @@ func _update_stroke_timing() -> void:
 ## Plays the stroke clip from `start_time` (s) at `speed`.
 func _start_swing(clip: StrokeClip, speed: float, start_time: float = 0.0) -> void:
 	_swing_clip = clip
+	# The swing has to face the net to meet the ball at the clip's contact point.
+	model.set_body_yaw(0.0)
 	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
 	_seconds_to_contact = (hit_time - start_time) / speed
 	_set_state(PlayerStateMachine.State.STROKING)
@@ -673,6 +717,7 @@ func apply_replay_frame(
 ) -> void:
 	global_transform = replay_transform
 	velocity = replay_velocity
+	model.set_body_yaw(animation_snapshot["body_yaw"])
 	model.animator.apply_snapshot(animation_snapshot)
 
 
@@ -685,14 +730,16 @@ func set_replay_animation_paused(paused: bool) -> void:
 
 
 func get_replay_animation_snapshot() -> Dictionary:
-	return model.animator.get_snapshot()
+	var snapshot: Dictionary = model.animator.get_snapshot()
+	snapshot["body_yaw"] = model.body_yaw
+	return snapshot
 
 
 func _on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 	controller.on_lifecycle_phase_changed(current_phase)
 
 
-## Called by match_manager after a point concludes to update mental state.
+## Called by the MatchManager after a point concludes to update mental state.
 func on_point_result(won: bool) -> void:
 	if won:
 		mental_state.on_point_won()
@@ -727,7 +774,7 @@ func show_shot_feedback(text: String, color: Color) -> void:
 
 ## Whether the next shot of this player is the return of a serve.
 func is_returning_serve() -> bool:
-	return match_manager.match_data.rally_length == 1
+	return session.is_return_of_serve(self)
 
 
 func get_lifecycle_bus() -> MatchLifecycleBus:

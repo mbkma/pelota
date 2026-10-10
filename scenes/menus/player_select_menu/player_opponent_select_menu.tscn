@@ -67,6 +67,7 @@ theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 40
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/HeaderRow" unique_id=211543723]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 26
@@ -118,6 +119,7 @@ size_flags_stretch_ratio = 1.5
 theme_override_constants/separation = 6
 
 [node name="DevicesHintLabel" type="Label" parent="MarginContainer/VBoxContainer/SelectorsRow/DevicesColumn" unique_id=1934022761]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Move a controller left or right to pick a side, then confirm with A / Enter"
 horizontal_alignment = 1
@@ -139,6 +141,7 @@ text = "CPU"
 horizontal_alignment = 1
 
 [node name="Player2LaneLabel" type="Label" parent="MarginContainer/VBoxContainer/SelectorsRow/DevicesColumn/LaneHeaderRow" unique_id=2060154919]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "P2"
@@ -150,6 +153,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="OpponentSelectColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/SelectorsRow" unique_id=850382350]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6

@@ -1,4 +1,6 @@
-## Player model: appearance, animation and stroke clips (racket contact points)
+## Player model: appearance, animation and stroke clips (racket contact points). The body (rig
+## and meshes) can turn away from the player's facing, e.g. to run backward; the stroke clips
+## keep the player's facing.
 class_name Model
 extends Node3D
 
@@ -10,12 +12,18 @@ const BASE_APPEARANCE: PlayerAppearance = preload(
 ## Surfaces of the racket mesh
 const RACKET_STRINGS_SURFACE: int = 0
 const RACKET_FRAME_SURFACE: int = 1
+## How fast (rad/s) the body turns
+const BODY_TURN_SPEED: float = 10.0
 
 @export var animator: PlayerAnimator
 ## Racket mesh held in the right hand of the rig.
 @export var racket_mesh: MeshInstance3D
 
+## Yaw (rad) of the body relative to the player's facing, in [-PI, PI]
+var body_yaw: float = 0.0
 var _stroke_clips: Array[StrokeClip] = []
+## Rig root transform with the body facing the player's facing
+var _rig_base_transform: Transform3D
 
 @onready var toss_point: Vector3 = $Points/BallTossPoint.position
 
@@ -29,9 +37,23 @@ var _stroke_clips: Array[StrokeClip] = []
 
 
 func _ready() -> void:
+	_rig_base_transform = _rig_root.transform
+	set_body_yaw(0.0)
+	_collect_stroke_clips()
+
+
+## Turns the body toward `yaw` (rad, relative to the player's facing) the shorter way round, at
+## BODY_TURN_SPEED.
+func turn_body_toward(yaw: float, delta: float) -> void:
+	var max_step: float = BODY_TURN_SPEED * delta
+	set_body_yaw(body_yaw + clampf(wrapf(yaw - body_yaw, -PI, PI), -max_step, max_step))
+
+
+func set_body_yaw(yaw: float) -> void:
+	body_yaw = wrapf(yaw, -PI, PI)
+	_rig_root.transform = Transform3D(Basis(Vector3.UP, body_yaw)) * _rig_base_transform
 	# MeshRoot must match the rig root transform, otherwise the skinned meshes face backward.
 	_mesh_root.transform = _rig_root.transform
-	_collect_stroke_clips()
 
 
 func _collect_stroke_clips() -> void:

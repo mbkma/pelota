@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/training/ball_machine.gd" id="1_machine"]
+[ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://scenes/ball/ball.tscn" id="2_ball"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.14, 0.27, 0.22, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.2, 0.2, 0.22, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hopper"]
+transparency = 1
+albedo_color = Color(0.85, 0.9, 0.95, 0.35)
+roughness = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.5, 0.45, 0.6)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hopper"]
+material = SubResource("StandardMaterial3D_hopper")
+top_radius = 0.3
+bottom_radius = 0.2
+height = 0.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_barrel"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.06
+bottom_radius = 0.07
+height = 0.3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leg"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.4
+
+[node name="BallMachine" type="Node3D"]
+script = ExtResource("1_machine")
+ball_scene = ExtResource("2_ball")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="Hopper" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0.05)
+mesh = SubResource("CylinderMesh_hopper")
+
+[node name="Barrel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.7, -0.42)
+mesh = SubResource("CylinderMesh_barrel")
+
+[node name="LegFrontLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.2, -0.25)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="LegFrontRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.2, -0.25)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="LegBackLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.2, 0.25)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="LegBackRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.2, 0.25)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="Muzzle" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.6)
