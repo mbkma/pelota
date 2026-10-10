@@ -18,9 +18,12 @@ const SERVE_DELAY: float = 2.0
 const INCOMING_ANGLE: float = PI / 6.0
 ## Ball speed (m/s) below which the ball does not count as incoming
 const INCOMING_MIN_SPEED: float = 3.0
+## Seconds before contact the AI commits to where its shot goes: it aims it then, from where the
+## opponent stands at that moment.
+const COMMIT_TIME: float = 0.35
 ## Chance range to follow a good offensive shot to the net, by net play skill.
-const NET_APPROACH_CHANCE_MIN: float = 0.25
-const NET_APPROACH_CHANCE_MAX: float = 0.75
+const NET_APPROACH_CHANCE_MIN: float = 0.15
+const NET_APPROACH_CHANCE_MAX: float = 0.55
 ## A good offensive shot to approach behind: an attack met in position (positioning quality),
 ## landing deep or wide (share of the half length or width), and fast (m/s) or with the
 ## opponent stretched (m from the landing point).
@@ -32,8 +35,13 @@ const APPROACH_STRETCH_DISTANCE: float = 3.0
 ## Distance from the net (m) the AI takes up when playing at the net.
 const NET_POSITION_DEPTH: float = 3.5
 ## The AI only follows an attack to the net when it hits from at least this far inside the
-## baseline (m), i.e. after attacking a short ball.
-const NET_APPROACH_INSIDE_BASELINE: float = 1.0
+## baseline (m), i.e. after attacking a short ball, and when it gets to SPLIT_STEP_DEPTH (m from
+## the net) before the opponent meets the ball (REPLY_DELAY s after the bounce at the earliest,
+## later when it has to run to the ball): from there it volleys the reply and closes in, rather
+## than being passed from the middle of the court.
+const NET_APPROACH_INSIDE_BASELINE: float = 1.5
+const SPLIT_STEP_DEPTH: float = 6.0
+const REPLY_DELAY: float = 0.35
 ## Recovery depth behind the baseline (m) for the play style's court position: this far behind
 ## it on the baseline (0), up to COURT_POSITION_IN inside it (-1) and COURT_POSITION_BACK
 ## farther back (1).
@@ -46,12 +54,16 @@ const WEAK_SHOT_STEP_BACK: float = 1.2
 const ATTACK_STEP_IN: float = 0.9
 const WEAK_SHOT_POSITIONING: float = 0.5
 const SHORT_SHOT_DEPTH: float = 8.0
-## Farthest the AI retreats (m) behind its recovery depth for a deep, high ball; beyond it the
-## ball is taken higher.
-const MAX_RETREAT: float = 2.5
-## Height (m) at which the AI meets a groundstroke as the ball drops after the bounce, from the
-## least to the most aggressive play style (an aggressive player takes the ball earlier).
-const CONTACT_HEIGHT := Vector2(0.95, 1.3)
+## Earliness (see ContactWindow) the AI takes groundstrokes at, from the least to the most
+## aggressive play style (an aggressive player takes the ball earlier), and its random variation
+## per ball.
+const EARLINESS: Vector2 = Vector2(0.3, 0.75)
+const EARLINESS_VARIATION: float = 0.15
+## Earliness of a short ball: the AI moves in and takes it early, inside the court, to attack it.
+## A ball counts as short when it can be met on the rise SHORT_BALL_DEPTH.x (m from the net) or
+## closer, fully from SHORT_BALL_DEPTH.y.
+const SHORT_BALL_EARLINESS: float = 0.9
+const SHORT_BALL_DEPTH: Vector2 = Vector2(10.0, 7.5)
 ## Highest ball (m) the AI volleys; a higher ball is let bounce.
 const VOLLEY_MAX_HEIGHT: float = 2.3
 
@@ -59,8 +71,10 @@ var _strategy: PointStrategy
 ## Stroke handed to the player (queued by the controller, executed by the player)
 var _pending_stroke: Stroke = null
 var _current_phase: Phase = Phase.ANTICIPATION
-## Whether the AI moved in to play at the net; it stays there until the point ends.
+## Whether the AI moved in to play at the net; it stays there until it has to play a groundstroke.
 var _plays_at_net: bool = false
+## Whether the AI committed to where the pending stroke goes (see COMMIT_TIME).
+var _committed: bool = false
 
 
 func _ready() -> void:
@@ -87,6 +101,8 @@ func update(_delta: float) -> void:
 				_current_phase = Phase.LOCK_IN
 		Phase.LOCK_IN:
 			_lock_in()
+		Phase.WAITING_FOR_HIT:
+			_commit()
 
 
 func get_move_direction() -> Vector3:
@@ -140,22 +156,43 @@ func _lock_in() -> void:
 	_current_phase = Phase.ANTICIPATION
 	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
 	var step: TrajectoryStep = _volley_step(trajectory)
+	var window: ContactWindow = null
 	if not step:
-		var contact_height: float = lerpf(
-			CONTACT_HEIGHT.x, CONTACT_HEIGHT.y, player.player_data.play_style.aggression
-		)
-		step = groundstroke_contact_step(
-			trajectory, contact_height, _baseline_recovery_depth() + MAX_RETREAT
-		)
+		window = contact_window(trajectory)
+		if window:
+			step = groundstroke_contact_step(trajectory, window, _choose_earliness(window))
 	# The ball does not reach this side (e.g. it ends up in the net).
 	if not step:
 		return
 
 	_pending_stroke = _strategy.compute_stroke(step)
+	_committed = false
+	if window:
+		_pending_stroke.earliness = window.earliness_of(step)
 	player.label_3d.modulate = _intent_color(_pending_stroke.stroke_intent)
 	_log_stroke("Stroke at t=%.3f" % step.time, _pending_stroke)
 	move_to_contact(step, _pending_stroke)
 	_current_phase = Phase.WAITING_FOR_HIT
+
+
+## Aims the pending stroke once, COMMIT_TIME before contact, from where the opponent stands then.
+func _commit() -> void:
+	if _committed or not _pending_stroke or player.get_seconds_to_contact() > COMMIT_TIME:
+		return
+	_committed = true
+	_strategy.reaim(_pending_stroke)
+	_log_stroke("Committed", _pending_stroke)
+
+
+## How early the AI takes the ball in `window`: by its play style, and early for a short ball.
+func _choose_earliness(window: ContactWindow) -> float:
+	var earliness: float = lerpf(EARLINESS.x, EARLINESS.y, player.player_data.play_style.aggression)
+	earliness += randf_range(-EARLINESS_VARIATION, EARLINESS_VARIATION)
+	var short_ball: float = clampf(
+		inverse_lerp(SHORT_BALL_DEPTH.x, SHORT_BALL_DEPTH.y, window.early_depth), 0.0, 1.0
+	)
+	earliness = lerpf(earliness, SHORT_BALL_EARLINESS, short_ball)
+	return clampf(earliness, 0.0, 1.0)
 
 
 ## Where the AI volleys the ball: at the net, or when the ball comes into the net zone out of
@@ -173,10 +210,15 @@ func _volley_step(trajectory: Array[TrajectoryStep]) -> TrajectoryStep:
 
 
 ## After hitting, maybe follows a good offensive shot to the net, then covers the angles of the
-## reply. An approach starts right away; otherwise the AI recovers after the follow-through.
+## reply. An approach starts right away; otherwise the AI recovers after the follow-through. A
+## net player that had to play a groundstroke gives the net up.
 func _on_player_ball_hit() -> void:
 	var hit_stroke: Stroke = player.queued_stroke
 	var landing: TrajectoryStep = _predicted_landing()
+	if hit_stroke.stroke_type != Stroke.StrokeType.SERVE:
+		player.mental_state.on_stroke(player.last_positioning_quality)
+	if not hit_stroke.is_volley():
+		_plays_at_net = false
 	var approaches: bool = false
 	if not _plays_at_net and _is_approach_shot(hit_stroke, landing):
 		var approach_chance: float = lerpf(
@@ -196,8 +238,8 @@ func _on_player_ball_hit() -> void:
 
 
 ## Whether the ball just hit is a good offensive shot to follow to the net: an attack from
-## inside the baseline, met in position, landing deep or wide and either fast or with the
-## opponent far from where it lands.
+## well inside the baseline, met in position, landing deep or wide and either fast or with the
+## opponent far from where it lands, and the AI gets in to volley before the opponent replies.
 func _is_approach_shot(hit_stroke: Stroke, landing: TrajectoryStep) -> bool:
 	var inside_court: bool = (
 		absf(player.global_position.z)
@@ -216,7 +258,15 @@ func _is_approach_shot(hit_stroke: Stroke, landing: TrajectoryStep) -> bool:
 	var to_landing: Vector3 = landing.point - player.opponent.global_position
 	to_landing.y = 0.0
 	var stretches: bool = to_landing.length() >= APPROACH_STRETCH_DISTANCE
-	return (deep or wide) and (fast or stretches)
+	if not ((deep or wide) and (fast or stretches)):
+		return false
+	var split_step: Vector3 = _calculate_angle_bisector_position(
+		hit_stroke.stroke_target, SPLIT_STEP_DEPTH
+	)
+	var reply_time: float = maxf(
+		landing.time + REPLY_DELAY, player.opponent.time_to_reach(landing.point)
+	)
+	return player.time_to_reach(split_step) <= reply_time
 
 
 ## Where the ball just hit lands in the opponent's court; null if it does not get there.

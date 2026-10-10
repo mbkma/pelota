@@ -1,5 +1,5 @@
 ## The stadium: court, player start positions, serve clocks, serve speed and match time panels,
-## the courtside TV cameras and the match cameras.
+## the player benches with their spare rackets, the courtside TV cameras and the match cameras.
 class_name Stadium
 extends Node3D
 
@@ -34,6 +34,8 @@ const SERVE_CLOCK_SECONDS: float = 25.0
 @onready var _time_label: Label3D = $TimePanel/Label3D
 @onready var _front_player_camera: TargetTracker = $FrontPlayerCamera
 @onready var _back_player_camera: TargetTracker = $BackPlayerCamera
+@onready
+var _bench_rackets: Array[Array] = [$Player1Bench.get_children(), $Player2Bench.get_children()]
 
 
 func _ready() -> void:
@@ -61,6 +63,13 @@ func show_match_time(elapsed_seconds: float) -> void:
 func track_players(front_player: Player, back_player: Player) -> void:
 	_front_player_camera.target = front_player
 	_back_player_camera.target = back_player
+
+
+## Gives the rackets on each player's bench the player's racket look (`players` in team order).
+func show_bench_rackets(players: Array[Player]) -> void:
+	for i in players.size():
+		for racket: Racket in _bench_rackets[i]:
+			racket.show_appearance(players[i].model.appearance)
 
 
 func start_serve_clocks() -> void:

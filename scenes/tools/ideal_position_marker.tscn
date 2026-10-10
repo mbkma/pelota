@@ -16,6 +16,9 @@ outer_radius = 0.45
 rings = 48
 ring_segments = 8
 
+[sub_resource type="BoxMesh" id="BoxMesh_range"]
+size = Vector3(0.12, 0.02, 1)
+
 [node name="IdealPositionMarker" type="Node3D" unique_id=1314660412]
 script = ExtResource("1_marker")
 top_level = true
@@ -25,3 +28,9 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 0.3, 0, 0, 0, 1, 0, 0.05, 0)
 cast_shadow = 0
 mesh = SubResource("TorusMesh_ring")
+
+[node name="Range" type="MeshInstance3D" parent="."]
+top_level = true
+visible = false
+cast_shadow = 0
+mesh = SubResource("BoxMesh_range")

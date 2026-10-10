@@ -10,6 +10,9 @@ enum PointImportance { NORMAL, GAME, BREAK, SET, MATCH }
 
 ## Games needed to win a set (a tiebreak is played at GAMES_PER_SET all)
 const GAMES_PER_SET: int = 6
+## How much a set and a game of the current set ahead count in the standing (see standing)
+const SET_STANDING: float = 0.4
+const GAME_STANDING: float = 0.12
 ## Points needed to win a tiebreak (with a 2 point lead)
 const TIEBREAK_POINTS: int = 7
 ## Ends change every this many points during a tiebreak
@@ -71,6 +74,15 @@ func point_importance(player_index: int) -> PointImportance:
 	if after.games_played > games_played:
 		return PointImportance.GAME if player_index == current_server else PointImportance.BREAK
 	return PointImportance.NORMAL
+
+
+## How far `player_index` is ahead in the match, in [-1, 1]: by the sets won and the games of
+## the current set (e.g. -0.88 a set and 0-4 down).
+func standing(player_index: int) -> float:
+	var opponent_index: int = 1 - player_index
+	var set_lead: int = sets[player_index] - sets[opponent_index]
+	var game_lead: int = games[player_index] - games[opponent_index]
+	return clampf(set_lead * SET_STANDING + game_lead * GAME_STANDING, -1.0, 1.0)
 
 
 ## Whether the receiver would win the server's game with the next point (not in a tiebreak).

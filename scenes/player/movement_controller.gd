@@ -16,7 +16,7 @@ const DIRECTION_CHANGE_PENALTY_DURATION: float = 0.15  # seconds to apply penalt
 const ARRIVAL_DECELERATION: float = 8.0
 ## Share of the top speed reached moving sideways and backward (forward is 1.0).
 const LATERAL_SPEED_FACTOR: float = 0.8
-const BACKWARD_SPEED_FACTOR: float = 0.6
+const BACKWARD_SPEED_FACTOR: float = 0.7
 
 ## Current movement target, null while there is none.
 var _target: Variant = null

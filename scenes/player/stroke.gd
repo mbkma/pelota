@@ -29,9 +29,36 @@ var intended_stroke_target: Vector3
 
 # The TrajectoryStep nearest to the players z-position
 var step: TrajectoryStep
+## How early a groundstroke takes the ball after the bounce (see ContactWindow); the standard
+## contact for other strokes.
+var earliness: float = ContactWindow.STANDARD
 
 # Shot intent for debug/UI display (mirrors AiPointContext.ShotIntent, -1 = unknown)
 var stroke_intent: int = -1
+
+
+## Takes over the shot of `other`: where it goes, how fast and with which spin, and its intent.
+func take_shot_from(other: Stroke) -> void:
+	intended_stroke_target = other.intended_stroke_target
+	stroke_target = other.stroke_target
+	intended_stroke_power = other.intended_stroke_power
+	stroke_power = other.stroke_power
+	attack_power = other.attack_power
+	stroke_spin = other.stroke_spin
+	stroke_intent = other.stroke_intent
+
+
+## Whether the stroke is played on the forehand side.
+func is_forehand() -> bool:
+	return (
+		stroke_type
+		in [
+			StrokeType.FOREHAND,
+			StrokeType.FOREHAND_DROP_SHOT,
+			StrokeType.FOREHAND_VOLLEY,
+			StrokeType.FOREHAND_DROP_VOLLEY,
+		]
+	)
 
 
 ## Whether the stroke is played before the ball bounces, close to the net.

@@ -1,5 +1,7 @@
 [gd_resource type="AnimationNodeBlendTree" format=3 uid="uid://cl8jd25st54sp"]
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_cadence"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vliv1"]
 animation = &"g_idle"
 
@@ -28,6 +30,9 @@ animation = &"g_mixamo_walk_backward"
 animation = &"g_mixamo_run_backward"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_3ltei"]
+min_space = Vector2(-4.5, -4.5)
+max_space = Vector2(4.5, 4.5)
+sync_mode = 1
 blend_point_0/node = SubResource("AnimationNodeAnimation_gwalk")
 blend_point_0/pos = Vector2(0, 1.49)
 blend_point_0/name = &"g_mixamo_walk"
@@ -52,11 +57,7 @@ blend_point_6/name = &"g_mixamo_walk_backward"
 blend_point_7/node = SubResource("AnimationNodeAnimation_rback")
 blend_point_7/pos = Vector2(0, -3.9)
 blend_point_7/name = &"g_mixamo_run_backward"
-min_space = Vector2(-4.5, -4.5)
-max_space = Vector2(4.5, 4.5)
-sync = true
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_cadence"]
+triangles = PackedInt32Array(0, 1, 2, 1, 2, 3, 0, 1, 4, 1, 4, 5, 0, 2, 6, 0, 4, 6, 2, 3, 7, 2, 6, 7, 4, 5, 7, 4, 6, 7)
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_moving"]
 

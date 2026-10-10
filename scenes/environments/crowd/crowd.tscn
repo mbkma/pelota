@@ -16,7 +16,6 @@ metadata/_custom_type_script = "uid://dfeyuegrtu4mk"
 [node name="Crowd" type="Node" unique_id=1204219689]
 script = ExtResource("1_a7rkt")
 config = SubResource("Resource_cp0o2")
-play_ambience = false
 
 [node name="EastBlock2" type="Node3D" parent="." unique_id=948425021]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.918195, -0.067768574, -17.666695)

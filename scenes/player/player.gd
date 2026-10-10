@@ -60,14 +60,22 @@ const HIGH_VOLLEY_HEIGHT: float = 1.7
 const LOW_VOLLEY_PACE_FACTOR: float = 0.75
 const LOW_VOLLEY_SPIN_FACTOR: float = 2.0
 const HIGH_VOLLEY_SPIN_FACTOR: float = 0.3
+## Contact earliness (see ContactWindow): a groundstroke taken early on the rise sends back up to
+## EARLY_PACE_TRANSFER of the incoming ball's speed (as far as it is met cleanly), but risks up
+## to EARLY_CONTROL_RISK of the control (for the worst timing; the best timing halves it). One
+## taken late, low and deep, keeps LATE_ATTACK_SHARE of the attack pace.
+const EARLY_PACE_TRANSFER: float = 0.15
+const EARLY_CONTROL_RISK: float = 0.3
+const LATE_ATTACK_SHARE: float = 0.5
 ## Height (m) by which strokes and serves aim to pass over the net cord
 const STROKE_NET_CLEARANCE: float = 0.15
 const SERVE_NET_CLEARANCE: float = 0.03
 ## Moving backward faster than BACKWARD_RUN_SPEED (m/s), within about 60 degrees of straight
 ## back (BACKWARD_RUN_ALIGNMENT: share of the speed pointing backward), the player turns and runs;
-## slower than BACKPEDAL_SPEED it faces the net again and backpedals.
-const BACKWARD_RUN_SPEED: float = 2.0
-const BACKPEDAL_SPEED: float = 1.5
+## slower than BACKPEDAL_SPEED it faces the net again and backpedals. A step or two back to meet
+## a groundstroke is backpedaled.
+const BACKWARD_RUN_SPEED: float = 3.5
+const BACKPEDAL_SPEED: float = 2.8
 const BACKWARD_RUN_ALIGNMENT: float = 0.5
 
 ## Static player identity/config data (name, handedness, sounds, stats).
@@ -240,6 +248,7 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	var body_yaw_target: float = _body_yaw_target()
 	model.turn_body_toward(body_yaw_target, delta)
 	model.animator.set_locomotion(_locomotion_velocity(velocity, body_yaw_target), delta)
+	model.shed_sweat(Vector2(velocity.x, velocity.z).length())
 	if not _state_machine.is_stroke_in_progress():
 		if direction.length() > 0:
 			_set_state(PlayerStateMachine.State.MOVING)
@@ -577,6 +586,12 @@ func _on_stroke_contact() -> void:
 		)
 		control *= 1.0 - pressure * control_loss
 		attack_share *= 1.0 - pressure
+		var early: float = ContactWindow.early_share(stroke.earliness)
+		control *= (
+			1.0 - EARLY_CONTROL_RISK * early * lerpf(1.0, 0.5, stats.timing01(get_stamina_ratio()))
+		)
+		attack_share *= lerpf(1.0, LATE_ATTACK_SHARE, ContactWindow.late_share(stroke.earliness))
+		stroke.stroke_power += ball.velocity.length() * EARLY_PACE_TRANSFER * early * control
 	_apply_contact_quality(stroke, control, attack_share)
 	_hit_ball(stroke)
 
@@ -682,13 +697,23 @@ func set_active_ball(b: Ball) -> void:
 	controller.ball_changed(b)
 
 
-## Shows the aim and ideal position markers the controller reports.
+## Shows the aim and ideal position markers the controller reports. The ideal position marker
+## is colored by how far the player stands from the range it may meet the ball from.
 func _update_controller_ui() -> void:
 	var ideal_position: Variant = controller.get_ideal_position()
 	ideal_position_marker.visible = ideal_position != null
 	if ideal_position != null:
 		ideal_position_marker.global_position = ideal_position
-		var offset: Vector3 = ideal_position - global_position
+		var ideal_range: PackedVector3Array = controller.get_ideal_range()
+		var closest: Vector3 = ideal_position
+		if ideal_range.is_empty():
+			ideal_position_marker.hide_range()
+		else:
+			ideal_position_marker.show_range(ideal_range[0], ideal_range[1])
+			closest = Geometry3D.get_closest_point_to_segment(
+				global_position, ideal_range[0], ideal_range[1]
+			)
+		var offset: Vector3 = closest - global_position
 		offset.y = 0.0
 		ideal_position_marker.set_quality(positioning_quality(offset.length()))
 
@@ -737,14 +762,6 @@ func get_replay_animation_snapshot() -> Dictionary:
 
 func _on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 	controller.on_lifecycle_phase_changed(current_phase)
-
-
-## Called by the MatchManager after a point concludes to update mental state.
-func on_point_result(won: bool) -> void:
-	if won:
-		mental_state.on_point_won()
-	else:
-		mental_state.on_point_lost()
 
 
 ## Shows a short rating of the last shot (e.g. "PERFECT!") rising above the player.

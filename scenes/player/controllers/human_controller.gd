@@ -5,8 +5,8 @@
 ## court until the racket meets the ball and holding the button charges power.
 ## Releasing the button times the shot: the closer to contact, the smaller the area the ball
 ## may land in and the more of the shot's attack pace it gets. Releasing within the perfect
-## window before contact is a perfect shot; still holding at contact plays a weak, safe ball
-## short through the middle.
+## window before contact is a perfect shot, which stands out with the full pace, spin and
+## precision; still holding at contact plays a weak, safe ball short through the middle.
 ## Pace: every shot has a rally speed (ATP averages: forehand ~115 km/h, backhand ~105 km/h)
 ## and an attack pace on top (winners up to ~165 km/h) that only comes through in full when
 ## the shot is perfectly timed, met in position and the player was set early with time to
@@ -29,10 +29,14 @@
 ## and the ball lands at the aim plus that direction times the current radius.
 ## Positioning: after the stroke button is pressed the player only shuffles toward the ball at
 ## SHOT_ADJUST_SPEED, so getting into position beforehand matters; a ball met off the racket's
-## sweet spot loses pace and accuracy (see Player). A marker shows the ideal position to meet
-## the opponent's ball, placed once from its real flight when the opponent hits it (only then
-## is the shot decided) and kept until this player hits the ball. Its color shows how well the
-## player stands there, red when far off to green when in place.
+## sweet spot loses pace and accuracy (see Player). The player decides how early to take a
+## groundstroke (see ContactWindow) by where it stands: it meets the ball at the point of the
+## contact window closest to it, so stepping in takes the ball early on the rise (more pace but
+## harder to time) and staying back takes it late (safer but weaker). A marker shows the standard
+## position to meet the opponent's ball and the range from the earliest to the latest contact,
+## placed once from its real flight when the opponent hits it (only then is the shot decided)
+## and kept until this player hits the ball. Its color shows how well the player stands in the
+## range, red when far off to green when in place.
 ## A ball taken out of the air is volleyed; in the net zone the player steps in to cut it off
 ## before the bounce. A volley is a short punch: holding the button charges nothing, its pace
 ## is mostly the incoming pace sent back, and only a ball above the net can be put away (see
@@ -85,27 +89,35 @@ const DROP_SHOT_DEPTH_MIN: float = 1.5
 const DROP_SHOT_DEPTH_MAX: float = 4.0
 
 ## Releasing the stroke button at most this many seconds before contact is perfect timing
-## (for a player with average timing; the timing stat scales it).
+## (for a player with average timing at the standard contact; the timing stat scales it).
 const PERFECT_TIMING_WINDOW: float = 0.12
+## Scale of the perfect window for a ball taken at the early end of the contact window (on the
+## rise it is harder to time) and at its late end.
+const EARLY_CONTACT_TIMING_WINDOW: float = 0.6
+const LATE_CONTACT_TIMING_WINDOW: float = 1.25
 ## Releasing this many seconds or more before contact is the worst timing.
 const EARLIEST_TIMING: float = 0.8
-## Share of the rally speed kept at the worst timing (released far too early).
-const TIMING_SPEED_WORST: float = 0.85
-## Share of the stroke's spin at the worst and at perfect timing: well-timed topspin dips and
-## kicks more, slices skid lower and drop shots die after the bounce.
-const TIMING_SPIN_WORST: float = 0.85
+## Effects of the timing below perfect, from the worst timing to just outside the perfect
+## window, and of perfect timing: a perfect shot gets its full rally speed and attack pace and
+## clearly more spin (well-timed topspin dips and kicks more, slices skid lower and drop shots
+## die after the bounce).
+const TIMING_SPEED: Vector2 = Vector2(0.8, 0.92)
+const TIMING_ATTACK: Vector2 = Vector2(0.0, 0.5)
+const TIMING_SPIN: Vector2 = Vector2(0.85, 1.05)
 const TIMING_SPIN_PERFECT: float = 1.3
-## Shot quality (worse of timing and positioning) for the ratings shown above the player
-const RATING_PERFECT: float = 0.95
+## Shot quality (worse of timing and positioning) for the ratings shown above the player: a
+## perfect rating takes perfect timing and the ball met in the racket's sweet spot.
+const RATING_PERFECT: float = 1.0
 const RATING_GREAT: float = 0.7
 const RATING_GOOD: float = 0.4
 const RATING_COLOR_PERFECT := Palette.AMBER
 const RATING_COLOR_GREAT := Palette.TEAL_LIGHT
 const RATING_COLOR_GOOD := Palette.CREAM
 const RATING_COLOR_BAD := Palette.RED_LIGHT
-## Landing area radius (m) of a rally shot with perfect and with the worst timing.
+## Landing area radius (m) of a rally shot from the worst timing to just outside the perfect
+## window, and with perfect timing.
+const RALLY_ERROR_RADIUS: Vector2 = Vector2(2.5, 0.9)
 const RALLY_ERROR_RADIUS_PERFECT: float = 0.25
-const RALLY_ERROR_RADIUS_WORST: float = 2.5
 ## Still holding the stroke button at contact: a weak ball through the middle, landing short
 ## (m from the net) within this radius (m). Its speed follows from a flight time (s, without air
 ## drag) drawn per shot, about that of a rally ball, so it comes at ~70-90 km/h without looping
@@ -131,11 +143,13 @@ const SLICE_ATTACK: float = 4.0
 const SERVE_PERFECT_WINDOW: float = 0.08
 ## Pressing this many seconds or more before contact (or not at all) is the worst timing.
 const SERVE_EARLIEST_TIMING: float = 0.5
-## Share of the serve speed of an untimed serve.
-const SERVE_UNTIMED_SPEED_FACTOR: float = 0.72
-## Landing area radius (m) of a serve with perfect and with the worst timing.
+## Share of the serve speed from an untimed serve to just outside the perfect window; a
+## perfectly timed serve gets the full speed.
+const SERVE_TIMING_SPEED: Vector2 = Vector2(0.72, 0.9)
+## Landing area radius (m) of a serve from untimed to just outside the perfect window, and
+## perfectly timed.
+const SERVE_ERROR_RADIUS: Vector2 = Vector2(1.6, 0.6)
 const SERVE_ERROR_RADIUS_PERFECT: float = 0.2
-const SERVE_ERROR_RADIUS_WORST: float = 1.6
 ## Share of the perfectly timed flat serve speed (GameConstants.SERVE_SPEED) per serve type:
 ## flat 103-121 mph, slice 90-106 mph, kick 79-92 mph.
 const SERVE_SPEED_SHARE: Dictionary[ServeType, float] = {
@@ -198,9 +212,14 @@ var _serve_action: InputDevice.Action = InputDevice.Action.STRIKE
 
 ## Whether the current shot meets the ball out of the air (it then aims like a volley).
 var _is_volley_shot: bool = false
+## Where the opponent's ball can be met with a groundstroke; null until the opponent hits it,
+## or if it does not bounce on this side.
+var _contact_window: ContactWindow = null
 ## Ideal position to meet the opponent's ball; null until the opponent hits it, or if it cannot
 ## be met.
 var _ideal_position: Variant = null
+## Positions of the earliest and the latest groundstroke contact; empty for a volley.
+var _ideal_range: PackedVector3Array = PackedVector3Array()
 ## Whether the ideal position was placed for the ball coming in (it then stays).
 var _ideal_placed: bool = false
 
@@ -246,6 +265,11 @@ func request_serve() -> void:
 	_aiming_at = _serve_aim_target()
 
 
+## The ideal position belongs to the ball it was placed for.
+func ball_changed(_ball: Ball) -> void:
+	_clear_ideal_position()
+
+
 func on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 	match current_phase:
 		MatchLifecycleBus.Phase.RALLY:
@@ -279,6 +303,10 @@ func get_aim_marker_position() -> Variant:
 ## Where the player should stand to meet the opponent's next ball, until the ball got past.
 func get_ideal_position() -> Variant:
 	return null if _has_ball_passed() else _ideal_position
+
+
+func get_ideal_range() -> PackedVector3Array:
+	return PackedVector3Array() if _has_ball_passed() else _ideal_range
 
 
 func get_aim_marker_radius() -> float:
@@ -373,33 +401,64 @@ func _update_shot(delta: float) -> void:
 	move_to_contact(step, _pending_stroke)
 
 
-## Places the ideal position once, as soon as the opponent's ball comes in.
+## Places the contact window and the ideal position once, as soon as the opponent's ball comes
+## in.
 func _update_ideal_position() -> void:
 	if _ideal_placed or not _is_ball_incoming():
 		return
-	var step: TrajectoryStep = get_ideal_contact_step()
+	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
+	_contact_window = contact_window(trajectory)
+	var step: TrajectoryStep = get_ideal_contact_step(trajectory, _contact_window)
 	_ideal_position = ideal_position_for_step(step) if step else null
+	_ideal_range = PackedVector3Array()
+	if step and not step.is_volley_contact():
+		var candidates: Array[TrajectoryStep] = _contact_window.steps_in(trajectory)
+		_ideal_range.append(ideal_position_for_step(candidates.front()))
+		_ideal_range.append(ideal_position_for_step(candidates.back()))
 	_ideal_placed = true
 
 
 func _clear_ideal_position() -> void:
+	_contact_window = null
 	_ideal_position = null
+	_ideal_range = PackedVector3Array()
 	_ideal_placed = false
 
 
-## Where the shot meets the ball: where it passes the player, or in the net zone where the
-## player can step in and volley it before the bounce.
+## Where the shot meets the ball: in the net zone the player steps in and volleys it before the
+## bounce; otherwise at the point of the contact window closest to where the player stands. A
+## ball that does not bounce on this side, or is past the window, is met where it passes the
+## player.
 func _shot_contact_step() -> TrajectoryStep:
-	var step: TrajectoryStep = get_closest_trajectory_step()
-	if not step or not step.is_in_net_zone() or not step.is_volley_contact():
+	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
+	var step: TrajectoryStep = _closest_playable_step(trajectory)
+	if step and step.is_in_net_zone() and step.is_volley_contact():
+		var intercept: TrajectoryStep = _volley_intercept_step(trajectory, SHOT_ADJUST_SPEED)
+		return intercept if intercept else step
+	if not _contact_window:
 		return step
-	var intercept: TrajectoryStep = get_volley_intercept_step(SHOT_ADJUST_SPEED)
-	return intercept if intercept else step
+	var closest_contact: TrajectoryStep = null
+	var closest_distance: float = INF
+	for candidate in _contact_window.steps_in(trajectory):
+		var distance: float = absf(ideal_position_for_step(candidate).z - player.global_position.z)
+		if distance < closest_distance:
+			closest_contact = candidate
+			closest_distance = distance
+	return closest_contact if closest_contact else step
 
 
 ## Timing quality in [0, 1] of releasing the stroke button `seconds_to_contact` before contact.
+## Taking the ball earlier narrows the perfect window, taking it later widens it.
 func _shot_timing_quality(seconds_to_contact: float) -> float:
-	return _timing_quality_for(seconds_to_contact, PERFECT_TIMING_WINDOW, EARLIEST_TIMING)
+	var window: float = PERFECT_TIMING_WINDOW
+	if _pending_stroke:
+		window *= lerpf(
+			1.0, EARLY_CONTACT_TIMING_WINDOW, ContactWindow.early_share(_pending_stroke.earliness)
+		)
+		window *= lerpf(
+			1.0, LATE_CONTACT_TIMING_WINDOW, ContactWindow.late_share(_pending_stroke.earliness)
+		)
+	return _timing_quality_for(seconds_to_contact, window, EARLIEST_TIMING)
 
 
 ## Timing quality the shot gets at contact: the release timing, or the worst while held.
@@ -416,7 +475,7 @@ func _displayed_shot_quality() -> float:
 
 
 func _rally_error_radius(quality: float) -> float:
-	var radius: float = lerpf(RALLY_ERROR_RADIUS_WORST, RALLY_ERROR_RADIUS_PERFECT, quality)
+	var radius: float = _by_timing(quality, RALLY_ERROR_RADIUS, RALLY_ERROR_RADIUS_PERFECT)
 	return radius * lerpf(1.25, 0.75, _shot_precision)
 
 
@@ -424,7 +483,7 @@ func _rally_error_radius(quality: float) -> float:
 ## timing. Still holding the button at contact plays a weak ball short through the middle.
 func _apply_shot_timing(stroke: Stroke) -> void:
 	var quality: float = _effective_shot_quality()
-	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
+	stroke.stroke_spin = _base_stroke_spin * _by_timing(quality, TIMING_SPIN, TIMING_SPIN_PERFECT)
 	if not _timed:
 		var late_target: Vector3 = _opponent_court_point(0.0, LATE_SHOT_DEPTH)
 		var late_error: Vector2 = _error_direction * LATE_SHOT_ERROR_RADIUS
@@ -438,8 +497,8 @@ func _apply_shot_timing(stroke: Stroke) -> void:
 	var error: Vector2 = _error_direction * _rally_error_radius(quality)
 	stroke.intended_stroke_target = _aiming_at
 	stroke.stroke_target = _aiming_at + Vector3(error.x, 0.0, error.y)
-	stroke.stroke_power = _base_stroke_power * lerpf(TIMING_SPEED_WORST, 1.0, quality)
-	stroke.attack_power = _base_attack_power * quality
+	stroke.stroke_power = _base_stroke_power * _by_timing(quality, TIMING_SPEED, 1.0)
+	stroke.attack_power = _base_attack_power * _by_timing(quality, TIMING_ATTACK, 1.0)
 
 
 ## Builds the rally stroke for the given contact step, forehand or backhand by ball side.
@@ -457,6 +516,8 @@ func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
 		_set_volley(stroke, is_forehand)
 	else:
 		_set_groundstroke(stroke, is_forehand, stamina)
+		if _contact_window:
+			stroke.earliness = _contact_window.earliness_of(step)
 
 	# Spin skill sets how much of the stroke's spin the player gets on the ball.
 	var spin_skill: float = player.stats.spin_control01(stroke.stroke_type, stamina)
@@ -588,7 +649,7 @@ func _displayed_serve_quality() -> float:
 
 func _serve_error_radius(quality: float) -> float:
 	var precision: float = player.stats.serve_accuracy01(player.get_stamina_ratio())
-	var radius: float = lerpf(SERVE_ERROR_RADIUS_WORST, SERVE_ERROR_RADIUS_PERFECT, quality)
+	var radius: float = _by_timing(quality, SERVE_ERROR_RADIUS, SERVE_ERROR_RADIUS_PERFECT)
 	return radius * lerpf(1.25, 0.75, precision)
 
 
@@ -598,8 +659,8 @@ func _apply_serve_timing(stroke: Stroke) -> void:
 	var error: Vector2 = _error_direction * _serve_error_radius(quality)
 	stroke.intended_stroke_target = _aiming_at
 	stroke.stroke_target = _aiming_at + Vector3(error.x, 0.0, error.y)
-	stroke.stroke_power = _base_stroke_power * lerpf(SERVE_UNTIMED_SPEED_FACTOR, 1.0, quality)
-	stroke.stroke_spin = _base_stroke_spin * lerpf(TIMING_SPIN_WORST, TIMING_SPIN_PERFECT, quality)
+	stroke.stroke_power = _base_stroke_power * _by_timing(quality, SERVE_TIMING_SPEED, 1.0)
+	stroke.stroke_spin = _base_stroke_spin * _by_timing(quality, TIMING_SPIN, TIMING_SPIN_PERFECT)
 
 
 func _build_serve_stroke() -> Stroke:
@@ -652,6 +713,14 @@ func _timing_quality_for(
 	var window: float = perfect_window * lerpf(0.75, 1.35, timing_skill)
 	var early_by: float = seconds_to_contact - window
 	return 1.0 - clampf(early_by / (earliest - window), 0.0, 1.0)
+
+
+## Effect of the timing `quality`: `perfect` for perfect timing, otherwise from `below_perfect.x`
+## at the worst timing to `below_perfect.y` just outside the perfect window.
+static func _by_timing(quality: float, below_perfect: Vector2, perfect: float) -> float:
+	if quality >= 1.0:
+		return perfect
+	return lerpf(below_perfect.x, below_perfect.y, quality)
 
 
 ## Sets the aim goal from the direction, per axis, and moves the aim toward it. Full
@@ -828,11 +897,12 @@ func _on_player_ball_hit() -> void:
 
 
 ## Shows how good the shot was: the worse of timing and positioning decides the rating, and a
-## poor rating names what went wrong.
+## poor rating names what went wrong. A well-hit shot lifts the player's confidence a little.
 func _show_shot_rating() -> void:
 	var timing: float = _timing_quality if _timed else 0.0
 	var positioning: float = player.last_positioning_quality
 	var quality: float = minf(timing, positioning)
+	player.mental_state.on_stroke(quality)
 	if quality >= RATING_PERFECT:
 		player.show_shot_feedback("PERFECT!", RATING_COLOR_PERFECT)
 	elif quality >= RATING_GREAT:

@@ -2,11 +2,9 @@
 @abstract class_name Controller
 extends Node
 
-## Height (m) at which a groundstroke is comfortably met as the ball drops after the bounce,
-## and how far behind the baseline (m) a player retreats at most for a deep, high ball (beyond
-## it the ball is taken higher), used for the ideal position.
-const IDEAL_CONTACT_HEIGHT: float = 1.1
-const MAX_RETREAT_BEHIND_BASELINE: float = 3.0
+## Farthest (m) a player moves back from where it stands when the ball comes in to meet a
+## groundstroke; a deeper ball is taken earlier and higher.
+const MAX_RETREAT: float = 1.0
 ## Time (s) a player wants to be in place before a groundstroke, to set for the swing
 const GROUNDSTROKE_SETUP_TIME: float = 0.25
 ## Lowest ball height (m) a stroke can still reach
@@ -57,6 +55,12 @@ func get_ideal_position() -> Variant:
 	return null
 
 
+## Where the player may stand to meet the incoming ball, from the earliest to the latest contact
+## (see ContactWindow), shown by the ideal position marker; empty hides the range.
+func get_ideal_range() -> PackedVector3Array:
+	return PackedVector3Array()
+
+
 ## Radius (m) in which the aimed stroke may land, shown by the aim marker
 func get_aim_marker_radius() -> float:
 	return BallAimMarker.DEFAULT_RADIUS
@@ -84,53 +88,48 @@ func position_for_contact(step: TrajectoryStep, stroke: Stroke) -> Vector3:
 	return body_position
 
 
-## Best point to meet the incoming ball: a volley if the ball can be taken before the bounce
-## in the net zone, otherwise a groundstroke after the bounce (see
-## groundstroke_contact_step).
-func get_ideal_contact_step() -> TrajectoryStep:
-	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
+## Standard point to meet the incoming ball: a volley if the ball can be taken before the bounce
+## in the net zone, otherwise the standard groundstroke contact of `window` (see
+## groundstroke_contact_step). Null if the ball does not bounce on this side (`window` is null).
+func get_ideal_contact_step(
+	trajectory: Array[TrajectoryStep], window: ContactWindow
+) -> TrajectoryStep:
 	var closest_step: TrajectoryStep = _closest_playable_step(trajectory)
 	if closest_step and closest_step.is_volley_contact() and closest_step.is_in_net_zone():
 		var intercept: TrajectoryStep = _volley_intercept_step(trajectory, 1.0)
 		return intercept if intercept else closest_step
-	return groundstroke_contact_step(
+	if not window:
+		return null
+	return groundstroke_contact_step(trajectory, window, ContactWindow.STANDARD)
+
+
+## Where the player can meet the ball flying along `trajectory` with a groundstroke, moving back
+## at most MAX_RETREAT from where it stands (see ContactWindow); null if the ball does not bounce
+## on this side.
+func contact_window(trajectory: Array[TrajectoryStep]) -> ContactWindow:
+	var deepest: float = absf(player.global_position.z) + MAX_RETREAT
+	return ContactWindow.create(
 		trajectory,
-		IDEAL_CONTACT_HEIGHT,
-		GameConstants.COURT_LENGTH_HALF + MAX_RETREAT_BEHIND_BASELINE
+		signf(player.global_position.z),
+		func(step: TrajectoryStep) -> bool: return absf(ideal_position_for_step(step).z) <= deepest
 	)
 
 
-## Where a player meets the ball after the bounce: as it drops to `contact_height` after the
-## apex (at the apex of a lower bounce), so the player moves in for a short ball and back for a
-## deep, high one. The player retreats no farther than `max_depth` (m from the net) and takes
-## the ball higher there. If the player cannot get there and set in time, it takes the ball
-## at the nearest point along the flight it can get to (earlier on the rise, or later and
-## lower); if there is none, where it is least late. Null if the ball does not bounce on this
-## side.
+## Where a player taking the ball at `earliness` meets it in `window`. If the player cannot get
+## there and set in time, it takes the ball at the nearest point of the window it can get to; if
+## there is none, where it is least late. Null if the ball is past the window.
 func groundstroke_contact_step(
-	trajectory: Array[TrajectoryStep], contact_height: float, max_depth: float
+	trajectory: Array[TrajectoryStep], window: ContactWindow, earliness: float
 ) -> TrajectoryStep:
-	var side: float = signf(player.global_position.z)
-	var candidates: Array[TrajectoryStep] = []
-	var preferred_index: int = -1
-	var previous_y: float = -INF
-	var apex_passed: bool = false
-	for step in trajectory:
-		if step.bounces > 1:
-			break
-		if step.bounces == 0 or signf(step.point.z) != side or step.point.y < MIN_CONTACT_HEIGHT:
-			continue
-		if absf(step.point.z) > max_depth and not candidates.is_empty():
-			break
-		candidates.append(step)
-		apex_passed = apex_passed or step.point.y < previous_y
-		previous_y = step.point.y
-		if preferred_index < 0 and apex_passed and step.point.y <= contact_height:
-			preferred_index = candidates.size() - 1
+	var candidates: Array[TrajectoryStep] = window.steps_in(trajectory)
 	if candidates.is_empty():
 		return null
-	if preferred_index < 0:
-		preferred_index = candidates.size() - 1
+	var preferred_depth: float = window.depth_at(earliness)
+	var preferred_index: int = candidates.size() - 1
+	for i in candidates.size():
+		if absf(candidates[i].point.z) >= preferred_depth:
+			preferred_index = i
+			break
 
 	var best: TrajectoryStep = null
 	var best_offset: int = 0
@@ -166,14 +165,10 @@ func ideal_position_for_step(step: TrajectoryStep) -> Vector3:
 	return position_for_contact(step, stroke)
 
 
-## Where a player in the net zone volleys the incoming ball, running at `speed_factor` of its
-## top speed: like a net player cutting the ball off, it steps in and meets the ball as early as
-## it can be there and set, at most VOLLEY_STEP_IN closer to the net. Null if the ball cannot be
-## volleyed in time.
-func get_volley_intercept_step(speed_factor: float) -> TrajectoryStep:
-	return _volley_intercept_step(player.ball.predict_trajectory(), speed_factor)
-
-
+## Where a player in the net zone volleys the ball flying along `trajectory`, running at
+## `speed_factor` of its top speed: like a net player cutting the ball off, it steps in and meets
+## the ball as early as it can be there and set, at most VOLLEY_STEP_IN closer to the net. Null if
+## the ball cannot be volleyed in time.
 func _volley_intercept_step(
 	trajectory: Array[TrajectoryStep], speed_factor: float
 ) -> TrajectoryStep:
@@ -196,13 +191,9 @@ func _volley_intercept_step(
 	return null
 
 
-## Playable trajectory step (before the second bounce, high enough to reach) closest to the
+## Playable step of `trajectory` (before the second bounce, high enough to reach) closest to the
 ## player by Z distance. A ball dying short of the player (e.g. a drop shot) is met at the last
 ## step it can still be played.
-func get_closest_trajectory_step() -> TrajectoryStep:
-	return _closest_playable_step(player.ball.predict_trajectory())
-
-
 func _closest_playable_step(trajectory: Array[TrajectoryStep]) -> TrajectoryStep:
 	var closest_step: TrajectoryStep = null
 	for step in trajectory:

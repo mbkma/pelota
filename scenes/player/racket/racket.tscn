@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/player/racket/racket.gd" id="1_racket"]
+[ext_resource type="ArrayMesh" path="res://scenes/player/racket/racket_mesh.res" id="2_mesh"]
+
+[node name="Racket" type="MeshInstance3D"]
+mesh = ExtResource("2_mesh")
+script = ExtResource("1_racket")

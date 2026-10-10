@@ -8,11 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://daep44axg5840" path="res://scenes/ui/hud/player_status_panel.tscn" id="6_status"]
 [ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="7_environment"]
 
-[node name="TennisTraining" type="Node" node_paths=PackedStringArray("player", "ball_machine", "court", "cameras", "shot_result_label")]
+[node name="TennisTraining" type="Node" node_paths=PackedStringArray("player", "ball_machine", "stadium", "court", "cameras", "shot_result_label")]
 process_mode = 1
 script = ExtResource("1_session")
 player = NodePath("Player")
 ball_machine = NodePath("BallMachine")
+stadium = NodePath("Stadium")
 court = NodePath("Stadium/Court")
 cameras = NodePath("Stadium/Cameras")
 shot_result_label = NodePath("Hud/ShotResultLabel")

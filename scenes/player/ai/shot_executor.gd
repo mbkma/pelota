@@ -51,10 +51,17 @@ const NEUTRAL_ATTACK: Vector2 = Vector2(3.0, 5.0)
 const ATTACK_ATTACK: Vector2 = Vector2(9.0, 13.0)
 ## Share of the attack pace a slice keeps.
 const SLICE_ATTACK_FACTOR: float = 0.3
+## Short angle cross court (see AiPointContext.is_angle): its target (normalized: width, depth),
+## and the share of the rally speed and attack pace and the extra topspin that make it dip in
+## short.
+const ANGLE_TARGET: Vector2 = Vector2(0.95, 0.55)
+const ANGLE_SPEED_FACTOR: float = 0.8
+const ANGLE_ATTACK_FACTOR: float = 0.5
+const ANGLE_TOPSPIN: float = 0.15
 
 
-static func build_stroke(context: AiPointContext) -> Stroke:
-	var stroke_type: Stroke.StrokeType = _determine_stroke_type(context)
+## Stroke of `stroke_type` (see choose_stroke_type) playing the shot planned in `context`.
+static func build_stroke(context: AiPointContext, stroke_type: Stroke.StrokeType) -> Stroke:
 	var normalized_target: Vector2 = _normalized_target(context)
 	if _is_drop_volley(stroke_type):
 		normalized_target.y = DROP_VOLLEY_DEPTH
@@ -80,13 +87,9 @@ static func _normalized_target(context: AiPointContext) -> Vector2:
 	if context.is_volley():
 		return _volley_target(context)
 
-	var lane_sign: float = 0.0
-	match context.target_lane:
-		AiPointContext.TargetLane.CROSS:
-			lane_sign = -1.0
-		AiPointContext.TargetLane.DOWN_THE_LINE:
-			lane_sign = 1.0
-
+	var lane_sign: float = context.lane_side(context.target_lane)
+	if context.is_angle:
+		return Vector2(lane_sign * ANGLE_TARGET.x, ANGLE_TARGET.y)
 	match context.intent:
 		AiPointContext.ShotIntent.SAFE:
 			return Vector2(lane_sign * 0.38, 0.75)
@@ -136,7 +139,9 @@ static func _to_world_target(normalized_target: Vector2, context: AiPointContext
 	)
 
 
-static func _determine_stroke_type(context: AiPointContext) -> Stroke.StrokeType:
+## Stroke type for the ball in `context`: by the side it is met on, a volley out of the air, a
+## safe backhand sometimes sliced.
+static func choose_stroke_type(context: AiPointContext) -> Stroke.StrokeType:
 	if context.is_serve:
 		return Stroke.StrokeType.SERVE
 
@@ -196,6 +201,8 @@ static func _shot_speed(context: AiPointContext, stroke_type: Stroke.StrokeType)
 	shot_speed *= lerpf(0.86, 1.0, context.player_stamina_ratio)
 	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
 		shot_speed *= SLICE_SPEED_FACTOR
+	if context.is_angle:
+		shot_speed *= ANGLE_SPEED_FACTOR
 	return shot_speed
 
 
@@ -222,6 +229,8 @@ static func _attack_power(context: AiPointContext, stroke_type: Stroke.StrokeTyp
 	attack_power *= lerpf(0.86, 1.0, context.player_stamina_ratio)
 	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
 		attack_power *= SLICE_ATTACK_FACTOR
+	if context.is_angle:
+		attack_power *= ANGLE_ATTACK_FACTOR
 	return attack_power
 
 
@@ -252,6 +261,8 @@ static func _shot_spin(
 		AiPointContext.ShotIntent.ATTACK:
 			intent_spin_bonus = 0.12
 	var topspin: float = lerpf(0.46, 0.88, topspin_skill) + style_topspin * intent_spin_bonus
+	if context.is_angle:
+		topspin += ANGLE_TOPSPIN
 	return Vector3(0.0, clampf(topspin, -1.0, 1.0), 0.0)
 
 

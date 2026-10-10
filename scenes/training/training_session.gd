@@ -12,6 +12,7 @@ const RESULT_COLOR_MISS := Palette.RED_LIGHT
 
 @export var player: Player
 @export var ball_machine: BallMachine
+@export var stadium: Stadium
 @export var court: Court
 @export var cameras: MatchCameras
 ## Shows where the player's last shot went
@@ -38,6 +39,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	player.session = self
 	player.ball_hit.connect(_on_player_ball_hit)
+	stadium.show_bench_rackets([player])
 	cameras.register_camera(player.first_person_camera)
 	cameras.show_from_behind(player)
 	shot_result_label.text = ""

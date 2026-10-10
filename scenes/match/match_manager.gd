@@ -15,15 +15,8 @@ enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER
 
 ## Rally length (shots, serve included) that excites the crowd the most
 const MOST_EXCITING_RALLY_SHOTS: int = 12
-## Pressure both players feel before a point, by what the point decides for either of them
-const POINT_PRESSURE: Dictionary[Score.PointImportance, float] = {
-	Score.PointImportance.GAME: 0.04,
-	Score.PointImportance.BREAK: 0.1,
-	Score.PointImportance.SET: 0.18,
-	Score.PointImportance.MATCH: 0.28,
-}
-## Pressure released before an ordinary point
-const NORMAL_POINT_PRESSURE_RELIEF: float = 0.04
+## Seconds the ball flies on after a first serve fault or a let before the serve is taken again
+const SERVE_AGAIN_BREAK: float = 2.0
 
 @export var player0: Player
 @export var player1: Player
@@ -84,6 +77,8 @@ func _ready() -> void:
 		television_hud.set_player(i, player.player_data)
 		cameras.register_camera(player.first_person_camera)
 	television_hud.update_score(match_data.score)
+	stadium.show_bench_rackets(players)
+	_update_players_for_next_point()
 
 	await place_players()
 	cameras.open_match()
@@ -151,10 +146,12 @@ func add_point(winner: int) -> void:
 	_record_point_statistics(winner)
 	var score: Score = match_data.score
 	var completed_sets_before: int = score.completed_sets.size()
+	var games_before: int = score.games_played
 	match_data.add_point(winner)
-	player0.on_point_result(winner == 0)
-	player1.on_point_result(winner == 1)
-	_apply_point_pressure()
+	if score.games_played > games_before:
+		get_player(winner).mental_state.on_game_result(true)
+		get_player(1 - winner).mental_state.on_game_result(false)
+	_update_players_for_next_point()
 	television_hud.update_score(score)
 	stadium.show_match_time(match_data.elapsed_seconds)
 	if score.is_match_over():
@@ -219,6 +216,15 @@ func _request_serve() -> void:
 	get_server().request_serve()
 
 
+## Lets the ball of a missed serve or a let fly on for SERVE_AGAIN_BREAK, no longer counting, then
+## serves again.
+func _serve_again_after_break() -> void:
+	_stop_players()
+	_retire_ball()
+	await get_tree().create_timer(SERVE_AGAIN_BREAK).timeout
+	_request_serve()
+
+
 func _end_match(winner_index: int) -> void:
 	current_state = MatchState.GAME_OVER
 	_stop_players()
@@ -253,7 +259,7 @@ func _on_ball_on_ground() -> void:
 func _process_serve_ground_contact() -> void:
 	var in_box: bool = court.is_ball_in_court_region(ball.position, _get_valid_service_box())
 	if in_box and _serve_clipped_net:
-		_request_serve()
+		_serve_again_after_break()
 		return
 
 	var is_first_serve: bool = current_state == MatchState.SERVE
@@ -272,7 +278,7 @@ func _process_serve_ground_contact() -> void:
 	if is_first_serve:
 		umpire.say_fault()
 		current_state = MatchState.SECOND_SERVE
-		_request_serve()
+		_serve_again_after_break()
 	else:
 		# Double fault: the point ends.
 		server_statistics.double_faults += 1
@@ -379,20 +385,15 @@ func _record_point_statistics(winner: int) -> void:
 				stats[i].net_points_won += 1
 
 
-## Big points (game, break, set and match points for either player) add pressure to both
-## players; ordinary points release a little.
-func _apply_point_pressure() -> void:
-	var score: Score = match_data.score
-	if score.is_match_over():
+## Gets the players ready for the next point: their minds on the score, and as sweaty as the
+## match time makes them.
+func _update_players_for_next_point() -> void:
+	if match_data.score.is_match_over():
 		return
-	var importance: Score.PointImportance = (
-		maxi(score.point_importance(0), score.point_importance(1)) as Score.PointImportance
-	)
-	for player: Player in [player0, player1]:
-		if importance == Score.PointImportance.NORMAL:
-			player.mental_state.release_pressure(NORMAL_POINT_PRESSURE_RELIEF)
-		else:
-			player.mental_state.apply_pressure(POINT_PRESSURE[importance])
+	for i in 2:
+		var player: Player = get_player(i)
+		player.mental_state.before_point(match_data.score, i)
+		player.model.sweat_after_match_time(match_data.elapsed_seconds)
 
 
 ## Ends the ball's part in the point: it no longer counts but stays on court until the next
