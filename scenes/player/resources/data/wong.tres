@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bp0i0atevqvj7"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_2taoi"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rkx4q"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_t8td7"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_swa3e"]
+
+[sub_resource type="Resource" id="Resource_icpui"]
+script = ExtResource("1_2taoi")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_p40m3"]
+script = ExtResource("2_rkx4q")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_pil5i"]
+script = ExtResource("4_swa3e")
+acceleration = 74.0
+top_speed = 74.0
+agility = 72.0
+stamina = 74.0
+forehand = 76.0
+backhand = 77.0
+serve_power = 75.0
+serve_accuracy = 73.0
+return_skill = 73.0
+volley_skill = 73.0
+slice_skill = 71.0
+topspin_skill = 74.0
+accuracy = 75.0
+consistency = 69.0
+timing = 75.0
+composure = 72.0
+clutch = 75.0
+net_play = 71.0
+
+[resource]
+script = ExtResource("3_t8td7")
+first_name = "Coleman"
+last_name = "Wong"
+age = 22
+country = "Hong Kong"
+country_code = "HKG"
+height = 188
+rank = 101
+play_style = SubResource("Resource_p40m3")
+stats = SubResource("Resource_pil5i")
+appearance = SubResource("Resource_icpui")

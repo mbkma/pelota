@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cvv2p7v77qsp4"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_tj7n7"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_w3ui4"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_eah35"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_16kn6"]
+
+[sub_resource type="Resource" id="Resource_e3kmn"]
+script = ExtResource("1_tj7n7")
+shirt_color = Color(0.4, 0.75, 0.75, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_rogf6"]
+script = ExtResource("2_w3ui4")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_v4hpc"]
+script = ExtResource("4_16kn6")
+acceleration = 75.0
+top_speed = 75.0
+agility = 73.0
+stamina = 74.0
+forehand = 79.0
+backhand = 72.0
+serve_power = 75.0
+serve_accuracy = 76.0
+return_skill = 73.0
+volley_skill = 71.0
+slice_skill = 77.0
+topspin_skill = 76.0
+accuracy = 76.0
+timing = 71.0
+composure = 72.0
+focus = 76.0
+clutch = 72.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_eah35")
+first_name = "Aleksandar"
+last_name = "Kovacevic"
+age = 27
+country = "USA"
+country_code = "USA"
+height = 185
+backhand = 1
+rank = 81
+play_style = SubResource("Resource_rogf6")
+stats = SubResource("Resource_v4hpc")
+appearance = SubResource("Resource_e3kmn")

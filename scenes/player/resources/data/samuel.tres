@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://ckvltmhxqtynl"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_24a2h"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_4wv1f"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_bmh4s"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_agj3g"]
+
+[sub_resource type="Resource" id="Resource_guxei"]
+script = ExtResource("1_24a2h")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_hasmk"]
+script = ExtResource("2_4wv1f")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_lq2fn"]
+script = ExtResource("4_agj3g")
+acceleration = 71.0
+top_speed = 68.0
+agility = 68.0
+stamina = 72.0
+forehand = 74.0
+backhand = 73.0
+serve_power = 79.0
+serve_accuracy = 78.0
+return_skill = 69.0
+volley_skill = 77.0
+slice_skill = 72.0
+topspin_skill = 72.0
+accuracy = 74.0
+consistency = 71.0
+timing = 74.0
+composure = 75.0
+focus = 73.0
+clutch = 71.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_bmh4s")
+first_name = "Toby"
+last_name = "Samuel"
+age = 22
+country = "Great Britain"
+country_code = "GBR"
+height = 188
+rank = 100
+play_style = SubResource("Resource_hasmk")
+stats = SubResource("Resource_lq2fn")
+appearance = SubResource("Resource_guxei")

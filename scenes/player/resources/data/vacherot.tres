@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b8lklkipwhxiw"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_e0obi"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1qyo2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_fx2kx"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_2dssj"]
+
+[sub_resource type="Resource" id="Resource_rsmvw"]
+script = ExtResource("1_e0obi")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_sj2k6"]
+script = ExtResource("2_1qyo2")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_6ppfo"]
+script = ExtResource("4_2dssj")
+acceleration = 79.0
+top_speed = 76.0
+agility = 78.0
+stamina = 80.0
+forehand = 80.0
+backhand = 83.0
+serve_power = 92.0
+serve_accuracy = 87.0
+return_skill = 76.0
+volley_skill = 83.0
+slice_skill = 79.0
+topspin_skill = 82.0
+accuracy = 83.0
+consistency = 79.0
+timing = 80.0
+composure = 81.0
+focus = 81.0
+clutch = 83.0
+net_play = 83.0
+
+[resource]
+script = ExtResource("3_fx2kx")
+first_name = "Valentin"
+last_name = "Vacherot"
+age = 27
+country = "Monaco"
+country_code = "MON"
+height = 193
+rank = 14
+play_style = SubResource("Resource_sj2k6")
+stats = SubResource("Resource_6ppfo")
+appearance = SubResource("Resource_rsmvw")

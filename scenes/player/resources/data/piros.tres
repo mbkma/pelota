@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://xxls011nbt5o"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_pxyof"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_drtpc"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_agk4f"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_5hdhr"]
+
+[sub_resource type="Resource" id="Resource_gox7r"]
+script = ExtResource("1_pxyof")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_yj5pu"]
+script = ExtResource("2_drtpc")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_1w7c3"]
+script = ExtResource("4_5hdhr")
+top_speed = 72.0
+agility = 71.0
+stamina = 73.0
+forehand = 73.0
+backhand = 74.0
+serve_accuracy = 71.0
+return_skill = 73.0
+volley_skill = 69.0
+slice_skill = 74.0
+topspin_skill = 71.0
+accuracy = 70.0
+consistency = 78.0
+timing = 74.0
+composure = 71.0
+focus = 74.0
+clutch = 73.0
+net_play = 68.0
+
+[resource]
+script = ExtResource("3_agk4f")
+first_name = "Zsombor"
+last_name = "Piros"
+age = 27
+country = "Hungary"
+country_code = "HUN"
+height = 185
+rank = 114
+play_style = SubResource("Resource_yj5pu")
+stats = SubResource("Resource_1w7c3")
+appearance = SubResource("Resource_gox7r")

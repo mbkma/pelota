@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b786vbm3rjp5i"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_l77qg"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_bxgte"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_pgtx3"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8pilc"]
+
+[sub_resource type="Resource" id="Resource_iyvfb"]
+script = ExtResource("1_l77qg")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_85y0n"]
+script = ExtResource("2_bxgte")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_50ydb"]
+script = ExtResource("4_8pilc")
+acceleration = 77.0
+agility = 71.0
+stamina = 77.0
+forehand = 77.0
+backhand = 74.0
+serve_power = 84.0
+serve_accuracy = 77.0
+volley_skill = 77.0
+slice_skill = 76.0
+topspin_skill = 73.0
+accuracy = 73.0
+consistency = 73.0
+timing = 74.0
+composure = 73.0
+focus = 76.0
+clutch = 77.0
+net_play = 76.0
+
+[resource]
+script = ExtResource("3_pgtx3")
+first_name = "Ethan"
+last_name = "Quinn"
+age = 22
+country = "USA"
+country_code = "USA"
+height = 191
+rank = 66
+play_style = SubResource("Resource_85y0n")
+stats = SubResource("Resource_50ydb")
+appearance = SubResource("Resource_iyvfb")

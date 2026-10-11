@@ -1,41 +1,41 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b2vrbrqsx0cpp"]
 
-[ext_resource type="Resource" uid="uid://dsn4q5hjb2llq" path="res://scenes/player/resources/appearances/auger-aliassime.tres" id="1_gigr2"]
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_jl1rq"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="3_tyoyc"]
-[ext_resource type="Resource" uid="uid://b2a62qphmwxnb" path="res://scenes/player/resources/play_styles/auger-aliassime.tres" id="4_2vnw3"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/auger-aliassime.tres" id="1_gigr2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_jl1rq"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_tyoyc"]
+[ext_resource type="Resource" path="res://scenes/player/resources/play_styles/auger-aliassime.tres" id="4_2vnw3"]
 
 [sub_resource type="Resource" id="Resource_faa_stats"]
 script = ExtResource("3_tyoyc")
-acceleration = 82.0
-top_speed = 86.0
-agility = 80.0
-stamina = 79.0
-forehand = 84.0
-backhand = 78.0
-serve_power = 88.0
-serve_accuracy = 79.0
-return_skill = 76.0
-volley_skill = 75.0
-slice_skill = 73.0
-topspin_skill = 76.0
-accuracy = 77.0
-consistency = 76.0
-timing = 78.0
-composure = 74.0
-focus = 75.0
-clutch = 76.0
-net_play = 74.0
+acceleration = 89.0
+top_speed = 93.0
+agility = 87.0
+stamina = 86.0
+forehand = 91.0
+backhand = 85.0
+serve_power = 95.0
+serve_accuracy = 86.0
+return_skill = 83.0
+volley_skill = 82.0
+slice_skill = 80.0
+topspin_skill = 83.0
+accuracy = 84.0
+consistency = 83.0
+timing = 85.0
+composure = 81.0
+focus = 82.0
+clutch = 83.0
+net_play = 81.0
 
 [resource]
 script = ExtResource("2_jl1rq")
 first_name = "Felix"
 last_name = "Auger-Aliassime"
-age = 21
+age = 26
 country = "Canada"
 country_code = "CAN"
 height = 193
-rank = 9
+rank = 5
 play_style = ExtResource("4_2vnw3")
 stats = SubResource("Resource_faa_stats")
 appearance = ExtResource("1_gigr2")

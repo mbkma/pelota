@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://5wjc2vlfdgot"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_80wx5"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ilvji"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_rmdpg"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ruuvi"]
+
+[sub_resource type="Resource" id="Resource_p2ldt"]
+script = ExtResource("1_80wx5")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_f8xls"]
+script = ExtResource("2_ilvji")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_gbgwp"]
+script = ExtResource("4_ruuvi")
+acceleration = 83.0
+top_speed = 84.0
+agility = 84.0
+stamina = 82.0
+forehand = 87.0
+backhand = 84.0
+serve_power = 82.0
+serve_accuracy = 83.0
+return_skill = 80.0
+volley_skill = 83.0
+slice_skill = 84.0
+topspin_skill = 87.0
+accuracy = 82.0
+consistency = 80.0
+timing = 80.0
+composure = 82.0
+focus = 82.0
+clutch = 80.0
+net_play = 82.0
+
+[resource]
+script = ExtResource("3_rmdpg")
+first_name = "Frances"
+last_name = "Tiafoe"
+age = 28
+country = "USA"
+country_code = "USA"
+height = 188
+rank = 10
+play_style = SubResource("Resource_f8xls")
+stats = SubResource("Resource_gbgwp")
+appearance = SubResource("Resource_p2ldt")

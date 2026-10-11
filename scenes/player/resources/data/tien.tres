@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c15omqf50orhs"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_kold2"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_l1vx7"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_aipj6"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_40t2e"]
+
+[sub_resource type="Resource" id="Resource_glhjc"]
+script = ExtResource("1_kold2")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_ahiiy"]
+script = ExtResource("2_l1vx7")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_c2w3y"]
+script = ExtResource("4_40t2e")
+acceleration = 78.0
+top_speed = 85.0
+agility = 88.0
+stamina = 85.0
+forehand = 80.0
+backhand = 79.0
+serve_accuracy = 81.0
+return_skill = 85.0
+volley_skill = 78.0
+slice_skill = 81.0
+topspin_skill = 82.0
+accuracy = 82.0
+consistency = 82.0
+timing = 78.0
+composure = 82.0
+focus = 81.0
+clutch = 78.0
+net_play = 81.0
+
+[resource]
+script = ExtResource("3_aipj6")
+first_name = "Learner"
+last_name = "Tien"
+country = "USA"
+country_code = "USA"
+hand = "L"
+rank = 17
+play_style = SubResource("Resource_ahiiy")
+stats = SubResource("Resource_c2w3y")
+appearance = SubResource("Resource_glhjc")

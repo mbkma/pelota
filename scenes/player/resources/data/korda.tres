@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://chq5meayfjif3"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ymq2d"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_uso4n"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_i6mma"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_faovg"]
+
+[sub_resource type="Resource" id="Resource_5tlop"]
+script = ExtResource("1_ymq2d")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_gf1eo"]
+script = ExtResource("2_uso4n")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_rl6xr"]
+script = ExtResource("4_faovg")
+acceleration = 76.0
+top_speed = 73.0
+agility = 75.0
+stamina = 72.0
+forehand = 79.0
+backhand = 75.0
+serve_power = 76.0
+serve_accuracy = 76.0
+return_skill = 72.0
+volley_skill = 76.0
+slice_skill = 71.0
+topspin_skill = 77.0
+accuracy = 77.0
+consistency = 69.0
+timing = 76.0
+composure = 75.0
+focus = 74.0
+clutch = 73.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_i6mma")
+first_name = "Sebastian"
+last_name = "Korda"
+age = 26
+country = "USA"
+country_code = "USA"
+height = 196
+rank = 74
+play_style = SubResource("Resource_gf1eo")
+stats = SubResource("Resource_rl6xr")
+appearance = SubResource("Resource_5tlop")

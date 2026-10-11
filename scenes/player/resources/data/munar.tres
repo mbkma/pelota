@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://ba3fohbtrnmiy"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_mm7oj"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_iuea6"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_q1xqq"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_o2j2m"]
+
+[sub_resource type="Resource" id="Resource_f3nbn"]
+script = ExtResource("1_mm7oj")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_utv27"]
+script = ExtResource("2_iuea6")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_y6vs3"]
+script = ExtResource("4_o2j2m")
+acceleration = 76.0
+top_speed = 79.0
+agility = 80.0
+stamina = 79.0
+forehand = 75.0
+backhand = 74.0
+serve_power = 68.0
+serve_accuracy = 75.0
+return_skill = 82.0
+volley_skill = 76.0
+slice_skill = 74.0
+topspin_skill = 75.0
+accuracy = 75.0
+consistency = 78.0
+timing = 74.0
+composure = 77.0
+focus = 75.0
+clutch = 75.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_q1xqq")
+first_name = "Jaume"
+last_name = "Munar"
+age = 29
+country = "Spain"
+country_code = "ESP"
+height = 183
+rank = 49
+play_style = SubResource("Resource_utv27")
+stats = SubResource("Resource_y6vs3")
+appearance = SubResource("Resource_f3nbn")

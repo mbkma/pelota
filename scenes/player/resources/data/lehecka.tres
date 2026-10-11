@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dr78i2r2y4oog"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_523ka"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vj462"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_gi0sx"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_uh1eq"]
+
+[sub_resource type="Resource" id="Resource_11s6a"]
+script = ExtResource("1_523ka")
+shirt_color = Color(0.4, 0.75, 0.75, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_77ng8"]
+script = ExtResource("2_vj462")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_qb6hn"]
+script = ExtResource("4_uh1eq")
+acceleration = 77.0
+top_speed = 78.0
+agility = 80.0
+stamina = 82.0
+forehand = 86.0
+backhand = 84.0
+serve_power = 82.0
+serve_accuracy = 81.0
+return_skill = 79.0
+volley_skill = 80.0
+slice_skill = 80.0
+topspin_skill = 80.0
+accuracy = 80.0
+consistency = 79.0
+timing = 79.0
+composure = 82.0
+focus = 80.0
+clutch = 80.0
+net_play = 78.0
+
+[resource]
+script = ExtResource("3_gi0sx")
+first_name = "Jiri"
+last_name = "Lehecka"
+age = 24
+country = "Czechia"
+country_code = "CZE"
+height = 185
+rank = 16
+play_style = SubResource("Resource_77ng8")
+stats = SubResource("Resource_qb6hn")
+appearance = SubResource("Resource_11s6a")

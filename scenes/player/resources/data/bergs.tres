@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b5noa3l8jct7x"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_3f7s2"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_wsoru"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_kfjo2"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_guv42"]
+
+[sub_resource type="Resource" id="Resource_nlrre"]
+script = ExtResource("1_3f7s2")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_bjf1f"]
+script = ExtResource("2_wsoru")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_bkjm7"]
+script = ExtResource("4_guv42")
+acceleration = 76.0
+top_speed = 76.0
+agility = 80.0
+stamina = 76.0
+forehand = 79.0
+backhand = 77.0
+serve_power = 75.0
+serve_accuracy = 77.0
+return_skill = 77.0
+volley_skill = 75.0
+slice_skill = 78.0
+topspin_skill = 80.0
+accuracy = 80.0
+consistency = 75.0
+timing = 75.0
+composure = 76.0
+focus = 79.0
+clutch = 75.0
+net_play = 77.0
+
+[resource]
+script = ExtResource("3_kfjo2")
+first_name = "Zizou"
+last_name = "Bergs"
+age = 27
+country = "Belgium"
+country_code = "BEL"
+height = 185
+rank = 39
+play_style = SubResource("Resource_bjf1f")
+stats = SubResource("Resource_bkjm7")
+appearance = SubResource("Resource_nlrre")

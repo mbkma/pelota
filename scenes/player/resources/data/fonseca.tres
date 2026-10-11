@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://fcc7l85nncwx"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_rw2yi"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rb0ht"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_4af6x"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_wol2c"]
+
+[sub_resource type="Resource" id="Resource_veqqc"]
+script = ExtResource("1_rw2yi")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_p4wvq"]
+script = ExtResource("2_rb0ht")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_v4u2k"]
+script = ExtResource("4_wol2c")
+acceleration = 77.0
+top_speed = 77.0
+agility = 78.0
+stamina = 77.0
+forehand = 82.0
+backhand = 82.0
+serve_power = 77.0
+serve_accuracy = 79.0
+return_skill = 78.0
+volley_skill = 78.0
+slice_skill = 77.0
+topspin_skill = 79.0
+accuracy = 81.0
+consistency = 75.0
+timing = 80.0
+composure = 77.0
+focus = 76.0
+clutch = 79.0
+net_play = 77.0
+
+[resource]
+script = ExtResource("3_4af6x")
+first_name = "Joao"
+last_name = "Fonseca"
+country = "Brazil"
+country_code = "BRA"
+height = 185
+rank = 29
+play_style = SubResource("Resource_p4wvq")
+stats = SubResource("Resource_v4u2k")
+appearance = SubResource("Resource_veqqc")

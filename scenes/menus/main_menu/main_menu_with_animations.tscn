@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/menus/main_menu/menu_background.tscn" id="9_background"]
 [ext_resource type="PackedScene" path="res://scenes/menus/tutorial_menu/tutorial_menu.tscn" id="10_tutorial"]
 [ext_resource type="PackedScene" path="res://scenes/menus/player_select_menu/training_select_menu.tscn" id="11_training_select"]
+[ext_resource type="PackedScene" path="res://scenes/menus/player_select_menu/tournament_select_menu.tscn" id="12_tournament_select"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Intro"
@@ -326,6 +327,8 @@ music_director_scene = ExtResource("8_music")
 tutorial_packed_scene = ExtResource("10_tutorial")
 training_select_packed_scene = ExtResource("11_training_select")
 training_scene_path = "res://scenes/training/training.tscn"
+tournament_select_packed_scene = ExtResource("12_tournament_select")
+tournament_scene_path = "res://scenes/tournament/tournament_screen.tscn"
 game_scene_path = "uid://bcwuxgarbilrg"
 options_packed_scene = ExtResource("3_2k5l7")
 credits_packed_scene = ExtResource("4_vsp5b")
@@ -373,11 +376,21 @@ modulate = Color(1, 1, 1, 0)
 [node name="MenuButtonsBoxContainer" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer" index="0" unique_id=2017477786]
 lock = true
 
-[node name="TrainingButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1"]
+[node name="ContinueTournamentButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continue US Open"
+
+[node name="TournamentButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "US Open"
+
+[node name="TrainingButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="3"]
 layout_mode = 2
 text = "Training"
 
-[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="2" unique_id=1846290378]
+[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="4" unique_id=1846290378]
 layout_mode = 2
 text = "How to Play"
 
@@ -396,5 +409,7 @@ metadata/_edit_lock_ = true
 
 [node name="MenuBackground" parent="." index="9" unique_id=1977320418 instance=ExtResource("9_background")]
 
+[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ContinueTournamentButton" to="." method="_on_continue_tournament_button_pressed"]
+[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/TournamentButton" to="." method="_on_tournament_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/TrainingButton" to="." method="_on_training_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/HowToPlayButton" to="." method="_on_how_to_play_button_pressed"]

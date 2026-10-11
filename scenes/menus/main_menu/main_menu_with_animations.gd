@@ -1,7 +1,7 @@
 extends MainMenu
 ## Main menu extension: animates the title and menu fading in (the player can skip it with
 ## any input), starts the music, opens the how-to-play screen and the player select before
-## a new match or a training.
+## a new match, a training or a tournament, and continues a saved tournament.
 
 ## Player select opened by 'New Game'; confirming it starts the match.
 @export var player_select_packed_scene: PackedScene
@@ -12,14 +12,24 @@ extends MainMenu
 ## Player select opened by 'Training'; confirming it starts the training.
 @export var training_select_packed_scene: PackedScene
 @export_file("*.tscn") var training_scene_path: String
+## Player select opened by 'US Open'; confirming it starts a new tournament.
+@export var tournament_select_packed_scene: PackedScene
+## The tournament's draw, opened when a tournament starts or continues
+@export_file("*.tscn") var tournament_scene_path: String
 
 var animation_state_machine: AnimationNodeStateMachinePlayback
+## The saved tournament, null if there is none
+var _saved_tournament: Tournament
 
 
 func _ready() -> void:
 	super._ready()
 	_start_music_once()
 	animation_state_machine = $MenuAnimationTree.get("parameters/playback")
+	_saved_tournament = Tournament.load_saved()
+	%ContinueTournamentButton.visible = _saved_tournament != null
+	%ContinueTournamentButton.text = "Continue %s" % Tournament.NAME
+	%TournamentButton.text = Tournament.NAME
 
 
 func _input(event: InputEvent) -> void:
@@ -71,6 +81,18 @@ func _start_music_once() -> void:
 
 func _on_how_to_play_button_pressed() -> void:
 	_open_sub_menu(tutorial_packed_scene)
+
+
+func _on_tournament_button_pressed() -> void:
+	_open_sub_menu(tournament_select_packed_scene).selection_confirmed.connect(
+		SceneLoader.load_scene.bind(tournament_scene_path)
+	)
+
+
+## Continues the saved tournament, played with the first connected device.
+func _on_continue_tournament_button_pressed() -> void:
+	GlobalGameData.continue_tournament(_saved_tournament, InputDevice.get_connected_device_ids()[0])
+	SceneLoader.load_scene(tournament_scene_path)
 
 
 func _on_training_button_pressed() -> void:

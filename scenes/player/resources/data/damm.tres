@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://wuef2aqn362v"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_nm4nh"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_b5lhw"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_rua3d"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_npsnw"]
+
+[sub_resource type="Resource" id="Resource_y5v2c"]
+script = ExtResource("1_nm4nh")
+shirt_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_8pels"]
+script = ExtResource("2_b5lhw")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_dsimd"]
+script = ExtResource("4_npsnw")
+acceleration = 74.0
+top_speed = 64.0
+agility = 64.0
+stamina = 71.0
+backhand = 74.0
+serve_power = 88.0
+serve_accuracy = 76.0
+return_skill = 67.0
+volley_skill = 77.0
+slice_skill = 72.0
+topspin_skill = 74.0
+accuracy = 71.0
+timing = 72.0
+composure = 73.0
+clutch = 73.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_rua3d")
+first_name = "Martin"
+last_name = "Damm"
+age = 23
+country = "USA"
+country_code = "USA"
+height = 203
+hand = "L"
+rank = 104
+play_style = SubResource("Resource_8pels")
+stats = SubResource("Resource_dsimd")
+appearance = SubResource("Resource_y5v2c")

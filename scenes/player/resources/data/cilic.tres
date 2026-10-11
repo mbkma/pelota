@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bm5t46rtk4cv0"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ky3hr"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_e1jbp"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_r1kfr"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_07tl4"]
+
+[sub_resource type="Resource" id="Resource_o78lc"]
+script = ExtResource("1_ky3hr")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_6kk6d"]
+script = ExtResource("2_e1jbp")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_w16in"]
+script = ExtResource("4_07tl4")
+acceleration = 75.0
+top_speed = 66.0
+forehand = 74.0
+backhand = 74.0
+serve_power = 87.0
+serve_accuracy = 79.0
+return_skill = 69.0
+volley_skill = 79.0
+slice_skill = 74.0
+topspin_skill = 73.0
+accuracy = 75.0
+timing = 76.0
+composure = 72.0
+focus = 71.0
+clutch = 76.0
+net_play = 76.0
+
+[resource]
+script = ExtResource("3_r1kfr")
+first_name = "Marin"
+last_name = "Cilic"
+age = 38
+country = "Croatia"
+country_code = "CRO"
+height = 198
+rank = 80
+play_style = SubResource("Resource_6kk6d")
+stats = SubResource("Resource_w16in")
+appearance = SubResource("Resource_o78lc")

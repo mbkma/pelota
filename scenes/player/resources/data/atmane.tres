@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bjsvfi3kjoqqj"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_lc66p"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ikdkp"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_f2ye8"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ba7st"]
+
+[sub_resource type="Resource" id="Resource_otb82"]
+script = ExtResource("1_lc66p")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_ybjj5"]
+script = ExtResource("2_ikdkp")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_q72gp"]
+script = ExtResource("4_ba7st")
+acceleration = 75.0
+top_speed = 71.0
+agility = 71.0
+stamina = 74.0
+forehand = 76.0
+backhand = 73.0
+serve_power = 77.0
+serve_accuracy = 74.0
+return_skill = 71.0
+volley_skill = 73.0
+slice_skill = 73.0
+topspin_skill = 75.0
+accuracy = 75.0
+timing = 71.0
+composure = 72.0
+focus = 72.0
+clutch = 72.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_f2ye8")
+first_name = "Terence"
+last_name = "Atmane"
+age = 24
+country = "France"
+country_code = "FRA"
+height = 193
+hand = "L"
+rank = 99
+play_style = SubResource("Resource_ybjj5")
+stats = SubResource("Resource_q72gp")
+appearance = SubResource("Resource_otb82")

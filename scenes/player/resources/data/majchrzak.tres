@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://1kngfpmnii8m"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_qnw5f"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_si6yv"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ysf0g"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_tm2mr"]
+
+[sub_resource type="Resource" id="Resource_yqu1x"]
+script = ExtResource("1_qnw5f")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_wmx75"]
+script = ExtResource("2_si6yv")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_fmt8s"]
+script = ExtResource("4_tm2mr")
+acceleration = 75.0
+top_speed = 75.0
+agility = 76.0
+stamina = 79.0
+forehand = 76.0
+backhand = 76.0
+serve_power = 73.0
+serve_accuracy = 76.0
+return_skill = 72.0
+volley_skill = 69.0
+slice_skill = 75.0
+topspin_skill = 76.0
+accuracy = 73.0
+consistency = 76.0
+timing = 76.0
+composure = 73.0
+focus = 76.0
+clutch = 76.0
+net_play = 69.0
+
+[resource]
+script = ExtResource("3_ysf0g")
+first_name = "Kamil"
+last_name = "Majchrzak"
+age = 30
+country = "Poland"
+country_code = "POL"
+height = 185
+rank = 70
+play_style = SubResource("Resource_wmx75")
+stats = SubResource("Resource_fmt8s")
+appearance = SubResource("Resource_yqu1x")

@@ -23,6 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_stats")
+tournament_scene_path = "res://scenes/tournament/tournament_screen.tscn"
 
 [node name="Center" type="CenterContainer" parent="." unique_id=1873360284]
 layout_mode = 1

@@ -1,42 +1,42 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cibbhkfv1ny2q"]
 
-[ext_resource type="Resource" uid="uid://bumsgiut0ffed" path="res://scenes/player/resources/appearances/djokovic.tres" id="1_fsr4u"]
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="2_fsr4u"]
-[ext_resource type="AudioStream" uid="uid://b8qyvdmruk4h5" path="res://assets/sounds/effects/strokes/stroke_flat_djokovic_1.wav" id="3_cf7pp"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="4_w4xln"]
-[ext_resource type="Resource" uid="uid://cs5xksavwdhs3" path="res://scenes/player/resources/play_styles/djokovic.tres" id="5_26w41"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/djokovic.tres" id="1_fsr4u"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_fsr4u"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/stroke_flat_djokovic_1.wav" id="3_cf7pp"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_w4xln"]
+[ext_resource type="Resource" path="res://scenes/player/resources/play_styles/djokovic.tres" id="5_26w41"]
 
 [sub_resource type="Resource" id="Resource_djokovic_stats"]
 script = ExtResource("4_w4xln")
-acceleration = 84.0
-top_speed = 82.0
-agility = 90.0
-stamina = 92.0
-forehand = 90.0
-backhand = 95.0
-serve_power = 84.0
-serve_accuracy = 90.0
-return_skill = 97.0
-volley_skill = 84.0
-slice_skill = 86.0
-topspin_skill = 83.0
-accuracy = 94.0
-consistency = 96.0
-timing = 95.0
-composure = 96.0
-focus = 95.0
-clutch = 93.0
-net_play = 77.0
+acceleration = 78.0
+top_speed = 76.0
+agility = 84.0
+stamina = 86.0
+forehand = 84.0
+backhand = 89.0
+serve_power = 78.0
+serve_accuracy = 84.0
+return_skill = 91.0
+volley_skill = 78.0
+slice_skill = 80.0
+topspin_skill = 77.0
+accuracy = 88.0
+consistency = 90.0
+timing = 89.0
+composure = 90.0
+focus = 89.0
+clutch = 87.0
+net_play = 71.0
 
 [resource]
 script = ExtResource("2_fsr4u")
 first_name = "Novak"
 last_name = "Djokovic"
-age = 35
+age = 39
 country = "Serbia"
 country_code = "SRB"
-height = 185
-rank = 7
+height = 188
+rank = 8
 play_style = ExtResource("5_26w41")
 stats = SubResource("Resource_djokovic_stats")
 appearance = ExtResource("1_fsr4u")

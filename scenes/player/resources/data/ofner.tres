@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d23egboltdt1d"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_c3sjw"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_jnr4j"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_q6fpe"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_i8ix8"]
+
+[sub_resource type="Resource" id="Resource_bstvq"]
+script = ExtResource("1_c3sjw")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_uutcq"]
+script = ExtResource("2_jnr4j")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_yl1j1"]
+script = ExtResource("4_i8ix8")
+acceleration = 73.0
+agility = 69.0
+stamina = 71.0
+forehand = 77.0
+backhand = 73.0
+serve_power = 73.0
+serve_accuracy = 69.0
+return_skill = 69.0
+volley_skill = 71.0
+slice_skill = 78.0
+topspin_skill = 73.0
+accuracy = 70.0
+consistency = 67.0
+timing = 69.0
+composure = 74.0
+focus = 73.0
+clutch = 73.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_q6fpe")
+first_name = "Sebastian"
+last_name = "Ofner"
+age = 30
+country = "Austria"
+country_code = "AUT"
+height = 191
+backhand = 1
+rank = 120
+play_style = SubResource("Resource_uutcq")
+stats = SubResource("Resource_yl1j1")
+appearance = SubResource("Resource_bstvq")

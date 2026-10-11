@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d4ey3a2bop36b"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_a510u"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_v3jc2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_4a4lj"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_kqb4h"]
+
+[sub_resource type="Resource" id="Resource_rq358"]
+script = ExtResource("1_a510u")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_6dhc3"]
+script = ExtResource("2_v3jc2")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_lpe5b"]
+script = ExtResource("4_kqb4h")
+acceleration = 77.0
+top_speed = 80.0
+agility = 80.0
+stamina = 83.0
+forehand = 78.0
+backhand = 83.0
+serve_power = 79.0
+serve_accuracy = 81.0
+return_skill = 80.0
+volley_skill = 75.0
+slice_skill = 77.0
+topspin_skill = 77.0
+accuracy = 78.0
+consistency = 83.0
+timing = 79.0
+composure = 77.0
+focus = 78.0
+clutch = 76.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_4a4lj")
+first_name = "Alejandro"
+last_name = "Tabilo"
+age = 29
+country = "Chile"
+country_code = "CHI"
+height = 188
+hand = "L"
+rank = 30
+play_style = SubResource("Resource_6dhc3")
+stats = SubResource("Resource_lpe5b")
+appearance = SubResource("Resource_rq358")

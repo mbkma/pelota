@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dke1hex5gjk1h"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_1ptjx"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_tlxu0"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_smmwn"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_3g2br"]
+
+[sub_resource type="Resource" id="Resource_gyoni"]
+script = ExtResource("1_1ptjx")
+shirt_color = Color(0.5, 0.25, 0.6, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_4b67t"]
+script = ExtResource("2_tlxu0")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_yg7lp"]
+script = ExtResource("4_3g2br")
+acceleration = 73.0
+top_speed = 75.0
+agility = 74.0
+stamina = 78.0
+forehand = 74.0
+backhand = 74.0
+serve_power = 71.0
+serve_accuracy = 71.0
+return_skill = 73.0
+volley_skill = 70.0
+slice_skill = 75.0
+topspin_skill = 72.0
+accuracy = 75.0
+consistency = 79.0
+timing = 75.0
+composure = 74.0
+focus = 75.0
+clutch = 75.0
+net_play = 69.0
+
+[resource]
+script = ExtResource("3_smmwn")
+first_name = "Camilo"
+last_name = "Ugo Carabelli"
+age = 27
+country = "Argentina"
+country_code = "ARG"
+height = 183
+rank = 77
+play_style = SubResource("Resource_4b67t")
+stats = SubResource("Resource_yg7lp")
+appearance = SubResource("Resource_gyoni")

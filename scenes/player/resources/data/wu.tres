@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://33nwn2a1rebl"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_we8h2"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_gpbd7"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0fugq"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_hp0pf"]
+
+[sub_resource type="Resource" id="Resource_aww0p"]
+script = ExtResource("1_we8h2")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_vajyd"]
+script = ExtResource("2_gpbd7")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_ibl4p"]
+script = ExtResource("4_hp0pf")
+acceleration = 69.0
+top_speed = 72.0
+agility = 72.0
+stamina = 72.0
+forehand = 76.0
+backhand = 73.0
+serve_power = 72.0
+serve_accuracy = 72.0
+return_skill = 73.0
+volley_skill = 74.0
+slice_skill = 72.0
+topspin_skill = 73.0
+accuracy = 74.0
+consistency = 67.0
+composure = 72.0
+focus = 73.0
+clutch = 74.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_0fugq")
+first_name = "Yibing"
+last_name = "Wu"
+age = 26
+country = "China"
+country_code = "CHN"
+height = 183
+rank = 113
+play_style = SubResource("Resource_vajyd")
+stats = SubResource("Resource_ibl4p")
+appearance = SubResource("Resource_aww0p")

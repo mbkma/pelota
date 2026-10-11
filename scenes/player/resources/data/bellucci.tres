@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cqnkuxqh5efsc"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_20ccu"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_45ejy"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0hjpw"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_hbmle"]
+
+[sub_resource type="Resource" id="Resource_7epmj"]
+script = ExtResource("1_20ccu")
+shirt_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_16mcp"]
+script = ExtResource("2_45ejy")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_3gcso"]
+script = ExtResource("4_hbmle")
+acceleration = 75.0
+top_speed = 74.0
+agility = 75.0
+stamina = 72.0
+forehand = 77.0
+backhand = 77.0
+serve_accuracy = 72.0
+return_skill = 72.0
+volley_skill = 76.0
+slice_skill = 72.0
+topspin_skill = 78.0
+accuracy = 74.0
+timing = 76.0
+composure = 72.0
+focus = 73.0
+clutch = 72.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_0hjpw")
+first_name = "Mattia"
+last_name = "Bellucci"
+age = 25
+country = "Italy"
+country_code = "ITA"
+height = 178
+hand = "L"
+rank = 86
+play_style = SubResource("Resource_16mcp")
+stats = SubResource("Resource_3gcso")
+appearance = SubResource("Resource_7epmj")

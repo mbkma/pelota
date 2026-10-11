@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c5vhlwgpsperf"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_7mpiw"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6pnmp"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nojif"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_2kkcj"]
+
+[sub_resource type="Resource" id="Resource_sri18"]
+script = ExtResource("1_7mpiw")
+shirt_color = Color(0.95, 0.5, 0.15, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_u0yrb"]
+script = ExtResource("2_6pnmp")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_iinav"]
+script = ExtResource("4_2kkcj")
+top_speed = 74.0
+agility = 71.0
+stamina = 73.0
+forehand = 74.0
+backhand = 74.0
+serve_power = 68.0
+serve_accuracy = 73.0
+return_skill = 75.0
+volley_skill = 70.0
+slice_skill = 70.0
+topspin_skill = 73.0
+accuracy = 74.0
+consistency = 78.0
+timing = 72.0
+composure = 71.0
+focus = 72.0
+clutch = 71.0
+net_play = 68.0
+
+[resource]
+script = ExtResource("3_nojif")
+first_name = "Patrick"
+last_name = "Kypson"
+age = 27
+country = "USA"
+country_code = "USA"
+height = 183
+rank = 118
+play_style = SubResource("Resource_u0yrb")
+stats = SubResource("Resource_iinav")
+appearance = SubResource("Resource_sri18")

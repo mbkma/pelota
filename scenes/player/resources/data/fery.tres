@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bilbw56tr5d0x"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_qws0l"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8p5fp"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_2hybi"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_erfna"]
+
+[sub_resource type="Resource" id="Resource_mxhs6"]
+script = ExtResource("1_qws0l")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_p1tvc"]
+script = ExtResource("2_8p5fp")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_blq4d"]
+script = ExtResource("4_erfna")
+acceleration = 77.0
+top_speed = 74.0
+agility = 76.0
+stamina = 78.0
+forehand = 79.0
+backhand = 77.0
+serve_power = 79.0
+serve_accuracy = 78.0
+return_skill = 75.0
+volley_skill = 76.0
+slice_skill = 75.0
+topspin_skill = 79.0
+accuracy = 79.0
+consistency = 73.0
+timing = 79.0
+composure = 79.0
+focus = 77.0
+clutch = 78.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_2hybi")
+first_name = "Arthur"
+last_name = "Fery"
+age = 24
+country = "Great Britain"
+country_code = "GBR"
+height = 188
+rank = 37
+play_style = SubResource("Resource_p1tvc")
+stats = SubResource("Resource_blq4d")
+appearance = SubResource("Resource_mxhs6")

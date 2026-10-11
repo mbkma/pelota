@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bux8nb1atrxhd"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_v38bf"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_o6o6x"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_23xre"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_7t6qx"]
+
+[sub_resource type="Resource" id="Resource_v7oxj"]
+script = ExtResource("1_v38bf")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_n1uwb"]
+script = ExtResource("2_o6o6x")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_6yqyg"]
+script = ExtResource("4_7t6qx")
+acceleration = 72.0
+top_speed = 73.0
+stamina = 76.0
+forehand = 71.0
+backhand = 74.0
+serve_power = 73.0
+serve_accuracy = 71.0
+return_skill = 71.0
+volley_skill = 71.0
+slice_skill = 80.0
+topspin_skill = 72.0
+accuracy = 74.0
+consistency = 79.0
+timing = 74.0
+composure = 73.0
+focus = 71.0
+clutch = 75.0
+net_play = 71.0
+
+[resource]
+script = ExtResource("3_23xre")
+first_name = "Jan"
+last_name = "Choinski"
+age = 30
+country = "Great Britain"
+country_code = "GBR"
+height = 191
+backhand = 1
+rank = 91
+play_style = SubResource("Resource_n1uwb")
+stats = SubResource("Resource_6yqyg")
+appearance = SubResource("Resource_v7oxj")

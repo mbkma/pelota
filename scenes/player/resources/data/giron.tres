@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b7mxsql0u1cin"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_khn5b"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nwvb7"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_7efle"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_kd0ob"]
+
+[sub_resource type="Resource" id="Resource_ku7k8"]
+script = ExtResource("1_khn5b")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_irm85"]
+script = ExtResource("2_nwvb7")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_8gkcy"]
+script = ExtResource("4_kd0ob")
+top_speed = 79.0
+agility = 77.0
+stamina = 77.0
+forehand = 73.0
+backhand = 72.0
+serve_power = 65.0
+serve_accuracy = 72.0
+return_skill = 79.0
+volley_skill = 72.0
+slice_skill = 72.0
+topspin_skill = 74.0
+accuracy = 70.0
+consistency = 79.0
+timing = 74.0
+composure = 72.0
+focus = 74.0
+clutch = 74.0
+net_play = 71.0
+
+[resource]
+script = ExtResource("3_7efle")
+first_name = "Marcos"
+last_name = "Giron"
+age = 33
+country = "USA"
+country_code = "USA"
+rank = 88
+play_style = SubResource("Resource_irm85")
+stats = SubResource("Resource_8gkcy")
+appearance = SubResource("Resource_ku7k8")

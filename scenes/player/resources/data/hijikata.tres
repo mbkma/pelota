@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d0ylwa6d07npf"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ir37b"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_260ks"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_xf2t8"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ft2kl"]
+
+[sub_resource type="Resource" id="Resource_40xdw"]
+script = ExtResource("1_ir37b")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_rgq6u"]
+script = ExtResource("2_260ks")
+aggression = 0.65
+shot_power = 0.7
+topspin = 0.55
+court_position = -0.3
+consistency = 0.65
+
+[sub_resource type="Resource" id="Resource_txmuo"]
+script = ExtResource("4_ft2kl")
+acceleration = 75.0
+top_speed = 72.0
+agility = 76.0
+stamina = 73.0
+forehand = 74.0
+backhand = 73.0
+serve_accuracy = 72.0
+return_skill = 72.0
+volley_skill = 82.0
+slice_skill = 78.0
+topspin_skill = 72.0
+accuracy = 73.0
+consistency = 71.0
+timing = 75.0
+composure = 71.0
+focus = 72.0
+clutch = 75.0
+net_play = 78.0
+
+[resource]
+script = ExtResource("3_xf2t8")
+first_name = "Rinky"
+last_name = "Hijikata"
+age = 25
+country = "Australia"
+country_code = "AUS"
+height = 178
+rank = 85
+play_style = SubResource("Resource_rgq6u")
+stats = SubResource("Resource_txmuo")
+appearance = SubResource("Resource_40xdw")

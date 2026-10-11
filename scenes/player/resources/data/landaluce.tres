@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://w2a2f2nqsxqc"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_sqm2g"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_xr3w6"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wvo5t"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_j351j"]
+
+[sub_resource type="Resource" id="Resource_tn4xe"]
+script = ExtResource("1_sqm2g")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_nucam"]
+script = ExtResource("2_xr3w6")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_xv86j"]
+script = ExtResource("4_j351j")
+acceleration = 75.0
+top_speed = 73.0
+agility = 72.0
+stamina = 73.0
+forehand = 78.0
+backhand = 75.0
+serve_power = 75.0
+serve_accuracy = 74.0
+return_skill = 72.0
+volley_skill = 77.0
+slice_skill = 77.0
+topspin_skill = 78.0
+accuracy = 78.0
+consistency = 71.0
+timing = 74.0
+composure = 74.0
+focus = 74.0
+clutch = 73.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_wvo5t")
+first_name = "Martin"
+last_name = "Landaluce"
+country = "Spain"
+country_code = "ESP"
+height = 191
+rank = 73
+play_style = SubResource("Resource_nucam")
+stats = SubResource("Resource_xv86j")
+appearance = SubResource("Resource_tn4xe")

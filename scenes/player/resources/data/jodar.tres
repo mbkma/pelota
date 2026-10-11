@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b0ksqv6tqm7pd"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cm12t"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rr8yl"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0ytir"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6gpjo"]
+
+[sub_resource type="Resource" id="Resource_kffti"]
+script = ExtResource("1_cm12t")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_geopl"]
+script = ExtResource("2_rr8yl")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_xmu1e"]
+script = ExtResource("4_6gpjo")
+acceleration = 81.0
+top_speed = 81.0
+agility = 83.0
+stamina = 84.0
+forehand = 88.0
+backhand = 82.0
+serve_power = 83.0
+serve_accuracy = 82.0
+return_skill = 83.0
+volley_skill = 80.0
+slice_skill = 80.0
+topspin_skill = 81.0
+accuracy = 82.0
+consistency = 81.0
+timing = 82.0
+composure = 82.0
+focus = 82.0
+clutch = 79.0
+net_play = 80.0
+
+[resource]
+script = ExtResource("3_0ytir")
+first_name = "Rafael"
+last_name = "Jodar"
+country = "Spain"
+country_code = "ESP"
+height = 191
+rank = 13
+play_style = SubResource("Resource_geopl")
+stats = SubResource("Resource_xmu1e")
+appearance = SubResource("Resource_kffti")

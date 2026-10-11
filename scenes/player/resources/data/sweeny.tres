@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://blnt8qncvx22e"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_2xmhl"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vknwx"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_fsq62"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_luxm5"]
+
+[sub_resource type="Resource" id="Resource_doooh"]
+script = ExtResource("1_2xmhl")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_uyxsw"]
+script = ExtResource("2_vknwx")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_54x17"]
+script = ExtResource("4_luxm5")
+top_speed = 74.0
+agility = 74.0
+forehand = 71.0
+backhand = 76.0
+serve_power = 69.0
+serve_accuracy = 71.0
+return_skill = 72.0
+volley_skill = 71.0
+slice_skill = 71.0
+topspin_skill = 71.0
+accuracy = 73.0
+consistency = 76.0
+timing = 75.0
+composure = 74.0
+focus = 74.0
+clutch = 73.0
+net_play = 71.0
+
+[resource]
+script = ExtResource("3_fsq62")
+first_name = "Dane"
+last_name = "Sweeny"
+age = 25
+country = "Australia"
+country_code = "AUS"
+height = 183
+rank = 112
+play_style = SubResource("Resource_uyxsw")
+stats = SubResource("Resource_54x17")
+appearance = SubResource("Resource_doooh")

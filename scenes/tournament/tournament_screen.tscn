@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/tournament_screen.gd" id="1_screen"]
+
+[node name="TournamentScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_screen")
+match_scene_path = "res://scenes/match/tennis_match.tscn"
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.141, 0.102, 0.188, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 40
+
+[node name="Layout" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RoundTabs" type="TabBar" parent="Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+tab_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="MatchList" type="VBoxContainer" parent="Margin/Layout/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="SetsOption" type="OptionButton" parent="Margin/Layout/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="Margin/Layout/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SimulateButton" type="Button" parent="Margin/Layout/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Simulate to the Final"
+
+[node name="MainMenuButton" type="Button" parent="Margin/Layout/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Main Menu"

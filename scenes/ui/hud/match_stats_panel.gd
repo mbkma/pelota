@@ -1,6 +1,6 @@
 ## Overlay with the match statistics of both players. Toggled with Tab or the gamepad's Back
 ## button; shown automatically after each set (with a Continue button that starts the next
-## set) and when the match ends.
+## set) and when the match ends; in a tournament, then with a button back to the draw.
 class_name MatchStatsPanel
 extends Control
 
@@ -23,6 +23,8 @@ const ROW_LABELS: Array[String] = [
 ]
 
 @export var match_manager: MatchManager
+## The tournament's draw, opened after a match of a tournament
+@export_file("*.tscn") var tournament_scene_path: String
 
 ## Value labels per row: [player0 label, player1 label]
 var _value_labels: Array[Array] = []
@@ -92,6 +94,9 @@ func _on_set_break_started(set_number: int) -> void:
 
 
 func _on_continue_pressed() -> void:
+	if match_manager.current_state == MatchManager.MatchState.GAME_OVER:
+		SceneLoader.load_scene(tournament_scene_path)
+		return
 	_continue_button.visible = false
 	_hint_label.visible = true
 	_title_label.text = "Match Statistics"
@@ -103,6 +108,11 @@ func _on_match_finished(winner_index: int) -> void:
 	var winner: Player = match_manager.player0 if winner_index == 0 else match_manager.player1
 	_title_label.text = "%s wins the match" % winner.player_data.last_name
 	visible = true
+	if GlobalGameData.tournament:
+		_hint_label.visible = false
+		_continue_button.text = "Back to the Draw"
+		_continue_button.visible = true
+		_continue_button.grab_focus()
 
 
 func _add_cell(text: String) -> Label:

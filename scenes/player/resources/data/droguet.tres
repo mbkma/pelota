@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://blidpwo8dnwmx"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_efa2u"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_tf2k0"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ur57q"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ri531"]
+
+[sub_resource type="Resource" id="Resource_aufw4"]
+script = ExtResource("1_efa2u")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_qd7xp"]
+script = ExtResource("2_tf2k0")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_iurb4"]
+script = ExtResource("4_ri531")
+acceleration = 74.0
+agility = 68.0
+stamina = 76.0
+forehand = 72.0
+backhand = 75.0
+serve_power = 84.0
+serve_accuracy = 79.0
+volley_skill = 78.0
+slice_skill = 74.0
+topspin_skill = 76.0
+accuracy = 76.0
+consistency = 71.0
+timing = 76.0
+composure = 76.0
+focus = 74.0
+clutch = 75.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_ur57q")
+first_name = "Titouan"
+last_name = "Droguet"
+age = 25
+country = "France"
+country_code = "FRA"
+height = 191
+rank = 72
+play_style = SubResource("Resource_qd7xp")
+stats = SubResource("Resource_iurb4")
+appearance = SubResource("Resource_aufw4")

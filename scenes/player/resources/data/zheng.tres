@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c32yud7bitomk"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_t7sfn"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_udtgn"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_5nul3"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_hvp1v"]
+
+[sub_resource type="Resource" id="Resource_g6qnm"]
+script = ExtResource("1_t7sfn")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_e2eh2"]
+script = ExtResource("2_udtgn")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_tpmdm"]
+script = ExtResource("4_hvp1v")
+acceleration = 75.0
+top_speed = 76.0
+agility = 74.0
+stamina = 76.0
+forehand = 73.0
+backhand = 76.0
+serve_power = 71.0
+serve_accuracy = 72.0
+return_skill = 75.0
+volley_skill = 69.0
+slice_skill = 72.0
+topspin_skill = 73.0
+consistency = 80.0
+timing = 76.0
+composure = 76.0
+focus = 72.0
+clutch = 72.0
+net_play = 70.0
+
+[resource]
+script = ExtResource("3_5nul3")
+first_name = "Michael"
+last_name = "Zheng"
+age = 22
+country = "USA"
+country_code = "USA"
+height = 185
+rank = 94
+play_style = SubResource("Resource_e2eh2")
+stats = SubResource("Resource_tpmdm")
+appearance = SubResource("Resource_g6qnm")

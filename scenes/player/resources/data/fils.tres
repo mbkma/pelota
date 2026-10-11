@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cph5kro180krl"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_0svmd"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nvf54"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_huo4d"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_3q7ck"]
+
+[sub_resource type="Resource" id="Resource_vr6ag"]
+script = ExtResource("1_0svmd")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_m5h5m"]
+script = ExtResource("2_nvf54")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_78vv7"]
+script = ExtResource("4_3q7ck")
+acceleration = 84.0
+top_speed = 80.0
+agility = 83.0
+stamina = 84.0
+forehand = 85.0
+backhand = 83.0
+serve_power = 80.0
+serve_accuracy = 83.0
+return_skill = 83.0
+volley_skill = 83.0
+slice_skill = 81.0
+topspin_skill = 82.0
+accuracy = 83.0
+consistency = 78.0
+timing = 81.0
+composure = 83.0
+focus = 80.0
+clutch = 82.0
+net_play = 84.0
+
+[resource]
+script = ExtResource("3_huo4d")
+first_name = "Arthur"
+last_name = "Fils"
+age = 22
+country = "France"
+country_code = "FRA"
+height = 185
+rank = 11
+play_style = SubResource("Resource_m5h5m")
+stats = SubResource("Resource_78vv7")
+appearance = SubResource("Resource_vr6ag")

@@ -1,41 +1,41 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://7puy4co7ounb"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
-[ext_resource type="Resource" uid="uid://7e3c3vwitqa5" path="res://scenes/player/resources/appearances/ruud.tres" id="1_0pjq8"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
-[ext_resource type="Resource" uid="uid://dgbtx8io0rl6n" path="res://scenes/player/resources/play_styles/ruud.tres" id="3_ojko4"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/ruud.tres" id="1_0pjq8"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="Resource" path="res://scenes/player/resources/play_styles/ruud.tres" id="3_ojko4"]
 
 [sub_resource type="Resource" id="Resource_ruud_stats"]
 script = ExtResource("2")
-acceleration = 81.0
-top_speed = 81.0
-agility = 82.0
-stamina = 86.0
-forehand = 87.0
-backhand = 79.0
-serve_power = 83.0
-serve_accuracy = 80.0
-return_skill = 80.0
-volley_skill = 74.0
-slice_skill = 76.0
-topspin_skill = 88.0
-accuracy = 79.0
-consistency = 80.0
-timing = 80.0
-composure = 78.0
-focus = 82.0
-clutch = 79.0
-net_play = 70.0
+acceleration = 80.0
+top_speed = 80.0
+agility = 81.0
+stamina = 85.0
+forehand = 86.0
+backhand = 78.0
+serve_power = 82.0
+serve_accuracy = 79.0
+return_skill = 79.0
+volley_skill = 73.0
+slice_skill = 75.0
+topspin_skill = 87.0
+accuracy = 78.0
+consistency = 79.0
+timing = 79.0
+composure = 77.0
+focus = 81.0
+clutch = 78.0
+net_play = 69.0
 
 [resource]
 script = ExtResource("1")
-first_name = "Caspar"
+first_name = "Casper"
 last_name = "Ruud"
-age = 23
+age = 27
 country = "Norway"
 country_code = "NOR"
 height = 183
-rank = 6
+rank = 24
 play_style = ExtResource("3_ojko4")
 stats = SubResource("Resource_ruud_stats")
 appearance = ExtResource("1_0pjq8")

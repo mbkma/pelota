@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://qlgx0msvuqtb"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_yy0rv"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ahvd2"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_kyf67"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_xy1qv"]
+
+[sub_resource type="Resource" id="Resource_13pbf"]
+script = ExtResource("1_yy0rv")
+shirt_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_xqlqv"]
+script = ExtResource("2_ahvd2")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_bjg8h"]
+script = ExtResource("4_xy1qv")
+acceleration = 71.0
+top_speed = 72.0
+agility = 75.0
+stamina = 77.0
+forehand = 73.0
+backhand = 76.0
+serve_power = 67.0
+serve_accuracy = 75.0
+return_skill = 75.0
+volley_skill = 68.0
+slice_skill = 73.0
+topspin_skill = 73.0
+consistency = 77.0
+timing = 73.0
+composure = 72.0
+focus = 75.0
+clutch = 72.0
+net_play = 70.0
+
+[resource]
+script = ExtResource("3_kyf67")
+first_name = "Jesper"
+last_name = "de Jong"
+age = 26
+country = "Netherlands"
+country_code = "NED"
+rank = 95
+play_style = SubResource("Resource_xqlqv")
+stats = SubResource("Resource_bjg8h")
+appearance = SubResource("Resource_13pbf")

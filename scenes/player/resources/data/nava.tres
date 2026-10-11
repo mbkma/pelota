@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dvdkcvw117bvm"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cihbr"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_jj45i"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wxxf3"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_xw3q7"]
+
+[sub_resource type="Resource" id="Resource_0o0b8"]
+script = ExtResource("1_cihbr")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_8yupa"]
+script = ExtResource("2_jj45i")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_ldgq6"]
+script = ExtResource("4_xw3q7")
+acceleration = 71.0
+top_speed = 72.0
+stamina = 70.0
+forehand = 74.0
+backhand = 72.0
+serve_power = 73.0
+serve_accuracy = 72.0
+volley_skill = 73.0
+slice_skill = 71.0
+topspin_skill = 74.0
+consistency = 70.0
+timing = 72.0
+composure = 71.0
+focus = 74.0
+clutch = 72.0
+net_play = 74.0
+
+[resource]
+script = ExtResource("3_wxxf3")
+first_name = "Emilio"
+last_name = "Nava"
+age = 24
+country = "USA"
+country_code = "USA"
+height = 185
+rank = 122
+play_style = SubResource("Resource_8yupa")
+stats = SubResource("Resource_ldgq6")
+appearance = SubResource("Resource_0o0b8")

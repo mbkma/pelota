@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://8lx1yvefmbpn"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_wa014"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_apw76"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_imkxm"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6j41p"]
+
+[sub_resource type="Resource" id="Resource_ofpv6"]
+script = ExtResource("1_wa014")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_htinf"]
+script = ExtResource("2_apw76")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_dunj5"]
+script = ExtResource("4_6j41p")
+acceleration = 72.0
+top_speed = 72.0
+agility = 74.0
+backhand = 76.0
+serve_power = 67.0
+serve_accuracy = 72.0
+volley_skill = 71.0
+slice_skill = 71.0
+topspin_skill = 72.0
+accuracy = 73.0
+consistency = 75.0
+timing = 71.0
+composure = 74.0
+focus = 72.0
+clutch = 72.0
+net_play = 67.0
+
+[resource]
+script = ExtResource("3_imkxm")
+first_name = "Francisco"
+last_name = "Comesana"
+age = 25
+country = "Argentina"
+country_code = "ARG"
+height = 185
+rank = 125
+play_style = SubResource("Resource_htinf")
+stats = SubResource("Resource_dunj5")
+appearance = SubResource("Resource_ofpv6")

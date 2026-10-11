@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bveibcjsyfw1s"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_68ywp"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_k5ek4"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_m4f6x"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8hv7i"]
+
+[sub_resource type="Resource" id="Resource_ftfbu"]
+script = ExtResource("1_68ywp")
+shirt_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_kxw2q"]
+script = ExtResource("2_k5ek4")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_uoiqc"]
+script = ExtResource("4_8hv7i")
+acceleration = 77.0
+top_speed = 80.0
+agility = 77.0
+stamina = 80.0
+forehand = 78.0
+backhand = 79.0
+serve_power = 77.0
+serve_accuracy = 75.0
+return_skill = 77.0
+volley_skill = 74.0
+slice_skill = 79.0
+topspin_skill = 76.0
+accuracy = 79.0
+consistency = 79.0
+timing = 76.0
+composure = 77.0
+focus = 79.0
+clutch = 79.0
+net_play = 72.0
+
+[resource]
+script = ExtResource("3_m4f6x")
+first_name = "Ignacio"
+last_name = "Buse"
+age = 22
+country = "Peru"
+country_code = "PER"
+height = 185
+rank = 36
+play_style = SubResource("Resource_kxw2q")
+stats = SubResource("Resource_uoiqc")
+appearance = SubResource("Resource_ftfbu")

@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cwby6qp84l1fu"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_3d1qb"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_5gg1v"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ohyv5"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_wb40y"]
+
+[sub_resource type="Resource" id="Resource_uuorx"]
+script = ExtResource("1_3d1qb")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_hho2l"]
+script = ExtResource("2_5gg1v")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_vxddq"]
+script = ExtResource("4_wb40y")
+acceleration = 75.0
+top_speed = 73.0
+agility = 73.0
+forehand = 79.0
+backhand = 76.0
+serve_power = 86.0
+serve_accuracy = 81.0
+return_skill = 72.0
+volley_skill = 82.0
+slice_skill = 78.0
+topspin_skill = 78.0
+accuracy = 77.0
+consistency = 74.0
+timing = 78.0
+composure = 78.0
+focus = 77.0
+clutch = 79.0
+net_play = 82.0
+
+[resource]
+script = ExtResource("3_ohyv5")
+first_name = "Hubert"
+last_name = "Hurkacz"
+age = 29
+country = "Poland"
+country_code = "POL"
+height = 196
+rank = 34
+play_style = SubResource("Resource_hho2l")
+stats = SubResource("Resource_vxddq")
+appearance = SubResource("Resource_uuorx")

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ucp4642kdyd7"
+
+[deps]
+
+files=["res://scenes/player/resources/roster/atp_top_128.first.translation", "res://scenes/player/resources/roster/atp_top_128.last.translation", "res://scenes/player/resources/roster/atp_top_128.country.translation", "res://scenes/player/resources/roster/atp_top_128.country.translation", "res://scenes/player/resources/roster/atp_top_128.age.translation", "res://scenes/player/resources/roster/atp_top_128.height.translation", "res://scenes/player/resources/roster/atp_top_128.hand.translation", "res://scenes/player/resources/roster/atp_top_128.backhand.translation", "res://scenes/player/resources/roster/atp_top_128.style.translation"]
+
+source_file="res://scenes/player/resources/roster/atp_top_128.csv"
+dest_files=["res://scenes/player/resources/roster/atp_top_128.first.translation", "res://scenes/player/resources/roster/atp_top_128.last.translation", "res://scenes/player/resources/roster/atp_top_128.country.translation", "res://scenes/player/resources/roster/atp_top_128.country.translation", "res://scenes/player/resources/roster/atp_top_128.age.translation", "res://scenes/player/resources/roster/atp_top_128.height.translation", "res://scenes/player/resources/roster/atp_top_128.hand.translation", "res://scenes/player/resources/roster/atp_top_128.backhand.translation", "res://scenes/player/resources/roster/atp_top_128.style.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

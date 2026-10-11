@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bvegoo5slo1j4"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_k3u4q"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_dlgc0"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ops3t"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_5rqxx"]
+
+[sub_resource type="Resource" id="Resource_g8ovb"]
+script = ExtResource("1_k3u4q")
+shirt_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_55sch"]
+script = ExtResource("2_dlgc0")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_wpvwq"]
+script = ExtResource("4_5rqxx")
+acceleration = 75.0
+top_speed = 79.0
+agility = 81.0
+stamina = 77.0
+forehand = 73.0
+backhand = 72.0
+serve_power = 61.0
+serve_accuracy = 71.0
+return_skill = 79.0
+volley_skill = 74.0
+slice_skill = 73.0
+topspin_skill = 71.0
+accuracy = 71.0
+consistency = 78.0
+timing = 72.0
+composure = 74.0
+focus = 73.0
+clutch = 73.0
+net_play = 72.0
+
+[resource]
+script = ExtResource("3_ops3t")
+first_name = "Zachary"
+last_name = "Svajda"
+age = 23
+country = "USA"
+country_code = "USA"
+height = 175
+rank = 82
+play_style = SubResource("Resource_55sch")
+stats = SubResource("Resource_wpvwq")
+appearance = SubResource("Resource_g8ovb")

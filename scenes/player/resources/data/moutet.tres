@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bfjgdyfjvttcv"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_61vg5"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_f53tn"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_is3tx"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_qk5rw"]
+
+[sub_resource type="Resource" id="Resource_xpf3y"]
+script = ExtResource("1_61vg5")
+shirt_color = Color(0.5, 0.25, 0.6, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_fdcig"]
+script = ExtResource("2_f53tn")
+aggression = 0.65
+shot_power = 0.7
+topspin = 0.55
+court_position = -0.3
+consistency = 0.65
+
+[sub_resource type="Resource" id="Resource_wc2lo"]
+script = ExtResource("4_qk5rw")
+acceleration = 73.0
+top_speed = 74.0
+agility = 76.0
+stamina = 74.0
+forehand = 75.0
+backhand = 75.0
+serve_power = 72.0
+serve_accuracy = 75.0
+return_skill = 75.0
+volley_skill = 81.0
+slice_skill = 79.0
+topspin_skill = 75.0
+accuracy = 73.0
+timing = 74.0
+composure = 75.0
+focus = 73.0
+clutch = 73.0
+net_play = 82.0
+
+[resource]
+script = ExtResource("3_is3tx")
+first_name = "Corentin"
+last_name = "Moutet"
+age = 27
+country = "France"
+country_code = "FRA"
+height = 175
+hand = "L"
+rank = 71
+play_style = SubResource("Resource_fdcig")
+stats = SubResource("Resource_wc2lo")
+appearance = SubResource("Resource_xpf3y")

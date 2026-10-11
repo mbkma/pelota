@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://btuymk43io7rc"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_bdgrx"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_mq6dm"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_yo7qy"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_81yib"]
+
+[sub_resource type="Resource" id="Resource_vm64o"]
+script = ExtResource("1_bdgrx")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_sca2c"]
+script = ExtResource("2_mq6dm")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_exaaf"]
+script = ExtResource("4_81yib")
+acceleration = 71.0
+top_speed = 74.0
+agility = 73.0
+stamina = 71.0
+forehand = 77.0
+backhand = 77.0
+serve_power = 71.0
+serve_accuracy = 75.0
+return_skill = 71.0
+volley_skill = 74.0
+slice_skill = 72.0
+topspin_skill = 75.0
+accuracy = 76.0
+consistency = 69.0
+timing = 73.0
+composure = 74.0
+focus = 74.0
+clutch = 72.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_yo7qy")
+first_name = "Valentin"
+last_name = "Royer"
+age = 25
+country = "France"
+country_code = "FRA"
+height = 188
+rank = 105
+play_style = SubResource("Resource_sca2c")
+stats = SubResource("Resource_exaaf")
+appearance = SubResource("Resource_vm64o")

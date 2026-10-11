@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bmjxsc1lcucu"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_hnihs"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6wvkr"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_qx53g"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_dsnaf"]
+
+[sub_resource type="Resource" id="Resource_0ei32"]
+script = ExtResource("1_hnihs")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_o5jpn"]
+script = ExtResource("2_6wvkr")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_4rrya"]
+script = ExtResource("4_dsnaf")
+acceleration = 76.0
+top_speed = 73.0
+agility = 68.0
+stamina = 77.0
+forehand = 74.0
+backhand = 74.0
+serve_power = 86.0
+serve_accuracy = 79.0
+volley_skill = 80.0
+slice_skill = 75.0
+topspin_skill = 78.0
+accuracy = 76.0
+consistency = 76.0
+timing = 75.0
+composure = 76.0
+focus = 78.0
+clutch = 75.0
+net_play = 76.0
+
+[resource]
+script = ExtResource("3_qx53g")
+first_name = "Jan-Lennard"
+last_name = "Struff"
+age = 36
+country = "Germany"
+country_code = "GER"
+height = 193
+rank = 59
+play_style = SubResource("Resource_o5jpn")
+stats = SubResource("Resource_4rrya")
+appearance = SubResource("Resource_0ei32")

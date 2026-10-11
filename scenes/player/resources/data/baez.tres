@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://k5dyjssqkk8o"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_eomu3"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_emf0s"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_lny80"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_dbbjo"]
+
+[sub_resource type="Resource" id="Resource_lkj75"]
+script = ExtResource("1_eomu3")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_3uhtp"]
+script = ExtResource("2_emf0s")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_hktvw"]
+script = ExtResource("4_dbbjo")
+acceleration = 77.0
+top_speed = 85.0
+agility = 83.0
+stamina = 80.0
+forehand = 74.0
+backhand = 74.0
+serve_power = 65.0
+serve_accuracy = 73.0
+return_skill = 81.0
+volley_skill = 75.0
+slice_skill = 75.0
+topspin_skill = 75.0
+accuracy = 75.0
+consistency = 81.0
+timing = 77.0
+composure = 75.0
+focus = 75.0
+clutch = 76.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_lny80")
+first_name = "Sebastian"
+last_name = "Baez"
+age = 25
+country = "Argentina"
+country_code = "ARG"
+height = 170
+rank = 53
+play_style = SubResource("Resource_3uhtp")
+stats = SubResource("Resource_hktvw")
+appearance = SubResource("Resource_lkj75")

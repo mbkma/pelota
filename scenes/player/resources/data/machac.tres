@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bqb0b5qsabmbb"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cfi0f"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_oc0dk"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nyqoc"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_5v114"]
+
+[sub_resource type="Resource" id="Resource_8tf2n"]
+script = ExtResource("1_cfi0f")
+shirt_color = Color(0.95, 0.5, 0.15, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_y0ml3"]
+script = ExtResource("2_oc0dk")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_y3uhm"]
+script = ExtResource("4_5v114")
+acceleration = 73.0
+top_speed = 73.0
+agility = 72.0
+stamina = 76.0
+forehand = 80.0
+backhand = 78.0
+serve_power = 72.0
+serve_accuracy = 72.0
+return_skill = 76.0
+volley_skill = 75.0
+slice_skill = 74.0
+topspin_skill = 75.0
+accuracy = 73.0
+timing = 75.0
+composure = 75.0
+focus = 74.0
+clutch = 75.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_nyqoc")
+first_name = "Tomas"
+last_name = "Machac"
+age = 25
+country = "Czechia"
+country_code = "CZE"
+height = 183
+rank = 75
+play_style = SubResource("Resource_y0ml3")
+stats = SubResource("Resource_y3uhm")
+appearance = SubResource("Resource_8tf2n")

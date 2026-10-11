@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dwl0at338jcm7"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_54g7f"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6b3ot"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_5hovm"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_20t6b"]
+
+[sub_resource type="Resource" id="Resource_6th7w"]
+script = ExtResource("1_54g7f")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_l0ua5"]
+script = ExtResource("2_6b3ot")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_r32q7"]
+script = ExtResource("4_20t6b")
+acceleration = 73.0
+stamina = 73.0
+backhand = 74.0
+serve_power = 84.0
+serve_accuracy = 78.0
+return_skill = 65.0
+volley_skill = 74.0
+slice_skill = 73.0
+topspin_skill = 72.0
+accuracy = 70.0
+consistency = 69.0
+timing = 71.0
+composure = 71.0
+focus = 74.0
+clutch = 72.0
+net_play = 74.0
+
+[resource]
+script = ExtResource("3_5hovm")
+first_name = "Lloyd"
+last_name = "Harris"
+age = 29
+country = "South Africa"
+country_code = "RSA"
+height = 193
+rank = 110
+play_style = SubResource("Resource_l0ua5")
+stats = SubResource("Resource_r32q7")
+appearance = SubResource("Resource_6th7w")

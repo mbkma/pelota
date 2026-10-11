@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dm3r52xmeoj5g"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_6hksw"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_dd8v1"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ank2h"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_hnk1w"]
+
+[sub_resource type="Resource" id="Resource_hfuyi"]
+script = ExtResource("1_6hksw")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_rm8i1"]
+script = ExtResource("2_dd8v1")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_abnv6"]
+script = ExtResource("4_hnk1w")
+acceleration = 78.0
+top_speed = 78.0
+agility = 74.0
+stamina = 79.0
+forehand = 84.0
+backhand = 82.0
+serve_power = 78.0
+serve_accuracy = 77.0
+return_skill = 77.0
+volley_skill = 78.0
+slice_skill = 77.0
+topspin_skill = 79.0
+accuracy = 76.0
+consistency = 74.0
+timing = 77.0
+composure = 76.0
+focus = 76.0
+clutch = 77.0
+net_play = 77.0
+
+[resource]
+script = ExtResource("3_ank2h")
+first_name = "Alex"
+last_name = "Michelsen"
+age = 22
+country = "USA"
+country_code = "USA"
+height = 193
+rank = 35
+play_style = SubResource("Resource_rm8i1")
+stats = SubResource("Resource_abnv6")
+appearance = SubResource("Resource_hfuyi")

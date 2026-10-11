@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://p7lek8kdrt0y"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_utrrj"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nst88"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ms6sw"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8g24e"]
+
+[sub_resource type="Resource" id="Resource_kam6r"]
+script = ExtResource("1_utrrj")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_psqob"]
+script = ExtResource("2_nst88")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_x6ks4"]
+script = ExtResource("4_8g24e")
+acceleration = 75.0
+top_speed = 81.0
+agility = 76.0
+stamina = 77.0
+forehand = 72.0
+backhand = 74.0
+serve_power = 62.0
+serve_accuracy = 71.0
+return_skill = 81.0
+volley_skill = 72.0
+slice_skill = 74.0
+topspin_skill = 74.0
+accuracy = 74.0
+consistency = 78.0
+timing = 74.0
+composure = 73.0
+focus = 75.0
+clutch = 74.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_ms6sw")
+first_name = "Adrian"
+last_name = "Mannarino"
+age = 38
+country = "France"
+country_code = "FRA"
+height = 183
+hand = "L"
+rank = 83
+play_style = SubResource("Resource_psqob")
+stats = SubResource("Resource_x6ks4")
+appearance = SubResource("Resource_kam6r")

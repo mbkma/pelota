@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://j5n5vlmbi1mp"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_udayw"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_kd2tx"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nv4lm"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6y2a4"]
+
+[sub_resource type="Resource" id="Resource_02pkn"]
+script = ExtResource("1_udayw")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_y4urq"]
+script = ExtResource("2_kd2tx")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_ll4yo"]
+script = ExtResource("4_6y2a4")
+acceleration = 73.0
+top_speed = 73.0
+agility = 73.0
+stamina = 76.0
+backhand = 75.0
+serve_accuracy = 72.0
+return_skill = 71.0
+volley_skill = 70.0
+slice_skill = 70.0
+topspin_skill = 71.0
+accuracy = 74.0
+consistency = 77.0
+composure = 74.0
+focus = 71.0
+clutch = 73.0
+net_play = 69.0
+
+[resource]
+script = ExtResource("3_nv4lm")
+first_name = "Hugo"
+last_name = "Dellien"
+age = 33
+country = "Bolivia"
+country_code = "BOL"
+height = 185
+rank = 128
+play_style = SubResource("Resource_y4urq")
+stats = SubResource("Resource_ll4yo")
+appearance = SubResource("Resource_02pkn")

@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://qy87y4ch2hui"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ggci1"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vndq4"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ox581"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ijcph"]
+
+[sub_resource type="Resource" id="Resource_iywr5"]
+script = ExtResource("1_ggci1")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_5stfo"]
+script = ExtResource("2_vndq4")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_ouxab"]
+script = ExtResource("4_ijcph")
+acceleration = 82.0
+top_speed = 88.0
+agility = 90.0
+stamina = 85.0
+forehand = 80.0
+backhand = 85.0
+serve_power = 74.0
+serve_accuracy = 82.0
+return_skill = 90.0
+volley_skill = 82.0
+slice_skill = 84.0
+topspin_skill = 83.0
+accuracy = 83.0
+consistency = 88.0
+timing = 82.0
+composure = 81.0
+focus = 82.0
+clutch = 83.0
+net_play = 81.0
+
+[resource]
+script = ExtResource("3_ox581")
+first_name = "Alex"
+last_name = "de Minaur"
+age = 27
+country = "Australia"
+country_code = "AUS"
+height = 183
+rank = 9
+play_style = SubResource("Resource_5stfo")
+stats = SubResource("Resource_ouxab")
+appearance = SubResource("Resource_iywr5")

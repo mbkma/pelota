@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b3l0eexjokr7l"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_nl22o"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_t3q1t"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_31lfd"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8mujk"]
+
+[sub_resource type="Resource" id="Resource_nu5mp"]
+script = ExtResource("1_nl22o")
+shirt_color = Color(0.4, 0.75, 0.75, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_ojb0t"]
+script = ExtResource("2_t3q1t")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_vtnfy"]
+script = ExtResource("4_8mujk")
+acceleration = 80.0
+top_speed = 77.0
+agility = 75.0
+stamina = 82.0
+forehand = 81.0
+backhand = 82.0
+serve_power = 93.0
+serve_accuracy = 84.0
+return_skill = 77.0
+volley_skill = 86.0
+slice_skill = 79.0
+topspin_skill = 82.0
+accuracy = 83.0
+consistency = 78.0
+timing = 81.0
+composure = 81.0
+focus = 82.0
+clutch = 80.0
+net_play = 85.0
+
+[resource]
+script = ExtResource("3_31lfd")
+first_name = "Taylor"
+last_name = "Fritz"
+age = 28
+country = "USA"
+country_code = "USA"
+height = 196
+rank = 12
+play_style = SubResource("Resource_ojb0t")
+stats = SubResource("Resource_vtnfy")
+appearance = SubResource("Resource_nu5mp")

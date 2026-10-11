@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://egpoaugnf5at"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_kg01f"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ig3j6"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_udugn"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_y7muq"]
+
+[sub_resource type="Resource" id="Resource_8qjfn"]
+script = ExtResource("1_kg01f")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_c10at"]
+script = ExtResource("2_ig3j6")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_621rv"]
+script = ExtResource("4_y7muq")
+acceleration = 74.0
+top_speed = 80.0
+agility = 76.0
+stamina = 81.0
+forehand = 76.0
+backhand = 77.0
+serve_power = 73.0
+serve_accuracy = 79.0
+return_skill = 75.0
+volley_skill = 72.0
+slice_skill = 74.0
+topspin_skill = 78.0
+accuracy = 78.0
+consistency = 81.0
+timing = 75.0
+composure = 76.0
+focus = 79.0
+clutch = 78.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_udugn")
+first_name = "Mariano"
+last_name = "Navone"
+age = 25
+country = "Argentina"
+country_code = "ARG"
+height = 178
+rank = 47
+play_style = SubResource("Resource_c10at")
+stats = SubResource("Resource_621rv")
+appearance = SubResource("Resource_8qjfn")

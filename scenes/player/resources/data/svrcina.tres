@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d4jv7vlxrvtsl"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_t5qg2"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vpp54"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0bs7n"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yqv7c"]
+
+[sub_resource type="Resource" id="Resource_kospy"]
+script = ExtResource("1_t5qg2")
+shirt_color = Color(0.95, 0.5, 0.15, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_cl2kk"]
+script = ExtResource("2_vpp54")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_vxrpb"]
+script = ExtResource("4_yqv7c")
+acceleration = 71.0
+top_speed = 73.0
+agility = 71.0
+forehand = 71.0
+backhand = 73.0
+serve_power = 69.0
+serve_accuracy = 74.0
+return_skill = 72.0
+volley_skill = 71.0
+slice_skill = 72.0
+topspin_skill = 73.0
+consistency = 79.0
+timing = 75.0
+composure = 73.0
+focus = 73.0
+clutch = 73.0
+net_play = 68.0
+
+[resource]
+script = ExtResource("3_0bs7n")
+first_name = "Dalibor"
+last_name = "Svrcina"
+age = 24
+country = "Czechia"
+country_code = "CZE"
+height = 183
+rank = 126
+play_style = SubResource("Resource_cl2kk")
+stats = SubResource("Resource_vxrpb")
+appearance = SubResource("Resource_kospy")

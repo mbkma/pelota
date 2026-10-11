@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bkr1cmwei5op5"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ri5p4"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_yk8fy"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ryk3c"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6s6s5"]
+
+[sub_resource type="Resource" id="Resource_yaaoo"]
+script = ExtResource("1_ri5p4")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_efgh4"]
+script = ExtResource("2_yk8fy")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_xp1wd"]
+script = ExtResource("4_6s6s5")
+acceleration = 73.0
+top_speed = 77.0
+agility = 73.0
+forehand = 78.0
+backhand = 74.0
+serve_power = 73.0
+serve_accuracy = 76.0
+return_skill = 75.0
+volley_skill = 74.0
+slice_skill = 75.0
+topspin_skill = 77.0
+accuracy = 74.0
+timing = 74.0
+composure = 73.0
+focus = 76.0
+clutch = 73.0
+net_play = 74.0
+
+[resource]
+script = ExtResource("3_ryk3c")
+first_name = "Roman"
+last_name = "Safiullin"
+age = 29
+country = "Russia"
+country_code = "RUS"
+height = 185
+rank = 79
+play_style = SubResource("Resource_efgh4")
+stats = SubResource("Resource_xp1wd")
+appearance = SubResource("Resource_yaaoo")

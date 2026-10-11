@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dhwwsqntv40al"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_76ojs"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_83hgi"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_84sdj"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8xoel"]
+
+[sub_resource type="Resource" id="Resource_tsksc"]
+script = ExtResource("1_76ojs")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_hg67h"]
+script = ExtResource("2_83hgi")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_aacyy"]
+script = ExtResource("4_8xoel")
+acceleration = 76.0
+top_speed = 77.0
+agility = 75.0
+stamina = 80.0
+forehand = 74.0
+backhand = 79.0
+serve_power = 74.0
+serve_accuracy = 77.0
+return_skill = 75.0
+volley_skill = 72.0
+slice_skill = 76.0
+topspin_skill = 77.0
+accuracy = 77.0
+consistency = 82.0
+timing = 78.0
+composure = 75.0
+focus = 78.0
+clutch = 78.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_84sdj")
+first_name = "Daniel"
+last_name = "Merida"
+age = 21
+country = "Spain"
+country_code = "ESP"
+height = 191
+rank = 44
+play_style = SubResource("Resource_hg67h")
+stats = SubResource("Resource_aacyy")
+appearance = SubResource("Resource_tsksc")

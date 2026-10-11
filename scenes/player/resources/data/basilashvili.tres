@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://ck4fnq3pdxao0"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ss1vj"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8ahpg"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_kd8fi"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_cqsjv"]
+
+[sub_resource type="Resource" id="Resource_yt4ns"]
+script = ExtResource("1_ss1vj")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_ff2sk"]
+script = ExtResource("2_8ahpg")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_73aaj"]
+script = ExtResource("4_cqsjv")
+acceleration = 73.0
+agility = 73.0
+stamina = 73.0
+forehand = 77.0
+backhand = 72.0
+serve_power = 74.0
+serve_accuracy = 73.0
+return_skill = 74.0
+volley_skill = 74.0
+slice_skill = 72.0
+topspin_skill = 74.0
+accuracy = 71.0
+consistency = 69.0
+timing = 73.0
+composure = 73.0
+focus = 71.0
+clutch = 71.0
+net_play = 70.0
+
+[resource]
+script = ExtResource("3_kd8fi")
+first_name = "Nikoloz"
+last_name = "Basilashvili"
+age = 34
+country = "Georgia"
+country_code = "GEO"
+height = 185
+rank = 124
+play_style = SubResource("Resource_ff2sk")
+stats = SubResource("Resource_73aaj")
+appearance = SubResource("Resource_yt4ns")

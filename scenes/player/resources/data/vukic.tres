@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://lf5nv0dgah38"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_u6pps"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_82px7"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_bshg4"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_h8dkt"]
+
+[sub_resource type="Resource" id="Resource_428lk"]
+script = ExtResource("1_u6pps")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_q8bat"]
+script = ExtResource("2_82px7")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_gixdt"]
+script = ExtResource("4_h8dkt")
+acceleration = 72.0
+top_speed = 73.0
+stamina = 71.0
+forehand = 77.0
+backhand = 73.0
+serve_power = 72.0
+return_skill = 75.0
+volley_skill = 72.0
+slice_skill = 74.0
+topspin_skill = 73.0
+accuracy = 76.0
+consistency = 68.0
+timing = 72.0
+composure = 71.0
+focus = 72.0
+clutch = 72.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_bshg4")
+first_name = "Aleksandar"
+last_name = "Vukic"
+age = 30
+country = "Australia"
+country_code = "AUS"
+height = 188
+rank = 115
+play_style = SubResource("Resource_q8bat")
+stats = SubResource("Resource_gixdt")
+appearance = SubResource("Resource_428lk")

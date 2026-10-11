@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://iu4gbikx7lsi"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_u7rou"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_sig6m"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nqo3j"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_f2se5"]
+
+[sub_resource type="Resource" id="Resource_cv7tw"]
+script = ExtResource("1_u7rou")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_1qcwb"]
+script = ExtResource("2_sig6m")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_p7jw0"]
+script = ExtResource("4_f2se5")
+acceleration = 86.0
+top_speed = 86.0
+agility = 83.0
+stamina = 87.0
+forehand = 83.0
+backhand = 86.0
+serve_power = 80.0
+serve_accuracy = 85.0
+return_skill = 82.0
+volley_skill = 80.0
+slice_skill = 82.0
+topspin_skill = 83.0
+accuracy = 82.0
+consistency = 90.0
+timing = 85.0
+composure = 82.0
+focus = 85.0
+clutch = 84.0
+net_play = 79.0
+
+[resource]
+script = ExtResource("3_nqo3j")
+first_name = "Flavio"
+last_name = "Cobolli"
+age = 24
+country = "Italy"
+country_code = "ITA"
+height = 183
+rank = 7
+play_style = SubResource("Resource_1qcwb")
+stats = SubResource("Resource_p7jw0")
+appearance = SubResource("Resource_cv7tw")

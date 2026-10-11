@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cipixi415d5y3"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ghe4h"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1djg1"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_6d1k1"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_nkgoj"]
+
+[sub_resource type="Resource" id="Resource_xbgkl"]
+script = ExtResource("1_ghe4h")
+shirt_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_kfpwb"]
+script = ExtResource("2_1djg1")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_lbfdp"]
+script = ExtResource("4_nkgoj")
+acceleration = 82.0
+top_speed = 80.0
+agility = 80.0
+stamina = 83.0
+forehand = 82.0
+backhand = 84.0
+serve_power = 75.0
+serve_accuracy = 80.0
+return_skill = 79.0
+volley_skill = 77.0
+slice_skill = 78.0
+topspin_skill = 80.0
+accuracy = 80.0
+consistency = 82.0
+timing = 78.0
+composure = 80.0
+focus = 79.0
+clutch = 81.0
+net_play = 78.0
+
+[resource]
+script = ExtResource("3_6d1k1")
+first_name = "Francisco"
+last_name = "Cerundolo"
+age = 28
+country = "Argentina"
+country_code = "ARG"
+height = 185
+rank = 20
+play_style = SubResource("Resource_kfpwb")
+stats = SubResource("Resource_lbfdp")
+appearance = SubResource("Resource_xbgkl")

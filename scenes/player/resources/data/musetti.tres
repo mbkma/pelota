@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dhtesh0178ytb"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_06bd4"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_yvh2n"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_2fntj"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_0p0ss"]
+
+[sub_resource type="Resource" id="Resource_2ocn3"]
+script = ExtResource("1_06bd4")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_vcwv3"]
+script = ExtResource("2_yvh2n")
+aggression = 0.65
+shot_power = 0.7
+topspin = 0.55
+court_position = -0.3
+consistency = 0.65
+
+[sub_resource type="Resource" id="Resource_i72wj"]
+script = ExtResource("4_0p0ss")
+acceleration = 75.0
+top_speed = 80.0
+agility = 78.0
+stamina = 79.0
+forehand = 76.0
+backhand = 75.0
+serve_power = 75.0
+serve_accuracy = 75.0
+return_skill = 79.0
+volley_skill = 86.0
+slice_skill = 87.0
+topspin_skill = 79.0
+accuracy = 77.0
+consistency = 78.0
+timing = 79.0
+composure = 78.0
+focus = 80.0
+clutch = 78.0
+net_play = 86.0
+
+[resource]
+script = ExtResource("3_2fntj")
+first_name = "Lorenzo"
+last_name = "Musetti"
+age = 24
+country = "Italy"
+country_code = "ITA"
+height = 185
+backhand = 1
+rank = 25
+play_style = SubResource("Resource_vcwv3")
+stats = SubResource("Resource_i72wj")
+appearance = SubResource("Resource_2ocn3")

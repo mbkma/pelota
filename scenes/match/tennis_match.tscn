@@ -17,11 +17,12 @@
 [ext_resource type="PackedScene" uid="uid://dwg7xu576cxge" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
 [ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
 
-[node name="TennisMatch" type="Node" unique_id=1484614295 node_paths=PackedStringArray("player0", "player1")]
+[node name="TennisMatch" type="Node" unique_id=1484614295 node_paths=PackedStringArray("player0", "player1", "match_manager")]
 process_mode = 1
 script = ExtResource("1_3pywv")
 player0 = NodePath("Player")
 player1 = NodePath("Player2")
+match_manager = NodePath("MatchManager")
 
 [node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)

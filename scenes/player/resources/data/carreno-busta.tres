@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dgy3x03r5de2r"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_gbfdf"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1aqhc"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_g01fa"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yqg7a"]
+
+[sub_resource type="Resource" id="Resource_8dshv"]
+script = ExtResource("1_gbfdf")
+shirt_color = Color(0.9, 0.45, 0.6, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_415by"]
+script = ExtResource("2_1aqhc")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_ml86q"]
+script = ExtResource("4_yqg7a")
+acceleration = 76.0
+top_speed = 75.0
+agility = 75.0
+forehand = 74.0
+backhand = 75.0
+serve_power = 75.0
+serve_accuracy = 74.0
+return_skill = 73.0
+volley_skill = 71.0
+slice_skill = 77.0
+topspin_skill = 73.0
+accuracy = 75.0
+consistency = 80.0
+timing = 77.0
+composure = 77.0
+focus = 76.0
+clutch = 76.0
+net_play = 71.0
+
+[resource]
+script = ExtResource("3_g01fa")
+first_name = "Pablo"
+last_name = "Carreno Busta"
+age = 35
+country = "Spain"
+country_code = "ESP"
+height = 188
+rank = 65
+play_style = SubResource("Resource_415by")
+stats = SubResource("Resource_ml86q")
+appearance = SubResource("Resource_8dshv")

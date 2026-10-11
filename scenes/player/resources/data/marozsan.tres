@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://4tkgofr0ewh2"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_hxn7e"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_247c7"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_e7hbh"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ifksc"]
+
+[sub_resource type="Resource" id="Resource_fbhe2"]
+script = ExtResource("1_hxn7e")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_ydhre"]
+script = ExtResource("2_247c7")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_iog16"]
+script = ExtResource("4_ifksc")
+acceleration = 72.0
+top_speed = 74.0
+agility = 76.0
+stamina = 76.0
+forehand = 77.0
+backhand = 78.0
+serve_power = 77.0
+serve_accuracy = 73.0
+return_skill = 74.0
+volley_skill = 75.0
+slice_skill = 76.0
+topspin_skill = 78.0
+accuracy = 75.0
+consistency = 71.0
+timing = 73.0
+composure = 72.0
+focus = 76.0
+clutch = 75.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_e7hbh")
+first_name = "Fabian"
+last_name = "Marozsan"
+age = 26
+country = "Hungary"
+country_code = "HUN"
+height = 191
+rank = 63
+play_style = SubResource("Resource_ydhre")
+stats = SubResource("Resource_iog16")
+appearance = SubResource("Resource_fbhe2")

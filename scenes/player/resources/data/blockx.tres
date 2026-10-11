@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bus1684qljchy"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_22vrq"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_7jfe4"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_maqb4"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_r2bri"]
+
+[sub_resource type="Resource" id="Resource_5iad1"]
+script = ExtResource("1_22vrq")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_m7jsf"]
+script = ExtResource("2_7jfe4")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_tb430"]
+script = ExtResource("4_r2bri")
+acceleration = 77.0
+top_speed = 77.0
+agility = 80.0
+stamina = 79.0
+forehand = 81.0
+backhand = 83.0
+serve_power = 80.0
+serve_accuracy = 77.0
+return_skill = 78.0
+volley_skill = 78.0
+slice_skill = 79.0
+topspin_skill = 79.0
+accuracy = 78.0
+consistency = 75.0
+timing = 80.0
+composure = 77.0
+focus = 79.0
+clutch = 77.0
+net_play = 80.0
+
+[resource]
+script = ExtResource("3_maqb4")
+first_name = "Alexander"
+last_name = "Blockx"
+age = 21
+country = "Belgium"
+country_code = "BEL"
+height = 191
+rank = 28
+play_style = SubResource("Resource_m7jsf")
+stats = SubResource("Resource_tb430")
+appearance = SubResource("Resource_5iad1")

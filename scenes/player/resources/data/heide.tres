@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://4qn26u7htn6r"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_t2yp7"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_4bxo3"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_an6oc"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yy6jb"]
+
+[sub_resource type="Resource" id="Resource_lw0mu"]
+script = ExtResource("1_t2yp7")
+shirt_color = Color(0.9, 0.45, 0.6, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_yrc3t"]
+script = ExtResource("2_4bxo3")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_o8w0x"]
+script = ExtResource("4_yy6jb")
+acceleration = 71.0
+top_speed = 69.0
+agility = 71.0
+stamina = 77.0
+forehand = 74.0
+backhand = 74.0
+serve_accuracy = 72.0
+return_skill = 69.0
+volley_skill = 71.0
+slice_skill = 71.0
+topspin_skill = 72.0
+accuracy = 71.0
+consistency = 74.0
+timing = 73.0
+composure = 72.0
+focus = 74.0
+clutch = 72.0
+net_play = 70.0
+
+[resource]
+script = ExtResource("3_an6oc")
+first_name = "Gustavo"
+last_name = "Heide"
+age = 24
+country = "Brazil"
+country_code = "BRA"
+height = 188
+rank = 116
+play_style = SubResource("Resource_yrc3t")
+stats = SubResource("Resource_o8w0x")
+appearance = SubResource("Resource_lw0mu")

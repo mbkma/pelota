@@ -61,6 +61,7 @@ var _point_volleyed: Array[bool] = [false, false]
 func _ready() -> void:
 	set_meta("logger_name", "MatchManager")
 	match_data = MatchData.new()
+	match_data.score.best_of_sets = GlobalGameData.best_of_sets
 
 	var players: Array[Player] = [player0, player1]
 	for i in players.size():

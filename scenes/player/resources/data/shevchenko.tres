@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://drdnhlgy6gpc5"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_0im1u"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_qw2st"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_43nrf"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_qwf27"]
+
+[sub_resource type="Resource" id="Resource_r530m"]
+script = ExtResource("1_0im1u")
+shirt_color = Color(0.9, 0.45, 0.6, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_wxqmq"]
+script = ExtResource("2_qw2st")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_wfdcp"]
+script = ExtResource("4_qwf27")
+acceleration = 71.0
+top_speed = 73.0
+agility = 71.0
+stamina = 74.0
+forehand = 79.0
+backhand = 73.0
+serve_accuracy = 72.0
+return_skill = 72.0
+volley_skill = 75.0
+slice_skill = 72.0
+topspin_skill = 73.0
+consistency = 69.0
+timing = 71.0
+composure = 75.0
+focus = 74.0
+clutch = 71.0
+net_play = 71.0
+
+[resource]
+script = ExtResource("3_43nrf")
+first_name = "Aleksandr"
+last_name = "Shevchenko"
+age = 25
+country = "Kazakhstan"
+country_code = "KAZ"
+height = 185
+rank = 111
+play_style = SubResource("Resource_wxqmq")
+stats = SubResource("Resource_wfdcp")
+appearance = SubResource("Resource_r530m")

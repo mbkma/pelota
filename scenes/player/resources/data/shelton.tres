@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://breomurf77djt"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_g5lb8"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_q40ml"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_c5u8f"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_86g7e"]
+
+[sub_resource type="Resource" id="Resource_isw6f"]
+script = ExtResource("1_g5lb8")
+shirt_color = Color(0.5, 0.25, 0.6, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_eas61"]
+script = ExtResource("2_q40ml")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_1klo2"]
+script = ExtResource("4_86g7e")
+acceleration = 86.0
+top_speed = 82.0
+agility = 82.0
+stamina = 85.0
+forehand = 87.0
+backhand = 83.0
+serve_power = 96.0
+serve_accuracy = 88.0
+return_skill = 81.0
+volley_skill = 91.0
+slice_skill = 84.0
+topspin_skill = 83.0
+accuracy = 84.0
+consistency = 85.0
+timing = 85.0
+composure = 87.0
+focus = 86.0
+clutch = 86.0
+net_play = 88.0
+
+[resource]
+script = ExtResource("3_c5u8f")
+first_name = "Ben"
+last_name = "Shelton"
+age = 24
+country = "USA"
+country_code = "USA"
+height = 193
+hand = "L"
+rank = 4
+play_style = SubResource("Resource_eas61")
+stats = SubResource("Resource_1klo2")
+appearance = SubResource("Resource_isw6f")

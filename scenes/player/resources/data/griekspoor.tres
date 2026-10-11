@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bvktp6bodbm63"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_kp8ef"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6x2ty"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wo3sy"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yh7o5"]
+
+[sub_resource type="Resource" id="Resource_2vdv5"]
+script = ExtResource("1_kp8ef")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_16f10"]
+script = ExtResource("2_6x2ty")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_4f2n4"]
+script = ExtResource("4_yh7o5")
+acceleration = 73.0
+top_speed = 72.0
+agility = 72.0
+stamina = 76.0
+forehand = 73.0
+backhand = 77.0
+serve_power = 86.0
+serve_accuracy = 77.0
+return_skill = 71.0
+volley_skill = 78.0
+slice_skill = 77.0
+topspin_skill = 76.0
+accuracy = 76.0
+consistency = 74.0
+timing = 74.0
+composure = 74.0
+focus = 72.0
+clutch = 75.0
+net_play = 76.0
+
+[resource]
+script = ExtResource("3_wo3sy")
+first_name = "Tallon"
+last_name = "Griekspoor"
+age = 30
+country = "Netherlands"
+country_code = "NED"
+height = 188
+rank = 58
+play_style = SubResource("Resource_16f10")
+stats = SubResource("Resource_4f2n4")
+appearance = SubResource("Resource_2vdv5")

@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cvd85wfj6aios"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_5xhbc"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_bhucc"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ud0vu"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_0amdx"]
+
+[sub_resource type="Resource" id="Resource_fsex2"]
+script = ExtResource("1_5xhbc")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_84ve2"]
+script = ExtResource("2_bhucc")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_ygdc5"]
+script = ExtResource("4_0amdx")
+acceleration = 76.0
+top_speed = 76.0
+agility = 77.0
+stamina = 76.0
+forehand = 76.0
+backhand = 75.0
+serve_accuracy = 74.0
+return_skill = 73.0
+volley_skill = 72.0
+slice_skill = 74.0
+topspin_skill = 73.0
+accuracy = 75.0
+consistency = 79.0
+timing = 73.0
+composure = 76.0
+focus = 73.0
+clutch = 73.0
+net_play = 73.0
+
+[resource]
+script = ExtResource("3_ud0vu")
+first_name = "Kyrian"
+last_name = "Jacquet"
+age = 25
+country = "France"
+country_code = "FRA"
+height = 183
+rank = 76
+play_style = SubResource("Resource_84ve2")
+stats = SubResource("Resource_ygdc5")
+appearance = SubResource("Resource_fsex2")

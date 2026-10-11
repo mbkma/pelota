@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://deaqwb47m3hxg"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_75b2o"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_f55ya"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_a74a7"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_odaw3"]
+
+[sub_resource type="Resource" id="Resource_0r6c4"]
+script = ExtResource("1_75b2o")
+shirt_color = Color(0.15, 0.55, 0.3, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_fdd55"]
+script = ExtResource("2_f55ya")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_fmvyq"]
+script = ExtResource("4_odaw3")
+acceleration = 76.0
+top_speed = 73.0
+agility = 76.0
+stamina = 76.0
+forehand = 77.0
+backhand = 78.0
+serve_power = 77.0
+serve_accuracy = 78.0
+return_skill = 76.0
+volley_skill = 77.0
+slice_skill = 73.0
+topspin_skill = 78.0
+accuracy = 76.0
+timing = 73.0
+composure = 78.0
+focus = 74.0
+clutch = 76.0
+net_play = 78.0
+
+[resource]
+script = ExtResource("3_a74a7")
+first_name = "Arthur"
+last_name = "Gea"
+age = 21
+country = "France"
+country_code = "FRA"
+height = 191
+rank = 56
+play_style = SubResource("Resource_fdd55")
+stats = SubResource("Resource_fmvyq")
+appearance = SubResource("Resource_0r6c4")

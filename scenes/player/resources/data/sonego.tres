@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b63ogvcbsofot"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_uvipv"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_w4fwv"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_47bre"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_qocta"]
+
+[sub_resource type="Resource" id="Resource_n3ila"]
+script = ExtResource("1_uvipv")
+shirt_color = Color(0.95, 0.85, 0.3, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_7wwmt"]
+script = ExtResource("2_w4fwv")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_hdoyk"]
+script = ExtResource("4_qocta")
+acceleration = 71.0
+top_speed = 71.0
+agility = 71.0
+stamina = 74.0
+forehand = 75.0
+backhand = 75.0
+serve_power = 74.0
+serve_accuracy = 74.0
+return_skill = 75.0
+volley_skill = 72.0
+slice_skill = 74.0
+topspin_skill = 77.0
+accuracy = 76.0
+consistency = 68.0
+timing = 74.0
+composure = 76.0
+focus = 74.0
+clutch = 73.0
+net_play = 72.0
+
+[resource]
+script = ExtResource("3_47bre")
+first_name = "Lorenzo"
+last_name = "Sonego"
+age = 31
+country = "Italy"
+country_code = "ITA"
+height = 191
+rank = 87
+play_style = SubResource("Resource_7wwmt")
+stats = SubResource("Resource_hdoyk")
+appearance = SubResource("Resource_n3ila")

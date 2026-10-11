@@ -1,0 +1,129 @@
+rank,first_name,last_name,country,country_code,age,height,hand,backhand,style
+1,Jannik,Sinner,Italy,ITA,25,191,R,2,aggressive
+2,Alexander,Zverev,Germany,GER,29,198,R,2,big_server
+3,Carlos,Alcaraz,Spain,ESP,23,183,R,2,all_court
+4,Ben,Shelton,USA,USA,24,193,L,2,big_server
+5,Felix,Auger-Aliassime,Canada,CAN,26,193,R,2,big_server
+6,Daniil,Medvedev,Russia,RUS,30,198,R,2,counterpuncher
+7,Flavio,Cobolli,Italy,ITA,24,183,R,2,baseliner
+8,Novak,Djokovic,Serbia,SRB,39,188,R,2,baseliner
+9,Alex,de Minaur,Australia,AUS,27,183,R,2,counterpuncher
+10,Frances,Tiafoe,USA,USA,28,188,R,2,aggressive
+11,Arthur,Fils,France,FRA,22,185,R,2,aggressive
+12,Taylor,Fritz,USA,USA,28,196,R,2,big_server
+13,Rafael,Jodar,Spain,ESP,20,191,R,2,aggressive
+14,Valentin,Vacherot,Monaco,MON,27,193,R,2,big_server
+15,Jakub,Mensik,Czechia,CZE,21,193,R,2,big_server
+16,Jiri,Lehecka,Czechia,CZE,24,185,R,2,aggressive
+17,Learner,Tien,USA,USA,20,180,L,2,counterpuncher
+18,Tommy,Paul,USA,USA,29,185,R,2,all_court
+19,Brandon,Nakashima,USA,USA,25,185,R,2,baseliner
+20,Francisco,Cerundolo,Argentina,ARG,28,185,R,2,baseliner
+21,Luciano,Darderi,Italy,ITA,24,183,R,2,baseliner
+22,Alexander,Bublik,Kazakhstan,KAZ,29,196,R,2,big_server
+23,Andrey,Rublev,Russia,RUS,28,188,R,2,aggressive
+24,Casper,Ruud,Norway,NOR,27,183,R,2,baseliner
+25,Lorenzo,Musetti,Italy,ITA,24,185,R,1,all_court
+26,Alejandro,Davidovich Fokina,Spain,ESP,27,183,R,2,counterpuncher
+27,Karen,Khachanov,Russia,RUS,30,198,R,2,big_server
+28,Alexander,Blockx,Belgium,BEL,21,191,R,2,aggressive
+29,Joao,Fonseca,Brazil,BRA,20,185,R,2,aggressive
+30,Alejandro,Tabilo,Chile,CHI,29,188,L,2,baseliner
+31,Tomas Martin,Etcheverry,Argentina,ARG,27,196,R,2,baseliner
+32,Ugo,Humbert,France,FRA,28,188,L,2,aggressive
+33,Arthur,Rinderknech,France,FRA,31,196,R,2,big_server
+34,Hubert,Hurkacz,Poland,POL,29,196,R,2,big_server
+35,Alex,Michelsen,USA,USA,22,193,R,2,aggressive
+36,Ignacio,Buse,Peru,PER,22,185,R,2,baseliner
+37,Arthur,Fery,Great Britain,GBR,24,188,R,2,aggressive
+38,Matteo,Arnaldi,Italy,ITA,25,185,R,2,baseliner
+39,Zizou,Bergs,Belgium,BEL,27,185,R,2,aggressive
+40,Cameron,Norrie,Great Britain,GBR,31,188,L,2,baseliner
+41,Botic,van de Zandschulp,Netherlands,NED,30,191,R,2,baseliner
+42,Denis,Shapovalov,Canada,CAN,27,185,L,1,aggressive
+43,Stefanos,Tsitsipas,Greece,GRE,28,193,R,1,all_court
+44,Daniel,Merida,Spain,ESP,21,191,R,2,baseliner
+45,Luca,Van Assche,France,FRA,22,178,R,2,counterpuncher
+46,Matteo,Berrettini,Italy,ITA,30,196,R,2,big_server
+47,Mariano,Navone,Argentina,ARG,25,178,R,2,baseliner
+48,Quentin,Halys,France,FRA,30,191,R,2,big_server
+49,Jaume,Munar,Spain,ESP,29,183,R,2,counterpuncher
+50,Raphael,Collignon,Belgium,BEL,24,191,R,2,aggressive
+51,Nuno,Borges,Portugal,POR,29,185,R,2,baseliner
+52,Adolfo Daniel,Vallejo,Paraguay,PAR,22,185,R,2,baseliner
+53,Sebastian,Baez,Argentina,ARG,25,170,R,2,counterpuncher
+54,Thiago Agustin,Tirante,Argentina,ARG,25,185,R,2,baseliner
+55,Juan Manuel,Cerundolo,Argentina,ARG,24,175,L,2,baseliner
+56,Arthur,Gea,France,FRA,21,191,R,2,aggressive
+57,Yannick,Hanfmann,Germany,GER,34,193,R,2,baseliner
+58,Tallon,Griekspoor,Netherlands,NED,30,188,R,2,big_server
+59,Jan-Lennard,Struff,Germany,GER,36,193,R,2,big_server
+60,Jaime,Faria,Portugal,POR,23,185,R,2,aggressive
+61,Miomir,Kecmanovic,Serbia,SRB,27,183,R,2,baseliner
+62,Roman Andres,Burruchaga,Argentina,ARG,24,183,R,2,baseliner
+63,Fabian,Marozsan,Hungary,HUN,26,191,R,2,aggressive
+64,James,Duckworth,Australia,AUS,34,183,R,2,big_server
+65,Pablo,Carreno Busta,Spain,ESP,35,188,R,2,baseliner
+66,Ethan,Quinn,USA,USA,22,191,R,2,big_server
+67,Daniel,Altmaier,Germany,GER,28,188,R,1,baseliner
+68,Vit,Kopriva,Czechia,CZE,29,185,R,2,baseliner
+69,Facundo,Diaz Acosta,Argentina,ARG,25,188,L,2,baseliner
+70,Kamil,Majchrzak,Poland,POL,30,185,R,2,baseliner
+71,Corentin,Moutet,France,FRA,27,175,L,2,all_court
+72,Titouan,Droguet,France,FRA,25,191,R,2,big_server
+73,Martin,Landaluce,Spain,ESP,20,191,R,2,aggressive
+74,Sebastian,Korda,USA,USA,26,196,R,2,aggressive
+75,Tomas,Machac,Czechia,CZE,25,183,R,2,aggressive
+76,Kyrian,Jacquet,France,FRA,25,183,R,2,baseliner
+77,Camilo,Ugo Carabelli,Argentina,ARG,27,183,R,2,baseliner
+78,Hamad,Medjedovic,Serbia,SRB,23,188,R,2,big_server
+79,Roman,Safiullin,Russia,RUS,29,185,R,2,aggressive
+80,Marin,Cilic,Croatia,CRO,38,198,R,2,big_server
+81,Aleksandar,Kovacevic,USA,USA,27,185,R,1,aggressive
+82,Zachary,Svajda,USA,USA,23,175,R,2,counterpuncher
+83,Adrian,Mannarino,France,FRA,38,183,L,2,counterpuncher
+84,Alex,Molcan,Slovakia,SVK,29,185,L,2,baseliner
+85,Rinky,Hijikata,Australia,AUS,25,178,R,2,all_court
+86,Mattia,Bellucci,Italy,ITA,25,178,L,2,aggressive
+87,Lorenzo,Sonego,Italy,ITA,31,191,R,2,aggressive
+88,Marcos,Giron,USA,USA,33,180,R,2,counterpuncher
+89,Hugo,Gaston,France,FRA,26,173,L,2,all_court
+90,Marco,Trungelliti,Argentina,ARG,36,183,R,2,baseliner
+91,Jan,Choinski,Great Britain,GBR,30,191,R,1,baseliner
+92,Benjamin,Bonzi,France,FRA,30,183,R,2,big_server
+93,Yunchaokete,Bu,China,CHN,24,188,R,2,aggressive
+94,Michael,Zheng,USA,USA,22,185,R,2,baseliner
+95,Jesper,de Jong,Netherlands,NED,26,180,R,2,baseliner
+96,Jacob,Fearnley,Great Britain,GBR,25,191,R,2,aggressive
+97,Dino,Prizmic,Croatia,CRO,21,188,R,2,baseliner
+98,Adam,Walton,Australia,AUS,27,185,R,2,baseliner
+99,Terence,Atmane,France,FRA,24,193,L,2,aggressive
+100,Toby,Samuel,Great Britain,GBR,22,188,R,2,big_server
+101,Coleman,Wong,Hong Kong,HKG,22,188,R,2,aggressive
+102,Jenson,Brooksby,USA,USA,25,193,R,2,counterpuncher
+103,Damir,Dzumhur,Bosnia and Herzegovina,BIH,34,175,R,2,all_court
+104,Martin,Damm,USA,USA,23,203,L,2,big_server
+105,Valentin,Royer,France,FRA,25,188,R,2,aggressive
+106,Henrique,Rocha,Portugal,POR,22,191,R,2,baseliner
+107,Otto,Virtanen,Finland,FIN,25,193,R,2,big_server
+108,Giovanni,Mpetshi Perricard,France,FRA,23,203,R,1,big_server
+109,Sho,Shimabukuro,Japan,JPN,29,178,R,2,baseliner
+110,Lloyd,Harris,South Africa,RSA,29,193,R,2,big_server
+111,Aleksandr,Shevchenko,Kazakhstan,KAZ,25,185,R,2,aggressive
+112,Dane,Sweeny,Australia,AUS,25,183,R,2,baseliner
+113,Yibing,Wu,China,CHN,26,183,R,2,aggressive
+114,Zsombor,Piros,Hungary,HUN,27,185,R,2,baseliner
+115,Aleksandar,Vukic,Australia,AUS,30,188,R,2,aggressive
+116,Gustavo,Heide,Brazil,BRA,24,188,R,2,baseliner
+117,Christopher,O'Connell,Australia,AUS,32,183,R,2,aggressive
+118,Patrick,Kypson,USA,USA,27,183,R,2,baseliner
+119,Nicolas,Mejia,Colombia,COL,26,188,R,2,baseliner
+120,Sebastian,Ofner,Austria,AUT,30,191,R,1,aggressive
+121,Gabriel,Diallo,Canada,CAN,25,203,R,2,big_server
+122,Emilio,Nava,USA,USA,24,185,R,2,aggressive
+123,Shintaro,Mochizuki,Japan,JPN,23,175,R,2,all_court
+124,Nikoloz,Basilashvili,Georgia,GEO,34,185,R,2,aggressive
+125,Francisco,Comesana,Argentina,ARG,25,185,R,2,baseliner
+126,Dalibor,Svrcina,Czechia,CZE,24,183,R,2,baseliner
+127,Grigor,Dimitrov,Bulgaria,BUL,35,191,R,1,all_court
+128,Hugo,Dellien,Bolivia,BOL,33,185,R,2,baseliner

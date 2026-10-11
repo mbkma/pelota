@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://tkomgsfcokyx"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_xdc2q"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ihkuk"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wed2s"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_x3w83"]
+
+[sub_resource type="Resource" id="Resource_vratf"]
+script = ExtResource("1_xdc2q")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_48dxe"]
+script = ExtResource("2_ihkuk")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_nv80a"]
+script = ExtResource("4_x3w83")
+acceleration = 74.0
+top_speed = 71.0
+agility = 71.0
+stamina = 74.0
+forehand = 74.0
+backhand = 75.0
+serve_power = 86.0
+serve_accuracy = 81.0
+return_skill = 72.0
+volley_skill = 81.0
+slice_skill = 75.0
+topspin_skill = 77.0
+accuracy = 78.0
+consistency = 73.0
+timing = 78.0
+composure = 77.0
+focus = 77.0
+clutch = 77.0
+net_play = 80.0
+
+[resource]
+script = ExtResource("3_wed2s")
+first_name = "Quentin"
+last_name = "Halys"
+age = 30
+country = "France"
+country_code = "FRA"
+height = 191
+rank = 48
+play_style = SubResource("Resource_48dxe")
+stats = SubResource("Resource_nv80a")
+appearance = SubResource("Resource_vratf")

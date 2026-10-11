@@ -5,9 +5,16 @@ extends Control
 ## character with up and down and confirms with its accept button (A / Enter). The start
 ## button gets the focus once every human player has confirmed. Cancel (B / Esc) on a confirmed
 ## device takes the confirmation back; otherwise it leaves the menu.
-## In training only player 1 is picked, and a device has to control it.
+## In training and for a tournament only player 1 is picked, and a device has to control it.
 
 signal selection_confirmed
+
+## What the players are picked for
+enum Mode {
+	MATCH,
+	TRAINING,
+	TOURNAMENT,
+}
 
 enum Lane {
 	PLAYER1,
@@ -52,8 +59,9 @@ class DeviceEntry:
 @export var keyboard_icon: Texture2D
 @export var gamepad_icon: Texture2D
 @export var ready_badge_icon: Texture2D
-## Picks the player of a training instead of the players of a match.
-@export var training: bool = false
+## What the players are picked for: a match picks both, a training and a tournament the
+## player's own.
+@export var mode: Mode = Mode.MATCH
 
 var _players: Array[PlayerData] = []
 var _chart: Chart
@@ -80,8 +88,8 @@ var _cancel_consumed_device_ids: Array[int] = []
 
 
 func _ready() -> void:
-	if training:
-		_apply_training_layout()
+	if _picks_one_player():
+		_apply_one_player_layout()
 	_players = GlobalGameData.get_players()
 	_populate_option_buttons()
 	_apply_player_colors()
@@ -167,13 +175,22 @@ func _populate_option_buttons() -> void:
 	opponent_option_button.select(1)
 
 
-## Training: only the player's side, and its device lane.
-func _apply_training_layout() -> void:
-	title_label.text = "Training"
-	devices_hint_label.text = "Move a controller left to train with it, then confirm with A / Enter"
+func _picks_one_player() -> bool:
+	return mode != Mode.MATCH
+
+
+## Training and tournament: only the player's side, and its device lane.
+func _apply_one_player_layout() -> void:
+	if mode == Mode.TRAINING:
+		title_label.text = "Training"
+		devices_hint_label.text = ("Move a controller left to train with it, then confirm with A / Enter")
+		start_button.text = "Start Training"
+	else:
+		title_label.text = Tournament.NAME
+		devices_hint_label.text = "Move a controller left to play with it, then confirm with A / Enter"
+		start_button.text = "Start %s" % Tournament.NAME
 	player2_lane_label.hide()
 	opponent_select_column.hide()
-	start_button.text = "Start Training"
 
 
 func _apply_player_colors() -> void:
@@ -301,9 +318,9 @@ func _place_card(entry: DeviceEntry) -> void:
 	entry.icon.modulate = _lane_color(entry.lane)
 
 
-## Rightmost lane: the device lanes end at the middle in training.
+## Rightmost lane: the device lanes end at the middle when only player 1 is picked.
 func _last_lane() -> Lane:
-	return Lane.UNASSIGNED if training else Lane.PLAYER2
+	return Lane.UNASSIGNED if _picks_one_player() else Lane.PLAYER2
 
 
 func _get_lane_entry(lane: Lane) -> DeviceEntry:
@@ -352,9 +369,9 @@ func _control_text(lane: Lane) -> String:
 
 
 ## Focuses the start button once every human player confirmed (right away without humans). A
-## training can only start once a device controls the player.
+## training or a tournament can only start once a device controls the player.
 func _update_start_focus() -> void:
-	start_button.disabled = training and not _get_lane_entry(Lane.PLAYER1)
+	start_button.disabled = _picks_one_player() and not _get_lane_entry(Lane.PLAYER1)
 	if start_button.disabled:
 		start_button.release_focus()
 		return
@@ -495,7 +512,7 @@ func _plot_stats(player_data: PlayerData, opponent_data: PlayerData) -> void:
 	chart_properties.colors.background = Color(0.0, 0.0, 0.0, 0.0)
 
 	var functions: Array[Function] = [player_function]
-	if not training:
+	if not _picks_one_player():
 		functions.append(opponent_function)
 	_chart.plot(functions, chart_properties)
 
@@ -535,10 +552,13 @@ func _extract_chart_stats(stats: PlayerStatsProfile) -> Array:
 
 func _on_start_button_pressed() -> void:
 	var player: PlayerData = _players[player_option_button.selected]
-	if training:
-		GlobalGameData.set_training_player(player)
-	else:
-		GlobalGameData.set_match_players(player, _players[opponent_option_button.selected])
+	match mode:
+		Mode.MATCH:
+			GlobalGameData.set_match_players(player, _players[opponent_option_button.selected])
+		Mode.TRAINING:
+			GlobalGameData.set_training_player(player)
+		Mode.TOURNAMENT:
+			GlobalGameData.start_tournament(player)
 	GlobalGameData.set_match_input_devices(
 		_get_lane_device_id(Lane.PLAYER1), _get_lane_device_id(Lane.PLAYER2)
 	)

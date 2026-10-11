@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c5amxc2o40018"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_iscj4"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_fgbdc"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_c2775"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_2wedn"]
+
+[sub_resource type="Resource" id="Resource_1xb87"]
+script = ExtResource("1_iscj4")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_j7t7e"]
+script = ExtResource("2_fgbdc")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_l80gd"]
+script = ExtResource("4_2wedn")
+acceleration = 71.0
+top_speed = 71.0
+agility = 75.0
+stamina = 71.0
+forehand = 78.0
+backhand = 73.0
+serve_power = 72.0
+serve_accuracy = 73.0
+return_skill = 72.0
+volley_skill = 71.0
+slice_skill = 70.0
+topspin_skill = 74.0
+accuracy = 74.0
+consistency = 71.0
+composure = 75.0
+clutch = 72.0
+net_play = 70.0
+
+[resource]
+script = ExtResource("3_c2775")
+first_name = "Christopher"
+last_name = "O'Connell"
+age = 32
+country = "Australia"
+country_code = "AUS"
+height = 183
+rank = 117
+play_style = SubResource("Resource_j7t7e")
+stats = SubResource("Resource_l80gd")
+appearance = SubResource("Resource_1xb87")

@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://ds52q3sm0k1wf"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_bycer"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_cp2gx"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_s67pj"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_xm5a0"]
+
+[sub_resource type="Resource" id="Resource_gqoa2"]
+script = ExtResource("1_bycer")
+shirt_color = Color(0.95, 0.5, 0.15, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_ioc5y"]
+script = ExtResource("2_cp2gx")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_appht"]
+script = ExtResource("4_xm5a0")
+acceleration = 77.0
+top_speed = 75.0
+agility = 74.0
+stamina = 76.0
+forehand = 78.0
+backhand = 78.0
+serve_power = 77.0
+serve_accuracy = 74.0
+return_skill = 78.0
+volley_skill = 73.0
+slice_skill = 77.0
+topspin_skill = 75.0
+accuracy = 76.0
+consistency = 71.0
+timing = 78.0
+composure = 74.0
+focus = 75.0
+clutch = 74.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_s67pj")
+first_name = "Jaime"
+last_name = "Faria"
+age = 23
+country = "Portugal"
+country_code = "POR"
+height = 185
+rank = 60
+play_style = SubResource("Resource_ioc5y")
+stats = SubResource("Resource_appht")
+appearance = SubResource("Resource_gqoa2")

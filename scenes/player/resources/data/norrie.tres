@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dofby8xlpqv1x"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_syxfo"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6y3i3"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ku880"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_36y4j"]
+
+[sub_resource type="Resource" id="Resource_ofiqr"]
+script = ExtResource("1_syxfo")
+shirt_color = Color(0.4, 0.75, 0.75, 1)
+shorts_color = Color(0.95, 0.95, 0.95, 1)
+
+[sub_resource type="Resource" id="Resource_80qbk"]
+script = ExtResource("2_6y3i3")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_cf627"]
+script = ExtResource("4_36y4j")
+acceleration = 78.0
+top_speed = 75.0
+agility = 79.0
+stamina = 80.0
+forehand = 76.0
+backhand = 79.0
+serve_power = 74.0
+serve_accuracy = 77.0
+return_skill = 78.0
+volley_skill = 74.0
+slice_skill = 76.0
+topspin_skill = 78.0
+accuracy = 77.0
+consistency = 80.0
+timing = 80.0
+composure = 79.0
+focus = 78.0
+clutch = 76.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_ku880")
+first_name = "Cameron"
+last_name = "Norrie"
+age = 31
+country = "Great Britain"
+country_code = "GBR"
+height = 188
+hand = "L"
+rank = 40
+play_style = SubResource("Resource_80qbk")
+stats = SubResource("Resource_cf627")
+appearance = SubResource("Resource_ofiqr")

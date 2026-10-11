@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://p7yap8yu77o"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_khpjc"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_qr5pw"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_mk16o"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_uenso"]
+
+[sub_resource type="Resource" id="Resource_ntul8"]
+script = ExtResource("1_khpjc")
+shirt_color = Color(0.9, 0.45, 0.6, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_hvdoh"]
+script = ExtResource("2_qr5pw")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_i76hp"]
+script = ExtResource("4_uenso")
+acceleration = 80.0
+top_speed = 87.0
+agility = 81.0
+stamina = 82.0
+forehand = 78.0
+backhand = 79.0
+serve_power = 72.0
+serve_accuracy = 77.0
+return_skill = 84.0
+volley_skill = 80.0
+slice_skill = 77.0
+topspin_skill = 76.0
+accuracy = 76.0
+consistency = 82.0
+timing = 78.0
+composure = 80.0
+focus = 80.0
+clutch = 76.0
+net_play = 76.0
+
+[resource]
+script = ExtResource("3_mk16o")
+first_name = "Alejandro"
+last_name = "Davidovich Fokina"
+age = 27
+country = "Spain"
+country_code = "ESP"
+height = 183
+rank = 26
+play_style = SubResource("Resource_hvdoh")
+stats = SubResource("Resource_i76hp")
+appearance = SubResource("Resource_ntul8")

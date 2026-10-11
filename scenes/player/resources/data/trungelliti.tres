@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d0xpys7atm1yw"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ul3hb"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vsfc8"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_be547"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_pu7q0"]
+
+[sub_resource type="Resource" id="Resource_n0qbj"]
+script = ExtResource("1_ul3hb")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+
+[sub_resource type="Resource" id="Resource_4k8un"]
+script = ExtResource("2_vsfc8")
+shot_power = 0.65
+topspin = 0.75
+court_position = 0.4
+consistency = 0.82
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_1o242"]
+script = ExtResource("4_pu7q0")
+acceleration = 74.0
+top_speed = 72.0
+agility = 75.0
+stamina = 74.0
+forehand = 72.0
+backhand = 75.0
+serve_power = 71.0
+serve_accuracy = 75.0
+return_skill = 71.0
+volley_skill = 71.0
+slice_skill = 73.0
+topspin_skill = 73.0
+accuracy = 75.0
+consistency = 78.0
+timing = 75.0
+composure = 74.0
+focus = 74.0
+clutch = 74.0
+net_play = 67.0
+
+[resource]
+script = ExtResource("3_be547")
+first_name = "Marco"
+last_name = "Trungelliti"
+age = 36
+country = "Argentina"
+country_code = "ARG"
+height = 183
+rank = 90
+play_style = SubResource("Resource_4k8un")
+stats = SubResource("Resource_1o242")
+appearance = SubResource("Resource_n0qbj")

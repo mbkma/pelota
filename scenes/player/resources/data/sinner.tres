@@ -1,40 +1,40 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bp3wxjl6bi806"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
-[ext_resource type="Resource" uid="uid://bwtwfl37vp63u" path="res://scenes/player/resources/appearances/sinner.tres" id="1_pv02q"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
-[ext_resource type="Resource" uid="uid://dlknm0vi72mmj" path="res://scenes/player/resources/play_styles/sinner.tres" id="3_09isn"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/sinner.tres" id="1_pv02q"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="Resource" path="res://scenes/player/resources/play_styles/sinner.tres" id="3_09isn"]
 
 [sub_resource type="Resource" id="Resource_sinner_stats"]
 script = ExtResource("2")
-acceleration = 84.0
-top_speed = 86.0
-agility = 84.0
-stamina = 84.0
-forehand = 90.0
-backhand = 88.0
-serve_power = 85.0
-serve_accuracy = 82.0
-return_skill = 85.0
-volley_skill = 76.0
-slice_skill = 77.0
-topspin_skill = 86.0
-accuracy = 84.0
-consistency = 84.0
-timing = 86.0
-composure = 83.0
-focus = 85.0
-clutch = 82.0
-net_play = 74.0
+acceleration = 89.0
+top_speed = 91.0
+agility = 89.0
+stamina = 89.0
+forehand = 95.0
+backhand = 93.0
+serve_power = 90.0
+serve_accuracy = 87.0
+return_skill = 90.0
+volley_skill = 81.0
+slice_skill = 82.0
+topspin_skill = 91.0
+accuracy = 89.0
+consistency = 89.0
+timing = 91.0
+composure = 88.0
+focus = 90.0
+clutch = 87.0
+net_play = 79.0
 
 [resource]
 script = ExtResource("1")
 first_name = "Jannik"
 last_name = "Sinner"
+age = 25
 country = "Italy"
 country_code = "ITA"
-height = 188
-rank = 10
+height = 191
 play_style = ExtResource("3_09isn")
 stats = SubResource("Resource_sinner_stats")
 appearance = ExtResource("1_pv02q")

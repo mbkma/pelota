@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bnc2vhdddiaj2"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ffv76"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_suytq"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_cngui"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_lt6o8"]
+
+[sub_resource type="Resource" id="Resource_dcpdu"]
+script = ExtResource("1_ffv76")
+shirt_color = Color(0.9, 0.45, 0.6, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_r7mwy"]
+script = ExtResource("2_suytq")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_vuj8i"]
+script = ExtResource("4_lt6o8")
+acceleration = 79.0
+top_speed = 76.0
+agility = 76.0
+stamina = 82.0
+forehand = 80.0
+backhand = 80.0
+serve_power = 93.0
+serve_accuracy = 83.0
+return_skill = 78.0
+volley_skill = 84.0
+slice_skill = 79.0
+topspin_skill = 80.0
+accuracy = 82.0
+consistency = 77.0
+timing = 82.0
+composure = 82.0
+focus = 80.0
+clutch = 83.0
+net_play = 83.0
+
+[resource]
+script = ExtResource("3_cngui")
+first_name = "Jakub"
+last_name = "Mensik"
+age = 21
+country = "Czechia"
+country_code = "CZE"
+height = 193
+rank = 15
+play_style = SubResource("Resource_r7mwy")
+stats = SubResource("Resource_vuj8i")
+appearance = SubResource("Resource_dcpdu")

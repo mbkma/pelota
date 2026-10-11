@@ -10,6 +10,7 @@ extends Resource
 @export var height := 180
 @export var hand := "R"
 @export var backhand := 2
+## ATP singles ranking; 0 for a player without one (e.g. retired)
 @export var rank := 1
 ## Identity-layer play style profile used by tactical systems.
 @export var play_style: AiPlayStyle

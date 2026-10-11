@@ -1,40 +1,41 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dinwm2sqeiwa8"]
 
-[ext_resource type="Script" uid="uid://lol13m6x68fn" path="res://scenes/player/player_data.gd" id="1"]
-[ext_resource type="Resource" uid="uid://b0yum5g0l65r1" path="res://scenes/player/resources/appearances/rublev.tres" id="1_lksp7"]
-[ext_resource type="Script" uid="uid://cm16m50fsryb1" path="res://scenes/player/player_stats_profile.gd" id="2"]
-[ext_resource type="Resource" uid="uid://b5q65y0421jdl" path="res://scenes/player/resources/play_styles/rublev.tres" id="3_t55ec"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
+[ext_resource type="Resource" path="res://scenes/player/resources/appearances/rublev.tres" id="1_lksp7"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="Resource" path="res://scenes/player/resources/play_styles/rublev.tres" id="3_t55ec"]
 
 [sub_resource type="Resource" id="Resource_rublev_stats"]
 script = ExtResource("2")
-acceleration = 80.0
-top_speed = 84.0
-agility = 79.0
-stamina = 77.0
-forehand = 89.0
-backhand = 75.0
-serve_power = 87.0
-serve_accuracy = 74.0
-return_skill = 74.0
-volley_skill = 66.0
-slice_skill = 68.0
-topspin_skill = 72.0
-accuracy = 74.0
-consistency = 73.0
-timing = 76.0
-composure = 71.0
-focus = 73.0
-clutch = 74.0
+acceleration = 84.0
+top_speed = 88.0
+agility = 83.0
+stamina = 81.0
+forehand = 93.0
+backhand = 79.0
+serve_power = 91.0
+serve_accuracy = 78.0
+return_skill = 78.0
+volley_skill = 70.0
+slice_skill = 72.0
+topspin_skill = 76.0
+accuracy = 78.0
+consistency = 77.0
+timing = 80.0
+composure = 75.0
+focus = 77.0
+clutch = 78.0
+net_play = 64.0
 
 [resource]
 script = ExtResource("1")
 first_name = "Andrey"
 last_name = "Rublev"
-age = 24
+age = 28
 country = "Russia"
 country_code = "RUS"
 height = 188
-rank = 8
+rank = 23
 play_style = ExtResource("3_t55ec")
 stats = SubResource("Resource_rublev_stats")
 appearance = ExtResource("1_lksp7")

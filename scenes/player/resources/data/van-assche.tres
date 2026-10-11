@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://e88faih3u1t7"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_o62lv"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8qyvt"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_1q5nk"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ttlv2"]
+
+[sub_resource type="Resource" id="Resource_upkxw"]
+script = ExtResource("1_o62lv")
+shirt_color = Color(0.4, 0.75, 0.75, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+
+[sub_resource type="Resource" id="Resource_grj2j"]
+script = ExtResource("2_8qyvt")
+aggression = 0.35
+shot_power = 0.55
+topspin = 0.6
+court_position = 0.85
+consistency = 0.9
+preferred_pattern = 1
+
+[sub_resource type="Resource" id="Resource_7j2yi"]
+script = ExtResource("4_ttlv2")
+acceleration = 78.0
+top_speed = 84.0
+agility = 81.0
+stamina = 81.0
+forehand = 74.0
+backhand = 75.0
+serve_power = 68.0
+serve_accuracy = 77.0
+return_skill = 80.0
+volley_skill = 76.0
+slice_skill = 76.0
+topspin_skill = 76.0
+accuracy = 74.0
+consistency = 79.0
+timing = 78.0
+composure = 77.0
+focus = 74.0
+clutch = 78.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_1q5nk")
+first_name = "Luca"
+last_name = "Van Assche"
+age = 22
+country = "France"
+country_code = "FRA"
+height = 178
+rank = 45
+play_style = SubResource("Resource_grj2j")
+stats = SubResource("Resource_7j2yi")
+appearance = SubResource("Resource_upkxw")

@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://da3cwxhqh00d3"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_lcfjl"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_dtalj"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_3so23"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_pfr2v"]
+
+[sub_resource type="Resource" id="Resource_mty23"]
+script = ExtResource("1_lcfjl")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_nrhou"]
+script = ExtResource("2_dtalj")
+aggression = 0.8
+shot_power = 0.85
+topspin = 0.65
+court_position = -0.2
+consistency = 0.6
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_dn7lu"]
+script = ExtResource("4_pfr2v")
+acceleration = 77.0
+top_speed = 74.0
+agility = 79.0
+stamina = 77.0
+forehand = 79.0
+backhand = 75.0
+serve_power = 78.0
+serve_accuracy = 77.0
+return_skill = 78.0
+volley_skill = 75.0
+slice_skill = 81.0
+topspin_skill = 77.0
+accuracy = 76.0
+consistency = 74.0
+timing = 77.0
+composure = 77.0
+focus = 76.0
+clutch = 74.0
+net_play = 75.0
+
+[resource]
+script = ExtResource("3_3so23")
+first_name = "Denis"
+last_name = "Shapovalov"
+age = 27
+country = "Canada"
+country_code = "CAN"
+height = 185
+hand = "L"
+backhand = 1
+rank = 42
+play_style = SubResource("Resource_nrhou")
+stats = SubResource("Resource_dn7lu")
+appearance = SubResource("Resource_mty23")

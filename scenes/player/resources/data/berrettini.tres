@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dk1h6jstrl37q"]
+
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_b1ust"]
+[ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_3vaxl"]
+[ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wbgyr"]
+[ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_0sotr"]
+
+[sub_resource type="Resource" id="Resource_qoulc"]
+script = ExtResource("1_b1ust")
+shirt_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+
+[sub_resource type="Resource" id="Resource_xmnvj"]
+script = ExtResource("2_3vaxl")
+aggression = 0.75
+shot_power = 0.85
+topspin = 0.45
+court_position = -0.1
+consistency = 0.55
+preferred_pattern = 2
+
+[sub_resource type="Resource" id="Resource_lbrc2"]
+script = ExtResource("4_0sotr")
+acceleration = 78.0
+top_speed = 73.0
+agility = 72.0
+stamina = 76.0
+forehand = 75.0
+backhand = 75.0
+serve_power = 90.0
+serve_accuracy = 80.0
+return_skill = 69.0
+volley_skill = 78.0
+slice_skill = 77.0
+topspin_skill = 74.0
+accuracy = 76.0
+consistency = 75.0
+timing = 78.0
+composure = 77.0
+focus = 76.0
+clutch = 75.0
+net_play = 77.0
+
+[resource]
+script = ExtResource("3_wbgyr")
+first_name = "Matteo"
+last_name = "Berrettini"
+age = 30
+country = "Italy"
+country_code = "ITA"
+height = 196
+rank = 46
+play_style = SubResource("Resource_xmnvj")
+stats = SubResource("Resource_lbrc2")
+appearance = SubResource("Resource_qoulc")
