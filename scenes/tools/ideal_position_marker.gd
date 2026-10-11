@@ -1,11 +1,13 @@
-## Ground ring showing where the player should stand to meet the incoming ball, and a line along
-## the range it may meet the ball from (from the earliest to the latest contact). Its color shows
-## how well the player is positioned: far_color when far off, perfect_color when in place.
+## Ring painted on the court showing where the player should stand to meet the incoming ball,
+## and a line along the range it may meet the ball from (from the earliest to the latest
+## contact). Its color shows how well the player is positioned: far_color when far off,
+## perfect_color when in place.
 class_name IdealPositionMarker
 extends Node3D
 
-## Height (m) of the range line above the ground, and its shortest shown length (m)
-const RANGE_HEIGHT: float = 0.05
+## Height (m) of the range line above the ground (just over the court's lines, so it looks
+## painted on the court), and its shortest shown length (m)
+const RANGE_HEIGHT: float = 0.007
 const RANGE_MIN_LENGTH: float = 0.05
 
 @export var far_color: Color = Color(0.9, 0.2, 0.15, 0.85)

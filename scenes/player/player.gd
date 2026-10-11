@@ -42,6 +42,9 @@ const SET_SPEED: float = 1.0
 const FULL_READINESS_SET_TIME: float = 0.5
 ## A groundstroke swung while moving faster than this share of move_speed is hit on the run
 const RUNNING_STROKE_SPEED_SHARE: float = 0.5
+## Volume (dB) of the stroke sounds: the racket hits and grunts are heard loud and close, as
+## on a TV broadcast
+const STROKE_SOUND_DB: float = 6.0
 ## Seconds into a sound of stroke_sounds_running its racket hit is
 const RUNNING_HIT_TIME: float = 0.5
 ## Seconds a running stroke sound fades out over when the stroke misses the ball
@@ -261,7 +264,7 @@ func apply_movement(direction: Vector3, delta: float) -> void:
 	var body_yaw_target: float = _body_yaw_target()
 	model.turn_body_toward(body_yaw_target, delta)
 	model.animator.set_locomotion(_locomotion_velocity(velocity, body_yaw_target), delta)
-	model.shed_sweat(Vector2(velocity.x, velocity.z).length())
+	model.shed_sweat(Vector2(velocity.x, velocity.z).length(), get_stamina_ratio(), delta)
 	if not _state_machine.is_stroke_in_progress():
 		if direction.length() > 0:
 			_set_state(PlayerStateMachine.State.MOVING)
@@ -725,7 +728,7 @@ func play_stroke_sound(stroke: Stroke) -> void:
 func _play_stroke_sound(sound: AudioStream, from_position: float = 0.0) -> void:
 	if _stroke_sound_fade:
 		_stroke_sound_fade.kill()
-	audio_stream_player.volume_db = 0.0
+	audio_stream_player.volume_db = STROKE_SOUND_DB
 	audio_stream_player.stream = sound
 	audio_stream_player.play(from_position)
 
@@ -760,13 +763,19 @@ func set_active_ball(b: Ball) -> void:
 	controller.ball_changed(b)
 
 
-## Shows the aim and ideal position markers the controller reports. The ideal position marker
-## is colored by how far the player stands from the range it may meet the ball from.
+## `point` on the court's surface.
+static func _on_court(point: Vector3) -> Vector3:
+	return Vector3(point.x, 0.0, point.z)
+
+
+## Shows the aim and ideal position markers the controller reports, painted on the court. The
+## ideal position marker is colored by how far the player stands from the range it may meet the
+## ball from.
 func _update_controller_ui() -> void:
 	var ideal_position: Variant = controller.get_ideal_position()
 	ideal_position_marker.visible = ideal_position != null
 	if ideal_position != null:
-		ideal_position_marker.global_position = ideal_position
+		ideal_position_marker.global_position = _on_court(ideal_position)
 		var ideal_range: PackedVector3Array = controller.get_ideal_range()
 		var closest: Vector3 = ideal_position
 		if ideal_range.is_empty():
@@ -783,7 +792,7 @@ func _update_controller_ui() -> void:
 	var aim_position: Variant = controller.get_aim_marker_position()
 	ball_aim_marker.visible = aim_position != null
 	if aim_position != null:
-		ball_aim_marker.global_position = aim_position
+		ball_aim_marker.global_position = _on_court(aim_position)
 		ball_aim_marker.set_radius(controller.get_aim_marker_radius())
 		ball_aim_marker.set_highlighted(controller.is_aim_marker_highlighted())
 

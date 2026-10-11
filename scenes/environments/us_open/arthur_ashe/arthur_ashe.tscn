@@ -1,24 +1,24 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dvxofbtaogam4"]
 
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/courtside.res" id="1_rt6lh"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/bowl.res" id="2_wicjx"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/suites.res" id="3_ek4gg"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/facade.res" id="4_ldrxy"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/roof.res" id="5_goioe"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/roof_panels.res" id="6_wgwee"]
-[ext_resource type="Script" path="res://scenes/environments/stadium_seats.gd" id="7_ixm0k"]
-[ext_resource type="Resource" path="res://scenes/environments/us_open/arthur_ashe/seating.res" id="8_cnjq5"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/seat.res" id="9_ddiqa"]
-[ext_resource type="Shader" path="res://scenes/environments/us_open/arthur_ashe/video_board.gdshader" id="10_jd3fu"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/video_board_frames.res" id="11_ilu62"]
-[ext_resource type="Shader" path="res://scenes/environments/us_open/arthur_ashe/flag.gdshader" id="12_4i2f7"]
-[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/logos.res" id="13_fdmky"]
+[ext_resource type="ArrayMesh" uid="uid://bmu6s0p06x08t" path="res://scenes/environments/us_open/arthur_ashe/meshes/courtside.res" id="1_rt6lh"]
+[ext_resource type="ArrayMesh" uid="uid://ubsrhagmpe4m" path="res://scenes/environments/us_open/arthur_ashe/meshes/bowl.res" id="2_wicjx"]
+[ext_resource type="ArrayMesh" uid="uid://bsdil06o5ddu2" path="res://scenes/environments/us_open/arthur_ashe/meshes/suites.res" id="3_ek4gg"]
+[ext_resource type="ArrayMesh" uid="uid://cwr4lumla100x" path="res://scenes/environments/us_open/arthur_ashe/meshes/facade.res" id="4_ldrxy"]
+[ext_resource type="ArrayMesh" uid="uid://c731540hlgoky" path="res://scenes/environments/us_open/arthur_ashe/meshes/roof.res" id="5_goioe"]
+[ext_resource type="ArrayMesh" uid="uid://dlw1g0l8jx7c8" path="res://scenes/environments/us_open/arthur_ashe/meshes/roof_panels.res" id="6_wgwee"]
+[ext_resource type="Script" uid="uid://db61s4aqpnqx7" path="res://scenes/environments/stadium_seats.gd" id="7_ixm0k"]
+[ext_resource type="Resource" uid="uid://d75018yog1sm" path="res://scenes/environments/us_open/arthur_ashe/seating.res" id="8_cnjq5"]
+[ext_resource type="ArrayMesh" uid="uid://dq0aawxeu5i1g" path="res://scenes/environments/us_open/arthur_ashe/meshes/seat.res" id="9_ddiqa"]
+[ext_resource type="Shader" uid="uid://cvsbd8q1l01h5" path="res://scenes/environments/us_open/arthur_ashe/video_board.gdshader" id="10_jd3fu"]
+[ext_resource type="ArrayMesh" uid="uid://tp6gjwe0f70r" path="res://scenes/environments/us_open/arthur_ashe/meshes/video_board_frames.res" id="11_ilu62"]
+[ext_resource type="Shader" uid="uid://dp4w3dem8lekj" path="res://scenes/environments/us_open/arthur_ashe/flag.gdshader" id="12_4i2f7"]
+[ext_resource type="ArrayMesh" uid="uid://0hh445dfshqh" path="res://scenes/environments/us_open/arthur_ashe/meshes/logos.res" id="13_fdmky"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/cameras/broadcast_camera.tscn" id="14_isv01"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2ip3u"]
 render_priority = 0
 shader = ExtResource("10_jd3fu")
-shader_parameter/energy = null
+shader_parameter/energy = 1.3
 
 [sub_resource type="QuadMesh" id="QuadMesh_h8ou2"]
 material = SubResource("ShaderMaterial_2ip3u")

@@ -4,7 +4,10 @@
 class_name Umpire
 extends Node3D
 
-## Calls by key: the point score as "<player0 points>-<player1 points>" (TennisPoint values,
+## Seconds after a point before the umpire calls the score (shortest, longest)
+const SCORE_CALL_DELAY: Vector2 = Vector2(2.0, 4.0)
+
+## Calls by key: the point score as "<server's points>-<receiver's points>" (TennisPoint values,
 ## e.g. "1-2" for 15-30), "advantage" and "out"
 @export var umpire_sounds: Dictionary[String, AudioStream]
 
@@ -16,13 +19,15 @@ func say_fault() -> void:
 	_play(umpire_sounds["out"])
 
 
-## Announce the point score after a short delay (nothing at the start of a game)
+## Announces the point score from the server's side ("15-30": the server has 15) after a random
+## delay; nothing at the start of a game.
 func say_score(score: Score) -> void:
-	var points: Array[int] = score.points
+	var server: int = score.current_server
+	var points: Array[int] = [score.points[server], score.points[1 - server]]
 	if points[0] == Score.TennisPoint.LOVE and points[1] == Score.TennisPoint.LOVE:
 		return
 
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(randf_range(SCORE_CALL_DELAY.x, SCORE_CALL_DELAY.y)).timeout
 	# Let a call still going (e.g. "out") finish instead of cutting it off
 	if _audio_stream_player.playing:
 		await _audio_stream_player.finished

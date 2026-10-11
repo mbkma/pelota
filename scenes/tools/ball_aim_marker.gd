@@ -1,5 +1,5 @@
-## Ground marker for where a stroke is aimed. The disc shows the radius in which the ball
-## may land; the dot marks the aim point itself.
+## Marker painted on the court for where a stroke is aimed. The disc shows the radius in which
+## the ball may land; the dot marks the aim point itself.
 class_name BallAimMarker
 extends Node3D
 

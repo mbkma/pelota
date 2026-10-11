@@ -1,6 +1,8 @@
 // Sweat soaking through a shirt: darker patches on the chest and back, under the arms and around
 // the collar, drawn over the shirt (as the next pass of its material). They grow with `sweat` and
-// have uneven edges. Positions are in the shirt mesh's space (meters, y up).
+// have uneven edges. Positions are in the shirt mesh's space in its rest pose (meters, y up),
+// which the model stores per vertex in CUSTOM0, so the patches stay on the cloth as the player
+// moves (the vertex position itself is already posed).
 shader_type spatial;
 render_mode unshaded, blend_mul, depth_draw_never, cull_back, shadows_disabled;
 
@@ -14,7 +16,7 @@ uniform float start_size = 0.35;
 varying vec3 shirt_position;
 
 void vertex() {
-	shirt_position = VERTEX;
+	shirt_position = CUSTOM0.xyz;
 }
 
 // 1 inside an ellipsoid patch around `center` with `radius`, fading out at its edge.

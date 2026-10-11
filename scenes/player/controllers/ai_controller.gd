@@ -28,7 +28,7 @@ const NET_APPROACH_CHANCE_MAX: float = 0.55
 ## landing deep or wide (share of the half length or width), and fast (m/s) or with the
 ## opponent stretched (m from the landing point).
 const APPROACH_MIN_POSITIONING: float = 0.7
-const APPROACH_DEEP: float = 0.7
+const APPROACH_DEEP: float = 0.77
 const APPROACH_WIDE: float = 0.65
 const APPROACH_MIN_SPEED: float = 28.0
 const APPROACH_STRETCH_DISTANCE: float = 3.0

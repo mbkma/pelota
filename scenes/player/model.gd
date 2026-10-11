@@ -1,7 +1,7 @@
 ## Player model: appearance, animation and stroke clips (racket contact points). The body (rig
 ## and meshes) can turn away from the player's facing, e.g. to run backward; the stroke clips
 ## keep the player's facing. The longer the match, the more the player sweats: the skin gets wet
-## and shiny, the shirt soaks through and drops fly off the head when it runs.
+## and shiny, the shirt soaks through, and when it tires drops now and then fly off its head.
 class_name Model
 extends Node3D
 
@@ -18,10 +18,18 @@ const FULL_SWEAT_MATCH_TIME: float = 5400.0
 ## (see sweat_patches.gdshader).
 const SWEAT_SKIN_ROUGHNESS: float = 0.25
 const SWEAT_SKIN_CLEARCOAT: float = 0.6
-## Running speed (m/s) at which a fully sweating player sheds the most drops
+## Sweat drops fly off in short bursts, only from a tired player (stamina below
+## SWEAT_DROP_STAMINA) running: at most this many bursts per second (when exhausted, fully
+## sweating and running at SWEAT_DROP_SPEED m/s or faster), each this long (s)
+const SWEAT_DROP_STAMINA: float = 0.35
 const SWEAT_DROP_SPEED: float = 5.0
+const SWEAT_DROP_BURSTS: float = 0.6
+const SWEAT_DROP_BURST_TIME: float = 0.3
 ## How fast (rad/s) the body turns
 const BODY_TURN_SPEED: float = 10.0
+
+## Shirts with their rest positions for the sweat patches, by the appearance's shirt mesh
+static var _rest_position_meshes: Dictionary[ArrayMesh, ArrayMesh] = {}
 
 @export var animator: PlayerAnimator
 ## Racket held in the right hand of the rig.
@@ -38,6 +46,8 @@ var _stroke_clips: Array[StrokeClip] = []
 ## Rig root transform with the body facing the player's facing
 var _rig_base_transform: Transform3D
 
+## Seconds left of the current burst of sweat drops
+var _drop_burst_left: float = 0.0
 ## Skin material and its dry roughness, and the sweat patches drawn over the shirt
 var _skin_material: StandardMaterial3D
 var _dry_skin_roughness: float
@@ -121,7 +131,7 @@ func get_racket_contact_point(stroke: Stroke) -> Vector3:
 func load_appearance(player_appearance: PlayerAppearance) -> void:
 	appearance = player_appearance.merged_onto(BASE_APPEARANCE)
 	_body_mesh.mesh = appearance.body_mesh
-	_shirt_mesh.mesh = appearance.shirt_mesh
+	_shirt_mesh.mesh = _with_rest_positions(appearance.shirt_mesh)
 	_shorts_mesh.mesh = appearance.shorts_mesh
 	_shoes_mesh.mesh = appearance.shoes_mesh
 	_hair_mesh.mesh = appearance.hair_mesh
@@ -142,6 +152,35 @@ func load_appearance(player_appearance: PlayerAppearance) -> void:
 	set_sweat(sweat)
 
 
+## `mesh` with each vertex's rest position also in CUSTOM0, for the sweat patches (see
+## sweat_patches.gdshader), which have to follow the cloth when the player moves. Each shirt
+## is made once and shared.
+static func _with_rest_positions(mesh: ArrayMesh) -> ArrayMesh:
+	if _rest_position_meshes.has(mesh):
+		return _rest_position_meshes[mesh]
+	var result := ArrayMesh.new()
+	for surface in mesh.get_surface_count():
+		var arrays: Array = mesh.surface_get_arrays(surface)
+		var positions: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var rest := PackedFloat32Array()
+		rest.resize(positions.size() * 4)
+		for i in positions.size():
+			rest[i * 4] = positions[i].x
+			rest[i * 4 + 1] = positions[i].y
+			rest[i * 4 + 2] = positions[i].z
+		arrays[Mesh.ARRAY_CUSTOM0] = rest
+		var flags: int = (
+			(mesh.surface_get_format(surface) & Mesh.ARRAY_FLAG_USE_8_BONE_WEIGHTS)
+			| (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT)
+		)
+		result.add_surface_from_arrays(
+			mesh.surface_get_primitive_type(surface), arrays, [], {}, flags
+		)
+		result.surface_set_material(surface, mesh.surface_get_material(surface))
+	_rest_position_meshes[mesh] = result
+	return result
+
+
 ## Sweats as after `seconds` of match time.
 func sweat_after_match_time(seconds: float) -> void:
 	set_sweat(lerpf(START_SWEAT, 1.0, clampf(seconds / FULL_SWEAT_MATCH_TIME, 0.0, 1.0)))
@@ -155,10 +194,20 @@ func set_sweat(level: float) -> void:
 	_sweat_patches.set_shader_parameter("sweat", sweat)
 
 
-## Sheds sweat drops while running at `speed` (m/s): more the faster and the sweatier.
-func shed_sweat(speed: float) -> void:
-	_sweat_drops.amount_ratio = sweat * clampf(speed / SWEAT_DROP_SPEED, 0.0, 1.0)
-	_sweat_drops.emitting = _sweat_drops.amount_ratio > 0.0
+## Now and then sheds a burst of sweat drops while running at `speed` (m/s) tired
+## (`stamina_ratio` low): more often the more tired, the sweatier and the faster.
+func shed_sweat(speed: float, stamina_ratio: float, delta: float) -> void:
+	_drop_burst_left -= delta
+	if _drop_burst_left <= 0.0:
+		var tiredness: float = clampf(
+			inverse_lerp(SWEAT_DROP_STAMINA, 0.0, stamina_ratio), 0.0, 1.0
+		)
+		var rate: float = (
+			SWEAT_DROP_BURSTS * tiredness * sweat * clampf(speed / SWEAT_DROP_SPEED, 0.0, 1.0)
+		)
+		if randf() < rate * delta:
+			_drop_burst_left = SWEAT_DROP_BURST_TIME
+	_sweat_drops.emitting = _drop_burst_left > 0.0
 
 
 ## Gives a surface the texture (none for a plain color) tinted with `color`; returns its material.

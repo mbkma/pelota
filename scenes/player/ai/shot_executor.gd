@@ -54,7 +54,7 @@ const SLICE_ATTACK_FACTOR: float = 0.3
 ## Short angle cross court (see AiPointContext.is_angle): its target (normalized: width, depth),
 ## and the share of the rally speed and attack pace and the extra topspin that make it dip in
 ## short.
-const ANGLE_TARGET: Vector2 = Vector2(0.95, 0.55)
+const ANGLE_TARGET: Vector2 = Vector2(0.95, 0.6)
 const ANGLE_SPEED_FACTOR: float = 0.8
 const ANGLE_ATTACK_FACTOR: float = 0.5
 const ANGLE_TOPSPIN: float = 0.15
@@ -92,10 +92,10 @@ static func _normalized_target(context: AiPointContext) -> Vector2:
 		return Vector2(lane_sign * ANGLE_TARGET.x, ANGLE_TARGET.y)
 	match context.intent:
 		AiPointContext.ShotIntent.SAFE:
-			return Vector2(lane_sign * 0.38, 0.75)
+			return Vector2(lane_sign * 0.38, 0.82)
 		AiPointContext.ShotIntent.ATTACK:
-			return Vector2(lane_sign * 0.9, maxf(0.6, randf()))
-	return Vector2(lane_sign * 0.75, 0.85)
+			return Vector2(lane_sign * 0.9, lerpf(0.66, 0.95, randf()))
+	return Vector2(lane_sign * 0.75, 0.93)
 
 
 ## Serves go cross court into the service box: a first serve down the T, at the body or wide

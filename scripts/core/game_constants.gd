@@ -48,7 +48,7 @@ const VOLLEY_OPEN_COURT_AIM: float = 0.6
 
 ## Half width of the singles court (m)
 const COURT_WIDTH_HALF: float = 4.115
-## Distance of the baseline from the net (m)
-const COURT_LENGTH_HALF: float = 13.0
+## Distance of the baseline from the net (m), as on the court (see Court)
+const COURT_LENGTH_HALF: float = 11.885
 ## Distance of the service line from the net (m)
 const SERVICE_LINE: float = 6.40

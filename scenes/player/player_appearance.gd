@@ -9,7 +9,7 @@ extends Resource
 const UNSET_COLOR := Color(0, 0, 0, 0)
 
 @export var body_mesh: Mesh
-@export var shirt_mesh: Mesh
+@export var shirt_mesh: ArrayMesh
 @export var shorts_mesh: Mesh
 @export var shoes_mesh: Mesh
 @export var hair_mesh: Mesh

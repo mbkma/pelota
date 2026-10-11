@@ -556,8 +556,7 @@ scale_min = 0.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sweat"]
 transparency = 1
-albedo_color = Color(0.86, 0.92, 1, 0.65)
-metallic = 0.3
+albedo_color = Color(0.9, 0.95, 1, 0.18)
 roughness = 0.05
 
 [sub_resource type="SphereMesh" id="SphereMesh_sweat"]

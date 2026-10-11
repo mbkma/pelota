@@ -107,6 +107,7 @@ bones/134/rotation = Quaternion(-0.0005141345, -0.15676466, -0.17959201, 0.97117
 bones/135/rotation = Quaternion(0.06424873, 0.69579357, -0.3404871, 0.6291359)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
+bus = &"SFX"
 
 [node name="IdealPositionMarker" parent="." unique_id=1093858306 instance=ExtResource("16_ideal")]
 
