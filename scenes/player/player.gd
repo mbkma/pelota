@@ -76,6 +76,16 @@ const HIGH_VOLLEY_SPIN_FACTOR: float = 0.3
 const EARLY_PACE_TRANSFER: float = 0.15
 const EARLY_CONTROL_RISK: float = 0.3
 const LATE_ATTACK_SHARE: float = 0.5
+## A fast ball is hard to control: from FAST_BALL_SPEED.x (m/s at contact; a rally ball arrives at
+## ~10-14 m/s) it takes away control, at FAST_BALL_SPEED.y (a hard first serve) up to
+## FAST_BALL_CONTROL_LOSS of it, for the least and for the most precise player (for a return, by
+## its return skill). A big serve gets a weak return back: short, slower and scattered.
+const FAST_BALL_SPEED: Vector2 = Vector2(13.0, 20.0)
+const FAST_BALL_CONTROL_LOSS: Vector2 = Vector2(0.7, 0.35)
+## Seconds after contact a player starts recovering, still in the follow-through: in tracking of
+## the Australian Open 2019 final the players are back within ~1.3 m of the middle of the court
+## by the time the opponent hits.
+const RECOVERY_DELAY: float = 0.25
 ## Height (m) by which strokes and serves aim to pass over the net cord
 const STROKE_NET_CLEARANCE: float = 0.15
 const SERVE_NET_CLEARANCE: float = 0.03
@@ -257,7 +267,14 @@ func _halt() -> void:
 ## Apply movement in given direction
 func apply_movement(direction: Vector3, delta: float) -> void:
 	velocity = _movement.tick(
-		direction, _body_facing(), stats, get_stamina_ratio(), move_speed, acceleration, friction
+		delta,
+		direction,
+		_body_facing(),
+		stats,
+		get_stamina_ratio(),
+		move_speed,
+		acceleration,
+		friction
 	)
 	move_and_slide()
 
@@ -347,10 +364,10 @@ func cancel_movement() -> void:
 	_movement.cancel()
 
 
-## Move to defensive position after stroke animation finishes, unless the player already
-## moves to meet the next ball by then.
+## Moves to a defensive position RECOVERY_DELAY seconds after contact, still in the
+## follow-through, unless the player already moves to meet the next ball by then.
 func move_to_defensive_position(target_position: Vector3) -> void:
-	await stroke_finished
+	await get_tree().create_timer(RECOVERY_DELAY, false).timeout
 	if queued_stroke:
 		return
 	request_move_to(target_position)
@@ -464,7 +481,7 @@ func _body_travel(seconds: float) -> Vector3:
 
 ## How far (m) the ball passes from the racket contact point during this physics tick.
 func _contact_distance(contact_point: Vector3) -> float:
-	var travel: Vector3 = ball.velocity / Engine.physics_ticks_per_second
+	var travel: Vector3 = ball.velocity * get_physics_process_delta_time()
 	var closest: Vector3 = Geometry3D.get_closest_point_to_segment(
 		contact_point, ball.global_position - travel, ball.global_position + travel
 	)
@@ -604,6 +621,7 @@ func _on_stroke_contact() -> void:
 			stats.shot_control01(get_stamina_ratio())
 		)
 		control *= 1.0 - pressure * control_loss
+		control *= 1.0 - _fast_ball_control_loss()
 		attack_share *= 1.0 - pressure
 		var early: float = ContactWindow.early_share(stroke.earliness)
 		control *= (
@@ -613,6 +631,15 @@ func _on_stroke_contact() -> void:
 		stroke.stroke_power += ball.velocity.length() * EARLY_PACE_TRANSFER * early * control
 	_apply_contact_quality(stroke, control, attack_share)
 	_hit_ball(stroke)
+
+
+## Share of the control the incoming ball's pace takes away (see FAST_BALL_SPEED).
+func _fast_ball_control_loss() -> float:
+	var pace: float = clampf(
+		inverse_lerp(FAST_BALL_SPEED.x, FAST_BALL_SPEED.y, ball.velocity.length()), 0.0, 1.0
+	)
+	var precision: float = stats.rally_precision01(get_stamina_ratio(), is_returning_serve(), false)
+	return pace * lerpf(FAST_BALL_CONTROL_LOSS.x, FAST_BALL_CONTROL_LOSS.y, precision)
 
 
 ## Execute ball hit with given stroke

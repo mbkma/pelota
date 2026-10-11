@@ -1,5 +1,6 @@
 ## The stadium: court, player start positions, serve clocks, serve speed and match time panels,
-## the player benches with their spare rackets, the courtside TV cameras and the match cameras.
+## the player benches with their spare rackets, the courtside TV cameras (one on each player, one
+## on the ball) and the match cameras.
 class_name Stadium
 extends Node3D
 
@@ -34,6 +35,7 @@ const SERVE_CLOCK_SECONDS: float = 25.0
 @onready var _time_label: Label3D = $RolexClock/Time
 @onready var _front_player_camera: TargetTracker = $FrontPlayerCamera
 @onready var _back_player_camera: TargetTracker = $BackPlayerCamera
+@onready var _ball_camera: TargetTracker = $BallCamera
 @onready
 var _bench_rackets: Array[Array] = [$Player1Bench.get_children(), $Player2Bench.get_children()]
 
@@ -63,6 +65,12 @@ func show_match_time(elapsed_seconds: float) -> void:
 func track_players(front_player: Player, back_player: Player) -> void:
 	_front_player_camera.target = front_player
 	_back_player_camera.target = back_player
+
+
+## Points the courtside ball camera at `target`: the ball during a point, the server between
+## points.
+func aim_ball_camera(target: Node3D) -> void:
+	_ball_camera.target = target
 
 
 ## Gives the rackets on each player's bench the player's racket look (`players` in team order).

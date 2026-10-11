@@ -30,13 +30,18 @@ const OUT_OF_POSITION_START: float = 0.8
 const OUT_OF_POSITION_FULL: float = 2.8
 ## Bounce depth (m from the net) from which an incoming ball is short, and from which fully; and
 ## its pace (m/s off the opponent's racket) from which it is weak, and from which fully. A short
-## ball is a chance, a short and weak one a full chance; a serve, always short, is none.
-const SHORT_BOUNCE_START: float = 9.0
-const SHORT_BOUNCE_FULL: float = 6.5
+## ball is a chance, a short and weak one a full chance; a serve, always short, is none. Hawk-Eye
+## tracked rally balls bounce ~8 m from the net (3.7 m inside the baseline); a short ball lands
+## around the service line.
+const SHORT_BOUNCE_START: float = 7.5
+const SHORT_BOUNCE_FULL: float = 5.5
 const WEAK_PACE_START: float = 27.0
 const WEAK_PACE_FULL: float = 20.0
 ## The player reaches the ball from this far (m) away.
 const REACH: float = 0.8
+## A ball met inside the service line below ATTACK_HEIGHT.x (m) has to be lifted over the net and
+## cannot be attacked (e.g. a drop shot); fully from ATTACK_HEIGHT.y on, about the net cord.
+const ATTACK_HEIGHT: Vector2 = Vector2(0.5, 0.9)
 
 var player: Player
 var play_style: AiPlayStyle
@@ -63,6 +68,9 @@ var ball_side: BallSide = BallSide.FOREHAND
 ## How much of a chance the incoming ball gives, in [0, 1]: a short ball can be attacked or
 ## angled away (see SHORT_BOUNCE_START).
 var opportunity: float = 0.0
+## How far the ball can be attacked where it is met, in [0, 1]: not when it is met low near the
+## net (see ATTACK_HEIGHT)
+var attackable: float = 1.0
 ## How much a deep incoming ball pushes the player back, in [0, 1] (see Player.depth_pressure)
 var depth_pressure: float = 0.0
 var intent: ShotIntent = ShotIntent.NEUTRAL
@@ -95,6 +103,10 @@ func _init(target_player: Player, step: TrajectoryStep) -> void:
 	)
 	var run: Vector3 = to_ball - to_ball.limit_length(REACH)
 	stretch = target_player.time_to_reach(player_position + run) / maxf(step.time, 0.001)
+	if absf(ball_position.z) < GameConstants.SERVICE_LINE:
+		attackable = clampf(
+			inverse_lerp(ATTACK_HEIGHT.x, ATTACK_HEIGHT.y, ball_position.y), 0.0, 1.0
+		)
 	if not step.is_volley_contact():
 		var is_return: bool = target_player.is_returning_serve()
 		var bounce_depth: float = absf(_bounce_point(target_player.ball).z)
@@ -107,7 +119,7 @@ func _init(target_player: Player, step: TrajectoryStep) -> void:
 		var weak: float = clampf(
 			inverse_lerp(WEAK_PACE_START, WEAK_PACE_FULL, incoming_ball_speed), 0.0, 1.0
 		)
-		opportunity = short * lerpf(0.5, 1.0, weak)
+		opportunity = short * lerpf(0.5, 1.0, weak) * attackable
 
 
 ## Looks where the opponent stands now: how far out of position it is and where the open court

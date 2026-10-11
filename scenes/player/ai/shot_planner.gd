@@ -6,10 +6,13 @@ class_name ShotPlanner
 extends RefCounted
 
 ## Chance that a fully deep incoming ball is played safe; a deep ball is not attacked.
-const DEEP_BALL_SAFE_CHANCE: float = 0.75
-## A player needing more than this share of the time until contact to get to the ball is
-## stretched and plays safe.
-const STRETCHED: float = 0.85
+const DEEP_BALL_SAFE_CHANCE: float = 0.5
+## A player needing more than this share of the time until contact to get to the ball (from a
+## standstill, see AiPointContext.stretch) is stretched and plays safe: about one ball in seven.
+const STRETCHED: float = 1.2
+## Incoming pace (m/s off the opponent's racket) of a ball the player can only defend: around the
+## fastest tenth of Hawk-Eye tracked rally balls (the median is ~35 m/s).
+const DEFENSIVE_PACE: float = 42.0
 ## Attack chance on a full chance (a short ball), and how much an opponent fully out of position
 ## adds to it.
 const OPPORTUNITY_ATTACK_CHANCE: float = 0.9
@@ -45,10 +48,11 @@ static func _choose_intent(context: AiPointContext) -> AiPointContext.ShotIntent
 	if _is_defensive_ball(context) or randf() < context.depth_pressure * DEEP_BALL_SAFE_CHANCE:
 		return AiPointContext.ShotIntent.SAFE
 
-	var attack_probability: float = lerpf(0.2, 0.6, context.play_style.aggression)
+	var attack_probability: float = lerpf(0.15, 0.45, context.play_style.aggression)
 	attack_probability = lerpf(attack_probability, OPPORTUNITY_ATTACK_CHANCE, context.opportunity)
 	attack_probability += OUT_OF_POSITION_ATTACK_CHANCE * context.opponent_out_of_position
 	attack_probability *= 1.0 - context.depth_pressure
+	attack_probability *= context.attackable
 
 	return (
 		AiPointContext.ShotIntent.ATTACK
@@ -116,6 +120,6 @@ static func _plays_angle(context: AiPointContext) -> bool:
 static func _is_defensive_ball(context: AiPointContext) -> bool:
 	return (
 		context.stretch > STRETCHED
-		or context.incoming_ball_speed > 35.0
+		or context.incoming_ball_speed > DEFENSIVE_PACE
 		or context.player_stamina_ratio < 0.32
 	)

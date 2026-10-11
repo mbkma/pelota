@@ -8,6 +8,22 @@ extends Node
 ## The idle sounds crossfade into each other, and the applause plays over them while they are
 ## turned down (the applause has its own crowd noise), so no sound is heard starting or ending.
 ## During the changeover after a set the crowd sounds like a changeover instead.
+## Most spectators follow the ball with their heads (see the crowd shader); without a ball in play
+## they look at the court.
+## Each section of seats is split into small blocks (see CrowdBlock), so spectators far from the
+## camera are drawn with less detailed meshes than those near it, also when the camera stands in
+## the stands. The crowd's detail (a graphics setting) thins out the crowd, picks less detailed
+## meshes sooner and stops the heads following the ball.
+
+enum Detail { LOW, MEDIUM, HIGH, ULTRA }
+
+## Share of the spectators kept, how much detail their meshes keep (see CrowdBlock.set_lod_bias)
+## and whether they follow the ball with their heads, per Detail
+const DETAIL_DENSITY: Array[float] = [0.5, 0.75, 1.0, 1.0]
+const DETAIL_LOD_BIAS: Array[float] = [0.5, 0.75, 1.0, 2.0]
+const DETAIL_HEADS_FOLLOW: Array[bool] = [false, true, true, true]
+## Size (m) of the squares (seen from above) the sections are split into blocks by
+const BLOCK_SIZE: float = 10.0
 
 ## Excitement from which the applause is medium and big instead of short
 const MEDIUM_CHEER_EXCITEMENT: float = 0.35
@@ -29,6 +45,10 @@ const SILENT_DB: float = -60.0
 ## Share of spectators that cheer for the least and the most exciting point
 const CHEER_SHARE_CALM: float = 0.15
 const CHEER_SHARE_EXCITED: float = 1.0
+## Where the spectators look without a ball in play: the middle of the court
+const COURT_LOOK_TARGET: Vector3 = Vector3(0.0, 1.0, 0.0)
+## How fast (1/s) the heads catch up with the ball: they follow it closely, with a short lag
+const LOOK_FOLLOW_RATE: float = 10.0
 
 @export var config: CrowdAudioConfig
 ## Seats of the stadium, and who sits on them
@@ -42,11 +62,23 @@ const CHEER_SHARE_EXCITED: float = 1.0
 			spectators.changed.connect(_seat_spectators)
 ## Whether the crowd plays its idle ambience (off where other music plays, e.g. menus)
 @export var play_ambience: bool = true
+@export var detail: Detail = Detail.HIGH:
+	set(value):
+		var reseat: bool = DETAIL_DENSITY[value] != DETAIL_DENSITY[detail]
+		detail = value
+		if not is_node_ready():
+			return
+		if reseat:
+			_seat_spectators()
+		_apply_detail()
 
 ## Seconds of the crowd's clock
 var _time: float = 0.0
 ## Materials of the spectators, which animate by the clock
 var _materials: Array[ShaderMaterial] = []
+## Ball the spectators follow (null while none is in play) and where they look
+var _ball: Ball
+var _look_target: Vector3 = COURT_LOOK_TARGET
 var _blocks: Array[CrowdBlock] = []
 var _photographers: CrowdBlock
 ## Which of the ambience players plays the current idle sound
@@ -71,9 +103,10 @@ var _cheer_count: int = 0
 
 
 func _ready() -> void:
-	_seat_spectators()
 	for character in spectators.characters:
 		_materials.append(character.get_material())
+	_seat_spectators()
+	_apply_detail()
 	if Engine.is_editor_hint() or not play_ambience:
 		return
 	_play_next_idle_sound()
@@ -81,8 +114,16 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
+	var target: Vector3 = _ball.global_position if is_instance_valid(_ball) else COURT_LOOK_TARGET
+	_look_target = _look_target.lerp(target, 1.0 - exp(-LOOK_FOLLOW_RATE * delta))
 	for material in _materials:
 		material.set_shader_parameter(&"crowd_time", _time)
+		material.set_shader_parameter(&"look_target", _look_target)
+
+
+## Makes the spectators follow `ball` with their heads; null when no ball is in play.
+func follow_ball(ball: Ball) -> void:
+	_ball = ball
 
 
 ## Cheers after a point. `excitement` in [0, 1] sets the applause, its volume and how many
@@ -123,13 +164,36 @@ func _seat_spectators() -> void:
 	_blocks.clear()
 	if _photographers:
 		_photographers.free()
+	var occupancy: float = spectators.occupancy * DETAIL_DENSITY[detail]
 	for i in seating.sections.size():
-		var block := CrowdBlock.new(spectators, seating.sections[i], spectators.occupancy, i)
-		add_child(block)
-		_blocks.append(block)
+		var blocks: Array[PackedVector4Array] = _split_into_blocks(seating.sections[i])
+		for j in blocks.size():
+			var block := CrowdBlock.new(spectators, blocks[j], occupancy, i * 100 + j)
+			add_child(block)
+			_blocks.append(block)
 	# The photographers are all there, and do not cheer.
 	_photographers = CrowdBlock.new(spectators, seating.photographers, 1.0, -1)
 	add_child(_photographers)
+
+
+func _apply_detail() -> void:
+	for block: CrowdBlock in _blocks + [_photographers]:
+		block.set_lod_bias(DETAIL_LOD_BIAS[detail])
+	for material in _materials:
+		material.set_shader_parameter(&"heads_follow", DETAIL_HEADS_FOLLOW[detail])
+
+
+## `seats` split by the BLOCK_SIZE squares they are in.
+static func _split_into_blocks(seats: PackedVector4Array) -> Array[PackedVector4Array]:
+	var squares: Dictionary[Vector2i, PackedVector4Array] = {}
+	for seat in seats:
+		var square := Vector2i(floori(seat.x / BLOCK_SIZE), floori(seat.z / BLOCK_SIZE))
+		if not squares.has(square):
+			squares[square] = PackedVector4Array()
+		squares[square].append(seat)
+	var blocks: Array[PackedVector4Array] = []
+	blocks.assign(squares.values())
+	return blocks
 
 
 ## The players sit down for the changeover after a set: the crowd sounds like a changeover.

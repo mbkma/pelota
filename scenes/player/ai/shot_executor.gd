@@ -14,33 +14,54 @@ const VOLLEY_DEPTH_NEUTRAL_HIGH_BALL: float = 7.0
 ## Chance that a safe backhand is played as a slice.
 const SAFE_SLICE_CHANCE: float = 0.45
 
-## Largest landing error (m) of a rally shot for a player with no precision.
-const AI_RALLY_ERROR_RADIUS: float = 1.8
-## Landing error radius (m) of a first and of a second serve, from no to full precision. A
-## first serve goes for the lines and goes in ~60-65% of the time; a second serve keeps a safe
-## margin (~90% in).
-const FIRST_SERVE_ERROR_RADIUS: Vector2 = Vector2(2.0, 1.35)
-const SECOND_SERVE_ERROR_RADIUS: Vector2 = Vector2(1.6, 1.0)
-## First serve targets (normalized x: 0 = T, 1 = sideline) with their chances: down the T, at
-## the body and wide; and their depth (share of the service line). A second serve goes to the
-## body, safely inside the lines.
-const FIRST_SERVE_T: float = 0.12
+## Spread (standard deviation, m) of the landing point of a rally shot from no to full
+## precision, across and along the court. In Hawk-Eye tracking of the Australian Open ~15% of
+## rally shots miss, 53% of the misses long, 31% wide and 16% into the net (a ball aimed short
+## at the same pace flies too low).
+const RALLY_ERROR_SPREAD_WIDTH: Vector2 = Vector2(1.8, 0.8)
+const RALLY_ERROR_SPREAD_DEPTH: Vector2 = Vector2(2.6, 1.2)
+## How much the spread grows (share) with the difficulty of the incoming ball (see
+## _difficulty), and its share for a safe and for an attacking shot.
+const DIFFICULTY_ERROR_GROWTH: float = 1.5
+const SAFE_ERROR_FACTOR: float = 0.8
+const ATTACK_ERROR_FACTOR: float = 1.15
+## Incoming pace (m/s off the opponent's racket) from which a ball is hard to control, and from
+## which fully (Hawk-Eye tracked rally balls leave the racket at ~35 m/s); and the
+## stretch (see AiPointContext.stretch) from which getting to it is.
+const HARD_PACE: Vector2 = Vector2(32.0, 45.0)
+const HARD_STRETCH: Vector2 = Vector2(0.8, 1.4)
+## Spread (standard deviation, m) of the landing point of a first and of a second serve, from
+## no to full precision. In the tracking data a first serve goes for the lines and goes in ~64%
+## of the time; a second serve keeps a margin and misses ~7% of the time.
+const FIRST_SERVE_ERROR_SPREAD: Vector2 = Vector2(1.05, 0.7)
+const SECOND_SERVE_ERROR_SPREAD: Vector2 = Vector2(1.2, 0.78)
+## Serve targets (normalized x: 0 = T, 1 = sideline): down the T, at the body and wide. A first
+## serve goes down the T or wide (45% each in the tracking data, 9% at the body), a second serve
+## to all three alike (36% T, 35% body, 29% wide), less close to the lines. Their depth (share of
+## the service line): a first serve lands ~1.2 m inside the service line, a second ~1.5 m.
+## A precise server aims its first serve closer to the lines: from the least to the most precise.
+const FIRST_SERVE_T: Vector2 = Vector2(0.2, 0.06)
 const FIRST_SERVE_BODY: float = 0.5
-const FIRST_SERVE_WIDE: float = 0.88
-const FIRST_SERVE_T_CHANCE: float = 0.4
-const FIRST_SERVE_BODY_CHANCE: float = 0.2
-const FIRST_SERVE_DEPTH: float = 0.91
-const SECOND_SERVE_X: float = 0.45
-const SECOND_SERVE_DEPTH: float = 0.88
+const FIRST_SERVE_WIDE: Vector2 = Vector2(0.8, 0.94)
+const FIRST_SERVE_T_CHANCE: float = 0.45
+const FIRST_SERVE_BODY_CHANCE: float = 0.09
+const FIRST_SERVE_DEPTH: float = 0.87
+const SECOND_SERVE_T: float = 0.22
+const SECOND_SERVE_BODY: float = 0.5
+const SECOND_SERVE_WIDE: float = 0.75
+const SECOND_SERVE_T_CHANCE: float = 0.36
+const SECOND_SERVE_BODY_CHANCE: float = 0.35
+const SECOND_SERVE_DEPTH: float = 0.78
 
 ## Share of the serve speed (GameConstants.SERVE_SPEED) a second serve keeps (ATP average
 ## ~95 mph) and the random variation per serve.
 const SECOND_SERVE_SPEED_FACTOR: float = 0.8
 const SERVE_SPEED_VARIATION: float = 0.05
-## Rally speed (m/s) of a groundstroke from the weakest to the best stroke (ATP averages:
-## forehand ~115 km/h, backhand ~105 km/h); the play style's shot power adds up to
-## STYLE_RALLY_SPEED.
-const RALLY_SPEED: Vector2 = Vector2(27.0, 31.5)
+## Rally speed (m/s) of a groundstroke from the weakest to the best stroke; the play style's
+## shot power adds up to STYLE_RALLY_SPEED. With the rally topspin (see _shot_spin) it gives the
+## arcs of Hawk-Eye tracked rally balls (Australian Open): ~0.55 m over the cord, peaking at
+## ~1.7 m, ~125-130 km/h off the racket.
+const RALLY_SPEED: Vector2 = Vector2(31.5, 35.0)
 const STYLE_RALLY_SPEED: float = 1.5
 ## Share of the rally speed of a safe shot and of a slice.
 const SAFE_SPEED_FACTOR: float = 0.92
@@ -51,6 +72,14 @@ const NEUTRAL_ATTACK: Vector2 = Vector2(3.0, 5.0)
 const ATTACK_ATTACK: Vector2 = Vector2(9.0, 13.0)
 ## Share of the attack pace a slice keeps.
 const SLICE_ATTACK_FACTOR: float = 0.3
+## Rally targets (normalized: width, depth) of a safe and a neutral groundstroke, and the width
+## and depth range of an attack. With the landing error (see _apply_consistency_error) they
+## spread like Hawk-Eye tracked rally balls: half land within 2.3 m of the middle, nine in ten
+## within 3.5 m, and half 3.7 m or more inside the baseline.
+const SAFE_TARGET: Vector2 = Vector2(0.35, 0.69)
+const NEUTRAL_TARGET: Vector2 = Vector2(0.6, 0.76)
+const ATTACK_TARGET_WIDTH: float = 0.8
+const ATTACK_TARGET_DEPTH: Vector2 = Vector2(0.62, 0.85)
 ## Short angle cross court (see AiPointContext.is_angle): its target (normalized: width, depth),
 ## and the share of the rally speed and attack pace and the extra topspin that make it dip in
 ## short.
@@ -92,22 +121,31 @@ static func _normalized_target(context: AiPointContext) -> Vector2:
 		return Vector2(lane_sign * ANGLE_TARGET.x, ANGLE_TARGET.y)
 	match context.intent:
 		AiPointContext.ShotIntent.SAFE:
-			return Vector2(lane_sign * 0.38, 0.82)
+			return Vector2(lane_sign * SAFE_TARGET.x, SAFE_TARGET.y)
 		AiPointContext.ShotIntent.ATTACK:
-			return Vector2(lane_sign * 0.9, lerpf(0.66, 0.95, randf()))
-	return Vector2(lane_sign * 0.75, 0.93)
+			return Vector2(
+				lane_sign * ATTACK_TARGET_WIDTH,
+				lerpf(ATTACK_TARGET_DEPTH.x, ATTACK_TARGET_DEPTH.y, randf())
+			)
+	return Vector2(lane_sign * NEUTRAL_TARGET.x, NEUTRAL_TARGET.y)
 
 
-## Serves go cross court into the service box: a first serve down the T, at the body or wide
-## near the lines, a second serve safely to the body.
+## Serves go cross court into the service box, down the T, at the body or wide: a first serve
+## close to the lines, a second serve with more margin.
 static func _serve_target(context: AiPointContext) -> Vector2:
 	var box_side: float = -signf(context.player_position.x)
-	if context.is_second_serve:
-		return Vector2(box_side * SECOND_SERVE_X, SECOND_SERVE_DEPTH)
 	var roll: float = randf()
-	var x: float = FIRST_SERVE_WIDE
+	if context.is_second_serve:
+		var second_x: float = SECOND_SERVE_WIDE
+		if roll < SECOND_SERVE_T_CHANCE:
+			second_x = SECOND_SERVE_T
+		elif roll < SECOND_SERVE_T_CHANCE + SECOND_SERVE_BODY_CHANCE:
+			second_x = SECOND_SERVE_BODY
+		return Vector2(box_side * second_x, SECOND_SERVE_DEPTH)
+	var precision: float = context.player.stats.serve_accuracy01(context.player_stamina_ratio)
+	var x: float = lerpf(FIRST_SERVE_WIDE.x, FIRST_SERVE_WIDE.y, precision)
 	if roll < FIRST_SERVE_T_CHANCE:
-		x = FIRST_SERVE_T
+		x = lerpf(FIRST_SERVE_T.x, FIRST_SERVE_T.y, precision)
 	elif roll < FIRST_SERVE_T_CHANCE + FIRST_SERVE_BODY_CHANCE:
 		x = FIRST_SERVE_BODY
 	return Vector2(box_side * x, FIRST_SERVE_DEPTH)
@@ -241,7 +279,12 @@ static func _shot_spin(
 	var side_sign: float = -1.0 if normalized_x < 0.0 else 1.0
 
 	if stroke_type == Stroke.StrokeType.SERVE:
-		var serve_topspin: float = lerpf(0.55, 0.9, style_topspin)
+		# A first serve is hit flat or sliced, a second serve with kick (more topspin).
+		var serve_topspin: float = (
+			lerpf(0.6, 0.9, style_topspin)
+			if context.is_second_serve
+			else lerpf(0.2, 0.45, style_topspin)
+		)
 		var serve_side: float = side_sign * lerpf(0.08, 0.3, context.play_style.aggression)
 		return Vector3(serve_side, serve_topspin, 0.0)
 	if stroke_type == Stroke.StrokeType.BACKHAND_SLICE:
@@ -254,39 +297,60 @@ static func _shot_spin(
 	var topspin_skill: float = context.player.stats.spin_control01(
 		stroke_type, context.player_stamina_ratio
 	)
-	var intent_spin_bonus: float = 0.3
+	var intent_spin_bonus: float = 0.2
 	match context.intent:
 		AiPointContext.ShotIntent.SAFE:
-			intent_spin_bonus = 0.6
+			intent_spin_bonus = 0.45
 		AiPointContext.ShotIntent.ATTACK:
-			intent_spin_bonus = 0.12
-	var topspin: float = lerpf(0.46, 0.88, topspin_skill) + style_topspin * intent_spin_bonus
+			intent_spin_bonus = 0.08
+	var topspin: float = lerpf(0.4, 0.68, topspin_skill) + style_topspin * intent_spin_bonus
 	if context.is_angle:
 		topspin += ANGLE_TOPSPIN
 	return Vector3(0.0, clampf(topspin, -1.0, 1.0), 0.0)
 
 
-## Misses the intended target by a random offset inside a radius set by the player's
-## precision (serve accuracy, or shot control with return and volley skill) and play style.
+## Misses the intended target by a normally distributed offset: its spread is set by the
+## player's precision (serve accuracy, or shot control with return and volley skill) and play
+## style, and for a rally shot by the intent and how hard the incoming ball is.
 static func _apply_consistency_error(intended_target: Vector3, context: AiPointContext) -> Vector3:
 	var stats: PlayerRuntimeStats = context.player.stats
-	var precision: float
-	var radius_range := Vector2(AI_RALLY_ERROR_RADIUS, 0.15)
+	var consistency: float = lerpf(1.2, 0.8, context.play_style.consistency)
+	var offset: Vector2
 	if context.is_serve:
-		precision = stats.serve_accuracy01(context.player_stamina_ratio)
-		radius_range = (
-			SECOND_SERVE_ERROR_RADIUS if context.is_second_serve else FIRST_SERVE_ERROR_RADIUS
+		var spread_range: Vector2 = (
+			SECOND_SERVE_ERROR_SPREAD if context.is_second_serve else FIRST_SERVE_ERROR_SPREAD
 		)
+		var precision: float = stats.serve_accuracy01(context.player_stamina_ratio)
+		var spread: float = lerpf(spread_range.x, spread_range.y, precision) * consistency
+		offset = Vector2(randfn(0.0, spread), randfn(0.0, spread))
 	else:
-		precision = stats.rally_precision01(
+		var precision: float = stats.rally_precision01(
 			context.player_stamina_ratio, context.player.is_returning_serve(), context.is_volley()
 		)
-	var error_radius: float = (
-		lerpf(radius_range.x, radius_range.y, precision)
-		* lerpf(1.2, 0.8, context.play_style.consistency)
-	)
-	var offset: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
+		var factor: float = consistency * (1.0 + DIFFICULTY_ERROR_GROWTH * _difficulty(context))
+		match context.intent:
+			AiPointContext.ShotIntent.SAFE:
+				factor *= SAFE_ERROR_FACTOR
+			AiPointContext.ShotIntent.ATTACK:
+				factor *= ATTACK_ERROR_FACTOR
+		offset = Vector2(
+			randfn(0.0, lerpf(RALLY_ERROR_SPREAD_WIDTH.x, RALLY_ERROR_SPREAD_WIDTH.y, precision)),
+			randfn(0.0, lerpf(RALLY_ERROR_SPREAD_DEPTH.x, RALLY_ERROR_SPREAD_DEPTH.y, precision))
+		)
+		offset *= factor
 	return intended_target + Vector3(offset.x, 0.0, offset.y)
+
+
+## How hard the incoming ball is to control, in [0, 1]: by how stretched the player is, how far
+## a deep ball pushes it back and the ball's pace; the hardest of these counts.
+static func _difficulty(context: AiPointContext) -> float:
+	var pace: float = clampf(
+		inverse_lerp(HARD_PACE.x, HARD_PACE.y, context.incoming_ball_speed), 0.0, 1.0
+	)
+	var stretch: float = clampf(
+		inverse_lerp(HARD_STRETCH.x, HARD_STRETCH.y, context.stretch), 0.0, 1.0
+	)
+	return maxf(maxf(stretch, context.depth_pressure), pace)
 
 
 static func _is_drop_volley(stroke_type: Stroke.StrokeType) -> bool:

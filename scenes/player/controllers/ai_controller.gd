@@ -14,6 +14,10 @@ enum Phase {
 
 ## Seconds the AI waits before tossing the ball for a serve
 const SERVE_DELAY: float = 2.0
+## Seconds the AI needs to react to the opponent's shot before it moves to meet the ball (a pro
+## returner's first step comes ~0.25-0.3 s after the serve is hit); a fast serve away from the
+## returner is an ace.
+const REACTION_TIME: float = 0.28
 ## Angle (rad) within which a ball moving toward the player counts as incoming
 const INCOMING_ANGLE: float = PI / 6.0
 ## Ball speed (m/s) below which the ball does not count as incoming
@@ -44,13 +48,14 @@ const SPLIT_STEP_DEPTH: float = 6.0
 const REPLY_DELAY: float = 0.35
 ## Recovery depth behind the baseline (m) for the play style's court position: this far behind
 ## it on the baseline (0), up to COURT_POSITION_IN inside it (-1) and COURT_POSITION_BACK
-## farther back (1).
-const RECOVERY_BEHIND_BASELINE: float = 0.7
+## farther back (1). In Hawk-Eye tracking a player stands ~1.5 m behind the baseline when the
+## opponent hits.
+const RECOVERY_BEHIND_BASELINE: float = 1.0
 const COURT_POSITION_IN: float = 1.5
 const COURT_POSITION_BACK: float = 2.3
 ## After a weak shot (met out of position, played safe or landing short) the AI recovers this
 ## much deeper (m) to cover the opponent's attack; after a good attack it steps this much in.
-const WEAK_SHOT_STEP_BACK: float = 1.2
+const WEAK_SHOT_STEP_BACK: float = 0.6
 const ATTACK_STEP_IN: float = 0.9
 const WEAK_SHOT_POSITIONING: float = 0.5
 const SHORT_SHOT_DEPTH: float = 8.0
@@ -66,6 +71,9 @@ const SHORT_BALL_EARLINESS: float = 0.9
 const SHORT_BALL_DEPTH: Vector2 = Vector2(10.0, 7.5)
 ## Highest ball (m) the AI volleys; a higher ball is let bounce.
 const VOLLEY_MAX_HEIGHT: float = 2.3
+## Share of the top speed the AI recovers at: it jogs back into position rather than sprinting,
+## so like a tracked pro it is often still on its way when the opponent hits.
+const RECOVERY_SPEED_FACTOR: float = 0.7
 
 var _strategy: PointStrategy
 ## Stroke handed to the player (queued by the controller, executed by the player)
@@ -75,6 +83,10 @@ var _current_phase: Phase = Phase.ANTICIPATION
 var _plays_at_net: bool = false
 ## Whether the AI committed to where the pending stroke goes (see COMMIT_TIME).
 var _committed: bool = false
+## Whether the AI is recovering into position after its shot (see RECOVERY_SPEED_FACTOR).
+var _recovering: bool = false
+## Seconds the ball has been coming toward the player (see REACTION_TIME).
+var _incoming_time: float = 0.0
 
 
 func _ready() -> void:
@@ -91,13 +103,14 @@ func request_serve() -> void:
 	_pending_stroke = stroke
 
 
-func update(_delta: float) -> void:
+func update(delta: float) -> void:
 	if not player.ball:
 		return
 
 	match _current_phase:
 		Phase.ANTICIPATION:
-			if _is_ball_incoming():
+			_incoming_time = _incoming_time + delta if _is_ball_incoming() else 0.0
+			if _incoming_time >= REACTION_TIME:
 				_current_phase = Phase.LOCK_IN
 		Phase.LOCK_IN:
 			_lock_in()
@@ -106,7 +119,7 @@ func update(_delta: float) -> void:
 
 
 func get_move_direction() -> Vector3:
-	return player.compute_move_dir()
+	return player.compute_move_dir(RECOVERY_SPEED_FACTOR if _recovering else 1.0)
 
 
 func get_stroke() -> Stroke:
@@ -135,11 +148,13 @@ func on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 		MatchLifecycleBus.Phase.POINT_ENDED, MatchLifecycleBus.Phase.IDLE:
 			_reset_to_anticipation()
 			_plays_at_net = false
+			_recovering = false
 
 
 func _reset_to_anticipation() -> void:
 	_current_phase = Phase.ANTICIPATION
 	_pending_stroke = null
+	_incoming_time = 0.0
 
 
 ## Whether the ball flies toward the player fast enough to prepare a stroke.
@@ -167,6 +182,7 @@ func _lock_in() -> void:
 
 	_pending_stroke = _strategy.compute_stroke(step)
 	_committed = false
+	_recovering = false
 	if window:
 		_pending_stroke.earliness = window.earliness_of(step)
 	player.label_3d.modulate = _intent_color(_pending_stroke.stroke_intent)
@@ -230,6 +246,7 @@ func _on_player_ball_hit() -> void:
 			DebugLogger.log(self, "Following the attack to the net")
 	var depth: float = NET_POSITION_DEPTH if _plays_at_net else _recovery_depth(hit_stroke, landing)
 	var recovery: Vector3 = _calculate_angle_bisector_position(hit_stroke.stroke_target, depth)
+	_recovering = not approaches
 	if approaches:
 		player.request_move_to(recovery)
 	else:

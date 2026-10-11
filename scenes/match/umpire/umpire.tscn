@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://dnkjfx5fk78c1"]
 
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/0-15.wav" id="2_eonia"]
+[ext_resource type="PackedScene" uid="uid://c4vhkpn2ffv1g" path="res://assets/models/umpire/umpire.fbx" id="20_model"]
+[ext_resource type="Animation" path="res://scenes/match/umpire/umpire_sitting.res" id="21_sitting"]
 [ext_resource type="PackedScene" path="res://scenes/match/umpire/umpire_chair.tscn" id="2_qv13u"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/0-30.wav" id="3_qey24"]
 [ext_resource type="AudioStream" uid="uid://ct2pjmgyh6esx" path="res://assets/sounds/effects/umpire/0-40.ogg" id="4_l2qjg"]
@@ -19,6 +21,11 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/40-30.wav" id="17_rr8j0"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/40-40.wav" id="18_h4dv8"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/15-40.wav" id="19_fifteen_forty"]
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_umpire"]
+_data = {
+&"sitting": ExtResource("21_sitting")
+}
 
 [sub_resource type="BoxShape3D" id="4"]
 size = Vector3(1.20747, 2.9555, 1.21453)
@@ -46,6 +53,37 @@ umpire_sounds = Dictionary[String, AudioStream]({
 })
 
 [node name="UmpireChair" parent="." unique_id=1793929124 instance=ExtResource("2_qv13u")]
+
+[node name="Model" parent="." instance=ExtResource("20_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.44, 0.25)
+
+[node name="NeckLook" type="LookAtModifier3D" parent="Model/GeneralSkeleton"]
+influence = 0.5
+target_node = NodePath("../../../LookTarget")
+bone_name = "Neck"
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 1.4
+secondary_limit_angle = 0.8
+
+[node name="HeadLook" type="LookAtModifier3D" parent="Model/GeneralSkeleton"]
+target_node = NodePath("../../../LookTarget")
+bone_name = "Head"
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 2.4
+secondary_limit_angle = 1.2
+
+[node name="SittingPlayer" type="AnimationPlayer" parent="Model"]
+root_node = NodePath("..")
+libraries = {
+&"": SubResource("AnimationLibrary_umpire")
+}
+autoplay = &"sitting"
+
+[node name="LookTarget" type="Node3D" parent="."]
+top_level = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1442936764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49691, 0)

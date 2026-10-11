@@ -76,9 +76,13 @@ func _ready() -> void:
 		bus.point_ended.connect(stadium.stop_serve_clocks.unbind(1))
 		television_hud.set_player(i, player.player_data)
 		cameras.register_camera(player.first_person_camera)
+	active_ball_changed.connect(crowd.follow_ball)
+	active_ball_changed.connect(umpire.follow_ball)
+	active_ball_changed.connect(_aim_ball_camera)
 	television_hud.start_broadcast(match_data.score)
 	stadium.show_bench_rackets(players)
 	_update_players_for_next_point()
+	stadium.aim_ball_camera(get_server())
 
 	await place_players()
 	cameras.open_match()
@@ -157,6 +161,7 @@ func add_point(winner: int) -> void:
 	if score.is_match_over():
 		_end_match(winner)
 		return
+	stadium.aim_ball_camera(get_server())
 	umpire.say_score(score)
 	cameras.reframe_tv_cameras()
 	await get_tree().create_timer(GameConstants.POINT_BREAK).timeout
@@ -471,6 +476,11 @@ func _get_player_position(
 		if serve_from_deuce_side
 		else Stadium.StadiumPosition.RECEIVE_BACK_RIGHT
 	)
+
+
+## The ball camera follows the ball in play, and the server while none is.
+func _aim_ball_camera(active_ball: Ball) -> void:
+	stadium.aim_ball_camera(active_ball if active_ball else get_server())
 
 
 ## A serve that clips the net cord and lands in the service box is a let and is replayed.

@@ -4,6 +4,10 @@
 // it. Each instance plays its idle clip in a loop and can cheer: INSTANCE_CUSTOM holds
 //   r: idle clip, g: cheer clip (-1: none), b: time the cheer started, a: look (random in [0, 1)).
 // The look sets the idle's phase and the colors the clothes and hair are tinted with.
+// Most spectators turn their head to follow the ball (the look target): the vertices turn around
+// the head joint as much as they are skinned to the head (UV2.y), within what a neck can turn.
+// Skinning matrices are kept as their three rows (the first three columns of a mat4, the fourth
+// unused), so a point is skinned with dot products: (vec4(point, 1.0) * rows).xyz.
 shader_type spatial;
 render_mode cull_back, depth_draw_opaque;
 
@@ -21,6 +25,18 @@ uniform float crowd_time = 0.0;
 // Seconds a cheer takes to blend in and out
 const float CHEER_BLEND_IN = 0.35;
 const float CHEER_BLEND_OUT = 0.6;
+// Where the spectators look (world space), set by the crowd; the head bone and its joint in the
+// model's rest pose
+uniform vec3 look_target = vec3(0.0, 1.0, 0.0);
+uniform int head_bone = 0;
+uniform vec3 head_pivot = vec3(0.0, 1.6, 0.0);
+// Whether the spectators follow the ball with their heads (off at low crowd detail)
+uniform bool heads_follow = true;
+// Share of the spectators that follow the ball, and how far a head turns (rad) sideways and up
+// or down
+const float FOLLOW_CHANCE = 0.85;
+const float MAX_HEAD_YAW = 1.3;
+const float MAX_HEAD_PITCH = 0.5;
 
 // Parts of a spectator (see CrowdBaker.Part)
 const int PART_TOP = 1;
@@ -46,15 +62,22 @@ float hash(float value) {
 	return fract(sin(value * 78.233) * 43758.5453);
 }
 
-// Skinning matrix of `bone` at `frame` (a row of the bone texture).
-mat4 bone_matrix(int bone, int frame) {
-	vec4 row0 = texelFetch(bone_texture, ivec2(bone * 3, frame), 0);
-	vec4 row1 = texelFetch(bone_texture, ivec2(bone * 3 + 1, frame), 0);
-	vec4 row2 = texelFetch(bone_texture, ivec2(bone * 3 + 2, frame), 0);
-	return transpose(mat4(row0, row1, row2, vec4(0.0, 0.0, 0.0, 1.0)));
+// Skinning rows of `bone` at `frame` (a row of the bone texture).
+mat4 bone_rows(int bone, int frame) {
+	return mat4(
+		texelFetch(bone_texture, ivec2(bone * 3, frame), 0),
+		texelFetch(bone_texture, ivec2(bone * 3 + 1, frame), 0),
+		texelFetch(bone_texture, ivec2(bone * 3 + 2, frame), 0),
+		vec4(0.0));
 }
 
-// Skinning matrix of the vertex at `time` (s) into `clip`, between its two nearest frames.
+// `v` rotated by `angle` (rad) around the unit `axis`.
+vec3 rotated(vec3 v, vec3 axis, float angle) {
+	return v * cos(angle) + cross(axis, v) * sin(angle) + axis * dot(axis, v) * (1.0 - cos(angle));
+}
+
+// Skinning rows of the vertex at `time` (s) into `clip`, between its two nearest frames. Both
+// frames are weighted first and blended once: the same as blending each bone, but cheaper.
 mat4 skin(int clip, float time, bool loop, ivec4 bones, vec4 weights) {
 	// The baked frames span (frames - 1) / FRAME_RATE seconds.
 	float frames = clip_frames[clip];
@@ -64,40 +87,70 @@ mat4 skin(int clip, float time, bool loop, ivec4 bones, vec4 weights) {
 	float next = loop ? mod(frame + 1.0, frames) : min(frame + 1.0, frames - 1.0);
 	float blend = position - floor(position);
 	int start = int(clip_start[clip]);
-	mat4 result = mat4(0.0);
+	int frame_row = start + int(frame);
+	int next_row = start + int(next);
+	mat4 current = mat4(0.0);
+	mat4 following = mat4(0.0);
 	for (int i = 0; i < 4; i++) {
 		if (weights[i] <= 0.0) {
 			continue;
 		}
-		mat4 a = bone_matrix(bones[i], start + int(frame));
-		mat4 b = bone_matrix(bones[i], start + int(next));
-		result += (a + (b - a) * blend) * weights[i];
+		current += bone_rows(bones[i], frame_row) * weights[i];
+		following += bone_rows(bones[i], next_row) * weights[i];
 	}
-	return result;
+	return current + (following - current) * blend;
+}
+
+// Skinning rows of `bones` weighted by `weights` for an instance with the INSTANCE_CUSTOM
+// `instance_custom`: its idle clip, blended into its cheer while it cheers.
+mat4 animated(ivec4 bones, vec4 weights, vec4 instance_custom) {
+	int idle_clip = int(instance_custom.r + 0.5);
+	mat4 skinning = skin(idle_clip, crowd_time + instance_custom.a * 97.0, true, bones, weights);
+	if (instance_custom.g < 0.0) {
+		return skinning;
+	}
+	int cheer_clip = int(instance_custom.g + 0.5);
+	float cheer_time = crowd_time - instance_custom.b;
+	float cheer_length = clip_length[cheer_clip];
+	float cheer = smoothstep(0.0, CHEER_BLEND_IN, cheer_time)
+		* (1.0 - smoothstep(cheer_length - CHEER_BLEND_OUT, cheer_length, cheer_time));
+	if (cheer <= 0.0) {
+		return skinning;
+	}
+	mat4 cheering = skin(cheer_clip, cheer_time, false, bones, weights);
+	return skinning + (cheering - skinning) * cheer;
 }
 
 void vertex() {
-	ivec4 bones = ivec4(CUSTOM0 + 0.5);
-	vec4 weights = CUSTOM1;
-	int idle_clip = int(INSTANCE_CUSTOM.r + 0.5);
-	int cheer_clip = int(INSTANCE_CUSTOM.g + 0.5);
 	look = INSTANCE_CUSTOM.a;
 	part = int(UV2.x + 0.5);
+	mat4 skinning = animated(ivec4(CUSTOM0 + 0.5), CUSTOM1, INSTANCE_CUSTOM);
+	VERTEX = (vec4(VERTEX, 1.0) * skinning).xyz;
+	NORMAL = normalize((vec4(NORMAL, 0.0) * skinning).xyz);
 
-	float phase = look * 97.0;
-	mat4 skinning = skin(idle_clip, crowd_time + phase, true, bones, weights);
-	if (INSTANCE_CUSTOM.g >= 0.0) {
-		float cheer_time = crowd_time - INSTANCE_CUSTOM.b;
-		float cheer_length = clip_length[cheer_clip];
-		float cheer = smoothstep(0.0, CHEER_BLEND_IN, cheer_time)
-			* (1.0 - smoothstep(cheer_length - CHEER_BLEND_OUT, cheer_length, cheer_time));
-		if (cheer > 0.0) {
-			mat4 cheering = skin(cheer_clip, cheer_time, false, bones, weights);
-			skinning = skinning + (cheering - skinning) * cheer;
-		}
+	float head_share = UV2.y;
+	if (heads_follow && head_share > 0.0 && hash(look + 0.7) < FOLLOW_CHANCE) {
+		// The head joint and the way the face points, as animated
+		mat4 head_skinning = animated(
+			ivec4(head_bone, 0, 0, 0), vec4(1.0, 0.0, 0.0, 0.0), INSTANCE_CUSTOM
+		);
+		vec3 pivot = (vec4(head_pivot, 1.0) * head_skinning).xyz;
+		vec3 face = normalize((vec4(0.0, 0.0, 1.0, 0.0) * head_skinning).xyz);
+		// The look target in model space. A spectator's transform only turns and scales evenly, so
+		// its inverse is the transposed rotation divided by the squared scale (far cheaper than
+		// inverse(), and exact).
+		mat3 turn_and_scale = mat3(MODEL_MATRIX);
+		vec3 to_target = transpose(turn_and_scale) * (look_target - MODEL_MATRIX[3].xyz)
+			/ dot(turn_and_scale[0], turn_and_scale[0]) - pivot;
+		float yaw = atan(to_target.x, to_target.z) - atan(face.x, face.z);
+		yaw = clamp(mod(yaw + PI, TAU) - PI, -MAX_HEAD_YAW, MAX_HEAD_YAW) * head_share;
+		float pitch = atan(to_target.y, length(to_target.xz)) - asin(clamp(face.y, -1.0, 1.0));
+		pitch = clamp(pitch, -MAX_HEAD_PITCH, MAX_HEAD_PITCH) * head_share;
+		vec3 up = vec3(0.0, 1.0, 0.0);
+		vec3 nod_axis = normalize(cross(rotated(face, up, yaw), up));
+		VERTEX = pivot + rotated(rotated(VERTEX - pivot, up, yaw), nod_axis, pitch);
+		NORMAL = rotated(rotated(NORMAL, up, yaw), nod_axis, pitch);
 	}
-	VERTEX = (skinning * vec4(VERTEX, 1.0)).xyz;
-	NORMAL = normalize(mat3(skinning) * NORMAL);
 }
 
 // The texture recolored with `color`, keeping its shading and pattern.

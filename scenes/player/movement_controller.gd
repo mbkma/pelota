@@ -139,6 +139,7 @@ func reach_time(
 ## Stamina affects max speed, acceleration, and direction change ability.
 ##
 ## Parameters:
+## - delta: duration of the physics frame (s)
 ## - direction: input direction (will be normalized)
 ## - facing: horizontal direction the player faces (toward the net)
 ## - stats: player stats for stamina scaling
@@ -147,6 +148,7 @@ func reach_time(
 ## - acceleration: base accel rate (m/s²)
 ## - friction: deceleration without input (m/s²)
 func tick(
+	delta: float,
 	direction: Vector3,
 	facing: Vector3,
 	stats: PlayerRuntimeStats,
@@ -155,7 +157,6 @@ func tick(
 	acceleration: float,
 	friction: float
 ) -> Vector3:
-	var delta: float = 1.0 / maxf(float(Engine.physics_ticks_per_second), 1.0)
 	var input_strength: float = clampf(direction.length(), 0.0, 1.0)
 	var move_direction: Vector3 = Vector3.ZERO
 	if input_strength > 0.001:

@@ -19,26 +19,30 @@ enum StepEvent { NONE, BOUNCED, ROLLING_STARTED, HIT_NET, CLIPPED_NET_CORD }
 const RADIUS: float = 0.033
 const GRAVITY: float = GameConstants.GRAVITY
 
-# Air
-const AIR_DRAG: float = 0.02
+# Air: quadratic drag (1/m), 0.5 * air density * drag coefficient (~0.6 for a fuzzy ball) * area
+# / mass
+const AIR_DRAG: float = 0.022
 ## Vertical spin acceleration (m/s²) at full spin on a fast ball: topspin dips the ball, backspin
-## lifts it. A slice spins slower than a topspin drive, so it lifts much less than topspin dips.
+## lifts it. The lift carries a slow slice: hit above the net it flies almost straight, hit below
+## it the ball is lifted over the net, and it floats down as it slows.
 const TOPSPIN_ACCEL_MAX: float = 15.0
-const BACKSPIN_ACCEL_MAX: float = 5.0
+const BACKSPIN_ACCEL_MAX: float = 12.0
 const SIDESPIN_ACCEL_MAX: float = 8.0
 
 # Ground: share of the vertical speed kept by a bounce (gentle impacts keep more than hard
 # ones, up to the impact speed BOUNCE_HARD_IMPACT_SPEED), share of the horizontal speed kept by
-# the friction of a bounce, and the vertical impact speed below which the ball rolls instead.
+# the friction of a bounce (a hard court grips the ball: Hawk-Eye tracking of the Australian Open
+# has rallies about 1.2-1.3 s from stroke to stroke), and the vertical impact speed below which
+# the ball rolls instead.
 const BOUNCE_RESTITUTION_SOFT: float = 0.78
 const BOUNCE_RESTITUTION_HARD: float = 0.6
 const BOUNCE_HARD_IMPACT_SPEED: float = 12.0
-const BOUNCE_HORIZONTAL_RETENTION: float = 0.88
+const BOUNCE_HORIZONTAL_RETENTION: float = 0.6
 const ROLL_SPEED_THRESHOLD: float = 0.6
 # Spin on the bounce: topspin kicks the ball higher and forward, backspin keeps it low and
 # checks it, sidespin kicks it sideways (m/s at full spin and a ball of SPIN_KICK_FULL_SPEED).
 const SPIN_BOUNCE_LIFT: float = 0.2
-const SPIN_BOUNCE_FORWARD_KICK: float = 1.5
+const SPIN_BOUNCE_FORWARD_KICK: float = 0.8
 const SPIN_BOUNCE_SIDE_KICK: float = 2.0
 const SPIN_RETENTION_ON_BOUNCE: float = 0.6
 const SPIN_KICK_FULL_SPEED: float = 20.0

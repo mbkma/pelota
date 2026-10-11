@@ -7,6 +7,7 @@
 ## - merges all meshes into one surface whose textures share one atlas (ATLAS_SIZE), and marks
 ##   each vertex with the part it belongs to (for the clothes colors);
 ## - moves the vertices into the skeleton's rest pose and keeps their four strongest bones;
+## - marks how much each vertex turns with the head (UV2.y), so spectators can follow the ball;
 ## - generates levels of detail;
 ## - plays every clip on the retargeted skeleton and stores each bone's skinning matrix per frame
 ##   (FRAME_RATE) in a float texture, which the crowd shader animates the vertices with.
@@ -24,7 +25,7 @@ enum Part {
 
 const SOURCE_DIR: String = "res://assets/models/crowd/source/"
 const OUTPUT_DIR: String = "res://scenes/environments/crowd/characters/"
-const CHARACTER_COUNT: int = 6
+const CHARACTER_COUNT: int = 9
 ## Clips in the order of CrowdCharacter.IDLE_CLIPS and CHEER_CLIPS
 const CLIPS: PackedStringArray = [
 	"sit_idle_1", "sit_idle_2", "sit_idle_3", "sit_cheer_1", "sit_cheer_2", "sit_cheer_3"
@@ -36,9 +37,11 @@ const ATLAS_SIZE: int = 1024
 const ATLAS_PADDING: int = 4
 const CROWD_SHADER: Shader = preload("res://scenes/environments/crowd/crowd.gdshader")
 ## Words in a mesh's name that tell its part
-const TOP_WORDS: PackedStringArray = ["shirt", "top", "hoodie", "sweater", "collar", "jacket"]
+const TOP_WORDS: PackedStringArray = [
+	"shirt", "top", "hoodie", "sweater", "collar", "jacket", "suit", "cloth"
+]
 const BOTTOM_WORDS: PackedStringArray = ["pants", "bottom", "shorts", "skirt"]
-const SHOES_WORDS: PackedStringArray = ["shoe", "sneaker"]
+const SHOES_WORDS: PackedStringArray = ["shoe", "sneaker", "sock"]
 const HAIR_WORDS: PackedStringArray = ["hair", "beard"]
 ## Standing height (m) every character is scaled to; the crowd blocks vary it a little
 const STANDING_HEIGHT: float = 1.75
@@ -48,6 +51,11 @@ const BOUNDS_MARGIN: float = 0.6
 ## Angle (degrees) within which the level of detail generation merges normals
 const LOD_NORMAL_MERGE_ANGLE: float = 25.0
 const LOD_NORMAL_SPLIT_ANGLE: float = 60.0
+## How much a vertex turns with the head when a spectator looks around: fully when skinned to the
+## head, partly to the neck, so the neck twists smoothly.
+const HEAD_BONE: StringName = &"Head"
+const NECK_BONE: StringName = &"Neck"
+const NECK_TURN_SHARE: float = 0.5
 
 
 func _initialize() -> void:
@@ -94,6 +102,11 @@ func _bake_character(source: String, clips: Array[Animation]) -> CrowdCharacter:
 	var character := CrowdCharacter.new()
 	var material := ShaderMaterial.new()
 	material.shader = CROWD_SHADER
+	var head: int = skeleton.find_bone(HEAD_BONE)
+	material.set_shader_parameter("head_bone", head)
+	material.set_shader_parameter(
+		"head_pivot", to_model * skeleton.get_bone_global_rest(head).origin
+	)
 	material.set_shader_parameter("atlas", atlas.compressed_texture())
 	var bone_texture: ImageTexture = _bone_texture(model, skeleton, to_model, clips, character)
 	material.set_shader_parameter("bone_texture", bone_texture)
@@ -185,7 +198,7 @@ func _merged_arrays(
 				vertices.append(to_model * (total * source_vertices[vertex]))
 				normals.append((to_model.basis * total.basis * source_normals[vertex]).normalized())
 				uvs.append(atlas.atlas_uv(texture, source_uvs[vertex]))
-				parts.append(Vector2(part, 0.0))
+				parts.append(Vector2(part, _head_share(strongest, skin_bones, skeleton)))
 				for i in 4:
 					if i < strongest.size():
 						bones.append(skin_bones[int(strongest[i].x)])
@@ -206,6 +219,22 @@ func _merged_arrays(
 	arrays[Mesh.ARRAY_CUSTOM1] = weights
 	arrays[Mesh.ARRAY_INDEX] = indices
 	return arrays
+
+
+## How much a vertex with the (bind, weight) `influences` turns with the head.
+static func _head_share(
+	influences: Array[Vector2], skin_bones: PackedInt32Array, skeleton: Skeleton3D
+) -> float:
+	var head: int = skeleton.find_bone(HEAD_BONE)
+	var neck: int = skeleton.find_bone(NECK_BONE)
+	var share: float = 0.0
+	for influence in influences:
+		var bone: int = skin_bones[int(influence.x)]
+		if bone == head:
+			share += influence.y
+		elif bone == neck:
+			share += influence.y * NECK_TURN_SHARE
+	return share
 
 
 ## The four strongest (bind, weight) influences of `vertex`, weights normalized.

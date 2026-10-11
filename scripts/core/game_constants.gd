@@ -5,16 +5,18 @@ class_name GameConstants
 const GRAVITY: float = 9.81
 
 ## Spin per stroke (x: sidespin, y: topspin (+) / backspin (-), z: unused), each in [-1, 1]
-const FOREHAND_SPIN: Vector3 = Vector3(0.2, 0.85, 0.0)
-const BACKHAND_SPIN: Vector3 = Vector3(-0.2, 0.85, 0.0)
+## (moderate topspin: with the rally pace it gives the arcs of Hawk-Eye tracked rally balls)
+const FOREHAND_SPIN: Vector3 = Vector3(0.2, 0.65, 0.0)
+const BACKHAND_SPIN: Vector3 = Vector3(-0.2, 0.6, 0.0)
 const BACKHAND_SLICE_SPIN: Vector3 = Vector3(-0.3, -0.85, 0.0)
 const DROP_SHOT_SPIN: Vector3 = Vector3(0.1, -0.85, 0.0)
 const VOLLEY_SPIN: Vector3 = Vector3(0.0, -0.15, 0.0)
 const DROP_VOLLEY_SPIN: Vector3 = Vector3(0.0, -0.8, 0.0)
 
-## Speed (m/s) of a flat first serve from the weakest to the strongest server (103-121 mph;
-## ATP average first serve ~118 mph). Slice and kick serves and second serves are slower.
-const SERVE_SPEED: Vector2 = Vector2(46.0, 54.0)
+## Speed (m/s) of a flat first serve from the weakest to the strongest server (169-209 km/h; the
+## median first serve in Hawk-Eye tracking of the Australian Open is 184 km/h, one of the best
+## servers averages ~200-210 km/h). Slice and kick serves and second serves are slower.
+const SERVE_SPEED: Vector2 = Vector2(47.0, 58.0)
 
 ## Volleys are short punches that mostly redirect the incoming pace (see Player): own pace
 ## (m/s) of a volley and of a drop volley from the weakest to the best volleyer, before the

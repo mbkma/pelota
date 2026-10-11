@@ -126,14 +126,15 @@ const LATE_SHOT_DEPTH: float = 6.0
 const LATE_SHOT_ERROR_RADIUS: float = 1.0
 const LATE_SHOT_FLIGHT_TIME: Vector2 = Vector2(0.75, 0.95)
 
-## Rally speed (m/s) from the weakest to the best stroke; ATP averages are ~115 km/h (32 m/s)
-## on the forehand and ~105 km/h (29 m/s) on the backhand.
-const FOREHAND_SPEED: Vector2 = Vector2(28.0, 33.0)
-const BACKHAND_SPEED: Vector2 = Vector2(26.5, 31.0)
-const SLICE_SPEED: Vector2 = Vector2(20.0, 24.0)
+## Rally speed (m/s) from the weakest to the best stroke, before the timing share: Hawk-Eye
+## tracking of the Australian Open has rally balls cross the net ~0.55 m above the cord and peak at
+## ~1.7 m, which takes ~125-130 km/h off the racket with moderate topspin.
+const FOREHAND_SPEED: Vector2 = Vector2(33.0, 38.0)
+const BACKHAND_SPEED: Vector2 = Vector2(31.5, 36.0)
+const SLICE_SPEED: Vector2 = Vector2(22.0, 26.0)
 const DROP_SHOT_SPEED: Vector2 = Vector2(9.0, 13.0)
 ## Attack pace (m/s) from the weakest to the best stroke: a perfect forehand of the best
-## player reaches 47 m/s (~170 km/h). Touch shots have none.
+## player reaches 52 m/s (~187 km/h). Touch shots have none.
 const FOREHAND_ATTACK: Vector2 = Vector2(10.0, 14.0)
 const BACKHAND_ATTACK: Vector2 = Vector2(8.0, 12.0)
 const SLICE_ATTACK: float = 4.0

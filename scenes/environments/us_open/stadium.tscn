@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d237t32p1sgei"]
 
-[ext_resource type="PackedScene" path="res://scenes/environments/us_open/arthur_ashe/arthur_ashe.tscn" id="2_hi2re"]
+[ext_resource type="PackedScene" uid="uid://dvxofbtaogam4" path="res://scenes/environments/us_open/arthur_ashe/arthur_ashe.tscn" id="2_hi2re"]
 [ext_resource type="PackedScene" path="res://scenes/player/racket/racket.tscn" id="2_racket"]
 [ext_resource type="Script" uid="uid://h38us3lvmlk7" path="res://scenes/environments/us_open/stadium.gd" id="3"]
 [ext_resource type="Script" uid="uid://bhlvub0gn61wg" path="res://scenes/environments/us_open/cameras/cameras.gd" id="4_2gjwx"]
@@ -189,10 +189,12 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.
 [node name="ServeClockTimer" type="Timer" parent="." unique_id=1386027715]
 one_shot = true
 
-[node name="UmpireCamera" type="Node3D" parent="." unique_id=1549887150]
+[node name="BallCamera" type="Node3D" parent="." unique_id=1549887150]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8, 0, 0)
+script = ExtResource("7_af67j")
+turn_rate = 12.0
 
-[node name="camera" parent="UmpireCamera" unique_id=768048712 instance=ExtResource("8_camera")]
+[node name="camera" parent="BallCamera" unique_id=768048712 instance=ExtResource("8_camera")]
 
 [node name="FrontPlayerCamera" type="Node3D" parent="." unique_id=430943148]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8, 0, 1.5)
