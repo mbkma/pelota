@@ -32,6 +32,7 @@ first_name = "Andrey"
 last_name = "Rublev"
 age = 24
 country = "Russia"
+country_code = "RUS"
 height = 188
 rank = 8
 play_style = ExtResource("3_t55ec")

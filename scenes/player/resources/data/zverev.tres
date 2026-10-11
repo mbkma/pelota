@@ -33,6 +33,7 @@ first_name = "Alexander"
 last_name = "Zverev"
 age = 25
 country = "Germany"
+country_code = "GER"
 height = 198
 rank = 2
 play_style = ExtResource("3_j2vlj")

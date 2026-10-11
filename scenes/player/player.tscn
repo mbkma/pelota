@@ -1,15 +1,36 @@
 [gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_01.wav" id="stroke_racket_hit_01"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_02.wav" id="stroke_racket_hit_02"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_03.wav" id="stroke_racket_hit_03"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_04.wav" id="stroke_racket_hit_04"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_05.wav" id="stroke_racket_hit_05"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_06.wav" id="stroke_racket_hit_06"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_07.wav" id="stroke_racket_hit_07"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_08.wav" id="stroke_racket_hit_08"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_09.wav" id="stroke_racket_hit_09"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_10.wav" id="stroke_racket_hit_10"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_11.wav" id="stroke_racket_hit_11"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_12.wav" id="stroke_racket_hit_12"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_13.wav" id="stroke_racket_hit_13"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_14.wav" id="stroke_racket_hit_14"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_15.wav" id="stroke_racket_hit_15"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_16.wav" id="stroke_racket_hit_16"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_01.wav" id="stroke_running_hit_01"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_02.wav" id="stroke_running_hit_02"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_05.wav" id="stroke_running_hit_05"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_06.wav" id="stroke_running_hit_06"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_08.wav" id="stroke_running_hit_08"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_09.wav" id="stroke_running_hit_09"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_11.wav" id="stroke_running_hit_11"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_15.wav" id="stroke_running_hit_15"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_16.wav" id="stroke_running_hit_16"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_slice_01.wav" id="stroke_racket_slice_01"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_slice_02.wav" id="stroke_racket_slice_02"]
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
 [ext_resource type="Resource" uid="uid://cibbhkfv1ny2q" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://scenes/ball/ball.tscn" id="2_ball"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
-[ext_resource type="AudioStream" uid="uid://du31r1ovjqfwa" path="res://assets/sounds/effects/strokes/stroke_flat_1.wav" id="3_xt4k8"]
-[ext_resource type="AudioStream" uid="uid://ccg3i75pj0df" path="res://assets/sounds/effects/strokes/stroke_flat_2.wav" id="4_p4hr7"]
-[ext_resource type="AudioStream" uid="uid://7ulnk6wumimm" path="res://assets/sounds/effects/strokes/stroke_flat_3.wav" id="5_drsim"]
-[ext_resource type="AudioStream" uid="uid://dkhg5enkwrhu8" path="res://assets/sounds/effects/strokes/stroke_slice_1.wav" id="6_xtirx"]
-[ext_resource type="AudioStream" uid="uid://cmob7pfsbsmhu" path="res://assets/sounds/effects/strokes/stroke_slice_2.wav" id="7_4n1kg"]
-[ext_resource type="AudioStream" uid="uid://bffa2ad0odjrc" path="res://assets/sounds/effects/strokes/stroke_slice_3.wav" id="8_cjnul"]
 [ext_resource type="PackedScene" uid="uid://bi8pmdx3d7doc" path="res://scenes/tools/ball_aim_marker.tscn" id="10_7vyk4"]
 [ext_resource type="Script" uid="uid://c183q5ubdpdu2" path="res://scenes/player/state_machine.gd" id="11_ntx4g"]
 [ext_resource type="Script" uid="uid://stg5qkjv1kvi" path="res://scenes/match/lifecycle_bus.gd" id="12_pyy3x"]
@@ -25,8 +46,9 @@ ball_scene = ExtResource("2_ball")
 player_data = ExtResource("2_uxa8p")
 ball_aim_marker = NodePath("BallAimMarker")
 ideal_position_marker = NodePath("IdealPositionMarker")
-stroke_sounds_flat = Array[AudioStream]([ExtResource("3_xt4k8"), ExtResource("4_p4hr7"), ExtResource("5_drsim")])
-stroke_sounds_slice = Array[AudioStream]([ExtResource("6_xtirx"), ExtResource("7_4n1kg"), ExtResource("8_cjnul")])
+stroke_sounds_flat = Array[AudioStream]([ExtResource("stroke_racket_hit_01"), ExtResource("stroke_racket_hit_02"), ExtResource("stroke_racket_hit_03"), ExtResource("stroke_racket_hit_04"), ExtResource("stroke_racket_hit_05"), ExtResource("stroke_racket_hit_06"), ExtResource("stroke_racket_hit_07"), ExtResource("stroke_racket_hit_08"), ExtResource("stroke_racket_hit_09"), ExtResource("stroke_racket_hit_10"), ExtResource("stroke_racket_hit_11"), ExtResource("stroke_racket_hit_12"), ExtResource("stroke_racket_hit_13"), ExtResource("stroke_racket_hit_14"), ExtResource("stroke_racket_hit_15"), ExtResource("stroke_racket_hit_16")])
+stroke_sounds_running = Array[AudioStream]([ExtResource("stroke_running_hit_01"), ExtResource("stroke_running_hit_02"), ExtResource("stroke_running_hit_05"), ExtResource("stroke_running_hit_06"), ExtResource("stroke_running_hit_08"), ExtResource("stroke_running_hit_09"), ExtResource("stroke_running_hit_11"), ExtResource("stroke_running_hit_15"), ExtResource("stroke_running_hit_16")])
+stroke_sounds_slice = Array[AudioStream]([ExtResource("stroke_racket_slice_01"), ExtResource("stroke_racket_slice_02")])
 
 [node name="PlayerStateMachine" type="Node" parent="." unique_id=1516428128]
 script = ExtResource("11_ntx4g")

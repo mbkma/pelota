@@ -1,33 +1,47 @@
 @tool
 class_name CrowdBlock
 extends Node3D
-## A grid of seats filled with spectators by its config. All spectators of one character are
-## drawn by one MultiMesh and animated on the GPU (see CrowdCharacter), so a block costs one draw
-## call per character. In the editor the block is rebuilt whenever the config changes.
+## The spectators of one section of seats. All spectators of one character are drawn by one
+## MultiMesh and animated on the GPU (see CrowdCharacter), so a block costs one draw call per
+## character.
 
 ## Seconds over which the spectators of a cheer get up, so they do not all move at once
 const CHEER_SPREAD: float = 0.4
 
-@export var config: CrowdConfig:
-	set(value):
-		if config and config.changed.is_connected(_rebuild):
-			config.changed.disconnect(_rebuild)
-		config = value
-		if Engine.is_editor_hint() and config:
-			config.changed.connect(_rebuild)
-			_rebuild.call_deferred()
-## Seed of who sits where, so the block looks the same every time
-@export var seating_seed: int = 0:
-	set(value):
-		seating_seed = value
-		if Engine.is_editor_hint() and is_inside_tree():
-			_rebuild.call_deferred()
-
+var _config: CrowdConfig
 var _multimeshes: Array[MultiMesh] = []
 
 
-func _ready() -> void:
-	_rebuild()
+## Seats spectators in `seats` (see StadiumSeating) as `config` says, taking `occupancy` (0 to 1)
+## of the seats; `seating_seed` decides who sits where, so the block looks the same every time.
+func _init(
+	config: CrowdConfig, seats: PackedVector4Array, occupancy: float, seating_seed: int
+) -> void:
+	_config = config
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seating_seed
+	var spectators: Array[Array] = []
+	for character in config.characters:
+		spectators.append([])
+	for seat in seats:
+		if rng.randf() >= occupancy:
+			continue
+		spectators[rng.randi() % config.characters.size()].append(_spectator(seat, rng))
+
+	for i in config.characters.size():
+		var multimesh := MultiMesh.new()
+		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.use_custom_data = true
+		multimesh.mesh = config.characters[i].mesh
+		multimesh.instance_count = spectators[i].size()
+		for instance in spectators[i].size():
+			multimesh.set_instance_transform(instance, spectators[i][instance])
+			multimesh.set_instance_custom_data(instance, _idle_data(rng))
+		var instances := MultiMeshInstance3D.new()
+		instances.multimesh = multimesh
+		instances.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(instances)
+		_multimeshes.append(multimesh)
 
 
 ## Lets about `share` (0 to 1) of the spectators cheer, starting at `time` (s of the crowd's
@@ -36,7 +50,7 @@ func _ready() -> void:
 func cheer(share: float, time: float) -> void:
 	for i in _multimeshes.size():
 		var multimesh: MultiMesh = _multimeshes[i]
-		var clip_lengths: PackedFloat32Array = config.characters[i].clip_lengths
+		var clip_lengths: PackedFloat32Array = _config.characters[i].clip_lengths
 		for instance in multimesh.instance_count:
 			if randf() >= share:
 				continue
@@ -48,50 +62,15 @@ func cheer(share: float, time: float) -> void:
 			multimesh.set_instance_custom_data(instance, data)
 
 
-func _rebuild() -> void:
-	for child in get_children():
-		if child is MultiMeshInstance3D:
-			child.free()
-	_multimeshes.clear()
-
-	var rng := RandomNumberGenerator.new()
-	rng.seed = seating_seed
-	var seats: Array[Array] = []
-	for character in config.characters:
-		seats.append([])
-	for row in config.grid_rows:
-		for column in config.grid_columns:
-			if rng.randf() >= config.occupancy:
-				continue
-			seats[rng.randi() % config.characters.size()].append(_seat(row, column, rng))
-
-	for i in config.characters.size():
-		var character: CrowdCharacter = config.characters[i]
-		var multimesh := MultiMesh.new()
-		multimesh.transform_format = MultiMesh.TRANSFORM_3D
-		multimesh.use_custom_data = true
-		multimesh.mesh = character.mesh
-		multimesh.instance_count = seats[i].size()
-		for instance in seats[i].size():
-			multimesh.set_instance_transform(instance, seats[i][instance])
-			multimesh.set_instance_custom_data(instance, _idle_data(rng))
-		var spectators := MultiMeshInstance3D.new()
-		spectators.multimesh = multimesh
-		spectators.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		add_child(spectators)
-		_multimeshes.append(multimesh)
-
-
-## Where a spectator sits in the seat at `row` and `column`, a little shifted, turned and sized.
-func _seat(row: int, column: int, rng: RandomNumberGenerator) -> Transform3D:
-	var position := Vector3(
-		column * config.seat_spacing.x + rng.randf_range(-1.0, 1.0) * config.seat_jitter,
-		row * config.seat_spacing.y,
-		-row * config.seat_spacing.z
+## Where a spectator sits on `seat`, a little shifted, turned and sized.
+func _spectator(seat: Vector4, rng: RandomNumberGenerator) -> Transform3D:
+	var offset: Vector3 = (
+		_config.seat_offset + Vector3.RIGHT * rng.randf_range(-1.0, 1.0) * _config.seat_jitter
 	)
-	var turn: float = deg_to_rad(rng.randf_range(-1.0, 1.0) * config.turn_jitter_degrees)
-	var size: float = 1.0 + rng.randf_range(-1.0, 1.0) * config.size_jitter
-	return Transform3D(Basis(Vector3.UP, turn).scaled(Vector3.ONE * size), position)
+	var turn: float = deg_to_rad(rng.randf_range(-1.0, 1.0) * _config.turn_jitter_degrees)
+	var size: float = 1.0 + rng.randf_range(-1.0, 1.0) * _config.size_jitter
+	var place: Transform3D = StadiumSeating.seat_transform(seat)
+	return place * Transform3D(Basis(Vector3.UP, turn).scaled(Vector3.ONE * size), offset)
 
 
 ## Instance data of a spectator idling: a random idle clip and look, no cheer (see crowd.gdshader).

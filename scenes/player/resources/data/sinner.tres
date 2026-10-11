@@ -32,6 +32,7 @@ script = ExtResource("1")
 first_name = "Jannik"
 last_name = "Sinner"
 country = "Italy"
+country_code = "ITA"
 height = 188
 rank = 10
 play_style = ExtResource("3_09isn")

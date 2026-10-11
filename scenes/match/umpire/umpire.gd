@@ -1,4 +1,6 @@
-## Umpire audio system for calling score, faults, and game events
+## Umpire audio system for calling score, faults, and game events. The calls are heard as in a
+## TV broadcast, from the umpire's microphone (not from the chair's position), and the crowd is
+## turned down under them (see the Crowd audio bus).
 class_name Umpire
 extends Node3D
 
@@ -6,7 +8,7 @@ extends Node3D
 ## e.g. "1-2" for 15-30), "advantage" and "out"
 @export var umpire_sounds: Dictionary[String, AudioStream]
 
-@onready var _audio_stream_player: AudioStreamPlayer3D = $AudioStreamPlayer
+@onready var _audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 
 ## Announce "fault"
@@ -21,6 +23,9 @@ func say_score(score: Score) -> void:
 		return
 
 	await get_tree().create_timer(1.0).timeout
+	# Let a call still going (e.g. "out") finish instead of cutting it off
+	if _audio_stream_player.playing:
+		await _audio_stream_player.finished
 	var key: String = "%d-%d" % [points[0], points[1]]
 	if points[0] == Score.TennisPoint.AD or points[1] == Score.TennisPoint.AD:
 		key = "advantage"

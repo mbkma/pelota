@@ -33,6 +33,7 @@ first_name = "Carlos"
 last_name = "Alcaraz"
 age = 19
 country = "Spain"
+country_code = "ESP"
 height = 183
 rank = 5
 play_style = ExtResource("4_2h7j1")

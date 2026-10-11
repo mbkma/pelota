@@ -33,6 +33,7 @@ first_name = "Stefanos"
 last_name = "Tsitsipas"
 age = 23
 country = "Greek"
+country_code = "GRE"
 height = 193
 backhand = 1
 rank = 4

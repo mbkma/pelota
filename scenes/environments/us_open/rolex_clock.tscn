@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://scenes/environments/us_open/sponsor_logos.png" id="1_logos"]
+[ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="2_font"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_green"]
+albedo_color = Color(0.03, 0.26, 0.12, 1)
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_panel"]
+material = SubResource("StandardMaterial3D_green")
+size = Vector3(1.9, 0.8, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_face"]
+albedo_color = Color(0.95, 0.95, 0.92, 1)
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_face"]
+material = SubResource("StandardMaterial3D_face")
+top_radius = 0.3
+bottom_radius = 0.3
+height = 0.02
+radial_segments = 32
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hand"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hour"]
+material = SubResource("StandardMaterial3D_hand")
+size = Vector3(0.025, 0.16, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_minute"]
+material = SubResource("StandardMaterial3D_hand")
+size = Vector3(0.018, 0.24, 0.01)
+
+[node name="RolexClock" type="Node3D"]
+
+[node name="Panel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0.02)
+mesh = SubResource("BoxMesh_panel")
+
+[node name="Face" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.52, 0.6, 0.045)
+mesh = SubResource("CylinderMesh_face")
+
+[node name="HourHand" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0.8660254, 0, -0.8660254, 0.5, 0, 0, 0, 1, -0.589, 0.64, 0.06)
+mesh = SubResource("BoxMesh_hour")
+
+[node name="MinuteHand" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 0, 0, 1, -0.46, 0.7039, 0.06)
+mesh = SubResource("BoxMesh_minute")
+
+[node name="Logo" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, 0.82, 0.045)
+pixel_size = 0.0015
+texture = ExtResource("1_logos")
+region_enabled = true
+region_rect = Rect2(1388, 568, 295, 123)
+alpha_cut = 1
+
+[node name="Time" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, 0.47, 0.045)
+pixel_size = 0.004
+modulate = Color(1, 0.86, 0.25, 1)
+text = "0:00"
+font = ExtResource("2_font")
+font_size = 80
+outline_size = 0

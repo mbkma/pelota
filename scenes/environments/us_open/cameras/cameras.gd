@@ -1,5 +1,5 @@
-## Broadcast and debug cameras of the match; 1 cycles through them. The TV cameras among them
-## move like real broadcast cameras (see TvCamera).
+## Broadcast and debug cameras of the match; 1 cycles through them. The TV and courtside cameras
+## among them move like real broadcast cameras (see TvCamera and CourtsideCamera).
 class_name MatchCameras
 extends Node3D
 
@@ -39,6 +39,14 @@ func show_from_behind(player: Player) -> void:
 func open_match() -> void:
 	if active_cam is TvCamera:
 		(active_cam as TvCamera).open_shot()
+
+
+## Points the courtside cameras at the player on their end of the court.
+func track_players(front_player: Player, back_player: Player) -> void:
+	for camera in cams:
+		if camera is CourtsideCamera:
+			var front: bool = camera.global_position.z > 0.0
+			(camera as CourtsideCamera).follow(front_player if front else back_player)
 
 
 ## Between points the TV cameras now and then reframe slightly.

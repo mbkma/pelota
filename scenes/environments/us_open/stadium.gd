@@ -31,7 +31,7 @@ const SERVE_CLOCK_SECONDS: float = 25.0
 @onready var _serve_speed_panels: Array[ServeSpeedPanel] = [$ServeSpeedPanel, $ServeSpeedPanel2]
 @onready var _serve_clocks: Array[Node] = $ServeClocks.get_children()
 @onready var _serve_clock_timer: Timer = $ServeClockTimer
-@onready var _time_label: Label3D = $TimePanel/Label3D
+@onready var _time_label: Label3D = $RolexClock/Time
 @onready var _front_player_camera: TargetTracker = $FrontPlayerCamera
 @onready var _back_player_camera: TargetTracker = $BackPlayerCamera
 @onready
@@ -44,8 +44,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	for clock: Label3D in _serve_clocks:
-		clock.text = "%d\nServe Clock" % int(_serve_clock_timer.time_left)
+	for clock: ServeClock in _serve_clocks:
+		clock.show_seconds(int(_serve_clock_timer.time_left))
 
 
 func show_serve_speed(ball: Ball) -> void:
@@ -53,7 +53,7 @@ func show_serve_speed(ball: Ball) -> void:
 		panel.show_serve_speed(ball.velocity.length())
 
 
-## Shows the match time as hours:minutes on the time panel.
+## Shows the match time as hours:minutes on the Rolex clock.
 func show_match_time(elapsed_seconds: float) -> void:
 	var total_minutes: int = floori(elapsed_seconds / 60.0)
 	_time_label.text = "%d:%02d" % [floori(total_minutes / 60.0), total_minutes % 60]
@@ -83,6 +83,6 @@ func stop_serve_clocks() -> void:
 
 
 func _set_serve_clocks_visible(clocks_visible: bool) -> void:
-	for clock: Label3D in _serve_clocks:
-		clock.visible = clocks_visible
+	for clock: ServeClock in _serve_clocks:
+		clock.set_running(clocks_visible)
 	set_process(clocks_visible)

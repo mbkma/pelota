@@ -45,10 +45,11 @@ const SPIN_KICK_FULL_SPEED: float = 20.0
 # Rolling deceleration (m/s²)
 const ROLL_DECELERATION: float = 1.5
 
-# Net: the cord sags from NET_POST_HEIGHT at the singles sticks to NET_CENTER_HEIGHT.
+# Net: a singles net, its posts 0.914 m outside the singles sidelines (inside the doubles alleys,
+# no singles sticks); the cord sags from NET_POST_HEIGHT at the posts to NET_CENTER_HEIGHT.
 const NET_CENTER_HEIGHT: float = 0.914
-const NET_POST_HEIGHT: float = 1.065
-const NET_HALF_WIDTH: float = 4.97
+const NET_POST_HEIGHT: float = 1.07
+const NET_HALF_WIDTH: float = 5.029
 # Share of the speed a ball keeps after clipping the cord, and after running into the net.
 const NET_CORD_SPEED_RETENTION: float = 0.45
 const NET_REBOUND: float = 0.1

@@ -1,93 +1,45 @@
 [gd_scene format=3 uid="uid://cxo4shm4p8nco"]
 
 [ext_resource type="Script" uid="uid://bgtage3xu44li" path="res://scenes/environments/crowd/crowd.gd" id="1_a7rkt"]
-[ext_resource type="PackedScene" uid="uid://ds5ryhspuxtpf" path="res://scenes/environments/crowd/crowd_block.tscn" id="2_axxkg"]
-[ext_resource type="AudioStream" uid="uid://501usltpmnhx" path="res://assets/sounds/effects/crowd/crowd-after-point1.wav" id="2_e1n7f"]
-[ext_resource type="AudioStream" uid="uid://birb4657ratbv" path="res://assets/sounds/effects/crowd/crowd-after-point2.wav" id="3_g038y"]
-[ext_resource type="AudioStream" uid="uid://ck1krkhd4cgch" path="res://assets/sounds/effects/crowd/crowd-idle.wav" id="4_xu5ij"]
 [ext_resource type="Script" uid="uid://dfeyuegrtu4mk" path="res://scenes/environments/crowd/crowd_audio_config.gd" id="5_gs5kl"]
+[ext_resource type="Resource" path="res://scenes/environments/us_open/arthur_ashe/seating.res" id="6_seating"]
+[ext_resource type="Resource" uid="uid://cd1vrmlg6sfga" path="res://scenes/environments/crowd/spectators.tres" id="7_spectators"]
+[ext_resource type="AudioStream" uid="uid://cm4f71rp8uubs" path="res://assets/sounds/effects/crowd/ambience_01.wav" id="crowd_ambience_01"]
+[ext_resource type="AudioStream" uid="uid://wo2dki21qy4i" path="res://assets/sounds/effects/crowd/ambience_02.wav" id="crowd_ambience_02"]
+[ext_resource type="AudioStream" uid="uid://bft0sux3sbifq" path="res://assets/sounds/effects/crowd/ambience_03.wav" id="crowd_ambience_03"]
+[ext_resource type="AudioStream" uid="uid://bnqnwxvudbyog" path="res://assets/sounds/effects/crowd/ambience_05.wav" id="crowd_ambience_05"]
+[ext_resource type="AudioStream" uid="uid://clhbnwjoxi1v3" path="res://assets/sounds/effects/crowd/ambience_06.wav" id="crowd_ambience_06"]
+[ext_resource type="AudioStream" uid="uid://bgl6f6hyntsei" path="res://assets/sounds/effects/crowd/ambience_changeover.wav" id="crowd_ambience_changeover"]
+[ext_resource type="AudioStream" uid="uid://dn8q7712urc06" path="res://assets/sounds/effects/crowd/applause_big_01.wav" id="crowd_applause_big_01"]
+[ext_resource type="AudioStream" uid="uid://cue3t0sywy4q6" path="res://assets/sounds/effects/crowd/applause_big_03.wav" id="crowd_applause_big_03"]
+[ext_resource type="AudioStream" uid="uid://dwlkugpqw8hi1" path="res://assets/sounds/effects/crowd/applause_big_05.wav" id="crowd_applause_big_05"]
+[ext_resource type="AudioStream" uid="uid://dtnfu57e0whvu" path="res://assets/sounds/effects/crowd/applause_big_06.wav" id="crowd_applause_big_06"]
+[ext_resource type="AudioStream" uid="uid://c60ywrpd7r62a" path="res://assets/sounds/effects/crowd/applause_big_07.wav" id="crowd_applause_big_07"]
+[ext_resource type="AudioStream" uid="uid://bgrf8ls4sec4a" path="res://assets/sounds/effects/crowd/applause_big_08.wav" id="crowd_applause_big_08"]
+[ext_resource type="AudioStream" uid="uid://dustvu7pnfo78" path="res://assets/sounds/effects/crowd/applause_medium_01.wav" id="crowd_applause_medium_01"]
+[ext_resource type="AudioStream" uid="uid://dp7dyujqiv8pg" path="res://assets/sounds/effects/crowd/applause_medium_07.wav" id="crowd_applause_medium_07"]
+[ext_resource type="AudioStream" uid="uid://d16tblitkm2v5" path="res://assets/sounds/effects/crowd/applause_short_04.wav" id="crowd_applause_short_04"]
+[ext_resource type="AudioStream" uid="uid://d07jlkl0shmwy" path="res://assets/sounds/effects/crowd/applause_short_06.wav" id="crowd_applause_short_06"]
 
 [sub_resource type="Resource" id="Resource_cp0o2"]
 script = ExtResource("5_gs5kl")
-idle_sounds = Array[AudioStream]([ExtResource("4_xu5ij")])
-after_point_sounds = Array[AudioStream]([ExtResource("2_e1n7f"), ExtResource("3_g038y")])
+idle_sounds = Array[AudioStream]([ExtResource("crowd_ambience_01"), ExtResource("crowd_ambience_02"), ExtResource("crowd_ambience_03"), ExtResource("crowd_ambience_05"), ExtResource("crowd_ambience_06")])
+changeover_sound = ExtResource("crowd_ambience_changeover")
+short_cheers = Array[AudioStream]([ExtResource("crowd_applause_short_04"), ExtResource("crowd_applause_short_06")])
+medium_cheers = Array[AudioStream]([ExtResource("crowd_applause_medium_01"), ExtResource("crowd_applause_medium_07")])
+big_cheers = Array[AudioStream]([ExtResource("crowd_applause_big_01"), ExtResource("crowd_applause_big_03"), ExtResource("crowd_applause_big_05"), ExtResource("crowd_applause_big_06"), ExtResource("crowd_applause_big_07"), ExtResource("crowd_applause_big_08")])
 metadata/_custom_type_script = "uid://dfeyuegrtu4mk"
 
 [node name="Crowd" type="Node" unique_id=1204219689]
 script = ExtResource("1_a7rkt")
 config = SubResource("Resource_cp0o2")
+seating = ExtResource("6_seating")
+spectators = ExtResource("7_spectators")
 
-[node name="EastBlock2" type="Node3D" parent="." unique_id=948425021]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -12.918195, -0.067768574, -17.666695)
+[node name="AmbiencePlayer1" type="AudioStreamPlayer" parent="." unique_id=604594858]
 
-[node name="CrowdBlock" parent="EastBlock2" unique_id=900926214 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
-seating_seed = 1
+[node name="AmbiencePlayer2" type="AudioStreamPlayer" parent="." unique_id=2055287706]
 
-[node name="CrowdBlock5" parent="EastBlock2" unique_id=660516629 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
-seating_seed = 2
+[node name="CheerPlayer1" type="AudioStreamPlayer" parent="." unique_id=1134290882]
 
-[node name="CrowdBlock2" parent="EastBlock2" unique_id=967489851 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
-seating_seed = 3
-
-[node name="CrowdBlock3" parent="EastBlock2" unique_id=383427788 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
-seating_seed = 4
-
-[node name="CrowdBlock4" parent="EastBlock2" unique_id=536227548 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
-seating_seed = 5
-
-[node name="EastBlock" type="Node3D" parent="." unique_id=1070903490]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.915, 0.566, 0)
-
-[node name="CrowdBlock" parent="EastBlock" unique_id=524828875 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -16.6489)
-seating_seed = 6
-
-[node name="CrowdBlock5" parent="EastBlock" unique_id=1059679277 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -13.5758)
-seating_seed = 7
-
-[node name="CrowdBlock2" parent="EastBlock" unique_id=1346328431 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -9.55223)
-seating_seed = 8
-
-[node name="CrowdBlock3" parent="EastBlock" unique_id=1021341322 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -6.48601)
-seating_seed = 9
-
-[node name="CrowdBlock4" parent="EastBlock" unique_id=722183903 instance=ExtResource("2_axxkg")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, -2.46337)
-seating_seed = 10
-
-[node name="NorthBlock" type="Node3D" parent="." unique_id=308978892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5966256, -20.85869)
-
-[node name="CrowdBlock6" parent="NorthBlock" unique_id=113764286 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -9.84708, 0, 0)
-seating_seed = 11
-
-[node name="CrowdBlock7" parent="NorthBlock" unique_id=958542378 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -6.66835, 0, 0)
-seating_seed = 12
-
-[node name="CrowdBlock8" parent="NorthBlock" unique_id=339555331 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -2.60709, 0, 0)
-seating_seed = 13
-
-[node name="CrowdBlock9" parent="NorthBlock" unique_id=1578502360 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 0.51696, 0, 0)
-seating_seed = 14
-
-[node name="CrowdBlock10" parent="NorthBlock" unique_id=1355092264 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 4.47408, 0, 0)
-seating_seed = 15
-
-[node name="CrowdBlock11" parent="NorthBlock" unique_id=744643174 instance=ExtResource("2_axxkg")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, 7.54606, 0, 0)
-seating_seed = 16
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1134290882]
+[node name="CheerPlayer2" type="AudioStreamPlayer" parent="." unique_id=2069597245]

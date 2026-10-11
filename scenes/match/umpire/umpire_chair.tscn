@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/match/umpire/umpire_chair.res" id="1_juacu"]
+
+[node name="UmpireChair" type="MeshInstance3D" unique_id=509593551]
+mesh = ExtResource("1_juacu")

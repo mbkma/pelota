@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/environments/us_open/serve_clock.gd" id="1_clock"]
+[ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="2_font"]
+
+[node name="ServeClock" type="Node3D"]
+script = ExtResource("1_clock")
+
+[node name="Seconds" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0.01)
+pixel_size = 0.004
+text = "25"
+font = ExtResource("2_font")
+font_size = 56
+outline_size = 0
+
+[node name="Caption" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0.01)
+pixel_size = 0.004
+text = "SERVE"
+font = ExtResource("2_font")
+font_size = 26
+outline_size = 0

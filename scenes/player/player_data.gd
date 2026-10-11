@@ -5,6 +5,8 @@ extends Resource
 @export var last_name := ""
 @export var age := 20
 @export var country := ""
+## Three-letter country code, as TV graphics show it (e.g. "ITA")
+@export var country_code := ""
 @export var height := 180
 @export var hand := "R"
 @export var backhand := 2

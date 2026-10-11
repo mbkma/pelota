@@ -40,6 +40,12 @@ const DEEP_BALL_CONTROL_LOSS: Vector2 = Vector2(0.6, 0.35)
 ## FULL_READINESS_SET_TIME seconds before contact is full readiness.
 const SET_SPEED: float = 1.0
 const FULL_READINESS_SET_TIME: float = 0.5
+## A groundstroke swung while moving faster than this share of move_speed is hit on the run
+const RUNNING_STROKE_SPEED_SHARE: float = 0.5
+## Seconds into a sound of stroke_sounds_running its racket hit is
+const RUNNING_HIT_TIME: float = 0.5
+## Seconds a running stroke sound fades out over when the stroke misses the ball
+const RUNNING_SOUND_FADE_OUT: float = 0.05
 ## Readiness: seconds the ball flies toward the player before contact. Below RUSHED_FLIGHT_TIME
 ## (a hard serve or drive) there is no time to attack, from RELAXED_FLIGHT_TIME on (a slow or
 ## short ball) there is plenty.
@@ -103,6 +109,8 @@ const BACKWARD_RUN_ALIGNMENT: float = 0.5
 @export var stroke_sounds_flat: Array[AudioStream]
 ## Slice stroke sound effect pool used for slice/drop-shot variants.
 @export var stroke_sounds_slice: Array[AudioStream]
+## Groundstrokes hit on the run: a shoe squeak and then the hit, RUNNING_HIT_TIME into the sound.
+@export var stroke_sounds_running: Array[AudioStream]
 
 ## Deceleration rate in m/s² without movement input.
 @export var friction: float = 12.0
@@ -135,6 +143,11 @@ var _movement := MovementController.new()
 var _swing_clip: StrokeClip = null
 ## Seconds until the racket is expected to meet the ball; INF while no contact is predicted.
 var _seconds_to_contact: float = INF
+## Sound of a stroke hit on the run, started RUNNING_HIT_TIME before contact so that its hit
+## lands on the contact; null for other strokes
+var _running_sound: AudioStream = null
+var _running_sound_started: bool = false
+var _stroke_sound_fade: Tween
 ## Seconds the player has been set (moving slower than SET_SPEED).
 var _set_time: float = 0.0
 ## Seconds the active ball has been flying toward this player.
@@ -366,6 +379,7 @@ func get_seconds_to_contact() -> float:
 func _update_stroke_timing() -> void:
 	if _swing_clip:
 		_seconds_to_contact -= get_physics_process_delta_time()
+		_start_running_sound_when_due()
 		return
 	if not queued_stroke or not is_instance_valid(ball):
 		_seconds_to_contact = INF
@@ -404,6 +418,8 @@ func _start_swing(clip: StrokeClip, speed: float, start_time: float = 0.0) -> vo
 	model.set_body_yaw(0.0)
 	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
 	_seconds_to_contact = (hit_time - start_time) / speed
+	_running_sound = _pick_running_sound()
+	_start_running_sound_when_due()
 	_set_state(PlayerStateMachine.State.STROKING)
 	model.animator.play_stroke(clip.animation, speed, start_time)
 
@@ -656,6 +672,15 @@ func _change_stamina(amount: float) -> void:
 
 ## Drop the queued stroke. A swing already playing finishes its animation.
 func cancel_stroke() -> void:
+	if _running_sound_started:
+		# Missed: the sound's hit must not be heard
+		_stroke_sound_fade = create_tween()
+		_stroke_sound_fade.tween_property(
+			audio_stream_player, "volume_db", -60.0, RUNNING_SOUND_FADE_OUT
+		)
+		_stroke_sound_fade.tween_callback(audio_stream_player.stop)
+	_running_sound = null
+	_running_sound_started = false
 	queued_stroke = null
 	_swing_clip = null
 	_seconds_to_contact = INF
@@ -679,16 +704,54 @@ func _spawn_serve_ball() -> void:
 	ball_spawned.emit(serve_ball)
 
 
-## Play sound for given stroke: a slice sound, a grunt or a flat hit.
+## Play sound for given stroke at contact: a slice sound, a grunt or a flat hit. A stroke on the
+## run already plays its sound, whose hit lands now.
 func play_stroke_sound(stroke: Stroke) -> void:
+	if _running_sound:
+		if not _running_sound_started:
+			_play_stroke_sound(_running_sound, RUNNING_HIT_TIME)
+		_running_sound = null
+		_running_sound_started = false
+		return
 	var grunts: Array = player_data.sounds.grunt_flat
-	if stroke.stroke_type == Stroke.StrokeType.BACKHAND_SLICE or stroke.is_drop():
-		audio_stream_player.stream = stroke_sounds_slice.pick_random()
+	if _is_slice(stroke):
+		_play_stroke_sound(stroke_sounds_slice.pick_random())
 	elif not grunts.is_empty() and randf() < player_data.sounds.grunt_frequency:
-		audio_stream_player.stream = grunts.pick_random()
+		_play_stroke_sound(grunts.pick_random())
 	else:
-		audio_stream_player.stream = stroke_sounds_flat.pick_random()
-	audio_stream_player.play()
+		_play_stroke_sound(stroke_sounds_flat.pick_random())
+
+
+func _play_stroke_sound(sound: AudioStream, from_position: float = 0.0) -> void:
+	if _stroke_sound_fade:
+		_stroke_sound_fade.kill()
+	audio_stream_player.volume_db = 0.0
+	audio_stream_player.stream = sound
+	audio_stream_player.play(from_position)
+
+
+func _is_slice(stroke: Stroke) -> bool:
+	return stroke.stroke_type == Stroke.StrokeType.BACKHAND_SLICE or stroke.is_drop()
+
+
+## A running stroke sound for a groundstroke swung on the run, otherwise null.
+func _pick_running_sound() -> AudioStream:
+	var stroke: Stroke = queued_stroke
+	if stroke.stroke_type == Stroke.StrokeType.SERVE or stroke.is_volley() or _is_slice(stroke):
+		return null
+	var speed: float = Vector2(velocity.x, velocity.z).length()
+	if speed < move_speed * RUNNING_STROKE_SPEED_SHARE:
+		return null
+	return stroke_sounds_running.pick_random()
+
+
+## Starts the running stroke sound once contact is RUNNING_HIT_TIME away, so that its hit lands
+## on the contact (part of the way in for a swing shorter than that).
+func _start_running_sound_when_due() -> void:
+	if not _running_sound or _running_sound_started or _seconds_to_contact > RUNNING_HIT_TIME:
+		return
+	_play_stroke_sound(_running_sound, RUNNING_HIT_TIME - maxf(_seconds_to_contact, 0.0))
+	_running_sound_started = true
 
 
 ## Set the active ball for this player

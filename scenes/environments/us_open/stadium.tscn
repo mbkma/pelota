@@ -1,55 +1,33 @@
 [gd_scene format=3 uid="uid://d237t32p1sgei"]
 
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/arthur_ashe/arthur_ashe.tscn" id="2_hi2re"]
 [ext_resource type="PackedScene" path="res://scenes/player/racket/racket.tscn" id="2_racket"]
-[ext_resource type="PackedScene" uid="uid://dvo2jq6bdkolh" path="res://assets/models/stadium/stadium.blend" id="2_hi2re"]
 [ext_resource type="Script" uid="uid://h38us3lvmlk7" path="res://scenes/environments/us_open/stadium.gd" id="3"]
 [ext_resource type="Script" uid="uid://bhlvub0gn61wg" path="res://scenes/environments/us_open/cameras/cameras.gd" id="4_2gjwx"]
 [ext_resource type="PackedScene" uid="uid://b0fek2dc3mv3s" path="res://scenes/environments/us_open/serve_speed_panel.tscn" id="5"]
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://scenes/court/court.tscn" id="5_2qn74"]
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scenes/environments/us_open/cameras/free_look_camera.gd" id="5_tvjv8"]
-[ext_resource type="FontFile" uid="uid://cv0pw4voe03yw" path="res://assets/fonts/HumanSans-Regular.otf" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/serve_clock.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/rolex_clock.tscn" id="6_rolex"]
 [ext_resource type="Script" uid="uid://b0cpbi4vts8nb" path="res://scenes/environments/us_open/cameras/tv_camera.gd" id="6_tvcam"]
 [ext_resource type="Script" uid="uid://cwhjwue5t16nc" path="res://scenes/environments/us_open/look_at.gd" id="7_af67j"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/cameras/broadcast_camera.tscn" id="8_camera"]
+[ext_resource type="Script" uid="uid://by6vagmrxlde0" path="res://scenes/environments/us_open/cameras/courtside_camera.gd" id="9_courtside"]
 
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(38.3846, 2, 46.8104)
 
 [sub_resource type="BoxShape3D" id="2"]
-size = Vector3(30.0088, 12.7414, 2)
+size = Vector3(36, 12.7414, 2)
 
 [sub_resource type="BoxShape3D" id="3"]
 size = Vector3(2, 12.186, 38.508)
-
-[sub_resource type="FontFile" id="5"]
-fallbacks = Array[Font]([ExtResource("6")])
-subpixel_positioning = 0
-msdf_pixel_range = 14
-msdf_size = 128
-cache/0/variation_coordinates = {}
-cache/0/face_index = 0
-cache/0/embolden = 0.0
-cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
-cache/0/spacing_top = 0
-cache/0/spacing_bottom = 0
-cache/0/spacing_space = 0
-cache/0/spacing_glyph = 0
-cache/0/baseline_offset = 0.0
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/32/0/ascent = 0.0
-cache/0/32/0/descent = 0.0
-cache/0/32/0/underline_position = 0.0
-cache/0/32/0/underline_thickness = 0.0
-cache/0/32/0/scale = 1.0
 
 [node name="Stadium" type="Node3D" unique_id=1375206359]
 script = ExtResource("3")
 
 [node name="Player2Bench" type="Node3D" parent="." unique_id=2040276200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 0, 0)
 
 [node name="racket4" parent="Player2Bench" unique_id=261715779 instance=ExtResource("2_racket")]
 transform = Transform3D(-0.17794098, -0.096829206, 0.9792655, 0.8747212, -0.47142848, 0.11232978, 0.45077688, 0.8765725, 0.16858502, -7.3618193, 0.2941249, -2.6589813)
@@ -58,7 +36,7 @@ transform = Transform3D(-0.17794098, -0.096829206, 0.9792655, 0.8747212, -0.4714
 transform = Transform3D(-0.8411639, 0.3539329, 0.40887022, 0.29873663, -0.32611686, 0.89688575, 0.45077688, 0.8765725, 0.16858502, -7.7174754, 0.42348576, -3.038759)
 
 [node name="Player1Bench" type="Node3D" parent="." unique_id=866799979]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 10.666, 0, 1.5)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 10.538, 0, 1.5)
 
 [node name="racket2" parent="Player1Bench" unique_id=188984536 instance=ExtResource("2_racket")]
 transform = Transform3D(0.17794101, 0.09682928, -0.9792655, 0.8747212, -0.47142848, 0.11232978, -0.45077688, -0.87657243, -0.1685851, 18.02782, 0.2941249, -1.008997)
@@ -66,7 +44,7 @@ transform = Transform3D(0.17794101, 0.09682928, -0.9792655, 0.8747212, -0.471428
 [node name="racket3" parent="Player1Bench" unique_id=17197512 instance=ExtResource("2_racket")]
 transform = Transform3D(0.17794101, 0.09682928, -0.9792655, 0.8747212, -0.47142848, 0.11232978, -0.45077688, -0.87657243, -0.1685851, 18.02782, 0.2941249, -1.2936141)
 
-[node name="stadium" parent="." unique_id=492985688 instance=ExtResource("2_hi2re")]
+[node name="ArthurAshe" parent="." unique_id=492985688 instance=ExtResource("2_hi2re")]
 
 [node name="Court" parent="." unique_id=412000164 instance=ExtResource("5_2qn74")]
 
@@ -84,14 +62,14 @@ far = 8192.0
 script = ExtResource("5_tvjv8")
 
 [node name="TopFront" type="Camera3D" parent="Cameras" unique_id=1711630965]
-transform = Transform3D(1, 0, 0, 0, 0.947768, 0.318959, 0, -0.318959, 0.947768, 0, 9.78, 32.23)
-fov = 25.0
+transform = Transform3D(0.999992, 0.002855, -0.002688, -0.001812, 0.944301, 0.329078, 0.003478, -0.329071, 0.944299, -0.016, 9.894, 32.245)
+fov = 24.65
 size = 97.38
 script = ExtResource("6_tvcam")
 
 [node name="TopBack" type="Camera3D" parent="Cameras" unique_id=600431920]
-transform = Transform3D(-1, 0, 0, 0, 0.947768, 0.318959, 0, 0.318959, -0.947768, 0, 9.78, -32.23)
-fov = 25.0
+transform = Transform3D(-0.999992, -0.002855, 0.002688, -0.001812, 0.944301, 0.329078, -0.003478, 0.329071, -0.944299, 0.016, 9.894, -32.245)
+fov = 24.65
 size = 97.38
 script = ExtResource("6_tvcam")
 
@@ -102,20 +80,20 @@ size = 97.38
 script = ExtResource("6_tvcam")
 
 [node name="MiddleBack" type="Camera3D" parent="Cameras" unique_id=1711178741]
-transform = Transform3D(-1, -2.3362732e-08, 8.424329e-08, 0, 0.9636309, 0.2672385, -8.742278e-08, 0.2672385, -0.9636309, 0, 6.936, -28.829)
+transform = Transform3D(-1, 0, 0, 0, 0.963631, 0.267239, 0, 0.267239, -0.963631, 0, 6.936, -28.829)
 fov = 23.5
 size = 97.38
 script = ExtResource("6_tvcam")
 
 [node name="CourtSideFront" type="Camera3D" parent="Cameras" unique_id=90699718]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 19)
-fov = 39.5
-script = ExtResource("6_tvcam")
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 3.2, 21.7)
+fov = 28.0
+script = ExtResource("9_courtside")
 
 [node name="CourtSideBack" type="Camera3D" parent="Cameras" unique_id=1456183779]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -19)
-fov = 39.5
-script = ExtResource("6_tvcam")
+transform = Transform3D(-1, 0, 0, 0, 0.984808, 0.173648, 0, 0.173648, -0.984808, 0, 3.2, -21.7)
+fov = 28.0
+script = ExtResource("9_courtside")
 
 [node name="CameraTop" type="Camera3D" parent="Cameras" unique_id=1099254777]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 20, 0)
@@ -123,51 +101,50 @@ script = ExtResource("5_tvjv8")
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=1699210346 groups=["Ground"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1119701321]
 shape = SubResource("1")
 
 [node name="WallNord" type="StaticBody3D" parent="." unique_id=1775614588]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, -20.5244)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, -21.47)
+visible = false
 
 [node name="CollisionShape2" type="CollisionShape3D" parent="WallNord" unique_id=1631690973]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0450077)
 shape = SubResource("2")
 
 [node name="WallEast" type="StaticBody3D" parent="." unique_id=1537985736]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8566, 6.05442, -0.262106)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1, 6.05442, -0.262106)
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast" unique_id=475963912]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586548, 0)
 shape = SubResource("3")
 
 [node name="WallWest" type="StaticBody3D" parent="." unique_id=1007468064]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.8512, 6.05442, -0.262106)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6, 6.05442, -0.262106)
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest" unique_id=1462181196]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586548, 0)
 shape = SubResource("3")
 
 [node name="WallSouth" type="StaticBody3D" parent="." unique_id=128149593]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, 20.7466)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.05442, 21.47)
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth" unique_id=1793847488]
 shape = SubResource("2")
 
 [node name="ServeSpeedPanel2" parent="." unique_id=1128045737 instance=ExtResource("5")]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 5.762, 0, 19.7)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.05, 0, 20.46)
 
 [node name="ServeSpeedPanel" parent="." unique_id=249829326 instance=ExtResource("5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.58155, 0.0526706, -19.7603)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.05, 0, -20.46)
 
-[node name="TimePanel" type="Node3D" parent="." unique_id=1191015511]
-transform = Transform3D(0.591664, 0, 0, 0, 0.554529, 0, 0, 0, 1.21236, 6.52847, 0.606019, -19.6819)
-
-[node name="Label3D" type="Label3D" parent="TimePanel" unique_id=1866972551]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.21567, -0.444406, -0.111006)
-modulate = Color(1, 1, 0, 1)
-text = "0:00"
-font_size = 179
+[node name="RolexClock" parent="." unique_id=1191015511 instance=ExtResource("6_rolex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9, 0.22, -20.46)
 
 [node name="Positions" type="Node3D" parent="." unique_id=17340585]
 
@@ -197,52 +174,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
 
 [node name="ServeClocks" type="Node3D" parent="." unique_id=1993826580]
 
-[node name="ServeClock" type="Label3D" parent="ServeClocks" unique_id=736676380]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.63603, 1.41341, -19.7699)
-outline_modulate = Color(1, 1, 1, 1)
-text = "25
-Serve Clock"
-font_size = 38
-outline_size = 2
+[node name="ServeClock" parent="ServeClocks" unique_id=736676380 instance=ExtResource("6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.77, 2.12, -20.46)
 
-[node name="ServeClock2" type="Label3D" parent="ServeClocks" unique_id=1946983221]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.42196, 1.41341, -19.7699)
-outline_modulate = Color(1, 1, 1, 1)
-text = "25
-Serve Clock"
-font = SubResource("5")
-outline_size = 2
+[node name="ServeClock2" parent="ServeClocks" unique_id=1946983221 instance=ExtResource("6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.29, 2.12, -20.46)
 
-[node name="ServeClock3" type="Label3D" parent="ServeClocks" unique_id=799800393]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 9.422, 1.413, 19.77)
-outline_modulate = Color(1, 1, 1, 1)
-text = "25
-Serve Clock"
-font = SubResource("5")
+[node name="ServeClock3" parent="ServeClocks" unique_id=799800393 instance=ExtResource("6")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.77, 2.12, 20.46)
 
-[node name="ServeClock4" type="Label3D" parent="ServeClocks" unique_id=1309599702]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -9, 1.413, 19.77)
-outline_modulate = Color(1, 1, 1, 1)
-text = "25
-Serve Clock"
-font = SubResource("5")
+[node name="ServeClock4" parent="ServeClocks" unique_id=1309599702 instance=ExtResource("6")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.29, 2.12, 20.46)
 
 [node name="ServeClockTimer" type="Timer" parent="." unique_id=1386027715]
 one_shot = true
 
 [node name="UmpireCamera" type="Node3D" parent="." unique_id=1549887150]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8, 0, 0)
 
 [node name="camera" parent="UmpireCamera" unique_id=768048712 instance=ExtResource("8_camera")]
 
 [node name="FrontPlayerCamera" type="Node3D" parent="." unique_id=430943148]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, 1.5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8, 0, 1.5)
 script = ExtResource("7_af67j")
 
 [node name="camera" parent="FrontPlayerCamera" unique_id=630861209 instance=ExtResource("8_camera")]
 
 [node name="BackPlayerCamera" type="Node3D" parent="." unique_id=412625823]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10.666, 0, -1.5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8, 0, -1.5)
 script = ExtResource("7_af67j")
 
 [node name="camera" parent="BackPlayerCamera" unique_id=731066851 instance=ExtResource("8_camera")]

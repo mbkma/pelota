@@ -33,6 +33,7 @@ first_name = "Caspar"
 last_name = "Ruud"
 age = 23
 country = "Norway"
+country_code = "NOR"
 height = 183
 rank = 6
 play_style = ExtResource("3_ojko4")

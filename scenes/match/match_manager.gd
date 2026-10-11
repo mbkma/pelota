@@ -76,7 +76,7 @@ func _ready() -> void:
 		bus.point_ended.connect(stadium.stop_serve_clocks.unbind(1))
 		television_hud.set_player(i, player.player_data)
 		cameras.register_camera(player.first_person_camera)
-	television_hud.update_score(match_data.score)
+	television_hud.start_broadcast(match_data.score)
 	stadium.show_bench_rackets(players)
 	_update_players_for_next_point()
 
@@ -152,7 +152,7 @@ func add_point(winner: int) -> void:
 		get_player(winner).mental_state.on_game_result(true)
 		get_player(1 - winner).mental_state.on_game_result(false)
 	_update_players_for_next_point()
-	television_hud.update_score(score)
+	television_hud.on_point_played(match_data, winner)
 	stadium.show_match_time(match_data.elapsed_seconds)
 	if score.is_match_over():
 		_end_match(winner)
@@ -181,10 +181,9 @@ func place_players() -> void:
 	player1.place_at(
 		stadium.positions[_get_player_position(server_index == 1, deuce_side, ends_switched)]
 	)
-	if player0.global_position.z > 0.0:
-		stadium.track_players(player0, player1)
-	else:
-		stadium.track_players(player1, player0)
+	var front_player: Player = player0 if player0.global_position.z > 0.0 else player1
+	stadium.track_players(front_player, front_player.opponent)
+	cameras.track_players(front_player, front_player.opponent)
 	var human_player: Player = _get_single_human_player()
 	if human_player:
 		cameras.show_from_behind(human_player)
@@ -336,8 +335,10 @@ func _hold_set_break() -> void:
 	var music_director: MusicDirector = get_tree().root.get_node_or_null(^"MusicDirector")
 	if music_director:
 		music_director.resume()
+	crowd.start_changeover()
 	set_break_started.emit(match_data.score.completed_sets.size())
 	await set_break_ended
+	crowd.end_changeover()
 	if music_director:
 		music_director.stop()
 

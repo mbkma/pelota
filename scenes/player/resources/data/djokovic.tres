@@ -34,6 +34,7 @@ first_name = "Novak"
 last_name = "Djokovic"
 age = 35
 country = "Serbia"
+country_code = "SRB"
 height = 185
 rank = 7
 play_style = ExtResource("5_26w41")

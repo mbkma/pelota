@@ -5,10 +5,10 @@ extends Camera3D
 
 ## Point the camera looks at
 @export var focus: Vector3 = Vector3(0.0, 0.5, 0.0)
-@export var radius: float = 24.0
-@export var radius_variation: float = 6.0
-@export var height: float = 7.0
-@export var height_variation: float = 3.0
+@export var radius: float = 16.0
+@export var radius_variation: float = 3.0
+@export var height: float = 8.5
+@export var height_variation: float = 2.0
 ## Orbit speed (radians per second)
 @export var angular_speed: float = 0.05
 

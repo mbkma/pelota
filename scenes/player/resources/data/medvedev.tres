@@ -33,6 +33,7 @@ first_name = "Daniil"
 last_name = "Medvedev"
 age = 25
 country = "Russia"
+country_code = "RUS"
 height = 198
 play_style = ExtResource("4_wq2sn")
 stats = SubResource("Resource_medvedev_stats")
