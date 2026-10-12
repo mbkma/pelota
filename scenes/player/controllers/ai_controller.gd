@@ -127,7 +127,9 @@ func get_stroke() -> Stroke:
 
 
 func get_aim_marker_position() -> Variant:
-	return _pending_stroke.stroke_target if _pending_stroke else null
+	if _pending_stroke:
+		return _pending_stroke.stroke_target
+	return null
 
 
 func get_current_phase() -> Phase:

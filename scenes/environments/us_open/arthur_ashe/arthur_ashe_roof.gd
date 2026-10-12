@@ -76,12 +76,12 @@ func flag() -> MeshInstance3D:
 	var material := ShaderMaterial.new()
 	material.shader = FLAG_SHADER
 	mesh.material = material
-	var flag := MeshInstance3D.new()
-	flag.name = "Flag"
-	flag.mesh = mesh
+	var flag_mesh := MeshInstance3D.new()
+	flag_mesh.name = "Flag"
+	flag_mesh.mesh = mesh
 	var at: Vector2 = _shape.on_edge(_far_end(), 0.5, RING_TRUSS.x - 0.6)
-	flag.transform = Transform3D(Basis(), Vector3(at.x + 9.5, RING_TRUSS.z - 3.4, at.y))
-	return flag
+	flag_mesh.transform = Transform3D(Basis(), Vector3(at.x + 9.5, RING_TRUSS.z - 3.4, at.y))
+	return flag_mesh
 
 
 ## The fixed roof ring with its trusses, lights and speakers, and the trusses and columns the roof
@@ -328,6 +328,7 @@ func build_panels() -> FlatGeometry:
 func _video_boards() -> Array[Dictionary]:
 	var boards: Array[Dictionary] = []
 	for corner in 4:
+		@warning_ignore("integer_division")
 		var at: Vector2 = _shape.at(
 			corner * (_shape.corner_facets + 1) + _shape.corner_facets / 2, RING_TRUSS.x - 1.5
 		)

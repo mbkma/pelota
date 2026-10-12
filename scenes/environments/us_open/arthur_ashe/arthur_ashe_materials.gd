@@ -30,7 +30,7 @@ static func make() -> Dictionary[String, Material]:
 	_material(materials, "terracotta", Color(0.6, 0.32, 0.24), 0.85)
 	_material(materials, "fascia", Color(0.06, 0.14, 0.4), 0.45)
 	_material(materials, "wall", Color(0.09, 0.2, 0.5), 0.55)
-	_material(materials, "field", Color(0.25, 0.47, 0.36), 0.85)
+	_material(materials, "field", Color(0.21, 0.3, 0.2), 0.85)
 	_material(materials, "seat", Color(0.1, 0.22, 0.56), 0.42)
 	_material(materials, "seat_frame", Color(0.2, 0.21, 0.23), 0.5, 0.6)
 	var glass := _material(materials, "glass", Color(0.05, 0.07, 0.1), 0.06, 0.85)

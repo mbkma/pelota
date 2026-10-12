@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://scenes/player/racket/racket.tscn" id="2_racket"]
 [ext_resource type="Script" uid="uid://qr66qvlcjtk7" path="res://scenes/player/model.gd" id="1_8ddow"]
+[ext_resource type="Resource" uid="uid://dfcx5o2i6uloi" path="res://scenes/player/resources/appearances/base.tres" id="19_base"]
 [ext_resource type="ArrayMesh" uid="uid://4r4ft5gety21" path="res://assets/models/player/meshes/djokovic/player_djokovic_high-poly.res" id="5_xrs24"]
 [ext_resource type="ArrayMesh" uid="uid://davv7k53727qv" path="res://assets/models/player/meshes/djokovic/player_djokovic_eyebrow012_001.res" id="6_5l8r3"]
 [ext_resource type="ArrayMesh" uid="uid://b4owf406mogj1" path="res://assets/models/player/meshes/djokovic/player_djokovic_eyelashes01_001.res" id="7_d4a1o"]
@@ -568,6 +569,7 @@ rings = 4
 
 [node name="Model" type="Node3D" unique_id=1656989274 node_paths=PackedStringArray("animator", "racket")]
 script = ExtResource("1_8ddow")
+base_appearance = ExtResource("19_base")
 animator = NodePath("AnimationTree")
 racket = NodePath("h/player_djokovic/game-rig/GeneralSkeleton/DEF-attachment_hand_R/racket")
 

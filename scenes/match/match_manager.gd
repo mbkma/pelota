@@ -226,8 +226,10 @@ func _start_point() -> void:
 	_request_serve()
 
 
-## Puts the players in position and lets the server serve (first or second serve, or a let).
+## Puts the players in position and lets the server serve (first or second serve, or a let); the
+## light bars of a fault go out.
 func _request_serve() -> void:
+	court.clear_fault()
 	match_data.rally_length = 0
 	_serve_clipped_net = false
 	_stop_players()
@@ -298,7 +300,7 @@ func _process_serve_ground_contact() -> void:
 
 	if is_first_serve:
 		if _ball_crossed_net():
-			umpire.call_fault()
+			_call_fault()
 		current_state = MatchState.SECOND_SERVE
 		_serve_again_after_break()
 	else:
@@ -320,6 +322,13 @@ func _process_rally_ground_contact() -> void:
 		current_state = MatchState.FAULT
 
 
+## The electronic line calling calls a ball out: the umpire's "Fault" and the red light bars at the
+## net.
+func _call_fault() -> void:
+	umpire.call_fault()
+	court.signal_fault()
+
+
 ## Whether the ball landed on the other side of the net than the last hitter's.
 func _ball_crossed_net() -> bool:
 	return signf(ball.position.z) != signf(last_hitter.position.z)
@@ -339,7 +348,7 @@ func _handle_fault() -> void:
 	if ground_contacts == 0:
 		# Out; a ball into the net is not called.
 		if crossed_net:
-			umpire.call_fault()
+			_call_fault()
 		point_winner = last_hitter.opponent
 		# Out or into the net; a missed second serve is already counted as a double fault.
 		if _point_serve_number > 0:
@@ -516,7 +525,10 @@ func _get_player_position(
 
 ## The ball camera follows the ball in play, and the server while none is.
 func _aim_ball_camera(active_ball: Ball) -> void:
-	stadium.aim_ball_camera(active_ball if active_ball else get_server())
+	if active_ball:
+		stadium.aim_ball_camera(active_ball)
+	else:
+		stadium.aim_ball_camera(get_server())
 
 
 ## A serve that clips the net cord and lands in the service box is a let and is replayed.

@@ -413,10 +413,10 @@ func _build() -> void:
 			_statistic_values[player].append(value)
 
 
-func _label(font: Font, size: int, color: Color, alignment: HorizontalAlignment) -> Label:
+func _label(font: Font, font_size: int, color: Color, alignment: HorizontalAlignment) -> Label:
 	var label := Label.new()
 	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", size)
+	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	label.horizontal_alignment = alignment
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

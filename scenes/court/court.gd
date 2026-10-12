@@ -14,6 +14,8 @@ enum CourtRegion {
 ## Court regions as rectangles on the ground (x, z)
 var _court_regions: Dictionary[CourtRegion, Rect2] = {}
 
+@onready var _net_led_bars: NetLedBars = $NetLedBars
+
 
 func _ready() -> void:
 	var front_left_box: Vector3 = $front_left_service_box.position
@@ -33,6 +35,16 @@ func _ready() -> void:
 		Rect2(-field_width / 2.0, $back_sideline.position.z, field_width, half_length),
 		CourtRegion.FRONT_SINGLES_BOX: Rect2(-field_width / 2.0, 0.0, field_width, half_length),
 	}
+
+
+## Lights the light bars at the net's ends red: a ball was called out.
+func signal_fault() -> void:
+	_net_led_bars.flash_fault()
+
+
+## Turns the light bars at the net's ends off: the next serve comes.
+func clear_fault() -> void:
+	_net_led_bars.turn_off()
 
 
 func is_ball_in_court_region(ball_position: Vector3, court_region: CourtRegion) -> bool:

@@ -7,10 +7,6 @@ extends Node3D
 
 const HAIR_SHADER: Shader = preload("res://scenes/player/hair.gdshader")
 const SWEAT_PATCHES_SHADER: Shader = preload("res://scenes/player/sweat_patches.gdshader")
-## Appearance every player's appearance builds on
-const BASE_APPEARANCE: PlayerAppearance = preload(
-	"res://scenes/player/resources/appearances/base.tres"
-)
 ## Match time (s) the player stays dry (about the first two or three games), and after which the
 ## sweat is full; in between it grows steadily.
 const DRY_MATCH_TIME: float = 480.0
@@ -32,6 +28,8 @@ const BODY_TURN_SPEED: float = 10.0
 ## Shirts with their rest positions for the sweat patches, by the appearance's shirt mesh
 static var _rest_position_meshes: Dictionary[ArrayMesh, ArrayMesh] = {}
 
+## Appearance every player's appearance builds on
+@export var base_appearance: PlayerAppearance
 @export var animator: PlayerAnimator
 ## Racket held in the right hand of the rig.
 @export var racket: Racket
@@ -130,7 +128,7 @@ func get_racket_contact_point(stroke: Stroke) -> Vector3:
 
 ## Shows the player's appearance on top of the base appearance.
 func load_appearance(player_appearance: PlayerAppearance) -> void:
-	appearance = player_appearance.merged_onto(BASE_APPEARANCE)
+	appearance = player_appearance.merged_onto(base_appearance)
 	_body_mesh.mesh = appearance.body_mesh
 	_shirt_mesh.mesh = _with_rest_positions(appearance.shirt_mesh)
 	_shorts_mesh.mesh = appearance.shorts_mesh

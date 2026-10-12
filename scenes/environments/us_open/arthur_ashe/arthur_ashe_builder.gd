@@ -407,9 +407,11 @@ func _behind_back_wall(at: Vector2, height: float) -> bool:
 
 ## Group of seats `edge` belongs to: a straight side, or half a corner.
 func _group(edge: int) -> String:
+	@warning_ignore("integer_division")
 	var corner: int = posmod(edge, _shape.edge_count()) / (CORNER_FACETS + 1)
 	if _shape.is_side(edge):
 		return "side%d" % corner
+	@warning_ignore("integer_division")
 	return "corner%d_%d" % [corner, _shape.facet(edge) * 2 / CORNER_FACETS]
 
 

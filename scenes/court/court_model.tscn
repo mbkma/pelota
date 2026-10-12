@@ -2,5 +2,5 @@
 
 [ext_resource type="ArrayMesh" path="res://scenes/court/court_model.res" id="1_5fbo7"]
 
-[node name="CourtModel" type="MeshInstance3D" unique_id=559413092]
+[node name="CourtModel" type="MeshInstance3D" unique_id=1630996427]
 mesh = ExtResource("1_5fbo7")

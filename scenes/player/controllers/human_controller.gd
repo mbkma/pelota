@@ -298,7 +298,9 @@ func get_stroke() -> Stroke:
 
 
 func get_aim_marker_position() -> Variant:
-	return null if _mode == Mode.FREE else _aiming_at
+	if _mode == Mode.FREE:
+		return null
+	return _aiming_at
 
 
 ## Where the player should stand to meet the opponent's next ball, until the ball got past.
@@ -331,7 +333,9 @@ func get_stroke_indicator_quality() -> Variant:
 		return null
 	match _mode:
 		Mode.FREE:
-			return 0.0 if _is_ball_incoming() else null
+			if _is_ball_incoming():
+				return 0.0
+			return null
 		Mode.SHOT:
 			return _displayed_shot_quality()
 		Mode.SERVE_SWING:
@@ -427,7 +431,9 @@ func _update_ideal_position() -> void:
 	var trajectory: Array[TrajectoryStep] = player.ball.predict_trajectory()
 	_contact_window = contact_window(trajectory)
 	var step: TrajectoryStep = get_ideal_contact_step(trajectory, _contact_window)
-	_ideal_position = ideal_position_for_step(step) if step else null
+	_ideal_position = null
+	if step:
+		_ideal_position = ideal_position_for_step(step)
 	_ideal_range = PackedVector3Array()
 	if step and not step.is_volley_contact():
 		var candidates: Array[TrajectoryStep] = _contact_window.steps_in(trajectory)

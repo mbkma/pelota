@@ -28,6 +28,8 @@ const POST: Vector2 = Vector2(Ball.NET_HALF_WIDTH, Ball.NET_POST_HEIGHT)
 ## Height of the white tape over the cord, and the net's thickness
 const TAPE_HEIGHT: float = 0.065
 const NET_HALF_THICKNESS: float = 0.012
+## The color of the court, a soft blue
+const COURT_COLOR: Color = Color(0.125, 0.195, 0.375)
 ## Segments the net's sagging top is made of
 const NET_SEGMENTS: int = 48
 
@@ -39,7 +41,7 @@ func _initialize() -> void:
 
 
 func _build() -> void:
-	var court := _material("court", Color(0.21, 0.28, 0.48), 0.75)
+	var court := _material("court", COURT_COLOR, 0.75)
 	var noise := FastNoiseLite.new()
 	noise.frequency = 0.3
 	var texture := NoiseTexture2D.new()

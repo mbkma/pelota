@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bq2wuq8xeg2gt"]
 
-[ext_resource type="Texture2D" uid="uid://dntjbx6djkg0e" path="res://assets/models/stadium/textures/us_open_logo-alpha.png" id="1_iexxg"]
+[ext_resource type="Texture2D" uid="uid://cjihyox0240ol" path="res://assets/models/stadium/textures/us_open_logo-alpha.png" id="1_iexxg"]
 
 [resource]
 resource_name = "us_open_logo"

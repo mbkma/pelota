@@ -124,6 +124,8 @@ const BACKWARD_RUN_ALIGNMENT: float = 0.5
 @export var stroke_sounds_flat: Array[AudioStream]
 ## Slice stroke sound effect pool used for slice/drop-shot variants.
 @export var stroke_sounds_slice: Array[AudioStream]
+## Volume (dB) a slice is quieter by when stroke_sounds_slice is empty and it plays a flat hit
+@export var slice_fallback_db: float = -8.0
 ## Groundstrokes hit on the run: a shoe squeak and then the hit, RUNNING_HIT_TIME into the sound.
 @export var stroke_sounds_running: Array[AudioStream]
 
@@ -766,18 +768,22 @@ func play_stroke_sound(stroke: Stroke) -> void:
 		_running_sound_started = false
 		return
 	var grunts: Array = player_data.sounds.grunt_flat
-	if _is_slice(stroke):
+	if _is_slice(stroke) and not stroke_sounds_slice.is_empty():
 		_play_stroke_sound(stroke_sounds_slice.pick_random())
+	elif _is_slice(stroke):
+		_play_stroke_sound(stroke_sounds_flat.pick_random(), 0.0, slice_fallback_db)
 	elif not grunts.is_empty() and randf() < player_data.sounds.grunt_frequency:
 		_play_stroke_sound(grunts.pick_random())
 	else:
 		_play_stroke_sound(stroke_sounds_flat.pick_random())
 
 
-func _play_stroke_sound(sound: AudioStream, from_position: float = 0.0) -> void:
+func _play_stroke_sound(
+	sound: AudioStream, from_position: float = 0.0, db_offset: float = 0.0
+) -> void:
 	if _stroke_sound_fade:
 		_stroke_sound_fade.kill()
-	audio_stream_player.volume_db = STROKE_SOUND_DB
+	audio_stream_player.volume_db = STROKE_SOUND_DB + db_offset
 	audio_stream_player.stream = sound
 	audio_stream_player.play(from_position)
 

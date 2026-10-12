@@ -66,17 +66,17 @@ func call_let() -> void:
 ## Calls the score after a point `winner` won, after a random delay, letting a call still going
 ## (e.g. "Fault") finish first.
 func call_point(score: Score, winner: int) -> void:
-	var call: Array[AudioStream] = _point_call(score, winner)
+	var clips: Array[AudioStream] = _point_call(score, winner)
 	_games_played = score.games_played
 	_sets_completed = score.completed_sets.size()
-	if call.is_empty():
+	if clips.is_empty():
 		return
 	await get_tree().create_timer(randf_range(SCORE_CALL_DELAY.x, SCORE_CALL_DELAY.y)).timeout
 	if _line_call_player.playing:
 		await _line_call_player.finished
 	if _audio_stream_player.playing:
 		await _audio_stream_player.finished
-	_say(call)
+	_say(clips)
 
 
 ## What the umpire says after a point `winner` won, `score` the score now.
@@ -131,11 +131,11 @@ func _tiebreak_call(score: Score) -> Array[AudioStream]:
 	return [calls.tiebreak_scores[key], _players[leader].name_call]
 
 
-## Says the clips of `call` one after the other; a newer call stops it.
-func _say(call: Array[AudioStream]) -> void:
+## Says `clips` one after the other; a newer call stops it.
+func _say(clips: Array[AudioStream]) -> void:
 	_call_count += 1
 	var count: int = _call_count
-	for stream in call:
+	for stream in clips:
 		_audio_stream_player.stream = stream
 		_audio_stream_player.play()
 		await _audio_stream_player.finished

@@ -27,6 +27,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.44, 0.25)
 libraries/ = SubResource("AnimationLibrary_umpire")
 autoplay = &"sitting"
 
+[node name="NeckLook" type="LookAtModifier3D" parent="Model/GeneralSkeleton" unique_id=1545055823]
+influence = 0.4
+target_node = NodePath("../../../LookTarget")
+bone_name = "Neck"
+bone = 4
+forward_axis = 4
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 2.0943952
+secondary_limit_angle = 1.0471976
+
+[node name="HeadLook" type="LookAtModifier3D" parent="Model/GeneralSkeleton" unique_id=1545055824]
+target_node = NodePath("../../../LookTarget")
+bone_name = "Head"
+bone = 5
+forward_axis = 4
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 2.0943952
+secondary_limit_angle = 1.0471976
+
 [node name="LookTarget" type="Node3D" parent="." unique_id=1545055822]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 top_level = true

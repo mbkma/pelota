@@ -120,14 +120,21 @@ func _open_from_modes(open: Callable) -> void:
 
 func _start_tournament_select() -> void:
 	_open_sub_menu(tournament_select_packed_scene).selection_confirmed.connect(
-		SceneLoader.load_scene.bind(tournament_scene_path)
+		_load_mode_scene.bind(tournament_scene_path)
 	)
 
 
 func _start_training_select() -> void:
 	_open_sub_menu(training_select_packed_scene).selection_confirmed.connect(
-		SceneLoader.load_scene.bind(training_scene_path)
+		_load_mode_scene.bind(training_scene_path)
 	)
+
+
+## Starts the mode picked from the modes menu: the menu closing as the scene changes must not
+## open the modes menu again.
+func _load_mode_scene(scene_path: String) -> void:
+	_return_to_modes = false
+	SceneLoader.load_scene(scene_path)
 
 
 ## Continues the saved tournament, played with the first connected device.

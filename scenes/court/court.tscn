@@ -2,6 +2,18 @@
 
 [ext_resource type="PackedScene" path="res://scenes/court/court_model.tscn" id="2_flwb3"]
 [ext_resource type="Script" uid="uid://cr3maasnq1mt6" path="res://scenes/court/court.gd" id="5"]
+[ext_resource type="Script" uid="uid://cr1y11hhrkny8" path="res://scenes/court/net_led_bars.gd" id="6_led"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_led"]
+albedo_color = Color(0.03, 0.03, 0.04, 1)
+roughness = 0.4
+emission_enabled = true
+emission = Color(1, 0.02, 0.02, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_led"]
+material = SubResource("StandardMaterial3D_led")
+size = Vector3(0.06, 1.068, 0.07)
 
 [node name="Court" type="Node3D" unique_id=1667997867]
 script = ExtResource("5")
@@ -25,3 +37,49 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03842455, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.8901)
 
 [node name="CourtModel" parent="." unique_id=955980070 instance=ExtResource("2_flwb3")]
+
+[node name="NetLedBars" type="Node3D" parent="." unique_id=901562854]
+script = ExtResource("6_led")
+bar_material = SubResource("StandardMaterial3D_led")
+
+[node name="LeftBar" type="MeshInstance3D" parent="NetLedBars" unique_id=1742093511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.959, 0.534, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_led")
+
+[node name="FrontLight" type="AreaLight3D" parent="NetLedBars/LeftBar" unique_id=318604277]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0.036)
+visible = false
+light_color = Color(1, 0.02, 0.02, 1)
+light_energy = 3.0
+area_range = 4.0
+area_size = Vector2(0.06, 1.068)
+
+[node name="BackLight" type="AreaLight3D" parent="NetLedBars/LeftBar" unique_id=1406675239]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.036)
+visible = false
+light_color = Color(1, 0.02, 0.02, 1)
+light_energy = 3.0
+area_range = 4.0
+area_size = Vector2(0.06, 1.068)
+
+[node name="RightBar" type="MeshInstance3D" parent="NetLedBars" unique_id=2057381946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.959, 0.534, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_led")
+
+[node name="FrontLight" type="AreaLight3D" parent="NetLedBars/RightBar" unique_id=663720158]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0.036)
+visible = false
+light_color = Color(1, 0.02, 0.02, 1)
+light_energy = 3.0
+area_range = 4.0
+area_size = Vector2(0.06, 1.068)
+
+[node name="BackLight" type="AreaLight3D" parent="NetLedBars/RightBar" unique_id=1879402613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.036)
+visible = false
+light_color = Color(1, 0.02, 0.02, 1)
+light_energy = 3.0
+area_range = 4.0
+area_size = Vector2(0.06, 1.068)

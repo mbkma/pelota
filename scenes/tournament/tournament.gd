@@ -174,9 +174,11 @@ static func _draw(field: Array[PlayerData]) -> Array[PlayerData]:
 	# section in the upper half, at the bottom in the lower half.
 	var section_seeds: Array[int] = _bracket_order(SEED_COUNT)
 	_shuffle_seed_groups(section_seeds)
+	@warning_ignore("integer_division")
 	var section_size: int = DRAW_SIZE / SEED_COUNT
 	for section in SEED_COUNT:
 		var line: int = section * section_size
+		@warning_ignore("integer_division")
 		if section >= SEED_COUNT / 2:
 			line += section_size - 1
 		lines[line] = field[section_seeds[section] - 1]

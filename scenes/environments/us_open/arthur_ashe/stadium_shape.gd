@@ -32,8 +32,8 @@ func _init(
 		center + Vector2(inner.x, -inner.y)
 	]
 	for corner in 4:
-		for facet in facets + 1:
-			var angle: float = deg_to_rad(corner * 90.0 + facet * 90.0 / facets)
+		for step in facets + 1:
+			var angle: float = deg_to_rad(corner * 90.0 + step * 90.0 / facets)
 			_vertices.append(centers[corner] + Vector2(cos(angle), sin(angle)) * corner_radius)
 	var count: int = _vertices.size()
 	for i in count:

@@ -1,41 +1,39 @@
 [gd_scene format=3 uid="uid://dkonwbmg06m5n"]
 
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_01.wav" id="stroke_racket_hit_01"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_02.wav" id="stroke_racket_hit_02"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_03.wav" id="stroke_racket_hit_03"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_04.wav" id="stroke_racket_hit_04"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_05.wav" id="stroke_racket_hit_05"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_06.wav" id="stroke_racket_hit_06"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_07.wav" id="stroke_racket_hit_07"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_08.wav" id="stroke_racket_hit_08"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_09.wav" id="stroke_racket_hit_09"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_10.wav" id="stroke_racket_hit_10"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_11.wav" id="stroke_racket_hit_11"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_12.wav" id="stroke_racket_hit_12"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_13.wav" id="stroke_racket_hit_13"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_14.wav" id="stroke_racket_hit_14"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_15.wav" id="stroke_racket_hit_15"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_hit_16.wav" id="stroke_racket_hit_16"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_01.wav" id="stroke_running_hit_01"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_02.wav" id="stroke_running_hit_02"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_05.wav" id="stroke_running_hit_05"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_06.wav" id="stroke_running_hit_06"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_08.wav" id="stroke_running_hit_08"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_09.wav" id="stroke_running_hit_09"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_11.wav" id="stroke_running_hit_11"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_15.wav" id="stroke_running_hit_15"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/running_hit_16.wav" id="stroke_running_hit_16"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_slice_01.wav" id="stroke_racket_slice_01"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/racket_slice_02.wav" id="stroke_racket_slice_02"]
 [ext_resource type="Script" uid="uid://cf4hsg2vy5lk3" path="res://scenes/player/player.gd" id="1"]
-[ext_resource type="Resource" uid="uid://cibbhkfv1ny2q" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://b2t51ehdhdsfk" path="res://scenes/ball/ball.tscn" id="2_ball"]
+[ext_resource type="Resource" uid="uid://cibbhkfv1ny2q" path="res://scenes/player/resources/data/djokovic.tres" id="2_uxa8p"]
 [ext_resource type="PackedScene" uid="uid://b5t7f8r1backb" path="res://scenes/player/model.tscn" id="3_lm2ok"]
 [ext_resource type="PackedScene" uid="uid://bi8pmdx3d7doc" path="res://scenes/tools/ball_aim_marker.tscn" id="10_7vyk4"]
 [ext_resource type="Script" uid="uid://c183q5ubdpdu2" path="res://scenes/player/state_machine.gd" id="11_ntx4g"]
 [ext_resource type="Script" uid="uid://stg5qkjv1kvi" path="res://scenes/match/lifecycle_bus.gd" id="12_pyy3x"]
-[ext_resource type="PackedScene" path="res://scenes/tools/ideal_position_marker.tscn" id="16_ideal"]
+[ext_resource type="PackedScene" uid="uid://qggb6a4vvyx0" path="res://scenes/tools/ideal_position_marker.tscn" id="16_ideal"]
 [ext_resource type="PackedScene" path="res://scenes/player/stroke_indicator/stroke_indicator.tscn" id="17_stroke_indicator"]
+[ext_resource type="AudioStream" uid="uid://qjhyy7aq3ypk" path="res://assets/sounds/effects/strokes/racket_hit_01.wav" id="stroke_racket_hit_01"]
+[ext_resource type="AudioStream" uid="uid://sen5ao3x3f1o" path="res://assets/sounds/effects/strokes/racket_hit_02.wav" id="stroke_racket_hit_02"]
+[ext_resource type="AudioStream" uid="uid://bafjkkx5eiwg5" path="res://assets/sounds/effects/strokes/racket_hit_03.wav" id="stroke_racket_hit_03"]
+[ext_resource type="AudioStream" uid="uid://c4ged50ibyyp0" path="res://assets/sounds/effects/strokes/racket_hit_04.wav" id="stroke_racket_hit_04"]
+[ext_resource type="AudioStream" uid="uid://inrfodrnrpxb" path="res://assets/sounds/effects/strokes/racket_hit_05.wav" id="stroke_racket_hit_05"]
+[ext_resource type="AudioStream" uid="uid://bkdknam1tp83n" path="res://assets/sounds/effects/strokes/racket_hit_06.wav" id="stroke_racket_hit_06"]
+[ext_resource type="AudioStream" uid="uid://byh177bcc6b86" path="res://assets/sounds/effects/strokes/racket_hit_07.wav" id="stroke_racket_hit_07"]
+[ext_resource type="AudioStream" uid="uid://dascbarb8tnyr" path="res://assets/sounds/effects/strokes/racket_hit_08.wav" id="stroke_racket_hit_08"]
+[ext_resource type="AudioStream" uid="uid://d04i78fvuv3c8" path="res://assets/sounds/effects/strokes/racket_hit_09.wav" id="stroke_racket_hit_09"]
+[ext_resource type="AudioStream" uid="uid://7xmbdulvgbok" path="res://assets/sounds/effects/strokes/racket_hit_10.wav" id="stroke_racket_hit_10"]
+[ext_resource type="AudioStream" uid="uid://dinh8msuiuer0" path="res://assets/sounds/effects/strokes/racket_hit_11.wav" id="stroke_racket_hit_11"]
+[ext_resource type="AudioStream" uid="uid://c2h0muuj7dfx0" path="res://assets/sounds/effects/strokes/racket_hit_12.wav" id="stroke_racket_hit_12"]
+[ext_resource type="AudioStream" uid="uid://bu5hnr3mjluh6" path="res://assets/sounds/effects/strokes/racket_hit_13.wav" id="stroke_racket_hit_13"]
+[ext_resource type="AudioStream" uid="uid://2cosggl18u1j" path="res://assets/sounds/effects/strokes/racket_hit_14.wav" id="stroke_racket_hit_14"]
+[ext_resource type="AudioStream" uid="uid://bd25ecv7hkxl3" path="res://assets/sounds/effects/strokes/racket_hit_15.wav" id="stroke_racket_hit_15"]
+[ext_resource type="AudioStream" uid="uid://1uveanwcrux5" path="res://assets/sounds/effects/strokes/racket_hit_16.wav" id="stroke_racket_hit_16"]
+[ext_resource type="AudioStream" uid="uid://cwfry3fcom4ct" path="res://assets/sounds/effects/strokes/running_hit_01.wav" id="stroke_running_hit_01"]
+[ext_resource type="AudioStream" uid="uid://ta2i0j61ga73" path="res://assets/sounds/effects/strokes/running_hit_02.wav" id="stroke_running_hit_02"]
+[ext_resource type="AudioStream" uid="uid://t1sulpokl6pj" path="res://assets/sounds/effects/strokes/running_hit_05.wav" id="stroke_running_hit_05"]
+[ext_resource type="AudioStream" uid="uid://cv72jb47n8415" path="res://assets/sounds/effects/strokes/running_hit_06.wav" id="stroke_running_hit_06"]
+[ext_resource type="AudioStream" uid="uid://yrsh8gm7u72y" path="res://assets/sounds/effects/strokes/running_hit_08.wav" id="stroke_running_hit_08"]
+[ext_resource type="AudioStream" uid="uid://dsu0luvdra2ry" path="res://assets/sounds/effects/strokes/running_hit_09.wav" id="stroke_running_hit_09"]
+[ext_resource type="AudioStream" uid="uid://duq0lntnm0sem" path="res://assets/sounds/effects/strokes/running_hit_11.wav" id="stroke_running_hit_11"]
+[ext_resource type="AudioStream" uid="uid://cianpey1wgecp" path="res://assets/sounds/effects/strokes/running_hit_15.wav" id="stroke_running_hit_15"]
+[ext_resource type="AudioStream" uid="uid://bouhwl14km5uo" path="res://assets/sounds/effects/strokes/running_hit_16.wav" id="stroke_running_hit_16"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0l77o"]
 radius = 0.0950554
@@ -43,14 +41,13 @@ height = 1.58024
 
 [node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker", "ideal_position_marker", "stroke_indicator") groups=["Players"]]
 script = ExtResource("1")
-ball_scene = ExtResource("2_ball")
 player_data = ExtResource("2_uxa8p")
 ball_aim_marker = NodePath("BallAimMarker")
 ideal_position_marker = NodePath("IdealPositionMarker")
 stroke_indicator = NodePath("StrokeIndicator")
+ball_scene = ExtResource("2_ball")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("stroke_racket_hit_01"), ExtResource("stroke_racket_hit_02"), ExtResource("stroke_racket_hit_03"), ExtResource("stroke_racket_hit_04"), ExtResource("stroke_racket_hit_05"), ExtResource("stroke_racket_hit_06"), ExtResource("stroke_racket_hit_07"), ExtResource("stroke_racket_hit_08"), ExtResource("stroke_racket_hit_09"), ExtResource("stroke_racket_hit_10"), ExtResource("stroke_racket_hit_11"), ExtResource("stroke_racket_hit_12"), ExtResource("stroke_racket_hit_13"), ExtResource("stroke_racket_hit_14"), ExtResource("stroke_racket_hit_15"), ExtResource("stroke_racket_hit_16")])
 stroke_sounds_running = Array[AudioStream]([ExtResource("stroke_running_hit_01"), ExtResource("stroke_running_hit_02"), ExtResource("stroke_running_hit_05"), ExtResource("stroke_running_hit_06"), ExtResource("stroke_running_hit_08"), ExtResource("stroke_running_hit_09"), ExtResource("stroke_running_hit_11"), ExtResource("stroke_running_hit_15"), ExtResource("stroke_running_hit_16")])
-stroke_sounds_slice = Array[AudioStream]([ExtResource("stroke_racket_slice_01"), ExtResource("stroke_racket_slice_02")])
 
 [node name="PlayerStateMachine" type="Node" parent="." unique_id=1516428128]
 script = ExtResource("11_ntx4g")
@@ -87,26 +84,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.34675705)
 
 [node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
 
-[node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 340929914) index="0" unique_id=287735910]
-bones/1/rotation = Quaternion(-0.0004905142, 0, 0, 0.9999999)
-bones/3/rotation = Quaternion(-0.0024782056, 0, 0, 0.999997)
-bones/4/rotation = Quaternion(-0.0019880857, 0, 0, 0.9999981)
-bones/5/rotation = Quaternion(0.0056920047, 0, 0, 0.9999838)
-bones/6/rotation = Quaternion(-0.0009085278, 0, 0, 0.99999964)
-bones/105/rotation = Quaternion(0.5012057, 0.50124335, 0.4987589, -0.4987861)
-bones/106/position = Vector3(-0.008429566, 0.17678122, -0.031078072)
-bones/106/rotation = Quaternion(-0.48831648, -0.056072645, -0.15439864, 0.8570671)
-bones/107/rotation = Quaternion(0.21273331, 0.9282801, -0.18422912, 0.24310562)
-bones/108/rotation = Quaternion(-0.00029382392, 0.08958987, 0.10263543, 0.9906764)
-bones/109/rotation = Quaternion(0.09206011, -0.72381395, 0.19864377, 0.65433854)
-bones/110/rotation = Quaternion(-0.17066696, -0.17885885, -0.25399333, 0.93507737)
-bones/111/rotation = Quaternion(0.15482713, 0.56594986, -0.306384, 0.749572)
-bones/131/rotation = Quaternion(0.5012057, -0.50124335, -0.4987589, -0.4987861)
-bones/132/position = Vector3(0.008429595, 0.17678197, -0.031077966)
-bones/132/rotation = Quaternion(-0.50827146, 0.010322674, 0.08225913, 0.8571973)
-bones/133/rotation = Quaternion(-0.10248408, 0.9627701, -0.22126082, -0.116681084)
-bones/134/rotation = Quaternion(-0.0005141345, -0.15676466, -0.17959201, 0.97117007)
-bones/135/rotation = Quaternion(0.06424873, 0.69579357, -0.3404871, 0.6291359)
+[node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 1707463736) index="0" unique_id=1907959317]
+bones/1/rotation = Quaternion(-0.00087472703, 0, 0, 0.99999964)
+bones/3/rotation = Quaternion(-0.006209522, 0, 0, 0.99998075)
+bones/4/rotation = Quaternion(-0.0050808433, 0, 0, 0.9999871)
+bones/5/rotation = Quaternion(0.017011907, 0, 0, 0.9998554)
+bones/6/rotation = Quaternion(-0.0017172331, 0, 0, 0.99999857)
+bones/105/rotation = Quaternion(0.50312626, 0.5032187, 0.49677372, -0.49684078)
+bones/106/position = Vector3(-0.008632251, 0.1810323, -0.031825162)
+bones/106/rotation = Quaternion(-0.48853582, -0.054003067, -0.15209907, 0.85748607)
+bones/107/rotation = Quaternion(0.2085551, 0.9303911, -0.18461277, 0.23831779)
+bones/108/rotation = Quaternion(-0.0003141413, 0.09583936, 0.10979502, 0.9893229)
+bones/109/rotation = Quaternion(0.11829213, -0.7213898, 0.20621833, 0.65044427)
+bones/110/rotation = Quaternion(-0.16931047, -0.17743763, -0.25197437, 0.93614036)
+bones/111/rotation = Quaternion(0.090670735, 0.54565275, -0.29743087, 0.77818817)
+bones/131/rotation = Quaternion(0.5031263, -0.5032187, -0.49677378, -0.49684078)
+bones/132/position = Vector3(0.008632284, 0.18103309, -0.031825375)
+bones/132/rotation = Quaternion(-0.5088133, 0.010331401, 0.08260682, 0.8568421)
+bones/133/rotation = Quaternion(-0.10335569, 0.96185255, -0.22430125, -0.11766996)
+bones/134/rotation = Quaternion(-0.0005191759, -0.15833794, -0.18139422, 0.97057974)
+bones/135/rotation = Quaternion(0.06073752, 0.6883444, -0.33342412, 0.6413434)
+
+[node name="AnimationTree" parent="Model" index="3" unique_id=697911821]
+parameters/Locomotion/Move/blend_position = Vector2(0, 0)
+parameters/Locomotion/Move/observer = null
+parameters/Locomotion/Cadence/scale = 1.0
+parameters/Locomotion/Moving/blend_amount = 0.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 bus = &"SFX"
@@ -117,6 +120,6 @@ bus = &"SFX"
 top_level = true
 visible = false
 
-[node name="StrokeIndicator" parent="." instance=ExtResource("17_stroke_indicator")]
+[node name="StrokeIndicator" parent="." unique_id=507737745 instance=ExtResource("17_stroke_indicator")]
 
 [editable path="Model"]
