@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://da3cwxhqh00d3"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_lcfjl"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/shapovalov.ogg" id="2_3so23"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_dtalj"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_3so23"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_dtalj"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_pfr2v"]
 
 [sub_resource type="Resource" id="Resource_mty23"]
@@ -55,3 +57,5 @@ rank = 42
 play_style = SubResource("Resource_nrhou")
 stats = SubResource("Resource_dn7lu")
 appearance = SubResource("Resource_mty23")
+racket = ExtResource("3_dtalj")
+name_call = ExtResource("2_3so23")

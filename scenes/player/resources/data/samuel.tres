@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_24a2h"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_4wv1f"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/samuel.ogg" id="2_bmh4s"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_4wv1f"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_bmh4s"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_agj3g"]
 
@@ -53,3 +55,5 @@ rank = 100
 play_style = SubResource("Resource_hasmk")
 stats = SubResource("Resource_lq2fn")
 appearance = SubResource("Resource_guxei")
+racket = ExtResource("3_4wv1f")
+name_call = ExtResource("2_bmh4s")

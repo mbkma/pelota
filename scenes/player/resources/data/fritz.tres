@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b3l0eexjokr7l"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_nl22o"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/fritz.ogg" id="2_31lfd"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_t3q1t"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_31lfd"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_radical.tres" id="3_t3q1t"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8mujk"]
 
 [sub_resource type="Resource" id="Resource_nu5mp"]
@@ -53,3 +55,5 @@ rank = 12
 play_style = SubResource("Resource_ojb0t")
 stats = SubResource("Resource_vtnfy")
 appearance = SubResource("Resource_nu5mp")
+racket = ExtResource("3_t3q1t")
+name_call = ExtResource("2_31lfd")

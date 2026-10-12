@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_eomu3"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_emf0s"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/baez.ogg" id="2_lny80"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_emf0s"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_lny80"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_dbbjo"]
 
@@ -53,3 +55,5 @@ rank = 53
 play_style = SubResource("Resource_3uhtp")
 stats = SubResource("Resource_hktvw")
 appearance = SubResource("Resource_lkj75")
+racket = ExtResource("3_emf0s")
+name_call = ExtResource("2_lny80")

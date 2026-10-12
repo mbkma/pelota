@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_nm4nh"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_b5lhw"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/damm.ogg" id="2_rua3d"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_b5lhw"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_rua3d"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_npsnw"]
 
@@ -51,3 +53,5 @@ rank = 104
 play_style = SubResource("Resource_8pels")
 stats = SubResource("Resource_dsimd")
 appearance = SubResource("Resource_y5v2c")
+racket = ExtResource("3_b5lhw")
+name_call = ExtResource("2_rua3d")

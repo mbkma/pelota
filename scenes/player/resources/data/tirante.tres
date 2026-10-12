@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cdgjy"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_uhadb"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/tirante.ogg" id="2_wv2fu"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_defyer.tres" id="3_uhadb"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wv2fu"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_5svfh"]
 
@@ -52,3 +54,5 @@ rank = 54
 play_style = SubResource("Resource_yx3pt")
 stats = SubResource("Resource_8b6c7")
 appearance = SubResource("Resource_47kho")
+racket = ExtResource("3_uhadb")
+name_call = ExtResource("2_wv2fu")

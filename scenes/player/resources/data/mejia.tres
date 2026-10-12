@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ik88k"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_mhar8"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/mejia.ogg" id="2_rspas"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_mhar8"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_rspas"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_k16b1"]
 
@@ -52,3 +54,5 @@ rank = 119
 play_style = SubResource("Resource_g266r")
 stats = SubResource("Resource_0ksqa")
 appearance = SubResource("Resource_ki8ba")
+racket = ExtResource("3_mhar8")
+name_call = ExtResource("2_rspas")

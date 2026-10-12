@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_bdj6u"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_3j2b1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/dimitrov.ogg" id="2_o01v2"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_pro_staff.tres" id="3_3j2b1"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_o01v2"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_txhwo"]
 
@@ -52,3 +54,5 @@ rank = 127
 play_style = SubResource("Resource_gh5tl")
 stats = SubResource("Resource_b8k06")
 appearance = SubResource("Resource_5kr2l")
+racket = ExtResource("3_3j2b1")
+name_call = ExtResource("2_o01v2")

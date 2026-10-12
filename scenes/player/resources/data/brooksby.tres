@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://deyfoa41w7qa2"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_b5v1s"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/brooksby.ogg" id="2_6lm33"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_dycqn"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_6lm33"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/dunlop_cx.tres" id="3_dycqn"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_rq43g"]
 
 [sub_resource type="Resource" id="Resource_lbfbx"]
@@ -50,3 +52,5 @@ rank = 102
 play_style = SubResource("Resource_bqxoi")
 stats = SubResource("Resource_73f7d")
 appearance = SubResource("Resource_lbfbx")
+racket = ExtResource("3_dycqn")
+name_call = ExtResource("2_6lm33")

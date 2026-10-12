@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dke1hex5gjk1h"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_1ptjx"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/ugo-carabelli.ogg" id="2_smmwn"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_tlxu0"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_smmwn"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_percept.tres" id="3_tlxu0"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_3g2br"]
 
 [sub_resource type="Resource" id="Resource_gyoni"]
@@ -52,3 +54,5 @@ rank = 77
 play_style = SubResource("Resource_4b67t")
 stats = SubResource("Resource_yg7lp")
 appearance = SubResource("Resource_gyoni")
+racket = ExtResource("3_tlxu0")
+name_call = ExtResource("2_smmwn")

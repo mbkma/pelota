@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_l77qg"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_bxgte"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/quinn.ogg" id="2_pgtx3"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_bxgte"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_pgtx3"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8pilc"]
 
@@ -51,3 +53,5 @@ rank = 66
 play_style = SubResource("Resource_85y0n")
 stats = SubResource("Resource_50ydb")
 appearance = SubResource("Resource_iyvfb")
+racket = ExtResource("3_bxgte")
+name_call = ExtResource("2_pgtx3")

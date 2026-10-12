@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_gbfdf"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1aqhc"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/carreno-busta.ogg" id="2_g01fa"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_1aqhc"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_g01fa"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yqg7a"]
 
@@ -51,3 +53,5 @@ rank = 65
 play_style = SubResource("Resource_415by")
 stats = SubResource("Resource_ml86q")
 appearance = SubResource("Resource_8dshv")
+racket = ExtResource("3_1aqhc")
+name_call = ExtResource("2_g01fa")

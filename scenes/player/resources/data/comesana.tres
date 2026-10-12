@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_wa014"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_apw76"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/comesana.ogg" id="2_imkxm"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_radical.tres" id="3_apw76"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_imkxm"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6j41p"]
 
@@ -49,3 +51,5 @@ rank = 125
 play_style = SubResource("Resource_htinf")
 stats = SubResource("Resource_dunj5")
 appearance = SubResource("Resource_ofpv6")
+racket = ExtResource("3_apw76")
+name_call = ExtResource("2_imkxm")

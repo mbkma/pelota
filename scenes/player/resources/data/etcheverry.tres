@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_6ia57"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_sjwgs"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/etcheverry.ogg" id="2_teop7"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_percept.tres" id="3_sjwgs"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_teop7"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_7edcb"]
 
@@ -52,3 +54,5 @@ rank = 31
 play_style = SubResource("Resource_8cv4e")
 stats = SubResource("Resource_yq21l")
 appearance = SubResource("Resource_rvmog")
+racket = ExtResource("3_sjwgs")
+name_call = ExtResource("2_teop7")

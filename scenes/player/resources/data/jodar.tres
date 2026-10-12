@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b0ksqv6tqm7pd"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cm12t"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/jodar.ogg" id="2_0ytir"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rr8yl"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0ytir"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_speed.tres" id="3_rr8yl"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6gpjo"]
 
 [sub_resource type="Resource" id="Resource_kffti"]
@@ -52,3 +54,5 @@ rank = 13
 play_style = SubResource("Resource_geopl")
 stats = SubResource("Resource_xmu1e")
 appearance = SubResource("Resource_kffti")
+racket = ExtResource("3_rr8yl")
+name_call = ExtResource("2_0ytir")

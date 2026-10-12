@@ -1,4 +1,5 @@
-## Corner panel showing a player's stamina, pressure and confidence.
+## Corner panel showing a player's stamina, pressure and confidence, when turned on in the UI
+## settings.
 class_name PlayerStatusPanel
 extends PanelContainer
 
@@ -14,6 +15,12 @@ extends PanelContainer
 func _ready() -> void:
 	_name_label.text = player.player_data.last_name
 	_name_label.add_theme_color_override("font_color", name_color)
+	UiSettings.changed.connect(_apply_ui_settings)
+	_apply_ui_settings()
+
+
+func _apply_ui_settings() -> void:
+	visible = UiSettings.is_shown(UiSettings.Element.PLAYER_STATUS)
 
 
 func _process(_delta: float) -> void:

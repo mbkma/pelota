@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_5xhbc"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_bhucc"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/jacquet.ogg" id="2_ud0vu"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_bhucc"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ud0vu"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_0amdx"]
 
@@ -51,3 +53,5 @@ rank = 76
 play_style = SubResource("Resource_84ve2")
 stats = SubResource("Resource_ygdc5")
 appearance = SubResource("Resource_fsex2")
+racket = ExtResource("3_bhucc")
+name_call = ExtResource("2_ud0vu")

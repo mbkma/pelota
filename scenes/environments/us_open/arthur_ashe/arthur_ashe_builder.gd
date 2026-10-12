@@ -23,9 +23,6 @@ extends SceneTree
 const SCENE_PATH: String = "res://scenes/environments/us_open/arthur_ashe/arthur_ashe.tscn"
 const MESH_DIR: String = "res://scenes/environments/us_open/arthur_ashe/meshes/"
 const SEATING_PATH: String = "res://scenes/environments/us_open/arthur_ashe/seating.res"
-const BROADCAST_CAMERA: PackedScene = preload(
-	"res://scenes/environments/us_open/cameras/broadcast_camera.tscn"
-)
 
 ## Half size (m) of the field inside the field wall (x, z), and its corners
 const FIELD_HALF_SIZE: Vector2 = Vector2(11.7, 20.47)
@@ -73,8 +70,9 @@ const RIM_WALKWAY: Vector2 = Vector2(45.3, 32.85)
 const RIM_WALL_TOP: float = 35.6
 const FACADE: float = 45.6
 
-## TV camera platforms in the stands behind both baselines, where the match's TV cameras stand
-## (see the stadium scene; the main camera's place was measured from the US Open 2025 final):
+## TV camera platforms in the stands behind both baselines, where the match's TV cameras and the
+## broadcast cameras stand (see the stadium scene; the main camera's place was measured from the
+## US Open 2025 final):
 ## half width, and the lower and upper deck (front offset, back offset, floor height)
 const PLATFORM_HALF_WIDTH: float = 2.3
 const LOWER_PLATFORM: Vector3 = Vector3(6.9, 9.9, 5.35)
@@ -84,9 +82,8 @@ var _shape := StadiumShape.new(FIELD_CENTER, FIELD_HALF_SIZE, CORNER_RADIUS, COR
 var _materials: Dictionary[String, Material] = ArthurAsheMaterials.make()
 var _root: Node3D
 var _seat_mesh: ArrayMesh
-## Spectators' seats per section name, and the photographers' (see StadiumSeating)
+## Spectators' seats per section name (see StadiumSeating)
 var _sections: Dictionary[String, PackedVector4Array] = {}
-var _photographers := PackedVector4Array()
 var _tiers: Array[StadiumTier] = [
 	StadiumTier.new(
 		"lower", ArthurAsheCourtside.PIT_DEPTH, 0.85, 15, 0.55, 0.3, 0.006, CROSS_AISLE_HEIGHT, true
@@ -111,7 +108,6 @@ func _build() -> void:
 		_shape, FIELD_CENTER, FIELD_HALF_SIZE, _materials, _tiers[0].height
 	)
 	_add_mesh(_root, "Courtside", courtside.build())
-	_photographers = courtside.photographers()
 	_sections["courtside_left"] = courtside.courtside_seats()
 	_add_mesh(_root, "Bowl", _build_bowl())
 	_add_mesh(_root, "Suites", _build_suites())
@@ -128,11 +124,14 @@ func _build() -> void:
 	_add_mesh(boards, "VideoBoardFrames", roof.build_video_board_frames())
 	_add(_root, roof.flag())
 	_add_mesh(_root, "Logos", _build_logos())
-	_add_platform_cameras()
 
 	var scene := PackedScene.new()
 	scene.pack(_root)
+	# Keep the scene's UID: the stadium scene refers to it by it.
+	var uid: int = ResourceLoader.get_resource_uid(SCENE_PATH)
 	ResourceSaver.save(scene, SCENE_PATH)
+	if uid != ResourceUID.INVALID_ID:
+		ResourceSaver.set_uid(SCENE_PATH, uid)
 	_root.free()
 	quit()
 
@@ -729,7 +728,6 @@ func _add_seats() -> void:
 	for section in names:
 		seating.sections.append(_sections[section])
 		total += _sections[section].size()
-	seating.photographers = _photographers
 	_save(seating, SEATING_PATH)
 	var seats := StadiumSeats.new()
 	seats.name = "Seats"
@@ -793,25 +791,6 @@ func _build_logos() -> FlatGeometry:
 					logo[2]
 				)
 	return geometry
-
-
-## Broadcast cameras on the TV camera platforms, next to the match cameras.
-func _add_platform_cameras() -> void:
-	var cameras := Node3D.new()
-	cameras.name = "PlatformCameras"
-	_add(_root, cameras)
-	for end: float in [1.0, -1.0]:
-		for deck: Vector3 in [LOWER_PLATFORM, UPPER_PLATFORM]:
-			for x: float in [-1.4, 1.4]:
-				var camera: Node3D = BROADCAST_CAMERA.instantiate(
-					PackedScene.GEN_EDIT_STATE_INSTANCE
-				)
-				camera.name = "Camera%d" % cameras.get_child_count()
-				var z: float = end * (FIELD_HALF_SIZE.y + lerpf(deck.x, deck.y, 0.7))
-				camera.transform = Transform3D(
-					Basis(Vector3.UP, 0.0 if end > 0.0 else PI), Vector3(x, deck.z, z)
-				)
-				_add(cameras, camera)
 
 
 # --- Saving ------------------------------------------------------------------------------------

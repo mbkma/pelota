@@ -1,6 +1,8 @@
 ## The stadium: court, player start positions, serve clocks, serve speed and match time panels,
-## the player benches with their spare rackets, the courtside TV cameras (one on each player, one
-## on the ball) and the match cameras.
+## the courtside props (the player benches with their spare rackets, towels, bottles and bags,
+## the photographers' and TV camera operators' places; see CourtsidePropsBuilder), the courtside
+## TV cameras (one on each player, one on the ball), the cameras on the TV camera platforms and
+## the match cameras. The props and cameras are placed by hand: move them in the editor.
 class_name Stadium
 extends Node3D
 
@@ -36,8 +38,7 @@ const SERVE_CLOCK_SECONDS: float = 25.0
 @onready var _front_player_camera: TargetTracker = $FrontPlayerCamera
 @onready var _back_player_camera: TargetTracker = $BackPlayerCamera
 @onready var _ball_camera: TargetTracker = $BallCamera
-@onready
-var _bench_rackets: Array[Array] = [$Player1Bench.get_children(), $Player2Bench.get_children()]
+@onready var _benches: Array[Node3D] = [$Courtside/Player1Bench, $Courtside/Player2Bench]
 
 
 func _ready() -> void:
@@ -73,11 +74,16 @@ func aim_ball_camera(target: Node3D) -> void:
 	_ball_camera.target = target
 
 
-## Gives the rackets on each player's bench the player's racket look (`players` in team order).
-func show_bench_rackets(players: Array[Player]) -> void:
+## Gives each player's bench the player's equipment (`players` in team order): the spare rackets
+## show the player's racket, the bag is of its brand.
+func show_bench_equipment(players: Array[Player]) -> void:
 	for i in players.size():
-		for racket: Racket in _bench_rackets[i]:
-			racket.show_appearance(players[i].model.appearance)
+		var design: RacketDesign = players[i].player_data.racket
+		for prop in _benches[i].get_children():
+			if prop is Racket:
+				(prop as Racket).show_design(design)
+			elif prop is TennisBag:
+				(prop as TennisBag).brand = design.brand
 
 
 func start_serve_clocks() -> void:

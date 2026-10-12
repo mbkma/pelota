@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dr78i2r2y4oog"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_523ka"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/lehecka.ogg" id="2_gi0sx"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vj462"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_gi0sx"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_pro_staff.tres" id="3_vj462"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_uh1eq"]
 
 [sub_resource type="Resource" id="Resource_11s6a"]
@@ -53,3 +55,5 @@ rank = 16
 play_style = SubResource("Resource_77ng8")
 stats = SubResource("Resource_qb6hn")
 appearance = SubResource("Resource_11s6a")
+racket = ExtResource("3_vj462")
+name_call = ExtResource("2_gi0sx")

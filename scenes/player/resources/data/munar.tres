@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_mm7oj"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_iuea6"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/munar.ogg" id="2_q1xqq"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_iuea6"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_q1xqq"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_o2j2m"]
 
@@ -53,3 +55,5 @@ rank = 49
 play_style = SubResource("Resource_utv27")
 stats = SubResource("Resource_y6vs3")
 appearance = SubResource("Resource_f3nbn")
+racket = ExtResource("3_iuea6")
+name_call = ExtResource("2_q1xqq")

@@ -2,7 +2,9 @@
 
 [ext_resource type="Resource" path="res://scenes/player/resources/appearances/medvedev.tres" id="1_7vms7"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_7vms7"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/medvedev.ogg" id="2_37k3x"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_gd4y4"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tfight.tres" id="3_y1dol"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/medvedev.tres" id="4_wq2sn"]
 
 [sub_resource type="Resource" id="Resource_medvedev_stats"]
@@ -39,3 +41,5 @@ rank = 6
 play_style = ExtResource("4_wq2sn")
 stats = SubResource("Resource_medvedev_stats")
 appearance = ExtResource("1_7vms7")
+racket = ExtResource("3_y1dol")
+name_call = ExtResource("2_37k3x")

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_efa2u"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_tf2k0"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/droguet.ogg" id="2_ur57q"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_tf2k0"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ur57q"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ri531"]
 
@@ -51,3 +53,5 @@ rank = 72
 play_style = SubResource("Resource_qd7xp")
 stats = SubResource("Resource_iurb4")
 appearance = SubResource("Resource_aufw4")
+racket = ExtResource("3_tf2k0")
+name_call = ExtResource("2_ur57q")

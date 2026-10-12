@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_syxfo"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6y3i3"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/norrie.ogg" id="2_ku880"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_strike.tres" id="3_6y3i3"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ku880"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_36y4j"]
 
@@ -53,3 +55,5 @@ rank = 40
 play_style = SubResource("Resource_80qbk")
 stats = SubResource("Resource_cf627")
 appearance = SubResource("Resource_ofiqr")
+racket = ExtResource("3_6y3i3")
+name_call = ExtResource("2_ku880")

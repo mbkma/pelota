@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_biyeg"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8icuw"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/vallejo.ogg" id="2_8umdp"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/dunlop_cx.tres" id="3_8icuw"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_8umdp"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_g2hat"]
 
@@ -52,3 +54,5 @@ rank = 52
 play_style = SubResource("Resource_4tuv5")
 stats = SubResource("Resource_5ik5w")
 appearance = SubResource("Resource_jmgdo")
+racket = ExtResource("3_8icuw")
+name_call = ExtResource("2_8umdp")

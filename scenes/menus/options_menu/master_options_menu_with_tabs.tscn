@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://p38eqskw82l3" path="res://scenes/menus/options_menu/audio/audio_options_menu.tscn" id="4_6wkjv"]
 [ext_resource type="PackedScene" uid="uid://bmwuuc1cqerot" path="res://scenes/menus/options_menu/video/video_options_menu_with_extras.tscn" id="5_kr6xa"]
 [ext_resource type="PackedScene" uid="uid://c4gr8phx0pt1o" path="res://scenes/menus/options_menu/graphics/graphics_options_menu.tscn" id="6_graphics"]
+[ext_resource type="PackedScene" path="res://scenes/menus/options_menu/interface/interface_options_menu.tscn" id="7_interface"]
 
 [node name="MasterOptionsMenu" type="TabContainer" unique_id=1111795112]
 anchors_preset = 15
@@ -40,3 +41,8 @@ metadata/_tab_index = 3
 visible = false
 layout_mode = 2
 metadata/_tab_index = 4
+
+[node name="Interface" parent="." instance=ExtResource("7_interface")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 5

@@ -18,6 +18,10 @@ extends Resource
 @export var stats: PlayerStatsProfile
 ## Visual profile that defines body, clothing, and hair mesh variants.
 @export var appearance: PlayerAppearance
+## The racket the player plays with: its brand and look
+@export var racket: RacketDesign
+## The umpire saying the player's name (see UmpireCalls)
+@export var name_call: AudioStream
 @export var sounds := {
 	"grunt_flat": [],
 	"grunt_frequency": 0.0,

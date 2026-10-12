@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_3d1qb"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_5gg1v"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/hurkacz.ogg" id="2_ohyv5"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_5gg1v"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ohyv5"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_wb40y"]
 
@@ -52,3 +54,5 @@ rank = 34
 play_style = SubResource("Resource_hho2l")
 stats = SubResource("Resource_vxddq")
 appearance = SubResource("Resource_uuorx")
+racket = ExtResource("3_5gg1v")
+name_call = ExtResource("2_ohyv5")

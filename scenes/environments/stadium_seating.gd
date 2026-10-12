@@ -6,8 +6,6 @@ extends Resource
 ## way it faces, towards the court.
 
 @export var sections: Array[PackedVector4Array] = []
-## Where the photographers and TV camera operators at court level sit (they do not cheer)
-@export var photographers := PackedVector4Array()
 
 
 static func seat_transform(seat: Vector4) -> Transform3D:

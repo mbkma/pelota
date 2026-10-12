@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_1bttg"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_aalhy"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/nakashima.ogg" id="2_eg47a"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_aalhy"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_eg47a"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yu1yb"]
 
@@ -52,3 +54,5 @@ rank = 19
 play_style = SubResource("Resource_ywvfv")
 stats = SubResource("Resource_mtkeh")
 appearance = SubResource("Resource_nn135")
+racket = ExtResource("3_aalhy")
+name_call = ExtResource("2_eg47a")

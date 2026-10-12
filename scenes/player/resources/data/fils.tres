@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cph5kro180krl"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_0svmd"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/fils.ogg" id="2_huo4d"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nvf54"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_huo4d"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_nvf54"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_3q7ck"]
 
 [sub_resource type="Resource" id="Resource_vr6ag"]
@@ -53,3 +55,5 @@ rank = 11
 play_style = SubResource("Resource_m5h5m")
 stats = SubResource("Resource_78vv7")
 appearance = SubResource("Resource_vr6ag")
+racket = ExtResource("3_nvf54")
+name_call = ExtResource("2_huo4d")

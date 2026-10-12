@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_bdgrx"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_mq6dm"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/royer.ogg" id="2_yo7qy"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_mq6dm"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_yo7qy"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_81yib"]
 
@@ -53,3 +55,5 @@ rank = 105
 play_style = SubResource("Resource_sca2c")
 stats = SubResource("Resource_exaaf")
 appearance = SubResource("Resource_vm64o")
+racket = ExtResource("3_mq6dm")
+name_call = ExtResource("2_yo7qy")

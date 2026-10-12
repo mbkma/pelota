@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ir37b"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_260ks"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/hijikata.ogg" id="2_xf2t8"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_260ks"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_xf2t8"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ft2kl"]
 
@@ -51,3 +53,5 @@ rank = 85
 play_style = SubResource("Resource_rgq6u")
 stats = SubResource("Resource_txmuo")
 appearance = SubResource("Resource_40xdw")
+racket = ExtResource("3_260ks")
+name_call = ExtResource("2_xf2t8")

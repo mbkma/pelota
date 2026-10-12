@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cihbr"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_jj45i"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/nava.ogg" id="2_wxxf3"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_pro_staff.tres" id="3_jj45i"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wxxf3"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_xw3q7"]
 
@@ -50,3 +52,5 @@ rank = 122
 play_style = SubResource("Resource_8yupa")
 stats = SubResource("Resource_ldgq6")
 appearance = SubResource("Resource_0o0b8")
+racket = ExtResource("3_jj45i")
+name_call = ExtResource("2_wxxf3")

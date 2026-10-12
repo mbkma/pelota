@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_m0vhk"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_35wnl"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/borges.ogg" id="2_hy6yj"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_radical.tres" id="3_35wnl"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_hy6yj"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_lr2ww"]
 
@@ -52,3 +54,5 @@ rank = 51
 play_style = SubResource("Resource_333q7")
 stats = SubResource("Resource_im8mh")
 appearance = SubResource("Resource_gvj18")
+racket = ExtResource("3_35wnl")
+name_call = ExtResource("2_hy6yj")

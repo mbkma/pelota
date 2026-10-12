@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dwl0at338jcm7"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_54g7f"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/harris.ogg" id="2_5hovm"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6b3ot"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_5hovm"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_6b3ot"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_20t6b"]
 
 [sub_resource type="Resource" id="Resource_6th7w"]
@@ -50,3 +52,5 @@ rank = 110
 play_style = SubResource("Resource_l0ua5")
 stats = SubResource("Resource_r32q7")
 appearance = SubResource("Resource_6th7w")
+racket = ExtResource("3_6b3ot")
+name_call = ExtResource("2_5hovm")

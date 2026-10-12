@@ -80,6 +80,11 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="SimulateMatchButton" type="Button" parent="Margin/Layout/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Simulate My Match"
+
 [node name="SimulateButton" type="Button" parent="Margin/Layout/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_sihe6"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_4bi50"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/fearnley.ogg" id="2_mu8xl"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_drive.tres" id="3_4bi50"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_mu8xl"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_g6oyj"]
 
@@ -52,3 +54,5 @@ rank = 96
 play_style = SubResource("Resource_lqatt")
 stats = SubResource("Resource_25kwa")
 appearance = SubResource("Resource_txwpw")
+racket = ExtResource("3_4bi50")
+name_call = ExtResource("2_mu8xl")

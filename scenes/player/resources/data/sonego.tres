@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b63ogvcbsofot"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_uvipv"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/sonego.ogg" id="2_47bre"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_w4fwv"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_47bre"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_w4fwv"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_qocta"]
 
 [sub_resource type="Resource" id="Resource_n3ila"]
@@ -53,3 +55,5 @@ rank = 87
 play_style = SubResource("Resource_7wwmt")
 stats = SubResource("Resource_hdoyk")
 appearance = SubResource("Resource_n3ila")
+racket = ExtResource("3_w4fwv")
+name_call = ExtResource("2_47bre")

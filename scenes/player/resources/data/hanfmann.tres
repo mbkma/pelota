@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://crl7xvxsx505j"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_7wtd3"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/hanfmann.ogg" id="2_oetpq"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_sw5m0"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_oetpq"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_prestige.tres" id="3_sw5m0"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_glplv"]
 
 [sub_resource type="Resource" id="Resource_wrffc"]
@@ -52,3 +54,5 @@ rank = 57
 play_style = SubResource("Resource_hjs4l")
 stats = SubResource("Resource_yjim7")
 appearance = SubResource("Resource_wrffc")
+racket = ExtResource("3_sw5m0")
+name_call = ExtResource("2_oetpq")

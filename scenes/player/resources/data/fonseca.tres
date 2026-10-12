@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://fcc7l85nncwx"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_rw2yi"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/fonseca.ogg" id="2_4af6x"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rb0ht"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_4af6x"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_rb0ht"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_wol2c"]
 
 [sub_resource type="Resource" id="Resource_veqqc"]
@@ -52,3 +54,5 @@ rank = 29
 play_style = SubResource("Resource_p4wvq")
 stats = SubResource("Resource_v4u2k")
 appearance = SubResource("Resource_veqqc")
+racket = ExtResource("3_rb0ht")
+name_call = ExtResource("2_4af6x")

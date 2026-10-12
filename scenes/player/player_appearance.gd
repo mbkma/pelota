@@ -31,9 +31,6 @@ const UNSET_COLOR := Color(0, 0, 0, 0)
 @export var hair_texture: Texture2D
 @export var hair_color: Color = UNSET_COLOR
 
-@export var racket_texture: Texture2D
-@export var racket_strings_texture: Texture2D
-
 
 ## This appearance with every unset field taken from `base`.
 func merged_onto(base: PlayerAppearance) -> PlayerAppearance:

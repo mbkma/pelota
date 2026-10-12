@@ -30,6 +30,9 @@ const ATTACK_ERROR_FACTOR: float = 1.15
 ## stretch (see AiPointContext.stretch) from which getting to it is.
 const HARD_PACE: Vector2 = Vector2(32.0, 45.0)
 const HARD_STRETCH: Vector2 = Vector2(0.8, 1.4)
+## Time (s) until contact from which being stretched makes a ball hard, and from which fully: a
+## player who gets to a slow ball (a drop shot) has time to set up for it.
+const RUSHED_TIME: Vector2 = Vector2(1.6, 0.9)
 ## Spread (standard deviation, m) of the landing point of a first and of a second serve, from
 ## no to full precision. In the tracking data a first serve goes for the lines and goes in ~64%
 ## of the time; a second serve keeps a margin and misses ~7% of the time.
@@ -341,14 +344,18 @@ static func _apply_consistency_error(intended_target: Vector3, context: AiPointC
 	return intended_target + Vector3(offset.x, 0.0, offset.y)
 
 
-## How hard the incoming ball is to control, in [0, 1]: by how stretched the player is, how far
-## a deep ball pushes it back and the ball's pace; the hardest of these counts.
+## How hard the incoming ball is to control, in [0, 1]: by how stretched the player is when the
+## ball comes quickly, how far a deep ball pushes it back and the ball's pace; the hardest of
+## these counts.
 static func _difficulty(context: AiPointContext) -> float:
 	var pace: float = clampf(
 		inverse_lerp(HARD_PACE.x, HARD_PACE.y, context.incoming_ball_speed), 0.0, 1.0
 	)
-	var stretch: float = clampf(
-		inverse_lerp(HARD_STRETCH.x, HARD_STRETCH.y, context.stretch), 0.0, 1.0
+	var rushed: float = clampf(
+		inverse_lerp(RUSHED_TIME.x, RUSHED_TIME.y, context.closest_step.time), 0.0, 1.0
+	)
+	var stretch: float = (
+		clampf(inverse_lerp(HARD_STRETCH.x, HARD_STRETCH.y, context.stretch), 0.0, 1.0) * rushed
 	)
 	return maxf(maxf(stretch, context.depth_pressure), pace)
 

@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cfuwahj2wgcw8"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_han1v"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/bonzi.ogg" id="2_h8b38"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_qphyp"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_h8b38"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_qphyp"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_vxa3g"]
 
 [sub_resource type="Resource" id="Resource_hfika"]
@@ -50,3 +52,5 @@ rank = 92
 play_style = SubResource("Resource_se48p")
 stats = SubResource("Resource_8eo6y")
 appearance = SubResource("Resource_hfika")
+racket = ExtResource("3_qphyp")
+name_call = ExtResource("2_h8b38")

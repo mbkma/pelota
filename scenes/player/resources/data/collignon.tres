@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_u8lqf"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_cma83"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/collignon.ogg" id="2_j2ysx"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_cma83"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_j2ysx"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_rl4w3"]
 
@@ -53,3 +55,5 @@ rank = 50
 play_style = SubResource("Resource_jaatn")
 stats = SubResource("Resource_sa4ys")
 appearance = SubResource("Resource_ayuql")
+racket = ExtResource("3_cma83")
+name_call = ExtResource("2_j2ysx")

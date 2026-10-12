@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_t2yp7"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_4bxo3"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/heide.ogg" id="2_an6oc"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_4bxo3"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_an6oc"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yy6jb"]
 
@@ -51,3 +53,5 @@ rank = 116
 play_style = SubResource("Resource_yrc3t")
 stats = SubResource("Resource_o8w0x")
 appearance = SubResource("Resource_lw0mu")
+racket = ExtResource("3_4bxo3")
+name_call = ExtResource("2_an6oc")

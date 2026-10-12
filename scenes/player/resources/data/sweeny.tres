@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://blnt8qncvx22e"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_2xmhl"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/sweeny.ogg" id="2_fsq62"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vknwx"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_fsq62"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_vknwx"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_luxm5"]
 
 [sub_resource type="Resource" id="Resource_doooh"]
@@ -50,3 +52,5 @@ rank = 112
 play_style = SubResource("Resource_uyxsw")
 stats = SubResource("Resource_54x17")
 appearance = SubResource("Resource_doooh")
+racket = ExtResource("3_vknwx")
+name_call = ExtResource("2_fsq62")

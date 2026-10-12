@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
 [ext_resource type="Resource" path="res://scenes/player/resources/appearances/rublev.tres" id="1_lksp7"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/rublev.ogg" id="2_qii1l"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_gravity.tres" id="3_c860u"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/rublev.tres" id="3_t55ec"]
 
 [sub_resource type="Resource" id="Resource_rublev_stats"]
@@ -39,3 +41,5 @@ rank = 23
 play_style = ExtResource("3_t55ec")
 stats = SubResource("Resource_rublev_stats")
 appearance = ExtResource("1_lksp7")
+racket = ExtResource("3_c860u")
+name_call = ExtResource("2_qii1l")

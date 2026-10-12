@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_qnw5f"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_si6yv"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/majchrzak.ogg" id="2_ysf0g"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_si6yv"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ysf0g"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_tm2mr"]
 
@@ -52,3 +54,5 @@ rank = 70
 play_style = SubResource("Resource_wmx75")
 stats = SubResource("Resource_fmt8s")
 appearance = SubResource("Resource_yqu1x")
+racket = ExtResource("3_si6yv")
+name_call = ExtResource("2_ysf0g")

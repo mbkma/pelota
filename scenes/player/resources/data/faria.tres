@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_bycer"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_cp2gx"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/faria.ogg" id="2_s67pj"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_cp2gx"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_s67pj"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_xm5a0"]
 
@@ -53,3 +55,5 @@ rank = 60
 play_style = SubResource("Resource_ioc5y")
 stats = SubResource("Resource_appht")
 appearance = SubResource("Resource_gqoa2")
+racket = ExtResource("3_cp2gx")
+name_call = ExtResource("2_s67pj")

@@ -9,7 +9,8 @@
 
 [node name="Stadium" parent="." unique_id=1203660137 instance=ExtResource("1_stadium")]
 
-[node name="Crowd" parent="." unique_id=1561406129 instance=ExtResource("2_crowd")]
+[node name="Crowd" parent="." node_paths=PackedStringArray("crew") unique_id=1561406129 instance=ExtResource("2_crowd")]
+crew = [NodePath("../Stadium/Courtside/Photographers"), NodePath("../Stadium/Courtside/CameraOperators")]
 play_ambience = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1092381622]

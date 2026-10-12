@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://ddpavk6by4cpn"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_wrqtt"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/khachanov.ogg" id="2_3uvvv"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_25sjk"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_3uvvv"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_defyer.tres" id="3_25sjk"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6nyxb"]
 
 [sub_resource type="Resource" id="Resource_jmoay"]
@@ -53,3 +55,5 @@ rank = 27
 play_style = SubResource("Resource_k5ct2")
 stats = SubResource("Resource_pjqst")
 appearance = SubResource("Resource_jmoay")
+racket = ExtResource("3_25sjk")
+name_call = ExtResource("2_3uvvv")

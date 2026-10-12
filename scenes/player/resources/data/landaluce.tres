@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://w2a2f2nqsxqc"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_sqm2g"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/landaluce.ogg" id="2_wvo5t"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_xr3w6"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wvo5t"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_xr3w6"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_j351j"]
 
 [sub_resource type="Resource" id="Resource_tn4xe"]
@@ -52,3 +54,5 @@ rank = 73
 play_style = SubResource("Resource_nucam")
 stats = SubResource("Resource_xv86j")
 appearance = SubResource("Resource_tn4xe")
+racket = ExtResource("3_xr3w6")
+name_call = ExtResource("2_wvo5t")

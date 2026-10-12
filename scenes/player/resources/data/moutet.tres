@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_61vg5"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_f53tn"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/moutet.ogg" id="2_is3tx"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tfight.tres" id="3_f53tn"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_is3tx"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_qk5rw"]
 
@@ -52,3 +54,5 @@ rank = 71
 play_style = SubResource("Resource_fdcig")
 stats = SubResource("Resource_wc2lo")
 appearance = SubResource("Resource_xpf3y")
+racket = ExtResource("3_f53tn")
+name_call = ExtResource("2_is3tx")

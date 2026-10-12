@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bilbw56tr5d0x"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_qws0l"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/fery.ogg" id="2_2hybi"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8p5fp"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_2hybi"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_defyer.tres" id="3_8p5fp"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_erfna"]
 
 [sub_resource type="Resource" id="Resource_mxhs6"]
@@ -53,3 +55,5 @@ rank = 37
 play_style = SubResource("Resource_p1tvc")
 stats = SubResource("Resource_blq4d")
 appearance = SubResource("Resource_mxhs6")
+racket = ExtResource("3_8p5fp")
+name_call = ExtResource("2_2hybi")

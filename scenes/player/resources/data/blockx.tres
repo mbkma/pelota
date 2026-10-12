@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_22vrq"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_7jfe4"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/blockx.ogg" id="2_maqb4"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tfight.tres" id="3_7jfe4"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_maqb4"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_r2bri"]
 
@@ -53,3 +55,5 @@ rank = 28
 play_style = SubResource("Resource_m7jsf")
 stats = SubResource("Resource_tb430")
 appearance = SubResource("Resource_5iad1")
+racket = ExtResource("3_7jfe4")
+name_call = ExtResource("2_maqb4")

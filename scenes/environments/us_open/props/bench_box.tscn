@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/props/meshes/bench_box.res" id="1_mesh"]
+
+[node name="BenchBox" type="MeshInstance3D"]
+mesh = ExtResource("1_mesh")

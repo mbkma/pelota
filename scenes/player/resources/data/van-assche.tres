@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://e88faih3u1t7"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_o62lv"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/van-assche.ogg" id="2_1q5nk"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8qyvt"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_1q5nk"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_8qyvt"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ttlv2"]
 
 [sub_resource type="Resource" id="Resource_upkxw"]
@@ -53,3 +55,5 @@ rank = 45
 play_style = SubResource("Resource_grj2j")
 stats = SubResource("Resource_7j2yi")
 appearance = SubResource("Resource_upkxw")
+racket = ExtResource("3_8qyvt")
+name_call = ExtResource("2_1q5nk")

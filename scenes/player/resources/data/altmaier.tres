@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_2ykoq"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_edskh"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/altmaier.ogg" id="2_ixsas"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_edskh"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ixsas"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ngr2i"]
 
@@ -53,3 +55,5 @@ rank = 67
 play_style = SubResource("Resource_ev875")
 stats = SubResource("Resource_lep2b")
 appearance = SubResource("Resource_qfice")
+racket = ExtResource("3_edskh")
+name_call = ExtResource("2_ixsas")

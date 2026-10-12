@@ -109,6 +109,8 @@ const BACKWARD_RUN_ALIGNMENT: float = 0.5
 ## Shows where to stand to meet the incoming ball (for controllers that provide it), colored by
 ## how well the player stands there.
 @export var ideal_position_marker: IdealPositionMarker
+## Circle above the head while the stroke button can be used (see StrokeIndicator)
+@export var stroke_indicator: StrokeIndicator
 ## Opposing player reference for serve/rally synchronization.
 @export var opponent: Player
 ## Ball scene spawned as the toss ball when serving.
@@ -172,6 +174,8 @@ var _stamina: float = 1.0
 var _running_backward: bool = false
 
 var _is_replay_mode: bool = false
+## Whether the player plays out a stroke after the point ended (see end_point)
+var _playing_out: bool = false
 
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -189,6 +193,7 @@ func _ready() -> void:
 	_stamina = stats.stamina_capacity()
 	label_3d.text = player_data.last_name
 	model.load_appearance(player_data.appearance)
+	model.racket.show_design(player_data.racket)
 	set_meta("logger_name", player_data.last_name)
 
 	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
@@ -239,10 +244,27 @@ func request_serve() -> void:
 
 ## Stop all player actions and clean up state
 func stop() -> void:
+	_playing_out = false
 	_halt()
 	cancel_stroke()
 	set_active_ball(null)
 	_lifecycle_bus.end_point(self)
+
+
+## Ends the point for this player. A human player with a stroke queued for the ball still plays
+## it (the ball no longer counts), as a player hits back a ball that just went out; everybody
+## else stops.
+func end_point() -> void:
+	if queued_stroke and controller is HumanController and is_instance_valid(ball):
+		_playing_out = true
+		_lifecycle_bus.end_point(self)
+		return
+	stop()
+
+
+## Whether the player plays out a stroke after the point ended (see end_point).
+func is_playing_out() -> bool:
+	return _playing_out
 
 
 ## Movement System
@@ -786,6 +808,9 @@ func _start_running_sound_when_due() -> void:
 
 ## Set the active ball for this player
 func set_active_ball(b: Ball) -> void:
+	# Playing out a stroke after the point ended, the player keeps the ball it hits back.
+	if b == null and _playing_out:
+		return
 	ball = b
 	controller.ball_changed(b)
 
@@ -795,12 +820,21 @@ static func _on_court(point: Vector3) -> Vector3:
 	return Vector3(point.x, 0.0, point.z)
 
 
-## Shows the aim and ideal position markers the controller reports, painted on the court. The
-## ideal position marker is colored by how far the player stands from the range it may meet the
-## ball from.
+## Shows the stroke indicator and the aim and ideal position markers the controller reports (the
+## markers painted on the court), those turned on in the UI settings. The ideal position marker
+## is colored by how far the player stands from the range it may meet the ball from.
 func _update_controller_ui() -> void:
+	var indicator_quality: Variant = controller.get_stroke_indicator_quality()
+	stroke_indicator.visible = (
+		indicator_quality != null and UiSettings.is_shown(UiSettings.Element.STROKE_INDICATOR)
+	)
+	if stroke_indicator.visible:
+		stroke_indicator.set_quality(indicator_quality)
+
 	var ideal_position: Variant = controller.get_ideal_position()
-	ideal_position_marker.visible = ideal_position != null
+	ideal_position_marker.visible = (
+		ideal_position != null and UiSettings.is_shown(UiSettings.Element.POSITION_MARKER)
+	)
 	if ideal_position != null:
 		ideal_position_marker.global_position = _on_court(ideal_position)
 		var ideal_range: PackedVector3Array = controller.get_ideal_range()
@@ -817,7 +851,9 @@ func _update_controller_ui() -> void:
 		ideal_position_marker.set_quality(positioning_quality(offset.length()))
 
 	var aim_position: Variant = controller.get_aim_marker_position()
-	ball_aim_marker.visible = aim_position != null
+	ball_aim_marker.visible = (
+		aim_position != null and UiSettings.is_shown(UiSettings.Element.AIM_MARKER)
+	)
 	if aim_position != null:
 		ball_aim_marker.global_position = _on_court(aim_position)
 		ball_aim_marker.set_radius(controller.get_aim_marker_radius())
@@ -865,6 +901,8 @@ func _on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void
 
 ## Shows a short rating of the last shot (e.g. "PERFECT!") rising above the player.
 func show_shot_feedback(text: String, color: Color) -> void:
+	if not UiSettings.is_shown(UiSettings.Element.SHOT_RATING):
+		return
 	_shot_feedback_label.text = text
 	_shot_feedback_label.modulate = color
 	_shot_feedback_label.position.y = SHOT_FEEDBACK_HEIGHT

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_80wx5"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ilvji"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/tiafoe.ogg" id="2_rmdpg"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_percept.tres" id="3_ilvji"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_rmdpg"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ruuvi"]
 
@@ -53,3 +55,5 @@ rank = 10
 play_style = SubResource("Resource_f8xls")
 stats = SubResource("Resource_gbgwp")
 appearance = SubResource("Resource_p2ldt")
+racket = ExtResource("3_ilvji")
+name_call = ExtResource("2_rmdpg")

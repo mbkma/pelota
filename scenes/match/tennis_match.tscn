@@ -117,7 +117,8 @@ replay = NodePath("../MatchReplay")
 [node name="PauseMenu" parent="." unique_id=156357199 instance=ExtResource("18_fevwx")]
 visible = false
 
-[node name="Crowd" parent="." unique_id=1204219689 instance=ExtResource("16_4veo4")]
+[node name="Crowd" parent="." node_paths=PackedStringArray("crew") unique_id=1204219689 instance=ExtResource("16_4veo4")]
+crew = [NodePath("../Stadium/Courtside/Photographers"), NodePath("../Stadium/Courtside/CameraOperators")]
 
 [editable path="TelevisionHUD"]
 [editable path="Stadium"]

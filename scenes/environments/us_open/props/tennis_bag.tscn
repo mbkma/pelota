@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/props/meshes/tennis_bag.res" id="1_mesh"]
+[ext_resource type="Script" path="res://scenes/environments/us_open/props/tennis_bag.gd" id="2_script"]
+[ext_resource type="FontFile" path="res://assets/fonts/Lato-Black.ttf" id="3_font"]
+
+[node name="TennisBag" type="MeshInstance3D"]
+mesh = ExtResource("1_mesh")
+script = ExtResource("2_script")
+
+[node name="FrontLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.167)
+pixel_size = 0.0016
+double_sided = false
+font = ExtResource("3_font")
+font_size = 64
+outline_size = 0
+text = "HEAD"
+
+[node name="BackLabel" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.15, -0.167)
+pixel_size = 0.0016
+double_sided = false
+font = ExtResource("3_font")
+font_size = 64
+outline_size = 0
+text = "HEAD"

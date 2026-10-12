@@ -2,6 +2,8 @@
 
 [ext_resource type="Resource" path="res://scenes/player/resources/appearances/auger-aliassime.tres" id="1_gigr2"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_jl1rq"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/auger-aliassime.ogg" id="2_u22i6"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_5fxvq"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_tyoyc"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/auger-aliassime.tres" id="4_2vnw3"]
 
@@ -39,3 +41,5 @@ rank = 5
 play_style = ExtResource("4_2vnw3")
 stats = SubResource("Resource_faa_stats")
 appearance = ExtResource("1_gigr2")
+racket = ExtResource("3_5fxvq")
+name_call = ExtResource("2_u22i6")

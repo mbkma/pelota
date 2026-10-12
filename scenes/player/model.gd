@@ -11,8 +11,9 @@ const SWEAT_PATCHES_SHADER: Shader = preload("res://scenes/player/sweat_patches.
 const BASE_APPEARANCE: PlayerAppearance = preload(
 	"res://scenes/player/resources/appearances/base.tres"
 )
-## Sweat at the start of a match (warmed up) and the match time (s) after which it is full
-const START_SWEAT: float = 0.1
+## Match time (s) the player stays dry (about the first two or three games), and after which the
+## sweat is full; in between it grows steadily.
+const DRY_MATCH_TIME: float = 480.0
 const FULL_SWEAT_MATCH_TIME: float = 5400.0
 ## Fully sweating: skin roughness and clearcoat (a wet film); the shirt soaks through in patches
 ## (see sweat_patches.gdshader).
@@ -142,7 +143,6 @@ func load_appearance(player_appearance: PlayerAppearance) -> void:
 	)
 	_apply_look(_shorts_mesh, 0, appearance.shorts_texture, appearance.shorts_color)
 	_apply_look(_shoes_mesh, 0, appearance.shoes_texture, appearance.shoes_color)
-	racket.show_appearance(appearance)
 	_apply_hair(appearance.hair_texture, appearance.hair_color)
 	_dry_skin_roughness = _skin_material.roughness
 	_skin_material.clearcoat_enabled = true
@@ -183,7 +183,7 @@ static func _with_rest_positions(mesh: ArrayMesh) -> ArrayMesh:
 
 ## Sweats as after `seconds` of match time.
 func sweat_after_match_time(seconds: float) -> void:
-	set_sweat(lerpf(START_SWEAT, 1.0, clampf(seconds / FULL_SWEAT_MATCH_TIME, 0.0, 1.0)))
+	set_sweat(clampf(inverse_lerp(DRY_MATCH_TIME, FULL_SWEAT_MATCH_TIME, seconds), 0.0, 1.0))
 
 
 ## Sets how much the player sweats, in [0, 1].

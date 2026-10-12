@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_u6pps"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_82px7"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/vukic.ogg" id="2_bshg4"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_82px7"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_bshg4"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_h8dkt"]
 
@@ -51,3 +53,5 @@ rank = 115
 play_style = SubResource("Resource_q8bat")
 stats = SubResource("Resource_gixdt")
 appearance = SubResource("Resource_428lk")
+racket = ExtResource("3_82px7")
+name_call = ExtResource("2_bshg4")

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_hxn7e"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_247c7"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/marozsan.ogg" id="2_e7hbh"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_247c7"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_e7hbh"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ifksc"]
 
@@ -53,3 +55,5 @@ rank = 63
 play_style = SubResource("Resource_ydhre")
 stats = SubResource("Resource_iog16")
 appearance = SubResource("Resource_fbhe2")
+racket = ExtResource("3_247c7")
+name_call = ExtResource("2_e7hbh")

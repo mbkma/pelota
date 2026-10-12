@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_wyvxh"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_eiflu"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/diaz-acosta.ogg" id="2_q4ooo"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_eiflu"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_q4ooo"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_53b1m"]
 
@@ -53,3 +55,5 @@ rank = 69
 play_style = SubResource("Resource_he2tn")
 stats = SubResource("Resource_s4vpb")
 appearance = SubResource("Resource_t0ej6")
+racket = ExtResource("3_eiflu")
+name_call = ExtResource("2_q4ooo")

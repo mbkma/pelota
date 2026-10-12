@@ -2,12 +2,44 @@
 
 [sub_resource type="AudioEffectHardLimiter" id="AudioEffectHardLimiter_master"]
 resource_name = "HardLimiter"
-ceiling_db = -0.3
+
+[sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_umpire_pa"]
+resource_name = "PaLowCut"
+cutoff_hz = 140.0
+db = 2
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_umpire_pa"]
+resource_name = "PaHighCut"
+cutoff_hz = 6500.0
+db = 1
+
+[sub_resource type="AudioEffectEQ6" id="AudioEffectEQ6_umpire_pa"]
+resource_name = "PaPresence"
+band_db/32_hz = -24.0
+band_db/100_hz = -4.0
+band_db/320_hz = 2.0
+band_db/1000_hz = 2.0
+band_db/3200_hz = 2.0
+band_db/10000_hz = -8.0
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_umpire_stadium"]
+resource_name = "StadiumReverb"
+predelay_msec = 90.0
+predelay_feedback = 0.0
+room_size = 0.95
+damping = 0.85
+hipass = 0.45
+wet = 0.07
+
+[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_umpire_pa"]
+resource_name = "PaCompressor"
+threshold = -16.0
+ratio = 3.0
+gain = 6.0
 
 [sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_umpire_duck"]
 resource_name = "UmpireDuck"
 threshold = -18.0
-ratio = 4.0
 attack_us = 20000.0
 release_ms = 400.0
 sidechain = &"Umpire"
@@ -31,8 +63,18 @@ bus/3/name = &"Umpire"
 bus/3/solo = false
 bus/3/mute = false
 bus/3/bypass_fx = false
-bus/3/volume_db = 0.0
+bus/3/volume_db = 4.0
 bus/3/send = &"Master"
+bus/3/effect/0/effect = SubResource("AudioEffectHighPassFilter_umpire_pa")
+bus/3/effect/0/enabled = true
+bus/3/effect/1/effect = SubResource("AudioEffectLowPassFilter_umpire_pa")
+bus/3/effect/1/enabled = true
+bus/3/effect/2/effect = SubResource("AudioEffectEQ6_umpire_pa")
+bus/3/effect/2/enabled = true
+bus/3/effect/3/effect = SubResource("AudioEffectReverb_umpire_stadium")
+bus/3/effect/3/enabled = true
+bus/3/effect/4/effect = SubResource("AudioEffectCompressor_umpire_pa")
+bus/3/effect/4/enabled = true
 bus/4/name = &"Crowd"
 bus/4/solo = false
 bus/4/mute = false

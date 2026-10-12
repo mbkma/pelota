@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cqnkuxqh5efsc"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_20ccu"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/bellucci.ogg" id="2_0hjpw"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_45ejy"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0hjpw"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_radical.tres" id="3_45ejy"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_hbmle"]
 
 [sub_resource type="Resource" id="Resource_7epmj"]
@@ -52,3 +54,5 @@ rank = 86
 play_style = SubResource("Resource_16mcp")
 stats = SubResource("Resource_3gcso")
 appearance = SubResource("Resource_7epmj")
+racket = ExtResource("3_45ejy")
+name_call = ExtResource("2_0hjpw")

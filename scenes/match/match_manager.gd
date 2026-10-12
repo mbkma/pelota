@@ -79,9 +79,10 @@ func _ready() -> void:
 		cameras.register_camera(player.first_person_camera)
 	active_ball_changed.connect(crowd.follow_ball)
 	active_ball_changed.connect(umpire.follow_ball)
+	umpire.set_players([player0.player_data, player1.player_data])
 	active_ball_changed.connect(_aim_ball_camera)
 	television_hud.start_broadcast(match_data.score)
-	stadium.show_bench_rackets(players)
+	stadium.show_bench_equipment(players)
 	_update_players_for_next_point()
 	stadium.aim_ball_camera(get_server())
 
@@ -159,11 +160,11 @@ func add_point(winner: int) -> void:
 	_update_players_for_next_point()
 	television_hud.on_point_played(match_data, winner)
 	stadium.show_match_time(match_data.elapsed_seconds)
+	umpire.call_point(score, winner)
 	if score.is_match_over():
 		_end_match(winner)
 		return
 	stadium.aim_ball_camera(get_server())
-	umpire.say_score(score)
 	cameras.reframe_tv_cameras()
 	await get_tree().create_timer(GameConstants.POINT_BREAK).timeout
 	if score.completed_sets.size() > completed_sets_before:
@@ -224,7 +225,7 @@ func _request_serve() -> void:
 ## Lets the ball of a missed serve or a let fly on for SERVE_AGAIN_BREAK, no longer counting, then
 ## serves again.
 func _serve_again_after_break() -> void:
-	_stop_players()
+	_end_point_for_players()
 	_retire_ball()
 	await get_tree().create_timer(SERVE_AGAIN_BREAK).timeout
 	_request_serve()
@@ -232,7 +233,7 @@ func _serve_again_after_break() -> void:
 
 func _end_match(winner_index: int) -> void:
 	current_state = MatchState.GAME_OVER
-	_stop_players()
+	_end_point_for_players()
 	_retire_ball()
 	match_finished.emit(winner_index)
 
@@ -264,6 +265,7 @@ func _on_ball_on_ground() -> void:
 func _process_serve_ground_contact() -> void:
 	var in_box: bool = court.is_ball_in_court_region(ball.position, _get_valid_service_box())
 	if in_box and _serve_clipped_net:
+		umpire.call_let()
 		_serve_again_after_break()
 		return
 
@@ -281,7 +283,8 @@ func _process_serve_ground_contact() -> void:
 		return
 
 	if is_first_serve:
-		umpire.say_fault()
+		if _ball_crossed_net():
+			umpire.call_fault()
 		current_state = MatchState.SECOND_SERVE
 		_serve_again_after_break()
 	else:
@@ -303,9 +306,15 @@ func _process_rally_ground_contact() -> void:
 		current_state = MatchState.FAULT
 
 
+## Whether the ball landed on the other side of the net than the last hitter's.
+func _ball_crossed_net() -> bool:
+	return signf(ball.position.z) != signf(last_hitter.position.z)
+
+
 ## Ends the point: the last hitter wins it if the ball bounced in, otherwise loses it.
 func _handle_fault() -> void:
-	_stop_players()
+	var crossed_net: bool = _ball_crossed_net()
+	_end_point_for_players()
 	_retire_ball()
 	crowd.cheer(_point_excitement())
 
@@ -314,7 +323,12 @@ func _handle_fault() -> void:
 		last_hitter
 	)]
 	if ground_contacts == 0:
-		umpire.say_fault()
+		# Out (a serve: a fault); a ball into the net is not called.
+		if crossed_net:
+			if _point_serve_number == 0:
+				umpire.call_fault()
+			else:
+				umpire.call_out()
 		point_winner = last_hitter.opponent
 		# Out or into the net; a missed second serve is already counted as a double fault.
 		if _point_serve_number > 0:
@@ -333,6 +347,12 @@ func _handle_fault() -> void:
 func _stop_players() -> void:
 	player0.stop()
 	player1.stop()
+
+
+## Ends the point for both players (see Player.end_point).
+func _end_point_for_players() -> void:
+	player0.end_point()
+	player1.end_point()
 
 
 ## Pauses the match after a set: the music plays and the statistics are shown until
@@ -510,6 +530,9 @@ func _on_player_serve_completed(serving_player: Player) -> void:
 
 func _on_player_ball_hit(player_index: int) -> void:
 	var player: Player = get_player(player_index)
+	# A ball hit back after the point ended does not count.
+	if player.ball != ball:
+		return
 	match_data.rally_length += 1
 	if player.queued_stroke.is_volley():
 		_point_volleyed[player_index] = true

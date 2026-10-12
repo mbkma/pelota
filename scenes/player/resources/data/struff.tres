@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_hnihs"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6wvkr"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/struff.ogg" id="2_qx53g"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_extreme.tres" id="3_6wvkr"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_qx53g"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_dsnaf"]
 
@@ -52,3 +54,5 @@ rank = 59
 play_style = SubResource("Resource_o5jpn")
 stats = SubResource("Resource_4rrya")
 appearance = SubResource("Resource_0ei32")
+racket = ExtResource("3_6wvkr")
+name_call = ExtResource("2_qx53g")

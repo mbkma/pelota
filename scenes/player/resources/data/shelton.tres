@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://breomurf77djt"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_g5lb8"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/shelton.ogg" id="2_c5u8f"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_q40ml"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_c5u8f"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_q40ml"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_86g7e"]
 
 [sub_resource type="Resource" id="Resource_isw6f"]
@@ -54,3 +56,5 @@ rank = 4
 play_style = SubResource("Resource_eas61")
 stats = SubResource("Resource_1klo2")
 appearance = SubResource("Resource_isw6f")
+racket = ExtResource("3_q40ml")
+name_call = ExtResource("2_c5u8f")

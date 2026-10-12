@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cibbhkfv1ny2q"]
 
 [ext_resource type="Resource" path="res://scenes/player/resources/appearances/djokovic.tres" id="1_fsr4u"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/djokovic.ogg" id="2_7yvlh"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_fsr4u"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/strokes/stroke_flat_djokovic_1.wav" id="3_cf7pp"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_speed.tres" id="3_rn4jr"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_w4xln"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/djokovic.tres" id="5_26w41"]
 
@@ -40,6 +42,8 @@ rank = 8
 play_style = ExtResource("5_26w41")
 stats = SubResource("Resource_djokovic_stats")
 appearance = ExtResource("1_fsr4u")
+racket = ExtResource("3_rn4jr")
+name_call = ExtResource("2_7yvlh")
 sounds = {
 "grunt_flat": [ExtResource("3_cf7pp")],
 "grunt_frequency": 0.1,

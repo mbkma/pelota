@@ -119,6 +119,15 @@ func record_player_match(final_score: Score) -> void:
 	finish_round()
 
 
+## Simulates the player's match of the current round over the player's sets (instead of playing
+## it), then the other matches of the round, and draws the next round.
+func simulate_player_match() -> void:
+	var own: TournamentMatch = player_match()
+	var final_score: Score = MatchSimulator.play(own.players, best_of_sets)
+	own.record(0 if final_score.sets[0] > final_score.sets[1] else 1, final_score)
+	finish_round()
+
+
 ## Simulates the unplayed matches of the current round and draws the next one.
 func finish_round() -> void:
 	for m in round_matches(current_round):

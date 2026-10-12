@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_0ebn4"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1bh13"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/rocha.ogg" id="2_4ng6n"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_speed.tres" id="3_1bh13"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_4ng6n"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_x27yw"]
 
@@ -52,3 +54,5 @@ rank = 106
 play_style = SubResource("Resource_c4gxg")
 stats = SubResource("Resource_uqrvh")
 appearance = SubResource("Resource_ro3fa")
+racket = ExtResource("3_1bh13")
+name_call = ExtResource("2_4ng6n")

@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://drdnhlgy6gpc5"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_0im1u"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/shevchenko.ogg" id="2_43nrf"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_qw2st"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_43nrf"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tfight.tres" id="3_qw2st"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_qwf27"]
 
 [sub_resource type="Resource" id="Resource_r530m"]
@@ -51,3 +53,5 @@ rank = 111
 play_style = SubResource("Resource_wxqmq")
 stats = SubResource("Resource_wfdcp")
 appearance = SubResource("Resource_r530m")
+racket = ExtResource("3_qw2st")
+name_call = ExtResource("2_43nrf")

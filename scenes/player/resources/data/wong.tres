@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_2taoi"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rkx4q"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/wong.ogg" id="2_t8td7"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_ultra.tres" id="3_rkx4q"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_t8td7"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_swa3e"]
 
@@ -52,3 +54,5 @@ rank = 101
 play_style = SubResource("Resource_p40m3")
 stats = SubResource("Resource_pil5i")
 appearance = SubResource("Resource_icpui")
+racket = ExtResource("3_rkx4q")
+name_call = ExtResource("2_t8td7")

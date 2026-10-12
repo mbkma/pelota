@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d4jv7vlxrvtsl"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_t5qg2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/svrcina.ogg" id="2_0bs7n"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vpp54"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0bs7n"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_vpp54"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yqv7c"]
 
 [sub_resource type="Resource" id="Resource_kospy"]
@@ -50,3 +52,5 @@ rank = 126
 play_style = SubResource("Resource_cl2kk")
 stats = SubResource("Resource_vxrpb")
 appearance = SubResource("Resource_kospy")
+racket = ExtResource("3_vpp54")
+name_call = ExtResource("2_0bs7n")

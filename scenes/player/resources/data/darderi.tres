@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://st47gnve14cu"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_wmyco"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/darderi.ogg" id="2_k12gv"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_lrmrq"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_k12gv"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_percept.tres" id="3_lrmrq"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_t0han"]
 
 [sub_resource type="Resource" id="Resource_ymk4i"]
@@ -52,3 +54,5 @@ rank = 21
 play_style = SubResource("Resource_vsmeg")
 stats = SubResource("Resource_mlmhx")
 appearance = SubResource("Resource_ymk4i")
+racket = ExtResource("3_lrmrq")
+name_call = ExtResource("2_k12gv")

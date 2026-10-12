@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://p7yap8yu77o"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_khpjc"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/davidovich-fokina.ogg" id="2_mk16o"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_qr5pw"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_mk16o"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_extreme.tres" id="3_qr5pw"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_uenso"]
 
 [sub_resource type="Resource" id="Resource_ntul8"]
@@ -53,3 +55,5 @@ rank = 26
 play_style = SubResource("Resource_hvdoh")
 stats = SubResource("Resource_i76hp")
 appearance = SubResource("Resource_ntul8")
+racket = ExtResource("3_qr5pw")
+name_call = ExtResource("2_mk16o")

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_xdc2q"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ihkuk"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/halys.ogg" id="2_wed2s"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_ihkuk"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wed2s"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_x3w83"]
 
@@ -53,3 +55,5 @@ rank = 48
 play_style = SubResource("Resource_48dxe")
 stats = SubResource("Resource_nv80a")
 appearance = SubResource("Resource_vratf")
+racket = ExtResource("3_ihkuk")
+name_call = ExtResource("2_wed2s")

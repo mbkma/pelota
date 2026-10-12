@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bux8nb1atrxhd"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_v38bf"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/choinski.ogg" id="2_23xre"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_o6o6x"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_23xre"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_o6o6x"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_7t6qx"]
 
 [sub_resource type="Resource" id="Resource_v7oxj"]
@@ -52,3 +54,5 @@ rank = 91
 play_style = SubResource("Resource_n1uwb")
 stats = SubResource("Resource_6yqyg")
 appearance = SubResource("Resource_v7oxj")
+racket = ExtResource("3_o6o6x")
+name_call = ExtResource("2_23xre")

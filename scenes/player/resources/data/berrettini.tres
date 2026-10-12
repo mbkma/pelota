@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_b1ust"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_3vaxl"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/berrettini.ogg" id="2_wbgyr"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_extreme.tres" id="3_3vaxl"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wbgyr"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_0sotr"]
 
@@ -53,3 +55,5 @@ rank = 46
 play_style = SubResource("Resource_xmnvj")
 stats = SubResource("Resource_lbrc2")
 appearance = SubResource("Resource_qoulc")
+racket = ExtResource("3_3vaxl")
+name_call = ExtResource("2_wbgyr")

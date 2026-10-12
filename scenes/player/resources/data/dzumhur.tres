@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_qqxlv"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_qhavw"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/dzumhur.ogg" id="2_ulxr6"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tfight.tres" id="3_qhavw"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ulxr6"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_vjtm5"]
 
@@ -51,3 +53,5 @@ rank = 103
 play_style = SubResource("Resource_mxhsl")
 stats = SubResource("Resource_h4fb2")
 appearance = SubResource("Resource_8mehc")
+racket = ExtResource("3_qhavw")
+name_call = ExtResource("2_ulxr6")

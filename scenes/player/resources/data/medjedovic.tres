@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://brhh37fij11uk"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_be8g8"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/medjedovic.ogg" id="2_4argo"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_aeoe3"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_4argo"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_strike.tres" id="3_aeoe3"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ylcdb"]
 
 [sub_resource type="Resource" id="Resource_yxodw"]
@@ -52,3 +54,5 @@ rank = 78
 play_style = SubResource("Resource_wraes")
 stats = SubResource("Resource_g6fbw")
 appearance = SubResource("Resource_yxodw")
+racket = ExtResource("3_aeoe3")
+name_call = ExtResource("2_4argo")

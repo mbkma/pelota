@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d0xpys7atm1yw"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ul3hb"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/trungelliti.ogg" id="2_be547"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vsfc8"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_be547"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_boom.tres" id="3_vsfc8"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_pu7q0"]
 
 [sub_resource type="Resource" id="Resource_n0qbj"]
@@ -52,3 +54,5 @@ rank = 90
 play_style = SubResource("Resource_4k8un")
 stats = SubResource("Resource_1o242")
 appearance = SubResource("Resource_n0qbj")
+racket = ExtResource("3_vsfc8")
+name_call = ExtResource("2_be547")

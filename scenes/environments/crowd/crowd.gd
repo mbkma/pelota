@@ -60,6 +60,18 @@ const LOOK_FOLLOW_RATE: float = 10.0
 		spectators = value
 		if Engine.is_editor_hint() and spectators:
 			spectators.changed.connect(_seat_spectators)
+## Rows of the photographers' and TV camera operators' places at court level (see PropRow): a
+## person sits at each place; they are all there and do not cheer.
+@export var crew: Array[PropRow] = []:
+	set(value):
+		for row in crew:
+			if row and row.places_changed.is_connected(_seat_crew):
+				row.places_changed.disconnect(_seat_crew)
+		crew = value
+		if Engine.is_editor_hint():
+			for row in crew:
+				if row:
+					row.places_changed.connect(_seat_crew)
 ## Whether the crowd plays its idle ambience (off where other music plays, e.g. menus)
 @export var play_ambience: bool = true
 @export var detail: Detail = Detail.HIGH:
@@ -162,8 +174,6 @@ func _seat_spectators() -> void:
 	for block in _blocks:
 		block.free()
 	_blocks.clear()
-	if _photographers:
-		_photographers.free()
 	var occupancy: float = spectators.occupancy * DETAIL_DENSITY[detail]
 	for i in seating.sections.size():
 		var blocks: Array[PackedVector4Array] = _split_into_blocks(seating.sections[i])
@@ -171,9 +181,23 @@ func _seat_spectators() -> void:
 			var block := CrowdBlock.new(spectators, blocks[j], occupancy, i * 100 + j)
 			add_child(block)
 			_blocks.append(block)
-	# The photographers are all there, and do not cheer.
-	_photographers = CrowdBlock.new(spectators, seating.photographers, 1.0, -1)
+	_seat_crew()
+
+
+## Seats the photographers and TV camera operators at their places: all of them are there.
+func _seat_crew() -> void:
+	if _photographers:
+		_photographers.free()
+	var places := PackedVector4Array()
+	for row in crew:
+		for place in row.places():
+			var seat: Transform3D = row.global_transform * place
+			places.append(
+				Vector4(seat.origin.x, seat.origin.y, seat.origin.z, seat.basis.get_euler().y)
+			)
+	_photographers = CrowdBlock.new(spectators, places, 1.0, -1)
 	add_child(_photographers)
+	_photographers.set_lod_bias(DETAIL_LOD_BIAS[detail])
 
 
 func _apply_detail() -> void:

@@ -63,6 +63,53 @@ func box(material: Material, place: Transform3D, size: Vector3, color: Color = C
 			polygon(material, points, place.basis * facing, color)
 
 
+## A prism: the convex `outline` (points in order around it, in its own x/y plane) extruded
+## `length` along its z, centered and turned by `place`. `cap_material` covers its ends (added
+## after the sides, so a new material for the ends comes after the sides' in the mesh).
+func extrusion(
+	material: Material,
+	cap_material: Material,
+	place: Transform3D,
+	outline: PackedVector2Array,
+	length: float,
+	color: Color = Color.WHITE
+) -> void:
+	var ends: Array[PackedVector3Array] = [PackedVector3Array(), PackedVector3Array()]
+	for point in outline:
+		ends[0].append(place * Vector3(point.x, point.y, -length * 0.5))
+		ends[1].append(place * Vector3(point.x, point.y, length * 0.5))
+	var center: Vector3 = place.origin
+	for i in outline.size():
+		var j: int = (i + 1) % outline.size()
+		var middle: Vector3 = (ends[0][i] + ends[0][j] + ends[1][i] + ends[1][j]) * 0.25
+		quad(
+			material,
+			ends[0][i],
+			ends[0][j],
+			ends[1][j],
+			ends[1][i],
+			_away_from_axis(middle - center, place.basis.z),
+			color
+		)
+	polygon(cap_material, ends[0], place.basis * Vector3.FORWARD, color)
+	polygon(cap_material, ends[1], place.basis * Vector3.BACK, color)
+
+
+## A regular polygon of `sides` points around the middle, `radius` out (x, y).
+static func circle_outline(radius: Vector2, sides: int) -> PackedVector2Array:
+	var outline := PackedVector2Array()
+	for i in sides:
+		var angle: float = TAU * i / sides
+		outline.append(Vector2(cos(angle) * radius.x, sin(angle) * radius.y))
+	return outline
+
+
+## `offset` without its part along `axis`: which way a side of a prism around `axis` faces.
+static func _away_from_axis(offset: Vector3, axis: Vector3) -> Vector3:
+	var unit: Vector3 = axis.normalized()
+	return offset - unit * offset.dot(unit)
+
+
 ## A square beam `width` thick from `from` to `to`.
 func beam(
 	material: Material, from: Vector3, to: Vector3, width: float, color: Color = Color.WHITE

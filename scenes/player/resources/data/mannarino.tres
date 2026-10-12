@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://p7lek8kdrt0y"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_utrrj"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/mannarino.ogg" id="2_ms6sw"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nst88"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ms6sw"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_nst88"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8g24e"]
 
 [sub_resource type="Resource" id="Resource_kam6r"]
@@ -54,3 +56,5 @@ rank = 83
 play_style = SubResource("Resource_psqob")
 stats = SubResource("Resource_x6ks4")
 appearance = SubResource("Resource_kam6r")
+racket = ExtResource("3_nst88")
+name_call = ExtResource("2_ms6sw")

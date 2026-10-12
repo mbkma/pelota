@@ -2,6 +2,8 @@
 
 [ext_resource type="Resource" path="res://scenes/player/resources/appearances/alcaraz.tres" id="1_ek37y"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="2_4xwx5"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/alcaraz.ogg" id="2_r5to5"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_s3j1s"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="3_vajur"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/alcaraz.tres" id="4_2h7j1"]
 
@@ -39,3 +41,5 @@ rank = 3
 play_style = ExtResource("4_2h7j1")
 stats = SubResource("Resource_alcaraz_stats")
 appearance = ExtResource("1_ek37y")
+racket = ExtResource("3_s3j1s")
+name_call = ExtResource("2_r5to5")

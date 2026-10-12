@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_upd7i"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_5f6m4"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/rinderknech.ogg" id="2_ohvpc"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tf40.tres" id="3_5f6m4"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ohvpc"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_id4hn"]
 
@@ -53,3 +55,5 @@ rank = 33
 play_style = SubResource("Resource_qeb2n")
 stats = SubResource("Resource_ksbty")
 appearance = SubResource("Resource_errc0")
+racket = ExtResource("3_5f6m4")
+name_call = ExtResource("2_ohvpc")

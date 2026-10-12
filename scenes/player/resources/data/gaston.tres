@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://buvuvyrwul75c"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_0du6p"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/gaston.ogg" id="2_sy7o7"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ugvyw"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_sy7o7"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_ultra.tres" id="3_ugvyw"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yabb7"]
 
 [sub_resource type="Resource" id="Resource_fpqsd"]
@@ -52,3 +54,5 @@ rank = 89
 play_style = SubResource("Resource_250hp")
 stats = SubResource("Resource_lb2cn")
 appearance = SubResource("Resource_fpqsd")
+racket = ExtResource("3_ugvyw")
+name_call = ExtResource("2_sy7o7")

@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://cra5tmsymalg1"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_uv6gn"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/kopriva.ogg" id="2_8v5tt"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_510p0"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_8v5tt"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_prestige.tres" id="3_510p0"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_xckaw"]
 
 [sub_resource type="Resource" id="Resource_2ueyi"]
@@ -52,3 +54,5 @@ rank = 68
 play_style = SubResource("Resource_n5eig")
 stats = SubResource("Resource_oci8s")
 appearance = SubResource("Resource_2ueyi")
+racket = ExtResource("3_510p0")
+name_call = ExtResource("2_8v5tt")

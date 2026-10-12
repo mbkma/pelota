@@ -322,6 +322,23 @@ func get_aim_marker_radius() -> float:
 	return BallAimMarker.DEFAULT_RADIUS
 
 
+## While the opponent's ball comes in the stroke button can start a shot (the timing is still
+## the worst then); during a shot and the serve swing the indicator shows the timing a release
+## (a press for the serve) right now would give, then the timing the stroke got. Gone after the
+## racket meets the ball, or once the ball got past or the point ended.
+func get_stroke_indicator_quality() -> Variant:
+	if player.is_playing_out():
+		return null
+	match _mode:
+		Mode.FREE:
+			return 0.0 if _is_ball_incoming() else null
+		Mode.SHOT:
+			return _displayed_shot_quality()
+		Mode.SERVE_SWING:
+			return _displayed_serve_quality()
+	return null
+
+
 func is_aim_marker_highlighted() -> bool:
 	match _mode:
 		Mode.SHOT:

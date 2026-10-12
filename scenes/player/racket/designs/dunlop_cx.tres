@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RacketDesign" format=3]
+
+[ext_resource type="Script" path="res://scenes/player/racket/racket_design.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/models/racket/textures/designs/dunlop_cx_frame.png" id="2_frame"]
+[ext_resource type="Texture2D" path="res://assets/models/racket/textures/designs/dunlop_cx_strings.png" id="3_strings"]
+
+[resource]
+script = ExtResource("1_script")
+brand = 5
+model = "CX"
+frame_texture = ExtResource("2_frame")
+strings_texture = ExtResource("3_strings")

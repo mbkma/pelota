@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://06e7jptf1wgd"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_b3xcq"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/diallo.ogg" id="2_waq38"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_yhnbl"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_waq38"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_speed.tres" id="3_yhnbl"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_v6u6j"]
 
 [sub_resource type="Resource" id="Resource_40guf"]
@@ -52,3 +54,5 @@ rank = 121
 play_style = SubResource("Resource_ssh60")
 stats = SubResource("Resource_eam7w")
 appearance = SubResource("Resource_40guf")
+racket = ExtResource("3_yhnbl")
+name_call = ExtResource("2_waq38")

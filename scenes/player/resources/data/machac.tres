@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bqb0b5qsabmbb"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_cfi0f"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/machac.ogg" id="2_nyqoc"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_oc0dk"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nyqoc"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_oc0dk"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_5v114"]
 
 [sub_resource type="Resource" id="Resource_8tf2n"]
@@ -52,3 +54,5 @@ rank = 75
 play_style = SubResource("Resource_y0ml3")
 stats = SubResource("Resource_y3uhm")
 appearance = SubResource("Resource_8tf2n")
+racket = ExtResource("3_oc0dk")
+name_call = ExtResource("2_nyqoc")

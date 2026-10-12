@@ -5,6 +5,7 @@
 ## - when nothing is at stake, sometimes an IBM statistic (break points won, first serves,
 ##   aces, winners, the last ten points);
 ## - the stadium's name when the broadcast starts.
+## Shown when turned on in the UI settings.
 class_name TelevisionHud
 extends Control
 
@@ -29,6 +30,15 @@ var _recent_winners: Array[int] = []
 var _points_since_statistic: int = 0
 
 @onready var _score_display: ScoreDisplay = $ScoreDisplay
+
+
+func _ready() -> void:
+	UiSettings.changed.connect(_apply_ui_settings)
+	_apply_ui_settings()
+
+
+func _apply_ui_settings() -> void:
+	visible = UiSettings.is_shown(UiSettings.Element.SCORE_PANEL)
 
 
 func set_player(player_index: int, player_data: PlayerData) -> void:

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_udayw"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_kd2tx"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/dellien.ogg" id="2_nv4lm"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_kd2tx"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nv4lm"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_6y2a4"]
 
@@ -49,3 +51,5 @@ rank = 128
 play_style = SubResource("Resource_y4urq")
 stats = SubResource("Resource_ll4yo")
 appearance = SubResource("Resource_02pkn")
+racket = ExtResource("3_kd2tx")
+name_call = ExtResource("2_nv4lm")

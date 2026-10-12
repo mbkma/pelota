@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bjsvfi3kjoqqj"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_lc66p"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/atmane.ogg" id="2_f2ye8"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ikdkp"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_f2ye8"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_defyer.tres" id="3_ikdkp"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_ba7st"]
 
 [sub_resource type="Resource" id="Resource_otb82"]
@@ -53,3 +55,5 @@ rank = 99
 play_style = SubResource("Resource_ybjj5")
 stats = SubResource("Resource_q72gp")
 appearance = SubResource("Resource_otb82")
+racket = ExtResource("3_ikdkp")
+name_call = ExtResource("2_f2ye8")

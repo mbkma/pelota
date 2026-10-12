@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ss1vj"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_8ahpg"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/basilashvili.ogg" id="2_kd8fi"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_8ahpg"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_kd8fi"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_cqsjv"]
 
@@ -52,3 +54,5 @@ rank = 124
 play_style = SubResource("Resource_ff2sk")
 stats = SubResource("Resource_73aaj")
 appearance = SubResource("Resource_yt4ns")
+racket = ExtResource("3_8ahpg")
+name_call = ExtResource("2_kd8fi")

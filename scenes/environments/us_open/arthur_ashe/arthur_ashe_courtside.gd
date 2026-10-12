@@ -7,10 +7,11 @@ extends RefCounted
 ## - along the long sides straight, low blue ad boards, ending short of the walls so people can
 ##   walk through at the corners. Behind the left board (as seen from the main TV camera) the
 ##   courtside seats begin right away; behind the right one a pit at court level runs in front
-##   of the first row, where the photographers sit along the whole court and the TV cameras
-##   stand next to the net;
-## The positions were measured from the US Open 2025 final's broadcast.
-## - the players' benches beside the umpire chair: a white chair and a navy box on a mat.
+##   of the first row, where the photographers sit along the court and the TV cameras stand
+##   next to the net.
+## The positions were measured from the US Open 2025 final's broadcast. The props at court level
+## (the players' benches, the photographers' and camera operators' places, towels, bottles and
+## bags) are scenes placed in the stadium scene (see CourtsidePropsBuilder).
 
 ## Low ad boards along the sides: height and depth (m)
 const BOARD: Vector2 = Vector2(0.85, 0.15)
@@ -66,17 +67,6 @@ const RIGHT_BOARD_LOGOS: Array[StringName] = [
 const LEFT_BOARD_LOGOS: Array[StringName] = [
 	&"fage", &"deloitte", &"ihg", &"evian", &"wilson", &"chubb", &"argenx", &"usopen_org"
 ]
-## Photographers in the pit on the right: offset from the board, spacing (m), and the gap
-## around the net (half length) where the TV cameras stand
-const PHOTOGRAPHERS: Vector3 = Vector3(1.15, 0.72, 2.4)
-## Where the operators of the TV cameras next to the net sit in the pit, behind their cameras
-## (which the stadium scene places 0.85 m behind the board): offset, and z of each
-const OPERATOR_OFFSET: float = 1.6
-const TV_CAMERA_Z: PackedFloat32Array = [-1.5, 0.0, 1.5]
-## The players' benches: x of the box's front (the spare rackets lean against it), and how far
-## from the net they reach (from, to)
-const BENCH_FRONT: float = -7.55
-const BENCH_SPAN: Vector2 = Vector2(2.4, 4.0)
 
 var _shape: StadiumShape
 ## Middle (x, z) and half size (m) of the field inside the walls and boards
@@ -86,7 +76,6 @@ var _materials: Dictionary[String, Material]
 var _logos: Material
 ## Floor height of the first row of seats, behind the pit
 var _first_row_height: float
-var _photographers := PackedVector4Array()
 var _courtside_seats := PackedVector4Array()
 
 
@@ -117,15 +106,7 @@ func build() -> FlatGeometry:
 	)
 	_build_logos(geometry)
 	_build_courtside_seats(geometry)
-	_build_photographers(geometry)
-	for end: float in [1.0, -1.0]:
-		_build_bench(geometry, end)
 	return geometry
-
-
-## Where the photographers and TV camera operators sit (see StadiumSeating), once built.
-func photographers() -> PackedVector4Array:
-	return _photographers
 
 
 ## The courtside seats behind the left board (see StadiumSeating), once built.
@@ -239,103 +220,3 @@ func _build_courtside_seats(geometry: FlatGeometry) -> void:
 		for i in count:
 			var z: float = lerpf(-reach, reach, (i + 0.5) / count)
 			_courtside_seats.append(Vector4(front - depth * 0.58, row.y, z, angle))
-
-
-## The photographers' row in the pit on the right, along the whole court except around the net
-## where the TV cameras stand: stools, and cameras with long white lenses pointed at the court.
-## The TV camera operators sit behind their cameras.
-func _build_photographers(geometry: FlatGeometry) -> void:
-	var x: float = _center.x + _field.x + PHOTOGRAPHERS.x
-	var facing := Vector3(-1.0, 0.0, 0.0)
-	var angle: float = atan2(facing.x, facing.z)
-	var reach: float = _field.y - CORNER_GAP - 0.4
-	var count: int = floori((reach - PHOTOGRAPHERS.z) / PHOTOGRAPHERS.y) + 1
-	for side: float in [1.0, -1.0]:
-		for i in count:
-			var spot := Vector3(x, 0.0, side * (PHOTOGRAPHERS.z + i * PHOTOGRAPHERS.y))
-			_photographers.append(Vector4(spot.x, 0.0, spot.z, angle))
-			_stool(geometry, spot)
-			# Camera body and lens, held at chest height towards the court
-			var body := spot + facing * 0.42 + Vector3.UP * 1.0
-			geometry.box(_materials["black"], Transform3D(Basis(), body), Vector3(0.14, 0.13, 0.12))
-			geometry.beam(_materials["white"], body + facing * 0.06, body + facing * 0.5, 0.11)
-			geometry.beam(_materials["black"], body + facing * 0.5, body + facing * 0.56, 0.12)
-			# Monopod down to the floor
-			geometry.beam(
-				_materials["black"],
-				body + facing * 0.25,
-				Vector3(body.x - 0.25, 0.0, body.z),
-				0.025
-			)
-	for camera_z in TV_CAMERA_Z:
-		var spot := Vector3(_center.x + _field.x + OPERATOR_OFFSET, 0.0, camera_z)
-		_photographers.append(Vector4(spot.x, 0.0, spot.z, angle))
-		_stool(geometry, spot)
-
-
-func _stool(geometry: FlatGeometry, at: Vector3) -> void:
-	geometry.box(
-		_materials["dark_steel"],
-		Transform3D(Basis(), at + Vector3(0.05, 0.21, 0.0)),
-		Vector3(0.34, 0.42, 0.34)
-	)
-
-
-## A player's bench on the umpire's side (-x), on the near (`end` 1) or far side of the net:
-## a mat with the Polo pony at both ends, a navy Polo box the spare rackets lean against, and a
-## white chair next to the umpire chair.
-func _build_bench(geometry: FlatGeometry, end: float) -> void:
-	var navy: Material = _materials["fascia"]
-	var mat_center := Vector3(BENCH_FRONT - 0.35, 0.004, end * 2.35)
-	geometry.box(
-		navy, Transform3D(Basis(), mat_center), Vector3(1.4, 0.012, 3.3), Color(0.6, 0.6, 0.65)
-	)
-	for along: float in [-1.35, 1.35]:
-		UsOpenLogos.add_flat(
-			geometry,
-			_logos,
-			&"polo_pony",
-			mat_center + Vector3(0.0, 0.008, along * end),
-			Vector3(0.0, 0.0, -end),
-			0.4
-		)
-	# Box with towels on top, its ends and its front showing POLO
-	var box_center := Vector3(BENCH_FRONT - 0.27, 0.23, end * (BENCH_SPAN.x + BENCH_SPAN.y) * 0.5)
-	var box_size := Vector3(0.54, 0.46, BENCH_SPAN.y - BENCH_SPAN.x)
-	geometry.box(navy, Transform3D(Basis(), box_center), box_size)
-	for face: Vector3 in [Vector3.RIGHT, Vector3.BACK, Vector3.FORWARD]:
-		var offset: Vector3 = face * (box_size * 0.5 + Vector3.ONE * 0.003)
-		UsOpenLogos.add(
-			geometry, _logos, &"polo", box_center + offset + Vector3.UP * 0.05, face, 0.12
-		)
-	geometry.box(
-		_materials["white"],
-		Transform3D(Basis(), box_center + Vector3(0.0, 0.26, end * -0.35)),
-		Vector3(0.45, 0.06, 0.55)
-	)
-	geometry.box(
-		_materials["towel"],
-		Transform3D(Basis(), box_center + Vector3(0.02, 0.26, end * 0.4)),
-		Vector3(0.42, 0.07, 0.5)
-	)
-	# White chair facing the court, next to the umpire chair
-	var chair := Vector3(BENCH_FRONT - 0.3, 0.0, end * 1.3)
-	var white: Material = _materials["white"]
-	geometry.box(
-		white, Transform3D(Basis(), chair + Vector3(0.0, 0.45, 0.0)), Vector3(0.5, 0.06, 0.5)
-	)
-	geometry.box(
-		white,
-		Transform3D(Basis(Vector3.BACK, -0.1), chair + Vector3(-0.27, 0.78, 0.0)),
-		Vector3(0.05, 0.62, 0.5)
-	)
-	for side: float in [-0.23, 0.23]:
-		geometry.box(
-			white, Transform3D(Basis(), chair + Vector3(0.0, 0.22, side)), Vector3(0.5, 0.44, 0.04)
-		)
-	# A towel hanging over the chair's back
-	geometry.box(
-		_materials["towel"],
-		Transform3D(Basis(Vector3.BACK, -0.1), chair + Vector3(-0.31, 0.72, 0.0)),
-		Vector3(0.04, 0.7, 0.4)
-	)

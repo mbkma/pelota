@@ -66,6 +66,12 @@ func get_aim_marker_radius() -> float:
 	return BallAimMarker.DEFAULT_RADIUS
 
 
+## Timing quality in [0, 1] the stroke indicator shows while the stroke button can be used;
+## null hides it.
+func get_stroke_indicator_quality() -> Variant:
+	return null
+
+
 ## Whether the aim marker should be highlighted (e.g. perfectly timed stroke)
 func is_aim_marker_highlighted() -> bool:
 	return false

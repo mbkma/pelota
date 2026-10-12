@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_5xeyr"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_gld78"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/humbert.ogg" id="2_teb8m"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_gld78"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_teb8m"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_55yb3"]
 
@@ -54,3 +56,5 @@ rank = 32
 play_style = SubResource("Resource_vyjrm")
 stats = SubResource("Resource_48h4y")
 appearance = SubResource("Resource_g1dwp")
+racket = ExtResource("3_gld78")
+name_call = ExtResource("2_teb8m")

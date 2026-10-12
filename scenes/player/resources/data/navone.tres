@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_kg01f"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_ig3j6"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/navone.ogg" id="2_udugn"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_boom.tres" id="3_ig3j6"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_udugn"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_y7muq"]
 
@@ -52,3 +54,5 @@ rank = 47
 play_style = SubResource("Resource_c10at")
 stats = SubResource("Resource_621rv")
 appearance = SubResource("Resource_8qjfn")
+racket = ExtResource("3_ig3j6")
+name_call = ExtResource("2_udugn")

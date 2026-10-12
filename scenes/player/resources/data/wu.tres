@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://33nwn2a1rebl"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_we8h2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/wu.ogg" id="2_0fugq"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_gpbd7"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0fugq"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_radical.tres" id="3_gpbd7"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_hp0pf"]
 
 [sub_resource type="Resource" id="Resource_aww0p"]
@@ -52,3 +54,5 @@ rank = 113
 play_style = SubResource("Resource_vajyd")
 stats = SubResource("Resource_ibl4p")
 appearance = SubResource("Resource_aww0p")
+racket = ExtResource("3_gpbd7")
+name_call = ExtResource("2_0fugq")

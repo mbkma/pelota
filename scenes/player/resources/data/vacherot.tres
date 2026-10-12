@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_e0obi"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1qyo2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/vacherot.ogg" id="2_fx2kx"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_1qyo2"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_fx2kx"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_2dssj"]
 
@@ -53,3 +55,5 @@ rank = 14
 play_style = SubResource("Resource_sj2k6")
 stats = SubResource("Resource_6ppfo")
 appearance = SubResource("Resource_rsmvw")
+racket = ExtResource("3_1qyo2")
+name_call = ExtResource("2_fx2kx")

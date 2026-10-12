@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="1"]
 [ext_resource type="Resource" path="res://scenes/player/resources/appearances/ruud.tres" id="1_0pjq8"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/ruud.ogg" id="2_gdpu0"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_lpvpi"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/ruud.tres" id="3_ojko4"]
 
 [sub_resource type="Resource" id="Resource_ruud_stats"]
@@ -39,3 +41,5 @@ rank = 24
 play_style = ExtResource("3_ojko4")
 stats = SubResource("Resource_ruud_stats")
 appearance = ExtResource("1_0pjq8")
+racket = ExtResource("3_lpvpi")
+name_call = ExtResource("2_gdpu0")

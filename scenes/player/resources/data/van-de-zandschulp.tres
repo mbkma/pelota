@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_a8hwx"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_tvyqn"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/van-de-zandschulp.ogg" id="2_y77s4"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_tvyqn"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_y77s4"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_gjw12"]
 
@@ -52,3 +54,5 @@ rank = 41
 play_style = SubResource("Resource_gyy2r")
 stats = SubResource("Resource_yhsq7")
 appearance = SubResource("Resource_0nkgc")
+racket = ExtResource("3_tvyqn")
+name_call = ExtResource("2_y77s4")

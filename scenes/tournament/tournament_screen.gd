@@ -1,7 +1,7 @@
 ## The draw of the running tournament (GlobalGameData.tournament): its matches round by round with
 ## their results, the player's next match, the length of the player's matches, and buttons to
-## play the next match, to simulate the rest of the tournament once the player is out, and back
-## to the main menu.
+## play or simulate the next match, to simulate the rest of the tournament once the player is
+## out, and back to the main menu.
 class_name TournamentScreen
 extends Control
 
@@ -18,6 +18,7 @@ var _tournament: Tournament
 @onready var _match_list: VBoxContainer = %MatchList
 @onready var _sets_option: OptionButton = %SetsOption
 @onready var _play_button: Button = %PlayButton
+@onready var _simulate_match_button: Button = %SimulateMatchButton
 @onready var _simulate_button: Button = %SimulateButton
 @onready var _main_menu_button: Button = %MainMenuButton
 
@@ -33,6 +34,7 @@ func _ready() -> void:
 	_sets_option.item_selected.connect(_on_sets_selected)
 	_round_tabs.tab_changed.connect(_show_round)
 	_play_button.pressed.connect(_on_play_pressed)
+	_simulate_match_button.pressed.connect(_on_simulate_match_pressed)
 	_simulate_button.pressed.connect(_on_simulate_pressed)
 	_main_menu_button.pressed.connect(SceneLoader.load_scene.bind(AppConfig.main_menu_scene_path))
 	_refresh()
@@ -47,6 +49,7 @@ func _refresh() -> void:
 	_status_label.text = _status()
 	var own_match: TournamentMatch = _tournament.player_match()
 	_play_button.visible = own_match != null
+	_simulate_match_button.visible = own_match != null
 	_sets_option.visible = own_match != null
 	_simulate_button.visible = own_match == null and not _tournament.is_over()
 	if own_match:
@@ -148,6 +151,12 @@ func _on_sets_selected(index: int) -> void:
 func _on_play_pressed() -> void:
 	GlobalGameData.prepare_tournament_match()
 	SceneLoader.load_scene(match_scene_path)
+
+
+func _on_simulate_match_pressed() -> void:
+	_tournament.simulate_player_match()
+	_tournament.save()
+	_refresh()
 
 
 func _on_simulate_pressed() -> void:

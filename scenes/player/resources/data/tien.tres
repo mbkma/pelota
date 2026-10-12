@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c15omqf50orhs"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_kold2"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/tien.ogg" id="2_aipj6"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_l1vx7"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_aipj6"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_ultra.tres" id="3_l1vx7"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_40t2e"]
 
 [sub_resource type="Resource" id="Resource_glhjc"]
@@ -51,3 +53,5 @@ rank = 17
 play_style = SubResource("Resource_ahiiy")
 stats = SubResource("Resource_c2w3y")
 appearance = SubResource("Resource_glhjc")
+racket = ExtResource("3_l1vx7")
+name_call = ExtResource("2_aipj6")

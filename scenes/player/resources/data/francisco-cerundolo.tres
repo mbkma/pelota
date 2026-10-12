@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ghe4h"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_1djg1"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/francisco-cerundolo.ogg" id="2_6d1k1"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/head_prestige.tres" id="3_1djg1"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_6d1k1"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_nkgoj"]
 
@@ -52,3 +54,5 @@ rank = 20
 play_style = SubResource("Resource_kfpwb")
 stats = SubResource("Resource_lbfdp")
 appearance = SubResource("Resource_xbgkl")
+racket = ExtResource("3_1djg1")
+name_call = ExtResource("2_6d1k1")

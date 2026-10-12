@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://chq5meayfjif3"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_ymq2d"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/korda.ogg" id="2_i6mma"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_uso4n"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_i6mma"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_defyer.tres" id="3_uso4n"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_faovg"]
 
 [sub_resource type="Resource" id="Resource_5tlop"]
@@ -53,3 +55,5 @@ rank = 74
 play_style = SubResource("Resource_gf1eo")
 stats = SubResource("Resource_rl6xr")
 appearance = SubResource("Resource_5tlop")
+racket = ExtResource("3_uso4n")
+name_call = ExtResource("2_i6mma")

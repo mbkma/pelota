@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bbq12j8vbllec"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_1r581"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/burruchaga.ogg" id="2_bvh0g"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_kgpjv"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_bvh0g"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_kgpjv"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_5d2to"]
 
 [sub_resource type="Resource" id="Resource_ubeqb"]
@@ -52,3 +54,5 @@ rank = 62
 play_style = SubResource("Resource_7q0jb")
 stats = SubResource("Resource_joi75")
 appearance = SubResource("Resource_ubeqb")
+racket = ExtResource("3_kgpjv")
+name_call = ExtResource("2_bvh0g")

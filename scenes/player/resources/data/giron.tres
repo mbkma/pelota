@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://b7mxsql0u1cin"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_khn5b"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/giron.ogg" id="2_7efle"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nwvb7"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_7efle"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_percept.tres" id="3_nwvb7"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_kd0ob"]
 
 [sub_resource type="Resource" id="Resource_ku7k8"]
@@ -51,3 +53,5 @@ rank = 88
 play_style = SubResource("Resource_irm85")
 stats = SubResource("Resource_8gkcy")
 appearance = SubResource("Resource_ku7k8")
+racket = ExtResource("3_nwvb7")
+name_call = ExtResource("2_7efle")

@@ -4,8 +4,8 @@
 ##     godot --headless --path . -s res://scenes/player/resources/roster/roster_builder.gd
 ##
 ## A player with a resource of their own (hand made: stats, play style and look tuned by hand)
-## gets the ranking's facts (name, country, age, height, hand, backhand, rank), and their stats
-## are shifted to the level of their rank, keeping their strengths and weaknesses. Any other
+## gets the ranking's facts (name, country, age, height, hand, backhand, rank, racket), and their
+## stats are shifted to the level of their rank, keeping their strengths and weaknesses. Any other
 ## player is generated: the stats from the rank (a better ranked player is better all round)
 ## and the playing style the ranking file gives, with a little variation per player; the play
 ## style from the playing style; the look from a few shirt and shorts colors. A hand made player
@@ -15,6 +15,12 @@ extends SceneTree
 
 const RANKING_FILE: String = "res://scenes/player/resources/roster/atp_top_128.csv"
 const DATA_DIR: String = "res://scenes/player/resources/data/"
+## The racket designs; the ranking names each player's (its "racket" column, a design's file
+## name; "racket_source" tells where it is known from, or that it is estimated)
+const RACKET_DIR: String = "res://scenes/player/racket/designs/"
+## The umpire calling each player's name, one clip per player resource, named like it (see
+## pelota-files/sounds/umpire/make_umpire_calls.py)
+const NAME_CALL_DIR: String = "res://assets/sounds/effects/umpire/names/"
 ## Overall level (stat points) of the best and of the 128th ranked player; the level falls off
 ## with the logarithm of the rank (shifted by RANK_OFFSET, so the very best are close together).
 const LEVEL_TOP: float = 88.0
@@ -133,11 +139,13 @@ func _initialize() -> void:
 		else:
 			player = _generated(row)
 		_apply_facts(player, row)
+		player.name_call = load(NAME_CALL_DIR + file_name.get_basename() + ".ogg")
 		_save(player, path)
 	for file_name in ResourceLoader.list_directory(DATA_DIR):
 		if file_name.get_extension() == "tres" and not ranked_files.has(file_name):
 			var unranked: PlayerData = load(DATA_DIR + file_name)
 			unranked.rank = 0
+			unranked.name_call = load(NAME_CALL_DIR + file_name.get_basename() + ".ogg")
 			_save(unranked, DATA_DIR + file_name)
 	quit()
 
@@ -175,6 +183,7 @@ static func _apply_facts(player: PlayerData, row: Dictionary) -> void:
 	player.hand = row.hand
 	player.backhand = int(row.backhand)
 	player.rank = int(row.rank)
+	player.racket = load(RACKET_DIR + row.racket + ".tres")
 
 
 ## Saves `player` to `path`, keeping the UID of the file there (scenes refer to players by it).

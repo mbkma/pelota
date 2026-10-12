@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_7mpiw"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6pnmp"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/kypson.ogg" id="2_nojif"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_drive.tres" id="3_6pnmp"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_nojif"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_2kkcj"]
 
@@ -51,3 +53,5 @@ rank = 118
 play_style = SubResource("Resource_u0yrb")
 stats = SubResource("Resource_iinav")
 appearance = SubResource("Resource_sri18")
+racket = ExtResource("3_6pnmp")
+name_call = ExtResource("2_nojif")

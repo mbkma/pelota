@@ -35,17 +35,19 @@
 [ext_resource type="Script" uid="uid://c183q5ubdpdu2" path="res://scenes/player/state_machine.gd" id="11_ntx4g"]
 [ext_resource type="Script" uid="uid://stg5qkjv1kvi" path="res://scenes/match/lifecycle_bus.gd" id="12_pyy3x"]
 [ext_resource type="PackedScene" path="res://scenes/tools/ideal_position_marker.tscn" id="16_ideal"]
+[ext_resource type="PackedScene" path="res://scenes/player/stroke_indicator/stroke_indicator.tscn" id="17_stroke_indicator"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0l77o"]
 radius = 0.0950554
 height = 1.58024
 
-[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker", "ideal_position_marker") groups=["Players"]]
+[node name="Player" type="CharacterBody3D" unique_id=1602140429 node_paths=PackedStringArray("ball_aim_marker", "ideal_position_marker", "stroke_indicator") groups=["Players"]]
 script = ExtResource("1")
 ball_scene = ExtResource("2_ball")
 player_data = ExtResource("2_uxa8p")
 ball_aim_marker = NodePath("BallAimMarker")
 ideal_position_marker = NodePath("IdealPositionMarker")
+stroke_indicator = NodePath("StrokeIndicator")
 stroke_sounds_flat = Array[AudioStream]([ExtResource("stroke_racket_hit_01"), ExtResource("stroke_racket_hit_02"), ExtResource("stroke_racket_hit_03"), ExtResource("stroke_racket_hit_04"), ExtResource("stroke_racket_hit_05"), ExtResource("stroke_racket_hit_06"), ExtResource("stroke_racket_hit_07"), ExtResource("stroke_racket_hit_08"), ExtResource("stroke_racket_hit_09"), ExtResource("stroke_racket_hit_10"), ExtResource("stroke_racket_hit_11"), ExtResource("stroke_racket_hit_12"), ExtResource("stroke_racket_hit_13"), ExtResource("stroke_racket_hit_14"), ExtResource("stroke_racket_hit_15"), ExtResource("stroke_racket_hit_16")])
 stroke_sounds_running = Array[AudioStream]([ExtResource("stroke_running_hit_01"), ExtResource("stroke_running_hit_02"), ExtResource("stroke_running_hit_05"), ExtResource("stroke_running_hit_06"), ExtResource("stroke_running_hit_08"), ExtResource("stroke_running_hit_09"), ExtResource("stroke_running_hit_11"), ExtResource("stroke_running_hit_15"), ExtResource("stroke_running_hit_16")])
 stroke_sounds_slice = Array[AudioStream]([ExtResource("stroke_racket_slice_01"), ExtResource("stroke_racket_slice_02")])
@@ -114,5 +116,7 @@ bus = &"SFX"
 [node name="BallAimMarker" parent="." unique_id=160563153 instance=ExtResource("10_7vyk4")]
 top_level = true
 visible = false
+
+[node name="StrokeIndicator" parent="." instance=ExtResource("17_stroke_indicator")]
 
 [editable path="Model"]

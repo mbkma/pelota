@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://c72d2js5y5svt"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_b5ldy"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/shimabukuro.ogg" id="2_0yeug"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_gvox8"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0yeug"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_vcore.tres" id="3_gvox8"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_7mff2"]
 
 [sub_resource type="Resource" id="Resource_7xk2t"]
@@ -49,3 +51,5 @@ rank = 109
 play_style = SubResource("Resource_jqfol")
 stats = SubResource("Resource_ltsmx")
 appearance = SubResource("Resource_7xk2t")
+racket = ExtResource("3_gvox8")
+name_call = ExtResource("2_0yeug")

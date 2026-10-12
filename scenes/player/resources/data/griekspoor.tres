@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_kp8ef"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_6x2ty"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/griekspoor.ogg" id="2_wo3sy"]
+[ext_resource type="Resource" path="res://scenes/player/racket/designs/tecnifibre_tfight.tres" id="3_6x2ty"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_wo3sy"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yh7o5"]
 
@@ -53,3 +55,5 @@ rank = 58
 play_style = SubResource("Resource_16f10")
 stats = SubResource("Resource_4f2n4")
 appearance = SubResource("Resource_2vdv5")
+racket = ExtResource("3_6x2ty")
+name_call = ExtResource("2_wo3sy")
