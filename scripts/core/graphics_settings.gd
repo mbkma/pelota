@@ -22,7 +22,7 @@ const CROWD_DETAIL: StringName = &"CrowdDetail"
 const CROWD_COUNT: StringName = &"CrowdCount"
 const MAX_FPS: StringName = &"MaxFps"
 
-const DEFAULT_PRESET: Preset = Preset.HIGH
+const DEFAULT_PRESET: Preset = Preset.MEDIUM
 ## Value of each setting per preset (low, medium, high, ultra)
 const PRESET_VALUES: Dictionary[StringName, Array] = {
 	RENDER_SCALE: [1.0, 1.0, 1.0, 1.0],
