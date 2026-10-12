@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://0x60svm0lwgm" path="res://scenes/match/umpire/umpire.gd" id="7"]
 [ext_resource type="PackedScene" uid="uid://c4vhkpn2ffv1g" path="res://assets/models/umpire/umpire.fbx" id="20_model"]
 [ext_resource type="Animation" uid="uid://cnh7rawwcfs2n" path="res://scenes/match/umpire/umpire_sitting.res" id="21_sitting"]
-[ext_resource type="Resource" path="res://scenes/match/umpire/umpire_calls.tres" id="22_calls"]
+[ext_resource type="Resource" uid="uid://c7gpihb8ud1ce" path="res://scenes/match/umpire/umpire_calls.tres" id="22_calls"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_umpire"]
 _data = {
@@ -37,5 +37,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49691, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1378992289]
 shape = SubResource("4")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=257645386]
+[node name="UmpirePlayer" type="AudioStreamPlayer" parent="." unique_id=257645386]
 bus = &"Umpire"
+
+[node name="LineCallPlayer" type="AudioStreamPlayer" parent="." unique_id=257645387]
+bus = &"SFX"

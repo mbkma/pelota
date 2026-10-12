@@ -32,7 +32,7 @@ MouseBlocker="*res://scripts/core/mouse_blocker.gd"
 AppConfig="*uid://cjke6crjg14a0"
 SceneLoader="*uid://cbwmrnp0af35y"
 ProjectMusicController="*uid://r5t485lr3p7t"
-ProjectUISoundController="*uid://cc37235kj4384"
+ProjectUISoundController="*res://scenes/ui/project_ui_sound_controller.tscn"
 
 [debug]
 

@@ -9,6 +9,10 @@ const ACTION_BUTTONS: Dictionary[Action, JoyButton] = {
 	Action.DROP_SHOT: JOY_BUTTON_Y,
 }
 
+## Setting of the input options: whether the gamepads vibrate
+const VIBRATION_SECTION: StringName = AppSettings.INPUT_SECTION
+const VIBRATION_KEY: StringName = &"GamepadVibration"
+
 var _joypad_id: int
 
 
@@ -29,6 +33,8 @@ func get_display_name() -> String:
 
 
 func vibrate(weak_magnitude: float, strong_magnitude: float, duration: float) -> void:
+	if not PlayerConfig.get_config(VIBRATION_SECTION, VIBRATION_KEY, true):
+		return
 	Input.start_joy_vibration(_joypad_id, weak_magnitude, strong_magnitude, duration)
 
 

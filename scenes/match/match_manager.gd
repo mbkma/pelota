@@ -17,6 +17,12 @@ enum MatchState { NOT_STARTED, IDLE, SERVE, SECOND_SERVE, PLAY, FAULT, GAME_OVER
 const MOST_EXCITING_RALLY_SHOTS: int = 12
 ## Seconds the ball flies on after a first serve fault or a let before the serve is taken again
 const SERVE_AGAIN_BREAK: float = 2.0
+## Seconds between the end of a point and the players walking to their positions for the next,
+## after the calmest and the most exciting point: time for the crowd to react and the umpire to
+## call the score, and in a broadcast match for the cameras to cut away (see
+## MatchCameras.cover_point_break). A point ending a game adds GAME_BREAK_BONUS.
+const POINT_BREAK: Vector2 = Vector2(3.5, 5.0)
+const GAME_BREAK_BONUS: float = 2.0
 
 @export var player0: Player
 @export var player1: Player
@@ -76,7 +82,7 @@ func _ready() -> void:
 		bus.serve_completed.connect(_on_player_serve_completed)
 		bus.point_ended.connect(stadium.stop_serve_clocks.unbind(1))
 		television_hud.set_player(i, player.player_data)
-		cameras.register_camera(player.first_person_camera)
+		cameras.register_player_view(player)
 	active_ball_changed.connect(crowd.follow_ball)
 	active_ball_changed.connect(umpire.follow_ball)
 	umpire.set_players([player0.player_data, player1.player_data])
@@ -153,8 +159,10 @@ func add_point(winner: int) -> void:
 	var score: Score = match_data.score
 	var completed_sets_before: int = score.completed_sets.size()
 	var games_before: int = score.games_played
+	var excitement: float = _point_excitement()
 	match_data.add_point(winner)
-	if score.games_played > games_before:
+	var game_ended: bool = score.games_played > games_before
+	if game_ended:
 		get_player(winner).mental_state.on_game_result(true)
 		get_player(1 - winner).mental_state.on_game_result(false)
 	_update_players_for_next_point()
@@ -166,7 +174,13 @@ func add_point(winner: int) -> void:
 		return
 	stadium.aim_ball_camera(get_server())
 	cameras.reframe_tv_cameras()
-	await get_tree().create_timer(GameConstants.POINT_BREAK).timeout
+	var point_break: float = (
+		lerpf(POINT_BREAK.x, POINT_BREAK.y, excitement) + (GAME_BREAK_BONUS if game_ended else 0.0)
+	)
+	if _has_human_player():
+		await get_tree().create_timer(point_break).timeout
+	else:
+		await cameras.cover_point_break(point_break, get_player(winner), excitement, game_ended)
 	if score.completed_sets.size() > completed_sets_before:
 		await _hold_set_break()
 	await place_players()
@@ -323,12 +337,9 @@ func _handle_fault() -> void:
 		last_hitter
 	)]
 	if ground_contacts == 0:
-		# Out (a serve: a fault); a ball into the net is not called.
+		# Out; a ball into the net is not called.
 		if crossed_net:
-			if _point_serve_number == 0:
-				umpire.call_fault()
-			else:
-				umpire.call_out()
+			umpire.call_fault()
 		point_winner = last_hitter.opponent
 		# Out or into the net; a missed second serve is already counted as a double fault.
 		if _point_serve_number > 0:
@@ -458,6 +469,10 @@ func _get_valid_service_box() -> Court.CourtRegion:
 		if deuce_side
 		else Court.CourtRegion.LEFT_FRONT_SERVICE_BOX
 	)
+
+
+func _has_human_player() -> bool:
+	return player0.controller is HumanController or player1.controller is HumanController
 
 
 ## The human controlled player when exactly one player is human, otherwise null.

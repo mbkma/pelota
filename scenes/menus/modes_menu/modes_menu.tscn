@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/menus/modes_menu/modes_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_logo.tscn" id="2_logo"]
+
+[node name="ModesMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="GameLogo" parent="Center/VBox" instance=ExtResource("2_logo")]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Modes"
+horizontal_alignment = 1
+
+[node name="ContinueTournamentButton" type="Button" parent="Center/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continue US Open"
+
+[node name="TournamentButton" type="Button" parent="Center/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "US Open"
+
+[node name="TrainingButton" type="Button" parent="Center/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Training"
+
+[node name="BackButton" type="Button" parent="Center/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back"

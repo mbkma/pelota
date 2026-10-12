@@ -1,15 +1,16 @@
 ## The chair umpire: calls the score like at the US Open, from the server's side ("Fifteen,
 ## love"), "Deuce", "Advantage" and "Game", "Game and first set", "Game, set and match" with the
 ## player's name, the tiebreak and its scores ("Three, one" and the leader's name), and a let;
-## the electronic line calling calls a serve out "Fault" and a rally ball out "Out". The calls
-## are heard as in a TV broadcast, from the umpire's microphone (not from the chair's position),
-## and the crowd is turned down under them (see the Crowd audio bus). Sitting in the chair, the
+## the electronic line calling calls a serve or a rally ball out "Fault", with its own voice
+## from the sound effects, not the umpire's. The umpire's calls are heard as in a TV broadcast,
+## from the umpire's microphone (not from the chair's position), and the crowd is turned down
+## under them (see the Crowd audio bus). Sitting in the chair, the
 ## umpire follows the ball with the head; without a ball in play the umpire looks at the court.
 class_name Umpire
 extends Node3D
 
 ## Seconds after a point before the umpire calls the score (shortest, longest)
-const SCORE_CALL_DELAY: Vector2 = Vector2(2.0, 4.0)
+const SCORE_CALL_DELAY: Vector2 = Vector2(3.0, 5.0)
 ## Where the umpire looks without a ball in play: the middle of the court
 const COURT_LOOK_TARGET: Vector3 = Vector3(0.0, 1.0, 0.0)
 ## How fast (1/s) the head catches up with the ball
@@ -27,7 +28,9 @@ var _call_count: int = 0
 ## Ball the umpire follows, null while none is in play
 var _ball: Ball
 
-@onready var _audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var _audio_stream_player: AudioStreamPlayer = $UmpirePlayer
+## Plays the electronic line calls
+@onready var _line_call_player: AudioStreamPlayer = $LineCallPlayer
 ## The neck and head turn toward it (see the LookAtModifier3D nodes of the model)
 @onready var _look_target: Node3D = $LookTarget
 
@@ -49,14 +52,10 @@ func set_players(players: Array[PlayerData]) -> void:
 	_players = players
 
 
-## A serve landing out: "Fault".
+## A serve or a rally ball landing out: "Fault".
 func call_fault() -> void:
-	_say([calls.fault])
-
-
-## A rally ball landing out: "Out".
-func call_out() -> void:
-	_say([calls.out])
+	_line_call_player.stream = calls.fault
+	_line_call_player.play()
 
 
 ## A serve touching the net cord and landing in: "Let".
@@ -65,7 +64,7 @@ func call_let() -> void:
 
 
 ## Calls the score after a point `winner` won, after a random delay, letting a call still going
-## (e.g. "Out") finish first.
+## (e.g. "Fault") finish first.
 func call_point(score: Score, winner: int) -> void:
 	var call: Array[AudioStream] = _point_call(score, winner)
 	_games_played = score.games_played
@@ -73,6 +72,8 @@ func call_point(score: Score, winner: int) -> void:
 	if call.is_empty():
 		return
 	await get_tree().create_timer(randf_range(SCORE_CALL_DELAY.x, SCORE_CALL_DELAY.y)).timeout
+	if _line_call_player.playing:
+		await _line_call_player.finished
 	if _audio_stream_player.playing:
 		await _audio_stream_player.finished
 	_say(call)

@@ -1,274 +1,518 @@
-[gd_resource type="Resource" script_class="UmpireCalls" format=3]
+[gd_resource type="Resource" script_class="UmpireCalls" format=3 uid="uid://c7gpihb8ud1ce"]
 
-[ext_resource type="Script" path="res://scenes/match/umpire/umpire_calls.gd" id="1_script"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_0-1.ogg" id="2_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_0-2.ogg" id="3_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_0-3.ogg" id="4_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_1-0.ogg" id="5_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_1-1.ogg" id="6_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_1-2.ogg" id="7_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_1-3.ogg" id="8_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_2-0.ogg" id="9_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_2-1.ogg" id="10_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_2-2.ogg" id="11_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_2-3.ogg" id="12_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_3-0.ogg" id="13_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_3-1.ogg" id="14_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/score_3-2.ogg" id="15_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/deuce.ogg" id="16_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/advantage.ogg" id="17_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game.ogg" id="18_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game_and_set_1.ogg" id="19_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game_and_set_2.ogg" id="20_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game_and_set_3.ogg" id="21_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game_and_set_4.ogg" id="22_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game_and_set_5.ogg" id="23_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/game_set_and_match.ogg" id="24_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak.ogg" id="25_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_1-0.ogg" id="26_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_1-1.ogg" id="27_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_2-0.ogg" id="28_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_2-1.ogg" id="29_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_2-2.ogg" id="30_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-0.ogg" id="31_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-1.ogg" id="32_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-2.ogg" id="33_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-3.ogg" id="34_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-0.ogg" id="35_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-1.ogg" id="36_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-2.ogg" id="37_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-3.ogg" id="38_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-4.ogg" id="39_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-0.ogg" id="40_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-1.ogg" id="41_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-2.ogg" id="42_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-3.ogg" id="43_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-4.ogg" id="44_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-5.ogg" id="45_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-0.ogg" id="46_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-1.ogg" id="47_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-2.ogg" id="48_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-3.ogg" id="49_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-4.ogg" id="50_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-5.ogg" id="51_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-6.ogg" id="52_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-0.ogg" id="53_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-1.ogg" id="54_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-2.ogg" id="55_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-3.ogg" id="56_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-4.ogg" id="57_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-5.ogg" id="58_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-6.ogg" id="59_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-7.ogg" id="60_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-0.ogg" id="61_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-1.ogg" id="62_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-2.ogg" id="63_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-3.ogg" id="64_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-4.ogg" id="65_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-5.ogg" id="66_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-6.ogg" id="67_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-7.ogg" id="68_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-8.ogg" id="69_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-0.ogg" id="70_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-1.ogg" id="71_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-2.ogg" id="72_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-3.ogg" id="73_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-4.ogg" id="74_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-5.ogg" id="75_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-6.ogg" id="76_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-7.ogg" id="77_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-8.ogg" id="78_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-9.ogg" id="79_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-0.ogg" id="80_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-1.ogg" id="81_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-2.ogg" id="82_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-3.ogg" id="83_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-4.ogg" id="84_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-5.ogg" id="85_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-6.ogg" id="86_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-7.ogg" id="87_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-8.ogg" id="88_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-9.ogg" id="89_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-10.ogg" id="90_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-0.ogg" id="91_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-1.ogg" id="92_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-2.ogg" id="93_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-3.ogg" id="94_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-4.ogg" id="95_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-5.ogg" id="96_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-6.ogg" id="97_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-7.ogg" id="98_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-8.ogg" id="99_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-9.ogg" id="100_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-10.ogg" id="101_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-11.ogg" id="102_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-0.ogg" id="103_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-1.ogg" id="104_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-2.ogg" id="105_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-3.ogg" id="106_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-4.ogg" id="107_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-5.ogg" id="108_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-6.ogg" id="109_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-7.ogg" id="110_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-8.ogg" id="111_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-9.ogg" id="112_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-10.ogg" id="113_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-11.ogg" id="114_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-12.ogg" id="115_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-0.ogg" id="116_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-1.ogg" id="117_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-2.ogg" id="118_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-3.ogg" id="119_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-4.ogg" id="120_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-5.ogg" id="121_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-6.ogg" id="122_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-7.ogg" id="123_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-8.ogg" id="124_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-9.ogg" id="125_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-10.ogg" id="126_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-11.ogg" id="127_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-12.ogg" id="128_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-13.ogg" id="129_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-0.ogg" id="130_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-1.ogg" id="131_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-2.ogg" id="132_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-3.ogg" id="133_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-4.ogg" id="134_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-5.ogg" id="135_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-6.ogg" id="136_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-7.ogg" id="137_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-8.ogg" id="138_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-9.ogg" id="139_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-10.ogg" id="140_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-11.ogg" id="141_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-12.ogg" id="142_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-13.ogg" id="143_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-14.ogg" id="144_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-0.ogg" id="145_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-1.ogg" id="146_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-2.ogg" id="147_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-3.ogg" id="148_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-4.ogg" id="149_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-5.ogg" id="150_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-6.ogg" id="151_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-7.ogg" id="152_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-8.ogg" id="153_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-9.ogg" id="154_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-10.ogg" id="155_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-11.ogg" id="156_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-12.ogg" id="157_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-13.ogg" id="158_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-14.ogg" id="159_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-15.ogg" id="160_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-0.ogg" id="161_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-1.ogg" id="162_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-2.ogg" id="163_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-3.ogg" id="164_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-4.ogg" id="165_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-5.ogg" id="166_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-6.ogg" id="167_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-7.ogg" id="168_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-8.ogg" id="169_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-9.ogg" id="170_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-10.ogg" id="171_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-11.ogg" id="172_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-12.ogg" id="173_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-13.ogg" id="174_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-14.ogg" id="175_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-15.ogg" id="176_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-16.ogg" id="177_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-0.ogg" id="178_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-1.ogg" id="179_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-2.ogg" id="180_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-3.ogg" id="181_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-4.ogg" id="182_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-5.ogg" id="183_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-6.ogg" id="184_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-7.ogg" id="185_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-8.ogg" id="186_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-9.ogg" id="187_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-10.ogg" id="188_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-11.ogg" id="189_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-12.ogg" id="190_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-13.ogg" id="191_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-14.ogg" id="192_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-15.ogg" id="193_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-16.ogg" id="194_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-17.ogg" id="195_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-0.ogg" id="196_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-1.ogg" id="197_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-2.ogg" id="198_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-3.ogg" id="199_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-4.ogg" id="200_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-5.ogg" id="201_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-6.ogg" id="202_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-7.ogg" id="203_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-8.ogg" id="204_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-9.ogg" id="205_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-10.ogg" id="206_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-11.ogg" id="207_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-12.ogg" id="208_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-13.ogg" id="209_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-14.ogg" id="210_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-15.ogg" id="211_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-16.ogg" id="212_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-17.ogg" id="213_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-18.ogg" id="214_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-0.ogg" id="215_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-1.ogg" id="216_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-2.ogg" id="217_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-3.ogg" id="218_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-4.ogg" id="219_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-5.ogg" id="220_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-6.ogg" id="221_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-7.ogg" id="222_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-8.ogg" id="223_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-9.ogg" id="224_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-10.ogg" id="225_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-11.ogg" id="226_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-12.ogg" id="227_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-13.ogg" id="228_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-14.ogg" id="229_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-15.ogg" id="230_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-16.ogg" id="231_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-17.ogg" id="232_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-18.ogg" id="233_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-19.ogg" id="234_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-0.ogg" id="235_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-1.ogg" id="236_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-2.ogg" id="237_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-3.ogg" id="238_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-4.ogg" id="239_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-5.ogg" id="240_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-6.ogg" id="241_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-7.ogg" id="242_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-8.ogg" id="243_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-9.ogg" id="244_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-10.ogg" id="245_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-11.ogg" id="246_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-12.ogg" id="247_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-13.ogg" id="248_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-14.ogg" id="249_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-15.ogg" id="250_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-16.ogg" id="251_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-17.ogg" id="252_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-18.ogg" id="253_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-19.ogg" id="254_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-20.ogg" id="255_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/let.ogg" id="256_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/fault.ogg" id="257_call"]
-[ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/calls/out.ogg" id="258_call"]
+[ext_resource type="Script" uid="uid://ckqsrgvq62ce2" path="res://scenes/match/umpire/umpire_calls.gd" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://c8humc64edxc8" path="res://assets/sounds/effects/umpire/calls/score_0-1.ogg" id="2_call"]
+[ext_resource type="AudioStream" uid="uid://blyce0nf28wu0" path="res://assets/sounds/effects/umpire/calls/score_0-2.ogg" id="3_call"]
+[ext_resource type="AudioStream" uid="uid://c3mayslhxsm1j" path="res://assets/sounds/effects/umpire/calls/score_0-3.ogg" id="4_call"]
+[ext_resource type="AudioStream" uid="uid://bg58etd4665ub" path="res://assets/sounds/effects/umpire/calls/score_1-0.ogg" id="5_call"]
+[ext_resource type="AudioStream" uid="uid://buttadn82wa8w" path="res://assets/sounds/effects/umpire/calls/score_1-1.ogg" id="6_call"]
+[ext_resource type="AudioStream" uid="uid://dve7lubhqqkyp" path="res://assets/sounds/effects/umpire/calls/score_1-2.ogg" id="7_call"]
+[ext_resource type="AudioStream" uid="uid://b81h25k1ayshb" path="res://assets/sounds/effects/umpire/calls/score_1-3.ogg" id="8_call"]
+[ext_resource type="AudioStream" uid="uid://t65f7j842ttn" path="res://assets/sounds/effects/umpire/calls/score_2-0.ogg" id="9_call"]
+[ext_resource type="AudioStream" uid="uid://b8xhqkxlcp7qe" path="res://assets/sounds/effects/umpire/calls/score_2-1.ogg" id="10_call"]
+[ext_resource type="AudioStream" uid="uid://dw1fdvrjjnxeo" path="res://assets/sounds/effects/umpire/calls/score_2-2.ogg" id="11_call"]
+[ext_resource type="AudioStream" uid="uid://balc7psuphldm" path="res://assets/sounds/effects/umpire/calls/score_2-3.ogg" id="12_call"]
+[ext_resource type="AudioStream" uid="uid://c6munmp5ytv3d" path="res://assets/sounds/effects/umpire/calls/score_3-0.ogg" id="13_call"]
+[ext_resource type="AudioStream" uid="uid://de8iohblmf3pw" path="res://assets/sounds/effects/umpire/calls/score_3-1.ogg" id="14_call"]
+[ext_resource type="AudioStream" uid="uid://c58uxxrht4s8c" path="res://assets/sounds/effects/umpire/calls/score_3-2.ogg" id="15_call"]
+[ext_resource type="AudioStream" uid="uid://djhflyc637p33" path="res://assets/sounds/effects/umpire/calls/deuce.ogg" id="16_call"]
+[ext_resource type="AudioStream" uid="uid://cmtjy8aqsijhn" path="res://assets/sounds/effects/umpire/calls/advantage.ogg" id="17_call"]
+[ext_resource type="AudioStream" uid="uid://y00mlmfj6smu" path="res://assets/sounds/effects/umpire/calls/game.ogg" id="18_call"]
+[ext_resource type="AudioStream" uid="uid://bteno0ctl5tdl" path="res://assets/sounds/effects/umpire/calls/game_and_set_1.ogg" id="19_call"]
+[ext_resource type="AudioStream" uid="uid://b4pyke6odrw2c" path="res://assets/sounds/effects/umpire/calls/game_and_set_2.ogg" id="20_call"]
+[ext_resource type="AudioStream" uid="uid://dllfaiywlhecd" path="res://assets/sounds/effects/umpire/calls/game_and_set_3.ogg" id="21_call"]
+[ext_resource type="AudioStream" uid="uid://24ingrgyfhin" path="res://assets/sounds/effects/umpire/calls/game_and_set_4.ogg" id="22_call"]
+[ext_resource type="AudioStream" uid="uid://hfqwnggu364n" path="res://assets/sounds/effects/umpire/calls/game_and_set_5.ogg" id="23_call"]
+[ext_resource type="AudioStream" uid="uid://pmp84c3o2jvd" path="res://assets/sounds/effects/umpire/calls/game_set_and_match.ogg" id="24_call"]
+[ext_resource type="AudioStream" uid="uid://g24gmn6jc81r" path="res://assets/sounds/effects/umpire/calls/tiebreak.ogg" id="25_call"]
+[ext_resource type="AudioStream" uid="uid://bdv43q5urgmnw" path="res://assets/sounds/effects/umpire/calls/tiebreak_1-0.ogg" id="26_call"]
+[ext_resource type="AudioStream" uid="uid://buhvy7giiem0w" path="res://assets/sounds/effects/umpire/calls/tiebreak_1-1.ogg" id="27_call"]
+[ext_resource type="AudioStream" uid="uid://bwefk4r42mjte" path="res://assets/sounds/effects/umpire/calls/tiebreak_2-0.ogg" id="28_call"]
+[ext_resource type="AudioStream" uid="uid://c53op6ojtvuf1" path="res://assets/sounds/effects/umpire/calls/tiebreak_2-1.ogg" id="29_call"]
+[ext_resource type="AudioStream" uid="uid://ch6o35bvaur4m" path="res://assets/sounds/effects/umpire/calls/tiebreak_2-2.ogg" id="30_call"]
+[ext_resource type="AudioStream" uid="uid://6iwdv8vjxoa8" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-0.ogg" id="31_call"]
+[ext_resource type="AudioStream" uid="uid://c1a3hxcutulc7" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-1.ogg" id="32_call"]
+[ext_resource type="AudioStream" uid="uid://cekckktd30h4i" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-2.ogg" id="33_call"]
+[ext_resource type="AudioStream" uid="uid://yx527wasgo8g" path="res://assets/sounds/effects/umpire/calls/tiebreak_3-3.ogg" id="34_call"]
+[ext_resource type="AudioStream" uid="uid://efhhnhmsm8t7" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-0.ogg" id="35_call"]
+[ext_resource type="AudioStream" uid="uid://b6igcbsga0kox" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-1.ogg" id="36_call"]
+[ext_resource type="AudioStream" uid="uid://cdq5a1c40gwj2" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-2.ogg" id="37_call"]
+[ext_resource type="AudioStream" uid="uid://2kyx0xf2kg30" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-3.ogg" id="38_call"]
+[ext_resource type="AudioStream" uid="uid://cgskn627aiju4" path="res://assets/sounds/effects/umpire/calls/tiebreak_4-4.ogg" id="39_call"]
+[ext_resource type="AudioStream" uid="uid://c8o4s4o0o228g" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-0.ogg" id="40_call"]
+[ext_resource type="AudioStream" uid="uid://ciaomnt26gv3p" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-1.ogg" id="41_call"]
+[ext_resource type="AudioStream" uid="uid://cxmcll8w25tge" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-2.ogg" id="42_call"]
+[ext_resource type="AudioStream" uid="uid://b57ojkhdqg3ic" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-3.ogg" id="43_call"]
+[ext_resource type="AudioStream" uid="uid://46yc2rlmytu4" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-4.ogg" id="44_call"]
+[ext_resource type="AudioStream" uid="uid://ck5d02pa8oj7q" path="res://assets/sounds/effects/umpire/calls/tiebreak_5-5.ogg" id="45_call"]
+[ext_resource type="AudioStream" uid="uid://ksyudhxx6w8q" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-0.ogg" id="46_call"]
+[ext_resource type="AudioStream" uid="uid://d3eu3o6ipoy6w" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-1.ogg" id="47_call"]
+[ext_resource type="AudioStream" uid="uid://dfq3jvrwcxrvx" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-2.ogg" id="48_call"]
+[ext_resource type="AudioStream" uid="uid://dgx4qca72owji" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-3.ogg" id="49_call"]
+[ext_resource type="AudioStream" uid="uid://c7yydt6awsmev" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-4.ogg" id="50_call"]
+[ext_resource type="AudioStream" uid="uid://bagu58qohj802" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-5.ogg" id="51_call"]
+[ext_resource type="AudioStream" uid="uid://bmy8lbt41u5bi" path="res://assets/sounds/effects/umpire/calls/tiebreak_6-6.ogg" id="52_call"]
+[ext_resource type="AudioStream" uid="uid://c3w4fntohnp21" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-0.ogg" id="53_call"]
+[ext_resource type="AudioStream" uid="uid://da6pwta085f4n" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-1.ogg" id="54_call"]
+[ext_resource type="AudioStream" uid="uid://buu54f2hckxk4" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-2.ogg" id="55_call"]
+[ext_resource type="AudioStream" uid="uid://bofkgu6756nu6" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-3.ogg" id="56_call"]
+[ext_resource type="AudioStream" uid="uid://bwfdsj022t547" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-4.ogg" id="57_call"]
+[ext_resource type="AudioStream" uid="uid://db2epon6dp1n0" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-5.ogg" id="58_call"]
+[ext_resource type="AudioStream" uid="uid://bxtlhfiu7gfao" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-6.ogg" id="59_call"]
+[ext_resource type="AudioStream" uid="uid://d1f7ov2qitybh" path="res://assets/sounds/effects/umpire/calls/tiebreak_7-7.ogg" id="60_call"]
+[ext_resource type="AudioStream" uid="uid://ccco3pay7d1d3" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-0.ogg" id="61_call"]
+[ext_resource type="AudioStream" uid="uid://cfy7vwy7qvl7b" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-1.ogg" id="62_call"]
+[ext_resource type="AudioStream" uid="uid://c40mp4qcpgtje" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-2.ogg" id="63_call"]
+[ext_resource type="AudioStream" uid="uid://c7kh7ehpmf7qs" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-3.ogg" id="64_call"]
+[ext_resource type="AudioStream" uid="uid://dc7btmxgvh4hm" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-4.ogg" id="65_call"]
+[ext_resource type="AudioStream" uid="uid://botqydn107cia" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-5.ogg" id="66_call"]
+[ext_resource type="AudioStream" uid="uid://bsda47afhlmu4" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-6.ogg" id="67_call"]
+[ext_resource type="AudioStream" uid="uid://cyy02j7e2dbs4" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-7.ogg" id="68_call"]
+[ext_resource type="AudioStream" uid="uid://b2fl8e02lt8ab" path="res://assets/sounds/effects/umpire/calls/tiebreak_8-8.ogg" id="69_call"]
+[ext_resource type="AudioStream" uid="uid://t163aq2k58xv" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-0.ogg" id="70_call"]
+[ext_resource type="AudioStream" uid="uid://cqswbdorpqwdd" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-1.ogg" id="71_call"]
+[ext_resource type="AudioStream" uid="uid://b26aq7e7xnxpq" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-2.ogg" id="72_call"]
+[ext_resource type="AudioStream" uid="uid://c4mu72ogxr6j4" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-3.ogg" id="73_call"]
+[ext_resource type="AudioStream" uid="uid://x73vnu6ty06s" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-4.ogg" id="74_call"]
+[ext_resource type="AudioStream" uid="uid://my3e8n52vv31" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-5.ogg" id="75_call"]
+[ext_resource type="AudioStream" uid="uid://dgrmrji855mhl" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-6.ogg" id="76_call"]
+[ext_resource type="AudioStream" uid="uid://dsndv7nvlhc2d" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-7.ogg" id="77_call"]
+[ext_resource type="AudioStream" uid="uid://c1ih5vqbvjttj" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-8.ogg" id="78_call"]
+[ext_resource type="AudioStream" uid="uid://chaaak7ey78p8" path="res://assets/sounds/effects/umpire/calls/tiebreak_9-9.ogg" id="79_call"]
+[ext_resource type="AudioStream" uid="uid://oaljg58u7cc8" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-0.ogg" id="80_call"]
+[ext_resource type="AudioStream" uid="uid://7yiaq7c1u1uf" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-1.ogg" id="81_call"]
+[ext_resource type="AudioStream" uid="uid://bp2d1p73i40jh" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-2.ogg" id="82_call"]
+[ext_resource type="AudioStream" uid="uid://b1q6rf2k7kuy0" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-3.ogg" id="83_call"]
+[ext_resource type="AudioStream" uid="uid://gy33ta0tov35" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-4.ogg" id="84_call"]
+[ext_resource type="AudioStream" uid="uid://dhig6p2asn03o" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-5.ogg" id="85_call"]
+[ext_resource type="AudioStream" uid="uid://dyvuegjro0bpb" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-6.ogg" id="86_call"]
+[ext_resource type="AudioStream" uid="uid://dy3m4ugm60f17" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-7.ogg" id="87_call"]
+[ext_resource type="AudioStream" uid="uid://bix6k415ioyfv" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-8.ogg" id="88_call"]
+[ext_resource type="AudioStream" uid="uid://bh10ujwts5dx7" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-9.ogg" id="89_call"]
+[ext_resource type="AudioStream" uid="uid://cyglka7elyu54" path="res://assets/sounds/effects/umpire/calls/tiebreak_10-10.ogg" id="90_call"]
+[ext_resource type="AudioStream" uid="uid://ddoj0yt1dslxn" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-0.ogg" id="91_call"]
+[ext_resource type="AudioStream" uid="uid://dhphd7fnit8cn" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-1.ogg" id="92_call"]
+[ext_resource type="AudioStream" uid="uid://qsvkamion700" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-2.ogg" id="93_call"]
+[ext_resource type="AudioStream" uid="uid://brop7gbgybvu2" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-3.ogg" id="94_call"]
+[ext_resource type="AudioStream" uid="uid://ck34hrhxcms65" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-4.ogg" id="95_call"]
+[ext_resource type="AudioStream" uid="uid://crdbay0xs4njb" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-5.ogg" id="96_call"]
+[ext_resource type="AudioStream" uid="uid://bpfgcdtbg8f5t" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-6.ogg" id="97_call"]
+[ext_resource type="AudioStream" uid="uid://dkm63o5e6xorp" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-7.ogg" id="98_call"]
+[ext_resource type="AudioStream" uid="uid://b8npwnhx7njki" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-8.ogg" id="99_call"]
+[ext_resource type="AudioStream" uid="uid://32gcd07cpf2m" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-9.ogg" id="100_call"]
+[ext_resource type="AudioStream" uid="uid://cis8i64ctvv6i" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-10.ogg" id="101_call"]
+[ext_resource type="AudioStream" uid="uid://cj0kr5yey6bkk" path="res://assets/sounds/effects/umpire/calls/tiebreak_11-11.ogg" id="102_call"]
+[ext_resource type="AudioStream" uid="uid://ryixvpq1g8tl" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-0.ogg" id="103_call"]
+[ext_resource type="AudioStream" uid="uid://cv7lq48wpkmu5" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-1.ogg" id="104_call"]
+[ext_resource type="AudioStream" uid="uid://dmcs3jh5o0qk2" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-2.ogg" id="105_call"]
+[ext_resource type="AudioStream" uid="uid://d03lt2qmqql3w" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-3.ogg" id="106_call"]
+[ext_resource type="AudioStream" uid="uid://dorvx4tx17nab" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-4.ogg" id="107_call"]
+[ext_resource type="AudioStream" uid="uid://cn2b1du5xc7sp" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-5.ogg" id="108_call"]
+[ext_resource type="AudioStream" uid="uid://2gxxcqgqtk3r" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-6.ogg" id="109_call"]
+[ext_resource type="AudioStream" uid="uid://dvi8qqk1q1ubn" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-7.ogg" id="110_call"]
+[ext_resource type="AudioStream" uid="uid://trqnhr4duh7t" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-8.ogg" id="111_call"]
+[ext_resource type="AudioStream" uid="uid://cvws4uviifex3" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-9.ogg" id="112_call"]
+[ext_resource type="AudioStream" uid="uid://c6y8bh35igd6n" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-10.ogg" id="113_call"]
+[ext_resource type="AudioStream" uid="uid://5ymc2sroeqhv" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-11.ogg" id="114_call"]
+[ext_resource type="AudioStream" uid="uid://h1nx4k11qwq4" path="res://assets/sounds/effects/umpire/calls/tiebreak_12-12.ogg" id="115_call"]
+[ext_resource type="AudioStream" uid="uid://biul1d5kt5vd1" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-0.ogg" id="116_call"]
+[ext_resource type="AudioStream" uid="uid://dlpvgmcpad6x7" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-1.ogg" id="117_call"]
+[ext_resource type="AudioStream" uid="uid://vqakfrri4c8" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-2.ogg" id="118_call"]
+[ext_resource type="AudioStream" uid="uid://d6rn5io2rbtm" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-3.ogg" id="119_call"]
+[ext_resource type="AudioStream" uid="uid://rq4po6jnlpye" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-4.ogg" id="120_call"]
+[ext_resource type="AudioStream" uid="uid://yly466bgvu8h" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-5.ogg" id="121_call"]
+[ext_resource type="AudioStream" uid="uid://05rsxgrkwfv" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-6.ogg" id="122_call"]
+[ext_resource type="AudioStream" uid="uid://0cge4o0dres6" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-7.ogg" id="123_call"]
+[ext_resource type="AudioStream" uid="uid://bc6fdfwf8ewbs" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-8.ogg" id="124_call"]
+[ext_resource type="AudioStream" uid="uid://chyj5ky80vwfo" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-9.ogg" id="125_call"]
+[ext_resource type="AudioStream" uid="uid://dsxe35pyqotme" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-10.ogg" id="126_call"]
+[ext_resource type="AudioStream" uid="uid://bj5iejelmdyxt" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-11.ogg" id="127_call"]
+[ext_resource type="AudioStream" uid="uid://bwr4jyebisjx4" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-12.ogg" id="128_call"]
+[ext_resource type="AudioStream" uid="uid://b72x5ovrvbodu" path="res://assets/sounds/effects/umpire/calls/tiebreak_13-13.ogg" id="129_call"]
+[ext_resource type="AudioStream" uid="uid://c2lgec4r1tyck" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-0.ogg" id="130_call"]
+[ext_resource type="AudioStream" uid="uid://cwewivpoyiin1" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-1.ogg" id="131_call"]
+[ext_resource type="AudioStream" uid="uid://c2wvd7b5pv08a" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-2.ogg" id="132_call"]
+[ext_resource type="AudioStream" uid="uid://dtnoc6ksd2e7w" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-3.ogg" id="133_call"]
+[ext_resource type="AudioStream" uid="uid://b8dltjmb6rp24" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-4.ogg" id="134_call"]
+[ext_resource type="AudioStream" uid="uid://cy50jrnum48a6" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-5.ogg" id="135_call"]
+[ext_resource type="AudioStream" uid="uid://c0m4fgg3t2sjl" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-6.ogg" id="136_call"]
+[ext_resource type="AudioStream" uid="uid://jpjk0lvq21bx" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-7.ogg" id="137_call"]
+[ext_resource type="AudioStream" uid="uid://b5nuyxjwq3hym" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-8.ogg" id="138_call"]
+[ext_resource type="AudioStream" uid="uid://cwv4oda1ug1kf" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-9.ogg" id="139_call"]
+[ext_resource type="AudioStream" uid="uid://bcu3ov8vopb" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-10.ogg" id="140_call"]
+[ext_resource type="AudioStream" uid="uid://bj0w46p7elhdi" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-11.ogg" id="141_call"]
+[ext_resource type="AudioStream" uid="uid://bqwlh52vordb3" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-12.ogg" id="142_call"]
+[ext_resource type="AudioStream" uid="uid://b5m4rmctkdgl1" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-13.ogg" id="143_call"]
+[ext_resource type="AudioStream" uid="uid://dstjcr6y0yqww" path="res://assets/sounds/effects/umpire/calls/tiebreak_14-14.ogg" id="144_call"]
+[ext_resource type="AudioStream" uid="uid://dugpt1jhcwg05" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-0.ogg" id="145_call"]
+[ext_resource type="AudioStream" uid="uid://bakg4qdhxm3r1" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-1.ogg" id="146_call"]
+[ext_resource type="AudioStream" uid="uid://bbrd83c738ac4" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-2.ogg" id="147_call"]
+[ext_resource type="AudioStream" uid="uid://blp1cbxg1qxkl" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-3.ogg" id="148_call"]
+[ext_resource type="AudioStream" uid="uid://ojy5e16g7h11" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-4.ogg" id="149_call"]
+[ext_resource type="AudioStream" uid="uid://dyu8hc3j8s6kj" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-5.ogg" id="150_call"]
+[ext_resource type="AudioStream" uid="uid://hfabhnpqgi64" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-6.ogg" id="151_call"]
+[ext_resource type="AudioStream" uid="uid://cjoms5052dswf" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-7.ogg" id="152_call"]
+[ext_resource type="AudioStream" uid="uid://cos0wbgv5xkwn" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-8.ogg" id="153_call"]
+[ext_resource type="AudioStream" uid="uid://cbho83wn7lfdc" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-9.ogg" id="154_call"]
+[ext_resource type="AudioStream" uid="uid://bpfqpgyfpguw5" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-10.ogg" id="155_call"]
+[ext_resource type="AudioStream" uid="uid://dy63d28p7pyw" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-11.ogg" id="156_call"]
+[ext_resource type="AudioStream" uid="uid://ctrb42qdj61wk" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-12.ogg" id="157_call"]
+[ext_resource type="AudioStream" uid="uid://bqgrl8atvgs1e" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-13.ogg" id="158_call"]
+[ext_resource type="AudioStream" uid="uid://j31w3ajgfuxc" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-14.ogg" id="159_call"]
+[ext_resource type="AudioStream" uid="uid://ubquirkcb8lh" path="res://assets/sounds/effects/umpire/calls/tiebreak_15-15.ogg" id="160_call"]
+[ext_resource type="AudioStream" uid="uid://cqt1bg0ga3pod" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-0.ogg" id="161_call"]
+[ext_resource type="AudioStream" uid="uid://c5m6fdt6i7gx1" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-1.ogg" id="162_call"]
+[ext_resource type="AudioStream" uid="uid://ba3x4qgi6ywlf" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-2.ogg" id="163_call"]
+[ext_resource type="AudioStream" uid="uid://dqk3aevifvq10" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-3.ogg" id="164_call"]
+[ext_resource type="AudioStream" uid="uid://c0quc7quoicob" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-4.ogg" id="165_call"]
+[ext_resource type="AudioStream" uid="uid://cyeskou6muubk" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-5.ogg" id="166_call"]
+[ext_resource type="AudioStream" uid="uid://c02ynfqx760bp" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-6.ogg" id="167_call"]
+[ext_resource type="AudioStream" uid="uid://c0jgh4gm7os5h" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-7.ogg" id="168_call"]
+[ext_resource type="AudioStream" uid="uid://d1ljlgpk07lh" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-8.ogg" id="169_call"]
+[ext_resource type="AudioStream" uid="uid://cvyjsxvmoej1l" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-9.ogg" id="170_call"]
+[ext_resource type="AudioStream" uid="uid://cqjxthvfnslh" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-10.ogg" id="171_call"]
+[ext_resource type="AudioStream" uid="uid://kdf15dmvhoem" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-11.ogg" id="172_call"]
+[ext_resource type="AudioStream" uid="uid://dtbnv32odep7t" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-12.ogg" id="173_call"]
+[ext_resource type="AudioStream" uid="uid://hjbkyuetee1x" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-13.ogg" id="174_call"]
+[ext_resource type="AudioStream" uid="uid://ley0d4shvt67" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-14.ogg" id="175_call"]
+[ext_resource type="AudioStream" uid="uid://bfdshyng60x4k" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-15.ogg" id="176_call"]
+[ext_resource type="AudioStream" uid="uid://cughmqaqqbpq6" path="res://assets/sounds/effects/umpire/calls/tiebreak_16-16.ogg" id="177_call"]
+[ext_resource type="AudioStream" uid="uid://c4jaqamngy288" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-0.ogg" id="178_call"]
+[ext_resource type="AudioStream" uid="uid://dgkxfw1net5r" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-1.ogg" id="179_call"]
+[ext_resource type="AudioStream" uid="uid://d2uxof7618hgg" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-2.ogg" id="180_call"]
+[ext_resource type="AudioStream" uid="uid://pc3qg5h7gykq" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-3.ogg" id="181_call"]
+[ext_resource type="AudioStream" uid="uid://db0bqw4dwd6ui" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-4.ogg" id="182_call"]
+[ext_resource type="AudioStream" uid="uid://cfm30rju1m584" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-5.ogg" id="183_call"]
+[ext_resource type="AudioStream" uid="uid://vymbwnmxyt5y" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-6.ogg" id="184_call"]
+[ext_resource type="AudioStream" uid="uid://cylfxglxshd5l" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-7.ogg" id="185_call"]
+[ext_resource type="AudioStream" uid="uid://cd7p86x46m2i" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-8.ogg" id="186_call"]
+[ext_resource type="AudioStream" uid="uid://l4vy72jogcx1" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-9.ogg" id="187_call"]
+[ext_resource type="AudioStream" uid="uid://84jl8i3pwa6o" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-10.ogg" id="188_call"]
+[ext_resource type="AudioStream" uid="uid://c4dodkm5c7g1v" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-11.ogg" id="189_call"]
+[ext_resource type="AudioStream" uid="uid://p4lqyg3nufs7" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-12.ogg" id="190_call"]
+[ext_resource type="AudioStream" uid="uid://qrq8d6i121pb" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-13.ogg" id="191_call"]
+[ext_resource type="AudioStream" uid="uid://bsepfbv81c05e" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-14.ogg" id="192_call"]
+[ext_resource type="AudioStream" uid="uid://db2xrqmm3aq6x" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-15.ogg" id="193_call"]
+[ext_resource type="AudioStream" uid="uid://lnrnjv5gk0kh" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-16.ogg" id="194_call"]
+[ext_resource type="AudioStream" uid="uid://bpi1dgvg1uyq5" path="res://assets/sounds/effects/umpire/calls/tiebreak_17-17.ogg" id="195_call"]
+[ext_resource type="AudioStream" uid="uid://ckxnt2c08d2pp" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-0.ogg" id="196_call"]
+[ext_resource type="AudioStream" uid="uid://cmybxc6xcgtto" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-1.ogg" id="197_call"]
+[ext_resource type="AudioStream" uid="uid://27lqdtimx6ia" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-2.ogg" id="198_call"]
+[ext_resource type="AudioStream" uid="uid://c5nvb3q6df0oe" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-3.ogg" id="199_call"]
+[ext_resource type="AudioStream" uid="uid://cb36l25ta7h38" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-4.ogg" id="200_call"]
+[ext_resource type="AudioStream" uid="uid://bjko8x5c25b65" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-5.ogg" id="201_call"]
+[ext_resource type="AudioStream" uid="uid://dp1k4nh35csba" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-6.ogg" id="202_call"]
+[ext_resource type="AudioStream" uid="uid://o5h0g3kbrbw6" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-7.ogg" id="203_call"]
+[ext_resource type="AudioStream" uid="uid://1uwujaf01q8o" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-8.ogg" id="204_call"]
+[ext_resource type="AudioStream" uid="uid://bhdbe316lh5hx" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-9.ogg" id="205_call"]
+[ext_resource type="AudioStream" uid="uid://jymq537dblf7" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-10.ogg" id="206_call"]
+[ext_resource type="AudioStream" uid="uid://ro5bg8qtd8fr" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-11.ogg" id="207_call"]
+[ext_resource type="AudioStream" uid="uid://fn0ygebthd1u" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-12.ogg" id="208_call"]
+[ext_resource type="AudioStream" uid="uid://d0p4nofwb0hul" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-13.ogg" id="209_call"]
+[ext_resource type="AudioStream" uid="uid://bv4kbwq2klcd1" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-14.ogg" id="210_call"]
+[ext_resource type="AudioStream" uid="uid://diqjk42r53gwr" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-15.ogg" id="211_call"]
+[ext_resource type="AudioStream" uid="uid://cfyt4nbwajy1c" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-16.ogg" id="212_call"]
+[ext_resource type="AudioStream" uid="uid://0grhsoktavo2" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-17.ogg" id="213_call"]
+[ext_resource type="AudioStream" uid="uid://ckyqrkhd3mkmn" path="res://assets/sounds/effects/umpire/calls/tiebreak_18-18.ogg" id="214_call"]
+[ext_resource type="AudioStream" uid="uid://dub6y4gxktjn3" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-0.ogg" id="215_call"]
+[ext_resource type="AudioStream" uid="uid://bof8k6acw3dm2" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-1.ogg" id="216_call"]
+[ext_resource type="AudioStream" uid="uid://bpdm33brq0rla" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-2.ogg" id="217_call"]
+[ext_resource type="AudioStream" uid="uid://w4wutu62g3c7" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-3.ogg" id="218_call"]
+[ext_resource type="AudioStream" uid="uid://cm47b0eaxcj3e" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-4.ogg" id="219_call"]
+[ext_resource type="AudioStream" uid="uid://be2ytvvrplcpj" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-5.ogg" id="220_call"]
+[ext_resource type="AudioStream" uid="uid://ephjtm3csoy8" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-6.ogg" id="221_call"]
+[ext_resource type="AudioStream" uid="uid://dhfhlpv5yhjep" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-7.ogg" id="222_call"]
+[ext_resource type="AudioStream" uid="uid://cp7do58spufln" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-8.ogg" id="223_call"]
+[ext_resource type="AudioStream" uid="uid://djuioh0axtdyh" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-9.ogg" id="224_call"]
+[ext_resource type="AudioStream" uid="uid://doq8hu2wtkhf" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-10.ogg" id="225_call"]
+[ext_resource type="AudioStream" uid="uid://c6b70bf0nyjb4" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-11.ogg" id="226_call"]
+[ext_resource type="AudioStream" uid="uid://qra41sshptq3" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-12.ogg" id="227_call"]
+[ext_resource type="AudioStream" uid="uid://068tvfn34tuy" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-13.ogg" id="228_call"]
+[ext_resource type="AudioStream" uid="uid://d2vu1w5orcf4n" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-14.ogg" id="229_call"]
+[ext_resource type="AudioStream" uid="uid://dud7wv7m14h46" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-15.ogg" id="230_call"]
+[ext_resource type="AudioStream" uid="uid://deteqse72hu3r" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-16.ogg" id="231_call"]
+[ext_resource type="AudioStream" uid="uid://bxe2s2hvvvfbo" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-17.ogg" id="232_call"]
+[ext_resource type="AudioStream" uid="uid://b1e8udcx4c6yq" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-18.ogg" id="233_call"]
+[ext_resource type="AudioStream" uid="uid://c2bwwoqude082" path="res://assets/sounds/effects/umpire/calls/tiebreak_19-19.ogg" id="234_call"]
+[ext_resource type="AudioStream" uid="uid://0fudbh1u0nqg" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-0.ogg" id="235_call"]
+[ext_resource type="AudioStream" uid="uid://b0b8gdlod6gx2" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-1.ogg" id="236_call"]
+[ext_resource type="AudioStream" uid="uid://c7bmh8kyhqcw5" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-2.ogg" id="237_call"]
+[ext_resource type="AudioStream" uid="uid://dd8jnk8iyeik0" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-3.ogg" id="238_call"]
+[ext_resource type="AudioStream" uid="uid://cyacx744mbm0q" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-4.ogg" id="239_call"]
+[ext_resource type="AudioStream" uid="uid://h6ybunphye4p" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-5.ogg" id="240_call"]
+[ext_resource type="AudioStream" uid="uid://dt5wym4gn1hrx" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-6.ogg" id="241_call"]
+[ext_resource type="AudioStream" uid="uid://bjfrjf53c24a5" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-7.ogg" id="242_call"]
+[ext_resource type="AudioStream" uid="uid://rpbh0vff4lbx" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-8.ogg" id="243_call"]
+[ext_resource type="AudioStream" uid="uid://dcebyjodr8tv6" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-9.ogg" id="244_call"]
+[ext_resource type="AudioStream" uid="uid://ckeln2kxglp0m" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-10.ogg" id="245_call"]
+[ext_resource type="AudioStream" uid="uid://cbol3nc7mrqtj" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-11.ogg" id="246_call"]
+[ext_resource type="AudioStream" uid="uid://c0hig8c4ay1f8" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-12.ogg" id="247_call"]
+[ext_resource type="AudioStream" uid="uid://b00kuvw021jxm" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-13.ogg" id="248_call"]
+[ext_resource type="AudioStream" uid="uid://cmwm5c2qgmfdv" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-14.ogg" id="249_call"]
+[ext_resource type="AudioStream" uid="uid://ccfy36wvooy5n" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-15.ogg" id="250_call"]
+[ext_resource type="AudioStream" uid="uid://dr1ogtxtvibjv" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-16.ogg" id="251_call"]
+[ext_resource type="AudioStream" uid="uid://bfkj8wu6bnjn3" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-17.ogg" id="252_call"]
+[ext_resource type="AudioStream" uid="uid://l1gmil3rpign" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-18.ogg" id="253_call"]
+[ext_resource type="AudioStream" uid="uid://dwl2mpxy68jkd" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-19.ogg" id="254_call"]
+[ext_resource type="AudioStream" uid="uid://tuvqakugpd7r" path="res://assets/sounds/effects/umpire/calls/tiebreak_20-20.ogg" id="255_call"]
+[ext_resource type="AudioStream" uid="uid://dtd0mtbu2l0xf" path="res://assets/sounds/effects/umpire/calls/let.ogg" id="256_call"]
+[ext_resource type="AudioStream" uid="uid://bgx6rdfhjd1lb" path="res://assets/sounds/effects/umpire/calls/fault.ogg" id="257_call"]
 
 [resource]
 script = ExtResource("1_script")
-scores = Dictionary[String, AudioStream]({"0-1": ExtResource("2_call"), "0-2": ExtResource("3_call"), "0-3": ExtResource("4_call"), "1-0": ExtResource("5_call"), "1-1": ExtResource("6_call"), "1-2": ExtResource("7_call"), "1-3": ExtResource("8_call"), "2-0": ExtResource("9_call"), "2-1": ExtResource("10_call"), "2-2": ExtResource("11_call"), "2-3": ExtResource("12_call"), "3-0": ExtResource("13_call"), "3-1": ExtResource("14_call"), "3-2": ExtResource("15_call")})
+scores = Dictionary[String, AudioStream]({
+"0-1": ExtResource("2_call"),
+"0-2": ExtResource("3_call"),
+"0-3": ExtResource("4_call"),
+"1-0": ExtResource("5_call"),
+"1-1": ExtResource("6_call"),
+"1-2": ExtResource("7_call"),
+"1-3": ExtResource("8_call"),
+"2-0": ExtResource("9_call"),
+"2-1": ExtResource("10_call"),
+"2-2": ExtResource("11_call"),
+"2-3": ExtResource("12_call"),
+"3-0": ExtResource("13_call"),
+"3-1": ExtResource("14_call"),
+"3-2": ExtResource("15_call")
+})
 deuce = ExtResource("16_call")
 advantage = ExtResource("17_call")
 game = ExtResource("18_call")
 game_and_set = Array[AudioStream]([ExtResource("19_call"), ExtResource("20_call"), ExtResource("21_call"), ExtResource("22_call"), ExtResource("23_call")])
 game_set_and_match = ExtResource("24_call")
 tiebreak = ExtResource("25_call")
-tiebreak_scores = Dictionary[String, AudioStream]({"1-0": ExtResource("26_call"), "1-1": ExtResource("27_call"), "2-0": ExtResource("28_call"), "2-1": ExtResource("29_call"), "2-2": ExtResource("30_call"), "3-0": ExtResource("31_call"), "3-1": ExtResource("32_call"), "3-2": ExtResource("33_call"), "3-3": ExtResource("34_call"), "4-0": ExtResource("35_call"), "4-1": ExtResource("36_call"), "4-2": ExtResource("37_call"), "4-3": ExtResource("38_call"), "4-4": ExtResource("39_call"), "5-0": ExtResource("40_call"), "5-1": ExtResource("41_call"), "5-2": ExtResource("42_call"), "5-3": ExtResource("43_call"), "5-4": ExtResource("44_call"), "5-5": ExtResource("45_call"), "6-0": ExtResource("46_call"), "6-1": ExtResource("47_call"), "6-2": ExtResource("48_call"), "6-3": ExtResource("49_call"), "6-4": ExtResource("50_call"), "6-5": ExtResource("51_call"), "6-6": ExtResource("52_call"), "7-0": ExtResource("53_call"), "7-1": ExtResource("54_call"), "7-2": ExtResource("55_call"), "7-3": ExtResource("56_call"), "7-4": ExtResource("57_call"), "7-5": ExtResource("58_call"), "7-6": ExtResource("59_call"), "7-7": ExtResource("60_call"), "8-0": ExtResource("61_call"), "8-1": ExtResource("62_call"), "8-2": ExtResource("63_call"), "8-3": ExtResource("64_call"), "8-4": ExtResource("65_call"), "8-5": ExtResource("66_call"), "8-6": ExtResource("67_call"), "8-7": ExtResource("68_call"), "8-8": ExtResource("69_call"), "9-0": ExtResource("70_call"), "9-1": ExtResource("71_call"), "9-2": ExtResource("72_call"), "9-3": ExtResource("73_call"), "9-4": ExtResource("74_call"), "9-5": ExtResource("75_call"), "9-6": ExtResource("76_call"), "9-7": ExtResource("77_call"), "9-8": ExtResource("78_call"), "9-9": ExtResource("79_call"), "10-0": ExtResource("80_call"), "10-1": ExtResource("81_call"), "10-2": ExtResource("82_call"), "10-3": ExtResource("83_call"), "10-4": ExtResource("84_call"), "10-5": ExtResource("85_call"), "10-6": ExtResource("86_call"), "10-7": ExtResource("87_call"), "10-8": ExtResource("88_call"), "10-9": ExtResource("89_call"), "10-10": ExtResource("90_call"), "11-0": ExtResource("91_call"), "11-1": ExtResource("92_call"), "11-2": ExtResource("93_call"), "11-3": ExtResource("94_call"), "11-4": ExtResource("95_call"), "11-5": ExtResource("96_call"), "11-6": ExtResource("97_call"), "11-7": ExtResource("98_call"), "11-8": ExtResource("99_call"), "11-9": ExtResource("100_call"), "11-10": ExtResource("101_call"), "11-11": ExtResource("102_call"), "12-0": ExtResource("103_call"), "12-1": ExtResource("104_call"), "12-2": ExtResource("105_call"), "12-3": ExtResource("106_call"), "12-4": ExtResource("107_call"), "12-5": ExtResource("108_call"), "12-6": ExtResource("109_call"), "12-7": ExtResource("110_call"), "12-8": ExtResource("111_call"), "12-9": ExtResource("112_call"), "12-10": ExtResource("113_call"), "12-11": ExtResource("114_call"), "12-12": ExtResource("115_call"), "13-0": ExtResource("116_call"), "13-1": ExtResource("117_call"), "13-2": ExtResource("118_call"), "13-3": ExtResource("119_call"), "13-4": ExtResource("120_call"), "13-5": ExtResource("121_call"), "13-6": ExtResource("122_call"), "13-7": ExtResource("123_call"), "13-8": ExtResource("124_call"), "13-9": ExtResource("125_call"), "13-10": ExtResource("126_call"), "13-11": ExtResource("127_call"), "13-12": ExtResource("128_call"), "13-13": ExtResource("129_call"), "14-0": ExtResource("130_call"), "14-1": ExtResource("131_call"), "14-2": ExtResource("132_call"), "14-3": ExtResource("133_call"), "14-4": ExtResource("134_call"), "14-5": ExtResource("135_call"), "14-6": ExtResource("136_call"), "14-7": ExtResource("137_call"), "14-8": ExtResource("138_call"), "14-9": ExtResource("139_call"), "14-10": ExtResource("140_call"), "14-11": ExtResource("141_call"), "14-12": ExtResource("142_call"), "14-13": ExtResource("143_call"), "14-14": ExtResource("144_call"), "15-0": ExtResource("145_call"), "15-1": ExtResource("146_call"), "15-2": ExtResource("147_call"), "15-3": ExtResource("148_call"), "15-4": ExtResource("149_call"), "15-5": ExtResource("150_call"), "15-6": ExtResource("151_call"), "15-7": ExtResource("152_call"), "15-8": ExtResource("153_call"), "15-9": ExtResource("154_call"), "15-10": ExtResource("155_call"), "15-11": ExtResource("156_call"), "15-12": ExtResource("157_call"), "15-13": ExtResource("158_call"), "15-14": ExtResource("159_call"), "15-15": ExtResource("160_call"), "16-0": ExtResource("161_call"), "16-1": ExtResource("162_call"), "16-2": ExtResource("163_call"), "16-3": ExtResource("164_call"), "16-4": ExtResource("165_call"), "16-5": ExtResource("166_call"), "16-6": ExtResource("167_call"), "16-7": ExtResource("168_call"), "16-8": ExtResource("169_call"), "16-9": ExtResource("170_call"), "16-10": ExtResource("171_call"), "16-11": ExtResource("172_call"), "16-12": ExtResource("173_call"), "16-13": ExtResource("174_call"), "16-14": ExtResource("175_call"), "16-15": ExtResource("176_call"), "16-16": ExtResource("177_call"), "17-0": ExtResource("178_call"), "17-1": ExtResource("179_call"), "17-2": ExtResource("180_call"), "17-3": ExtResource("181_call"), "17-4": ExtResource("182_call"), "17-5": ExtResource("183_call"), "17-6": ExtResource("184_call"), "17-7": ExtResource("185_call"), "17-8": ExtResource("186_call"), "17-9": ExtResource("187_call"), "17-10": ExtResource("188_call"), "17-11": ExtResource("189_call"), "17-12": ExtResource("190_call"), "17-13": ExtResource("191_call"), "17-14": ExtResource("192_call"), "17-15": ExtResource("193_call"), "17-16": ExtResource("194_call"), "17-17": ExtResource("195_call"), "18-0": ExtResource("196_call"), "18-1": ExtResource("197_call"), "18-2": ExtResource("198_call"), "18-3": ExtResource("199_call"), "18-4": ExtResource("200_call"), "18-5": ExtResource("201_call"), "18-6": ExtResource("202_call"), "18-7": ExtResource("203_call"), "18-8": ExtResource("204_call"), "18-9": ExtResource("205_call"), "18-10": ExtResource("206_call"), "18-11": ExtResource("207_call"), "18-12": ExtResource("208_call"), "18-13": ExtResource("209_call"), "18-14": ExtResource("210_call"), "18-15": ExtResource("211_call"), "18-16": ExtResource("212_call"), "18-17": ExtResource("213_call"), "18-18": ExtResource("214_call"), "19-0": ExtResource("215_call"), "19-1": ExtResource("216_call"), "19-2": ExtResource("217_call"), "19-3": ExtResource("218_call"), "19-4": ExtResource("219_call"), "19-5": ExtResource("220_call"), "19-6": ExtResource("221_call"), "19-7": ExtResource("222_call"), "19-8": ExtResource("223_call"), "19-9": ExtResource("224_call"), "19-10": ExtResource("225_call"), "19-11": ExtResource("226_call"), "19-12": ExtResource("227_call"), "19-13": ExtResource("228_call"), "19-14": ExtResource("229_call"), "19-15": ExtResource("230_call"), "19-16": ExtResource("231_call"), "19-17": ExtResource("232_call"), "19-18": ExtResource("233_call"), "19-19": ExtResource("234_call"), "20-0": ExtResource("235_call"), "20-1": ExtResource("236_call"), "20-2": ExtResource("237_call"), "20-3": ExtResource("238_call"), "20-4": ExtResource("239_call"), "20-5": ExtResource("240_call"), "20-6": ExtResource("241_call"), "20-7": ExtResource("242_call"), "20-8": ExtResource("243_call"), "20-9": ExtResource("244_call"), "20-10": ExtResource("245_call"), "20-11": ExtResource("246_call"), "20-12": ExtResource("247_call"), "20-13": ExtResource("248_call"), "20-14": ExtResource("249_call"), "20-15": ExtResource("250_call"), "20-16": ExtResource("251_call"), "20-17": ExtResource("252_call"), "20-18": ExtResource("253_call"), "20-19": ExtResource("254_call"), "20-20": ExtResource("255_call")})
+tiebreak_scores = Dictionary[String, AudioStream]({
+"1-0": ExtResource("26_call"),
+"1-1": ExtResource("27_call"),
+"10-0": ExtResource("80_call"),
+"10-1": ExtResource("81_call"),
+"10-10": ExtResource("90_call"),
+"10-2": ExtResource("82_call"),
+"10-3": ExtResource("83_call"),
+"10-4": ExtResource("84_call"),
+"10-5": ExtResource("85_call"),
+"10-6": ExtResource("86_call"),
+"10-7": ExtResource("87_call"),
+"10-8": ExtResource("88_call"),
+"10-9": ExtResource("89_call"),
+"11-0": ExtResource("91_call"),
+"11-1": ExtResource("92_call"),
+"11-10": ExtResource("101_call"),
+"11-11": ExtResource("102_call"),
+"11-2": ExtResource("93_call"),
+"11-3": ExtResource("94_call"),
+"11-4": ExtResource("95_call"),
+"11-5": ExtResource("96_call"),
+"11-6": ExtResource("97_call"),
+"11-7": ExtResource("98_call"),
+"11-8": ExtResource("99_call"),
+"11-9": ExtResource("100_call"),
+"12-0": ExtResource("103_call"),
+"12-1": ExtResource("104_call"),
+"12-10": ExtResource("113_call"),
+"12-11": ExtResource("114_call"),
+"12-12": ExtResource("115_call"),
+"12-2": ExtResource("105_call"),
+"12-3": ExtResource("106_call"),
+"12-4": ExtResource("107_call"),
+"12-5": ExtResource("108_call"),
+"12-6": ExtResource("109_call"),
+"12-7": ExtResource("110_call"),
+"12-8": ExtResource("111_call"),
+"12-9": ExtResource("112_call"),
+"13-0": ExtResource("116_call"),
+"13-1": ExtResource("117_call"),
+"13-10": ExtResource("126_call"),
+"13-11": ExtResource("127_call"),
+"13-12": ExtResource("128_call"),
+"13-13": ExtResource("129_call"),
+"13-2": ExtResource("118_call"),
+"13-3": ExtResource("119_call"),
+"13-4": ExtResource("120_call"),
+"13-5": ExtResource("121_call"),
+"13-6": ExtResource("122_call"),
+"13-7": ExtResource("123_call"),
+"13-8": ExtResource("124_call"),
+"13-9": ExtResource("125_call"),
+"14-0": ExtResource("130_call"),
+"14-1": ExtResource("131_call"),
+"14-10": ExtResource("140_call"),
+"14-11": ExtResource("141_call"),
+"14-12": ExtResource("142_call"),
+"14-13": ExtResource("143_call"),
+"14-14": ExtResource("144_call"),
+"14-2": ExtResource("132_call"),
+"14-3": ExtResource("133_call"),
+"14-4": ExtResource("134_call"),
+"14-5": ExtResource("135_call"),
+"14-6": ExtResource("136_call"),
+"14-7": ExtResource("137_call"),
+"14-8": ExtResource("138_call"),
+"14-9": ExtResource("139_call"),
+"15-0": ExtResource("145_call"),
+"15-1": ExtResource("146_call"),
+"15-10": ExtResource("155_call"),
+"15-11": ExtResource("156_call"),
+"15-12": ExtResource("157_call"),
+"15-13": ExtResource("158_call"),
+"15-14": ExtResource("159_call"),
+"15-15": ExtResource("160_call"),
+"15-2": ExtResource("147_call"),
+"15-3": ExtResource("148_call"),
+"15-4": ExtResource("149_call"),
+"15-5": ExtResource("150_call"),
+"15-6": ExtResource("151_call"),
+"15-7": ExtResource("152_call"),
+"15-8": ExtResource("153_call"),
+"15-9": ExtResource("154_call"),
+"16-0": ExtResource("161_call"),
+"16-1": ExtResource("162_call"),
+"16-10": ExtResource("171_call"),
+"16-11": ExtResource("172_call"),
+"16-12": ExtResource("173_call"),
+"16-13": ExtResource("174_call"),
+"16-14": ExtResource("175_call"),
+"16-15": ExtResource("176_call"),
+"16-16": ExtResource("177_call"),
+"16-2": ExtResource("163_call"),
+"16-3": ExtResource("164_call"),
+"16-4": ExtResource("165_call"),
+"16-5": ExtResource("166_call"),
+"16-6": ExtResource("167_call"),
+"16-7": ExtResource("168_call"),
+"16-8": ExtResource("169_call"),
+"16-9": ExtResource("170_call"),
+"17-0": ExtResource("178_call"),
+"17-1": ExtResource("179_call"),
+"17-10": ExtResource("188_call"),
+"17-11": ExtResource("189_call"),
+"17-12": ExtResource("190_call"),
+"17-13": ExtResource("191_call"),
+"17-14": ExtResource("192_call"),
+"17-15": ExtResource("193_call"),
+"17-16": ExtResource("194_call"),
+"17-17": ExtResource("195_call"),
+"17-2": ExtResource("180_call"),
+"17-3": ExtResource("181_call"),
+"17-4": ExtResource("182_call"),
+"17-5": ExtResource("183_call"),
+"17-6": ExtResource("184_call"),
+"17-7": ExtResource("185_call"),
+"17-8": ExtResource("186_call"),
+"17-9": ExtResource("187_call"),
+"18-0": ExtResource("196_call"),
+"18-1": ExtResource("197_call"),
+"18-10": ExtResource("206_call"),
+"18-11": ExtResource("207_call"),
+"18-12": ExtResource("208_call"),
+"18-13": ExtResource("209_call"),
+"18-14": ExtResource("210_call"),
+"18-15": ExtResource("211_call"),
+"18-16": ExtResource("212_call"),
+"18-17": ExtResource("213_call"),
+"18-18": ExtResource("214_call"),
+"18-2": ExtResource("198_call"),
+"18-3": ExtResource("199_call"),
+"18-4": ExtResource("200_call"),
+"18-5": ExtResource("201_call"),
+"18-6": ExtResource("202_call"),
+"18-7": ExtResource("203_call"),
+"18-8": ExtResource("204_call"),
+"18-9": ExtResource("205_call"),
+"19-0": ExtResource("215_call"),
+"19-1": ExtResource("216_call"),
+"19-10": ExtResource("225_call"),
+"19-11": ExtResource("226_call"),
+"19-12": ExtResource("227_call"),
+"19-13": ExtResource("228_call"),
+"19-14": ExtResource("229_call"),
+"19-15": ExtResource("230_call"),
+"19-16": ExtResource("231_call"),
+"19-17": ExtResource("232_call"),
+"19-18": ExtResource("233_call"),
+"19-19": ExtResource("234_call"),
+"19-2": ExtResource("217_call"),
+"19-3": ExtResource("218_call"),
+"19-4": ExtResource("219_call"),
+"19-5": ExtResource("220_call"),
+"19-6": ExtResource("221_call"),
+"19-7": ExtResource("222_call"),
+"19-8": ExtResource("223_call"),
+"19-9": ExtResource("224_call"),
+"2-0": ExtResource("28_call"),
+"2-1": ExtResource("29_call"),
+"2-2": ExtResource("30_call"),
+"20-0": ExtResource("235_call"),
+"20-1": ExtResource("236_call"),
+"20-10": ExtResource("245_call"),
+"20-11": ExtResource("246_call"),
+"20-12": ExtResource("247_call"),
+"20-13": ExtResource("248_call"),
+"20-14": ExtResource("249_call"),
+"20-15": ExtResource("250_call"),
+"20-16": ExtResource("251_call"),
+"20-17": ExtResource("252_call"),
+"20-18": ExtResource("253_call"),
+"20-19": ExtResource("254_call"),
+"20-2": ExtResource("237_call"),
+"20-20": ExtResource("255_call"),
+"20-3": ExtResource("238_call"),
+"20-4": ExtResource("239_call"),
+"20-5": ExtResource("240_call"),
+"20-6": ExtResource("241_call"),
+"20-7": ExtResource("242_call"),
+"20-8": ExtResource("243_call"),
+"20-9": ExtResource("244_call"),
+"3-0": ExtResource("31_call"),
+"3-1": ExtResource("32_call"),
+"3-2": ExtResource("33_call"),
+"3-3": ExtResource("34_call"),
+"4-0": ExtResource("35_call"),
+"4-1": ExtResource("36_call"),
+"4-2": ExtResource("37_call"),
+"4-3": ExtResource("38_call"),
+"4-4": ExtResource("39_call"),
+"5-0": ExtResource("40_call"),
+"5-1": ExtResource("41_call"),
+"5-2": ExtResource("42_call"),
+"5-3": ExtResource("43_call"),
+"5-4": ExtResource("44_call"),
+"5-5": ExtResource("45_call"),
+"6-0": ExtResource("46_call"),
+"6-1": ExtResource("47_call"),
+"6-2": ExtResource("48_call"),
+"6-3": ExtResource("49_call"),
+"6-4": ExtResource("50_call"),
+"6-5": ExtResource("51_call"),
+"6-6": ExtResource("52_call"),
+"7-0": ExtResource("53_call"),
+"7-1": ExtResource("54_call"),
+"7-2": ExtResource("55_call"),
+"7-3": ExtResource("56_call"),
+"7-4": ExtResource("57_call"),
+"7-5": ExtResource("58_call"),
+"7-6": ExtResource("59_call"),
+"7-7": ExtResource("60_call"),
+"8-0": ExtResource("61_call"),
+"8-1": ExtResource("62_call"),
+"8-2": ExtResource("63_call"),
+"8-3": ExtResource("64_call"),
+"8-4": ExtResource("65_call"),
+"8-5": ExtResource("66_call"),
+"8-6": ExtResource("67_call"),
+"8-7": ExtResource("68_call"),
+"8-8": ExtResource("69_call"),
+"9-0": ExtResource("70_call"),
+"9-1": ExtResource("71_call"),
+"9-2": ExtResource("72_call"),
+"9-3": ExtResource("73_call"),
+"9-4": ExtResource("74_call"),
+"9-5": ExtResource("75_call"),
+"9-6": ExtResource("76_call"),
+"9-7": ExtResource("77_call"),
+"9-8": ExtResource("78_call"),
+"9-9": ExtResource("79_call")
+})
 let = ExtResource("256_call")
 fault = ExtResource("257_call")
-out = ExtResource("258_call")

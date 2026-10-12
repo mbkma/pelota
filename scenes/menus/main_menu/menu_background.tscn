@@ -3,15 +3,18 @@
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="1_stadium"]
 [ext_resource type="PackedScene" uid="uid://cxo4shm4p8nco" path="res://scenes/environments/crowd/crowd.tscn" id="2_crowd"]
 [ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="3_environment"]
-[ext_resource type="Script" uid="uid://bry6gcmxt6ttq" path="res://scenes/menus/main_menu/menu_camera_orbit.gd" id="4_orbit"]
+[ext_resource type="Script" path="res://scenes/menus/main_menu/menu_background.gd" id="5_background"]
+[ext_resource type="Script" uid="uid://bry6gcmxt6ttq" path="res://scenes/menus/main_menu/menu_camera_director.gd" id="4_orbit"]
 
 [node name="MenuBackground" type="Node3D" unique_id=1795337440]
+script = ExtResource("5_background")
 
 [node name="Stadium" parent="." unique_id=1203660137 instance=ExtResource("1_stadium")]
 
 [node name="Crowd" parent="." node_paths=PackedStringArray("crew") unique_id=1561406129 instance=ExtResource("2_crowd")]
 crew = [NodePath("../Stadium/Courtside/Photographers"), NodePath("../Stadium/Courtside/CameraOperators")]
 play_ambience = false
+density_scale = 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1092381622]
 environment = ExtResource("3_environment")

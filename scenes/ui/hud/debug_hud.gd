@@ -213,7 +213,7 @@ func _refresh_camera_selector() -> void:
 
 
 func _on_camera_selected(index: int) -> void:
-	match_manager.cameras.activate(match_manager.cameras.cams[index])
+	match_manager.cameras.pick(match_manager.cameras.cams[index])
 
 
 func _set_simulation_speed(new_speed: float) -> void:

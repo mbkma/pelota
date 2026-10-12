@@ -25,9 +25,6 @@ const VOLLEY_PUNCH_SPEED: Vector2 = Vector2(14.0, 18.0)
 const DROP_VOLLEY_SPEED: Vector2 = Vector2(5.0, 8.0)
 const VOLLEY_PUT_AWAY_PACE: float = 6.0
 
-## Pause (s) after a point before the players walk to their positions for the next one
-const POINT_BREAK: float = 3.0
-
 ## Default number of steps and time step (s) of a ball trajectory prediction
 const TRAJECTORY_PREDICTION_STEPS: int = 200
 const TRAJECTORY_TIME_STEP: float = 0.016

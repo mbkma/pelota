@@ -3,9 +3,12 @@
 // texels per bone, one per row of the 3x4 matrix), and the vertex shader skins the vertices with
 // it. Each instance plays its idle clip in a loop and can cheer: INSTANCE_CUSTOM holds
 //   r: idle clip, g: cheer clip (-1: none), b: time the cheer started, a: look (random in [0, 1)).
-// The look sets the idle's phase and the colors the clothes and hair are tinted with.
+// The look sets the idle's phase, the tempo of the cheers (see CrowdCharacter.cheer_tempo) and the
+// colors the clothes and hair are tinted with.
 // Most spectators turn their head to follow the ball (the look target): the vertices turn around
 // the head joint as much as they are skinned to the head (UV2.y), within what a neck can turn.
+// A cheer moves the head itself, so the head follows the ball less the more the cheer is blended
+// in: the cheer's own head movement is kept, not turned on top of.
 // Skinning matrices are kept as their three rows (the first three columns of a mat4, the fourth
 // unused), so a point is skinned with dot products: (vec4(point, 1.0) * rows).xyz.
 shader_type spatial;
@@ -14,7 +17,7 @@ render_mode cull_back, depth_draw_opaque;
 // Clips: first frame in the bone texture, number of frames (FRAME_RATE per second, both ends
 // included) and length (s)
 const float FRAME_RATE = 30.0;
-const int CLIP_COUNT = 6;
+const int CLIP_COUNT = 9;
 uniform float clip_start[CLIP_COUNT];
 uniform float clip_frames[CLIP_COUNT];
 uniform float clip_length[CLIP_COUNT];
@@ -25,6 +28,9 @@ uniform float crowd_time = 0.0;
 // Seconds a cheer takes to blend in and out
 const float CHEER_BLEND_IN = 0.35;
 const float CHEER_BLEND_OUT = 0.6;
+// Slowest and fastest tempo a spectator cheers at (see CrowdCharacter.CHEER_TEMPO)
+const float CHEER_TEMPO_MIN = 0.85;
+const float CHEER_TEMPO_MAX = 1.15;
 // Where the spectators look (world space), set by the crowd; the head bone and its joint in the
 // model's rest pose
 uniform vec3 look_target = vec3(0.0, 1.0, 0.0);
@@ -101,38 +107,50 @@ mat4 skin(int clip, float time, bool loop, ivec4 bones, vec4 weights) {
 	return current + (following - current) * blend;
 }
 
+// Time (s) into the cheer of an instance with the INSTANCE_CUSTOM `instance_custom`, at its tempo.
+float cheer_time(vec4 instance_custom) {
+	float tempo = mix(CHEER_TEMPO_MIN, CHEER_TEMPO_MAX, fract(instance_custom.a * 13.0));
+	return (crowd_time - instance_custom.b) * tempo;
+}
+
+// How far (0 to 1) the cheer of an instance with the INSTANCE_CUSTOM `instance_custom` is blended
+// in over its idle.
+float cheer_blend(vec4 instance_custom) {
+	if (instance_custom.g < 0.0) {
+		return 0.0;
+	}
+	float time = cheer_time(instance_custom);
+	float length = clip_length[int(instance_custom.g + 0.5)];
+	return smoothstep(0.0, CHEER_BLEND_IN, time)
+		* (1.0 - smoothstep(length - CHEER_BLEND_OUT, length, time));
+}
+
 // Skinning rows of `bones` weighted by `weights` for an instance with the INSTANCE_CUSTOM
-// `instance_custom`: its idle clip, blended into its cheer while it cheers.
-mat4 animated(ivec4 bones, vec4 weights, vec4 instance_custom) {
+// `instance_custom`: its idle clip, blended into its cheer by `cheer` (see cheer_blend).
+mat4 animated(ivec4 bones, vec4 weights, vec4 instance_custom, float cheer) {
 	int idle_clip = int(instance_custom.r + 0.5);
 	mat4 skinning = skin(idle_clip, crowd_time + instance_custom.a * 97.0, true, bones, weights);
-	if (instance_custom.g < 0.0) {
-		return skinning;
-	}
-	int cheer_clip = int(instance_custom.g + 0.5);
-	float cheer_time = crowd_time - instance_custom.b;
-	float cheer_length = clip_length[cheer_clip];
-	float cheer = smoothstep(0.0, CHEER_BLEND_IN, cheer_time)
-		* (1.0 - smoothstep(cheer_length - CHEER_BLEND_OUT, cheer_length, cheer_time));
 	if (cheer <= 0.0) {
 		return skinning;
 	}
-	mat4 cheering = skin(cheer_clip, cheer_time, false, bones, weights);
+	int cheer_clip = int(instance_custom.g + 0.5);
+	mat4 cheering = skin(cheer_clip, cheer_time(instance_custom), false, bones, weights);
 	return skinning + (cheering - skinning) * cheer;
 }
 
 void vertex() {
 	look = INSTANCE_CUSTOM.a;
 	part = int(UV2.x + 0.5);
-	mat4 skinning = animated(ivec4(CUSTOM0 + 0.5), CUSTOM1, INSTANCE_CUSTOM);
+	float cheer = cheer_blend(INSTANCE_CUSTOM);
+	mat4 skinning = animated(ivec4(CUSTOM0 + 0.5), CUSTOM1, INSTANCE_CUSTOM, cheer);
 	VERTEX = (vec4(VERTEX, 1.0) * skinning).xyz;
 	NORMAL = normalize((vec4(NORMAL, 0.0) * skinning).xyz);
 
-	float head_share = UV2.y;
+	float head_share = UV2.y * (1.0 - cheer);
 	if (heads_follow && head_share > 0.0 && hash(look + 0.7) < FOLLOW_CHANCE) {
 		// The head joint and the way the face points, as animated
 		mat4 head_skinning = animated(
-			ivec4(head_bone, 0, 0, 0), vec4(1.0, 0.0, 0.0, 0.0), INSTANCE_CUSTOM
+			ivec4(head_bone, 0, 0, 0), vec4(1.0, 0.0, 0.0, 0.0), INSTANCE_CUSTOM, cheer
 		);
 		vec3 pivot = (vec4(head_pivot, 1.0) * head_skinning).xyz;
 		vec3 face = normalize((vec4(0.0, 0.0, 1.0, 0.0) * head_skinning).xyz);

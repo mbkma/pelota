@@ -5,10 +5,12 @@ extends MarginContainer
 @onready var _controls: Dictionary[UiSettings.Element, OptionControl] = {
 	UiSettings.Element.STROKE_INDICATOR: %StrokeIndicatorControl,
 	UiSettings.Element.AIM_MARKER: %AimMarkerControl,
+	UiSettings.Element.AI_AIM_MARKER: %AiAimMarkerControl,
 	UiSettings.Element.POSITION_MARKER: %PositionMarkerControl,
 	UiSettings.Element.SHOT_RATING: %ShotRatingControl,
 	UiSettings.Element.SCORE_PANEL: %ScorePanelControl,
 	UiSettings.Element.PLAYER_STATUS: %PlayerStatusControl,
+	UiSettings.Element.AI_PLAYER_STATUS: %AiPlayerStatusControl,
 }
 
 

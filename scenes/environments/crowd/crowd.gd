@@ -74,6 +74,13 @@ const LOOK_FOLLOW_RATE: float = 10.0
 					row.places_changed.connect(_seat_crew)
 ## Whether the crowd plays its idle ambience (off where other music plays, e.g. menus)
 @export var play_ambience: bool = true
+## Share of the spectators kept on top of the crowd's detail, e.g. for a background where a thin
+## crowd is enough
+@export_range(0.0, 1.0, 0.05) var density_scale: float = 1.0:
+	set(value):
+		density_scale = value
+		if is_node_ready():
+			_seat_spectators()
 @export var detail: Detail = Detail.HIGH:
 	set(value):
 		var reseat: bool = DETAIL_DENSITY[value] != DETAIL_DENSITY[detail]
@@ -174,7 +181,7 @@ func _seat_spectators() -> void:
 	for block in _blocks:
 		block.free()
 	_blocks.clear()
-	var occupancy: float = spectators.occupancy * DETAIL_DENSITY[detail]
+	var occupancy: float = spectators.occupancy * DETAIL_DENSITY[detail] * density_scale
 	for i in seating.sections.size():
 		var blocks: Array[PackedVector4Array] = _split_into_blocks(seating.sections[i])
 		for j in blocks.size():

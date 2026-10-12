@@ -18,6 +18,5 @@ extends Resource
 ## "Three, one", the leader's name follows), and the ties ("2-2" is "Two all")
 @export var tiebreak_scores: Dictionary[String, AudioStream] = {}
 @export var let: AudioStream
-## Electronic line calls: a serve out, and a rally ball out
+## Electronic line call: a serve or a rally ball out
 @export var fault: AudioStream
-@export var out: AudioStream

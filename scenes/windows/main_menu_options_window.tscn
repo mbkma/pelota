@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://crndfbb22ri4s" path="res://addons/maaacks_game_template/base/nodes/windows/overlaid_window_scene_container.tscn" id="1_miy0a"]
 [ext_resource type="PackedScene" uid="uid://dwyoafhyv8ci7" path="res://scenes/menus/options_menu/master_options_menu_with_tabs.tscn" id="2_mljqd"]
+[ext_resource type="Script" path="res://scenes/windows/options_window.gd" id="options_window_script"]
 
 [node name="MainMenuOptionsOverlaidWindow" unique_id=1787637973 instance=ExtResource("1_miy0a")]
+script = ExtResource("options_window_script")
 anchors_preset = 15
 anchor_left = 0.0
 anchor_top = 0.0

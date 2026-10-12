@@ -11,6 +11,16 @@ Author: [Name]()
 Source: [Domain : webpage.html]()  
 License: [License]()
 
+#### Music
+Author: Infraction  
+Source: [YouTube: Infraction - No Copyright Music](https://www.youtube.com/@InfractionMusic)  
+License: Copyright free, see the channel's terms
+
+#### UI Sounds
+Author: Kenney Vleugels  
+Source: [kenney.nl](https://www.kenney.nl)  
+License: CC0 (UI SFX Set)
+
 #### Godot Engine Logo
 Author: Andrea Calabró  
 Source: [godotengine.org : press](https://godotengine.org/press/)  

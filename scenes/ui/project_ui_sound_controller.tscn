@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://cc37235kj4384" path="res://addons/maaacks_game_template/base/nodes/autoloads/ui_sound_controller/project_ui_sound_controller.tscn" id="1_base"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/rollover3.wav" id="2_hover"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/rollover1.wav" id="3_focus"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/click1.wav" id="4_press"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/switch3.wav" id="5_tab"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/mouseclick1.wav" id="6_drag_start"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/mouserelease1.wav" id="7_drag_end"]
+[ext_resource type="AudioStream" path="res://assets/sounds/effects/UI_SFX_Set/click3.wav" id="8_item"]
+[ext_resource type="Script" path="res://scenes/ui/project_ui_sound_controller.gd" id="9_script"]
+
+[node name="ProjectUISoundController" instance=ExtResource("1_base")]
+script = ExtResource("9_script")
+volumes_db = {
+&"button_hovered": 10.0,
+&"button_focused": 12.0,
+&"button_pressed": 10.0,
+&"tab_hovered": 10.0,
+&"tab_changed": -3.0,
+&"slider_hovered": 10.0,
+&"slider_focused": 12.0,
+&"slider_drag_started": 20.0,
+&"slider_drag_ended": 21.0,
+&"item_list_selected": -1.0,
+&"item_list_activated": 10.0
+}
+button_hovered = ExtResource("2_hover")
+button_focused = ExtResource("3_focus")
+button_pressed = ExtResource("4_press")
+tab_hovered = ExtResource("2_hover")
+tab_changed = ExtResource("5_tab")
+slider_hovered = ExtResource("2_hover")
+slider_focused = ExtResource("3_focus")
+slider_drag_started = ExtResource("6_drag_start")
+slider_drag_ended = ExtResource("7_drag_end")
+item_list_selected = ExtResource("8_item")
+item_list_activated = ExtResource("4_press")

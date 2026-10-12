@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/fault.ogg-555e5a55e82088ca13d3937cdc0ab956.og
 [params]
 
 loop=false
-loop_offset=0
-bpm=0
+loop_offset=0.0
+bpm=0.0
 beat_count=0
 bar_beats=4

@@ -24,7 +24,7 @@ const MAX_FPS: StringName = &"MaxFps"
 const DEFAULT_PRESET: Preset = Preset.HIGH
 ## Value of each setting per preset (low, medium, high, ultra)
 const PRESET_VALUES: Dictionary[StringName, Array] = {
-	RENDER_SCALE: [0.75, 1.0, 1.0, 1.0],
+	RENDER_SCALE: [1.0, 1.0, 1.0, 1.0],
 	# Without MSAA the far court lines (thinner than a pixel) break up, so all presets keep it.
 	MSAA: [Viewport.MSAA_2X, Viewport.MSAA_2X, Viewport.MSAA_4X, Viewport.MSAA_8X],
 	SCREEN_SPACE_AA:

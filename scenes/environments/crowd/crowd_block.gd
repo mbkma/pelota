@@ -6,8 +6,9 @@ extends Node3D
 ## character. The level of detail is picked per block, by the distance to its nearest spectator,
 ## so blocks are kept to a few rows (see Crowd).
 
-## Seconds over which the spectators of a cheer get up, so they do not all move at once
-const CHEER_SPREAD: float = 0.4
+## Longest a spectator takes (s) to react to a point: most react at once, a few later, so they
+## do not all move at once
+const CHEER_REACTION_DELAY: float = 1.2
 ## Floats per spectator in a MultiMesh buffer: the transform's three rows, then the custom data
 const INSTANCE_FLOATS: int = 16
 const CUSTOM_OFFSET: int = 12
@@ -63,9 +64,9 @@ func set_lod_bias(bias: float) -> void:
 		instances.lod_bias = bias
 
 
-## Lets about `share` (0 to 1) of the spectators cheer, starting at `time` (s of the crowd's
-## clock, see Crowd). Spectators still cheering finish their cheer: restarting it would make
-## them jump.
+## Lets about `share` (0 to 1) of the spectators cheer, each a random cheer, reacting from `time`
+## (s of the crowd's clock, see Crowd) on. Spectators still cheering finish their cheer:
+## restarting it would make them jump.
 func cheer(share: float, time: float) -> void:
 	var cheer_clips: Array = Array(CrowdCharacter.CHEER_CLIPS)
 	for i in _multimeshes.size():
@@ -76,11 +77,13 @@ func cheer(share: float, time: float) -> void:
 			if randf() >= share:
 				continue
 			var custom: int = instance * INSTANCE_FLOATS + CUSTOM_OFFSET
-			var cheer_clip: float = buffer[custom + 1]
-			if cheer_clip >= 0.0 and time < buffer[custom + 2] + clip_lengths[int(cheer_clip)]:
-				continue
+			var cheer_clip: int = int(buffer[custom + 1])
+			if cheer_clip >= 0:
+				var tempo: float = CrowdCharacter.cheer_tempo(buffer[custom + 3])
+				if time < buffer[custom + 2] + clip_lengths[cheer_clip] / tempo:
+					continue
 			buffer[custom + 1] = cheer_clips.pick_random()
-			buffer[custom + 2] = time + randf() * CHEER_SPREAD
+			buffer[custom + 2] = time + pow(randf(), 2.0) * CHEER_REACTION_DELAY
 			changed = true
 		if changed:
 			_multimeshes[i].buffer = buffer

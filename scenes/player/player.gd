@@ -851,9 +851,12 @@ func _update_controller_ui() -> void:
 		ideal_position_marker.set_quality(positioning_quality(offset.length()))
 
 	var aim_position: Variant = controller.get_aim_marker_position()
-	ball_aim_marker.visible = (
-		aim_position != null and UiSettings.is_shown(UiSettings.Element.AIM_MARKER)
+	var aim_element: UiSettings.Element = (
+		UiSettings.Element.AIM_MARKER
+		if controller is HumanController
+		else UiSettings.Element.AI_AIM_MARKER
 	)
+	ball_aim_marker.visible = aim_position != null and UiSettings.is_shown(aim_element)
 	if aim_position != null:
 		ball_aim_marker.global_position = _on_court(aim_position)
 		ball_aim_marker.set_radius(controller.get_aim_marker_radius())

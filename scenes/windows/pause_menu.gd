@@ -12,6 +12,9 @@ extends OverlaidWindow
 @export var menu_container_node_path: NodePath = ^".."
 
 var open_window: Node
+## Releasing ui_cancel closes the menu or its window only after its press reached the menu: the
+## press that closes an open dropdown list does not.
+var _cancel_press := UiCancelPress.new()
 
 @onready
 var restart_confirmation: ConfirmationOverlaidWindow = get_node(restart_confirmation_node_path)
@@ -77,6 +80,9 @@ func _load_and_show_menu(scene: PackedScene) -> void:
 ## is open.
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint():
+		return
+	if _cancel_press.is_unpaired_release(event):
+		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed(&"pause"):
 		if not visible:

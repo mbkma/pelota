@@ -1,5 +1,5 @@
 ## Corner panel showing a player's stamina, pressure and confidence, when turned on in the UI
-## settings.
+## settings (separately for human and AI players).
 class_name PlayerStatusPanel
 extends PanelContainer
 
@@ -20,7 +20,12 @@ func _ready() -> void:
 
 
 func _apply_ui_settings() -> void:
-	visible = UiSettings.is_shown(UiSettings.Element.PLAYER_STATUS)
+	var element: UiSettings.Element = (
+		UiSettings.Element.PLAYER_STATUS
+		if player.controller is HumanController
+		else UiSettings.Element.AI_PLAYER_STATUS
+	)
+	visible = UiSettings.is_shown(element)
 
 
 func _process(_delta: float) -> void:

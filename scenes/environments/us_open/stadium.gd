@@ -78,12 +78,26 @@ func aim_ball_camera(target: Node3D) -> void:
 ## show the player's racket, the bag is of its brand.
 func show_bench_equipment(players: Array[Player]) -> void:
 	for i in players.size():
-		var design: RacketDesign = players[i].player_data.racket
-		for prop in _benches[i].get_children():
-			if prop is Racket:
-				(prop as Racket).show_design(design)
-			elif prop is TennisBag:
-				(prop as TennisBag).brand = design.brand
+		_equip_bench(_benches[i], players[i].player_data.racket)
+
+
+## Gives each bench the racket design of a random player, the spare rackets and the bag of a bench
+## sharing its brand, e.g. for a stadium without a match.
+func show_random_bench_equipment() -> void:
+	var designs: Array[RacketDesign] = []
+	for player in GlobalGameData.get_players():
+		designs.append(player.racket)
+	for bench in _benches:
+		_equip_bench(bench, designs.pick_random())
+
+
+## Shows `design` on the spare rackets of `bench` and the brand of it on its bag.
+func _equip_bench(bench: Node3D, design: RacketDesign) -> void:
+	for prop in bench.get_children():
+		if prop is Racket:
+			(prop as Racket).show_design(design)
+		elif prop is TennisBag:
+			(prop as TennisBag).brand = design.brand
 
 
 func start_serve_clocks() -> void:

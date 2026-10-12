@@ -5,6 +5,7 @@
 
 [node name="Opening" unique_id=1930105641 instance=ExtResource("1_ke3tw")]
 images = Array[Texture2D]([ExtResource("2_yhkvs")])
+show_loading_screen = true
 
 [node name="BackgroundMusicPlayer" parent="." index="0" unique_id=1317385298]
 bus = &"Master"

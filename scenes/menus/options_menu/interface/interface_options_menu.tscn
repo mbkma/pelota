@@ -36,6 +36,14 @@ option_section = 4
 key = "ShowAimMarker"
 section = "GameSettings"
 
+[node name="AiAimMarkerControl" parent="VBoxContainer" instance=ExtResource("3_toggle")]
+unique_name_in_owner = true
+layout_mode = 2
+option_name = "AI Aim Marker"
+option_section = 4
+key = "ShowAiAimMarker"
+section = "GameSettings"
+
 [node name="PositionMarkerControl" parent="VBoxContainer" instance=ExtResource("3_toggle")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -66,4 +74,12 @@ layout_mode = 2
 option_name = "Player Status"
 option_section = 4
 key = "ShowPlayerStatus"
+section = "GameSettings"
+
+[node name="AiPlayerStatusControl" parent="VBoxContainer" instance=ExtResource("3_toggle")]
+unique_name_in_owner = true
+layout_mode = 2
+option_name = "AI Player Status"
+option_section = 4
+key = "ShowAiPlayerStatus"
 section = "GameSettings"

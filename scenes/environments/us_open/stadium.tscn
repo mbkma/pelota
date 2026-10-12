@@ -8,22 +8,42 @@
 [ext_resource type="PackedScene" uid="uid://dyg40a5hhkqva" path="res://scenes/court/court.tscn" id="5_2qn74"]
 [ext_resource type="Script" uid="uid://bn6tlcpxi7l1t" path="res://scenes/environments/us_open/cameras/free_look_camera.gd" id="5_tvjv8"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/serve_clock.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/environments/us_open/rolex_clock.tscn" id="6_rolex"]
+[ext_resource type="PackedScene" uid="uid://dks1w680ij0jk" path="res://scenes/environments/us_open/rolex_clock.tscn" id="6_rolex"]
 [ext_resource type="Script" uid="uid://b0cpbi4vts8nb" path="res://scenes/environments/us_open/cameras/tv_camera.gd" id="6_tvcam"]
 [ext_resource type="Script" uid="uid://cwhjwue5t16nc" path="res://scenes/environments/us_open/look_at.gd" id="7_af67j"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/cameras/broadcast_camera.tscn" id="8_camera"]
 [ext_resource type="Script" uid="uid://by6vagmrxlde0" path="res://scenes/environments/us_open/cameras/courtside_camera.gd" id="9_courtside"]
-
-[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/bench_mat.tscn" id="p_mat"]
+[ext_resource type="Script" uid="uid://djcugw2c1c2j3" path="res://scenes/environments/us_open/cameras/aerial_camera.gd" id="c_aerial"]
+[ext_resource type="Script" uid="uid://b114k3iwcqat" path="res://scenes/environments/us_open/cameras/player_close_up_camera.gd" id="c_close_up"]
+[ext_resource type="Script" uid="uid://ccihr5b5gqvfu" path="res://scenes/environments/us_open/cameras/crowd_shot_camera.gd" id="c_crowd"]
+[ext_resource type="Resource" path="res://scenes/environments/us_open/arthur_ashe/seating.res" id="c_seating"]
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/tennis_bag.tscn" id="p_bag"]
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/water_bottle.tscn" id="p_bottle"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/bench_box.tscn" id="p_box"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/bench_chair.tscn" id="p_chair"]
 [ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/hanging_towel.tscn" id="p_hanging"]
-[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/towel.tscn" id="p_towel"]
-[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/water_bottle.tscn" id="p_bottle"]
-[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/tennis_bag.tscn" id="p_bag"]
-[ext_resource type="Script" path="res://scenes/environments/us_open/props/prop_row.gd" id="p_row"]
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/bench_mat.tscn" id="p_mat"]
 [ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/props/meshes/photographer.res" id="p_photographer_mesh"]
+[ext_resource type="Script" uid="uid://g0qefmhonlf0" path="res://scenes/environments/us_open/props/prop_row.gd" id="p_row"]
 [ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/props/meshes/operator_stool.res" id="p_stool_mesh"]
+[ext_resource type="PackedScene" path="res://scenes/environments/us_open/props/towel.tscn" id="p_towel"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8q41"]
+albedo_color = Color(0.07, 0.07, 0.08, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wna5"]
+albedo_color = Color(0.92, 0.92, 0.92, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6kl1q"]
+albedo_color = Color(0.78, 0.07, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a2u7u"]
+albedo_color = Color(0.92, 0.92, 0.92, 1)
+roughness = 0.6
+
 [sub_resource type="BoxShape3D" id="1"]
 size = Vector3(38.3846, 2, 46.8104)
 
@@ -36,278 +56,286 @@ size = Vector3(2, 12.186, 38.508)
 [node name="Stadium" type="Node3D" unique_id=1375206359]
 script = ExtResource("3")
 
-[node name="Courtside" type="Node3D" parent="."]
+[node name="Courtside" type="Node3D" parent="." unique_id=532835481]
 
-[node name="Player1Bench" type="Node3D" parent="Courtside"]
+[node name="Player1Bench" type="Node3D" parent="Courtside" unique_id=1847627363]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -7.55, 0, 2.35)
 
-[node name="Mat" parent="Courtside/Player1Bench" instance=ExtResource("p_mat")]
+[node name="Mat" parent="Courtside/Player1Bench" unique_id=1696004678 instance=ExtResource("p_mat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35)
 
-[node name="Box" parent="Courtside/Player1Bench" instance=ExtResource("p_box")]
+[node name="Box" parent="Courtside/Player1Bench" unique_id=378034582 instance=ExtResource("p_box")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0, -0.27)
 
-[node name="Chair" parent="Courtside/Player1Bench" instance=ExtResource("p_chair")]
+[node name="Chair" parent="Courtside/Player1Bench" unique_id=1255352299 instance=ExtResource("p_chair")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -0.3)
 
-[node name="HangingTowel" parent="Courtside/Player1Bench" instance=ExtResource("p_hanging")]
+[node name="HangingTowel" parent="Courtside/Player1Bench" unique_id=1335017407 instance=ExtResource("p_hanging")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 1.1, -0.6)
 
-[node name="Towel" parent="Courtside/Player1Bench" instance=ExtResource("p_towel")]
+[node name="Towel" parent="Courtside/Player1Bench" unique_id=1617654017 instance=ExtResource("p_towel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.46, -0.27)
 
-[node name="Towel2" parent="Courtside/Player1Bench" instance=ExtResource("p_towel")]
+[node name="Towel2" parent="Courtside/Player1Bench" unique_id=618901895 instance=ExtResource("p_towel")]
 transform = Transform3D(0.988771, 0, 0.149438, 0, 1, 0, -0.149438, 0, 0.988771, -1.25, 0.46, -0.27)
 
-[node name="WaterBottle" parent="Courtside/Player1Bench" instance=ExtResource("p_bottle")]
+[node name="WaterBottle" parent="Courtside/Player1Bench" unique_id=1506963207 instance=ExtResource("p_bottle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38, 0.012, -0.15)
 
-[node name="WaterBottle2" parent="Courtside/Player1Bench" instance=ExtResource("p_bottle")]
+[node name="WaterBottle2" parent="Courtside/Player1Bench" unique_id=817476097 instance=ExtResource("p_bottle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46, 0.012, -0.05)
 
-[node name="WaterBottle3" parent="Courtside/Player1Bench" instance=ExtResource("p_bottle")]
+[node name="WaterBottle3" parent="Courtside/Player1Bench" unique_id=1144077634 instance=ExtResource("p_bottle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.46, -0.15)
 
-[node name="TennisBag" parent="Courtside/Player1Bench" instance=ExtResource("p_bag")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.012, -0.82)
+[node name="TennisBag" parent="Courtside/Player1Bench" unique_id=882284073 instance=ExtResource("p_bag")]
+transform = Transform3D(0.85665274, 0, -0.51589346, 0, 1, 0, 0.51589346, 0, 0.85665274, -1.1136291, 0.53240067, -0.29510784)
+surface_material_override/0 = SubResource("StandardMaterial3D_w8q41")
+surface_material_override/1 = SubResource("StandardMaterial3D_0wna5")
 
-[node name="Racket1" parent="Courtside/Player1Bench" instance=ExtResource("2_racket")]
-transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968293, 0.979266, -0.158997, 0.294125, 0.06018)
+[node name="Racket1" parent="Courtside/Player1Bench" unique_id=148243648 instance=ExtResource("2_racket")]
+transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968293, 0.979266, -0.15899706, 0.294125, 0.083176136)
 
-[node name="Racket2" parent="Courtside/Player1Bench" instance=ExtResource("2_racket")]
-transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968293, 0.979266, -0.443614, 0.294125, 0.06018)
+[node name="Racket2" parent="Courtside/Player1Bench" unique_id=188034528 instance=ExtResource("2_racket")]
+transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968293, 0.979266, -0.443614, 0.294125, 0.09452963)
 
-[node name="Player2Bench" type="Node3D" parent="Courtside"]
+[node name="Player2Bench" type="Node3D" parent="Courtside" unique_id=1279010953]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -7.55, 0, -2.35)
 
-[node name="Mat" parent="Courtside/Player2Bench" instance=ExtResource("p_mat")]
+[node name="Mat" parent="Courtside/Player2Bench" unique_id=1332314467 instance=ExtResource("p_mat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35)
 
-[node name="Box" parent="Courtside/Player2Bench" instance=ExtResource("p_box")]
+[node name="Box" parent="Courtside/Player2Bench" unique_id=1961269059 instance=ExtResource("p_box")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0, -0.27)
 
-[node name="Chair" parent="Courtside/Player2Bench" instance=ExtResource("p_chair")]
+[node name="Chair" parent="Courtside/Player2Bench" unique_id=1785200352 instance=ExtResource("p_chair")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0, -0.3)
 
-[node name="HangingTowel" parent="Courtside/Player2Bench" instance=ExtResource("p_hanging")]
+[node name="HangingTowel" parent="Courtside/Player2Bench" unique_id=1285945710 instance=ExtResource("p_hanging")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 1.1, -0.6)
 
-[node name="Towel" parent="Courtside/Player2Bench" instance=ExtResource("p_towel")]
+[node name="Towel" parent="Courtside/Player2Bench" unique_id=1978010590 instance=ExtResource("p_towel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.46, -0.27)
 
-[node name="Towel2" parent="Courtside/Player2Bench" instance=ExtResource("p_towel")]
+[node name="Towel2" parent="Courtside/Player2Bench" unique_id=1407617726 instance=ExtResource("p_towel")]
 transform = Transform3D(0.988771, 0, -0.149438, 0, 1, 0, 0.149438, 0, 0.988771, 1.25, 0.46, -0.27)
 
-[node name="WaterBottle" parent="Courtside/Player2Bench" instance=ExtResource("p_bottle")]
+[node name="WaterBottle" parent="Courtside/Player2Bench" unique_id=283959717 instance=ExtResource("p_bottle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.38, 0.012, -0.15)
 
-[node name="WaterBottle2" parent="Courtside/Player2Bench" instance=ExtResource("p_bottle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.46, 0.012, -0.05)
+[node name="WaterBottle2" parent="Courtside/Player2Bench" unique_id=1227268986 instance=ExtResource("p_bottle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.46, 0.012, 0.24564123)
 
-[node name="WaterBottle3" parent="Courtside/Player2Bench" instance=ExtResource("p_bottle")]
+[node name="WaterBottle3" parent="Courtside/Player2Bench" unique_id=369731609 instance=ExtResource("p_bottle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.46, -0.15)
 
-[node name="TennisBag" parent="Courtside/Player2Bench" instance=ExtResource("p_bag")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.012, -0.82)
+[node name="TennisBag" parent="Courtside/Player2Bench" unique_id=1319553045 instance=ExtResource("p_bag")]
+transform = Transform3D(0.983824, 0, 0.17913769, 0, 1, 0, -0.17913769, 0, 0.983824, 1.2446275, 0.52806574, -0.26740646)
+surface_material_override/0 = SubResource("StandardMaterial3D_6kl1q")
+surface_material_override/1 = SubResource("StandardMaterial3D_a2u7u")
 brand = 2
 
-[node name="Racket1" parent="Courtside/Player2Bench" instance=ExtResource("2_racket")]
-transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968292, 0.979266, 0.308981, 0.294125, 0.0581807)
+[node name="Racket1" parent="Courtside/Player2Bench" unique_id=1828059495 instance=ExtResource("2_racket")]
+transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968292, 0.979266, 0.30898094, 0.294125, 0.08161545)
 
-[node name="Racket2" parent="Courtside/Player2Bench" instance=ExtResource("2_racket")]
-transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.298737, -0.326117, 0.896886, -0.841164, 0.353933, 0.40887, 0.688759, 0.423486, -0.297475)
+[node name="Racket2" parent="Courtside/Player2Bench" unique_id=1125385174 instance=ExtResource("2_racket")]
+transform = Transform3D(-0.9123723, -0.3732143, 0.16818997, 0.29873696, -0.32611698, 0.89688593, -0.2798814, 0.86853784, 0.40903264, 0.4228871, 0.570364, -0.29747486)
 
-[node name="Photographers" type="Node3D" parent="Courtside"]
+[node name="Photographers" type="Node3D" parent="Courtside" unique_id=792675761]
 script = ExtResource("p_row")
 prop_mesh = ExtResource("p_photographer_mesh")
 
-[node name="Place0" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place0" type="Marker3D" parent="Courtside/Photographers" unique_id=214610071]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 3.12)
 
-[node name="Place1" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place1" type="Marker3D" parent="Courtside/Photographers" unique_id=1229393749]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 3.84)
 
-[node name="Place2" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place2" type="Marker3D" parent="Courtside/Photographers" unique_id=756918588]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 4.56)
 
-[node name="Place3" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place3" type="Marker3D" parent="Courtside/Photographers" unique_id=1896614083]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 5.28)
 
-[node name="Place4" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place4" type="Marker3D" parent="Courtside/Photographers" unique_id=1237818020]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 6)
 
-[node name="Place5" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place5" type="Marker3D" parent="Courtside/Photographers" unique_id=1704345343]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 6.72)
 
-[node name="Place6" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place6" type="Marker3D" parent="Courtside/Photographers" unique_id=560402038]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 7.44)
 
-[node name="Place7" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place7" type="Marker3D" parent="Courtside/Photographers" unique_id=1853002341]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 8.16)
 
-[node name="Place8" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place8" type="Marker3D" parent="Courtside/Photographers" unique_id=974392326]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 8.88)
 
-[node name="Place9" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place9" type="Marker3D" parent="Courtside/Photographers" unique_id=1906775509]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 9.6)
 
-[node name="Place10" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place10" type="Marker3D" parent="Courtside/Photographers" unique_id=1473803511]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 10.32)
 
-[node name="Place11" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place11" type="Marker3D" parent="Courtside/Photographers" unique_id=56455243]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 11.04)
 
-[node name="Place12" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place12" type="Marker3D" parent="Courtside/Photographers" unique_id=416750592]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 11.76)
 
-[node name="Place13" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place13" type="Marker3D" parent="Courtside/Photographers" unique_id=1179929261]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 12.48)
 
-[node name="Place14" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place14" type="Marker3D" parent="Courtside/Photographers" unique_id=925594533]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 13.2)
 
-[node name="Place15" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place15" type="Marker3D" parent="Courtside/Photographers" unique_id=721312135]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 13.92)
 
-[node name="Place16" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place16" type="Marker3D" parent="Courtside/Photographers" unique_id=72948888]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 14.64)
 
-[node name="Place17" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place17" type="Marker3D" parent="Courtside/Photographers" unique_id=597273648]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 15.36)
 
-[node name="Place18" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place18" type="Marker3D" parent="Courtside/Photographers" unique_id=748195822]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 16.08)
 
-[node name="Place19" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place19" type="Marker3D" parent="Courtside/Photographers" unique_id=925289141]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 16.8)
 
-[node name="Place20" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place20" type="Marker3D" parent="Courtside/Photographers" unique_id=897747684]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 17.52)
 
-[node name="Place21" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place21" type="Marker3D" parent="Courtside/Photographers" unique_id=459376884]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 18.24)
 
-[node name="Place22" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place22" type="Marker3D" parent="Courtside/Photographers" unique_id=1340939926]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, 18.96)
 
-[node name="Place23" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place23" type="Marker3D" parent="Courtside/Photographers" unique_id=754328317]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -3.12)
 
-[node name="Place24" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place24" type="Marker3D" parent="Courtside/Photographers" unique_id=630359258]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -3.84)
 
-[node name="Place25" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place25" type="Marker3D" parent="Courtside/Photographers" unique_id=99872639]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -4.56)
 
-[node name="Place26" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place26" type="Marker3D" parent="Courtside/Photographers" unique_id=1897413574]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -5.28)
 
-[node name="Place27" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place27" type="Marker3D" parent="Courtside/Photographers" unique_id=22346561]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -6)
 
-[node name="Place28" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place28" type="Marker3D" parent="Courtside/Photographers" unique_id=435232621]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -6.72)
 
-[node name="Place29" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place29" type="Marker3D" parent="Courtside/Photographers" unique_id=574142545]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -7.44)
 
-[node name="Place30" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place30" type="Marker3D" parent="Courtside/Photographers" unique_id=692443456]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -8.16)
 
-[node name="Place31" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place31" type="Marker3D" parent="Courtside/Photographers" unique_id=1202295440]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -8.88)
 
-[node name="Place32" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place32" type="Marker3D" parent="Courtside/Photographers" unique_id=348107505]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -9.6)
 
-[node name="Place33" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place33" type="Marker3D" parent="Courtside/Photographers" unique_id=51749340]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -10.32)
 
-[node name="Place34" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place34" type="Marker3D" parent="Courtside/Photographers" unique_id=943962215]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -11.04)
 
-[node name="Place35" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place35" type="Marker3D" parent="Courtside/Photographers" unique_id=1502325641]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -11.76)
 
-[node name="Place36" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place36" type="Marker3D" parent="Courtside/Photographers" unique_id=1598577422]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -12.48)
 
-[node name="Place37" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place37" type="Marker3D" parent="Courtside/Photographers" unique_id=484342594]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -13.2)
 
-[node name="Place38" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place38" type="Marker3D" parent="Courtside/Photographers" unique_id=2075760912]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -13.92)
 
-[node name="Place39" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place39" type="Marker3D" parent="Courtside/Photographers" unique_id=1694516397]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -14.64)
 
-[node name="Place40" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place40" type="Marker3D" parent="Courtside/Photographers" unique_id=291722287]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -15.36)
 
-[node name="Place41" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place41" type="Marker3D" parent="Courtside/Photographers" unique_id=606035564]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -16.08)
 
-[node name="Place42" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place42" type="Marker3D" parent="Courtside/Photographers" unique_id=86094094]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -16.8)
 
-[node name="Place43" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place43" type="Marker3D" parent="Courtside/Photographers" unique_id=34340772]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -17.52)
 
-[node name="Place44" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place44" type="Marker3D" parent="Courtside/Photographers" unique_id=308936638]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -18.24)
 
-[node name="Place45" type="Marker3D" parent="Courtside/Photographers"]
+[node name="Place45" type="Marker3D" parent="Courtside/Photographers" unique_id=1842520289]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.1, 0, -18.96)
 
-[node name="CameraOperators" type="Node3D" parent="Courtside"]
+[node name="CameraOperators" type="Node3D" parent="Courtside" unique_id=2105310660]
 script = ExtResource("p_row")
 prop_mesh = ExtResource("p_stool_mesh")
 
-[node name="Place0" type="Marker3D" parent="Courtside/CameraOperators"]
+[node name="Place0" type="Marker3D" parent="Courtside/CameraOperators" unique_id=416202631]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.55, 0, -1.5)
 
-[node name="Place1" type="Marker3D" parent="Courtside/CameraOperators"]
+[node name="Place1" type="Marker3D" parent="Courtside/CameraOperators" unique_id=256049128]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.55, 0, 0)
 
-[node name="Place2" type="Marker3D" parent="Courtside/CameraOperators"]
+[node name="Place2" type="Marker3D" parent="Courtside/CameraOperators" unique_id=1160234246]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 12.55, 0, 1.5)
 
-[node name="PlatformCameras" type="Node3D" parent="."]
+[node name="PlatformCameras" type="Node3D" parent="." unique_id=1399413648]
 
-[node name="Camera0" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera0" parent="PlatformCameras" unique_id=732527013 instance=ExtResource("8_camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 5.35, 29.47)
 
-[node name="Camera1" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera1" parent="PlatformCameras" unique_id=1445252367 instance=ExtResource("8_camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 5.35, 29.47)
 
-[node name="Camera2" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera2" parent="PlatformCameras" unique_id=2070574923 instance=ExtResource("8_camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 8.2, 32.96)
 
-[node name="Camera3" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera3" parent="PlatformCameras" unique_id=1916649922 instance=ExtResource("8_camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 8.2, 32.96)
 
-[node name="Camera4" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera4" parent="PlatformCameras" unique_id=541886470 instance=ExtResource("8_camera")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.4, 5.35, -29.47)
 
-[node name="Camera5" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera5" parent="PlatformCameras" unique_id=1278613039 instance=ExtResource("8_camera")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.4, 5.35, -29.47)
 
-[node name="Camera6" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera6" parent="PlatformCameras" unique_id=17066377 instance=ExtResource("8_camera")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.4, 8.2, -32.96)
 
-[node name="Camera7" parent="PlatformCameras" instance=ExtResource("8_camera")]
+[node name="Camera7" parent="PlatformCameras" unique_id=884469819 instance=ExtResource("8_camera")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.4, 8.2, -32.96)
 
 [node name="ArthurAshe" parent="." unique_id=492985688 instance=ExtResource("2_hi2re")]
 
 [node name="Court" parent="." unique_id=412000164 instance=ExtResource("5_2qn74")]
 
-[node name="Cameras" type="Node3D" parent="." unique_id=1668762139 node_paths=PackedStringArray("cams", "active_cam", "front_player_cam", "back_player_cam")]
+[node name="Cameras" type="Node3D" parent="." unique_id=1668762139 node_paths=PackedStringArray("cams", "active_cam", "front_end_cams", "back_end_cams", "front_close_up_cam", "back_close_up_cam", "crowd_cam", "aerial_cam")]
 script = ExtResource("4_2gjwx")
 cams = [NodePath("FlyingCam"), NodePath("TopFront"), NodePath("TopBack"), NodePath("MiddleFront"), NodePath("MiddleBack"), NodePath("CourtSideFront"), NodePath("CourtSideBack"), NodePath("CameraTop")]
 active_cam = NodePath("TopFront")
-front_player_cam = NodePath("TopFront")
-back_player_cam = NodePath("TopBack")
+front_end_cams = [NodePath("TopFront"), NodePath("MiddleFront"), NodePath("CourtSideFront")]
+back_end_cams = [NodePath("TopBack"), NodePath("MiddleBack"), NodePath("CourtSideBack")]
+front_close_up_cam = NodePath("FrontCloseUp")
+back_close_up_cam = NodePath("BackCloseUp")
+crowd_cam = NodePath("CrowdShot")
+aerial_cam = NodePath("Aerial")
 
 [node name="FlyingCam" type="Camera3D" parent="Cameras" unique_id=994003878]
 transform = Transform3D(0.73468, 0.384394, -0.559005, 0.00282663, 0.822247, 0.569124, 0.678408, -0.419704, 0.603002, -19.984, 17.5928, 16.17)
@@ -352,6 +380,23 @@ script = ExtResource("9_courtside")
 [node name="CameraTop" type="Camera3D" parent="Cameras" unique_id=1099254777]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 20, 0)
 script = ExtResource("5_tvjv8")
+
+[node name="FrontCloseUp" type="Camera3D" parent="Cameras" unique_id=1820461733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.05, 0.95, 1.5)
+script = ExtResource("c_close_up")
+
+[node name="BackCloseUp" type="Camera3D" parent="Cameras" unique_id=1820461734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.05, 0.95, -1.5)
+script = ExtResource("c_close_up")
+
+[node name="CrowdShot" type="Camera3D" parent="Cameras" unique_id=1820461735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 1.7, -4.5)
+script = ExtResource("c_crowd")
+seating = ExtResource("c_seating")
+
+[node name="Aerial" type="Camera3D" parent="Cameras" unique_id=1820461736]
+fov = 40.0
+script = ExtResource("c_aerial")
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=1699210346 groups=["Ground"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -429,16 +474,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -13)
 [node name="ServeClocks" type="Node3D" parent="." unique_id=1993826580]
 
 [node name="ServeClock" parent="ServeClocks" unique_id=736676380 instance=ExtResource("6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.77, 2.12, -20.46)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.12, -20.46)
 
 [node name="ServeClock2" parent="ServeClocks" unique_id=1946983221 instance=ExtResource("6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.29, 2.12, -20.46)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.12, -20.46)
 
 [node name="ServeClock3" parent="ServeClocks" unique_id=799800393 instance=ExtResource("6")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.77, 2.12, 20.46)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 8, 2.12, 20.46)
 
 [node name="ServeClock4" parent="ServeClocks" unique_id=1309599702 instance=ExtResource("6")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.29, 2.12, 20.46)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -8, 2.12, 20.46)
 
 [node name="ServeClockTimer" type="Timer" parent="." unique_id=1386027715]
 one_shot = true

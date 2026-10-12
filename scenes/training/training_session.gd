@@ -40,7 +40,7 @@ func _ready() -> void:
 	player.session = self
 	player.ball_hit.connect(_on_player_ball_hit)
 	stadium.show_bench_equipment([player])
-	cameras.register_camera(player.first_person_camera)
+	cameras.register_player_view(player)
 	cameras.show_from_behind(player)
 	shot_result_label.text = ""
 

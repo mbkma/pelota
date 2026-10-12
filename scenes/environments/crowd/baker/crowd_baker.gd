@@ -10,7 +10,9 @@
 ## - marks how much each vertex turns with the head (UV2.y), so spectators can follow the ball;
 ## - generates levels of detail;
 ## - plays every clip on the retargeted skeleton and stores each bone's skinning matrix per frame
-##   (FRAME_RATE) in a float texture, which the crowd shader animates the vertices with.
+##   (FRAME_RATE) in a float texture, which the crowd shader animates the vertices with; the
+##   cheers are stored a second time mirrored (left and right swapped), so the spectators cheer
+##   in twice as many ways.
 class_name CrowdBaker
 extends SceneTree
 
@@ -26,10 +28,17 @@ enum Part {
 const SOURCE_DIR: String = "res://assets/models/crowd/source/"
 const OUTPUT_DIR: String = "res://scenes/environments/crowd/characters/"
 const CHARACTER_COUNT: int = 9
-## Clips in the order of CrowdCharacter.IDLE_CLIPS and CHEER_CLIPS
+## Source clips, baked in this order, then MIRRORED_CLIPS mirrored: together in the order of
+## CrowdCharacter.IDLE_CLIPS and CHEER_CLIPS
 const CLIPS: PackedStringArray = [
 	"sit_idle_1", "sit_idle_2", "sit_idle_3", "sit_cheer_1", "sit_cheer_2", "sit_cheer_3"
 ]
+## Clips of CLIPS baked a second time mirrored, after all of CLIPS
+const MIRRORED_CLIPS: PackedInt32Array = [3, 4, 5]
+## Mirrors the model's space: its left and right (X) swapped. The skeletons are symmetric in it.
+const MIRROR := Transform3D(
+	Vector3(-1.0, 0.0, 0.0), Vector3(0.0, 1.0, 0.0), Vector3(0.0, 0.0, 1.0), Vector3.ZERO
+)
 const SOURCE_ANIMATION: StringName = &"mixamo_com"
 const FRAME_RATE: float = 30.0
 ## Size (px) of a character's texture atlas, and the gap (px) kept around each texture in it
@@ -114,7 +123,7 @@ func _bake_character(source: String, clips: Array[Animation]) -> CrowdCharacter:
 	# could count a frame more and show the next clip's first frame.
 	var starts := PackedFloat32Array()
 	var frames := PackedFloat32Array()
-	for clip in clips:
+	for clip in _baked_clips(clips):
 		starts.append(_sum(frames))
 		frames.append(_frame_count(clip.length))
 	material.set_shader_parameter("clip_start", starts)
@@ -289,9 +298,9 @@ static func _contains_any(text: String, words: PackedStringArray) -> bool:
 	return false
 
 
-## Skinning matrix of every bone at every frame of every clip, three texels per bone (the rows of
-## its 3x4 matrix in the model's space), one texture row per frame. Fills the clip lengths of
-## `character`.
+## Skinning matrix of every bone at every frame of every clip, then of MIRRORED_CLIPS mirrored,
+## three texels per bone (the rows of its 3x4 matrix in the model's space), one texture row per
+## frame. Fills the clip lengths of `character`.
 func _bone_texture(
 	model: Node3D,
 	skeleton: Skeleton3D,
@@ -300,11 +309,8 @@ func _bone_texture(
 	character: CrowdCharacter
 ) -> ImageTexture:
 	var library := AnimationLibrary.new()
-	var total_frames: int = 0
 	for i in clips.size():
 		library.add_animation(CLIPS[i], clips[i])
-		character.clip_lengths.append(clips[i].length)
-		total_frames += _frame_count(clips[i].length)
 	var player := AnimationPlayer.new()
 	model.add_child(player)
 	player.root_node = player.get_path_to(model)
@@ -313,29 +319,82 @@ func _bone_texture(
 	var rest_inverse: Array[Transform3D] = []
 	for bone in skeleton.get_bone_count():
 		rest_inverse.append(skeleton.get_bone_global_rest(bone).affine_inverse())
-	var image := Image.create_empty(
-		skeleton.get_bone_count() * 3, total_frames, false, Image.FORMAT_RGBAF
-	)
-	var row: int = 0
+	# Skinning of each frame of each clip: per frame, one transform per bone
+	var clip_frames: Array[Array] = []
 	for i in clips.size():
+		var frames: Array[Array] = []
 		player.play(CLIPS[i])
 		for frame in _frame_count(clips[i].length):
 			skeleton.reset_bone_poses()
 			player.seek(frame / FRAME_RATE, true)
+			var skinning: Array[Transform3D] = []
 			for bone in skeleton.get_bone_count():
-				var skinning: Transform3D = (
-					to_model
-					* skeleton.get_bone_global_pose(bone)
-					* rest_inverse[bone]
-					* to_model.affine_inverse()
+				skinning.append(
+					(
+						to_model
+						* skeleton.get_bone_global_pose(bone)
+						* rest_inverse[bone]
+						* to_model.affine_inverse()
+					)
 				)
-				var basis: Basis = skinning.basis
-				var origin: Vector3 = skinning.origin
+			frames.append(skinning)
+		clip_frames.append(frames)
+
+	# A mirrored vertex moves as the mirror of its mirrored place on the mirrored bone.
+	var mirrored_bones: PackedInt32Array = _mirrored_bones(skeleton)
+	var baked: Array[Array] = clip_frames.duplicate()
+	for i in MIRRORED_CLIPS:
+		var frames: Array[Array] = []
+		for skinning: Array[Transform3D] in clip_frames[i]:
+			var mirrored: Array[Transform3D] = []
+			for bone in skinning.size():
+				mirrored.append(MIRROR * skinning[mirrored_bones[bone]] * MIRROR)
+			frames.append(mirrored)
+		baked.append(frames)
+	for clip in _baked_clips(clips):
+		character.clip_lengths.append(clip.length)
+
+	var total_frames: int = 0
+	for frames in baked:
+		total_frames += frames.size()
+	var image := Image.create_empty(
+		skeleton.get_bone_count() * 3, total_frames, false, Image.FORMAT_RGBAF
+	)
+	var row: int = 0
+	for frames in baked:
+		for skinning: Array[Transform3D] in frames:
+			for bone in skinning.size():
+				var basis: Basis = skinning[bone].basis
+				var origin: Vector3 = skinning[bone].origin
 				image.set_pixel(bone * 3, row, Color(basis.x.x, basis.y.x, basis.z.x, origin.x))
 				image.set_pixel(bone * 3 + 1, row, Color(basis.x.y, basis.y.y, basis.z.y, origin.y))
 				image.set_pixel(bone * 3 + 2, row, Color(basis.x.z, basis.y.z, basis.z.z, origin.z))
 			row += 1
 	return ImageTexture.create_from_image(image)
+
+
+## The source clips in the order they are baked: `clips` (in the order of CLIPS), then
+## MIRRORED_CLIPS.
+static func _baked_clips(clips: Array[Animation]) -> Array[Animation]:
+	var baked: Array[Animation] = clips.duplicate()
+	for i in MIRRORED_CLIPS:
+		baked.append(clips[i])
+	return baked
+
+
+## The bone on the other side of each bone of `skeleton` (Left and Right swapped in its name),
+## itself for the bones in the middle.
+static func _mirrored_bones(skeleton: Skeleton3D) -> PackedInt32Array:
+	var mirrored := PackedInt32Array()
+	for bone in skeleton.get_bone_count():
+		var bone_name: String = skeleton.get_bone_name(bone)
+		var other_name: String = (
+			bone_name.replace("Left", "<side>").replace("Right", "Left").replace("<side>", "Right")
+		)
+		var other: int = skeleton.find_bone(other_name)
+		assert(other != -1, "Bone %s has no mirrored bone %s" % [bone_name, other_name])
+		mirrored.append(other)
+	return mirrored
 
 
 static func _sum(values: PackedFloat32Array) -> float:
@@ -350,20 +409,21 @@ static func _frame_count(length: float) -> int:
 	return floori(length * FRAME_RATE) + 1
 
 
-## The textures of a character packed into one atlas: a grid of equal tiles.
+## The textures of a character packed into one atlas: a grid of equal tiles. The textures alone
+## give the colors and the cut-outs (hair, lashes): the albedo colors of the source materials are
+## left out, as most sources (Mixamo) carry their diffuse factor of 0.8 into it as a grey tint and
+## an opacity of 0.8, which would make the clothes and skin see-through.
 class _Atlas:
 	var _tiles: Dictionary[Texture2D, Rect2i] = {}
 	var _image: Image
 
 	func _init(mesh_instances: Array[MeshInstance3D]) -> void:
 		var textures: Array[Texture2D] = []
-		var colors: Dictionary[Texture2D, Color] = {}
 		for mesh_instance in mesh_instances:
 			for surface in mesh_instance.mesh.get_surface_count():
-				var material: StandardMaterial3D = _material(mesh_instance, surface)
-				if not textures.has(material.albedo_texture):
-					textures.append(material.albedo_texture)
-					colors[material.albedo_texture] = material.albedo_color
+				var texture: Texture2D = surface_texture(mesh_instance, surface)
+				if not textures.has(texture):
+					textures.append(texture)
 		var grid: int = ceili(sqrt(textures.size()))
 		var tile: int = floori(float(ATLAS_SIZE) / grid)
 		_image = Image.create_empty(ATLAS_SIZE, ATLAS_SIZE, false, Image.FORMAT_RGBA8)
@@ -378,10 +438,6 @@ class _Atlas:
 			source.decompress()
 			source.convert(Image.FORMAT_RGBA8)
 			source.resize(cell.size.x, cell.size.y, Image.INTERPOLATE_LANCZOS)
-			var color: Color = colors[textures[i]]
-			for y in cell.size.y:
-				for x in cell.size.x:
-					source.set_pixel(x, y, source.get_pixel(x, y) * color)
 			_image.blit_rect(source, Rect2i(Vector2i.ZERO, cell.size), cell.position)
 			_tiles[textures[i]] = cell
 

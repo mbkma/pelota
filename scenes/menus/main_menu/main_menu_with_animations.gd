@@ -1,18 +1,21 @@
 extends MainMenu
 ## Main menu extension: animates the title and menu fading in (the player can skip it with
-## any input), starts the music, opens the how-to-play screen and the player select before
-## a new match, a training or a tournament, and continues a saved tournament.
+## any input), starts the music, opens the how-to-play screen, the player select before a new
+## match and the modes menu, whose entries (training, tournament, a saved tournament) open
+## their own player select or continue.
 
 ## Player select opened by 'New Game'; confirming it starts the match.
 @export var player_select_packed_scene: PackedScene
 ## Plays the music (a random song per game launch) and keeps running across scenes.
 @export var music_director_scene: PackedScene
+## Modes menu opened by the 'Modes' button.
+@export var modes_packed_scene: PackedScene
 ## How-to-play screen opened by the 'How to Play' button.
 @export var tutorial_packed_scene: PackedScene
-## Player select opened by 'Training'; confirming it starts the training.
+## Player select opened by the modes menu's 'Training'; confirming it starts the training.
 @export var training_select_packed_scene: PackedScene
 @export_file("*.tscn") var training_scene_path: String
-## Player select opened by 'US Open'; confirming it starts a new tournament.
+## Player select opened by the modes menu's 'US Open'; confirming it starts a new tournament.
 @export var tournament_select_packed_scene: PackedScene
 ## The tournament's draw, opened when a tournament starts or continues
 @export_file("*.tscn") var tournament_scene_path: String
@@ -20,6 +23,11 @@ extends MainMenu
 var animation_state_machine: AnimationNodeStateMachinePlayback
 ## The saved tournament, null if there is none
 var _saved_tournament: Tournament
+## Whether the modes menu opens again when the sub menu opened from it closes
+var _return_to_modes: bool = false
+## Releasing ui_cancel closes the open sub menu only after its press reached the main menu: the
+## press that closes an open dropdown list does not.
+var _cancel_press := UiCancelPress.new()
 
 
 func _ready() -> void:
@@ -27,12 +35,11 @@ func _ready() -> void:
 	_start_music_once()
 	animation_state_machine = $MenuAnimationTree.get("parameters/playback")
 	_saved_tournament = Tournament.load_saved()
-	%ContinueTournamentButton.visible = _saved_tournament != null
-	%ContinueTournamentButton.text = "Continue %s" % Tournament.NAME
-	%TournamentButton.text = Tournament.NAME
 
 
 func _input(event: InputEvent) -> void:
+	if _cancel_press.is_unpaired_release(event):
+		return
 	if _is_in_intro() and _event_skips_intro(event):
 		intro_done()
 		return
@@ -65,8 +72,17 @@ func _open_sub_menu(menu: PackedScene) -> Node:
 
 
 func _close_sub_menu() -> void:
+	# The closing sub menu must not close the menu opened in its place when it leaves the tree.
+	if sub_menu:
+		# One-shot connections are already gone once their signal was emitted.
+		for closing_signal: Signal in [sub_menu.hidden, sub_menu.tree_exiting]:
+			if closing_signal.is_connected(_close_sub_menu):
+				closing_signal.disconnect(_close_sub_menu)
 	super._close_sub_menu()
 	animation_state_machine.travel("OpenMainMenu")
+	if _return_to_modes:
+		_return_to_modes = false
+		_open_modes_menu()
 
 
 ## Starts the music director the first time the main menu opens; afterwards (e.g. back from a
@@ -83,19 +99,38 @@ func _on_how_to_play_button_pressed() -> void:
 	_open_sub_menu(tutorial_packed_scene)
 
 
-func _on_tournament_button_pressed() -> void:
+func _on_modes_button_pressed() -> void:
+	_open_modes_menu()
+
+
+func _open_modes_menu() -> void:
+	var modes: ModesMenu = _open_sub_menu(modes_packed_scene)
+	modes.setup(_saved_tournament != null)
+	modes.tournament_requested.connect(_open_from_modes.bind(_start_tournament_select))
+	modes.training_requested.connect(_open_from_modes.bind(_start_training_select))
+	modes.continue_tournament_requested.connect(_continue_tournament)
+
+
+## Replaces the modes menu by the menu `open` opens; closing that returns to the modes menu.
+func _open_from_modes(open: Callable) -> void:
+	_close_sub_menu()
+	_return_to_modes = true
+	open.call()
+
+
+func _start_tournament_select() -> void:
 	_open_sub_menu(tournament_select_packed_scene).selection_confirmed.connect(
 		SceneLoader.load_scene.bind(tournament_scene_path)
 	)
 
 
-## Continues the saved tournament, played with the first connected device.
-func _on_continue_tournament_button_pressed() -> void:
-	GlobalGameData.continue_tournament(_saved_tournament, InputDevice.get_connected_device_ids()[0])
-	SceneLoader.load_scene(tournament_scene_path)
-
-
-func _on_training_button_pressed() -> void:
+func _start_training_select() -> void:
 	_open_sub_menu(training_select_packed_scene).selection_confirmed.connect(
 		SceneLoader.load_scene.bind(training_scene_path)
 	)
+
+
+## Continues the saved tournament, played with the first connected device.
+func _continue_tournament() -> void:
+	GlobalGameData.continue_tournament(_saved_tournament, InputDevice.get_connected_device_ids()[0])
+	SceneLoader.load_scene(tournament_scene_path)

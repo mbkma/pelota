@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 
 func announce(track: MusicTrack) -> void:
 	_cover.texture = track.cover
+	_cover.get_parent().visible = track.cover != null
 	_title_label.text = track.title
 	_artist_label.text = track.artist
 	_artist_label.visible = not track.artist.is_empty()
