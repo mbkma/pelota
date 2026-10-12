@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bcwuxgarbilrg"]
 
 [ext_resource type="Script" uid="uid://b0ns3sergm4r5" path="res://scenes/match/tennis_match.gd" id="1_3pywv"]
-[ext_resource type="PackedScene" uid="uid://dkonwbmg06m5n" path="res://scenes/player/player.tscn" id="2_hqvfk"]
 [ext_resource type="PackedScene" uid="uid://r13b2pnjirfc" path="res://scenes/ui/hud/television_hud.tscn" id="4_upnw7"]
 [ext_resource type="PackedScene" uid="uid://d237t32p1sgei" path="res://scenes/environments/us_open/stadium.tscn" id="6_4vere"]
 [ext_resource type="PackedScene" uid="uid://c7717agxjy34d" path="res://scenes/match/match_manager.tscn" id="8_2s2ac"]
@@ -17,24 +16,15 @@
 [ext_resource type="PackedScene" uid="uid://dwg7xu576cxge" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
 [ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
 
-[node name="TennisMatch" type="Node" unique_id=1484614295 node_paths=PackedStringArray("player0", "player1", "match_manager")]
+[node name="TennisMatch" type="Node" unique_id=1484614295 node_paths=PackedStringArray("match_manager", "splitscreen", "status_panels")]
 process_mode = 1
 script = ExtResource("1_3pywv")
-player0 = NodePath("Player")
-player1 = NodePath("Player2")
 match_manager = NodePath("MatchManager")
+splitscreen = NodePath("SplitscreenUI")
+status_panels = [NodePath("PlayerStatus/Player1StatusPanel"), NodePath("PlayerStatus/Player2StatusPanel")]
 
-[node name="Player" parent="." unique_id=1602140429 instance=ExtResource("2_hqvfk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.994318)
-
-[node name="Player2" parent="." unique_id=1376272979 instance=ExtResource("2_hqvfk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008353233, 0, -1.8869265)
-team_index = 1
-
-[node name="SplitscreenUI" parent="." unique_id=900824732 node_paths=PackedStringArray("cameras", "player0", "player1") instance=ExtResource("17_splitscreen")]
+[node name="SplitscreenUI" parent="." unique_id=900824732 node_paths=PackedStringArray("cameras") instance=ExtResource("17_splitscreen")]
 cameras = NodePath("../Stadium/Cameras")
-player0 = NodePath("../Player")
-player1 = NodePath("../Player2")
 
 [node name="TelevisionHUD" parent="." unique_id=684788014 instance=ExtResource("4_upnw7")]
 metadata/_edit_lock_ = true
@@ -48,14 +38,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Player1StatusPanel" parent="PlayerStatus" unique_id=1102937415 node_paths=PackedStringArray("player") instance=ExtResource("22_status_panel")]
+[node name="Player1StatusPanel" parent="PlayerStatus" unique_id=1102937415 instance=ExtResource("22_status_panel")]
 layout_mode = 0
 offset_left = 16.0
 offset_top = 16.0
-player = NodePath("../../Player")
 name_color = Color(0.349, 0.675, 0.725, 1)
 
-[node name="Player2StatusPanel" parent="PlayerStatus" unique_id=1959407326 node_paths=PackedStringArray("player") instance=ExtResource("22_status_panel")]
+[node name="Player2StatusPanel" parent="PlayerStatus" unique_id=1959407326 instance=ExtResource("22_status_panel")]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -64,7 +53,6 @@ offset_left = -226.0
 offset_top = 16.0
 offset_right = -16.0
 grow_horizontal = 0
-player = NodePath("../../Player2")
 name_color = Color(0.843, 0.459, 0.447, 1)
 
 [node name="MatchStatsPanel" parent="." unique_id=1844470918 node_paths=PackedStringArray("match_manager") instance=ExtResource("23_stats_panel")]
@@ -82,9 +70,7 @@ transform = Transform3D(1.3113417e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113417e-07, -7.5
 match_manager = NodePath("../MatchManager")
 _trajectory_drawer = NodePath("../TrajectoryDrawer")
 
-[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("player0", "player1", "court", "stadium", "television_hud", "umpire", "crowd", "cameras") instance=ExtResource("8_2s2ac")]
-player0 = NodePath("../Player")
-player1 = NodePath("../Player2")
+[node name="MatchManager" parent="." unique_id=1993417814 node_paths=PackedStringArray("court", "stadium", "television_hud", "umpire", "crowd", "cameras") instance=ExtResource("8_2s2ac")]
 court = NodePath("../Stadium/Court")
 stadium = NodePath("../Stadium")
 television_hud = NodePath("../TelevisionHUD")
