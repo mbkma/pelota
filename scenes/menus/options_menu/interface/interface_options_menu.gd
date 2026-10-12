@@ -1,4 +1,5 @@
-## Options tab of the UI settings (see UiSettings): one toggle per UI element of the match.
+## Options tab of the UI settings (see UiSettings): the camera view and one toggle per UI element
+## of the match.
 class_name InterfaceOptionsMenu
 extends MarginContainer
 
@@ -12,6 +13,7 @@ extends MarginContainer
 	UiSettings.Element.PLAYER_STATUS: %PlayerStatusControl,
 	UiSettings.Element.AI_PLAYER_STATUS: %AiPlayerStatusControl,
 }
+@onready var _camera_view_control: ListOptionControl = %CameraViewControl
 
 
 func _ready() -> void:
@@ -19,6 +21,8 @@ func _ready() -> void:
 		var control: OptionControl = _controls[element]
 		control.value = UiSettings.is_shown(element)
 		control.setting_changed.connect(_on_setting_changed.bind(element))
+	_camera_view_control.value = UiSettings.get_camera_view()
+	_camera_view_control.setting_changed.connect(UiSettings.set_camera_view)
 
 
 func _on_setting_changed(shown: bool, element: UiSettings.Element) -> void:

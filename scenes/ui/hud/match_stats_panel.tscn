@@ -92,8 +92,9 @@ text = "Continue"
 
 [node name="HintLabel" type="Label" parent="Center/Panel/VBox" unique_id=1938817626]
 unique_name_in_owner = true
+visible = false
 modulate = Color(1, 1, 1, 0.55)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Tab / Back: show or hide"
+text = "B / Esc: back"
 horizontal_alignment = 1

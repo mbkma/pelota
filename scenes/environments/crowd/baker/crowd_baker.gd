@@ -132,7 +132,13 @@ func _bake_character(source: String, clips: Array[Animation]) -> CrowdCharacter:
 
 	var importer := ImporterMesh.new()
 	importer.add_surface(
-		Mesh.PRIMITIVE_TRIANGLES, arrays, [], {}, material, "crowd", _custom_format_flags()
+		Mesh.PRIMITIVE_TRIANGLES,
+		arrays,
+		[],
+		{},
+		material,
+		"crowd",
+		CrowdCharacter.custom_format_flags()
 	)
 	importer.generate_lods(LOD_NORMAL_MERGE_ANGLE, LOD_NORMAL_SPLIT_ANGLE, [])
 	character.mesh = importer.get_mesh()
@@ -149,14 +155,6 @@ static func _height(vertices: PackedVector3Array) -> float:
 		lowest = minf(lowest, vertex.y)
 		highest = maxf(highest, vertex.y)
 	return highest - lowest
-
-
-## Vertex format flags of the merged surface: bones and weights as four floats each.
-static func _custom_format_flags() -> int:
-	return (
-		(Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT)
-		| (Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM1_SHIFT)
-	)
 
 
 ## All surfaces of `mesh_instances` in one, in the model's space and the skeleton's rest pose,

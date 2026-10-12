@@ -15,6 +15,12 @@ const SCORE_CALL_DELAY: Vector2 = Vector2(3.0, 5.0)
 const COURT_LOOK_TARGET: Vector3 = Vector3(0.0, 1.0, 0.0)
 ## How fast (1/s) the head catches up with the ball
 const LOOK_FOLLOW_RATE: float = 12.0
+## Bones turned toward the look target, and how much of the turn each takes: the neck some, the
+## head the rest
+const LOOK_BONES: Dictionary[StringName, float] = {&"Neck": 0.4, &"Head": 1.0}
+## How far (rad) the head turns sideways, and up or down
+const LOOK_LIMIT_SIDEWAYS: float = deg_to_rad(120.0)
+const LOOK_LIMIT_UP_DOWN: float = deg_to_rad(60.0)
 
 @export var calls: UmpireCalls
 
@@ -31,8 +37,30 @@ var _ball: Ball
 @onready var _audio_stream_player: AudioStreamPlayer = $UmpirePlayer
 ## Plays the electronic line calls
 @onready var _line_call_player: AudioStreamPlayer = $LineCallPlayer
-## The neck and head turn toward it (see the LookAtModifier3D nodes of the model)
+## The neck and head turn toward it (see _add_look_modifiers)
 @onready var _look_target: Node3D = $LookTarget
+
+
+func _ready() -> void:
+	_add_look_modifiers()
+
+
+## Turns the neck and head toward the look target. Made here rather than in the scene: nodes added
+## under the skeleton of the imported model are left out of an exported game.
+func _add_look_modifiers() -> void:
+	var skeleton: Skeleton3D = $Model/GeneralSkeleton
+	for bone in LOOK_BONES:
+		var look := LookAtModifier3D.new()
+		look.name = "%sLook" % bone
+		look.bone_name = bone
+		look.influence = LOOK_BONES[bone]
+		look.forward_axis = SkeletonModifier3D.BONE_AXIS_PLUS_Z
+		look.use_angle_limitation = true
+		look.symmetry_limitation = true
+		look.primary_limit_angle = LOOK_LIMIT_SIDEWAYS
+		look.secondary_limit_angle = LOOK_LIMIT_UP_DOWN
+		skeleton.add_child(look)
+		look.target_node = look.get_path_to(_look_target)
 
 
 func _process(delta: float) -> void:

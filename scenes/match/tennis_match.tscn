@@ -102,6 +102,7 @@ replay = NodePath("../MatchReplay")
 
 [node name="PauseMenu" parent="." unique_id=156357199 instance=ExtResource("18_fevwx")]
 visible = false
+match_stats_panel_path = NodePath("../MatchStatsPanel")
 
 [node name="Crowd" parent="." node_paths=PackedStringArray("crew") unique_id=1204219689 instance=ExtResource("16_4veo4")]
 crew = [NodePath("../Stadium/Courtside/Photographers"), NodePath("../Stadium/Courtside/CameraOperators")]

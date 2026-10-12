@@ -33,12 +33,15 @@ func _ready() -> void:
 	_next_button.grab_focus()
 
 
+## Left / right and the shoulder buttons (Page Up / Page Down) turn the pages.
 func _unhandled_input(event: InputEvent) -> void:
+	var step: int = UiPage.step(event)
 	if event.is_action_pressed("ui_left"):
-		_turn(-1)
-		get_viewport().set_input_as_handled()
+		step = -1
 	elif event.is_action_pressed("ui_right"):
-		_turn(1)
+		step = 1
+	if step != 0:
+		_turn(step)
 		get_viewport().set_input_as_handled()
 
 

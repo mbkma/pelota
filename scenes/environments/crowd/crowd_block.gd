@@ -45,7 +45,6 @@ func _init(
 		var multimesh := MultiMesh.new()
 		multimesh.transform_format = MultiMesh.TRANSFORM_3D
 		multimesh.use_custom_data = true
-		multimesh.mesh = config.characters[i].mesh
 		multimesh.instance_count = spectators[i].size()
 		multimesh.buffer = buffer
 		var instances := MultiMeshInstance3D.new()
@@ -57,11 +56,13 @@ func _init(
 		_buffers.append(buffer)
 
 
-## Scales the distances at which the spectators switch to less detailed meshes (above 1 keeps
-## more detail).
-func set_lod_bias(bias: float) -> void:
-	for instances in _instances:
-		instances.lod_bias = bias
+## Draws the spectators of each character with its mesh in `meshes` (see CrowdCharacter.get_mesh),
+## switching to its less detailed levels the sooner the lower `lod_bias` is (above 1 keeps more
+## detail).
+func set_detail(meshes: Array[ArrayMesh], lod_bias: float) -> void:
+	for i in _instances.size():
+		_multimeshes[i].mesh = meshes[i]
+		_instances[i].lod_bias = lod_bias
 
 
 ## Lets about `share` (0 to 1) of the spectators cheer, each a random cheer, reacting from `time`

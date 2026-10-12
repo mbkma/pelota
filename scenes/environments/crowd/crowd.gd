@@ -12,16 +12,27 @@ extends Node
 ## they look at the court.
 ## Each section of seats is split into small blocks (see CrowdBlock), so spectators far from the
 ## camera are drawn with less detailed meshes than those near it, also when the camera stands in
-## the stands. The crowd's detail (a graphics setting) thins out the crowd, picks less detailed
-## meshes sooner and stops the heads following the ball.
+## the stands. Two graphics settings set how many spectators there are (count) and how detailed
+## they are drawn (detail).
 
 enum Detail { LOW, MEDIUM, HIGH, ULTRA }
 
-## Share of the spectators kept, how much detail their meshes keep (see CrowdBlock.set_lod_bias)
-## and whether they follow the ball with their heads, per Detail
-const DETAIL_DENSITY: Array[float] = [0.5, 0.75, 1.0, 1.0]
-const DETAIL_LOD_BIAS: Array[float] = [0.5, 0.75, 1.0, 2.0]
+## Per Detail: the most triangles a spectator's mesh keeps (see CrowdCharacter.get_mesh), how
+## soon the spectators switch to less detailed levels (see CrowdBlock.set_detail), up to which
+## distance (m) from the camera they are animated in full detail (see crowd.gdshader) and whether
+## they follow the ball with their heads.
+## The full meshes have 50000 to 56000 triangles. Levels of about 14000 look the same as the full
+## mesh even for the spectators nearest to the crowd shot camera; the levels below tear a little
+## at their elbows and shoulders there.
+const DETAIL_MAX_TRIANGLES: Array[int] = [2500, 7000, 14000, 14000]
+const DETAIL_LOD_BIAS: Array[float] = [0.25, 0.35, 0.5, 1.0]
+const DETAIL_FULL_DISTANCE: Array[float] = [15.0, 25.0, 40.0, 80.0]
 const DETAIL_HEADS_FOLLOW: Array[bool] = [false, true, true, true]
+## Whether the hair and lashes are smoothed per Detail (see crowd.gdshader): smoothing them costs
+## an extra pass over the crowd, a third of all draw calls at the lower details.
+const DETAIL_SMOOTH_HAIR: Array[bool] = [false, false, true, true]
+const SMOOTH_HAIR_SHADER: Shader = preload("res://scenes/environments/crowd/crowd.gdshader")
+const HARD_HAIR_SHADER: Shader = preload("res://scenes/environments/crowd/crowd_hard_edges.gdshader")
 ## Size (m) of the squares (seen from above) the sections are split into blocks by
 const BLOCK_SIZE: float = 10.0
 
@@ -74,27 +85,32 @@ const LOOK_FOLLOW_RATE: float = 10.0
 					row.places_changed.connect(_seat_crew)
 ## Whether the crowd plays its idle ambience (off where other music plays, e.g. menus)
 @export var play_ambience: bool = true
-## Share of the spectators kept on top of the crowd's detail, e.g. for a background where a thin
+## Share of the spectators kept on top of the crowd's count, e.g. for a background where a thin
 ## crowd is enough
 @export_range(0.0, 1.0, 0.05) var density_scale: float = 1.0:
 	set(value):
 		density_scale = value
-		if is_node_ready():
-			_seat_spectators()
+		_queue_seating()
+## Share of the spectators kept (a graphics setting)
+@export_range(0.0, 1.0, 0.05) var count: float = 1.0:
+	set(value):
+		if is_equal_approx(value, count):
+			return
+		count = value
+		_queue_seating()
 @export var detail: Detail = Detail.HIGH:
 	set(value):
-		var reseat: bool = DETAIL_DENSITY[value] != DETAIL_DENSITY[detail]
 		detail = value
-		if not is_node_ready():
-			return
-		if reseat:
-			_seat_spectators()
-		_apply_detail()
+		if is_node_ready():
+			_apply_detail()
 
 ## Seconds of the crowd's clock
 var _time: float = 0.0
 ## Materials of the spectators, which animate by the clock
 var _materials: Array[ShaderMaterial] = []
+## Whether the spectators are seated again at the end of the frame: changing the count with a
+## slider seats them once per frame at most
+var _seating_queued: bool = false
 ## Ball the spectators follow (null while none is in play) and where they look
 var _ball: Ball
 var _look_target: Vector3 = COURT_LOOK_TARGET
@@ -125,7 +141,6 @@ func _ready() -> void:
 	for character in spectators.characters:
 		_materials.append(character.get_material())
 	_seat_spectators()
-	_apply_detail()
 	if Engine.is_editor_hint() or not play_ambience:
 		return
 	_play_next_idle_sound()
@@ -177,11 +192,19 @@ func cheer(excitement: float) -> void:
 		block.cheer(share, _time)
 
 
+func _queue_seating() -> void:
+	if not is_node_ready() or _seating_queued:
+		return
+	_seating_queued = true
+	_seat_spectators.call_deferred()
+
+
 func _seat_spectators() -> void:
+	_seating_queued = false
 	for block in _blocks:
 		block.free()
 	_blocks.clear()
-	var occupancy: float = spectators.occupancy * DETAIL_DENSITY[detail] * density_scale
+	var occupancy: float = spectators.occupancy * count * density_scale
 	for i in seating.sections.size():
 		var blocks: Array[PackedVector4Array] = _split_into_blocks(seating.sections[i])
 		for j in blocks.size():
@@ -204,14 +227,22 @@ func _seat_crew() -> void:
 			)
 	_photographers = CrowdBlock.new(spectators, places, 1.0, -1)
 	add_child(_photographers)
-	_photographers.set_lod_bias(DETAIL_LOD_BIAS[detail])
+	_apply_detail()
 
 
 func _apply_detail() -> void:
+	var meshes: Array[ArrayMesh] = []
+	for character in spectators.characters:
+		meshes.append(character.get_mesh(DETAIL_MAX_TRIANGLES[detail]))
 	for block: CrowdBlock in _blocks + [_photographers]:
-		block.set_lod_bias(DETAIL_LOD_BIAS[detail])
+		if block:
+			block.set_detail(meshes, DETAIL_LOD_BIAS[detail])
+	var shader: Shader = SMOOTH_HAIR_SHADER if DETAIL_SMOOTH_HAIR[detail] else HARD_HAIR_SHADER
 	for material in _materials:
+		if material.shader != shader:
+			material.shader = shader
 		material.set_shader_parameter(&"heads_follow", DETAIL_HEADS_FOLLOW[detail])
+		material.set_shader_parameter(&"full_detail_distance", DETAIL_FULL_DISTANCE[detail])
 
 
 ## `seats` split by the BLOCK_SIZE squares they are in.

@@ -15,6 +15,7 @@ extends MarginContainer
 	%MeshDetailControl,
 	%TextureFilteringControl,
 	%CrowdDetailControl,
+	%CrowdCountControl,
 	%MaxFpsControl,
 ]
 

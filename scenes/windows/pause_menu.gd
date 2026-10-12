@@ -10,6 +10,8 @@ extends OverlaidWindow
 @export_node_path(&"ConfirmationOverlaidWindow") var main_menu_confirmation_node_path: NodePath
 @export_node_path(&"ConfirmationOverlaidWindow") var exit_confirmation_node_path: NodePath
 @export var menu_container_node_path: NodePath = ^".."
+## The match statistics shown by the Match Stats button; the button is hidden without them.
+@export_node_path(&"MatchStatsPanel") var match_stats_panel_path: NodePath
 
 var open_window: Node
 ## Releasing ui_cancel closes the menu or its window only after its press reached the menu: the
@@ -23,6 +25,9 @@ var main_menu_confirmation: ConfirmationOverlaidWindow = get_node(main_menu_conf
 @onready var exit_confirmation: ConfirmationOverlaidWindow = get_node(exit_confirmation_node_path)
 @onready var menu_container: Node = get_node(menu_container_node_path)
 @onready var options_button = %OptionsButton
+@onready var match_stats_button = %MatchStatsButton
+@onready var camera_view_control: ListOptionControl = %CameraViewControl
+@onready var match_stats_panel: MatchStatsPanel = get_node_or_null(match_stats_panel_path)
 @onready var main_menu_button = %MainMenuButton
 @onready var exit_button = %ExitButton
 
@@ -43,15 +48,13 @@ func close_window() -> void:
 
 
 func _disable_focus() -> void:
-	for child in %MenuButtons.get_children():
-		if child is Control:
-			child.focus_mode = FOCUS_NONE
+	for button in %MenuButtons.find_children("*", "BaseButton", true, false):
+		button.focus_mode = FOCUS_NONE
 
 
 func _enable_focus() -> void:
-	for child in %MenuButtons.get_children():
-		if child is Control:
-			child.focus_mode = FOCUS_ALL
+	for button in %MenuButtons.find_children("*", "BaseButton", true, false):
+		button.focus_mode = FOCUS_ALL
 
 
 func _load_scene(scene_path: String) -> void:
@@ -118,17 +121,41 @@ func _refresh_main_menu_button() -> void:
 	main_menu_button.visible = !get_main_menu_scene_path().is_empty()
 
 
+func _refresh_camera_view() -> void:
+	camera_view_control.value = UiSettings.get_camera_view()
+
+
+## The statistics already showing (after a set or the match) need no button.
+func _refresh_match_stats_button() -> void:
+	match_stats_button.visible = match_stats_panel != null and not match_stats_panel.visible
+
+
 func _ready() -> void:
 	_refresh_exit_button()
 	_refresh_options_button()
 	_refresh_main_menu_button()
+	_refresh_match_stats_button()
+	visibility_changed.connect(_refresh_match_stats_button)
 	restart_confirmation.confirmed.connect(_on_restart_confirmation_confirmed)
 	main_menu_confirmation.confirmed.connect(_on_main_menu_confirmation_confirmed)
 	exit_confirmation.confirmed.connect(_on_exit_confirmation_confirmed)
+	if Engine.is_editor_hint():
+		return
+	# The camera view is also set in the options, which open from this menu.
+	camera_view_control.setting_changed.connect(UiSettings.set_camera_view)
+	UiSettings.changed.connect(_refresh_camera_view)
+	_refresh_camera_view()
 
 
 func _on_restart_button_pressed() -> void:
 	_show_window(restart_confirmation)
+
+
+func _on_match_stats_button_pressed() -> void:
+	match_stats_panel.show_over_pause_menu()
+	await _show_window(match_stats_panel)
+	# The statistics take no focus, so none returns on its own (after _enable_focus).
+	match_stats_button.grab_focus.call_deferred()
 
 
 func _on_options_button_pressed() -> void:

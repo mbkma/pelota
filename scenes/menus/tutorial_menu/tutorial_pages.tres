@@ -15,8 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://bt4wmqy3ctv6d" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_ctrl.svg" id="12_res"]
 [ext_resource type="Texture2D" uid="uid://da8j1yfxleoeg" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_y.svg" id="13_res"]
 [ext_resource type="Texture2D" uid="uid://8jgo43kaxqqt" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_enter.svg" id="14_res"]
-[ext_resource type="Texture2D" uid="uid://bbs2ce7236ytp" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_tab.svg" id="15_res"]
-[ext_resource type="Texture2D" uid="uid://dml4bqggseclv" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_view.svg" id="16_res"]
 [ext_resource type="Texture2D" uid="uid://bgny2jpo75ifi" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_escape.svg" id="17_res"]
 [ext_resource type="Texture2D" uid="uid://blh6usfhyhpyg" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_menu.svg" id="18_res"]
 [ext_resource type="Texture2D" uid="uid://bdgbelhpjchyb" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_x.svg" id="19_res"]
@@ -101,12 +99,6 @@ Move forward after a strong shot to finish the point - but watch out for passing
 image = ExtResource("24_res")
 controls = Array[ExtResource("2_control")]([SubResource("Control_3")])
 
-[sub_resource type="Resource" id="Control_5"]
-script = ExtResource("2_control")
-description = "Match statistics"
-keyboard_icons = Array[Texture2D]([ExtResource("15_res")])
-gamepad_icons = Array[Texture2D]([ExtResource("16_res")])
-
 [sub_resource type="Resource" id="Control_6"]
 script = ExtResource("2_control")
 description = "Pause"
@@ -121,11 +113,11 @@ keyboard_icons = Array[Texture2D]([ExtResource("19_res")])
 [sub_resource type="Resource" id="Page_5"]
 script = ExtResource("1_page")
 title = "During the match"
-text = "Big points like break points and set points add pressure - it lowers your precision, the calmer players cope better. Running drains stamina, which costs speed and accuracy. Keep an eye on the panels in the corners.
+text = "Big points like break points and set points add pressure - it lowers your precision, the calmer players cope better. Running drains stamina, which costs speed and accuracy. Keep an eye on the panels in the corners; the match statistics are in the pause menu.
 
 Long rallies make the crowd go wild. Good luck!"
 image = ExtResource("22_res")
-controls = Array[ExtResource("2_control")]([SubResource("Control_5"), SubResource("Control_6"), SubResource("Control_7")])
+controls = Array[ExtResource("2_control")]([SubResource("Control_6"), SubResource("Control_7")])
 
 [resource]
 script = ExtResource("0_tutorial")

@@ -1,6 +1,7 @@
-## The UI settings: which of the match's UI elements are shown. By default all are, except the
-## aim marker and the status panel of the AI players, which are turned on in the options. The
-## settings are kept in the player config (see PlayerConfig), and the elements show or hide at
+## The UI settings: which of the match's UI elements are shown, and the camera view the match is
+## watched from. By default all elements are shown, except the aim marker and the status panel of
+## the AI players, which are turned on in the options. The camera view is set in the options and
+## in the pause menu. The settings are kept in the player config (see PlayerConfig) and apply at
 ## once when one changes (see changed).
 extends Node
 
@@ -26,7 +27,22 @@ enum Element {
 	AI_PLAYER_STATUS,
 }
 
+## Camera views a match is watched from (see MatchCameras)
+enum CameraView {
+	## High behind the baseline, like a TV broadcast
+	BROADCAST,
+	## Lower and closer behind the baseline
+	ELEVATED,
+	## From the side of the court
+	COURTSIDE,
+	## From straight above
+	OVERHEAD,
+	## Through the eyes of the player
+	PLAYER,
+}
+
 const SECTION: StringName = AppSettings.GAME_SECTION
+const CAMERA_VIEW_KEY: StringName = &"CameraView"
 ## Config key of each element
 const KEYS: Dictionary[Element, StringName] = {
 	Element.STROKE_INDICATOR: &"ShowStrokeIndicator",
@@ -51,4 +67,13 @@ func is_shown_by_default(element: Element) -> bool:
 
 func set_shown(element: Element, shown: bool) -> void:
 	PlayerConfig.set_config(SECTION, KEYS[element], shown)
+	changed.emit()
+
+
+func get_camera_view() -> CameraView:
+	return PlayerConfig.get_config(SECTION, CAMERA_VIEW_KEY, CameraView.BROADCAST)
+
+
+func set_camera_view(view: CameraView) -> void:
+	PlayerConfig.set_config(SECTION, CAMERA_VIEW_KEY, view)
 	changed.emit()

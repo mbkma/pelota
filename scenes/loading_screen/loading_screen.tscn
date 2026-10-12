@@ -5,3 +5,21 @@
 
 [node name="LoadingScreen" unique_id=179842335 instance=ExtResource("1_a8kcw")]
 script = ExtResource("2_53rj4")
+
+[node name="TipBox" type="VBoxContainer" parent="Control/VBoxContainer" parent_id_path=PackedInt32Array(10456653) index="2" unique_id=1688234510]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TipTitle" type="Label" parent="Control/VBoxContainer/TipBox" unique_id=1688234511]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
+text = "Did you know?"
+horizontal_alignment = 1
+
+[node name="TipLabel" type="Label" parent="Control/VBoxContainer/TipBox" unique_id=1688234512]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3

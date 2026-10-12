@@ -6,7 +6,7 @@
 
 [node name="PauseMenuOptionsOverlaidWindow" unique_id=701085877 instance=ExtResource("1_a6sle")]
 script = ExtResource("options_window_script")
-process_mode = 3
+pauses_game = true
 anchors_preset = 15
 anchor_left = 0.0
 anchor_top = 0.0

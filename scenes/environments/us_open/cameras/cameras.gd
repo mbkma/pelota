@@ -1,6 +1,8 @@
-## Broadcast and debug cameras of the match; 1 cycles through them. The TV and courtside cameras
-## among them move like real broadcast cameras (see TvCamera and CourtsideCamera).
-## The camera picked (by cycling or in the debug HUD) stays picked until another is picked. While
+## Broadcast and debug cameras of the match. The TV and courtside cameras among them move like
+## real broadcast cameras (see TvCamera and CourtsideCamera).
+## The camera of the camera view setting (see UiSettings.CameraView, set in the options and the
+## pause menu) is picked, also when the setting changes during the match; the debug HUD can pick
+## any camera. The picked camera stays picked until another is picked. While
 ## the view is behind a human player (see show_from_behind), a camera that has a twin on the other
 ## end of the court, or a player's own view, is shown from that player's end or through their
 ## eyes, also after they change ends.
@@ -44,8 +46,10 @@ const REPEAT_FACTOR: float = 0.35
 const AERIAL_COOLDOWN: int = 6
 
 @export var cams: Array[Camera3D]
-## Camera active at the start, and picked
+## Camera active at the start
 @export var active_cam: Camera3D
+## Camera of each camera view but the player's own (see UiSettings.CameraView), in its order
+@export var view_cams: Array[Camera3D]
 ## Cameras showing the court from the front end (z > 0) and, at the same index, their twins
 ## showing it from the back end (z < 0)
 @export var front_end_cams: Array[Camera3D]
@@ -76,15 +80,26 @@ func _ready() -> void:
 	activate(active_cam)
 
 
-func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_pressed() and event.keycode == KEY_1:
-		_pick_next()
-
-
-## Adds `player`'s own view to the cameras.
+## Adds `player`'s own view to the cameras. A match or a training adds its players: from then on
+## the camera view setting is followed (the stadium behind the menus has a camera of its own).
 func register_player_view(player: Player) -> void:
 	_player_views[player] = player.first_person_camera
 	cams.append(player.first_person_camera)
+	if not UiSettings.changed.is_connected(_pick_setting_view):
+		UiSettings.changed.connect(_pick_setting_view)
+	_pick_setting_view()
+
+
+## Picks the camera of the camera view setting, unless it is picked already.
+func _pick_setting_view() -> void:
+	var view: UiSettings.CameraView = UiSettings.get_camera_view()
+	var camera: Camera3D = view_cams[UiSettings.CameraView.BROADCAST]
+	if view == UiSettings.CameraView.PLAYER:
+		camera = _player_views.values()[0]
+	elif view < view_cams.size():
+		camera = view_cams[view]
+	if camera != _picked:
+		pick(camera)
 
 
 ## Makes `camera` the picked one, showing it from the viewer's end.
@@ -238,16 +253,6 @@ func _for_viewer(camera: Camera3D) -> Camera3D:
 	if pair == -1:
 		return camera
 	return front_end_cams[pair] if _viewer.global_position.z > 0.0 else back_end_cams[pair]
-
-
-## Picks the next camera after the active one that changes the view.
-func _pick_next() -> void:
-	var index: int = cams.find(active_cam)
-	for step in range(1, cams.size()):
-		var camera: Camera3D = cams[(index + step) % cams.size()]
-		if _for_viewer(camera) != active_cam:
-			pick(camera)
-			return
 
 
 func _wait(seconds: float) -> void:

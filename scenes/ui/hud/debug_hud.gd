@@ -1,6 +1,6 @@
 ## Debug HUD (toggled with the game_debug_menu action): match, ball and player state, a ball
 ## speed graph and the debug log. In debug builds , and . change the simulation speed, - resets
-## it and P pauses. The mouse cursor shows while it is open.
+## it and P pauses. The mouse cursor shows and works (only here) while it is open.
 extends CanvasLayer
 
 const MIN_SIM_SPEED: float = 0.1
@@ -18,6 +18,8 @@ var _ball_speed_elapsed: float = 0.0
 var _ball_speed_sample_accumulator: float = 0.0
 var _log_text_filter: String = ""
 var _log_object_filter: String = ""
+## Mouse mode before the HUD opened, set back when it closes
+var _mouse_mode_before: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 var _log_display_dirty: bool = true
 var _shown_log_count: int = 0
 
@@ -79,7 +81,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("game_debug_menu"):
 		visible = not visible
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if visible else Input.MOUSE_MODE_HIDDEN
+		_show_mouse(visible)
 		if visible:
 			_refresh_camera_selector()
 		return
@@ -97,6 +99,23 @@ func _input(event: InputEvent) -> void:
 			_set_simulation_speed(1.0)
 		KEY_P:
 			get_tree().paused = not get_tree().paused
+
+
+## Leaving the match with the HUD open gives back the mouse.
+func _exit_tree() -> void:
+	if visible:
+		_show_mouse(false)
+
+
+## Shows the mouse while the HUD is open (also with a gamepad, see MouseBlocker), and sets it back
+## as it was when the HUD closes.
+func _show_mouse(show: bool) -> void:
+	MouseBlocker.set_debug_ui_open(show)
+	if show:
+		_mouse_mode_before = Input.mouse_mode
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = _mouse_mode_before
 
 
 func _process(delta: float) -> void:

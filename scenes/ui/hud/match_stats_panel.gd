@@ -1,6 +1,6 @@
-## Overlay with the match statistics of both players. Toggled with Tab or the gamepad's Back
-## button; shown automatically after each set (with a Continue button that starts the next
-## set) and when the match ends; in a tournament, then with a button back to the draw.
+## Overlay with the match statistics of both players. Opened from the pause menu; shown
+## automatically after each set (with a Continue button that starts the next set) and when the
+## match ends; in a tournament, then with a button back to the draw.
 class_name MatchStatsPanel
 extends Control
 
@@ -52,17 +52,26 @@ func _ready() -> void:
 	_continue_button.pressed.connect(_on_continue_pressed)
 
 
+## Shows the statistics over the pause menu until they are hidden; the pause menu hides them
+## on ui_cancel.
+func show_over_pause_menu() -> void:
+	z_index = 1
+	_hint_label.visible = true
+	show()
+	await hidden
+	z_index = 0
+	_hint_label.visible = false
+
+
+## After the match, ui_cancel hides the statistics. While the game is paused, the pause menu
+## shows them and handles ui_cancel.
 func _unhandled_input(event: InputEvent) -> void:
-	var toggle_key: bool = (
-		event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_TAB
-	)
-	var toggle_button: bool = (
-		event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_BACK
-	)
-	if (toggle_key or toggle_button) and not _continue_button.visible:
-		visible = not visible
-		get_viewport().set_input_as_handled()
-	elif visible and not _continue_button.visible and event.is_action_pressed(&"ui_cancel"):
+	if (
+		visible
+		and not _continue_button.visible
+		and not get_tree().paused
+		and event.is_action_pressed(&"ui_cancel")
+	):
 		visible = false
 		get_viewport().set_input_as_handled()
 
@@ -90,6 +99,7 @@ func _on_set_break_started(set_number: int) -> void:
 	_hint_label.visible = false
 	_continue_button.visible = true
 	visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_continue_button.grab_focus()
 
 
@@ -98,9 +108,9 @@ func _on_continue_pressed() -> void:
 		SceneLoader.load_scene(tournament_scene_path)
 		return
 	_continue_button.visible = false
-	_hint_label.visible = true
 	_title_label.text = "Match Statistics"
 	visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	match_manager.continue_after_set_break()
 
 
@@ -108,6 +118,7 @@ func _on_match_finished(winner_index: int) -> void:
 	var winner: Player = match_manager.player0 if winner_index == 0 else match_manager.player1
 	_title_label.text = "%s wins the match" % winner.player_data.last_name
 	visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if GlobalGameData.tournament:
 		_hint_label.visible = false
 		_continue_button.text = "Back to the Draw"

@@ -1,6 +1,15 @@
 ## What the players need to know about the play they are part of (a match or a training).
+## The mouse is captured while playing; menus opening over the play show it (see MouseBlocker).
 @abstract class_name PlaySession
 extends Node
+
+
+## A notification, unlike _ready, reaches this class also where a session has its own _ready.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_READY:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	elif what == NOTIFICATION_EXIT_TREE:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 ## Whether the next shot of `player` is the return of a serve.
 @abstract func is_return_of_serve(player: Player) -> bool

@@ -1,5 +1,5 @@
-## The graphics settings. A quality preset (low, medium, high or ultra) sets all of them at once;
-## changing one on its own makes the preset custom. They are kept in the player config (see
+## The graphics settings. A quality preset (low, medium, high or ultra) sets all of them at once,
+## always to its own values; changing one on its own makes the preset custom. They are kept in the player config (see
 ## PlayerConfig) and applied to the renderer and every viewport, and to the lights, environments
 ## and crowds of the scenes as they enter the tree, so changes show at once, also during a match.
 extends Node
@@ -19,6 +19,7 @@ const GLOW: StringName = &"Glow"
 const MESH_DETAIL: StringName = &"MeshDetail"
 const TEXTURE_FILTERING: StringName = &"TextureFiltering"
 const CROWD_DETAIL: StringName = &"CrowdDetail"
+const CROWD_COUNT: StringName = &"CrowdCount"
 const MAX_FPS: StringName = &"MaxFps"
 
 const DEFAULT_PRESET: Preset = Preset.HIGH
@@ -30,7 +31,7 @@ const PRESET_VALUES: Dictionary[StringName, Array] = {
 	SCREEN_SPACE_AA:
 	[
 		Viewport.SCREEN_SPACE_AA_FXAA,
-		Viewport.SCREEN_SPACE_AA_FXAA,
+		Viewport.SCREEN_SPACE_AA_SMAA,
 		Viewport.SCREEN_SPACE_AA_SMAA,
 		Viewport.SCREEN_SPACE_AA_SMAA,
 	],
@@ -38,7 +39,7 @@ const PRESET_VALUES: Dictionary[StringName, Array] = {
 	AMBIENT_OCCLUSION:
 	[
 		AmbientOcclusion.OFF,
-		AmbientOcclusion.LOW,
+		AmbientOcclusion.OFF,
 		AmbientOcclusion.MEDIUM,
 		AmbientOcclusion.HIGH,
 	],
@@ -52,13 +53,16 @@ const PRESET_VALUES: Dictionary[StringName, Array] = {
 		Viewport.ANISOTROPY_16X,
 	],
 	CROWD_DETAIL: [Crowd.Detail.LOW, Crowd.Detail.MEDIUM, Crowd.Detail.HIGH, Crowd.Detail.ULTRA],
+	# Share of the spectators kept (a slider in steps of 0.05)
+	CROWD_COUNT: [0.5, 0.75, 1.0, 1.0],
 }
 ## Not part of the presets: frames per second at most (0: no limit)
 const DEFAULT_MAX_FPS: int = 0
 
-## Directional shadows per Shadows level: the shadow map size, how the view is split into cascades,
-## and how soft the shadow edges are filtered
-const SHADOW_ATLAS_SIZES: Array[int] = [0, 2048, 4096, 4096, 8192]
+## Directional shadows per Shadows level: the shadow map size (medium shadows look the same in
+## 2048 as in 4096), how the view is split into cascades, and how soft the shadow edges are
+## filtered
+const SHADOW_ATLAS_SIZES: Array[int] = [0, 2048, 2048, 4096, 8192]
 const SHADOW_MODES: Array[DirectionalLight3D.ShadowMode] = [
 	DirectionalLight3D.SHADOW_ORTHOGONAL,
 	DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS,
@@ -95,49 +99,76 @@ const DESIGNED_SSAO: StringName = &"graphics_designed_ssao"
 const DESIGNED_GLOW: StringName = &"graphics_designed_glow"
 
 
+## Custom settings that are a preset's (after the presets changed) are that preset.
 func _ready() -> void:
 	get_tree().node_added.connect(_configure)
+	if get_preset() == Preset.CUSTOM:
+		PlayerConfig.set_config(SECTION, PRESET, _matching_preset())
 	_apply()
 
 
-## Current value of a setting (one of the keys of PRESET_VALUES, or MAX_FPS).
+## Current value of a setting (one of the keys of PRESET_VALUES, or MAX_FPS): the preset's while
+## one is chosen, the saved one with the custom preset.
 func get_value(key: StringName) -> Variant:
-	var default: Variant = DEFAULT_MAX_FPS
-	if key != MAX_FPS:
-		default = PRESET_VALUES[key][DEFAULT_PRESET]
-	return PlayerConfig.get_config(SECTION, key, default)
+	var preset: Preset = get_preset()
+	if preset != Preset.CUSTOM and PRESET_VALUES.has(key):
+		return PRESET_VALUES[key][preset]
+	return _saved_value(key)
 
 
 func get_preset() -> Preset:
 	return PlayerConfig.get_config(SECTION, PRESET, DEFAULT_PRESET)
 
 
-## Sets all settings of `preset` (not CUSTOM) and applies them.
+## Chooses `preset` (not CUSTOM) and applies its settings.
 func select_preset(preset: Preset) -> void:
 	PlayerConfig.set_config(SECTION, PRESET, preset)
-	for key in PRESET_VALUES:
-		PlayerConfig.set_config(SECTION, key, PRESET_VALUES[key][preset])
+	_save_preset_values(preset)
 	_apply()
 
 
-## Sets one setting and applies it. The preset becomes the one all settings now match, or CUSTOM.
+## Sets one setting and applies it. The preset becomes the one all settings now match, or CUSTOM;
+## the other settings stay those of the preset chosen before.
 func set_value(key: StringName, value: Variant) -> void:
+	if key != MAX_FPS and get_preset() != Preset.CUSTOM:
+		_save_preset_values(get_preset())
 	PlayerConfig.set_config(SECTION, key, value)
 	if key != MAX_FPS:
 		PlayerConfig.set_config(SECTION, PRESET, _matching_preset())
 	_apply()
 
 
+func _saved_value(key: StringName) -> Variant:
+	var default: Variant = DEFAULT_MAX_FPS
+	if key != MAX_FPS:
+		default = PRESET_VALUES[key][DEFAULT_PRESET]
+	return PlayerConfig.get_config(SECTION, key, default)
+
+
+## Saves the settings of `preset` (not CUSTOM), which the custom preset starts from.
+func _save_preset_values(preset: Preset) -> void:
+	for key in PRESET_VALUES:
+		PlayerConfig.set_config(SECTION, key, PRESET_VALUES[key][preset])
+
+
+## The preset whose settings are all the saved ones, or CUSTOM.
 func _matching_preset() -> Preset:
 	for preset in [Preset.LOW, Preset.MEDIUM, Preset.HIGH, Preset.ULTRA]:
 		var matches: bool = true
 		for key in PRESET_VALUES:
-			if get_value(key) != PRESET_VALUES[key][preset]:
+			if not _is_same_value(_saved_value(key), PRESET_VALUES[key][preset]):
 				matches = false
 				break
 		if matches:
 			return preset
 	return Preset.CUSTOM
+
+
+## Whether two values of a setting are the same; a slider's values are only about the same.
+static func _is_same_value(a: Variant, b: Variant) -> bool:
+	if a is float or b is float:
+		return is_equal_approx(float(a), float(b))
+	return a == b
 
 
 ## Applies the settings to the renderer and to everything in the tree.
@@ -175,6 +206,7 @@ func _configure(node: Node) -> void:
 		_configure_environment((node as WorldEnvironment).environment)
 	elif node is Crowd:
 		(node as Crowd).detail = get_value(CROWD_DETAIL)
+		(node as Crowd).count = get_value(CROWD_COUNT)
 
 
 func _configure_viewport(viewport: Viewport) -> void:

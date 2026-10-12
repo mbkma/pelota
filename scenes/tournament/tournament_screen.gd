@@ -40,6 +40,18 @@ func _ready() -> void:
 	_refresh()
 
 
+## The shoulder buttons and Page Up / Page Down switch between the rounds played so far. Read in
+## _input, before the focused control: an open dropdown list keeps them.
+func _input(event: InputEvent) -> void:
+	var step: int = UiPage.step(event)
+	if step == 0:
+		return
+	_round_tabs.current_tab = UiPage.next_tab(
+		_round_tabs.current_tab, step, _round_tabs.tab_count, _round_tabs.is_tab_disabled
+	)
+	get_viewport().set_input_as_handled()
+
+
 ## Shows the state of the tournament and the current round.
 func _refresh() -> void:
 	for round_index in _tournament.round_count():
