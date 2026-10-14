@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="AnimationSetImport" format=3]
+
+[ext_resource type="Script" uid="uid://b8hbrkn7o3y3c" path="res://scenes/player/rig/animation_set_import.gd" id="1_set"]
+[ext_resource type="Script" uid="uid://l46m2y770xo0" path="res://scenes/player/rig/animation_clip_import.gd" id="2_clip"]
+
+[sub_resource type="Resource" id="idle"]
+script = ExtResource("2_clip")
+source = &"idle"
+name = &"idle"
+loop = true
+
+[sub_resource type="Resource" id="serve"]
+script = ExtResource("2_clip")
+source = &"serve"
+name = &"serve"
+markers = Dictionary[StringName, float]({
+&"toss": 0.267,
+&"swing": 0.433,
+&"hit": 0.7
+})
+
+[sub_resource type="Resource" id="forehand"]
+script = ExtResource("2_clip")
+source = &"forehand"
+name = &"forehand"
+markers = Dictionary[StringName, float]({
+&"swing": 0.9,
+&"hit": 1.033
+})
+
+[sub_resource type="Resource" id="forehand_down"]
+script = ExtResource("2_clip")
+source = &"forehand_down"
+name = &"forehand_down"
+markers = Dictionary[StringName, float]({
+&"swing": 0.367,
+&"hit": 0.5
+})
+
+[sub_resource type="Resource" id="forehand_up"]
+script = ExtResource("2_clip")
+source = &"forehand_up"
+name = &"forehand_up"
+markers = Dictionary[StringName, float]({
+&"swing": 0.4,
+&"hit": 0.5
+})
+
+[sub_resource type="Resource" id="forehand_open"]
+script = ExtResource("2_clip")
+source = &"forehand_open"
+name = &"forehand_open"
+markers = Dictionary[StringName, float]({
+&"swing": 0.9,
+&"hit": 1.033
+})
+
+[sub_resource type="Resource" id="backhand"]
+script = ExtResource("2_clip")
+source = &"backhand"
+name = &"backhand"
+markers = Dictionary[StringName, float]({
+&"swing": 1.333,
+&"hit": 1.59
+})
+
+[sub_resource type="Resource" id="backhand_down"]
+script = ExtResource("2_clip")
+source = &"backhand_down"
+name = &"backhand_down"
+markers = Dictionary[StringName, float]({
+&"swing": 0.1,
+&"hit": 0.5
+})
+
+[sub_resource type="Resource" id="backhand_up"]
+script = ExtResource("2_clip")
+source = &"backhand_up"
+name = &"backhand_up"
+markers = Dictionary[StringName, float]({
+&"swing": 0.333,
+&"hit": 0.5
+})
+
+[sub_resource type="Resource" id="backhand_slice"]
+script = ExtResource("2_clip")
+source = &"backhand_slice"
+name = &"backhand_slice"
+markers = Dictionary[StringName, float]({
+&"swing": 0.1,
+&"hit": 0.233
+})
+
+[resource]
+script = ExtResource("1_set")
+output_dir = "res://scenes/player/animations"
+clips = Array[ExtResource("2_clip")]([SubResource("idle"), SubResource("serve"), SubResource("forehand"), SubResource("forehand_down"), SubResource("forehand_up"), SubResource("forehand_open"), SubResource("backhand"), SubResource("backhand_down"), SubResource("backhand_up"), SubResource("backhand_slice")])

@@ -3,6 +3,11 @@
 [ext_resource type="Script" path="res://scenes/player/racket/racket.gd" id="1_racket"]
 [ext_resource type="ArrayMesh" path="res://scenes/player/racket/racket_mesh.res" id="2_mesh"]
 
-[node name="Racket" type="MeshInstance3D"]
+[node name="Racket" type="MeshInstance3D" node_paths=PackedStringArray("sweet_spot")]
 mesh = ExtResource("2_mesh")
 script = ExtResource("1_racket")
+sweet_spot = NodePath("SweetSpot")
+
+[node name="SweetSpot" type="Marker3D" parent="."]
+position = Vector3(-0.13126, 0.065617, 0.05207)
+gizmo_extents = 0.05

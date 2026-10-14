@@ -5,7 +5,15 @@
 .vscode/
 .claude/
 
-assets/models/
+assets/models/**
+# The import settings of the player bodies and animation sets are part of the import pipeline
+# (see tools/blender/export_player_assets.py); the models themselves are not versioned.
+!assets/models/**/
+!assets/models/players/**/*.glb.import
+!assets/models/animations/**/*.glb.import
+!assets/models/animations/**/*.fbx.import
+# Textures of the player appearances
+!assets/models/players/textures/*
 
 ### Blender ###
 # Ignore temporary Blender files.

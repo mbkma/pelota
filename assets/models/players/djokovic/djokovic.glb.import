@@ -1,0 +1,104 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://rgbqemjyjgx8"
+path="res://.godot/imported/djokovic.glb-11442446f29096ee70992cde77c414a0.scn"
+
+[deps]
+
+source_file="res://assets/models/players/djokovic/djokovic.glb"
+dest_files=["res://.godot/imported/djokovic.glb-11442446f29096ee70992cde77c414a0.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+mesh_library/create_categories_from_hierarchy=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path="res://scenes/player/rig/player_body_import.gd"
+materials/extract=0
+materials/extract_format=0
+materials/extract_path="res://assets/materials"
+_subresources={
+"materials": {
+"Fabric White": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Fabric White.tres",
+"use_external/path": "uid://cs63spc8ukfg3"
+},
+"Human.body": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.body.tres",
+"use_external/path": "uid://s01h6tnpxsrj"
+},
+"Human.eyebrow012.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.eyebrow012.001.tres",
+"use_external/path": "uid://db4wk2ietdh41"
+},
+"Human.eyelashes01.001": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.eyelashes01.001.tres",
+"use_external/path": "uid://dhtbfl2qd6nwh"
+},
+"Human.high-poly": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.high-poly.tres",
+"use_external/path": "uid://cygwab11uwxei"
+},
+"Human.shoes05": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.shoes05.tres",
+"use_external/path": "uid://ccy41v0ciuo2t"
+},
+"Human.short01.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.short01.002.tres",
+"use_external/path": "uid://carcaucrbmiyf"
+},
+"Human.teeth_base.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.teeth_base.002.tres",
+"use_external/path": "uid://bl5m2p84s4s27"
+},
+"Human.tongue01.002": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Human.tongue01.002.tres",
+"use_external/path": "uid://bn3rgv7dx2byg"
+},
+"Material": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/Material.tres",
+"use_external/path": "uid://rk2qooa1xee"
+}
+},
+"nodes": {
+"PATH:Rig/Skeleton3D": {
+"retarget/bone_map": Resource("res://scenes/player/rig/game_rig_bone_map.tres")
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=2
+gltf/texture_map_mode=1

@@ -162,8 +162,8 @@ var bisector_direction: Vector3 = Vector3.ZERO
 var opponent_hit_position: Vector3 = Vector3.ZERO
 
 var _movement := MovementController.new()
-## Clip of the queued stroke once its swing has started.
-var _swing_clip: StrokeClip = null
+## Prepares and swings the queued stroke so that it meets the ball
+var _swing_timer: SwingTimer
 ## Seconds until the racket is expected to meet the ball; INF while no contact is predicted.
 var _seconds_to_contact: float = INF
 ## Sound of a stroke hit on the run, started RUNNING_HIT_TIME before contact so that its hit
@@ -204,7 +204,9 @@ func _ready() -> void:
 	stats = PlayerRuntimeStats.new(player_data.stats, mental_state)
 	_stamina = stats.stamina_capacity()
 	label_3d.text = player_data.last_name
+	model.load_body(player_data.body)
 	model.load_appearance(player_data.appearance)
+	_swing_timer = SwingTimer.new(model.animator, max_stroke_speed)
 	model.racket.show_design(player_data.racket)
 	set_meta("logger_name", player_data.last_name)
 
@@ -257,6 +259,7 @@ func _process(delta: float) -> void:
 	controller.update(delta)
 	_update_controller_ui()
 	_consume_controller_stroke()
+	model.look_at_point(ball.global_position if is_instance_valid(ball) else null)
 
 
 ## Serves or queues the stroke the controller decided on, once per decision.
@@ -280,6 +283,7 @@ func _physics_process(delta: float) -> void:
 
 ## Request the input handler to initiate a serve
 func request_serve() -> void:
+	model.hold_ball(true)
 	_lifecycle_bus.begin_serve_setup(self)
 	controller.request_serve()
 
@@ -289,6 +293,7 @@ func stop() -> void:
 	_playing_out = false
 	_halt()
 	cancel_stroke()
+	model.hold_ball(false)
 	set_active_ball(null)
 	_lifecycle_bus.end_point(self)
 
@@ -441,11 +446,11 @@ func move_to_defensive_position(target_position: Vector3) -> void:
 ##################
 
 
-## Queue a rally stroke. It is swung automatically so that the animation's `hit`
-## marker coincides with the ball reaching the racket contact point.
+## Queue a rally stroke. It is prepared and swung automatically so that the animation's `hit`
+## marker coincides with the ball reaching the racket contact point (see SwingTimer).
 ## Returns false while a swing is already on its way to contact.
 func queue_stroke(stroke: Stroke) -> bool:
-	if _swing_clip or not is_instance_valid(ball):
+	if _swing_timer.is_released() or not is_instance_valid(ball):
 		return false
 
 	queued_stroke = stroke
@@ -459,19 +464,28 @@ func get_seconds_to_contact() -> float:
 	return _seconds_to_contact
 
 
-## Start the swing of the queued stroke once the ball is within the clip's hit time.
+## Prepares and swings the queued stroke for the ball (see SwingTimer); during the forward swing,
+## lets the racket hand reach for a ball the swing would miss.
 func _update_stroke_timing() -> void:
-	if _swing_clip:
-		_seconds_to_contact -= get_physics_process_delta_time()
+	if _swing_timer.is_released():
+		_seconds_to_contact = model.animator.seconds_until_marker(PlayerAnimator.HIT_MARKER)
 		_start_running_sound_when_due()
+		_reach_for_ball()
+		return
+	if queued_stroke and queued_stroke.stroke_type == Stroke.StrokeType.SERVE:
+		_seconds_to_contact = _swing_timer.update_serve(get_physics_process_delta_time())
+		if _seconds_to_contact == INF:
+			_seconds_to_contact = model.get_serve_seconds_to_contact()
+		elif _swing_timer.is_released():
+			_on_swing_released()
 		return
 	if not queued_stroke or not is_instance_valid(ball):
 		_seconds_to_contact = INF
 		return
 
-	var clip: StrokeClip = model.get_stroke_clip(queued_stroke)
-	var contact_point: Vector3 = clip.global_position
-	if _is_ball_moving_away_from(contact_point):
+	var swing: StrokeBlend = model.get_stroke_blend(queued_stroke)
+	var contact_point: Vector3 = model.get_contact_point(swing)
+	if ball.is_moving_away_from(contact_point):
 		# Ball already passed the contact point: the stroke is too late.
 		cancel_stroke()
 		return
@@ -480,37 +494,31 @@ func _update_stroke_timing() -> void:
 	if time_to_contact < 0.0:
 		_seconds_to_contact = INF
 		return
-	# A fired OneShot starts advancing one animation frame later.
+	# The stroke clock runs on in the next animation frame.
 	time_to_contact -= get_process_delta_time()
 	_seconds_to_contact = time_to_contact
-
-	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
-	if time_to_contact > hit_time:
-		return
-
-	# Late swings are sped up so the hit marker still lines up with the ball; when even the
-	# fastest swing is too slow, the swing starts part of the way through (a shortened backswing).
-	var speed: float = clampf(hit_time / maxf(time_to_contact, 0.001), 1.0, max_stroke_speed)
-	var start_time: float = maxf(hit_time - time_to_contact * max_stroke_speed, 0.0)
-	_start_swing(clip, speed, start_time)
+	_swing_timer.update(swing, time_to_contact)
+	if _swing_timer.is_released():
+		_on_swing_released()
 
 
-## Plays the stroke clip from `start_time` (s) at `speed`.
-func _start_swing(clip: StrokeClip, speed: float, start_time: float = 0.0) -> void:
-	_swing_clip = clip
-	# The swing has to face the net to meet the ball at the clip's contact point.
+func _on_swing_released() -> void:
+	# The swing has to face the net to meet the ball at the swing's contact point.
 	model.set_body_yaw(0.0)
-	var hit_time: float = model.animator.get_marker_time(clip.animation, PlayerAnimator.HIT_MARKER)
-	_seconds_to_contact = (hit_time - start_time) / speed
+	model.reach_toward(Vector3.ZERO)
 	_running_sound = _pick_running_sound()
 	_start_running_sound_when_due()
 	_set_state(PlayerStateMachine.State.STROKING)
-	model.animator.play_stroke(clip.animation, speed, start_time)
 
 
-func _is_ball_moving_away_from(contact_point: Vector3) -> bool:
-	var offset: float = ball.global_position.z - contact_point.z
-	return offset * ball.velocity.z > 0.0
+## Lets the racket hand reach from where the swing meets the ball toward where the ball will be
+## then (see Model.reach_toward).
+func _reach_for_ball() -> void:
+	if not is_instance_valid(ball) or not queued_stroke or _seconds_to_contact <= 0.0:
+		return
+	var contact: Vector3 = model.get_contact_point(_swing_timer.swing)
+	contact += _body_travel(_seconds_to_contact)
+	model.reach_toward(ball.position_in(_seconds_to_contact) - contact)
 
 
 ## Seconds until the ball crosses the depth (z) of the contact point before its second bounce,
@@ -541,15 +549,6 @@ func _body_travel(seconds: float) -> Vector3:
 	var to_target: Vector3 = target - global_position
 	to_target.y = 0.0
 	return travel.limit_length(to_target.length())
-
-
-## How far (m) the ball passes from the racket contact point during this physics tick.
-func _contact_distance(contact_point: Vector3) -> float:
-	var travel: Vector3 = ball.velocity * get_physics_process_delta_time()
-	var closest: Vector3 = Geometry3D.get_closest_point_to_segment(
-		contact_point, ball.global_position - travel, ball.global_position + travel
-	)
-	return closest.distance_to(contact_point)
 
 
 ## Positioning quality in [0, 1] for a ball meeting the racket `contact_distance` meters off
@@ -653,12 +652,15 @@ func _on_stroke_marker_reached(marker: StringName) -> void:
 ## Racket reaches the contact point of the swinging stroke.
 func _on_stroke_contact() -> void:
 	var stroke: Stroke = queued_stroke
-	var clip: StrokeClip = _swing_clip
-	if not stroke or not clip:
+	var swing: StrokeBlend = _swing_timer.swing
+	if not stroke or not swing:
 		return
 
+	var contact_point: Vector3 = model.get_contact_point(swing)
 	if stroke.stroke_type == Stroke.StrokeType.SERVE:
-		last_positioning_quality = 1.0
+		last_positioning_quality = positioning_quality(
+			ball.passing_distance(contact_point, get_physics_process_delta_time())
+		)
 		_hit_ball(stroke)
 		_lifecycle_bus.complete_serve(self)
 		return
@@ -666,7 +668,9 @@ func _on_stroke_contact() -> void:
 	if not is_instance_valid(ball):
 		cancel_stroke()
 		return
-	var contact_distance: float = _contact_distance(clip.global_position)
+	var contact_distance: float = ball.passing_distance(
+		contact_point, get_physics_process_delta_time()
+	)
 	if contact_distance > hit_range_tolerance_meters:
 		cancel_stroke()
 		return
@@ -776,7 +780,7 @@ func cancel_stroke() -> void:
 	_running_sound = null
 	_running_sound_started = false
 	queued_stroke = null
-	_swing_clip = null
+	_swing_timer.cancel()
 	_seconds_to_contact = INF
 	if _state_machine.get_state() == PlayerStateMachine.State.PREPARING_STROKE:
 		_set_state(PlayerStateMachine.State.IDLE)
@@ -787,13 +791,15 @@ func cancel_stroke() -> void:
 func serve(stroke: Stroke) -> void:
 	queued_stroke = stroke
 	_lifecycle_bus.start_serving()
-	_start_swing(model.get_stroke_clip(stroke), 1.0)
+	_swing_timer.prepare_serve(model.get_stroke_blend(stroke))
+	# The serve has to face the net to meet the ball at its contact point.
+	model.set_body_yaw(0.0)
+	_set_state(PlayerStateMachine.State.STROKING)
 
 
 func _spawn_serve_ball() -> void:
 	var serve_ball: Ball = ball_scene.instantiate()
-	serve_ball.initial_position = position + model.toss_point
-	serve_ball.initial_velocity = Vector3(0, 5, 0)
+	_swing_timer.toss(model.toss(serve_ball))
 	get_parent().add_child(serve_ball)
 	ball_spawned.emit(serve_ball)
 
@@ -926,8 +932,7 @@ func apply_replay_frame(
 ) -> void:
 	global_transform = replay_transform
 	velocity = replay_velocity
-	model.set_body_yaw(animation_snapshot["body_yaw"])
-	model.animator.apply_snapshot(animation_snapshot)
+	model.apply_snapshot(animation_snapshot)
 
 
 func set_replay_mode(enabled: bool) -> void:
@@ -939,9 +944,7 @@ func set_replay_animation_paused(paused: bool) -> void:
 
 
 func get_replay_animation_snapshot() -> Dictionary:
-	var snapshot: Dictionary = model.animator.get_snapshot()
-	snapshot["body_yaw"] = model.body_yaw
-	return snapshot
+	return model.get_snapshot()
 
 
 func _on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:

@@ -1,8 +1,8 @@
-## A stroke animation together with the racket contact point it reaches at its `hit` marker.
-## Place it where the racket meets the ball at the hit frame (in model space).
-## The Model picks the clip whose contact height is closest to the ball for a given stroke type.
+## A stroke animation and the stroke types it plays. Where its racket meets the ball (the racket's
+## sweet spot at the animation's `hit` marker) follows from the animation on the player's body
+## (see Model.get_contact_point).
 class_name StrokeClip
-extends Marker3D
+extends Resource
 
 ## Animation in the player AnimationLibrary. Must have a `hit` marker
 ## and must be an input of the StrokeSelect transition in the player AnimationTree.

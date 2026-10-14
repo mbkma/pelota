@@ -6,6 +6,9 @@ extends MeshInstance3D
 const STRINGS_SURFACE: int = 0
 const FRAME_SURFACE: int = 1
 
+## Middle of the strings, where the racket should meet the ball
+@export var sweet_spot: Marker3D
+
 
 ## Shows the frame and strings of `design`.
 func show_design(design: RacketDesign) -> void:

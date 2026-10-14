@@ -41,7 +41,11 @@ shapes/navigation/geometry_color=Color(1, 0, 0.960784, 0.4)
 
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/size/initial_position_type=4
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/size/fullscreen=true
 
 [editor_plugins]
@@ -536,7 +540,6 @@ copy_path="res://"
 [rendering]
 
 textures/default_filters/anisotropic_filtering_level=4
-anti_aliasing/quality/msaa_2d=2
 anti_aliasing/quality/msaa_3d=2
 environment/defaults/default_clear_color=Color(0.141, 0.102, 0.188, 1)
 anti_aliasing/quality/screen_space_aa=2

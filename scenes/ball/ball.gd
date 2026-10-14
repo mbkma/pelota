@@ -340,6 +340,56 @@ func _solve_velocity(
 	return Vector3(vx0, vy0, velocity_z0)
 
 
+## Velocity that takes a ball without spin from `start_position` to `target_position` in
+## `seconds` (e.g. a serve toss), flying as the ball does: each iteration corrects the velocity
+## by the miss over the flight time.
+func velocity_to_reach(
+	start_position: Vector3, target_position: Vector3, seconds: float
+) -> Vector3:
+	var time_step: float = 1.0 / Engine.physics_ticks_per_second
+	var steps: int = maxi(roundi(seconds / time_step), 1)
+	var flight_time: float = steps * time_step
+	var start_velocity: Vector3 = (
+		(target_position - start_position) / flight_time + Vector3.UP * 0.5 * GRAVITY * flight_time
+	)
+	for _iteration in range(VELOCITY_SOLVER_MAX_ITERATIONS):
+		var state := State.new(start_position, start_velocity, Vector3.ZERO, false)
+		for _step in steps:
+			state.velocity = _advance_velocity(state.velocity, state.spin, time_step)
+			state.position += state.velocity * time_step
+		var miss: Vector3 = target_position - state.position
+		if miss.length() < VELOCITY_SOLVER_TOLERANCE * 0.1:
+			break
+		start_velocity += miss / flight_time
+	return start_velocity
+
+
+## Whether the ball flies away from `point` along the length of the court.
+func is_moving_away_from(point: Vector3) -> bool:
+	return (global_position.z - point.z) * velocity.z > 0.0
+
+
+## How far (m) the ball passes from `point` while it flies for `seconds` around now.
+func passing_distance(point: Vector3, seconds: float) -> float:
+	var travel: Vector3 = velocity * seconds
+	var closest: Vector3 = Geometry3D.get_closest_point_to_segment(
+		point, global_position - travel, global_position + travel
+	)
+	return closest.distance_to(point)
+
+
+## Where the ball will be in `seconds`, by its predicted trajectory.
+func position_in(seconds: float) -> Vector3:
+	var previous_point: Vector3 = global_position
+	var previous_time: float = 0.0
+	for step in predict_trajectory():
+		if step.time >= seconds:
+			return previous_point.lerp(step.point, inverse_lerp(previous_time, step.time, seconds))
+		previous_point = step.point
+		previous_time = step.time
+	return previous_point
+
+
 ## Predicts the ball's trajectory with the same simulation the ball runs (walls excluded) and
 ## keeps it in `trajectory`. Step bounces count since the last stroke.
 func predict_trajectory(

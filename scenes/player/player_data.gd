@@ -16,7 +16,10 @@ extends Resource
 @export var play_style: AiPlayStyle
 ## Full gameplay stat profile used by movement, stamina, shot synthesis, and AI behavior.
 @export var stats: PlayerStatsProfile
-## Visual profile that defines body, clothing, and hair mesh variants.
+## Body of the player: an imported player body (see scenes/player/rig/player_body_import.gd);
+## none for the model's default body.
+@export var body: PackedScene
+## Textures and colors of the body
 @export var appearance: PlayerAppearance
 ## The racket the player plays with: its brand and look
 @export var racket: RacketDesign

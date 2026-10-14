@@ -30,13 +30,13 @@ func _ready() -> void:
 	_split_cameras = {
 		SplitscreenMode.VERTICAL_SPLIT:
 		[
-			_create_camera($HBoxContainer/LeftViewportContainer/LeftViewport),
-			_create_camera($HBoxContainer/RightViewportContainer/RightViewport),
+			_create_camera($HBoxContainer/LeftView/LeftViewport),
+			_create_camera($HBoxContainer/RightView/RightViewport),
 		],
 		SplitscreenMode.HORIZONTAL_SPLIT:
 		[
-			_create_camera($VBoxContainer/TopViewportContainer/TopViewport),
-			_create_camera($VBoxContainer/BottomViewportContainer/BottomViewport),
+			_create_camera($VBoxContainer/TopView/TopViewport),
+			_create_camera($VBoxContainer/BottomView/BottomViewport),
 		],
 	}
 	_set_mode(SplitscreenMode.NORMAL)

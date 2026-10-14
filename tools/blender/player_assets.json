@@ -1,0 +1,29 @@
+{
+	"bodies": {
+		"djokovic": {
+			"blend": "../pelota-files/player/player_djokovic.blend",
+			"rig": "game-rig",
+			"output": "assets/models/players/djokovic/djokovic.glb",
+			"meshes": {
+				"Body": "Human",
+				"Shirt": "Human.male_casualsuit06",
+				"Shorts": "Human.mindfront_male_swimming_trunks_01",
+				"Shoes": "Human.shoes05",
+				"Hair": "Human.short01",
+				"Eyes": "Human.high-poly",
+				"Eyebrows": "Human.eyebrow012",
+				"Eyelashes": "Human.eyelashes01",
+				"Teeth": "Human.teeth_base",
+				"Tongue": "Human.tongue01"
+			}
+		}
+	},
+	"animation_sets": {
+		"base": {
+			"blend": "../pelota-files/player/player_djokovic.blend",
+			"rig": "game-rig",
+			"prefix": "g_",
+			"output": "assets/models/animations/base/base_animations.glb"
+		}
+	}
+}

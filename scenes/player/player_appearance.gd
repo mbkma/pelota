@@ -1,5 +1,5 @@
-## Look of a player: modular meshes, textures and colors. A color tints its slot's texture;
-## a slot without a texture shows the plain color.
+## Look of a player's body (see Model): textures and colors of its mesh slots. A color tints its
+## slot's texture; a slot without a texture shows the plain color.
 ## Every field left unset (null, or a color with alpha 0) is taken from the base appearance
 ## (see Model), so player appearances only need what makes them different.
 class_name PlayerAppearance
@@ -7,12 +7,6 @@ extends Resource
 
 ## Color meaning "not set, use the base appearance's"
 const UNSET_COLOR := Color(0, 0, 0, 0)
-
-@export var body_mesh: Mesh
-@export var shirt_mesh: ArrayMesh
-@export var shorts_mesh: Mesh
-@export var shoes_mesh: Mesh
-@export var hair_mesh: Mesh
 
 ## Skin of the body and the face
 @export var skin_texture: Texture2D

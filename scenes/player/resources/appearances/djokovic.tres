@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://bumsgiut0ffed"]
 
 [ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://bijyf0dfn1sg5" path="res://assets/models/player/textures/djokovic-2_DH0853_C9U_24.jpg" id="2_shirt"]
+[ext_resource type="Texture2D" uid="uid://bijyf0dfn1sg5" path="res://assets/models/players/textures/djokovic-2_DH0853_C9U_24.jpg" id="2_shirt"]
 
 [resource]
 script = ExtResource("1_script")

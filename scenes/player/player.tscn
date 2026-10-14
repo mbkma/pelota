@@ -84,33 +84,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6746259, -0.34675705)
 
 [node name="Model" parent="." unique_id=1656989274 instance=ExtResource("3_lm2ok")]
 
-[node name="GeneralSkeleton" parent="Model/h/player_djokovic/game-rig" parent_id_path=PackedInt32Array(1656989274, 1707463736) index="0" unique_id=1907959317]
-bones/1/rotation = Quaternion(-0.00087472703, 0, 0, 0.99999964)
-bones/3/rotation = Quaternion(-0.006209522, 0, 0, 0.99998075)
-bones/4/rotation = Quaternion(-0.0050808433, 0, 0, 0.9999871)
-bones/5/rotation = Quaternion(0.017011907, 0, 0, 0.9998554)
-bones/6/rotation = Quaternion(-0.0017172331, 0, 0, 0.99999857)
-bones/105/rotation = Quaternion(0.50312626, 0.5032187, 0.49677372, -0.49684078)
-bones/106/position = Vector3(-0.008632251, 0.1810323, -0.031825162)
-bones/106/rotation = Quaternion(-0.48853582, -0.054003067, -0.15209907, 0.85748607)
-bones/107/rotation = Quaternion(0.2085551, 0.9303911, -0.18461277, 0.23831779)
-bones/108/rotation = Quaternion(-0.0003141413, 0.09583936, 0.10979502, 0.9893229)
-bones/109/rotation = Quaternion(0.11829213, -0.7213898, 0.20621833, 0.65044427)
-bones/110/rotation = Quaternion(-0.16931047, -0.17743763, -0.25197437, 0.93614036)
-bones/111/rotation = Quaternion(0.090670735, 0.54565275, -0.29743087, 0.77818817)
-bones/131/rotation = Quaternion(0.5031263, -0.5032187, -0.49677378, -0.49684078)
-bones/132/position = Vector3(0.008632284, 0.18103309, -0.031825375)
-bones/132/rotation = Quaternion(-0.5088133, 0.010331401, 0.08260682, 0.8568421)
-bones/133/rotation = Quaternion(-0.10335569, 0.96185255, -0.22430125, -0.11766996)
-bones/134/rotation = Quaternion(-0.0005191759, -0.15833794, -0.18139422, 0.97057974)
-bones/135/rotation = Quaternion(0.06073752, 0.6883444, -0.33342412, 0.6413434)
-
-[node name="AnimationTree" parent="Model" index="3" unique_id=697911821]
-parameters/Locomotion/Move/blend_position = Vector2(0, 0)
-parameters/Locomotion/Move/observer = null
-parameters/Locomotion/Cadence/scale = 1.0
-parameters/Locomotion/Moving/blend_amount = 0.0
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1264019160]
 bus = &"SFX"
 
@@ -122,4 +95,3 @@ visible = false
 
 [node name="StrokeIndicator" parent="." unique_id=507737745 instance=ExtResource("17_stroke_indicator")]
 
-[editable path="Model"]
