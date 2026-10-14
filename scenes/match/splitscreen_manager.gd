@@ -70,6 +70,8 @@ func _set_mode(mode: SplitscreenMode) -> void:
 		_split_containers[container_mode].visible = container_mode == mode
 	var split: bool = mode != SplitscreenMode.NORMAL
 	set_process(split)
+	# The split views cover the whole screen, so the main view would render its 3D unseen.
+	get_viewport().disable_3d = split
 	if split:
 		for camera: Camera3D in _split_cameras[mode]:
 			camera.make_current()
