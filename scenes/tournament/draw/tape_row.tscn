@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/tape_row.gd" id="1_tape"]
+
+[node name="TapeRow" type="HBoxContainer"]
+script = ExtResource("1_tape")
+
+[node name="LeftValueLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_colors/font_color = Color(0.349, 0.675, 0.725, 1)
+theme_override_font_sizes/font_size = 19
+text = "#1"
+
+[node name="TitleLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Age"
+horizontal_alignment = 1
+
+[node name="RightValueLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_colors/font_color = Color(0.843, 0.459, 0.447, 1)
+theme_override_font_sizes/font_size = 19
+text = "#2"
+horizontal_alignment = 2

@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://c28c38c1du2oh"]
-
-[resource]
-resource_name = "Human.teeth_base.002"
-transparency = 4
-cull_mode = 2
-roughness = 0.2

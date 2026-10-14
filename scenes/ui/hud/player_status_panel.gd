@@ -16,6 +16,7 @@ func _ready() -> void:
 	_name_label.text = player.player_data.last_name
 	_name_label.add_theme_color_override("font_color", name_color)
 	UiSettings.changed.connect(_apply_ui_settings)
+	player.controller_changed.connect(_apply_ui_settings)
 	_apply_ui_settings()
 
 

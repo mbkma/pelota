@@ -88,3 +88,4 @@ horizontal_alignment = 1
 
 [node name="PauseMenu" parent="." instance=ExtResource("5_pause")]
 visible = false
+opponent_controllable = false

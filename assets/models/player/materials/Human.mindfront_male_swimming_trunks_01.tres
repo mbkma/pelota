@@ -1,8 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bnx2blfcjnmhj"]
-
-[resource]
-resource_name = "Human.mindfront_male_swimming_trunks_01"
-transparency = 4
-cull_mode = 2
-metallic = 0.362205
-roughness = 0.788152

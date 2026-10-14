@@ -27,3 +27,13 @@ extends Resource
 	"grunt_frequency": 0.0,
 	"victory": [],
 }
+
+
+## "Carlos Alcaraz"
+func full_name() -> String:
+	return "%s %s" % [first_name, last_name]
+
+
+## Name as on a draw: "C. Alcaraz"
+func short_name() -> String:
+	return "%s. %s" % [first_name.left(1), last_name]

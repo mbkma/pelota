@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://dypqur1tbridq"]
-
-[resource]
-resource_name = "Human.shoes05"
-transparency = 4
-cull_mode = 2
-roughness = 0.727559

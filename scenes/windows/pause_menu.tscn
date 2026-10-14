@@ -5,14 +5,15 @@
 [ext_resource type="PackedScene" uid="uid://cs4ych5druj43" path="res://scenes/windows/pause_menu_options_window.tscn" id="3_mdvg7"]
 [ext_resource type="PackedScene" uid="uid://cwt4p3bufkke5" path="res://addons/maaacks_game_template/base/nodes/windows/confirmation_overlaid_window.tscn" id="4_6lma4"]
 [ext_resource type="PackedScene" uid="uid://b6bl3n5mp3m1e" path="res://addons/maaacks_game_template/base/nodes/menus/options_menu/option_control/list_option_control.tscn" id="5_list"]
+[ext_resource type="PackedScene" path="res://scenes/windows/controllers_window.tscn" id="6_controllers"]
 
 [node name="PauseMenu" unique_id=156357199 instance=ExtResource("1_yn032")]
 process_mode = 3
-custom_minimum_size = Vector2(320, 392)
+custom_minimum_size = Vector2(320, 440)
 offset_left = -160.0
-offset_top = -195.0
+offset_top = -220.0
 offset_right = 160.0
-offset_bottom = 197.0
+offset_bottom = 220.0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource("2_00o4m")
@@ -48,26 +49,30 @@ key = "CameraView"
 section = "GameSettings"
 property_type = 2
 
-[node name="MatchStatsButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="2" unique_id=1846291537]
+[node name="ControllersButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="2"]
+layout_mode = 2
+text = "Controllers"
+
+[node name="MatchStatsButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="3" unique_id=1846291537]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Match Stats"
 
-[node name="RestartButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="3" unique_id=1371657172]
+[node name="RestartButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="4" unique_id=1371657172]
 layout_mode = 2
 text = "Restart"
 
-[node name="OptionsButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="4" unique_id=1126383675]
+[node name="OptionsButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="5" unique_id=1126383675]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Options"
 
-[node name="MainMenuButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="5" unique_id=928043706]
+[node name="MainMenuButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="6" unique_id=928043706]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Main Menu"
 
-[node name="ExitButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="6" unique_id=1398257582]
+[node name="ExitButton" type="Button" parent="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons" parent_id_path=PackedInt32Array(1371114575) index="7" unique_id=1398257582]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Exit Game"
@@ -94,6 +99,12 @@ layout_mode = 2
 text = "Exit the game?"
 title = "Confirm Exit"
 
+[node name="ControllersWindow" parent="." index="4" instance=ExtResource("6_controllers")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons/ControllersButton" to="." method="_on_controllers_button_pressed"]
 [connection signal="pressed" from="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons/MatchStatsButton" to="." method="_on_match_stats_button_pressed"]
 [connection signal="pressed" from="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons/RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="ContentContainer/BoxContainer/MenuButtonsMargin/MenuButtons/OptionsButton" to="." method="_on_options_button_pressed"]

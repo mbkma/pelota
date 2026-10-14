@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/device_lanes/device_row.gd" id="1_row"]
+[ext_resource type="Texture2D" uid="uid://dq6e6bfnkdf32" path="res://addons/at-icons/control/keyboard.svg" id="2_keyboard"]
+[ext_resource type="Texture2D" uid="uid://bhbxyb5vmh40a" path="res://addons/at-icons/control/joypad.svg" id="3_joypad"]
+[ext_resource type="Texture2D" uid="uid://deesrrft052ce" path="res://assets/textures/ui/ready_badge.svg" id="4_ready"]
+
+[node name="DeviceRow" type="HBoxContainer"]
+script = ExtResource("1_row")
+keyboard_icon = ExtResource("2_keyboard")
+gamepad_icon = ExtResource("3_joypad")
+
+[node name="Player1Slot" type="CenterContainer" parent="."]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UnassignedSlot" type="CenterContainer" parent="."]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Card" type="VBoxContainer" parent="UnassignedSlot"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="IconHolder" type="Control" parent="UnassignedSlot/Card"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Icon" type="TextureRect" parent="UnassignedSlot/Card/IconHolder"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_keyboard")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReadyBadge" type="TextureRect" parent="UnassignedSlot/Card/IconHolder"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = -12.0
+offset_right = 60.0
+offset_bottom = 18.0
+pivot_offset = Vector2(15, 15)
+texture = ExtResource("4_ready")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="UnassignedSlot/Card"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Keyboard"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="ReadyLabel" type="Label" parent="UnassignedSlot/Card"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
+theme_override_font_sizes/font_size = 20
+text = "READY"
+horizontal_alignment = 1
+
+[node name="Player2Slot" type="CenterContainer" parent="."]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3

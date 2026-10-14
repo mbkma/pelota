@@ -11,6 +11,8 @@ class_name Tournament
 extends Resource
 
 const NAME: String = "US Open"
+const LOCATION: String = "New York, USA"
+const CATEGORY: String = "Grand Slam"
 const DRAW_SIZE: int = 128
 const SEED_COUNT: int = 32
 const ROUND_NAMES: PackedStringArray = [
@@ -74,6 +76,19 @@ func round_name(round_index: int) -> String:
 	return ROUND_NAMES[round_index]
 
 
+## Short name of a round as on a draw: R128, R64, R32, R16, QF, SF, F.
+func round_short_name(round_index: int) -> String:
+	var players_left: int = DRAW_SIZE >> round_index
+	match players_left:
+		8:
+			return "QF"
+		4:
+			return "SF"
+		2:
+			return "F"
+	return "R%d" % players_left
+
+
 func round_matches(round_index: int) -> Array[TournamentMatch]:
 	return matches.filter(func(m: TournamentMatch) -> bool: return m.round_index == round_index)
 
@@ -98,6 +113,28 @@ func player_match() -> TournamentMatch:
 		if m.has_player(player) and not m.is_played():
 			return m
 	return null
+
+
+## The matches `entrant` played or is drawn to play, first round first.
+func matches_of(entrant: PlayerData) -> Array[TournamentMatch]:
+	return matches.filter(func(m: TournamentMatch) -> bool: return m.has_player(entrant))
+
+
+## Matches `entrant` won and lost so far.
+func win_loss(entrant: PlayerData) -> Vector2i:
+	var record := Vector2i.ZERO
+	for m in matches_of(entrant):
+		if m.is_played():
+			if m.get_winner() == entrant:
+				record.x += 1
+			else:
+				record.y += 1
+	return record
+
+
+## Whether `entrant` lost a match.
+func is_out(entrant: PlayerData) -> bool:
+	return win_loss(entrant).y > 0
 
 
 ## The match the player lost, null while the player is still in.
@@ -161,6 +198,8 @@ static func _seen_from(final_score: Score, player_index: int) -> Score:
 	var swapped := Score.new()
 	for games in final_score.completed_sets:
 		swapped.completed_sets.append(Vector2i(games.y, games.x))
+	for points in final_score.set_tiebreaks:
+		swapped.set_tiebreaks.append(Vector2i(points.y, points.x))
 	swapped.sets = [final_score.sets[1], final_score.sets[0]]
 	return swapped
 

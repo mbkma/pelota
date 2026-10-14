@@ -21,6 +21,11 @@ Author: Kenney Vleugels
 Source: [kenney.nl](https://www.kenney.nl)  
 License: CC0 (UI SFX Set)
 
+#### Country Flags
+Author: [Panayiotis Lipiridis and contributors](https://github.com/lipis/flag-icons/graphs/contributors)  
+Source: [github: flag-icons](https://github.com/lipis/flag-icons)  
+License: [MIT License](https://github.com/lipis/flag-icons/blob/main/LICENSE)
+
 #### Godot Engine Logo
 Author: Andrea Calabró  
 Source: [godotengine.org : press](https://godotengine.org/press/)  

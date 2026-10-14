@@ -28,7 +28,7 @@ const TIPS: PackedStringArray = [
 	"Playing with a friend? Press X during the match to switch between one view, side by side and top and bottom split screen.",
 	"In the player selection, move your keyboard or controller left or right to take a player. A player without one is played by the CPU.",
 	"In training, press E or the right trigger for the next ball from the ball machine.",
-	"On the tournament draw, the shoulder buttons (Page Up / Page Down) switch between the rounds played so far.",
+	"On the tournament draw, the shoulder buttons (Page Up / Page Down) switch between the rounds of the draw.",
 	"Choose best of 3 or best of 5 sets for your tournament matches on the draw.",
 	"In the options, the shoulder buttons (Page Up / Page Down) switch between the tabs.",
 	"Game running slowly? Lower the Crowd Count or the Crowd Detail in the graphics options.",

@@ -2,6 +2,9 @@
 ## the tournament being played.
 extends Node
 
+## The devices controlling the teams changed (see set_match_input_devices)
+signal match_input_devices_changed
+
 const CHARACTER_DATA_DIR := "res://scenes/player/resources/data/"
 ## Sets of a match outside a tournament
 const DEFAULT_BEST_OF_SETS: int = 3
@@ -80,6 +83,7 @@ func set_training_player(player: PlayerData) -> void:
 
 func set_match_input_devices(player1_device_id: int, player2_device_id: int) -> void:
 	_match_input_devices = [player1_device_id, player2_device_id]
+	match_input_devices_changed.emit()
 
 
 func get_match_input_device(team_index: int) -> int:

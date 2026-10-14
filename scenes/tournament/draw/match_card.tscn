@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/match_card.gd" id="1_card"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/draw_player_line.tscn" id="2_line"]
+
+[node name="MatchCard" type="PanelContainer"]
+custom_minimum_size = Vector2(380, 116)
+theme_type_variation = &"DrawCard"
+script = ExtResource("1_card")
+
+[node name="Lines" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="TopLine" parent="Lines" instance=ExtResource("2_line")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BottomLine" parent="Lines" instance=ExtResource("2_line")]
+unique_name_in_owner = true
+layout_mode = 2

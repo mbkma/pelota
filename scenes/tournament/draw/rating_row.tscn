@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/rating_row.gd" id="1_rating"]
+
+[node name="RatingRow" type="VBoxContainer"]
+theme_override_constants/separation = 2
+script = ExtResource("1_rating")
+
+[node name="Values" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="LeftValueLabel" type="Label" parent="Values"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_colors/font_color = Color(0.349, 0.675, 0.725, 1)
+theme_override_font_sizes/font_size = 17
+text = "80"
+
+[node name="TitleLabel" type="Label" parent="Values"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
+text = "Serve"
+horizontal_alignment = 1
+
+[node name="RightValueLabel" type="Label" parent="Values"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_colors/font_color = Color(0.843, 0.459, 0.447, 1)
+theme_override_font_sizes/font_size = 17
+text = "75"
+
+[node name="Bars" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="LeftBar" type="ProgressBar" parent="Bars"]
+unique_name_in_owner = true
+self_modulate = Color(0.349, 0.675, 0.725, 1)
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"RatingBar"
+min_value = 40.0
+value = 80.0
+fill_mode = 1
+show_percentage = false
+
+[node name="RightBar" type="ProgressBar" parent="Bars"]
+unique_name_in_owner = true
+self_modulate = Color(0.843, 0.459, 0.447, 1)
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"RatingBar"
+min_value = 40.0
+value = 75.0
+show_percentage = false

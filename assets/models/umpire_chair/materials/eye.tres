@@ -1,8 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://dgrup50ah6031"]
-
-[ext_resource type="Texture2D" uid="uid://dkwpdml1mhimf" path="res://assets/models/umpire_chair/textures/umpire_chair_brown_eye.png" id="1_0prtg"]
-
-[resource]
-resource_name = "eye"
-albedo_texture = ExtResource("1_0prtg")
-roughness = 0.5

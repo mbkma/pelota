@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://du4q8qqg54l40"]
-
-[resource]
-resource_name = "Human.body"
-cull_mode = 2
-roughness = 0.56947

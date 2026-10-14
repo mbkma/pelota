@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/news_item.gd" id="1_news"]
+
+[node name="NewsItem" type="MarginContainer"]
+script = ExtResource("1_news")
+
+[node name="Button" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DrawLine"
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="Row" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Badge" type="PanelContainer" parent="Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(58, 0)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"BadgeRed"
+
+[node name="RoundLabel" type="Label" parent="Margin/Row/Badge"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 15
+text = "R32"
+horizontal_alignment = 1
+
+[node name="TextLabel" type="Label" parent="Margin/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Upset! Quentin Halys knocks out (30) Alejandro Tabilo in the 3rd Round"
+autowrap_mode = 3

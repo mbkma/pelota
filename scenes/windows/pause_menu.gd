@@ -12,6 +12,9 @@ extends OverlaidWindow
 @export var menu_container_node_path: NodePath = ^".."
 ## The match statistics shown by the Match Stats button; the button is hidden without them.
 @export_node_path(&"MatchStatsPanel") var match_stats_panel_path: NodePath
+## Whether the Controllers window can hand player 2 to a device (not in training, nor in a
+## tournament, where the opponent is always the CPU)
+@export var opponent_controllable: bool = true
 
 var open_window: Node
 ## Releasing ui_cancel closes the menu or its window only after its press reached the menu: the
@@ -29,6 +32,7 @@ var main_menu_confirmation: ConfirmationOverlaidWindow = get_node(main_menu_conf
 @onready var camera_view_control: ListOptionControl = %CameraViewControl
 @onready var match_stats_panel: MatchStatsPanel = get_node_or_null(match_stats_panel_path)
 @onready var main_menu_button = %MainMenuButton
+@onready var controllers_window: ControllersWindow = %ControllersWindow
 @onready var exit_button = %ExitButton
 
 
@@ -149,6 +153,11 @@ func _ready() -> void:
 
 func _on_restart_button_pressed() -> void:
 	_show_window(restart_confirmation)
+
+
+func _on_controllers_button_pressed() -> void:
+	controllers_window.one_player = (not opponent_controllable or GlobalGameData.tournament != null)
+	_show_window(controllers_window)
 
 
 func _on_match_stats_button_pressed() -> void:

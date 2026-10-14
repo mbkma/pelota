@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/champion_card.gd" id="1_champion"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/player_avatar.tscn" id="2_avatar"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/country_flag.tscn" id="3_flag"]
+[ext_resource type="Texture2D" path="res://addons/at-icons/control/trophy.svg" id="4_trophy"]
+
+[node name="ChampionCard" type="PanelContainer"]
+custom_minimum_size = Vector2(380, 116)
+theme_type_variation = &"ChampionCard"
+script = ExtResource("1_champion")
+
+[node name="Row" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PlayerAvatar" parent="Row" instance=ExtResource("2_avatar")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+initials_font_size = 26
+
+[node name="Text" type="VBoxContainer" parent="Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 0
+
+[node name="TitleLabel" type="Label" parent="Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"InkLabel"
+theme_override_font_sizes/font_size = 15
+text = "US OPEN CHAMPION"
+
+[node name="NameLabel" type="Label" parent="Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"InkLabel"
+theme_override_font_sizes/font_size = 28
+text = "Carlos Alcaraz"
+
+[node name="Country" type="HBoxContainer" parent="Row/Text"]
+layout_mode = 2
+
+[node name="CountryFlag" parent="Row/Text/Country" instance=ExtResource("3_flag")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CountryLabel" type="Label" parent="Row/Text/Country"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"InkLabel"
+theme_override_font_sizes/font_size = 16
+text = "Spain"
+
+[node name="Trophy" type="TextureRect" parent="Row"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_trophy")
+expand_mode = 1
+stretch_mode = 5

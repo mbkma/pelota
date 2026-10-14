@@ -1,6 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/tournament/tournament_screen.gd" id="1_screen"]
+[ext_resource type="Script" path="res://scenes/tournament/draw/draw_bracket.gd" id="2_bracket"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/match_card.tscn" id="3_card"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/champion_card.tscn" id="4_champion"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/head_to_head_card.tscn" id="5_h2h"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/player_profile_card.tscn" id="6_profile"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/news_item.tscn" id="7_news"]
+[ext_resource type="Texture2D" path="res://addons/at-icons/control/arrow_left.svg" id="8_left"]
+[ext_resource type="Texture2D" path="res://addons/at-icons/control/arrow_right.svg" id="9_right"]
+
+[sub_resource type="ButtonGroup" id="round_group"]
+allow_unpress = false
 
 [node name="TournamentScreen" type="Control"]
 layout_mode = 3
@@ -11,6 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_screen")
 match_scene_path = "res://scenes/match/tennis_match.tscn"
+news_item_scene = ExtResource("7_news")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -28,69 +40,293 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 28
 
-[node name="Layout" type="VBoxContainer" parent="Margin"]
+[node name="Columns" type="HBoxContainer" parent="Margin"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 28
 
-[node name="TitleLabel" type="Label" parent="Margin/Layout"]
+[node name="Main" type="VBoxContainer" parent="Margin/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="Header" type="PanelContainer" parent="Margin/Columns/Main"]
+layout_mode = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="Margin/Columns/Main/Header"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Badge" type="PanelContainer" parent="Margin/Columns/Main/Header/HeaderRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_type_variation = &"TournamentBadge"
+
+[node name="BadgeText" type="VBoxContainer" parent="Margin/Columns/Main/Header/HeaderRow/Badge"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = -4
+
+[node name="BadgeNameLabel" type="Label" parent="Margin/Columns/Main/Header/HeaderRow/Badge/BadgeText"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_type_variation = &"InkLabel"
+theme_override_font_sizes/font_size = 28
+text = "US OPEN"
 horizontal_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="Margin/Layout"]
+[node name="BadgeCategoryLabel" type="Label" parent="Margin/Columns/Main/Header/HeaderRow/Badge/BadgeText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"InkLabel"
+theme_override_font_sizes/font_size = 14
+text = "GRAND SLAM"
+horizontal_alignment = 1
+
+[node name="Info" type="VBoxContainer" parent="Margin/Columns/Main/Header/HeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 2
+
+[node name="TitleRow" type="HBoxContainer" parent="Margin/Columns/Main/Header/HeaderRow/Info"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="StateBadge" type="PanelContainer" parent="Margin/Columns/Main/Header/HeaderRow/Info/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"BadgeRed"
+
+[node name="StateLabel" type="Label" parent="Margin/Columns/Main/Header/HeaderRow/Info/TitleRow/StateBadge"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 16
+text = "LIVE"
+
+[node name="TitleLabel" type="Label" parent="Margin/Columns/Main/Header/HeaderRow/Info/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 34
+text = "US Open"
+
+[node name="InfoLabel" type="Label" parent="Margin/Columns/Main/Header/HeaderRow/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "New York, USA  |  Men's Singles  |  128 players"
+
+[node name="StatusLabel" type="Label" parent="Margin/Columns/Main/Header/HeaderRow/Info"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
-theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 22
 autowrap_mode = 3
 
-[node name="RoundTabs" type="TabBar" parent="Margin/Layout"]
+[node name="RoundBar" type="HBoxContainer" parent="Margin/Columns/Main"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PrevRoundButton" type="Button" parent="Margin/Columns/Main/RoundBar"]
 unique_name_in_owner = true
 layout_mode = 2
-tab_alignment = 1
+tooltip_text = "Previous round"
+icon = ExtResource("8_left")
 
-[node name="Scroll" type="ScrollContainer" parent="Margin/Layout"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="MatchList" type="VBoxContainer" parent="Margin/Layout/Scroll"]
-unique_name_in_owner = true
+[node name="LeftSpacer" type="Control" parent="Margin/Columns/Main/RoundBar"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
 
-[node name="Buttons" type="HBoxContainer" parent="Margin/Layout"]
+[node name="RoundButtons" type="HBoxContainer" parent="Margin/Columns/Main/RoundBar"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 12
+
+[node name="R128Button" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "R128"
+
+[node name="R64Button" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "R64"
+
+[node name="R32Button" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "R32"
+
+[node name="R16Button" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "R16"
+
+[node name="QFButton" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "QF"
+
+[node name="SFButton" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "SF"
+
+[node name="FButton" type="Button" parent="Margin/Columns/Main/RoundBar/RoundButtons"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_group = SubResource("round_group")
+text = "F"
+
+[node name="RightSpacer" type="Control" parent="Margin/Columns/Main/RoundBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MyMatchButton" type="Button" parent="Margin/Columns/Main/RoundBar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "My Match"
+
+[node name="NextRoundButton" type="Button" parent="Margin/Columns/Main/RoundBar"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Next round"
+icon = ExtResource("9_right")
+
+[node name="ColumnHeads" type="Control" parent="Margin/Columns/Main"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+
+[node name="FirstHeadLabel" type="Label" parent="Margin/Columns/Main/ColumnHeads"]
+layout_mode = 0
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "1st Round"
+
+[node name="SecondHeadLabel" type="Label" parent="Margin/Columns/Main/ColumnHeads"]
+layout_mode = 0
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "2nd Round"
+
+[node name="ThirdHeadLabel" type="Label" parent="Margin/Columns/Main/ColumnHeads"]
+layout_mode = 0
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "3rd Round"
+
+[node name="DrawScroll" type="ScrollContainer" parent="Margin/Columns/Main"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="Bracket" type="Control" parent="Margin/Columns/Main/DrawScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2_bracket")
+match_card_scene = ExtResource("3_card")
+champion_card_scene = ExtResource("4_champion")
+
+[node name="Buttons" type="HBoxContainer" parent="Margin/Columns/Main"]
+layout_mode = 2
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="SetsOption" type="OptionButton" parent="Margin/Layout/Buttons"]
+[node name="SetsOption" type="OptionButton" parent="Margin/Columns/Main/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PlayButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="PlayButton" type="Button" parent="Margin/Columns/Main/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SimulateMatchButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="SimulateMatchButton" type="Button" parent="Margin/Columns/Main/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Simulate My Match"
 
-[node name="SimulateButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="SimulateButton" type="Button" parent="Margin/Columns/Main/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Simulate to the Final"
 
-[node name="MainMenuButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="MainMenuButton" type="Button" parent="Margin/Columns/Main/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Main Menu"
+
+[node name="SideScroll" type="ScrollContainer" parent="Margin/Columns"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="SideColumn" type="VBoxContainer" parent="Margin/Columns/SideScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="HeadToHeadCard" parent="Margin/Columns/SideScroll/SideColumn" instance=ExtResource("5_h2h")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayerProfileCard" parent="Margin/Columns/SideScroll/SideColumn" instance=ExtResource("6_profile")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NewsCard" type="PanelContainer" parent="Margin/Columns/SideScroll/SideColumn"]
+layout_mode = 2
+theme_type_variation = &"SideCard"
+
+[node name="News" type="VBoxContainer" parent="Margin/Columns/SideScroll/SideColumn/NewsCard"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NewsTitleLabel" type="Label" parent="Margin/Columns/SideScroll/SideColumn/NewsCard/News"]
+layout_mode = 2
+theme_type_variation = &"CardTitleLabel"
+text = "NEWS"
+
+[node name="NoNewsLabel" type="Label" parent="Margin/Columns/SideScroll/SideColumn/NewsCard/News"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "The draw is out. Play your first match!"
+autowrap_mode = 3
+
+[node name="NewsList" type="VBoxContainer" parent="Margin/Columns/SideScroll/SideColumn/NewsCard/News"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6

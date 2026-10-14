@@ -40,6 +40,9 @@ func _ready() -> void:
 		],
 	}
 	_set_mode(SplitscreenMode.NORMAL)
+	# A player taken over by a human (from the pause menu) steers with its split view too.
+	player0.controller_changed.connect(_set_view_cameras)
+	player1.controller_changed.connect(_set_view_cameras)
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -72,9 +75,14 @@ func _set_mode(mode: SplitscreenMode) -> void:
 			camera.make_current()
 	else:
 		cameras.active_cam.make_current()
-	# Human players steer relative to the camera of their split view (null: the main camera).
-	_set_view_camera(player0, _split_cameras[mode][0] if split else null)
-	_set_view_camera(player1, _split_cameras[mode][1] if split else null)
+	_set_view_cameras()
+
+
+## Human players steer relative to the camera of their split view (null: the main camera).
+func _set_view_cameras() -> void:
+	var split: bool = _mode != SplitscreenMode.NORMAL
+	_set_view_camera(player0, _split_cameras[_mode][0] if split else null)
+	_set_view_camera(player1, _split_cameras[_mode][1] if split else null)
 
 
 func _set_view_camera(player: Player, camera: Camera3D) -> void:

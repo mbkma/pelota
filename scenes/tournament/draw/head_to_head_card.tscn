@@ -1,0 +1,236 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/head_to_head_card.gd" id="1_h2h"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/player_avatar.tscn" id="2_avatar"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/country_flag.tscn" id="3_flag"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/tape_row.tscn" id="4_tape"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/rating_row.tscn" id="5_rating"]
+
+[sub_resource type="Gradient" id="ring_gradient"]
+offsets = PackedFloat32Array(0, 0.8, 0.82, 0.97, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="ring_texture"]
+gradient = SubResource("ring_gradient")
+width = 80
+height = 80
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="HeadToHeadCard" type="PanelContainer"]
+theme_type_variation = &"SideCard"
+script = ExtResource("1_h2h")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Content/Title"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardTitleLabel"
+text = "HEAD 2 HEAD"
+
+[node name="RoundLabel" type="Label" parent="Content/Title"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "1st Round"
+
+[node name="Faceoff" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="LeftAvatar" parent="Content/Faceoff" instance=ExtResource("2_avatar")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+initials_font_size = 28
+
+[node name="LeftPercentLabel" type="Label" parent="Content/Faceoff"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_colors/font_color = Color(0.349, 0.675, 0.725, 1)
+theme_override_font_sizes/font_size = 30
+text = "50%"
+horizontal_alignment = 1
+
+[node name="Ring" type="TextureProgressBar" parent="Content/Faceoff"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.001
+value = 0.5
+fill_mode = 4
+texture_under = SubResource("ring_texture")
+texture_progress = SubResource("ring_texture")
+tint_under = Color(0.843, 0.459, 0.447, 1)
+tint_progress = Color(0.349, 0.675, 0.725, 1)
+
+[node name="VsLabel" type="Label" parent="Content/Faceoff/Ring"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 20
+text = "VS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPercentLabel" type="Label" parent="Content/Faceoff"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_colors/font_color = Color(0.843, 0.459, 0.447, 1)
+theme_override_font_sizes/font_size = 30
+text = "50%"
+horizontal_alignment = 1
+
+[node name="RightAvatar" parent="Content/Faceoff" instance=ExtResource("2_avatar")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+initials_font_size = 28
+
+[node name="Names" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="LeftName" type="VBoxContainer" parent="Content/Names"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="LeftFirstNameLabel" type="Label" parent="Content/Names/LeftName"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Carlos"
+
+[node name="LeftLastNameLabel" type="Label" parent="Content/Names/LeftName"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 22
+text = "Alcaraz"
+
+[node name="LeftCountry" type="HBoxContainer" parent="Content/Names/LeftName"]
+layout_mode = 2
+alignment = 0
+
+[node name="LeftFlag" parent="Content/Names/LeftName/LeftCountry" instance=ExtResource("3_flag")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LeftCodeLabel" type="Label" parent="Content/Names/LeftName/LeftCountry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "ESP"
+
+[node name="RightName" type="VBoxContainer" parent="Content/Names"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="RightFirstNameLabel" type="Label" parent="Content/Names/RightName"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Carlos"
+horizontal_alignment = 2
+
+[node name="RightLastNameLabel" type="Label" parent="Content/Names/RightName"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 22
+text = "Alcaraz"
+horizontal_alignment = 2
+
+[node name="RightCountry" type="HBoxContainer" parent="Content/Names/RightName"]
+layout_mode = 2
+alignment = 2
+
+[node name="RightCodeLabel" type="Label" parent="Content/Names/RightName/RightCountry"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "ESP"
+
+[node name="RightFlag" parent="Content/Names/RightName/RightCountry" instance=ExtResource("3_flag")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CaptionLabel" type="Label" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.714, 0.196, 1)
+theme_override_font_sizes/font_size = 18
+text = "Win chance"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Separator" type="HSeparator" parent="Content"]
+layout_mode = 2
+
+[node name="Tape" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RankingRow" parent="Content/Tape" instance=ExtResource("4_tape")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Ranking"
+
+[node name="AgeRow" parent="Content/Tape" instance=ExtResource("4_tape")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Age"
+
+[node name="HeightRow" parent="Content/Tape" instance=ExtResource("4_tape")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Height"
+
+[node name="PlaysRow" parent="Content/Tape" instance=ExtResource("4_tape")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Plays"
+
+[node name="TournamentRow" parent="Content/Tape" instance=ExtResource("4_tape")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Tournament"
+
+[node name="Ratings" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ServeRow" parent="Content/Ratings" instance=ExtResource("5_rating")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Serve"
+
+[node name="ReturnRow" parent="Content/Ratings" instance=ExtResource("5_rating")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Return"
+
+[node name="RallyRow" parent="Content/Ratings" instance=ExtResource("5_rating")]
+unique_name_in_owner = true
+layout_mode = 2
+title = "Rally"
+

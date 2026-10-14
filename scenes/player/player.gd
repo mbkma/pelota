@@ -10,6 +10,8 @@ signal stroke_finished
 
 ## Emitted when the ball is tossed for a serve
 signal ball_spawned(ball: Ball)
+## Emitted when another controller took over the player (another device or the AI)
+signal controller_changed
 
 const DISTANCE_THRESHOLD: float = 0.01
 const STAMINA_STROKE_COST_BASE: float = 5.5
@@ -96,6 +98,10 @@ const SERVE_NET_CLEARANCE: float = 0.03
 const BACKWARD_RUN_SPEED: float = 3.5
 const BACKPEDAL_SPEED: float = 2.8
 const BACKWARD_RUN_ALIGNMENT: float = 0.5
+## Phases in which another controller takes over only once the point is over
+const CONTROLLER_CHANGE_DEFERRED_PHASES: Array[MatchLifecycleBus.Phase] = [
+	MatchLifecycleBus.Phase.SERVING, MatchLifecycleBus.Phase.RALLY
+]
 
 ## Static player identity/config data (name, handedness, sounds, stats).
 @export var player_data: PlayerData
@@ -178,6 +184,10 @@ var _running_backward: bool = false
 var _is_replay_mode: bool = false
 ## Whether the player plays out a stroke after the point ended (see end_point)
 var _playing_out: bool = false
+## Device the controller plays with; InputDevice.NO_DEVICE_ID for the AI
+var _controller_device_id: int = InputDevice.NO_DEVICE_ID
+## Whether another device takes over once the point is over
+var _controller_change_pending: bool = false
 
 @onready var model: Model = $Model
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -201,11 +211,41 @@ func _ready() -> void:
 	_lifecycle_bus.phase_changed.connect(_on_lifecycle_phase_changed)
 	model.animator.stroke_marker_reached.connect(_on_stroke_marker_reached)
 	model.animator.stroke_finished.connect(_on_stroke_animation_finished)
+	_add_controller()
+	GlobalGameData.match_input_devices_changed.connect(_on_match_input_devices_changed)
+
+
+## The controller of the device controlling the team, the AI without one.
+func _add_controller() -> void:
+	_controller_device_id = GlobalGameData.get_match_input_device(team_index)
 	if GlobalGameData.is_human_controlled(team_index):
 		controller = HumanController.new(self)
 	else:
 		controller = AiController.new(self)
 	add_child(controller)
+
+
+## Another device (or the AI) takes over the player: right away between points and while waiting
+## to serve, once the point is over during a serve or a rally.
+func _on_match_input_devices_changed() -> void:
+	_controller_change_pending = (
+		GlobalGameData.get_match_input_device(team_index) != _controller_device_id
+	)
+	var phase: MatchLifecycleBus.Phase = _lifecycle_bus.get_phase()
+	if _controller_change_pending and phase not in CONTROLLER_CHANGE_DEFERRED_PHASES:
+		_change_controller()
+
+
+func _change_controller() -> void:
+	_controller_change_pending = false
+	var waiting_to_serve: bool = _lifecycle_bus.get_phase() == MatchLifecycleBus.Phase.SERVE_SETUP
+	remove_child(controller)
+	controller.queue_free()
+	_add_controller()
+	controller.ball_changed(ball)
+	if waiting_to_serve:
+		controller.request_serve()
+	controller_changed.emit()
 
 
 ## Set player state through dedicated state machine
@@ -906,6 +946,8 @@ func get_replay_animation_snapshot() -> Dictionary:
 
 func _on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 	controller.on_lifecycle_phase_changed(current_phase)
+	if _controller_change_pending and current_phase == MatchLifecycleBus.Phase.POINT_ENDED:
+		_change_controller()
 
 
 ## Shows a short rating of the last shot (e.g. "PERFECT!") rising above the player.

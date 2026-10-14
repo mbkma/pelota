@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://6gdbfi0172ji" path="res://addons/maaacks_game_template/base/nodes/windows/overlaid_window.tscn" id="1_window"]
+[ext_resource type="Script" path="res://scenes/windows/controllers_window.gd" id="2_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/device_lanes/device_lanes.tscn" id="3_lanes"]
+
+[node name="ControllersWindow" instance=ExtResource("1_window")]
+process_mode = 3
+custom_minimum_size = Vector2(600, 320)
+offset_left = -300.0
+offset_top = -160.0
+offset_right = 300.0
+offset_bottom = 160.0
+script = ExtResource("2_script")
+pauses_game = true
+update_content = true
+text = "Move a controller left or right to play that side. A side without one is played by the CPU."
+close_button_text = "Done"
+title = "Controllers"
+two_players_text = "Move a controller left or right to play that side. A side without one is played by the CPU."
+one_player_text = "Move a controller left to play with it."
+
+[node name="LanesMargin" type="MarginContainer" parent="ContentContainer/BoxContainer" index="2"]
+layout_mode = 2
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="DeviceLanes" parent="ContentContainer/BoxContainer/LanesMargin" instance=ExtResource("3_lanes")]
+unique_name_in_owner = true
+layout_mode = 2
+needs_confirmation = false

@@ -28,12 +28,12 @@ static func play(players: Array[PlayerData], best_of_sets: int) -> Score:
 	for server in 2:
 		var returner: int = 1 - server
 		var serve_edge: float = (
-			_serve_rating(players[server].stats) - _return_rating(players[returner].stats)
+			serve_rating(players[server].stats) - return_rating(players[returner].stats)
 		)
 		var baseline_edge: float = (
-			_baseline_rating(players[server].stats)
+			baseline_rating(players[server].stats)
 			+ form[server]
-			- _baseline_rating(players[returner].stats)
+			- baseline_rating(players[returner].stats)
 			- form[returner]
 		)
 		serve_chances[server] = clampf(
@@ -47,16 +47,29 @@ static func play(players: Array[PlayerData], best_of_sets: int) -> Score:
 	return score
 
 
-static func _serve_rating(stats: PlayerStatsProfile) -> float:
+## Share of `runs` simulated matches of `best_of_sets` that `player` wins against `opponent`.
+static func win_chance(
+	player: PlayerData, opponent: PlayerData, best_of_sets: int, runs: int = 200
+) -> float:
+	var players: Array[PlayerData] = [player, opponent]
+	var wins: int = 0
+	for run in runs:
+		var score: Score = play(players, best_of_sets)
+		if score.sets[0] > score.sets[1]:
+			wins += 1
+	return float(wins) / runs
+
+
+static func serve_rating(stats: PlayerStatsProfile) -> float:
 	return 0.55 * stats.serve_power + 0.45 * stats.serve_accuracy
 
 
-static func _return_rating(stats: PlayerStatsProfile) -> float:
+static func return_rating(stats: PlayerStatsProfile) -> float:
 	return 0.6 * stats.return_skill + 0.2 * stats.top_speed + 0.2 * stats.timing
 
 
 ## How well a player plays the rally: groundstrokes, movement and nerve.
-static func _baseline_rating(stats: PlayerStatsProfile) -> float:
+static func baseline_rating(stats: PlayerStatsProfile) -> float:
 	return (
 		(
 			stats.forehand

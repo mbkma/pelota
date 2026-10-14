@@ -1,0 +1,182 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/tournament/draw/player_profile_card.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/player_avatar.tscn" id="2_avatar"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/country_flag.tscn" id="3_flag"]
+[ext_resource type="PackedScene" path="res://scenes/tournament/draw/path_row.tscn" id="4_path"]
+
+[node name="PlayerProfileCard" type="PanelContainer"]
+theme_type_variation = &"SideCard"
+script = ExtResource("1_profile")
+path_row_scene = ExtResource("4_path")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"CardTitleLabel"
+text = "PROFILE"
+
+[node name="Head" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PlayerAvatar" parent="Content/Head" instance=ExtResource("2_avatar")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+initials_font_size = 28
+
+[node name="Names" type="VBoxContainer" parent="Content/Head"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = -4
+
+[node name="FirstNameLabel" type="Label" parent="Content/Head/Names"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "CARLOS"
+
+[node name="LastNameLabel" type="Label" parent="Content/Head/Names"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 32
+text = "ALCARAZ"
+
+[node name="Country" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="CountryFlag" parent="Content/Country" instance=ExtResource("3_flag")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CountryLabel" type="Label" parent="Content/Country"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Spain"
+
+[node name="Facts" type="GridContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="RankingTitleLabel" type="Label" parent="Content/Facts"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 17
+text = "Ranking"
+
+[node name="RankingLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 18
+text = "#3"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="SeedTitleLabel" type="Label" parent="Content/Facts"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 17
+text = "Seed"
+
+[node name="SeedLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 18
+text = "3"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="AgeTitleLabel" type="Label" parent="Content/Facts"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 17
+text = "Age"
+
+[node name="AgeLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 18
+text = "23"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="HeightTitleLabel" type="Label" parent="Content/Facts"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 17
+text = "Height"
+
+[node name="HeightLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 18
+text = "183 cm"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="PlaysTitleLabel" type="Label" parent="Content/Facts"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 17
+text = "Plays"
+
+[node name="PlaysLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 18
+text = "Right-handed, two-handed backhand"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="StandingTitleLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 17
+text = "US Open"
+
+[node name="StandingLabel" type="Label" parent="Content/Facts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BoldLabel"
+theme_override_font_sizes/font_size = 18
+text = "Into the R16  (3-0)"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Separator" type="HSeparator" parent="Content"]
+layout_mode = 2
+
+[node name="PathTitleLabel" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Path"
+
+[node name="PathRows" type="VBoxContainer" parent="Content"]
+unique_name_in_owner = true
+layout_mode = 2

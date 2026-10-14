@@ -59,7 +59,7 @@ script = ExtResource("3")
 [node name="Courtside" type="Node3D" parent="." unique_id=532835481]
 
 [node name="Player1Bench" type="Node3D" parent="Courtside" unique_id=1847627363]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -7.55, 0, 2.35)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8, 0, 3)
 
 [node name="Mat" parent="Courtside/Player1Bench" unique_id=1696004678 instance=ExtResource("p_mat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35)
@@ -100,7 +100,7 @@ transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.
 transform = Transform3D(-0.450777, -0.876572, -0.168585, 0.874721, -0.471428, 0.11233, -0.177941, -0.0968293, 0.979266, -0.443614, 0.294125, 0.09452963)
 
 [node name="Player2Bench" type="Node3D" parent="Courtside" unique_id=1279010953]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -7.55, 0, -2.35)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8, 0, -3)
 
 [node name="Mat" parent="Courtside/Player2Bench" unique_id=1332314467 instance=ExtResource("p_mat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35)

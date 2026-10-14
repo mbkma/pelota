@@ -24,6 +24,9 @@ var best_of_sets: int = 3
 ## Games of each completed set as (player0, player1)
 var completed_sets: Array[Vector2i] = []
 
+## Points of each completed set's tiebreak as (player0, player1); zero for a set without one
+var set_tiebreaks: Array[Vector2i] = []
+
 ## Sets won by each player [player0, player1]
 var sets: Array[int] = [0, 0]
 
@@ -47,6 +50,8 @@ var games_played: int = 0
 
 ## Player who served the first point of the current tiebreak
 var _tiebreak_first_server: int = 0
+## Points of the tiebreak that decided the current set; zero while none did
+var _set_tiebreak: Vector2i = Vector2i.ZERO
 
 
 ## Check if match has been won by either player
@@ -134,6 +139,7 @@ func _add_tiebreak_point(player_index: int) -> void:
 	var lead: int = tiebreak_points[player_index] - tiebreak_points[1 - player_index]
 	if tiebreak_points[player_index] >= TIEBREAK_POINTS and lead >= 2:
 		is_tiebreak = false
+		_set_tiebreak = Vector2i(tiebreak_points[0], tiebreak_points[1])
 		tiebreak_points = [0, 0]
 		# The player who received first in the tiebreak serves first in the next set;
 		# _win_game passes the serve on from the tiebreak's first server.
@@ -162,6 +168,8 @@ func _win_game(player_index: int) -> void:
 
 func _win_set(player_index: int) -> void:
 	completed_sets.append(Vector2i(games[0], games[1]))
+	set_tiebreaks.append(_set_tiebreak)
+	_set_tiebreak = Vector2i.ZERO
 	sets[player_index] += 1
 	games = [0, 0]
 
@@ -170,6 +178,7 @@ func _copy() -> Score:
 	var copy := Score.new()
 	copy.best_of_sets = best_of_sets
 	copy.completed_sets = completed_sets.duplicate()
+	copy.set_tiebreaks = set_tiebreaks.duplicate()
 	copy.sets = sets.duplicate()
 	copy.games = games.duplicate()
 	copy.points = points.duplicate()
@@ -178,4 +187,5 @@ func _copy() -> Score:
 	copy.current_server = current_server
 	copy.games_played = games_played
 	copy._tiebreak_first_server = _tiebreak_first_server
+	copy._set_tiebreak = _set_tiebreak
 	return copy

@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/device_lanes/device_lanes.gd" id="1_lanes"]
+[ext_resource type="PackedScene" path="res://scenes/ui/device_lanes/device_row.tscn" id="2_row"]
+
+[node name="DeviceLanes" type="VBoxContainer"]
+theme_override_constants/separation = 6
+script = ExtResource("1_lanes")
+device_row_scene = ExtResource("2_row")
+
+[node name="LaneHeaderRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Player1LaneLabel" type="Label" parent="LaneHeaderRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "P1"
+horizontal_alignment = 1
+
+[node name="UnassignedLaneLabel" type="Label" parent="LaneHeaderRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CPU"
+horizontal_alignment = 1
+
+[node name="Player2LaneLabel" type="Label" parent="LaneHeaderRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "P2"
+horizontal_alignment = 1
+
+[node name="DeviceRows" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
