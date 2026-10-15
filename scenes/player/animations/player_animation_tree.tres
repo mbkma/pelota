@@ -286,9 +286,7 @@ animation = &"serve"
 filter_enabled = true
 filters = ["%GeneralSkeleton:Hips", "%GeneralSkeleton:LeftFoot", "%GeneralSkeleton:LeftHipFrontHelper", "%GeneralSkeleton:LeftHipHelper", "%GeneralSkeleton:LeftLowerLeg", "%GeneralSkeleton:LeftLowerLegTwist", "%GeneralSkeleton:LeftToes", "%GeneralSkeleton:LeftUpperLeg", "%GeneralSkeleton:LeftUpperLegTwist", "%GeneralSkeleton:RightFoot", "%GeneralSkeleton:RightHipFrontHelper", "%GeneralSkeleton:RightHipHelper", "%GeneralSkeleton:RightLowerLeg", "%GeneralSkeleton:RightLowerLegTwist", "%GeneralSkeleton:RightToes", "%GeneralSkeleton:RightUpperLeg", "%GeneralSkeleton:RightUpperLegTwist"]
 
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_hqwn2"]
-fadein_time = 0.2
-fadeout_time = 0.25
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_stroke"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_f6ay8"]
 
@@ -344,7 +342,7 @@ nodes/HeightBlend/node = SubResource("AnimationNodeBlend2_civy7")
 nodes/HeightBlend/position = Vector2(-100, 600)
 nodes/StrokeClock/node = SubResource("AnimationNodeTimeScale_f6ay8")
 nodes/StrokeClock/position = Vector2(150, 600)
-nodes/Stroke/node = SubResource("AnimationNodeOneShot_hqwn2")
+nodes/Stroke/node = SubResource("AnimationNodeBlend2_stroke")
 nodes/Stroke/position = Vector2(400, 0)
 nodes/LegLocomotion/node = SubResource("AnimationNodeBlendTree_xvrgu")
 nodes/LegLocomotion/position = Vector2(400, -300)

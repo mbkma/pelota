@@ -1,10 +1,11 @@
-## Drives the player AnimationTree: locomotion blending with strokes layered on top as a OneShot.
+## Drives the player AnimationTree: locomotion blending with strokes layered on top (the Stroke
+## blend, faded in and out here).
 ## Locomotion: the idle crossfades into the moving blend space up to walking speed. The moving
 ## clips are gait cycles of equal length that all start at the left foot's touchdown (see the
 ## Mixamo locomotion import); the blend space plays them in sync, so blending never mixes
 ## different steps, at the cadence of the running speed.
 ## Strokes: a StrokeBlend plays on a stroke clock this animator runs (the tree only seeks its
-## clips to it): its speed can change at any time, and it can hold at a marker, e.g. with the
+## clips to it, and the animator fades the stroke in and out by the clock, not by the clips): its speed can change at any time, and it can hold at a marker, e.g. with the
 ## racket taken back (`swing`) until the forward swing has to start. The blend's marker times
 ## (`swing`, `hit`, `toss`, ...) lie between its two clips' by its weight; each clip is played
 ## from its own times so that both reach every marker together. Passing a marker emits
@@ -52,22 +53,22 @@ const RUNNING_LEGS_TIME: float = 0.12
 ## a clip ending soon after its hit (e.g. at the top of its follow-through) holds its last pose
 ## while it fades, so the follow-through is not faded away.
 const MIN_FOLLOW_THROUGH: float = 0.3
-## The clips are held this far (s) before their end: a clip played to its end ends the stroke's
-## OneShot at once, without its fade-out.
-const CLIP_END_HOLD_MARGIN: float = 0.001
 
 ## Both locomotion branches: the full body and the legs running under a stroke
 const _LOCOMOTION_BRANCHES: Array[String] = ["Locomotion", "LegLocomotion"]
 const _RUNNING_LEGS: StringName = &"parameters/RunningLegs/blend_amount"
-const _STROKE_REQUEST: StringName = &"parameters/Stroke/request"
+const _STROKE_BLEND: StringName = &"parameters/Stroke/blend_amount"
 const _STROKE_CLOCK: StringName = &"parameters/StrokeClock/scale"
 const _HEIGHT_BLEND: StringName = &"parameters/HeightBlend/blend_amount"
 const _LOW_SELECT: StringName = &"parameters/LowSelect/transition_request"
 const _HIGH_SELECT: StringName = &"parameters/HighSelect/transition_request"
 const _LOW_SEEK: StringName = &"parameters/LowSeek/seek_request"
 const _HIGH_SEEK: StringName = &"parameters/HighSeek/seek_request"
-const _STROKE_NODE: StringName = &"Stroke"
 const _STROKE_SELECT_NODE: StringName = &"LowSelect"
+
+## Seconds a stroke fades in over when it starts, and out over when it ends
+@export var stroke_fade_in_time: float = 0.2
+@export var stroke_fade_out_time: float = 0.25
 
 ## Stroke playing (also while it fades out), null when none is
 var _stroke: StrokeBlend = null
@@ -88,8 +89,8 @@ var _low_keys: PackedFloat32Array
 var _high_keys: PackedFloat32Array
 var _blend_keys: PackedFloat32Array
 var _marker_names: Array[StringName] = []
-## Seconds a stroke fades out over
-var _fade_out_time: float
+## Share in [0, 1] of the stroke over locomotion
+var _stroke_weight: float = 0.0
 ## Locomotion velocity (m/s) the animation follows, smoothed
 var _locomotion_velocity: Vector2 = Vector2.ZERO
 ## Running speed (m/s) and gait cycles per second of the walk and the run clip
@@ -109,12 +110,9 @@ func _ready() -> void:
 	_run_speed = run.get_meta(&"travel_speed")
 	_run_cadence = 1.0 / run.get_meta(&"cycle_time")
 	_gait_cycle_length = walk.length
-	var stroke_node: AnimationNodeOneShot = (tree_root as AnimationNodeBlendTree).get_node(
-		_STROKE_NODE
-	)
-	_fade_out_time = stroke_node.fadeout_time
 	callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	set(_STROKE_CLOCK, 0.0)
+	set(_STROKE_BLEND, 0.0)
 	active = true
 
 
@@ -122,6 +120,7 @@ func _process(delta: float) -> void:
 	if not active:
 		return
 	_advance_stroke(delta)
+	_fade_stroke(delta)
 	_update_running_legs(delta)
 	advance(delta)
 
@@ -213,7 +212,6 @@ func play_stroke(
 	set(_LOW_SELECT, String(stroke.low.animation))
 	set(_HIGH_SELECT, String(stroke.high.animation))
 	set(_HEIGHT_BLEND, stroke.weight)
-	set(_STROKE_REQUEST, AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	_seek_stroke()
 
 
@@ -224,11 +222,7 @@ func change_stroke(stroke: StrokeBlend) -> void:
 	var previous_keys: PackedFloat32Array = _blend_keys
 	_stroke = stroke
 	_set_stroke_keys()
-	for i in range(1, previous_keys.size()):
-		if _stroke_time <= previous_keys[i] or i == previous_keys.size() - 1:
-			var share: float = inverse_lerp(previous_keys[i - 1], previous_keys[i], _stroke_time)
-			_stroke_time = lerpf(_blend_keys[i - 1], _blend_keys[i], clampf(share, 0.0, 1.0))
-			break
+	_remap_stroke_time(previous_keys)
 	set(_LOW_SELECT, String(stroke.low.animation))
 	set(_HIGH_SELECT, String(stroke.high.animation))
 	set(_HEIGHT_BLEND, stroke.weight)
@@ -237,8 +231,10 @@ func change_stroke(stroke: StrokeBlend) -> void:
 
 ## Changes the blend weight of the playing stroke (e.g. as the ball's height becomes clearer).
 func set_stroke_weight(weight: float) -> void:
+	var previous_keys: PackedFloat32Array = _blend_keys
 	_stroke.weight = weight
 	_set_stroke_keys()
+	_remap_stroke_time(previous_keys)
 	set(_HEIGHT_BLEND, weight)
 
 
@@ -290,7 +286,6 @@ func seconds_until_marker(marker: StringName) -> float:
 func stop_stroke() -> void:
 	if not _stroke or _stroke_fading:
 		return
-	set(_STROKE_REQUEST, AnimationNodeOneShot.ONE_SHOT_REQUEST_FADE_OUT)
 	_finish_stroke()
 
 
@@ -354,7 +349,18 @@ func _advance_stroke(delta: float) -> void:
 ## Stroke clock time (s) at which the playing stroke starts to fade out: so that it ends with the
 ## clips, but not before MIN_FOLLOW_THROUGH after `hit`.
 func _fade_start_time() -> float:
-	return maxf(_blend_keys[-1] - _fade_out_time, _key_time(HIT_MARKER) + MIN_FOLLOW_THROUGH)
+	return maxf(
+		_blend_keys[-1] - stroke_fade_out_time, _key_time(HIT_MARKER) + MIN_FOLLOW_THROUGH
+	)
+
+
+## Fades the stroke in while it plays and out once it fades (or is gone).
+func _fade_stroke(delta: float) -> void:
+	if _stroke and not _stroke_fading:
+		_stroke_weight = minf(_stroke_weight + delta / stroke_fade_in_time, 1.0)
+	else:
+		_stroke_weight = maxf(_stroke_weight - delta / stroke_fade_out_time, 0.0)
+	set(_STROKE_BLEND, _stroke_weight)
 
 
 ## Seeks both stroke clips to the stroke clock.
@@ -369,11 +375,20 @@ func _clip_time(keys: PackedFloat32Array) -> float:
 	for i in range(1, _blend_keys.size()):
 		if _stroke_time <= _blend_keys[i] or i == _blend_keys.size() - 1:
 			var share: float = inverse_lerp(_blend_keys[i - 1], _blend_keys[i], _stroke_time)
-			return minf(
-				lerpf(keys[i - 1], keys[i], clampf(share, 0.0, 1.0)),
-				keys[-1] - CLIP_END_HOLD_MARGIN
-			)
-	return keys[-1] - CLIP_END_HOLD_MARGIN
+			return lerpf(keys[i - 1], keys[i], clampf(share, 0.0, 1.0))
+	return keys[-1]
+
+
+## Moves the stroke clock from the timeline with key times `previous_keys` onto the current
+## `_blend_keys`, as far through the same stretch between markers as it was: a stroke whose
+## markers move (its blend weight or clips changed) goes on from the same pose, and neither
+## skips nor repeats a marker.
+func _remap_stroke_time(previous_keys: PackedFloat32Array) -> void:
+	for i in range(1, previous_keys.size()):
+		if _stroke_time <= previous_keys[i] or i == previous_keys.size() - 1:
+			var share: float = inverse_lerp(previous_keys[i - 1], previous_keys[i], _stroke_time)
+			_stroke_time = lerpf(_blend_keys[i - 1], _blend_keys[i], clampf(share, 0.0, 1.0))
+			return
 
 
 func _set_stroke_keys() -> void:
@@ -411,5 +426,5 @@ func _finish_stroke() -> void:
 	_stroke_fading = true
 	_hold_marker = &""
 	_stroke_speed = maxf(_stroke_speed, 1.0)
-	_fade_end_time = _stroke_time + _fade_out_time * _stroke_speed
+	_fade_end_time = _stroke_time + stroke_fade_out_time * _stroke_speed
 	stroke_finished.emit()
