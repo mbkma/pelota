@@ -1,6 +1,7 @@
-## Tennis match scoring system handling points, games, sets, tiebreaks and change of ends
+## Tennis match scoring system handling points, games, sets, tiebreaks and change of ends.
+## A resource, so that a match can be saved between points (see SavedMatch).
 class_name Score
-extends RefCounted
+extends Resource
 
 ## Tennis point values for deuce/advantage tracking
 enum TennisPoint { LOVE = 0, FIFTEEN = 1, THIRTY = 2, FORTY = 3, AD = 4 }
@@ -19,39 +20,39 @@ const TIEBREAK_POINTS: int = 7
 const TIEBREAK_END_CHANGE_POINTS: int = 6
 
 ## Number of sets to win the match (typically 3 or 5)
-var best_of_sets: int = 3
+@export var best_of_sets: int = 3
 
 ## Games of each completed set as (player0, player1)
-var completed_sets: Array[Vector2i] = []
+@export var completed_sets: Array[Vector2i] = []
 
 ## Points of each completed set's tiebreak as (player0, player1); zero for a set without one
-var set_tiebreaks: Array[Vector2i] = []
+@export var set_tiebreaks: Array[Vector2i] = []
 
 ## Sets won by each player [player0, player1]
-var sets: Array[int] = [0, 0]
+@export var sets: Array[int] = [0, 0]
 
 ## Games of the current set for each player [player0, player1]
-var games: Array[int] = [0, 0]
+@export var games: Array[int] = [0, 0]
 
 ## Current point score for each player in standard tennis (0-40-AD)
-var points: Array[int] = [0, 0]
+@export var points: Array[int] = [0, 0]
 
 ## Point score during tiebreak (first to 7 with 2+ lead)
-var tiebreak_points: Array[int] = [0, 0]
+@export var tiebreak_points: Array[int] = [0, 0]
 
 ## Whether match is currently in tiebreak
-var is_tiebreak: bool = false
+@export var is_tiebreak: bool = false
 
 ## Index of current server (0 or 1)
-var current_server: int = 0
+@export var current_server: int = 0
 
 ## Games played in the whole match, used for the change of ends
-var games_played: int = 0
+@export var games_played: int = 0
 
 ## Player who served the first point of the current tiebreak
-var _tiebreak_first_server: int = 0
+@export var _tiebreak_first_server: int = 0
 ## Points of the tiebreak that decided the current set; zero while none did
-var _set_tiebreak: Vector2i = Vector2i.ZERO
+@export var _set_tiebreak: Vector2i = Vector2i.ZERO
 
 
 ## Check if match has been won by either player

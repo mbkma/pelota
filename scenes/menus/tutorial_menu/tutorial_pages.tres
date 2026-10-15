@@ -8,11 +8,15 @@
 [ext_resource type="Texture2D" uid="uid://cxdew0f40cx5g" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_s.svg" id="5_res"]
 [ext_resource type="Texture2D" uid="uid://cnh0sl1ot1iid" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_d.svg" id="6_res"]
 [ext_resource type="Texture2D" uid="uid://c1uxg0rtv3n5f" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_stick_l.svg" id="7_res"]
-[ext_resource type="Texture2D" uid="uid://cbaik2bw0kh6q" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_space.svg" id="8_res"]
+[ext_resource type="Texture2D" uid="uid://i7ysxsswwil3" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_j.svg" id="8_res"]
 [ext_resource type="Texture2D" uid="uid://k1qtcr2wivxx" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_a.svg" id="9_res"]
-[ext_resource type="Texture2D" uid="uid://dhedh547wthtf" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_shift.svg" id="10_res"]
+[ext_resource type="Texture2D" uid="uid://cdgpxq217wg7c" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_k.svg" id="10_res"]
 [ext_resource type="Texture2D" uid="uid://dxgbd6470yls1" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_x.svg" id="11_res"]
-[ext_resource type="Texture2D" uid="uid://bt4wmqy3ctv6d" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_ctrl.svg" id="12_res"]
+[ext_resource type="Texture2D" uid="uid://rj5ercxvfhk8" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_l.svg" id="12_res"]
+[ext_resource type="Texture2D" uid="uid://tm0fuy7mjt57" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_q.svg" id="25_res"]
+[ext_resource type="Texture2D" uid="uid://bij6au1txp4aw" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/mouse_left.svg" id="26_res"]
+[ext_resource type="Texture2D" uid="uid://bcd7s6ed7slbv" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/mouse_right.svg" id="27_res"]
+[ext_resource type="Texture2D" uid="uid://rxnmlsglu3rn" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/mouse_move.svg" id="28_res"]
 [ext_resource type="Texture2D" uid="uid://da8j1yfxleoeg" path="res://assets/kenney_input-prompts/Xbox Series/Vector/xbox_button_y.svg" id="13_res"]
 [ext_resource type="Texture2D" uid="uid://8jgo43kaxqqt" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_enter.svg" id="14_res"]
 [ext_resource type="Texture2D" uid="uid://bgny2jpo75ifi" path="res://assets/kenney_input-prompts/Keyboard & Mouse/Vector/keyboard_escape.svg" id="17_res"]
@@ -48,9 +52,9 @@ controls = Array[ExtResource("2_control")]([SubResource("Control_0"), SubResourc
 [sub_resource type="Resource" id="Page_1"]
 script = ExtResource("1_page")
 title = "Movement & positioning"
-text = "Run with the direction keys or the left stick. When your opponent hits, a blue ring shows the ideal spot to meet the ball.
+text = "Run with WASD or the left stick. When your opponent hits, a blue ring shows the ideal spot to meet the ball.
 
-Get there early: once you press a shot button your player only shuffles slowly towards the ball. Balls met off the racket's sweet spot lose pace and accuracy."
+Get there early: once you press a shot button your player only shuffles slowly towards the ball on its own (with keyboard and mouse you keep running with WASD). Balls met off the racket's sweet spot lose pace and accuracy."
 image = ExtResource("21_res")
 controls = Array[ExtResource("2_control")]([SubResource("Control_0")])
 
@@ -58,37 +62,47 @@ controls = Array[ExtResource("2_control")]([SubResource("Control_0")])
 script = ExtResource("2_control")
 description = "Topspin shot / flat serve"
 keyboard_icons = Array[Texture2D]([ExtResource("8_res")])
+mouse_icons = Array[Texture2D]([ExtResource("26_res")])
 gamepad_icons = Array[Texture2D]([ExtResource("9_res")])
 
 [sub_resource type="Resource" id="Control_2"]
 script = ExtResource("2_control")
 description = "Slice shot / slice serve"
 keyboard_icons = Array[Texture2D]([ExtResource("10_res")])
+mouse_icons = Array[Texture2D]([ExtResource("27_res")])
 gamepad_icons = Array[Texture2D]([ExtResource("11_res")])
 
 [sub_resource type="Resource" id="Control_3"]
 script = ExtResource("2_control")
 description = "Drop shot / kick serve"
 keyboard_icons = Array[Texture2D]([ExtResource("12_res")])
+mouse_icons = Array[Texture2D]([ExtResource("25_res")])
 gamepad_icons = Array[Texture2D]([ExtResource("13_res")])
+
+[sub_resource type="Resource" id="Control_5"]
+script = ExtResource("2_control")
+description = "Aim"
+keyboard_icons = Array[Texture2D]([ExtResource("3_res"), ExtResource("4_res"), ExtResource("5_res"), ExtResource("6_res")])
+mouse_icons = Array[Texture2D]([ExtResource("28_res")])
+gamepad_icons = Array[Texture2D]([ExtResource("7_res")])
 
 [sub_resource type="Resource" id="Page_2"]
 script = ExtResource("1_page")
 title = "Groundstrokes"
-text = "Press a shot button when the ball comes towards you and steer the aim with the direction - it stays where you leave it. Hold the button to build power and release it just before the racket meets the ball.
+text = "Press a shot button when the ball comes towards you and aim: with the mouse, with WASD on the keyboard alone (no key aims at the middle; the keys held when you release the button count) or with the left stick (the aim stays where you leave it). Hold the button to build power and release it just before the racket meets the ball.
 
 The circle on your opponent's side shows where the ball can land. The better your timing, the smaller it gets; it turns gold for a perfect shot with extra pace and spin. A rating above your player tells you how you did."
 image = ExtResource("22_res")
-controls = Array[ExtResource("2_control")]([SubResource("Control_1"), SubResource("Control_2"), SubResource("Control_3")])
+controls = Array[ExtResource("2_control")]([SubResource("Control_5"), SubResource("Control_1"), SubResource("Control_2"), SubResource("Control_3")])
 
 [sub_resource type="Resource" id="Page_3"]
 script = ExtResource("1_page")
 title = "Serve"
-text = "Slide along the baseline with left and right. Press and hold a serve button and aim inside the service box: flat for pace, slice for a curving serve, kick for a safe, high-bouncing serve.
+text = "Slide along the baseline with left and right. Press and hold a serve button and aim inside the service box, as for a shot: flat for pace, slice for a curving serve, kick for a safe, high-bouncing serve.
 
 Release the button to toss the ball and press it again right before the racket meets the ball. The closer to contact, the faster and more precise the serve."
 image = ExtResource("23_res")
-controls = Array[ExtResource("2_control")]([SubResource("Control_1"), SubResource("Control_2"), SubResource("Control_3")])
+controls = Array[ExtResource("2_control")]([SubResource("Control_5"), SubResource("Control_1"), SubResource("Control_2"), SubResource("Control_3")])
 
 [sub_resource type="Resource" id="Page_4"]
 script = ExtResource("1_page")

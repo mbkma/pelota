@@ -129,8 +129,13 @@ visible = false
 match_stats_panel_path = NodePath("../MatchStatsPanel")
 opponent_controllable = true
 
+[node name="MainMenuConfirmation" parent="PauseMenu" index="2"]
+text = "Exit to the main menu?
+The match is saved and can be continued from this point."
+
 [node name="Crowd" parent="." unique_id=1204219689 node_paths=PackedStringArray("crew") instance=ExtResource("16_4veo4")]
 crew = [NodePath("../Stadium/Courtside/Photographers"), NodePath("../Stadium/Courtside/CameraOperators")]
 
 [editable path="TelevisionHUD"]
 [editable path="Stadium"]
+[editable path="PauseMenu"]

@@ -1,12 +1,12 @@
 ## Human player controller: maps one InputDevice to movement, aiming and strokes.
 ##
 ## Rally: the direction moves the player. Pressing a stroke button commits to a shot: the
-## player runs to the incoming ball on its own, the direction aims inside the opponent's
-## court until the racket meets the ball and holding the button charges power.
+## player runs to the incoming ball on its own, the aim moves inside the opponent's court until
+## the racket meets the ball (see Aiming) and holding the button charges power.
 ## Releasing the button times the shot: the closer to contact, the smaller the area the ball
 ## may land in and the more of the shot's attack pace it gets. Releasing within the perfect
 ## window before contact is a perfect shot, which stands out with the full pace, spin and
-## precision; still holding at contact plays a weak, safe ball short through the middle.
+## precision; still holding at contact plays a weak ball the aimed way, less wide and shorter.
 ## Pace: every shot has a rally speed (ATP averages: forehand ~115 km/h, backhand ~105 km/h)
 ## and an attack pace on top (winners up to ~165 km/h) that only comes through in full when
 ## the shot is perfectly timed, met in position and the player was set early with time to
@@ -22,9 +22,12 @@
 ## until the ball is hit.
 ## Directions follow the screen: up on the stick points up in the camera view this player is
 ## seen through, whichever end of the court the player is on.
-## The direction sets an aim goal per axis that is kept while the direction eases back
-## toward neutral; the aim moves toward that goal at AIM_SPEED. The aim only resets to the
-## middle after this player hits the ball, a new serve, or the end of the point.
+## Aiming depends on the device (see ShotAim): a gamepad aims with the direction, the keyboard
+## with the mouse (the direction keeps moving the player during a shot; without a direction the
+## player runs to the ball on its own) or, alone, by zones picked with the direction, keeping the
+## zone held when the stroke button is released (when the ball is tossed for a serve).
+## The aim only resets to the middle after this player hits the ball, a new serve, or the end of
+## the point.
 ## The aim marker shows the landing area: every shot draws one random direction inside it,
 ## and the ball lands at the aim plus that direction times the current radius.
 ## Positioning: after the stroke button is pressed the player only shuffles toward the ball at
@@ -68,13 +71,6 @@ enum ServeType {
 
 ## Seconds a stroke button has to be held for the full attack pace.
 const FULL_CHARGE_TIME: float = 0.8
-## How fast the aim moves toward its goal, in aim ranges (center to line) per second.
-const AIM_SPEED: float = 1.4
-## Direction axis values below this count as neutral for aiming.
-const AIM_NEUTRAL: float = 0.05
-## An aim axis only follows the direction while it stays above this share of the push's peak,
-## so the aim holds while the stick springs back.
-const AIM_RELEASE_RATIO: float = 0.9
 ## How far ahead (m) the slide target along the baseline lies; sets the slide speed.
 const SERVE_SLIDE_LOOKAHEAD: float = 1.1
 ## Closest the server may stand to the center mark (m).
@@ -84,6 +80,9 @@ const AIM_LINE_MARGIN: float = 0.5
 ## Speed factor of the automatic adjustment toward the ball once a stroke button is pressed;
 ## the player has to get into position on their own to arrive in time and set.
 const SHOT_ADJUST_SPEED: float = 0.75
+## A shot keeps its side (forehand or backhand) until the ball passes this far (m) on the other
+## side of the player: switching sides starts the swing anew.
+const SIDE_SWITCH_MARGIN: float = 0.3
 ## Depth range (m from the net) of drop shot targets.
 const DROP_SHOT_DEPTH_MIN: float = 1.5
 const DROP_SHOT_DEPTH_MAX: float = 4.0
@@ -118,11 +117,14 @@ const RATING_COLOR_BAD := Palette.RED_LIGHT
 ## window, and with perfect timing.
 const RALLY_ERROR_RADIUS: Vector2 = Vector2(2.5, 0.9)
 const RALLY_ERROR_RADIUS_PERFECT: float = 0.25
-## Still holding the stroke button at contact: a weak ball through the middle, landing short
-## (m from the net) within this radius (m). Its speed follows from a flight time (s, without air
-## drag) drawn per shot, about that of a rally ball, so it comes at ~70-90 km/h without looping
-## up: some come a little flatter, some a little higher.
-const LATE_SHOT_DEPTH: float = 6.0
+## Still holding the stroke button at contact: a weak ball still goes the aimed way, but less
+## wide (LATE_SHOT_LATERAL_FACTOR of the aim's distance from the middle) and shorter, landing
+## between LATE_SHOT_DEPTH.x (m from the net, for the shortest aim) and LATE_SHOT_DEPTH.y (the
+## deepest aim), within LATE_SHOT_ERROR_RADIUS (m). Its speed follows from a flight time (s,
+## without air drag) drawn per shot, about that of a rally ball, so it comes at ~70-90 km/h
+## without looping up: some come a little flatter, some a little higher.
+const LATE_SHOT_LATERAL_FACTOR: float = 0.75
+const LATE_SHOT_DEPTH: Vector2 = Vector2(5.0, 8.0)
 const LATE_SHOT_ERROR_RADIUS: float = 1.0
 const LATE_SHOT_FLIGHT_TIME: Vector2 = Vector2(0.75, 0.95)
 
@@ -179,12 +181,8 @@ var _stroke_action: InputDevice.Action = InputDevice.Action.STRIKE
 var _charging: bool = false
 var _charge_time: float = 0.0
 
-## Aim within the current target area: x = left/right, y = short/deep, each in [-1, 1].
-var _aim: Vector2 = Vector2.ZERO
-## Where the aim is moving to, set by the direction.
-var _aim_goal: Vector2 = Vector2.ZERO
-## Peak deflection per axis of the current push of the direction.
-var _aim_peak: Vector2 = Vector2.ZERO
+## Aim within the current target area
+var _aim := ShotAim.new()
 ## World position of the aim, derived from _aim.
 var _aiming_at: Vector3 = Vector3.ZERO
 ## Sign of the server's x position, i.e. which half of the baseline it serves from.
@@ -211,6 +209,8 @@ var _serve_type: ServeType = ServeType.FLAT
 ## Serve button held while aiming the serve.
 var _serve_action: InputDevice.Action = InputDevice.Action.STRIKE
 
+## Whether the current shot is played on the forehand side; null until its side is picked.
+var _forehand_side: Variant = null
 ## Whether the current shot meets the ball out of the air (it then aims like a volley).
 var _is_volley_shot: bool = false
 ## Where the opponent's ball can be met with a groundstroke; null until the opponent hits it,
@@ -233,6 +233,10 @@ func _ready() -> void:
 	)
 	_device = InputDevice.create(device_id)
 	player.ball_hit.connect(_on_player_ball_hit)
+
+
+func _input(event: InputEvent) -> void:
+	_device.handle_input_event(event)
 
 
 ## Update controller state - called by Player each frame
@@ -262,7 +266,7 @@ func request_serve() -> void:
 	_clear_ideal_position()
 	_mode = Mode.SERVE_READY
 	_serve_side = signf(player.global_position.x)
-	_reset_aim()
+	_aim.reset()
 	_aiming_at = _serve_aim_target()
 
 
@@ -278,7 +282,7 @@ func on_lifecycle_phase_changed(current_phase: MatchLifecycleBus.Phase) -> void:
 				_enter_free_mode()
 		MatchLifecycleBus.Phase.POINT_ENDED, MatchLifecycleBus.Phase.IDLE:
 			_enter_free_mode()
-			_reset_aim()
+			_aim.reset()
 			_clear_ideal_position()
 
 
@@ -287,6 +291,8 @@ func get_move_direction() -> Vector3:
 		Mode.FREE:
 			return _to_world(_get_direction())
 		Mode.SHOT:
+			if _moves_freely():
+				return _to_world(_get_direction())
 			return player.compute_move_dir(SHOT_ADJUST_SPEED)
 		Mode.SERVE_READY:
 			return _serve_slide_direction()
@@ -375,6 +381,7 @@ func _begin_shot(action: InputDevice.Action) -> void:
 	_charge_time = 0.0
 	_timed = false
 	_is_volley_shot = false
+	_forehand_side = null
 	_draw_error_direction()
 	_late_flight_time = randf_range(LATE_SHOT_FLIGHT_TIME.x, LATE_SHOT_FLIGHT_TIME.y)
 	_aiming_at = _rally_aim_target()
@@ -400,7 +407,9 @@ func _update_shot(delta: float) -> void:
 	if was_charging and not _charging:
 		_timed = true
 		_timing_quality = _shot_timing_quality(player.get_seconds_to_contact())
-	_update_aim(delta)
+	# Aiming by zones keeps the zone held at the release.
+	if _charging or _device.get_aim_mode() != InputDevice.AimMode.ZONES:
+		_update_aim(delta)
 	_aiming_at = _rally_aim_target()
 
 	# During the swing the stroke still follows aim and timing until the racket meets the ball.
@@ -420,7 +429,20 @@ func _update_shot(delta: float) -> void:
 		return
 
 	_pending_stroke = _build_rally_stroke(step)
-	move_to_contact(step, _pending_stroke)
+	if _moves_freely():
+		player.cancel_movement()
+	else:
+		move_to_contact(step, _pending_stroke)
+
+
+## Whether the direction moves the player during the shot (aiming with a pointer, until the
+## swing): otherwise the player runs to the ball on its own.
+func _moves_freely() -> bool:
+	return (
+		_device.get_aim_mode() == InputDevice.AimMode.POINTER
+		and _get_direction() != Vector2.ZERO
+		and player.get_current_state() != PlayerStateMachine.State.STROKING
+	)
 
 
 ## Places the contact window and the ideal position once, as soon as the opponent's ball comes
@@ -504,12 +526,12 @@ func _rally_error_radius(quality: float) -> float:
 
 
 ## Points a rally stroke at the current aim with its landing error, speed and attack pace by
-## timing. Still holding the button at contact plays a weak ball short through the middle.
+## timing. Still holding the button at contact plays a weak, shorter ball the aimed way.
 func _apply_shot_timing(stroke: Stroke) -> void:
 	var quality: float = _effective_shot_quality()
 	stroke.stroke_spin = _base_stroke_spin * _by_timing(quality, TIMING_SPIN, TIMING_SPIN_PERFECT)
 	if not _timed:
-		var late_target: Vector3 = _opponent_court_point(0.0, LATE_SHOT_DEPTH)
+		var late_target: Vector3 = _late_shot_target()
 		var late_error: Vector2 = _error_direction * LATE_SHOT_ERROR_RADIUS
 		stroke.intended_stroke_target = late_target
 		stroke.stroke_target = late_target + Vector3(late_error.x, 0.0, late_error.y)
@@ -525,11 +547,24 @@ func _apply_shot_timing(stroke: Stroke) -> void:
 	stroke.attack_power = _base_attack_power * _by_timing(quality, TIMING_ATTACK, 1.0)
 
 
-## Builds the rally stroke for the given contact step, forehand or backhand by ball side.
+## Target of a late shot: the aimed way, less wide and shorter (never deeper than the aim).
+func _late_shot_target() -> Vector3:
+	var depth: float = minf(
+		lerpf(LATE_SHOT_DEPTH.x, LATE_SHOT_DEPTH.y, (_aim.value.y + 1.0) * 0.5), absf(_aiming_at.z)
+	)
+	var target: Vector3 = _aiming_at * Vector3(LATE_SHOT_LATERAL_FACTOR, 0.0, 0.0)
+	target.z = depth * signf(_aiming_at.z)
+	return target
+
+
+## Builds the rally stroke for the given contact step, forehand or backhand by ball side (kept
+## for a ball near the middle, see SIDE_SWITCH_MARGIN).
 ## A ball taken before the bounce is volleyed (a drop shot becomes a drop volley).
 func _build_rally_stroke(step: TrajectoryStep) -> Stroke:
-	var to_ball: Vector3 = step.point - player.global_position
-	var is_forehand: bool = to_ball.dot(player.global_basis.x) > 0.0
+	var side: float = (step.point - player.global_position).dot(player.global_basis.x)
+	if _forehand_side == null or absf(side) > SIDE_SWITCH_MARGIN:
+		_forehand_side = side > 0.0
+	var is_forehand: bool = _forehand_side
 	var is_volley: bool = step.is_volley_contact()
 	_is_volley_shot = is_volley
 	var stamina: float = player.get_stamina_ratio()
@@ -652,7 +687,9 @@ func _update_serve_aim(delta: float) -> void:
 
 
 func _update_serve_swing(delta: float) -> void:
-	_update_aim(delta)
+	# Aiming by zones keeps the zone held at the toss.
+	if _device.get_aim_mode() != InputDevice.AimMode.ZONES:
+		_update_aim(delta)
 	_aiming_at = _serve_aim_target()
 	if not _timed and _just_pressed_action() >= 0:
 		_timed = true
@@ -747,38 +784,10 @@ static func _by_timing(quality: float, below_perfect: Vector2, perfect: float) -
 	return lerpf(below_perfect.x, below_perfect.y, quality)
 
 
-## Sets the aim goal from the direction, per axis, and moves the aim toward it. Full
-## deflection in any direction reaches the edge of the target area (diagonals reach the
-## corners). An axis easing back toward neutral keeps its goal.
+## Moves the aim the way the device aims.
 func _update_aim(delta: float) -> void:
-	var direction: Vector2 = _get_direction()
-	var largest_axis: float = maxf(absf(direction.x), absf(direction.y))
-	if largest_axis == 0.0:
-		_aim_peak = Vector2.ZERO
-	else:
-		var square: Vector2 = direction / largest_axis * direction.length()
-		_update_aim_axis(Vector2.AXIS_X, square.x)
-		_update_aim_axis(Vector2.AXIS_Y, square.y)
-	_aim = _aim.move_toward(_aim_goal, AIM_SPEED * delta)
-
-
-func _update_aim_axis(axis: int, value: float) -> void:
-	var magnitude: float = absf(value)
-	if magnitude < AIM_NEUTRAL:
-		_aim_peak[axis] = 0.0
-		return
-	if signf(value) != signf(_aim_goal[axis]):
-		# Pushing to the other side starts a new push.
-		_aim_peak[axis] = 0.0
-	if magnitude >= _aim_peak[axis] * AIM_RELEASE_RATIO:
-		_aim_peak[axis] = maxf(_aim_peak[axis], magnitude)
-		_aim_goal[axis] = value
-
-
-func _reset_aim() -> void:
-	_aim = Vector2.ZERO
-	_aim_goal = Vector2.ZERO
-	_aim_peak = Vector2.ZERO
+	var pointer_motion: Vector2 = _screen_to_player(_device.get_pointer_motion())
+	_aim.update(_device.get_aim_mode(), _get_direction(), pointer_motion, delta)
 
 
 func _enter_free_mode() -> void:
@@ -809,17 +818,21 @@ func _has_ball_passed() -> bool:
 	return (ball.global_position.z - player.global_position.z) * own_side > 0.0
 
 
-## Device direction relative to this player (x = right, y = forward). The device direction is
-## relative to the screen, so it is turned by the view camera's facing on the ground.
+## Device direction relative to this player (x = right, y = forward).
 func _get_direction() -> Vector2:
+	return _screen_to_player(_device.get_direction())
+
+
+## Turns a vector on the screen (x = right, y = up) into one relative to this player (x = right,
+## y = forward) by the view camera's facing on the ground.
+func _screen_to_player(screen_vector: Vector2) -> Vector2:
 	var camera: Camera3D = view_camera if view_camera else player.get_viewport().get_camera_3d()
 	# The camera's right axis stays horizontal (no camera rolls); "up the screen" is the ground
 	# direction perpendicular to it, also for cameras looking straight down.
 	var screen_right: Vector3 = Vector3(camera.global_basis.x.x, 0.0, camera.global_basis.x.z)
 	screen_right = screen_right.normalized()
 	var screen_up: Vector3 = Vector3.UP.cross(screen_right)
-	var device_direction: Vector2 = _device.get_direction()
-	var world: Vector3 = screen_right * device_direction.x + screen_up * device_direction.y
+	var world: Vector3 = screen_right * screen_vector.x + screen_up * screen_vector.y
 	return Vector2(world.dot(player.global_basis.x), world.dot(-player.global_basis.z))
 
 
@@ -856,7 +869,7 @@ func _serve_slide_direction() -> Vector3:
 func _rally_aim_target() -> Vector3:
 	var depth_min: float = GameConstants.SERVICE_LINE
 	var depth_max: float = GameConstants.COURT_LENGTH_HALF - AIM_LINE_MARGIN
-	var aim_x: float = _aim.x
+	var aim_x: float = _aim.value.x
 	if _stroke_action == InputDevice.Action.DROP_SHOT:
 		depth_min = DROP_SHOT_DEPTH_MIN
 		depth_max = DROP_SHOT_DEPTH_MAX
@@ -866,7 +879,7 @@ func _rally_aim_target() -> Vector3:
 		aim_x = _toward_open_court(aim_x)
 
 	var lateral: float = aim_x * (GameConstants.COURT_WIDTH_HALF - AIM_LINE_MARGIN)
-	var depth: float = lerpf(depth_min, depth_max, (_aim.y + 1.0) * 0.5)
+	var depth: float = lerpf(depth_min, depth_max, (_aim.value.y + 1.0) * 0.5)
 	return _opponent_court_point(lateral, depth)
 
 
@@ -895,11 +908,11 @@ func _serve_aim_target() -> Vector3:
 	var box_sign: float = -_serve_side * right_x
 	var inner: float = box_sign * AIM_LINE_MARGIN
 	var outer: float = box_sign * (GameConstants.COURT_WIDTH_HALF - AIM_LINE_MARGIN)
-	var lateral: float = lerpf(minf(inner, outer), maxf(inner, outer), (_aim.x + 1.0) * 0.5)
+	var lateral: float = lerpf(minf(inner, outer), maxf(inner, outer), (_aim.value.x + 1.0) * 0.5)
 	var depth: float = lerpf(
 		GameConstants.SERVICE_LINE * 0.5,
 		GameConstants.SERVICE_LINE - AIM_LINE_MARGIN,
-		(_aim.y + 1.0) * 0.5
+		(_aim.value.y + 1.0) * 0.5
 	)
 	return _opponent_court_point(lateral, depth)
 
@@ -916,7 +929,7 @@ func _on_player_ball_hit() -> void:
 	_clear_ideal_position()
 	if _mode == Mode.SHOT:
 		_enter_free_mode()
-	_reset_aim()
+	_aim.reset()
 	_device.vibrate(0.64, 0.4, 0.1)
 
 

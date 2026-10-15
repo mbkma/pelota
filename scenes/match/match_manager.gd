@@ -1,4 +1,5 @@
-## Manages match state, scoring, and game flow for tennis matches
+## Manages match state, scoring, and game flow for tennis matches. The match is saved after
+## every point until it is over, and continues a saved match picked in the menus (see SavedMatch).
 class_name MatchManager
 extends PlaySession
 
@@ -66,8 +67,15 @@ var _point_volleyed: Array[bool] = [false, false]
 
 func _ready() -> void:
 	set_meta("logger_name", "MatchManager")
-	match_data = MatchData.new()
-	match_data.score.best_of_sets = GlobalGameData.best_of_sets
+	var resumed: SavedMatch = GlobalGameData.resumed_match
+	# Restarting the match starts it anew.
+	GlobalGameData.resumed_match = null
+	if resumed:
+		match_data = resumed.match_data
+	else:
+		match_data = MatchData.new()
+		match_data.score.best_of_sets = GlobalGameData.best_of_sets
+		SavedMatch.delete_saved(_is_tournament_match())
 
 	var players: Array[Player] = [player0, player1]
 	for i in players.size():
@@ -88,6 +96,7 @@ func _ready() -> void:
 	umpire.set_players([player0.player_data, player1.player_data])
 	active_ball_changed.connect(_aim_ball_camera)
 	television_hud.start_broadcast(match_data.score)
+	stadium.show_match_time(match_data.elapsed_seconds)
 	stadium.show_bench_equipment(players)
 	_update_players_for_next_point()
 	stadium.aim_ball_camera(get_server())
@@ -170,8 +179,10 @@ func add_point(winner: int) -> void:
 	stadium.show_match_time(match_data.elapsed_seconds)
 	umpire.call_point(score, winner)
 	if score.is_match_over():
+		SavedMatch.delete_saved(_is_tournament_match())
 		_end_match(winner)
 		return
+	_save_match()
 	stadium.aim_ball_camera(get_server())
 	cameras.reframe_tv_cameras()
 	var point_break: float = (
@@ -480,6 +491,19 @@ func _get_valid_service_box() -> Court.CourtRegion:
 	)
 
 
+## Saves the match to continue it from the next point.
+func _save_match() -> void:
+	var players: Array[PlayerData] = [player0.player_data, player1.player_data]
+	var devices: Array[int] = [
+		GlobalGameData.get_match_input_device(0), GlobalGameData.get_match_input_device(1)
+	]
+	SavedMatch.create(players, devices, _is_tournament_match(), match_data).save()
+
+
+func _is_tournament_match() -> bool:
+	return GlobalGameData.tournament != null
+
+
 func _has_human_player() -> bool:
 	return player0.controller is HumanController or player1.controller is HumanController
 
@@ -539,7 +563,9 @@ func _on_ball_on_net_cord() -> void:
 
 func _on_player_serve_requested(serving_player: Player) -> void:
 	if serving_player == get_server():
-		stadium.start_serve_clocks()
+		# The serve clock only runs before a first serve.
+		if not is_second_serve():
+			stadium.start_serve_clocks()
 		cameras.frame_return(serving_player.opponent)
 
 

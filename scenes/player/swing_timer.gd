@@ -2,18 +2,21 @@
 ## PREPARATION_LEAD seconds before it would have to start at its natural speed, it takes the racket
 ## back to its `swing` marker and holds it there. The forward swing from `swing` to `hit` then
 ## starts when the ball is that far away, and plays at its natural speed. When the ball leaves less
-## time, the preparation plays faster, at most at MAX_PREPARATION_SPEED, and starts later in the
-## clip (skipping its quiet start) rather than rushing through the whole of it. Only a ball that
-## leaves less time than the forward swing takes speeds the forward swing up (at most at the
-## player's max speed) and, when even that is too slow, starts it part of the way through.
+## time, the whole take-back plays faster, up to MAX_PREPARATION_SPEED, and only a ball leaving
+## even less time starts it part of the way through. Only a ball that leaves less time than the
+## forward swing takes speeds the forward swing up (at most at the player's max speed) and, when
+## even that is too slow, starts it part of the way through.
+## A ball whose height changes while the swing prepares moves it to the clips for that height,
+## as far through as it was; another stroke (e.g. a backhand instead of a forehand) prepares
+## anew.
 class_name SwingTimer
 extends RefCounted
 
 ## Seconds the preparation may start before the swing would have to start at its natural speed
 const PREPARATION_LEAD: float = 0.6
-## Fastest the preparation plays when it starts; a preparation that would have to be faster starts
-## later in the clip instead.
-const MAX_PREPARATION_SPEED: float = 1.5
+## Fastest the preparation (the take-back) plays; a preparation that would have to be faster starts
+## later in the clip instead, cutting the take-back short.
+const MAX_PREPARATION_SPEED: float = 3.0
 
 ## Swing preparing or swinging, null while there is none
 var swing: StrokeBlend = null
@@ -48,8 +51,12 @@ func update(candidate: StrokeBlend, time_to_contact: float) -> void:
 	if _released:
 		return
 	if swing and not candidate.is_same_swing(swing):
-		_animator.stop_stroke()
-		swing = null
+		if candidate.is_same_stroke(swing):
+			_animator.change_stroke(candidate)
+			swing = candidate
+		else:
+			_animator.stop_stroke()
+			swing = null
 	if not swing:
 		var lead_time: float = (
 			_animator.get_marker_time(candidate, PlayerAnimator.HIT_MARKER) + PREPARATION_LEAD
@@ -121,7 +128,9 @@ func _pace(time_to_contact: float) -> void:
 	var swing_time: float = _animator.get_marker_time(swing, PlayerAnimator.SWING_MARKER)
 	var preparation_left: float = time_to_contact - forward_time
 	var time: float = _animator.get_stroke_time()
-	_animator.set_stroke_speed(clampf((swing_time - time) / preparation_left, 1.0, _max_speed))
+	_animator.set_stroke_speed(
+		clampf((swing_time - time) / preparation_left, 1.0, MAX_PREPARATION_SPEED)
+	)
 
 
 ## Starts the forward swing so that it reaches `hit` in `time_to_contact` seconds.

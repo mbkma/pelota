@@ -48,6 +48,13 @@ const STEPPING_SPEED: float = 0.4
 ## to running, and the time constant (s) the legs change over with
 const RUNNING_LEGS_SPEED: Vector2 = Vector2(1.0, 2.5)
 const RUNNING_LEGS_TIME: float = 0.12
+## Seconds of the stroke's timeline after `hit` that play before the stroke may start to fade out:
+## a clip ending soon after its hit (e.g. at the top of its follow-through) holds its last pose
+## while it fades, so the follow-through is not faded away.
+const MIN_FOLLOW_THROUGH: float = 0.3
+## The clips are held this far (s) before their end: a clip played to its end ends the stroke's
+## OneShot at once, without its fade-out.
+const CLIP_END_HOLD_MARGIN: float = 0.001
 
 ## Both locomotion branches: the full body and the legs running under a stroke
 const _LOCOMOTION_BRANCHES: Array[String] = ["Locomotion", "LegLocomotion"]
@@ -70,6 +77,8 @@ var _stroke_speed: float = 1.0
 var _hold_marker: StringName = &""
 ## Whether the stroke fades out already (stroke_finished was emitted)
 var _stroke_fading: bool = false
+## Stroke clock time (s) at which the fade-out is done
+var _fade_end_time: float = 0.0
 ## Whether the stroke plays through to its end: its forward swing started, or it never holds
 var _stroke_released: bool = false
 ## Share of the legs running under the stroke (see RUNNING_LEGS_SPEED)
@@ -208,6 +217,24 @@ func play_stroke(
 	_seek_stroke()
 
 
+## Plays `stroke` (the same stroke at another height: another pair of clips with the same
+## markers) instead of the playing stroke, as far through it as the playing stroke is: at the
+## same share between the same markers.
+func change_stroke(stroke: StrokeBlend) -> void:
+	var previous_keys: PackedFloat32Array = _blend_keys
+	_stroke = stroke
+	_set_stroke_keys()
+	for i in range(1, previous_keys.size()):
+		if _stroke_time <= previous_keys[i] or i == previous_keys.size() - 1:
+			var share: float = inverse_lerp(previous_keys[i - 1], previous_keys[i], _stroke_time)
+			_stroke_time = lerpf(_blend_keys[i - 1], _blend_keys[i], clampf(share, 0.0, 1.0))
+			break
+	set(_LOW_SELECT, String(stroke.low.animation))
+	set(_HIGH_SELECT, String(stroke.high.animation))
+	set(_HEIGHT_BLEND, stroke.weight)
+	_seek_stroke()
+
+
 ## Changes the blend weight of the playing stroke (e.g. as the ball's height becomes clearer).
 func set_stroke_weight(weight: float) -> void:
 	_stroke.weight = weight
@@ -307,8 +334,7 @@ func _advance_stroke(delta: float) -> void:
 	_stroke_time += delta * _stroke_speed
 	if not _hold_marker.is_empty():
 		_stroke_time = minf(_stroke_time, _key_time(_hold_marker))
-	var end_time: float = _blend_keys[-1]
-	if _stroke_fading and _stroke_time >= end_time:
+	if _stroke_fading and _stroke_time >= maxf(_blend_keys[-1], _fade_end_time):
 		_stroke = null
 		return
 	_seek_stroke()
@@ -317,9 +343,18 @@ func _advance_stroke(delta: float) -> void:
 	for marker in _marker_names:
 		var marker_time: float = _key_time(marker)
 		if previous_time < marker_time and marker_time <= _stroke_time:
+			if marker == HIT_MARKER:
+				# The follow-through plays at its natural speed, however fast the swing was.
+				_stroke_speed = 1.0
 			stroke_marker_reached.emit(marker)
-	if _stroke and _stroke_time >= end_time - _fade_out_time:
+	if _stroke and _stroke_time >= _fade_start_time():
 		stop_stroke()
+
+
+## Stroke clock time (s) at which the playing stroke starts to fade out: so that it ends with the
+## clips, but not before MIN_FOLLOW_THROUGH after `hit`.
+func _fade_start_time() -> float:
+	return maxf(_blend_keys[-1] - _fade_out_time, _key_time(HIT_MARKER) + MIN_FOLLOW_THROUGH)
 
 
 ## Seeks both stroke clips to the stroke clock.
@@ -334,8 +369,11 @@ func _clip_time(keys: PackedFloat32Array) -> float:
 	for i in range(1, _blend_keys.size()):
 		if _stroke_time <= _blend_keys[i] or i == _blend_keys.size() - 1:
 			var share: float = inverse_lerp(_blend_keys[i - 1], _blend_keys[i], _stroke_time)
-			return lerpf(keys[i - 1], keys[i], clampf(share, 0.0, 1.0))
-	return keys[-1]
+			return minf(
+				lerpf(keys[i - 1], keys[i], clampf(share, 0.0, 1.0)),
+				keys[-1] - CLIP_END_HOLD_MARGIN
+			)
+	return keys[-1] - CLIP_END_HOLD_MARGIN
 
 
 func _set_stroke_keys() -> void:
@@ -373,4 +411,5 @@ func _finish_stroke() -> void:
 	_stroke_fading = true
 	_hold_marker = &""
 	_stroke_speed = maxf(_stroke_speed, 1.0)
+	_fade_end_time = _stroke_time + _fade_out_time * _stroke_speed
 	stroke_finished.emit()

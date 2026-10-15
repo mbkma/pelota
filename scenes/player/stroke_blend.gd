@@ -18,3 +18,8 @@ func _init(p_low: StrokeClip, p_high: StrokeClip, p_weight: float) -> void:
 
 func is_same_swing(other: StrokeBlend) -> bool:
 	return other != null and other.low == low and other.high == high
+
+
+## Whether `other` plays the same stroke (e.g. both a backhand), at whatever height.
+func is_same_stroke(other: StrokeBlend) -> bool:
+	return other != null and other.low.stroke_types == low.stroke_types

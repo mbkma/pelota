@@ -113,7 +113,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var looking: bool = _look_point != null
+	var looking: bool = _look_point != null and _is_in_front(_look_point)
 	if looking:
 		look_target.global_position = _look_point
 	var follow: float = 1.0 - exp(-delta / LOOK_FADE_TIME)
@@ -243,9 +243,18 @@ func reach_toward(offset: Vector3) -> void:
 	arm_reach.reach = reach
 
 
-## Turns the head toward `point` (world), or back to the animation for null.
+## Turns the head toward `point` (world) while it is in front of the body, or back to the
+## animation for null.
 func look_at_point(point: Variant) -> void:
 	_look_point = point
+
+
+## Whether `point` (world) is in front of the body: the head turns only that far.
+func _is_in_front(point: Vector3) -> bool:
+	# The model faces -z at body yaw 0.
+	var facing: Vector3 = -(global_basis * Basis(Vector3.UP, body_yaw)).z
+	var offset: Vector3 = point - global_position
+	return offset.x * facing.x + offset.z * facing.z > 0.0
 
 
 ## Turns the chest back to the stroke's turn as far as the hips run with the legs (see

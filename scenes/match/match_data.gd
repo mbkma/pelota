@@ -1,6 +1,6 @@
-## Score, statistics and match time of a match.
+## Score, statistics and match time of a match; saved between points (see SavedMatch).
 class_name MatchData
-extends RefCounted
+extends Resource
 
 ## Match time per point (s) between serves (walking back, toweling, serve preparation)
 const SECONDS_PER_POINT: float = 25.0
@@ -9,15 +9,16 @@ const SECONDS_PER_SHOT: float = 1.5
 ## Longest a single game can take (s)
 const MAX_GAME_SECONDS: float = 600.0
 
-var score := Score.new()
-## Shots in the current rally, serve included
-var rally_length: int = 0
-var longest_rally: int = 0
+@export var score := Score.new()
+@export var longest_rally: int = 0
 ## Statistics per player [player0, player1]
-var statistics: Array[MatchStatistics] = [MatchStatistics.new(), MatchStatistics.new()]
+@export var statistics: Array[MatchStatistics] = [MatchStatistics.new(), MatchStatistics.new()]
 ## Match time (s) shown in the stadium; advances after each game by the length of the game.
-var elapsed_seconds: float = 0.0
-var _game_seconds: float = 0.0
+@export var elapsed_seconds: float = 0.0
+@export var _game_seconds: float = 0.0
+
+## Shots in the current rally, serve included (not saved: a match is saved between points)
+var rally_length: int = 0
 
 
 func get_server() -> int:

@@ -61,6 +61,20 @@ const NET_REBOUND: float = 0.1
 # Walls (physics engine): share of the speed kept by a wall bounce
 const WALL_BOUNCE_RETENTION: float = 0.3
 
+# Look of the turning ball (visual only, the flight uses `spin`): rate at full spin on a fast
+# ball (a heavy topspin forehand turns at about 3000 rpm), share of it a slow ball keeps, and the
+# ball speed (m/s) for the full rate. On a bounce the felt grips the court and pulls the ball
+# toward rolling by BOUNCE_ROLL_GRIP; in the air the spin slowly decays (share lost per second).
+const SPIN_RATE_MAX: float = 3000.0 * TAU / 60.0
+const SPIN_RATE_SLOW_SHARE: float = 0.4
+const SPIN_RATE_FULL_SPEED: float = 40.0
+const BOUNCE_ROLL_GRIP: float = 0.6
+const AIR_SPIN_DECAY: float = 0.1
+const NET_SPIN_RETENTION: float = 0.2
+## Largest rotation shown per physics frame (rad): faster spin would alias and seem to turn
+## slowly or backwards, like a wagon wheel on film.
+const MAX_VISUAL_ROTATION_PER_FRAME: float = PI * 0.4
+
 const TRAJECTORY_MAX_TIME: float = 5.0
 const TRAJECTORY_SIMULATION_DT: float = 1.0 / 240.0
 # Velocity solver: landing tolerance (m), vertical speed probe and step limit (m/s)
@@ -100,12 +114,15 @@ var bounces_since_stroke: int = 0
 ## Where the ball last touched the ground
 var last_bounce_position: Vector3 = Vector3.ZERO
 var _rolling: bool = false
+## How the ball turns (rad/s, world axis), for its look only
+var _angular_velocity: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
 	set_meta("logger_name", "Ball")
 	velocity = initial_velocity
 	global_position = initial_position
+	_angular_velocity = _spin_angular_velocity(velocity, spin)
 	for group in ["Ground", "Net", "Players"]:
 		for body in get_tree().get_nodes_in_group(group):
 			add_collision_exception_with(body)
@@ -123,6 +140,7 @@ func _physics_process(delta: float) -> void:
 	velocity = state.velocity
 	spin = state.spin
 	_rolling = state.rolling
+	_turn(event, collision != null, delta)
 
 	match event:
 		StepEvent.BOUNCED, StepEvent.ROLLING_STARTED:
@@ -141,6 +159,52 @@ func apply_stroke(stroke_velocity: Vector3, spin_amount: Vector3) -> void:
 	velocity = stroke_velocity
 	_rolling = false
 	bounces_since_stroke = 0
+	_angular_velocity = _spin_angular_velocity(velocity, spin)
+
+
+## Updates how the ball turns after a step with `event` and turns it: it keeps its spin in the
+## air, grips the court on a bounce and rolls on the ground.
+func _turn(event: StepEvent, hit_wall: bool, delta: float) -> void:
+	if _rolling:
+		_angular_velocity = _rolling_angular_velocity(velocity)
+	else:
+		match event:
+			StepEvent.BOUNCED:
+				_angular_velocity = _angular_velocity.lerp(
+					_rolling_angular_velocity(velocity), BOUNCE_ROLL_GRIP
+				)
+			StepEvent.HIT_NET, StepEvent.CLIPPED_NET_CORD:
+				_angular_velocity *= NET_SPIN_RETENTION
+			_:
+				_angular_velocity /= 1.0 + AIR_SPIN_DECAY * delta
+		if hit_wall:
+			_angular_velocity *= WALL_BOUNCE_RETENTION
+
+	var rate: float = _angular_velocity.length()
+	if rate > 0.001:
+		global_rotate(
+			_angular_velocity / rate, minf(rate * delta, MAX_VISUAL_ROTATION_PER_FRAME)
+		)
+
+
+## Angular velocity (rad/s) of a ball flying with `base_velocity` and `spin_value`: topspin
+## turns its top forward, backspin backward, and sidespin turns it about the vertical axis
+## (the turning that makes the spin forces of _compute_spin_force). Faster balls turn faster.
+func _spin_angular_velocity(base_velocity: Vector3, spin_value: Vector3) -> Vector3:
+	var rate: float = (
+		SPIN_RATE_MAX
+		* lerpf(
+			SPIN_RATE_SLOW_SHARE, 1.0, minf(base_velocity.length() / SPIN_RATE_FULL_SPEED, 1.0)
+		)
+	)
+	return (
+		(_sidespin_direction(base_velocity) * spin_value.y + Vector3.UP * spin_value.x) * rate
+	)
+
+
+## Angular velocity (rad/s) of a ball rolling on the ground with `base_velocity`.
+static func _rolling_angular_velocity(base_velocity: Vector3) -> Vector3:
+	return Vector3.UP.cross(Vector3(base_velocity.x, 0.0, base_velocity.z)) / RADIUS
 
 
 ## Height of the net cord at `x`, or -INF outside the net posts.

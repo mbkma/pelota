@@ -4,22 +4,25 @@ extends LoadingScreen
 
 ## Seconds a tip stays before the next one, when loading takes that long
 const TIP_DURATION: float = 8.0
-## Controls are named for the keyboard first, then for the gamepad: "Space / A" (see KeyboardInput
-## and GamepadInput).
+## Controls are named for keyboard and mouse, the keyboard alone, then the gamepad: "left click /
+## J / A" (see KeyboardInput and GamepadInput).
 const TIPS: PackedStringArray = [
 	"Watch the match from the broadcast, elevated, courtside or overhead camera, or through your player's eyes: set the camera view in the pause menu or in the interface options.",
 	"Hold a shot button to build power, and release it just before the racket meets the ball.",
 	"The circle on your opponent's side shows where the ball can land: the better your timing, the smaller it gets.",
 	"A gold landing circle means a perfect shot, with extra pace and spin.",
-	"Your aim stays where you leave it: steer it with the direction while the ball comes towards you.",
-	"Get to the blue ring early: once you press a shot button, your player only shuffles slowly towards the ball.",
+	"Aim with the mouse, with WASD on the keyboard alone or with the left stick, where the aim stays where you leave it.",
+	"Playing with keyboard and mouse, WASD keeps moving your player while you aim a shot with the mouse.",
+	"Keyboard only? WASD picks one of nine aiming zones; the keys you hold when you release the shot button count.",
+	"Switch between keyboard and mouse and keyboard only in the input options.",
+	"Get to the blue ring early: once you press a shot button, your player only shuffles slowly towards the ball on its own.",
 	"Balls met off the racket's sweet spot lose pace and accuracy.",
-	"Three shots: topspin with Space / A, slice with Shift / X and the drop shot with Ctrl / Y.",
-	"Serve flat (Space / A) for pace, slice (Shift / X) for a curving serve or kick (Ctrl / Y) for a safe, high-bouncing serve.",
+	"Three shots: topspin with left click / J / A, slice with right click / K / X and the drop shot with Q / L / Y.",
+	"Serve flat (left click / J / A) for pace, slice (right click / K / X) for a curving serve or kick (Q / L / Y) for a safe, high-bouncing serve.",
 	"To serve, release the button to toss the ball and press it again right before contact: the closer to contact, the faster and more precise the serve.",
 	"Before serving, slide along the baseline with left and right to change your angle.",
 	"Close to the net, a ball you take before it bounces is volleyed automatically.",
-	"At the net, the drop shot button (Ctrl / Y) plays a drop volley that dies right behind the net.",
+	"At the net, the drop shot button (Q / L / Y) plays a drop volley that dies right behind the net.",
 	"Move forward after a strong shot to finish the point - but watch out for passing shots and lobs.",
 	"Break points and set points add pressure, which lowers precision. Calmer players cope better.",
 	"Running drains stamina, which costs speed and accuracy. Keep an eye on the panels in the corners.",

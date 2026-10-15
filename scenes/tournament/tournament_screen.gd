@@ -49,6 +49,10 @@ var _selected_player: PlayerData
 
 
 func _ready() -> void:
+	# Back from a match the music goes on (no music director when the screen is run directly).
+	var music_director: MusicDirector = get_tree().root.get_node_or_null(^"MusicDirector")
+	if music_director:
+		music_director.resume()
 	_tournament = GlobalGameData.tournament
 	_badge_name_label.text = Tournament.NAME.to_upper()
 	_badge_category_label.text = Tournament.CATEGORY.to_upper()
@@ -96,9 +100,11 @@ func _refresh() -> void:
 	_state_badge.theme_type_variation = &"BadgeTeal" if over else &"BadgeRed"
 	_status_label.text = _status()
 	var own_match: TournamentMatch = _tournament.player_match()
+	var saved_match: SavedMatch = GlobalGameData.saved_tournament_match()
 	_play_button.visible = own_match != null
 	_simulate_match_button.visible = own_match != null
-	_sets_option.visible = own_match != null
+	# A started match keeps its sets.
+	_sets_option.visible = own_match != null and saved_match == null
 	_simulate_button.visible = own_match == null and not over
 	for round_index in _round_buttons.size():
 		_round_buttons[round_index].modulate.a = (
@@ -107,7 +113,12 @@ func _refresh() -> void:
 	_show_news()
 	_show_my_match()
 	if own_match:
-		_play_button.text = "Play the %s" % _tournament.round_name(_tournament.current_round)
+		var round_name: String = _tournament.round_name(_tournament.current_round)
+		_play_button.text = (
+			"Continue the %s (%s)" % [round_name, saved_match.score_text()]
+			if saved_match
+			else "Play the %s" % round_name
+		)
 		_play_button.grab_focus()
 	elif _simulate_button.visible:
 		_simulate_button.grab_focus()
@@ -245,6 +256,8 @@ func _on_play_pressed() -> void:
 func _on_simulate_match_pressed() -> void:
 	_tournament.simulate_player_match()
 	_tournament.save()
+	# A started match of it is simulated too, from the start.
+	SavedMatch.delete_saved(true)
 	_refresh()
 
 

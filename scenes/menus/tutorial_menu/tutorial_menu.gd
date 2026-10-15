@@ -1,5 +1,6 @@
 ## How-to-play screen: one tutorial page at a time with an illustration, the explanation and
-## the keyboard and gamepad controls it is about. Left and right turn the pages.
+## the keyboard (in the layout picked in the input options) and gamepad controls it is about.
+## Left and right turn the pages.
 class_name TutorialMenu
 extends Control
 
@@ -77,7 +78,13 @@ func _show_page(index: int) -> void:
 func _control_row(control: TutorialControl) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
-	for icon in control.keyboard_icons:
+	var keyboard_icons: Array[Texture2D] = control.keyboard_icons
+	if (
+		KeyboardInput.get_layout() == KeyboardInput.Layout.KEYBOARD_AND_MOUSE
+		and not control.mouse_icons.is_empty()
+	):
+		keyboard_icons = control.mouse_icons
+	for icon in keyboard_icons:
 		row.add_child(_icon(icon))
 	if not control.gamepad_icons.is_empty():
 		var separator := Label.new()

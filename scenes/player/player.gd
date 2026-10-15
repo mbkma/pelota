@@ -16,10 +16,14 @@ signal controller_changed
 const DISTANCE_THRESHOLD: float = 0.01
 const STAMINA_STROKE_COST_BASE: float = 5.5
 const STAMINA_MOVE_DRAIN_BASE: float = 6.0
-## Ball within this distance (m) of the racket contact point at contact: perfect positioning.
+## Ball within this distance (m) of the swing's contact point at contact: perfect positioning.
 const PERFECT_CONTACT_DISTANCE: float = 0.15
-## Extra landing error (m) at the worst control.
-const POOR_POSITION_ERROR_RADIUS: float = 3.0
+## The ball is only hit if it passes the racket's strings: within this distance (m) of the sweet
+## spot where the racket meets it (with the hand reaching for the ball, see Model.reach_toward).
+const RACKET_HEAD_RADIUS: float = 0.15
+## At the worst control: extra landing error (m) and share of the target's width (from the middle)
+const POOR_POSITION_ERROR_RADIUS: float = 1.2
+const POOR_POSITION_LATERAL_FACTOR: float = 0.75
 ## Share of the target depth (distance from the net) reached at the worst control: a weak shot
 ## lands shorter instead of being looped up high.
 const POOR_POSITION_DEPTH_FACTOR: float = 0.55
@@ -121,8 +125,6 @@ const CONTROLLER_CHANGE_DEFERRED_PHASES: Array[MatchLifecycleBus.Phase] = [
 @export var opponent: Player
 ## Ball scene spawned as the toss ball when serving.
 @export var ball_scene: PackedScene
-## Maximum distance between ball and racket contact point that still counts as a hit.
-@export var hit_range_tolerance_meters: float = 1.0
 ## Maximum stroke playback speed used to reach the ball when the swing starts late.
 @export var max_stroke_speed: float = 1.8
 
@@ -551,11 +553,12 @@ func _body_travel(seconds: float) -> Vector3:
 	return travel.limit_length(to_target.length())
 
 
-## Positioning quality in [0, 1] for a ball meeting the racket `contact_distance` meters off
-## the contact point: 1 within PERFECT_CONTACT_DISTANCE, 0 at the edge of the hit range.
+## Positioning quality in [0, 1] for a ball passing `contact_distance` meters off the swing's
+## contact point: 1 within PERFECT_CONTACT_DISTANCE, 0 as far as the racket reaches.
 func positioning_quality(contact_distance: float) -> float:
 	var off_by: float = contact_distance - PERFECT_CONTACT_DISTANCE
-	var tolerance: float = hit_range_tolerance_meters - PERFECT_CONTACT_DISTANCE
+	var reach: float = Model.MAX_REACH + RACKET_HEAD_RADIUS + Ball.RADIUS
+	var tolerance: float = reach - PERFECT_CONTACT_DISTANCE
 	return 1.0 - clampf(off_by / tolerance, 0.0, 1.0)
 
 
@@ -590,9 +593,9 @@ static func depth_pressure(bounce_z: float, is_return: bool) -> float:
 
 ## Applies how well the ball was met (`control`: the positioning, lowered by a deep incoming
 ## ball): the stroke's attack pace only comes through in full with full control and its full
-## share (readiness, or the contact height of a volley); with poor control the stroke is also
-## shortened, flattened and scattered, and weakened so that it takes about as long as the clean
-## shot over its shorter distance (see POOR_POSITION_FLIGHT_TIME).
+## share (readiness, or the contact height of a volley); with poor control it is also shortened,
+## narrowed, flattened, a little scattered and weakened to about the clean shot's flight time
+## over its shorter distance (see POOR_POSITION_FLIGHT_TIME).
 func _apply_contact_quality(stroke: Stroke, control: float, attack_share: float) -> void:
 	stroke.stroke_power += stroke.attack_power * control * attack_share
 	var flight_time: float = (
@@ -601,6 +604,7 @@ func _apply_contact_quality(stroke: Stroke, control: float, attack_share: float)
 		* lerpf(randf_range(POOR_POSITION_FLIGHT_TIME.x, POOR_POSITION_FLIGHT_TIME.y), 1.0, control)
 	)
 	stroke.stroke_target.z *= lerpf(POOR_POSITION_DEPTH_FACTOR, 1.0, control)
+	stroke.stroke_target.x *= lerpf(POOR_POSITION_LATERAL_FACTOR, 1.0, control)
 	stroke.stroke_spin.y *= lerpf(POOR_POSITION_SPIN_FACTOR, 1.0, control)
 	var error_radius: float = POOR_POSITION_ERROR_RADIUS * (1.0 - control)
 	var error: Vector2 = Vector2.from_angle(randf() * TAU) * sqrt(randf()) * error_radius
@@ -668,13 +672,11 @@ func _on_stroke_contact() -> void:
 	if not is_instance_valid(ball):
 		cancel_stroke()
 		return
-	var contact_distance: float = ball.passing_distance(
-		contact_point, get_physics_process_delta_time()
-	)
-	if contact_distance > hit_range_tolerance_meters:
+	var delta: float = get_physics_process_delta_time()
+	if ball.passing_distance(contact_point + model.reach, delta) > RACKET_HEAD_RADIUS + Ball.RADIUS:
 		cancel_stroke()
 		return
-	last_positioning_quality = positioning_quality(contact_distance)
+	last_positioning_quality = positioning_quality(ball.passing_distance(contact_point, delta))
 	var control: float = last_positioning_quality
 	var attack_share: float = _readiness()
 	if stroke.is_volley():

@@ -1,8 +1,8 @@
 extends MainMenu
 ## Main menu extension: animates the title and menu fading in (the player can skip it with
-## any input), starts the music, opens the how-to-play screen, the player select before a new
-## match and the modes menu, whose entries (training, tournament, a saved tournament) open
-## their own player select or continue.
+## any input), starts the music, continues a saved match, opens the how-to-play screen, the
+## player select before a new match and the modes menu, whose entries (training, tournament, a
+## saved tournament) open their own player select or continue.
 
 ## Player select opened by 'New Game'; confirming it starts the match.
 @export var player_select_packed_scene: PackedScene
@@ -23,6 +23,8 @@ extends MainMenu
 var animation_state_machine: AnimationNodeStateMachinePlayback
 ## The saved tournament, null if there is none
 var _saved_tournament: Tournament
+## The saved match outside a tournament, null if there is none
+var _saved_match: SavedMatch
 ## Whether the modes menu opens again when the sub menu opened from it closes
 var _return_to_modes: bool = false
 ## Releasing ui_cancel closes the open sub menu only after its press reached the main menu: the
@@ -35,6 +37,11 @@ func _ready() -> void:
 	_start_music_once()
 	animation_state_machine = $MenuAnimationTree.get("parameters/playback")
 	_saved_tournament = Tournament.load_saved()
+	_saved_match = SavedMatch.load_saved(false)
+	var continue_button: Button = %ContinueMatchButton
+	continue_button.visible = _saved_match != null
+	if _saved_match:
+		continue_button.text = "Continue Match (%s)" % _saved_match.score_text()
 
 
 func _input(event: InputEvent) -> void:
@@ -93,6 +100,11 @@ func _start_music_once() -> void:
 		director.resume()
 		return
 	get_tree().root.add_child.call_deferred(music_director_scene.instantiate())
+
+
+func _on_continue_match_button_pressed() -> void:
+	GlobalGameData.continue_match(_saved_match)
+	load_game_scene()
 
 
 func _on_how_to_play_button_pressed() -> void:

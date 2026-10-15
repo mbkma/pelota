@@ -378,11 +378,17 @@ modulate = Color(1, 1, 1, 0)
 [node name="MenuButtonsBoxContainer" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer" index="0" unique_id=2017477786]
 lock = true
 
-[node name="ModesButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="1"]
+[node name="ContinueMatchButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="0"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Continue Match"
+
+[node name="ModesButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="2"]
 layout_mode = 2
 text = "Modes"
 
-[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="2" unique_id=1846290378]
+[node name="HowToPlayButton" type="Button" parent="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer" index="3" unique_id=1846290378]
 layout_mode = 2
 text = "How to Play"
 
@@ -401,5 +407,6 @@ metadata/_edit_lock_ = true
 
 [node name="MenuBackground" parent="." index="9" unique_id=1977320418 instance=ExtResource("9_background")]
 
+[connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ContinueMatchButton" to="." method="_on_continue_match_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/ModesButton" to="." method="_on_modes_button_pressed"]
 [connection signal="pressed" from="MenuContainer/MenuButtonsMargin/MenuButtonsContainer/MenuButtonsBoxContainer/HowToPlayButton" to="." method="_on_how_to_play_button_pressed"]
