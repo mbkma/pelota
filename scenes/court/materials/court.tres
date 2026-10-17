@@ -1,9 +1,10 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bxnk3o1vrnbk3"]
 
-[ext_resource type="Shader" uid="uid://bdocrn01ksns7" path="res://scenes/court/hard_court.gdshader" id="1_shader"]
-[ext_resource type="Texture2D" uid="uid://cve7fyhew6l6t" path="res://assets/textures/pbr/concrete_012/concrete_012_normalgl.jpg" id="2_normal"]
-[ext_resource type="Texture2D" uid="uid://dnmoegbcywt3q" path="res://assets/textures/pbr/concrete_012/concrete_012_roughness.jpg" id="3_roughness"]
-[ext_resource type="Texture2D" uid="uid://cbgdgrthgwf2t" path="res://assets/textures/pbr/concrete_012/concrete_012_color.jpg" id="4_tone"]
+[ext_resource type="Shader" path="res://scenes/court/hard_court.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_normalgl.jpg" id="2_normal"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_roughness.jpg" id="3_roughness"]
+[ext_resource type="Texture2D" path="res://assets/textures/court/court_tone.tres" id="4_tone"]
+[ext_resource type="Texture2D" path="res://assets/textures/court/court_scuffs.png" id="5_scuffs"]
 
 [resource]
 resource_name = "court"
@@ -13,14 +14,5 @@ shader_parameter/paint_color = Color(0.1, 0.18, 0.42, 1)
 shader_parameter/roughness = 0.78
 shader_parameter/grain_normal = ExtResource("2_normal")
 shader_parameter/grain_roughness = ExtResource("3_roughness")
-shader_parameter/grain_size = 0.6
-shader_parameter/grain_strength = 0.35
-shader_parameter/grain_roughness_variation = 0.12
-shader_parameter/tone_texture = ExtResource("4_tone")
-shader_parameter/tone_size = 9.0
-shader_parameter/tone_variation = 0.06
-shader_parameter/wear_center_z = 12.4
-shader_parameter/wear_half_size = Vector2(4.8, 2.6)
-shader_parameter/wear_fade = 0.6
-shader_parameter/wear_polish = 0.18
-shader_parameter/rubber_marks = 0.5
+shader_parameter/tone_noise = ExtResource("4_tone")
+shader_parameter/scuffs = ExtResource("5_scuffs")

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://d237t32p1sgei"]
 
+[ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="1_environment"]
 [ext_resource type="PackedScene" uid="uid://dvxofbtaogam4" path="res://scenes/environments/us_open/arthur_ashe/arthur_ashe.tscn" id="2_hi2re"]
 [ext_resource type="PackedScene" path="res://scenes/player/racket/racket.tscn" id="2_racket"]
 [ext_resource type="Script" uid="uid://h38us3lvmlk7" path="res://scenes/environments/us_open/stadium.gd" id="3"]
@@ -55,6 +56,15 @@ size = Vector3(2, 12.186, 38.508)
 
 [node name="Stadium" type="Node3D" unique_id=1375206359]
 script = ExtResource("3")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]
+environment = ExtResource("1_environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1614528829]
+transform = Transform3D(-0.949723, -0.220835, 0.22194107, 0.057147432, 0.5746921, 0.816372, -0.3078311, 0.7880108, -0.53317815, 0, 12, 0)
+light_energy = 1.34
+shadow_enabled = true
+directional_shadow_max_distance = 70.0
 
 [node name="Courtside" type="Node3D" parent="." unique_id=532835481]
 

@@ -16,7 +16,6 @@
 [ext_resource type="Script" uid="uid://ghfnq4x36r3e" path="res://scenes/match/replay/match_replay_controller.gd" id="20_replay"]
 [ext_resource type="PackedScene" uid="uid://daep44axg5840" path="res://scenes/ui/hud/player_status_panel.tscn" id="22_status_panel"]
 [ext_resource type="PackedScene" uid="uid://dwg7xu576cxge" path="res://scenes/ui/hud/match_stats_panel.tscn" id="23_stats_panel"]
-[ext_resource type="Environment" uid="uid://d3u2fkt5mn6ct" path="res://assets/environments/stadium_environment.tres" id="24_environment"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxyny"]
 resource_name = "bag_body"
@@ -131,15 +130,6 @@ television_hud = NodePath("../TelevisionHUD")
 umpire = NodePath("../Umpire")
 crowd = NodePath("../Crowd")
 cameras = NodePath("../Stadium/Cameras")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=168634856]
-environment = ExtResource("24_environment")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1614528829]
-transform = Transform3D(-0.949723, -0.220835, 0.22194107, 0.057147432, 0.5746921, 0.816372, -0.3078311, 0.7880108, -0.53317815, 0, 12, 0)
-light_energy = 1.34
-shadow_enabled = true
-directional_shadow_max_distance = 70.0
 
 [node name="MatchReplay" type="Node" parent="." unique_id=1093746211 node_paths=PackedStringArray("match_manager")]
 process_mode = 3

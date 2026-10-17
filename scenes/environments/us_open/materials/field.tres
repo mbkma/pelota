@@ -3,7 +3,8 @@
 [ext_resource type="Shader" path="res://scenes/court/hard_court.gdshader" id="1_shader"]
 [ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_normalgl.jpg" id="2_normal"]
 [ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_roughness.jpg" id="3_roughness"]
-[ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_color.jpg" id="4_tone"]
+[ext_resource type="Texture2D" path="res://assets/textures/court/court_tone.tres" id="4_tone"]
+[ext_resource type="Texture2D" path="res://assets/textures/court/court_scuffs.png" id="5_scuffs"]
 
 [resource]
 resource_name = "field"
@@ -13,4 +14,5 @@ shader_parameter/paint_color = Color(0.17, 0.31, 0.18, 1)
 shader_parameter/roughness = 0.8
 shader_parameter/grain_normal = ExtResource("2_normal")
 shader_parameter/grain_roughness = ExtResource("3_roughness")
-shader_parameter/tone_texture = ExtResource("4_tone")
+shader_parameter/tone_noise = ExtResource("4_tone")
+shader_parameter/scuffs = ExtResource("5_scuffs")
