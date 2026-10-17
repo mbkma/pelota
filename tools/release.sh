@@ -9,10 +9,11 @@
 #
 #   version    defaults to config/version of project.godot
 #   --publish  also tags the current commit v<version> (an existing tag is kept as it is),
-#              pushes the tag and creates a draft
-#              GitHub release with the archives (needs the gh CLI, logged in); review and
-#              publish the draft on GitHub. An existing build of the version is published as
-#              it is, without building again
+#              pushes the tag and creates a draft GitHub release with the archives and the
+#              version's section of CHANGELOG.md ("## Pelota <version>") as its notes (needs
+#              the gh CLI, logged in); review and publish the draft on GitHub. Do not mark it as
+#              a pre-release: releases/latest only leads to full releases. An existing build of
+#              the version is published as it is, without building again
 #   --force    with --publish: builds again even if the version is built already
 #
 # The Godot binary is taken from $GODOT, or `godot` on the PATH; its export templates must be
@@ -29,7 +30,7 @@ for arg in "$@"; do
 	case "$arg" in
 		--publish) PUBLISH=true ;;
 		--force) FORCE=true ;;
-		-h|--help) sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+		-h|--help) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
 		*) VERSION="$arg" ;;
 	esac
 done
@@ -38,7 +39,9 @@ if [[ -z "$VERSION" ]]; then
 fi
 NAME="Pelota-$VERSION"
 OUT="$ROOT/build/$VERSION"
-ARCHIVES=("$OUT/$NAME-linux-x86_64.tar.gz" "$OUT/$NAME-windows-x86_64.zip" "$OUT/SHA256SUMS.txt")
+LINUX_ARCHIVE="$NAME-linux-x86_64.tar.gz"
+WINDOWS_ARCHIVE="$NAME-windows-x86_64.zip"
+ARCHIVES=("$OUT/$LINUX_ARCHIVE" "$OUT/$WINDOWS_ARCHIVE" "$OUT/SHA256SUMS.txt")
 
 built() {
 	for file in "${ARCHIVES[@]}"; do
@@ -75,13 +78,30 @@ build() {
 	done
 	chmod +x "$OUT/linux/$NAME/Pelota.x86_64"
 
-	tar -czf "$OUT/$NAME-linux-x86_64.tar.gz" -C "$OUT/linux" "$NAME"
-	(cd "$OUT/windows" && zip -qr "../$NAME-windows-x86_64.zip" "$NAME")
-	(cd "$OUT" && sha256sum "$NAME-linux-x86_64.tar.gz" "$NAME-windows-x86_64.zip" > SHA256SUMS.txt)
+	tar -czf "$OUT/$LINUX_ARCHIVE" -C "$OUT/linux" "$NAME"
+	(cd "$OUT/windows" && zip -qr "../$WINDOWS_ARCHIVE" "$NAME")
+	(cd "$OUT" && sha256sum "$LINUX_ARCHIVE" "$WINDOWS_ARCHIVE" > SHA256SUMS.txt)
 
 	echo "Done:"
 	ls -lh "${ARCHIVES[@]}"
 }
+
+# The notes of the version: its section of CHANGELOG.md, without the heading
+release_notes() {
+	awk -v heading="## Pelota $VERSION" '
+		$0 == heading { found = 1; next }
+		found && /^## / { exit }
+		found { print }
+	' "$ROOT/CHANGELOG.md"
+}
+
+if $PUBLISH; then
+	NOTES="$(release_notes)"
+	if [[ -z "${NOTES//[[:space:]]/}" ]]; then
+		echo "CHANGELOG.md has no section \"## Pelota $VERSION\": write the release notes first." >&2
+		exit 1
+	fi
+fi
 
 if $PUBLISH && ! $FORCE && built; then
 	echo "$NAME is built already, publishing it as it is (--force builds again):"
@@ -102,6 +122,6 @@ if $PUBLISH; then
 	git -C "$ROOT" push origin "$TAG"
 	echo "Creating a draft GitHub release"
 	(cd "$ROOT" && gh release create "$TAG" --draft --title "Pelota $VERSION" \
-		--notes "Pelota $VERSION for Linux and Windows. See README.txt in the archive." \
+		--notes "$NOTES" \
 		"${ARCHIVES[@]}")
 fi

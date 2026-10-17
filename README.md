@@ -6,8 +6,8 @@
 
 **A free, open source 3D tennis game. No sign-up, no ads, no purchases, no internet needed.**
 
-[![Download for Windows](https://img.shields.io/badge/Download-Windows-ffb632?style=for-the-badge&labelColor=241a30)](https://github.com/mbkma/pelota/releases/download/v0.1.0-alpha/Pelota-0.1.0-alpha-windows-x86_64.zip)
-[![Download for Linux](https://img.shields.io/badge/Download-Linux-ffb632?style=for-the-badge&labelColor=241a30)](https://github.com/mbkma/pelota/releases/download/v0.1.0-alpha/Pelota-0.1.0-alpha-linux-x86_64.tar.gz)
+[![Download for Windows](https://img.shields.io/badge/Download-Windows-ffb632?style=for-the-badge&labelColor=241a30)](https://github.com/mbkma/pelota/releases/latest)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux-ffb632?style=for-the-badge&labelColor=241a30)](https://github.com/mbkma/pelota/releases/latest)
 
 
 [**Website**](https://mbkma.github.io/pelota-website/) &nbsp;·&nbsp;
@@ -29,7 +29,7 @@
 | **Price** | Free, forever |
 | **Players** | 1–2 on one computer, with keyboard and gamepads |
 | **Platforms** | Windows 10/11 · Linux (64-bit) |
-| **Release** | Early alpha (0.1.0) |
+| **Release** | Early alpha, [![latest release](https://img.shields.io/github/v/release/mbkma/pelota?label=latest&color=ffb632&labelColor=241a30)](https://github.com/mbkma/pelota/releases/latest) |
 | **Developer** | [mbkma](https://github.com/mbkma) |
 | **License** | Open source, [GPL-3.0](LICENSE) |
 
@@ -113,7 +113,7 @@ The in-game **How to Play** page walks you through it, and the
 
 ## ◇ PLAY IT IN THREE STEPS ◇
 
-1. **Download** the [Windows](https://github.com/mbkma/pelota/releases/download/v0.1.0-alpha/Pelota-0.1.0-alpha-windows-x86_64.zip) or [Linux](https://github.com/mbkma/pelota/releases/download/v0.1.0-alpha/Pelota-0.1.0-alpha-linux-x86_64.tar.gz) version (about 200 MB), or see all [releases](https://github.com/mbkma/pelota/releases).
+1. **Download** the Windows (`.zip`) or Linux (`.tar.gz`) file of the [latest release](https://github.com/mbkma/pelota/releases/latest) (about 200 MB), or see all [releases](https://github.com/mbkma/pelota/releases).
 2. **Unpack** it anywhere.
 3. **Run** `Pelota.exe` (Windows) or `Pelota.x86_64` (Linux). Nothing to install.
 
