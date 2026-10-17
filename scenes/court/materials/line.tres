@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://scenes/court/hard_court.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_normalgl.jpg" id="2_normal"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_roughness.jpg" id="3_roughness"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/concrete_012/concrete_012_color.jpg" id="4_tone"]
+
+[resource]
+resource_name = "line"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/paint_color = Color(0.95, 0.95, 0.94, 1)
+shader_parameter/roughness = 0.66
+shader_parameter/grain_normal = ExtResource("2_normal")
+shader_parameter/grain_roughness = ExtResource("3_roughness")
+shader_parameter/tone_texture = ExtResource("4_tone")

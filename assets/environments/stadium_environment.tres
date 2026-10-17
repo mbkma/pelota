@@ -1,27 +1,23 @@
 [gd_resource type="Environment" format=3 uid="uid://d3u2fkt5mn6ct"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ka0"]
-sky_top_color = Color(0.22, 0.42, 0.78, 1)
-sky_horizon_color = Color(0.68, 0.76, 0.86, 1)
-ground_bottom_color = Color(0.2, 0.22, 0.24, 1)
-ground_horizon_color = Color(0.62, 0.66, 0.7, 1)
-sun_angle_max = 20.0
-energy_multiplier = 1.6
+[ext_resource type="Texture2D" uid="uid://cyjt0d3swedu6" path="res://assets/environments/kloofendal_43d_clear_puresky_2k.exr" id="1_sky"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_sky"]
+panorama = ExtResource("1_sky")
 
 [sub_resource type="Sky" id="Sky_cux4k"]
-sky_material = SubResource("ProceduralSkyMaterial_11ka0")
+sky_material = SubResource("PanoramaSkyMaterial_sky")
 
 [resource]
 background_mode = 2
-background_energy_multiplier = 1.1
+background_energy_multiplier = 0.75
 sky = SubResource("Sky_cux4k")
+sky_rotation = Vector3(0, 3.0188, 0)
 ambient_light_source = 3
-ambient_light_color = Color(0.92, 0.9, 0.86, 1)
-ambient_light_sky_contribution = 0.2
-ambient_light_energy = 0.75
+ambient_light_color = Color(1, 1, 1, 1)
 reflected_light_source = 2
 tonemap_mode = 4
-tonemap_exposure = 1.12
+tonemap_exposure = 1.15
 ssao_enabled = true
 ssao_radius = 1.4
 ssao_intensity = 1.6
@@ -31,8 +27,6 @@ glow_enabled = true
 glow_intensity = 0.35
 glow_bloom = 0.04
 glow_hdr_threshold = 1.2
-volumetric_fog_density = 0.0
+volumetric_fog_density = 0.005
+volumetric_fog_detail_spread = 1.6245052
 volumetric_fog_sky_affect = 0.0
-adjustment_enabled = true
-adjustment_contrast = 1.02
-adjustment_saturation = 0.96

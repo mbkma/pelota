@@ -4,6 +4,12 @@ extends RefCounted
 ## transparent, drawn for the blue boards), and where each logo is in it.
 
 const ATLAS: Texture2D = preload("res://scenes/environments/us_open/sponsor_logos.png")
+## The materials the logos are drawn with: blended, or cut out (for logos in front of other
+## see-through things, like the net, which blending would sort against)
+const MATERIAL: Material = preload("res://scenes/environments/us_open/materials/logos.tres")
+const MATERIAL_CUT_OUT: Material = preload(
+	"res://scenes/environments/us_open/materials/logos_cut_out.tres"
+)
 ## Rectangle of each logo in the atlas (UV)
 const RECTS: Dictionary[StringName, Rect2] = {
 	&"chase": Rect2(0.10107, 0.00391, 0.29785, 0.06055),
@@ -34,24 +40,6 @@ const RECTS: Dictionary[StringName, Rect2] = {
 	&"healthiest_sport": Rect2(0.66211, 0.82422, 0.17578, 0.06055),
 	&"polo_pony": Rect2(0.21729, 0.89258, 0.06543, 0.06055),
 }
-
-
-## The material the logos are drawn with: blended, or cut out (for logos in front of other
-## see-through things, like the net, which blending would sort against).
-static func make_material(cut_out: bool = false) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.resource_name = "logos_cut_out" if cut_out else "logos"
-	material.albedo_texture = ATLAS
-	if cut_out:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
-		material.alpha_antialiasing_mode = BaseMaterial3D.ALPHA_ANTIALIASING_ALPHA_TO_COVERAGE
-		material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	else:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS
-	material.roughness = 0.6
-	material.vertex_color_use_as_albedo = true
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-	return material
 
 
 ## Width / height of `logo`.

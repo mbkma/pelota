@@ -1,0 +1,20 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/metal_029/metal_029_roughness.jpg" id="1_roughness"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/metal_029/metal_029_normalgl.jpg" id="2_normalgl"]
+
+[resource]
+resource_name = "seat_frame"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.2, 0.21, 0.23, 1.0)
+metallic = 0.6
+roughness = 1.0
+roughness_texture = ExtResource("1_roughness")
+roughness_texture_channel = 0
+normal_enabled = true
+normal_scale = 0.5
+normal_texture = ExtResource("2_normalgl")
+uv1_scale = Vector3(2.0, 2.0, 2.0)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 5

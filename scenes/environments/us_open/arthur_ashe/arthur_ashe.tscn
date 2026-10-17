@@ -9,98 +9,89 @@
 [ext_resource type="Script" path="res://scenes/environments/stadium_seats.gd" id="7_wgwee"]
 [ext_resource type="Resource" path="res://scenes/environments/us_open/arthur_ashe/seating.res" id="8_ixm0k"]
 [ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/seat.res" id="9_cnjq5"]
-[ext_resource type="Shader" path="res://scenes/environments/us_open/arthur_ashe/video_board.gdshader" id="10_ddiqa"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/materials/video_board.tres" id="10_ddiqa"]
 [ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/video_board_frames.res" id="11_jd3fu"]
-[ext_resource type="Shader" path="res://scenes/environments/us_open/arthur_ashe/flag.gdshader" id="12_ilu62"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/materials/flag.tres" id="12_ilu62"]
 [ext_resource type="ArrayMesh" path="res://scenes/environments/us_open/arthur_ashe/meshes/logos.res" id="13_4i2f7"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fdmky"]
-render_priority = 0
-shader = ExtResource("10_ddiqa")
-shader_parameter/energy = null
+[sub_resource type="QuadMesh" id="QuadMesh_fdmky"]
+material = ExtResource("10_ddiqa")
 
 [sub_resource type="QuadMesh" id="QuadMesh_isv01"]
-material = SubResource("ShaderMaterial_fdmky")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ip3u"]
-render_priority = 0
-shader = ExtResource("12_ilu62")
-
-[sub_resource type="QuadMesh" id="QuadMesh_h8ou2"]
-material = SubResource("ShaderMaterial_2ip3u")
+material = ExtResource("12_ilu62")
 size = Vector2(3.4, 6.4)
 subdivide_width = 6
 subdivide_depth = 16
 
-[node name="ArthurAshe" type="Node3D" unique_id=492465236]
+[node name="ArthurAshe" type="Node3D" unique_id=1280550373]
 
-[node name="Courtside" type="MeshInstance3D" parent="." unique_id=1548038881]
+[node name="Courtside" type="MeshInstance3D" parent="." unique_id=495991594]
 mesh = ExtResource("1_bn6kh")
 
-[node name="Bowl" type="MeshInstance3D" parent="." unique_id=1833528006]
+[node name="Bowl" type="MeshInstance3D" parent="." unique_id=1034271073]
 mesh = ExtResource("2_rt6lh")
 
-[node name="Suites" type="MeshInstance3D" parent="." unique_id=1100986055]
+[node name="Suites" type="MeshInstance3D" parent="." unique_id=567453411]
 mesh = ExtResource("3_wicjx")
 
-[node name="Facade" type="MeshInstance3D" parent="." unique_id=2098019415]
+[node name="Facade" type="MeshInstance3D" parent="." unique_id=1322894240]
 mesh = ExtResource("4_ek4gg")
 
-[node name="Roof" type="MeshInstance3D" parent="." unique_id=1753149367]
+[node name="Roof" type="MeshInstance3D" parent="." unique_id=1181603029]
 mesh = ExtResource("5_ldrxy")
 
-[node name="RoofPanels" type="MeshInstance3D" parent="." unique_id=1647621749]
+[node name="RoofPanels" type="MeshInstance3D" parent="." unique_id=764799944]
 mesh = ExtResource("6_goioe")
 
-[node name="Seats" type="Node3D" parent="." unique_id=1181216892]
+[node name="Seats" type="Node3D" parent="." unique_id=1407215052]
 script = ExtResource("7_wgwee")
 seating = ExtResource("8_ixm0k")
 seat_mesh = ExtResource("9_cnjq5")
 
-[node name="VideoBoards" type="Node3D" parent="." unique_id=1040830020]
+[node name="VideoBoards" type="Node3D" parent="." unique_id=1861952711]
 
-[node name="Screen0" type="MeshInstance3D" parent="VideoBoards" unique_id=1338617305]
+[node name="Screen0" type="MeshInstance3D" parent="VideoBoards" unique_id=460339552]
 transform = Transform3D(-8.002355, 0, -0.59968597, 0, 5.6, 0, 5.9968596, 0, -0.80023545, 28.461056, 34.3, 37.97912)
 cast_shadow = 0
 instance_shader_parameters/aspect = 1.7857143161248192
-mesh = SubResource("QuadMesh_isv01")
+mesh = SubResource("QuadMesh_fdmky")
 
-[node name="Screen1" type="MeshInstance3D" parent="VideoBoards" unique_id=1447888861]
+[node name="Screen1" type="MeshInstance3D" parent="VideoBoards" unique_id=1797264652]
 transform = Transform3D(-7.8511167, 0, 0.6193542, 0, 5.6, 0, -6.193542, 0, -0.78511167, -29.96086, 34.3, 37.97927)
 cast_shadow = 0
 instance_shader_parameters/aspect = 1.7857143161248192
-mesh = SubResource("QuadMesh_isv01")
+mesh = SubResource("QuadMesh_fdmky")
 
-[node name="Screen2" type="MeshInstance3D" parent="VideoBoards" unique_id=461594134]
+[node name="Screen2" type="MeshInstance3D" parent="VideoBoards" unique_id=1620202189]
 transform = Transform3D(7.8511167, 0, 0.6193542, 0, 5.6, 0, -6.193542, 0, 0.78511167, -29.96086, 34.3, -37.97927)
 cast_shadow = 0
 instance_shader_parameters/aspect = 1.7857143161248192
-mesh = SubResource("QuadMesh_isv01")
+mesh = SubResource("QuadMesh_fdmky")
 
-[node name="Screen3" type="MeshInstance3D" parent="VideoBoards" unique_id=1900014410]
+[node name="Screen3" type="MeshInstance3D" parent="VideoBoards" unique_id=1277393700]
 transform = Transform3D(8.002355, 0, -0.59968597, 0, 5.6, 0, 5.9968596, 0, 0.80023545, 28.461056, 34.3, -37.97912)
 cast_shadow = 0
 instance_shader_parameters/aspect = 1.7857143161248192
-mesh = SubResource("QuadMesh_isv01")
+mesh = SubResource("QuadMesh_fdmky")
 
-[node name="Screen4" type="MeshInstance3D" parent="VideoBoards" unique_id=1109493318]
+[node name="Screen4" type="MeshInstance3D" parent="VideoBoards" unique_id=2096190519]
 transform = Transform3D(-12, 0, 0, 0, 6.75, 0, 0, 0, -1, -0.75, 33.725, 44.960003)
 cast_shadow = 0
 instance_shader_parameters/aspect = 1.7777777777777777
-mesh = SubResource("QuadMesh_isv01")
+mesh = SubResource("QuadMesh_fdmky")
 
-[node name="Screen5" type="MeshInstance3D" parent="VideoBoards" unique_id=1875484317]
+[node name="Screen5" type="MeshInstance3D" parent="VideoBoards" unique_id=507573566]
 transform = Transform3D(12, 0, 0, 0, 6.75, 0, 0, 0, 1, -0.75, 33.725, -44.960003)
 cast_shadow = 0
 instance_shader_parameters/aspect = 1.7777777777777777
-mesh = SubResource("QuadMesh_isv01")
+mesh = SubResource("QuadMesh_fdmky")
 
-[node name="VideoBoardFrames" type="MeshInstance3D" parent="VideoBoards" unique_id=918285418]
+[node name="VideoBoardFrames" type="MeshInstance3D" parent="VideoBoards" unique_id=1328195743]
 mesh = ExtResource("11_jd3fu")
 
-[node name="Flag" type="MeshInstance3D" parent="." unique_id=261731708]
+[node name="Flag" type="MeshInstance3D" parent="." unique_id=1540615432]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.75, 35.1, -45.87)
-mesh = SubResource("QuadMesh_h8ou2")
+mesh = SubResource("QuadMesh_isv01")
 
-[node name="Logos" type="MeshInstance3D" parent="." unique_id=736552603]
+[node name="Logos" type="MeshInstance3D" parent="." unique_id=1852956325]
 mesh = ExtResource("13_4i2f7")

@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b386xv7w003i"]
+
+[ext_resource type="Texture2D" uid="uid://dkdcams3dq326" path="res://assets/textures/pbr/bricks_101/bricks_101_color.jpg" id="1_color"]
+[ext_resource type="Texture2D" uid="uid://cwb5s4838by4q" path="res://assets/textures/pbr/bricks_101/bricks_101_roughness.jpg" id="2_roughness"]
+[ext_resource type="Texture2D" uid="uid://dgvtb084yico4" path="res://assets/textures/pbr/bricks_101/bricks_101_normalgl.jpg" id="3_normalgl"]
+
+[resource]
+resource_name = "brick"
+albedo_color = Color(0.85, 0.72, 0.68, 1)
+albedo_texture = ExtResource("1_color")
+roughness_texture = ExtResource("2_roughness")
+normal_enabled = true
+normal_texture = ExtResource("3_normalgl")
+subsurf_scatter_strength = 1.0
+uv1_scale = Vector3(0.58, 0.58, 1)
+texture_filter = 5

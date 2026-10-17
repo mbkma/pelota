@@ -1,0 +1,17 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/rubber_004/rubber_004_roughness.jpg" id="1_roughness"]
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/rubber_004/rubber_004_normalgl.jpg" id="2_normalgl"]
+
+[resource]
+resource_name = "rubber"
+albedo_color = Color(0.035, 0.035, 0.04, 1.0)
+roughness = 1.0
+roughness_texture = ExtResource("1_roughness")
+roughness_texture_channel = 0
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource("2_normalgl")
+uv1_scale = Vector3(4.0, 4.0, 4.0)
+uv1_triplanar = true
+texture_filter = 5

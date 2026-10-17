@@ -2,5 +2,5 @@
 
 [ext_resource type="ArrayMesh" path="res://scenes/match/umpire/umpire_chair.res" id="1_juacu"]
 
-[node name="UmpireChair" type="MeshInstance3D" unique_id=509593551]
+[node name="UmpireChair" type="MeshInstance3D" unique_id=2088921819]
 mesh = ExtResource("1_juacu")

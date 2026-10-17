@@ -26,6 +26,16 @@ Author: [Panayiotis Lipiridis and contributors](https://github.com/lipis/flag-ic
 Source: [github: flag-icons](https://github.com/lipis/flag-icons)  
 License: [MIT License](https://github.com/lipis/flag-icons/blob/main/LICENSE)
 
+#### PBR Textures
+Author: Lennart Demes  
+Source: [ambientCG](https://ambientcg.com) (Bricks101, Concrete012, Concrete034, Fabric034, Fabric036, Fabric082A, Fabric084, Metal029, PavingStones136, Plaster001, Plastic010, Rubber004)  
+License: [CC0 1.0](https://docs.ambientcg.com/license/)
+
+#### Sky (Kloofendal 43d Clear, Pure Sky)
+Author: Greg Zaal  
+Source: [Poly Haven](https://polyhaven.com/a/kloofendal_43d_clear_puresky)  
+License: [CC0 1.0](https://polyhaven.com/license)
+
 #### Godot Engine Logo
 Author: Andrea Calabró  
 Source: [godotengine.org : press](https://godotengine.org/press/)  

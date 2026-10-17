@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/pbr/plastic_010/plastic_010_normalgl.jpg" id="1_normalgl"]
+
+[resource]
+resource_name = "bottle"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.78, 0.86, 0.94, 1.0)
+roughness = 0.12
+normal_enabled = true
+normal_scale = 0.3
+normal_texture = ExtResource("1_normalgl")
+uv1_scale = Vector3(6.0, 6.0, 6.0)
+uv1_triplanar = true
+texture_filter = 5

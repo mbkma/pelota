@@ -9,6 +9,7 @@ extends SceneTree
 
 const UMPIRE_CHAIR_PATH: String = "res://scenes/match/umpire/umpire_chair.tscn"
 const MESH_PATH: String = "res://scenes/match/umpire/umpire_chair.res"
+const MATERIAL_FOLDER: String = "res://scenes/match/umpire/materials/"
 ## Height (m) of the seat, and half the stand's width (x) and depth (z)
 const SEAT_HEIGHT: float = 1.85
 const HALF_SIZE: Vector2 = Vector2(0.42, 0.42)
@@ -22,14 +23,13 @@ func _build() -> void:
 	# Let the project's autoloads start up first: quitting before they have does not end the run.
 	for frame in 10:
 		await process_frame
-	var navy := _material("navy", Color(0.06, 0.1, 0.3), 0.55)
-	var white := _material("white", Color(0.92, 0.92, 0.9), 0.45)
-	var black := _material("black", Color(0.02, 0.02, 0.025), 0.4)
-	var cushion := _material("cushion", Color(0.05, 0.07, 0.18), 0.85)
-	var screen := _material("screen", Color(0.05, 0.08, 0.12), 0.2)
-	screen.emission_enabled = true
-	screen.emission = Color(0.15, 0.25, 0.4)
-	var logos: Material = UsOpenLogos.make_material()
+	var materials: Dictionary[String, Material] = MaterialLibrary.load_folder(MATERIAL_FOLDER)
+	var navy: Material = materials["navy"]
+	var white: Material = materials["white"]
+	var black: Material = materials["black"]
+	var cushion: Material = materials["cushion"]
+	var screen: Material = materials["screen"]
+	var logos: Material = UsOpenLogos.MATERIAL
 	var geometry := FlatGeometry.new()
 
 	# Platform and the steps up the back
@@ -146,12 +146,3 @@ func _build() -> void:
 	ResourceSaver.save(scene, UMPIRE_CHAIR_PATH)
 	chair.free()
 	quit()
-
-
-func _material(material_name: String, color: Color, roughness: float) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.resource_name = material_name
-	material.albedo_color = color
-	material.roughness = roughness
-	material.vertex_color_use_as_albedo = true
-	return material

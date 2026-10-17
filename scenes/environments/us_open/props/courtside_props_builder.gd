@@ -30,7 +30,6 @@ func _initialize() -> void:
 
 
 func _build() -> void:
-	_add_materials()
 	DirAccess.make_dir_recursive_absolute(MESH_DIR)
 	_save("bench_mat", _bench_mat())
 	_save("bench_box", _bench_box())
@@ -44,24 +43,6 @@ func _build() -> void:
 	quit()
 
 
-## Materials of the props that the stadium does not have. The tennis bag's two are replaced per
-## brand (see TennisBag).
-func _add_materials() -> void:
-	_materials["bottle"] = _material("bottle", Color(0.78, 0.86, 0.94), 0.15)
-	_materials["bottle_label"] = _material("bottle_label", Color(0.93, 0.45, 0.62), 0.5)
-	_materials["bag_body"] = _material("bag_body", Color(0.1, 0.1, 0.1), 0.6)
-	_materials["bag_accent"] = _material("bag_accent", Color(0.9, 0.9, 0.9), 0.6)
-
-
-static func _material(material_name: String, color: Color, roughness: float) -> Material:
-	var material := StandardMaterial3D.new()
-	material.resource_name = material_name
-	material.albedo_color = color
-	material.roughness = roughness
-	material.vertex_color_use_as_albedo = true
-	return material
-
-
 func _save(mesh_name: String, geometry: FlatGeometry) -> void:
 	var path: String = MESH_DIR + mesh_name + ".res"
 	var error: Error = ResourceSaver.save(geometry.to_mesh(), path, ResourceSaver.FLAG_COMPRESS)
@@ -73,7 +54,7 @@ func _save(mesh_name: String, geometry: FlatGeometry) -> void:
 func _bench_mat() -> FlatGeometry:
 	var geometry := FlatGeometry.new()
 	geometry.box(
-		_materials["fascia"],
+		_materials["mat"],
 		Transform3D(Basis(), Vector3(0.0, 0.006, 0.0)),
 		Vector3(3.3, 0.012, 1.4),
 		Color(0.6, 0.6, 0.65)

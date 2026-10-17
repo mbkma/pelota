@@ -42,15 +42,15 @@ func _ready() -> void:
 
 func _apply_brand() -> void:
 	var look: Array = LOOKS[brand]
-	set_surface_override_material(BODY_SURFACE, _material(look[1]))
-	set_surface_override_material(ACCENT_SURFACE, _material(look[2]))
+	set_surface_override_material(BODY_SURFACE, _tinted(BODY_SURFACE, look[1]))
+	set_surface_override_material(ACCENT_SURFACE, _tinted(ACCENT_SURFACE, look[2]))
 	for label in _labels:
 		label.text = look[0]
 		label.modulate = look[3]
 
 
-static func _material(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
+## The fabric of the bag's `surface` (see bag_body.tres), in `color`.
+func _tinted(surface: int, color: Color) -> StandardMaterial3D:
+	var material := (mesh.surface_get_material(surface) as StandardMaterial3D).duplicate()
 	material.albedo_color = color
-	material.roughness = 0.6
 	return material

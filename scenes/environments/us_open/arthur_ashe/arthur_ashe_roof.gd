@@ -12,10 +12,6 @@ const ROOF_EDGE_HEIGHT: float = 41.0
 ## The four trusses the roof panels ride on: x of each, and bottom, top and half length along z
 const SUPER_TRUSS_X: PackedFloat32Array = [-58.0, -37.0, 37.0, 58.0]
 const SUPER_TRUSS: Vector3 = Vector3(43.5, 50.0, 66.0)
-const VIDEO_BOARD_SHADER: Shader = preload(
-	"res://scenes/environments/us_open/arthur_ashe/video_board.gdshader"
-)
-const FLAG_SHADER: Shader = preload("res://scenes/environments/us_open/arthur_ashe/flag.gdshader")
 
 var _shape: StadiumShape
 var _materials: Dictionary[String, Material]
@@ -47,9 +43,7 @@ func build_video_board_frames() -> FlatGeometry:
 ## Screens of the video boards, showing the TV picture.
 func video_screens() -> Array[MeshInstance3D]:
 	var mesh := QuadMesh.new()
-	var material := ShaderMaterial.new()
-	material.shader = VIDEO_BOARD_SHADER
-	mesh.material = material
+	mesh.material = _materials["video_board"]
 	var screens: Array[MeshInstance3D] = []
 	for board in _video_boards():
 		var size: Vector2 = board.size
@@ -73,9 +67,7 @@ func flag() -> MeshInstance3D:
 	mesh.size = Vector2(3.4, 6.4)
 	mesh.subdivide_width = 6
 	mesh.subdivide_depth = 16
-	var material := ShaderMaterial.new()
-	material.shader = FLAG_SHADER
-	mesh.material = material
+	mesh.material = _materials["flag"]
 	var flag_mesh := MeshInstance3D.new()
 	flag_mesh.name = "Flag"
 	flag_mesh.mesh = mesh

@@ -4,6 +4,7 @@
 ### Manual ###
 .vscode/
 .claude/
+AGENTS.md
 
 assets/models/**
 # The import settings of the player bodies and animation sets are part of the import pipeline

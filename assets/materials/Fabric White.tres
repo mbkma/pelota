@@ -19,7 +19,6 @@ keep_compressed_buffer = true
 resource_name = "Fabric White"
 cull_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_bbwau")
-metallic = 0.2
 metallic_texture = SubResource("PortableCompressedTexture2D_gmkwq")
 metallic_texture_channel = 2
 roughness_texture = SubResource("PortableCompressedTexture2D_gmkwq")

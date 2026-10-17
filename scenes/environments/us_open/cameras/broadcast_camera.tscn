@@ -1,196 +1,161 @@
 [gd_scene format=3]
 
-[ext_resource type="Shader" path="res://scenes/environments/us_open/cameras/lens_glass.gdshader" id="1_ucfcq"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/steel.tres" id="1_kv0u0"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/rubber.tres" id="2_dbyva"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/cover.tres" id="3_ogim4"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/strap.tres" id="4_2o225"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/tally.tres" id="5_1hodl"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/black.tres" id="6_kjls3"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/screen.tres" id="7_qrmse"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/hood_inside.tres" id="8_bkog5"]
+[ext_resource type="Material" path="res://scenes/environments/us_open/cameras/materials/lens_glass.tres" id="9_xdpcn"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m760v"]
-resource_name = "Steel"
-albedo_color = Color(0.16, 0.17, 0.19, 1)
-metallic = 0.6
-roughness = 0.4
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_0osd1"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_wx1rq"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.035
 bottom_radius = 0.035
 height = 0.77388626
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_p62oj"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_amwwp"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.02
 bottom_radius = 0.02
 height = 0.23099999
 radial_segments = 10
 rings = 1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bykp2"]
-resource_name = "Rubber"
-albedo_color = Color(0.035, 0.035, 0.04, 1)
-roughness = 0.9
-
-[sub_resource type="BoxMesh" id="BoxMesh_4o442"]
-material = SubResource("StandardMaterial3D_bykp2")
+[sub_resource type="BoxMesh" id="BoxMesh_5fxbd"]
+material = ExtResource("2_dbyva")
 size = Vector3(0.06, 0.03, 0.08)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_btbvx"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_wkuen"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.035
 bottom_radius = 0.035
 height = 0.7738862
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_t8nw4"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_x6816"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.02
 bottom_radius = 0.02
 height = 0.23099999
 radial_segments = 10
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_kv0u0"]
-material = SubResource("StandardMaterial3D_bykp2")
+[sub_resource type="BoxMesh" id="BoxMesh_no2i8"]
+material = ExtResource("2_dbyva")
 size = Vector3(0.06, 0.03, 0.08)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_dbyva"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_0vmi8"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.035
 bottom_radius = 0.035
 height = 0.77388626
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_ogim4"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_4l7xy"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.02
 bottom_radius = 0.02
 height = 0.23099999
 radial_segments = 10
 rings = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_2o225"]
-material = SubResource("StandardMaterial3D_bykp2")
+[sub_resource type="BoxMesh" id="BoxMesh_j8wtb"]
+material = ExtResource("2_dbyva")
 size = Vector3(0.06, 0.03, 0.08)
 
-[sub_resource type="BoxMesh" id="BoxMesh_1hodl"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="BoxMesh" id="BoxMesh_0n8hi"]
+material = ExtResource("1_kv0u0")
 size = Vector3(0.18, 0.12, 0.22)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_kjls3"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_d45d5"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.022
 bottom_radius = 0.022
 height = 0.59101605
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_qrmse"]
-material = SubResource("StandardMaterial3D_bykp2")
+[sub_resource type="CylinderMesh" id="CylinderMesh_jnhjm"]
+material = ExtResource("2_dbyva")
 top_radius = 0.04
 bottom_radius = 0.04
 height = 0.147754
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_bkog5"]
-material = SubResource("StandardMaterial3D_m760v")
+[sub_resource type="CylinderMesh" id="CylinderMesh_e4fae"]
+material = ExtResource("1_kv0u0")
 top_radius = 0.022
 bottom_radius = 0.022
 height = 0.59101605
 radial_segments = 10
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_xdpcn"]
-material = SubResource("StandardMaterial3D_bykp2")
+[sub_resource type="CylinderMesh" id="CylinderMesh_s332b"]
+material = ExtResource("2_dbyva")
 top_radius = 0.04
 bottom_radius = 0.04
 height = 0.147754
 radial_segments = 10
 rings = 1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wx1rq"]
-resource_name = "Cover"
-albedo_color = Color(0.1, 0.24, 0.6, 1)
-roughness = 0.85
-
-[sub_resource type="BoxMesh" id="BoxMesh_amwwp"]
-material = SubResource("StandardMaterial3D_wx1rq")
-size = Vector3(0.34, 0.3, 0.88)
-
-[sub_resource type="BoxMesh" id="BoxMesh_5fxbd"]
-material = SubResource("StandardMaterial3D_wx1rq")
-size = Vector3(0.3, 0.36, 0.86)
-
-[sub_resource type="BoxMesh" id="BoxMesh_wkuen"]
-material = SubResource("StandardMaterial3D_wx1rq")
-size = Vector3(0.36, 0.025, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x6816"]
-resource_name = "Strap"
-albedo_color = Color(0.04, 0.06, 0.12, 1)
-roughness = 0.8
-
-[sub_resource type="BoxMesh" id="BoxMesh_no2i8"]
-material = SubResource("StandardMaterial3D_x6816")
-size = Vector3(0.355, 0.375, 0.035)
-
-[sub_resource type="BoxMesh" id="BoxMesh_0vmi8"]
-material = SubResource("StandardMaterial3D_x6816")
-size = Vector3(0.355, 0.375, 0.035)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4l7xy"]
-resource_name = "Tally"
-albedo_color = Color(1, 0.1, 0.05, 1)
-roughness = 0.3
-emission_enabled = true
-emission = Color(1, 0.08, 0.04, 1)
-emission_energy_multiplier = 3.0
-
-[sub_resource type="BoxMesh" id="BoxMesh_j8wtb"]
-material = SubResource("StandardMaterial3D_4l7xy")
-size = Vector3(0.04, 0.018, 0.02)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0n8hi"]
-resource_name = "Black"
-albedo_color = Color(0.02, 0.02, 0.025, 1)
-metallic = 0.2
-roughness = 0.5
-
-[sub_resource type="BoxMesh" id="BoxMesh_d45d5"]
-material = SubResource("StandardMaterial3D_0n8hi")
-size = Vector3(0.22, 0.15, 0.12)
-
-[sub_resource type="BoxMesh" id="BoxMesh_jnhjm"]
-material = SubResource("StandardMaterial3D_bykp2")
-size = Vector3(0.2, 0.13, 0.1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e4fae"]
-resource_name = "Screen"
-albedo_color = Color(0.03, 0.05, 0.08, 1)
-metallic = 0.6
-roughness = 0.1
-emission_enabled = true
-emission = Color(0.1, 0.16, 0.24, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_s332b"]
-material = SubResource("StandardMaterial3D_e4fae")
-size = Vector3(0.17, 0.1, 0.004)
 
 [sub_resource type="BoxMesh" id="BoxMesh_1nsbu"]
-material = SubResource("StandardMaterial3D_4l7xy")
+material = ExtResource("3_ogim4")
+size = Vector3(0.34, 0.3, 0.88)
+
+[sub_resource type="BoxMesh" id="BoxMesh_37ypl"]
+material = ExtResource("3_ogim4")
+size = Vector3(0.3, 0.36, 0.86)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5524w"]
+material = ExtResource("3_ogim4")
+size = Vector3(0.36, 0.025, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qgy87"]
+material = ExtResource("4_2o225")
+size = Vector3(0.355, 0.375, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tq6gd"]
+material = ExtResource("4_2o225")
+size = Vector3(0.355, 0.375, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mamar"]
+material = ExtResource("5_1hodl")
+size = Vector3(0.04, 0.018, 0.02)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yxidx"]
+material = ExtResource("6_kjls3")
+size = Vector3(0.22, 0.15, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1ogfh"]
+material = ExtResource("2_dbyva")
+size = Vector3(0.2, 0.13, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rnk55"]
+material = ExtResource("7_qrmse")
+size = Vector3(0.17, 0.1, 0.004)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bhf2n"]
+material = ExtResource("5_1hodl")
 size = Vector3(0.03, 0.014, 0.01)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_37ypl"]
-material = SubResource("StandardMaterial3D_0n8hi")
+[sub_resource type="CylinderMesh" id="CylinderMesh_1tmco"]
+material = ExtResource("6_kjls3")
 top_radius = 0.088
 bottom_radius = 0.085
 height = 0.08
 radial_segments = 32
 rings = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_5524w"]
-material = SubResource("StandardMaterial3D_bykp2")
+[sub_resource type="CylinderMesh" id="CylinderMesh_p8u00"]
+material = ExtResource("2_dbyva")
 top_radius = 0.115
 bottom_radius = 0.092
 height = 0.13
@@ -198,12 +163,8 @@ radial_segments = 32
 rings = 1
 cap_top = false
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgy87"]
-resource_name = "HoodInside"
-albedo_color = Color(0.01, 0.01, 0.012, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_tq6gd"]
-material = SubResource("StandardMaterial3D_qgy87")
+[sub_resource type="CylinderMesh" id="CylinderMesh_8fan5"]
+material = ExtResource("8_bkog5")
 flip_faces = true
 top_radius = 0.108
 bottom_radius = 0.085
@@ -212,135 +173,123 @@ radial_segments = 32
 rings = 1
 cap_top = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mamar"]
-resource_name = "LensGlass"
-render_priority = 0
-shader = ExtResource("1_ucfcq")
-shader_parameter/glass_color = null
-shader_parameter/coating_face = null
-shader_parameter/coating_side = null
-shader_parameter/coating_edge = null
-shader_parameter/coating_strength = null
-shader_parameter/glass_radius = 0.072
-shader_parameter/element_rings = null
-
-[sub_resource type="SphereMesh" id="SphereMesh_yxidx"]
-material = SubResource("ShaderMaterial_mamar")
+[sub_resource type="SphereMesh" id="SphereMesh_gj8mk"]
+material = ExtResource("9_xdpcn")
 radius = 0.072
 height = 0.144
 radial_segments = 48
 rings = 24
 
-[node name="BroadcastCamera" type="Node3D" unique_id=1406252371]
+[node name="BroadcastCamera" type="Node3D" unique_id=1907451773]
 
-[node name="Leg0" type="MeshInstance3D" parent="." unique_id=727862455]
+[node name="Leg0" type="MeshInstance3D" parent="." unique_id=187136373]
 transform = Transform3D(-1, 0, 0, 0, -0.83991665, 0.5427154, 0, 0.5427154, 0.83991665, 0, 0.325, 0.26)
-mesh = SubResource("CylinderMesh_0osd1")
+mesh = SubResource("CylinderMesh_wx1rq")
 
-[node name="Spreader0" type="MeshInstance3D" parent="." unique_id=1246521581]
+[node name="Spreader0" type="MeshInstance3D" parent="." unique_id=1577062009]
 transform = Transform3D(0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0.12, 0.1655)
-mesh = SubResource("CylinderMesh_p62oj")
+mesh = SubResource("CylinderMesh_amwwp")
 
-[node name="Foot0" type="MeshInstance3D" parent="." unique_id=679752680]
+[node name="Foot0" type="MeshInstance3D" parent="." unique_id=1752890820]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0.47)
-mesh = SubResource("BoxMesh_4o442")
-
-[node name="Leg1" type="MeshInstance3D" parent="." unique_id=1210552327]
-transform = Transform3D(-0.8726601, 0.47000533, 0.1325116, -0.48832804, -0.83991677, -0.23680307, 0, -0.27135774, 0.96247864, 0.18186532, 0.325, -0.055000015)
-mesh = SubResource("CylinderMesh_btbvx")
-
-[node name="Spreader1" type="MeshInstance3D" parent="." unique_id=759153851]
-transform = Transform3D(0, 0.8660254, 0.5000001, -1, 0, 0, 0, -0.5000001, 0.8660254, 0.10002593, 0.12, -0.00775001)
-mesh = SubResource("CylinderMesh_t8nw4")
-
-[node name="Foot1" type="MeshInstance3D" parent="." unique_id=134934459]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36373064, 0.015, -0.16000003)
-mesh = SubResource("BoxMesh_kv0u0")
-
-[node name="Leg2" type="MeshInstance3D" parent="." unique_id=392184543]
-transform = Transform3D(-0.8726601, -0.47000533, -0.13251156, 0.4883281, -0.83991665, -0.23680298, 0, -0.27135763, 0.9624786, -0.18186533, 0.325, -0.054999977)
-mesh = SubResource("CylinderMesh_dbyva")
-
-[node name="Spreader2" type="MeshInstance3D" parent="." unique_id=537696464]
-transform = Transform3D(0, -0.86602545, -0.4999999, 1, 0, 0, 0, -0.4999999, 0.86602545, -0.10002594, 0.12, -0.0077499878)
-mesh = SubResource("CylinderMesh_ogim4")
-
-[node name="Foot2" type="MeshInstance3D" parent="." unique_id=1710861062]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36373067, 0.015, -0.15999995)
-mesh = SubResource("BoxMesh_2o225")
-
-[node name="Head" type="MeshInstance3D" parent="." unique_id=1156053799]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72999996, 0.05)
-mesh = SubResource("BoxMesh_1hodl")
-
-[node name="PanBarL" type="MeshInstance3D" parent="." unique_id=940854475]
-transform = Transform3D(0, -0.30456024, 0.9524932, 0.9770158, -0.20304018, -0.06492222, 0.21316709, 0.9306008, 0.29756016, -0.16999999, 0.69, 0.405)
-mesh = SubResource("CylinderMesh_kjls3")
-
-[node name="GripL" type="MeshInstance3D" parent="." unique_id=813067001]
-transform = Transform3D(0, -0.3045603, 0.9524931, 0.9770158, -0.20304, -0.06492218, 0.2131669, 0.93060076, 0.29756021, -0.23749998, 0.645, 0.61125004)
-mesh = SubResource("CylinderMesh_qrmse")
-
-[node name="PanBarR" type="MeshInstance3D" parent="." unique_id=1151672581]
-transform = Transform3D(0, 0.30456024, 0.9524932, 0.9770158, -0.20304018, 0.06492222, 0.21316709, 0.9306008, -0.29756016, 0.16999999, 0.69, 0.405)
-mesh = SubResource("CylinderMesh_bkog5")
-
-[node name="GripR" type="MeshInstance3D" parent="." unique_id=400592566]
-transform = Transform3D(0, 0.3045603, 0.9524931, 0.9770158, -0.20304, 0.06492218, 0.2131669, 0.93060076, -0.29756021, 0.23749998, 0.645, 0.61125004)
-mesh = SubResource("CylinderMesh_xdpcn")
-
-[node name="Cover" type="MeshInstance3D" parent="." unique_id=6281018]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.02)
-mesh = SubResource("BoxMesh_amwwp")
-
-[node name="CoverSides" type="MeshInstance3D" parent="." unique_id=996156424]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.02)
 mesh = SubResource("BoxMesh_5fxbd")
 
-[node name="CoverFlap" type="MeshInstance3D" parent="." unique_id=856344455]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13, 0.099999994)
-mesh = SubResource("BoxMesh_wkuen")
+[node name="Leg1" type="MeshInstance3D" parent="." unique_id=934166909]
+transform = Transform3D(-0.8726601, 0.47000533, 0.1325116, -0.48832804, -0.83991677, -0.23680307, 0, -0.27135774, 0.96247864, 0.18186532, 0.325, -0.055000015)
+mesh = SubResource("CylinderMesh_wkuen")
 
-[node name="Strap-22" type="MeshInstance3D" parent="." unique_id=1210716627]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.24)
+[node name="Spreader1" type="MeshInstance3D" parent="." unique_id=627920552]
+transform = Transform3D(0, 0.8660254, 0.5000001, -1, 0, 0, 0, -0.5000001, 0.8660254, 0.10002593, 0.12, -0.00775001)
+mesh = SubResource("CylinderMesh_x6816")
+
+[node name="Foot1" type="MeshInstance3D" parent="." unique_id=1982656459]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36373064, 0.015, -0.16000003)
 mesh = SubResource("BoxMesh_no2i8")
 
-[node name="Strap20" type="MeshInstance3D" parent="." unique_id=536661346]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.18)
-mesh = SubResource("BoxMesh_0vmi8")
+[node name="Leg2" type="MeshInstance3D" parent="." unique_id=1817277533]
+transform = Transform3D(-0.8726601, -0.47000533, -0.13251156, 0.4883281, -0.83991665, -0.23680298, 0, -0.27135763, 0.9624786, -0.18186533, 0.325, -0.054999977)
+mesh = SubResource("CylinderMesh_0vmi8")
 
-[node name="TallyFront" type="MeshInstance3D" parent="." unique_id=729421695]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.14, -0.4)
+[node name="Spreader2" type="MeshInstance3D" parent="." unique_id=1650131228]
+transform = Transform3D(0, -0.86602545, -0.4999999, 1, 0, 0, 0, -0.4999999, 0.86602545, -0.10002594, 0.12, -0.0077499878)
+mesh = SubResource("CylinderMesh_4l7xy")
+
+[node name="Foot2" type="MeshInstance3D" parent="." unique_id=1769064812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36373067, 0.015, -0.15999995)
 mesh = SubResource("BoxMesh_j8wtb")
 
-[node name="Viewfinder" type="MeshInstance3D" parent="." unique_id=1440073882]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.47)
-mesh = SubResource("BoxMesh_d45d5")
+[node name="Head" type="MeshInstance3D" parent="." unique_id=599375681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72999996, 0.05)
+mesh = SubResource("BoxMesh_0n8hi")
 
-[node name="ViewfinderHood" type="MeshInstance3D" parent="." unique_id=396333553]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.57)
-mesh = SubResource("BoxMesh_jnhjm")
+[node name="PanBarL" type="MeshInstance3D" parent="." unique_id=149867001]
+transform = Transform3D(0, -0.30456024, 0.9524932, 0.9770158, -0.20304018, -0.06492222, 0.21316709, 0.9306008, 0.29756016, -0.16999999, 0.69, 0.405)
+mesh = SubResource("CylinderMesh_d45d5")
 
-[node name="ViewfinderScreen" type="MeshInstance3D" parent="." unique_id=1983138182]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.621)
-mesh = SubResource("BoxMesh_s332b")
+[node name="GripL" type="MeshInstance3D" parent="." unique_id=1431206814]
+transform = Transform3D(0, -0.3045603, 0.9524931, 0.9770158, -0.20304, -0.06492218, 0.2131669, 0.93060076, 0.29756021, -0.23749998, 0.645, 0.61125004)
+mesh = SubResource("CylinderMesh_jnhjm")
 
-[node name="TallyViewfinder" type="MeshInstance3D" parent="." unique_id=1362492577]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 1.235, 0.44)
+[node name="PanBarR" type="MeshInstance3D" parent="." unique_id=1139463666]
+transform = Transform3D(0, 0.30456024, 0.9524932, 0.9770158, -0.20304018, 0.06492222, 0.21316709, 0.9306008, -0.29756016, 0.16999999, 0.69, 0.405)
+mesh = SubResource("CylinderMesh_e4fae")
+
+[node name="GripR" type="MeshInstance3D" parent="." unique_id=2136189372]
+transform = Transform3D(0, 0.3045603, 0.9524931, 0.9770158, -0.20304, 0.06492218, 0.2131669, 0.93060076, -0.29756021, 0.23749998, 0.645, 0.61125004)
+mesh = SubResource("CylinderMesh_s332b")
+
+[node name="Cover" type="MeshInstance3D" parent="." unique_id=366271287]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.02)
 mesh = SubResource("BoxMesh_1nsbu")
 
-[node name="LensFront" type="MeshInstance3D" parent="." unique_id=1855120220]
+[node name="CoverSides" type="MeshInstance3D" parent="." unique_id=123193706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.02)
+mesh = SubResource("BoxMesh_37ypl")
+
+[node name="CoverFlap" type="MeshInstance3D" parent="." unique_id=995551539]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13, 0.099999994)
+mesh = SubResource("BoxMesh_5524w")
+
+[node name="Strap-22" type="MeshInstance3D" parent="." unique_id=1572542081]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -0.24)
+mesh = SubResource("BoxMesh_qgy87")
+
+[node name="Strap20" type="MeshInstance3D" parent="." unique_id=1024915365]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.18)
+mesh = SubResource("BoxMesh_tq6gd")
+
+[node name="TallyFront" type="MeshInstance3D" parent="." unique_id=1463687776]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.14, -0.4)
+mesh = SubResource("BoxMesh_mamar")
+
+[node name="Viewfinder" type="MeshInstance3D" parent="." unique_id=882225507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.47)
+mesh = SubResource("BoxMesh_yxidx")
+
+[node name="ViewfinderHood" type="MeshInstance3D" parent="." unique_id=1420449404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.57)
+mesh = SubResource("BoxMesh_1ogfh")
+
+[node name="ViewfinderScreen" type="MeshInstance3D" parent="." unique_id=2041840308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.621)
+mesh = SubResource("BoxMesh_rnk55")
+
+[node name="TallyViewfinder" type="MeshInstance3D" parent="." unique_id=256114439]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 1.235, 0.44)
+mesh = SubResource("BoxMesh_bhf2n")
+
+[node name="LensFront" type="MeshInstance3D" parent="." unique_id=234793088]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.95, -0.5)
-mesh = SubResource("CylinderMesh_37ypl")
+mesh = SubResource("CylinderMesh_1tmco")
 
-[node name="Hood" type="MeshInstance3D" parent="." unique_id=1297558626]
+[node name="Hood" type="MeshInstance3D" parent="." unique_id=930247222]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.95, -0.605)
-mesh = SubResource("CylinderMesh_5524w")
+mesh = SubResource("CylinderMesh_p8u00")
 
-[node name="HoodInside" type="MeshInstance3D" parent="." unique_id=1958233219]
+[node name="HoodInside" type="MeshInstance3D" parent="." unique_id=999052261]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.95, -0.605)
-mesh = SubResource("CylinderMesh_tq6gd")
+mesh = SubResource("CylinderMesh_8fan5")
 
-[node name="FrontGlass" type="MeshInstance3D" parent="." unique_id=735588735]
+[node name="FrontGlass" type="MeshInstance3D" parent="." unique_id=391723158]
 transform = Transform3D(1, 0, 0, 0, -1.2239188e-08, 1, 0, -0.28, -4.371139e-08, 0, 0.95, -0.545)
-mesh = SubResource("SphereMesh_yxidx")
+mesh = SubResource("SphereMesh_gj8mk")

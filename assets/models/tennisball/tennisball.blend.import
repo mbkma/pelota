@@ -40,7 +40,20 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"white": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://scenes/ball/materials/seam.tres",
+"use_external/path": "res://scenes/ball/materials/seam.tres"
+},
+"yellow": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://scenes/ball/materials/felt.tres",
+"use_external/path": "res://scenes/ball/materials/felt.tres"
+}
+}
+}
 blender/nodes/visible=0
 blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true

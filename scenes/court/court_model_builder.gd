@@ -11,7 +11,9 @@ extends SceneTree
 
 const COURT_MODEL_PATH: String = "res://scenes/court/court_model.tscn"
 const MESH_PATH: String = "res://scenes/court/court_model.res"
-const NET_SHADER: Shader = preload("res://scenes/court/net.gdshader")
+## The court's materials: the painted acrylic of the court and of its lines (see
+## hard_court.gdshader), the net and its posts and tape
+const MATERIAL_FOLDER: String = "res://scenes/court/materials/"
 
 ## Half size (m) of the doubles court (x) and of its length (z), and the singles court's half
 ## width, to the lines' outer edges
@@ -28,8 +30,6 @@ const POST: Vector2 = Vector2(Ball.NET_HALF_WIDTH, Ball.NET_POST_HEIGHT)
 ## Height of the white tape over the cord, and the net's thickness
 const TAPE_HEIGHT: float = 0.065
 const NET_HALF_THICKNESS: float = 0.012
-## The color of the court, a soft blue
-const COURT_COLOR: Color = Color(0.125, 0.195, 0.375)
 ## Segments the net's sagging top is made of
 const NET_SEGMENTS: int = 48
 
@@ -41,28 +41,9 @@ func _initialize() -> void:
 
 
 func _build() -> void:
-	var court := _material("court", COURT_COLOR, 0.75)
-	var noise := FastNoiseLite.new()
-	noise.frequency = 0.3
-	var texture := NoiseTexture2D.new()
-	texture.noise = noise
-	texture.seamless = true
-	var ramp := Gradient.new()
-	ramp.set_color(0, Color(0.93, 0.93, 0.93))
-	ramp.set_color(1, Color(1.0, 1.0, 1.0))
-	texture.color_ramp = ramp
-	court.albedo_texture = texture
-	court.uv1_triplanar = true
-	court.uv1_world_triplanar = true
-	_material("line", Color(0.95, 0.95, 0.94), 0.6)
-	_material("post", Color(0.05, 0.08, 0.22), 0.45, 0.4)
-	_material("white", Color(0.94, 0.94, 0.92), 0.5)
-	var net := ShaderMaterial.new()
-	net.resource_name = "net"
-	net.shader = NET_SHADER
-	_materials["net"] = net
-	_materials["logos"] = UsOpenLogos.make_material()
-	_materials["logos_cut_out"] = UsOpenLogos.make_material(true)
+	_materials = MaterialLibrary.load_folder(MATERIAL_FOLDER)
+	_materials["logos"] = UsOpenLogos.MATERIAL
+	_materials["logos_cut_out"] = UsOpenLogos.MATERIAL_CUT_OUT
 
 	var geometry := FlatGeometry.new()
 	_build_surface(geometry)
@@ -261,16 +242,3 @@ func _rectangle(
 func _span(x0: float, x1: float, z0: float, z1: float) -> Rect2:
 	var from := Vector2(minf(x0, x1), minf(z0, z1))
 	return Rect2(from, Vector2(maxf(x0, x1), maxf(z0, z1)) - from)
-
-
-func _material(
-	material_name: String, color: Color, roughness: float, metallic: float = 0.0
-) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.resource_name = material_name
-	material.albedo_color = color
-	material.roughness = roughness
-	material.metallic = metallic
-	material.vertex_color_use_as_albedo = true
-	_materials[material_name] = material
-	return material

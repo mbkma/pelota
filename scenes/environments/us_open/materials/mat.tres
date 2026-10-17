@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://0hpbf2lsnr24"]
+
+[ext_resource type="Texture2D" uid="uid://cncsi02hyvbjj" path="res://assets/textures/pbr/fabric_084/fabric_084_roughness.jpg" id="1_roughness"]
+[ext_resource type="Texture2D" uid="uid://ou6phxwpr60m" path="res://assets/textures/pbr/fabric_084/fabric_084_normalgl.jpg" id="2_normalgl"]
+
+[resource]
+resource_name = "mat"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.06, 0.14, 0.4, 1)
+roughness_texture = ExtResource("1_roughness")
+normal_enabled = true
+normal_texture = ExtResource("2_normalgl")
+uv1_scale = Vector3(2, 2, 2)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 5

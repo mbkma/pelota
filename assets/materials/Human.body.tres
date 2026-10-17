@@ -7,7 +7,9 @@ keep_compressed_buffer = true
 
 [resource]
 resource_name = "Human.body"
-transparency = 4
 cull_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_e3qxe")
-roughness = 0.7
+roughness = 0.55
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.3
+subsurf_scatter_skin_mode = true

@@ -11,10 +11,10 @@ extends SceneTree
 const BROADCAST_CAMERA_PATH: String = (
 	"res://scenes/environments/us_open/cameras/broadcast_camera.tscn"
 )
-const LENS_GLASS: Shader = preload("res://scenes/environments/us_open/cameras/lens_glass.gdshader")
+const MATERIAL_FOLDER: String = "res://scenes/environments/us_open/cameras/materials/"
 ## Height (m) of the lens axis
 const LENS_HEIGHT: float = 0.95
-## Front of the rain cover (z, m), and the lens's glass radius
+## Front of the rain cover (z, m), and the lens's glass radius (lens_glass.tres's glass_radius)
 const COVER_FRONT: float = -0.46
 const GLASS_RADIUS: float = 0.072
 
@@ -28,22 +28,15 @@ func _initialize() -> void:
 func _build() -> void:
 	_root = Node3D.new()
 	_root.name = "BroadcastCamera"
-	var steel := _material("Steel", Color(0.16, 0.17, 0.19), 0.6, 0.4)
-	var rubber := _material("Rubber", Color(0.035, 0.035, 0.04), 0.0, 0.9)
-	var cover := _material("Cover", Color(0.1, 0.24, 0.6), 0.0, 0.85)
-	var strap := _material("Strap", Color(0.04, 0.06, 0.12), 0.0, 0.8)
-	var black := _material("Black", Color(0.02, 0.02, 0.025), 0.2, 0.5)
-	var tally := _material("Tally", Color(1.0, 0.1, 0.05), 0.0, 0.3)
-	tally.emission_enabled = true
-	tally.emission = Color(1.0, 0.08, 0.04)
-	tally.emission_energy_multiplier = 3.0
-	var screen := _material("Screen", Color(0.03, 0.05, 0.08), 0.6, 0.1)
-	screen.emission_enabled = true
-	screen.emission = Color(0.1, 0.16, 0.24)
-	var glass := ShaderMaterial.new()
-	glass.resource_name = "LensGlass"
-	glass.shader = LENS_GLASS
-	glass.set_shader_parameter(&"glass_radius", GLASS_RADIUS)
+	var materials: Dictionary[String, Material] = MaterialLibrary.load_folder(MATERIAL_FOLDER)
+	var steel: Material = materials["steel"]
+	var rubber: Material = materials["rubber"]
+	var cover: Material = materials["cover"]
+	var strap: Material = materials["strap"]
+	var black: Material = materials["black"]
+	var tally: Material = materials["tally"]
+	var screen: Material = materials["screen"]
+	var glass: Material = materials["lens_glass"]
 
 	# Tripod: three splayed legs with a spreader, and the fluid head
 	var head := Vector3(0.0, LENS_HEIGHT - 0.3, 0.05)
@@ -144,7 +137,7 @@ func _build() -> void:
 	_part(
 		"HoodInside",
 		inside,
-		_material("HoodInside", Color(0.01, 0.01, 0.012), 0.0, 1.0),
+		materials["hood_inside"],
 		_along_z(Vector3(0.0, LENS_HEIGHT, COVER_FRONT - 0.145))
 	)
 	var dome := SphereMesh.new()
@@ -167,17 +160,6 @@ func _build() -> void:
 	ResourceSaver.save(scene, BROADCAST_CAMERA_PATH)
 	_root.free()
 	quit()
-
-
-func _material(
-	material_name: String, color: Color, metallic: float, roughness: float
-) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.resource_name = material_name
-	material.albedo_color = color
-	material.metallic = metallic
-	material.roughness = roughness
-	return material
 
 
 func _part(part_name: String, mesh: PrimitiveMesh, material: Material, place: Transform3D) -> void:
