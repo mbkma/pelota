@@ -1,0 +1,20 @@
+[project]
+name = "pelota"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "mbkma", email = "johannes.unruh@fau.de" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "gdtoolkit>=4.5.0",
+    "scipy>=1.18.1",
+]
+
+[project.scripts]
+pelota = "pelota:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"

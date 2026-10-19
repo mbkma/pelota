@@ -7,16 +7,13 @@
 class_name Model
 extends Node3D
 
-const HAIR_SHADER: Shader = preload("res://scenes/player/hair.gdshader")
 const SWEAT_PATCHES_SHADER: Shader = preload("res://scenes/player/sweat_patches.gdshader")
 ## Match time (s) the player stays dry (about the first two or three games), and after which the
 ## sweat is full; in between it grows steadily.
 const DRY_MATCH_TIME: float = 480.0
 const FULL_SWEAT_MATCH_TIME: float = 5400.0
-## Fully sweating: skin roughness and clearcoat (a wet film); the shirt soaks through in patches
-## (see sweat_patches.gdshader).
-const SWEAT_SKIN_ROUGHNESS: float = 0.25
-const SWEAT_SKIN_CLEARCOAT: float = 0.6
+## Fully sweating, the skin is wet (see skin.gdshader) and the shirt soaks through in patches (see
+## sweat_patches.gdshader).
 ## Sweat drops fly off in short bursts, only from a tired player (stamina below
 ## SWEAT_DROP_STAMINA) running: at most this many bursts per second (when exhausted, fully
 ## sweating and running at SWEAT_DROP_SPEED m/s or faster), each this long (s)
@@ -40,6 +37,19 @@ const TOSS_HAND_BONE: StringName = &"LeftHand"
 
 ## Appearance every player's appearance builds on
 @export var base_appearance: PlayerAppearance
+@export_group("Materials")
+## Materials the body's slots are drawn with, which the appearance sets the textures and colors of:
+## the skin (skin.gdshader), the eyes, the hair, eyebrows and eyelashes (hair.gdshader, taking the
+## strands from the body's own texture), and the kit (kit.gdshader): the shirt and the shorts
+## (with their folds), the cloth of the socks and the accessories, and the shoes
+@export var skin_material: ShaderMaterial
+@export var eye_material: StandardMaterial3D
+@export var hair_material: ShaderMaterial
+@export var shirt_material: ShaderMaterial
+@export var shorts_material: ShaderMaterial
+@export var cloth_material: ShaderMaterial
+@export var shoes_material: ShaderMaterial
+@export_group("")
 @export var animator: PlayerAnimator
 ## Racket held in the right hand: moved onto the body's RacketAttachment, keeping its transform
 ## as the grip
@@ -86,8 +96,7 @@ var _look_point: Variant = null
 ## Seconds left of the current burst of sweat drops
 var _drop_burst_left: float = 0.0
 ## Skin material and its dry roughness, and the sweat patches drawn over the shirt
-var _skin_material: StandardMaterial3D
-var _dry_skin_roughness: float
+var _skin_material: ShaderMaterial
 var _sweat_patches: ShaderMaterial
 
 @onready var _body: Node3D = $Body
@@ -359,18 +368,67 @@ func _toss_flight_time(release: Vector3, contact: Vector3) -> float:
 ## Shows the player's appearance on top of the base appearance.
 func load_appearance(player_appearance: PlayerAppearance) -> void:
 	appearance = player_appearance.merged_onto(base_appearance)
-	_skin_material = _apply_look(&"Body", appearance.skin_texture, appearance.skin_color)
-	var shirt_material: StandardMaterial3D = _apply_look(
-		&"Shirt", appearance.shirt_texture, appearance.shirt_color
+	var kit: KitDesign = appearance.kit
+	_skin_material = _dress(
+		&"Body",
+		skin_material,
+		{"skin_texture": appearance.skin_texture, "tint": appearance.skin_tint}
 	)
-	_apply_look(&"Shorts", appearance.shorts_texture, appearance.shorts_color)
-	_apply_look(&"Shoes", appearance.shoes_texture, appearance.shoes_color)
-	_apply_hair(appearance.hair_texture, appearance.hair_color)
-	_dry_skin_roughness = _skin_material.roughness
-	_skin_material.clearcoat_enabled = true
+	var eyes: StandardMaterial3D = eye_material.duplicate()
+	eyes.albedo_texture = appearance.eye_texture
+	_slot_mesh(&"Eyes").material_override = eyes
+	for slot in [&"Hair", &"Eyebrows", &"Eyelashes"]:
+		_dress(
+			slot,
+			hair_material,
+			{"hair_texture": _body_texture(slot), "hair_color": appearance.hair_color}
+		)
+	var shirt: ShaderMaterial = _dress(
+		&"Shirt",
+		shirt_material,
+		{
+			"pattern": kit.shirt_pattern,
+			"main_color": kit.shirt_color,
+			"second_color": kit.shirt_second_color,
+			"trim_color": kit.shirt_trim_color,
+		}
+	)
+	_dress(
+		&"Shorts",
+		shorts_material,
+		{
+			"pattern": kit.shorts_pattern,
+			"main_color": kit.shorts_color,
+			"second_color": kit.shorts_second_color,
+			"trim_color": kit.shorts_trim_color,
+		}
+	)
+	_dress(
+		&"Socks",
+		cloth_material,
+		{
+			"pattern": kit.socks_pattern,
+			"main_color": kit.socks_color,
+			"trim_color": kit.socks_stripe_color,
+		}
+	)
+	_dress(
+		&"Shoes",
+		shoes_material,
+		{
+			"main_color": kit.shoes_color,
+			"second_color": kit.shoes_sole_color,
+			"trim_color": kit.shoes_trim_color,
+		}
+	)
+	for slot in [&"Headband", &"WristbandLeft", &"WristbandRight"]:
+		_dress(slot, cloth_material, {"pattern": null, "main_color": kit.accessory_color})
+	_slot_mesh(&"Headband").visible = kit.headband
+	_slot_mesh(&"WristbandLeft").visible = kit.wristbands
+	_slot_mesh(&"WristbandRight").visible = kit.wristbands
 	_sweat_patches = ShaderMaterial.new()
 	_sweat_patches.shader = SWEAT_PATCHES_SHADER
-	shirt_material.next_pass = _sweat_patches
+	shirt.next_pass = _sweat_patches
 	set_sweat(sweat)
 
 
@@ -382,8 +440,7 @@ func sweat_after_match_time(seconds: float) -> void:
 ## Sets how much the player sweats, in [0, 1].
 func set_sweat(level: float) -> void:
 	sweat = level
-	_skin_material.roughness = lerpf(_dry_skin_roughness, SWEAT_SKIN_ROUGHNESS, sweat)
-	_skin_material.clearcoat = SWEAT_SKIN_CLEARCOAT * sweat
+	_skin_material.set_shader_parameter("sweat", sweat)
 	_sweat_patches.set_shader_parameter("sweat", sweat)
 
 
@@ -410,25 +467,22 @@ func _slot_mesh(slot: StringName) -> MeshInstance3D:
 	return mesh
 
 
-## Gives the mesh in `slot` the texture (none for a plain color) tinted with `color`; returns its
-## material.
-func _apply_look(slot: StringName, texture: Texture2D, color: Color) -> StandardMaterial3D:
-	var mesh: MeshInstance3D = _slot_mesh(slot)
-	var base_material: Material = mesh.mesh.surface_get_material(0)
-	var material: StandardMaterial3D = (
-		(base_material as StandardMaterial3D).duplicate()
-		if base_material is StandardMaterial3D
-		else StandardMaterial3D.new()
+## Draws the mesh in `slot` with a copy of `material` with the shader `parameters`; returns the
+## copy.
+func _dress(slot: StringName, material: ShaderMaterial, parameters: Dictionary) -> ShaderMaterial:
+	var dressed: ShaderMaterial = material.duplicate()
+	for parameter in parameters:
+		dressed.set_shader_parameter(parameter, parameters[parameter])
+	_slot_mesh(slot).material_override = dressed
+	return dressed
+
+
+## The texture the body brings for the mesh in `slot` (the strands of its hair, eyebrows and
+## eyelashes).
+func _body_texture(slot: StringName) -> Texture2D:
+	var material: BaseMaterial3D = _slot_mesh(slot).mesh.surface_get_material(0)
+	assert(
+		material and material.albedo_texture,
+		"The %s of the body %s has no texture" % [slot, _body.scene_file_path]
 	)
-	material.albedo_texture = texture
-	material.albedo_color = color
-	mesh.set_surface_override_material(0, material)
-	return material
-
-
-func _apply_hair(texture: Texture2D, color: Color) -> void:
-	var material := ShaderMaterial.new()
-	material.shader = HAIR_SHADER
-	material.set_shader_parameter("hair_texture", texture)
-	material.set_shader_parameter("hair_color", color)
-	_slot_mesh(&"Hair").material_override = material
+	return material.albedo_texture

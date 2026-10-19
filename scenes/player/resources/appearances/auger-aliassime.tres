@@ -1,9 +1,34 @@
 [gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://dsn4q5hjb2llq"]
 
-[ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/player/kit/kit_design.gd" id="2_kit"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/dark.png" id="3_skin"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/eyes/brown.png" id="4_eyes"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/kit/shirt_chest_band.png" id="5_shirt"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/kit/shorts_waistband.png" id="6_shorts"]
+
+[sub_resource type="Resource" id="Resource_kit"]
+script = ExtResource("2_kit")
+shirt_pattern = ExtResource("5_shirt")
+shirt_color = Color(0.05, 0.05, 0.06, 1)
+shirt_second_color = Color(0.95, 0.8, 0.15, 1)
+shirt_trim_color = Color(0.95, 0.8, 0.15, 1)
+shorts_pattern = ExtResource("6_shorts")
+shorts_color = Color(0.05, 0.05, 0.06, 1)
+shorts_second_color = Color(0.95, 0.8, 0.15, 1)
+shorts_trim_color = Color(0.95, 0.8, 0.15, 1)
+socks_color = Color(0.05, 0.05, 0.06, 1)
+socks_stripe_color = Color(0.05, 0.05, 0.06, 1)
+shoes_color = Color(0.05, 0.05, 0.06, 1)
+shoes_sole_color = Color(1, 1, 1, 1)
+shoes_trim_color = Color(0.95, 0.8, 0.15, 1)
+headband = false
+wristbands = false
+accessory_color = Color(0.05, 0.05, 0.06, 1)
 
 [resource]
 script = ExtResource("1_script")
-skin_color = Color(0.55, 0.4, 0.32, 1)
-shirt_color = Color(1, 0.55, 0.12, 1)
+skin_texture = ExtResource("3_skin")
+eye_texture = ExtResource("4_eyes")
 hair_color = Color(0.04, 0.03, 0.03, 1)
+kit = SubResource("Resource_kit")

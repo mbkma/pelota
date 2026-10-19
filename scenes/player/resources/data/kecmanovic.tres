@@ -1,16 +1,34 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://mmimolu4rdtn"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_rcabw"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/eyes/lightblue.png" id="1_u7bpk"]
+[ext_resource type="Script" path="res://scenes/player/kit/kit_design.gd" id="2_fo87d"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_jlejl"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/kecmanovic.ogg" id="2_lhpi5"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/dunlop_cx.tres" id="3_jlejl"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_lhpi5"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/dark.png" id="4_fo87d"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_opc1v"]
+[ext_resource type="PackedScene" path="res://assets/models/players/generic_c/generic_c.glb" id="5_j3lkx"]
 
-[sub_resource type="Resource" id="Resource_b3iow"]
+[sub_resource type="Resource" id="Resource_a6dpj"]
+script = ExtResource("2_fo87d")
+shirt_color = Color(0.2, 0.55, 0.85, 1)
+shirt_second_color = Color(0.1, 0.25, 0.55, 1)
+shirt_trim_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+shorts_second_color = Color(0.1, 0.25, 0.55, 1)
+shorts_trim_color = Color(0.2, 0.55, 0.85, 1)
+socks_stripe_color = Color(0.1, 0.25, 0.55, 1)
+shoes_trim_color = Color(0.1, 0.25, 0.55, 1)
+accessory_color = Color(0.2, 0.55, 0.85, 1)
+
+[sub_resource type="Resource" id="Resource_2hx4g"]
 script = ExtResource("1_rcabw")
-shirt_color = Color(0.75, 0.15, 0.15, 1)
-shorts_color = Color(0.95, 0.95, 0.95, 1)
+skin_texture = ExtResource("4_fo87d")
+eye_texture = ExtResource("1_u7bpk")
+hair_color = Color(0.6, 0.48, 0.28, 1)
+kit = SubResource("Resource_a6dpj")
 
 [sub_resource type="Resource" id="Resource_bdiv1"]
 script = ExtResource("2_jlejl")
@@ -53,6 +71,7 @@ height = 183
 rank = 61
 play_style = SubResource("Resource_bdiv1")
 stats = SubResource("Resource_u7bpk")
-appearance = SubResource("Resource_b3iow")
+body = ExtResource("5_j3lkx")
+appearance = SubResource("Resource_2hx4g")
 racket = ExtResource("3_jlejl")
 name_call = ExtResource("2_lhpi5")

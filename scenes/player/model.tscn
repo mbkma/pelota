@@ -1,16 +1,23 @@
 [gd_scene format=3 uid="uid://b5t7f8r1backb"]
 
 [ext_resource type="Script" uid="uid://qr66qvlcjtk7" path="res://scenes/player/model.gd" id="1_model"]
-[ext_resource type="PackedScene" uid="uid://rgbqemjyjgx8" path="res://assets/models/players/djokovic/djokovic.glb" id="2_body"]
+[ext_resource type="PackedScene" uid="uid://def58p23bytqd" path="res://assets/models/players/default/default.glb" id="2_body"]
 [ext_resource type="PackedScene" path="res://scenes/player/racket/racket.tscn" id="3_racket"]
 [ext_resource type="Resource" uid="uid://dfcx5o2i6uloi" path="res://scenes/player/resources/appearances/base.tres" id="4_base"]
 [ext_resource type="AnimationLibrary" uid="uid://bai5xelq5f7fg" path="res://scenes/player/animations/player_animations.tres" id="5_library"]
 [ext_resource type="Script" uid="uid://d3nm5cxs313ml" path="res://scenes/player/player_animator.gd" id="7_animator"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://cl8jd25st54sp" path="res://scenes/player/animations/player_animation_tree.tres" id="8_tree"]
 [ext_resource type="Script" uid="uid://cmu00yagkg44i" path="res://scenes/player/rig/racket_reach_modifier.gd" id="9_reach"]
-[ext_resource type="PackedScene" uid="uid://qipgtc2hwn48" path="res://assets/models/tennisball/tennisball.blend" id="10_ball"]
+[ext_resource type="PackedScene" path="res://scenes/ball/tennis_ball.tscn" id="10_ball"]
 [ext_resource type="Script" uid="uid://5yv0vmxyfjbc" path="res://scenes/player/rig/torso_twist_modifier.gd" id="11_twist"]
 [ext_resource type="Script" uid="uid://bdi2jtuqtbtwe" path="res://scenes/player/stroke_clip.gd" id="16_strk"]
+[ext_resource type="Material" path="res://scenes/player/materials/skin.tres" id="20_skin"]
+[ext_resource type="Material" path="res://scenes/player/materials/eyes.tres" id="21_eyes"]
+[ext_resource type="Material" path="res://scenes/player/materials/hair.tres" id="22_hair"]
+[ext_resource type="Material" path="res://scenes/player/materials/cloth.tres" id="23_cloth"]
+[ext_resource type="Material" path="res://scenes/player/materials/shorts.tres" id="24_shorts"]
+[ext_resource type="Material" path="res://scenes/player/materials/shoes.tres" id="25_shoes"]
+[ext_resource type="Material" path="res://scenes/player/materials/shirt.tres" id="26_shirt"]
 
 [sub_resource type="Resource" id="StrokeClip_serve"]
 script = ExtResource("16_strk")
@@ -76,6 +83,13 @@ rings = 4
 [node name="Model" type="Node3D" unique_id=1656989274 node_paths=PackedStringArray("animator", "racket", "sweat_drops", "held_ball", "arm_reach", "torso_twist", "head_look", "look_target")]
 script = ExtResource("1_model")
 base_appearance = ExtResource("4_base")
+skin_material = ExtResource("20_skin")
+eye_material = ExtResource("21_eyes")
+hair_material = ExtResource("22_hair")
+shirt_material = ExtResource("26_shirt")
+shorts_material = ExtResource("24_shorts")
+cloth_material = ExtResource("23_cloth")
+shoes_material = ExtResource("25_shoes")
 animator = NodePath("AnimationTree")
 racket = NodePath("Racket")
 sweat_drops = NodePath("SweatDrops")
@@ -178,10 +192,7 @@ parameters/HighSelect/observer = null
 parameters/HighSeek/seek_request = -1.0
 parameters/HeightBlend/blend_amount = 0.0
 parameters/StrokeClock/scale = 1.0
-parameters/Stroke/active = false
-parameters/Stroke/internal_active = false
-parameters/Stroke/request = 0
-parameters/Stroke/observer = null
+parameters/Stroke/blend_amount = 0.0
 parameters/LegLocomotion/Move/blend_position = Vector2(0, 0)
 parameters/LegLocomotion/Move/observer = null
 parameters/LegLocomotion/Cadence/scale = 1.0

@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/ruud.ogg" id="2_gdpu0"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/yonex_ezone.tres" id="3_lpvpi"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/ruud.tres" id="3_ojko4"]
+[ext_resource type="PackedScene" path="res://assets/models/players/ruud/ruud.glb" id="20_body"]
 
 [sub_resource type="Resource" id="Resource_ruud_stats"]
 script = ExtResource("2")
@@ -40,6 +41,7 @@ height = 183
 rank = 24
 play_style = ExtResource("3_ojko4")
 stats = SubResource("Resource_ruud_stats")
+body = ExtResource("20_body")
 appearance = ExtResource("1_0pjq8")
 racket = ExtResource("3_lpvpi")
 name_call = ExtResource("2_gdpu0")

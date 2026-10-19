@@ -36,6 +36,16 @@ Author: Greg Zaal
 Source: [Poly Haven](https://polyhaven.com/a/kloofendal_43d_clear_puresky)  
 License: [CC0 1.0](https://polyhaven.com/license)
 
+#### Player Bodies, Skin, Eyes, Hair, Shirt and Shoes
+Author: [The MakeHuman team](http://www.makehumancommunity.org) and contributors of the MakeHuman asset packs  
+Source: [MakeHuman system assets and hair01 pack](https://static.makehumancommunity.org/assets/assetpacks.html), made into players with [MPFB](https://static.makehumancommunity.org/mpfb.html)  
+License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
+
+#### Player Shorts (mindfront_male_swimming_trunks_01)
+Author: Mindfront (Sweden)  
+Source: [MakeHuman asset pack pants03](https://static.makehumancommunity.org/assets/assetpacks.html), reworked for the kit (see `tools/blender/make_player_kit.py`)  
+License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
 #### Godot Engine Logo
 Author: Andrea Calabró  
 Source: [godotengine.org : press](https://godotengine.org/press/)  

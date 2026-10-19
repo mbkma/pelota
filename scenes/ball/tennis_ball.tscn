@@ -1,0 +1,96 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://scenes/ball/tennis_ball.gdshader" id="1_shader"]
+[ext_resource type="FontFile" path="res://assets/fonts/Lato-Black.ttf" id="2_font"]
+
+[sub_resource type="FontVariation" id="FontVariation_brand"]
+base_font = ExtResource("2_font")
+variation_transform = Transform2D(0.88, 0, 0, 1, 0, 0)
+
+[sub_resource type="FontVariation" id="FontVariation_event"]
+base_font = ExtResource("2_font")
+variation_transform = Transform2D(1, 0, 0.22, 1, 0, 0)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_logo"]
+resource_local_to_scene = true
+viewport_path = NodePath("Logo")
+
+[sub_resource type="SphereMesh" id="SphereMesh_ball"]
+radius = 0.033
+height = 0.066
+radial_segments = 48
+rings = 24
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_felt"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/logo = SubResource("ViewportTexture_logo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fuzz_inner"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/logo = SubResource("ViewportTexture_logo")
+shader_parameter/shell = 0.33
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fuzz_middle"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/logo = SubResource("ViewportTexture_logo")
+shader_parameter/shell = 0.66
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fuzz_outer"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/logo = SubResource("ViewportTexture_logo")
+shader_parameter/shell = 1.0
+
+[node name="TennisBall" type="Node3D"]
+
+[node name="Logo" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(640, 384)
+render_target_update_mode = 1
+
+[node name="Brand" type="Label" parent="Logo"]
+offset_right = 640.0
+offset_bottom = 196.0
+theme_override_colors/font_color = Color(0.07, 0.07, 0.06, 1)
+theme_override_fonts/font = SubResource("FontVariation_brand")
+theme_override_font_sizes/font_size = 210
+text = "Wilson"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Event" type="Label" parent="Logo"]
+offset_top = 206.0
+offset_right = 640.0
+offset_bottom = 384.0
+theme_override_colors/font_color = Color(0.82, 0.05, 0.16, 1)
+theme_override_fonts/font = SubResource("FontVariation_event")
+theme_override_font_sizes/font_size = 170
+text = "us open"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Felt" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("ShaderMaterial_felt")
+
+[node name="FuzzInner" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("ShaderMaterial_fuzz_inner")
+
+[node name="FuzzMiddle" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("ShaderMaterial_fuzz_middle")
+
+[node name="FuzzOuter" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ball")
+surface_material_override/0 = SubResource("ShaderMaterial_fuzz_outer")

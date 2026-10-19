@@ -1,16 +1,37 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dhtesh0178ytb"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_06bd4"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/eyes/brownlight.png" id="1_i7i07"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/musetti.ogg" id="2_2fntj"]
+[ext_resource type="Script" path="res://scenes/player/kit/kit_design.gd" id="2_iwuhu"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_yvh2n"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_2fntj"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/kit/shirt_chest_band.png" id="3_i7i07"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/head_boom.tres" id="3_yvh2n"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_0p0ss"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/light.png" id="5_iwuhu"]
+[ext_resource type="PackedScene" path="res://assets/models/players/generic_d/generic_d.glb" id="6_0vn44"]
 
-[sub_resource type="Resource" id="Resource_2ocn3"]
+[sub_resource type="Resource" id="Resource_j3jio"]
+script = ExtResource("2_iwuhu")
+shirt_pattern = ExtResource("3_i7i07")
+shirt_color = Color(0.75, 0.15, 0.15, 1)
+shirt_second_color = Color(0.12, 0.12, 0.14, 1)
+shirt_trim_color = Color(0.12, 0.12, 0.14, 1)
+shorts_color = Color(0.08, 0.08, 0.1, 1)
+shorts_second_color = Color(0.12, 0.12, 0.14, 1)
+shorts_trim_color = Color(0.75, 0.15, 0.15, 1)
+socks_stripe_color = Color(0.12, 0.12, 0.14, 1)
+shoes_trim_color = Color(0.12, 0.12, 0.14, 1)
+wristbands = true
+accessory_color = Color(0.75, 0.15, 0.15, 1)
+
+[sub_resource type="Resource" id="Resource_y0o6c"]
 script = ExtResource("1_06bd4")
-shirt_color = Color(0.2, 0.55, 0.85, 1)
-shorts_color = Color(0.35, 0.35, 0.38, 1)
+skin_texture = ExtResource("5_iwuhu")
+eye_texture = ExtResource("1_i7i07")
+hair_color = Color(0.4, 0.28, 0.15, 1)
+kit = SubResource("Resource_j3jio")
 
 [sub_resource type="Resource" id="Resource_vcwv3"]
 script = ExtResource("2_yvh2n")
@@ -54,6 +75,7 @@ backhand = 1
 rank = 25
 play_style = SubResource("Resource_vcwv3")
 stats = SubResource("Resource_i72wj")
-appearance = SubResource("Resource_2ocn3")
+body = ExtResource("6_0vn44")
+appearance = SubResource("Resource_y0o6c")
 racket = ExtResource("3_yvh2n")
 name_call = ExtResource("2_2fntj")

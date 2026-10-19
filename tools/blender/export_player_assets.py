@@ -1,15 +1,13 @@
-# Exports the player bodies and animation sets listed in player_assets.json from their Blender
-# files into the Godot project as glTF binaries, ready for the importers to pick up (see
-# scenes/player/rig/). The .blend files are only read, never saved.
+# Exports the player animation sets listed in player_assets.json from their Blender files into the
+# Godot project as glTF binaries, ready for the importer to pick up (see
+# scenes/player/rig/player_animations_import.gd). The .blend files are only read, never saved.
+# (The player bodies are generated, see generate_players.py.)
 #
 # Usage (from anywhere; paths in player_assets.json are relative to the project root):
 #   blender -b --python tools/blender/export_player_assets.py [-- name ...]
 #
-#   name    exports only the listed bodies / animation sets (default: all)
+#   name    exports only the listed animation sets (default: all)
 #
-# A body is the rig with its meshes, in the rest pose, without animations. Its armature is
-# exported as "Rig" and its meshes under their slot names (Body, Shirt, Shorts, Shoes, Hair, ...),
-# which the player model looks up.
 # An animation set is the rig with one glTF animation per NLA track whose name starts with the
 # set's prefix (the prefix is dropped from the animation name). The tracks hold baked actions: the
 # rig's bone constraints (e.g. copying a control rig) are muted for the export. A one-triangle mesh skinned to the
@@ -32,28 +30,10 @@ def main():
     names = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
     with open(CONFIG) as config_file:
         config = json.load(config_file)
-    for name, body in config["bodies"].items():
-        if not names or name in names:
-            _open(body["blend"])
-            export_body(body)
     for name, animation_set in config["animation_sets"].items():
         if not names or name in names:
             _open(animation_set["blend"])
             export_animation_set(animation_set)
-
-
-def export_body(body):
-    rig = _rig(body["rig"])
-    _mute_animation(rig)
-    meshes = []
-    for slot, object_name in body["meshes"].items():
-        mesh = bpy.data.objects[object_name]
-        assert mesh.parent == rig, "%s is not parented to the rig %s" % (object_name, rig.name)
-        mesh.name = slot
-        meshes.append(mesh)
-    rig.name = RIG_NAME
-    _select([rig] + meshes)
-    _export(body["output"], animations=False)
 
 
 def export_animation_set(animation_set):
@@ -80,14 +60,6 @@ def _rig(name):
     rig = bpy.data.objects[name]
     assert rig.type == "ARMATURE", "%s is not an armature" % name
     return rig
-
-
-def _mute_animation(rig):
-    if not rig.animation_data:
-        return
-    rig.animation_data.action = None
-    for track in rig.animation_data.nla_tracks:
-        track.mute = True
 
 
 # A single triangle skinned to the rig, so the bones are exported as a glTF skin.

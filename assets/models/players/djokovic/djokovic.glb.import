@@ -41,61 +41,9 @@ materials/extract=0
 materials/extract_format=0
 materials/extract_path="res://assets/materials"
 _subresources={
-"materials": {
-"Fabric White": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Fabric White.tres",
-"use_external/path": "uid://cs63spc8ukfg3"
-},
-"Human.body": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.body.tres",
-"use_external/path": "uid://s01h6tnpxsrj"
-},
-"Human.eyebrow012.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.eyebrow012.001.tres",
-"use_external/path": "uid://db4wk2ietdh41"
-},
-"Human.eyelashes01.001": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.eyelashes01.001.tres",
-"use_external/path": "uid://dhtbfl2qd6nwh"
-},
-"Human.high-poly": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.high-poly.tres",
-"use_external/path": "uid://cygwab11uwxei"
-},
-"Human.shoes05": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.shoes05.tres",
-"use_external/path": "uid://ccy41v0ciuo2t"
-},
-"Human.short01.002": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.short01.002.tres",
-"use_external/path": "uid://carcaucrbmiyf"
-},
-"Human.teeth_base.002": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.teeth_base.002.tres",
-"use_external/path": "uid://bl5m2p84s4s27"
-},
-"Human.tongue01.002": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Human.tongue01.002.tres",
-"use_external/path": "uid://bn3rgv7dx2byg"
-},
-"Material": {
-"use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/Material.tres",
-"use_external/path": "uid://rk2qooa1xee"
-}
-},
 "nodes": {
 "PATH:Rig/Skeleton3D": {
-"retarget/bone_map": Resource("res://scenes/player/rig/game_rig_bone_map.tres")
+"retarget/bone_map": Resource("res://scenes/player/rig/mpfb_bone_map.tres")
 }
 }
 }

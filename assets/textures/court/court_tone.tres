@@ -1,13 +1,10 @@
-[gd_resource type="NoiseTexture2D" format=3]
+[gd_resource type="NoiseTexture2D" format=3 uid="uid://bouxyr7y4gam1"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_tone"]
-noise_type = 1
 seed = 3
 frequency = 0.008
 fractal_octaves = 4
 
 [resource]
-width = 512
-height = 512
-seamless = true
 noise = SubResource("FastNoiseLite_tone")
+seamless = true

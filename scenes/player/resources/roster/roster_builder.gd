@@ -8,8 +8,9 @@
 ## stats are shifted to the level of their rank, keeping their strengths and weaknesses. Any other
 ## player is generated: the stats from the rank (a better ranked player is better all round)
 ## and the playing style the ranking file gives, with a little variation per player; the play
-## style from the playing style; the look from a few shirt and shorts colors. A hand made player
-## missing from the ranking keeps playable but unranked (rank 0).
+## style from the playing style; the look (a generic body of about their height, skin, eyes,
+## hair and kit) from a few of each. A hand made player missing from the ranking keeps playable
+## but unranked (rank 0).
 class_name RosterBuilder
 extends SceneTree
 
@@ -120,6 +121,42 @@ const SHORTS_COLORS: Array[Color] = [
 	Color(0.1, 0.12, 0.3),
 	Color(0.35, 0.35, 0.38),
 ]
+## Kit patterns of the generated players (assets/textures/players/kit/), plain ones included as
+## empty strings
+const KIT_DIR: String = "res://assets/textures/players/kit/"
+const SHIRT_PATTERNS: Array[String] = [
+	"", "trims", "sleeves", "yoke", "chest_band", "side_panels", "sash", "fade"
+]
+const SHORTS_PATTERNS: Array[String] = ["", "", "side_stripe", "waistband", "side_panels"]
+const SOCKS_PATTERNS: Array[String] = ["", "", "stripes"]
+## Bodies of the generated players (made from pelota-files/player/presets/generic_*.json, see
+## tools/blender/generate_players.py): their height (cm) and the skin tones that suit them. A
+## player gets one of the two bodies nearest their height.
+const BODY_DIR: String = "res://assets/models/players/"
+const GENERIC_BODIES: Dictionary[String, Dictionary] = {
+	"generic_a": {"height": 178, "skins": ["light", "light_2", "light_mature"]},
+	"generic_b": {"height": 182, "skins": ["light_2", "olive"]},
+	"generic_c": {"height": 185, "skins": ["dark", "dark_mature"]},
+	"generic_d": {"height": 187, "skins": ["light", "light_2"]},
+	"generic_e": {"height": 189, "skins": ["olive", "olive_mature"]},
+	"generic_f": {"height": 191, "skins": ["olive_mature", "dark"]},
+	"generic_g": {"height": 194, "skins": ["light", "light_mature", "olive"]},
+	"generic_h": {"height": 198, "skins": ["light", "light_2"]},
+}
+## Skin tones, eye colors and hair colors of the generated players
+const SKIN_DIR: String = "res://assets/textures/players/skin/"
+const EYE_DIR: String = "res://assets/textures/players/eyes/"
+const EYE_COLORS: Array[String] = [
+	"brown", "brownlight", "blue", "lightblue", "green", "grey", "bluegreen"
+]
+const HAIR_COLORS: Array[Color] = [
+	Color(0.05, 0.04, 0.03),
+	Color(0.12, 0.08, 0.05),
+	Color(0.25, 0.17, 0.1),
+	Color(0.4, 0.28, 0.15),
+	Color(0.6, 0.48, 0.28),
+	Color(0.45, 0.2, 0.08),
+]
 
 
 func _initialize() -> void:
@@ -204,7 +241,7 @@ static func _generated(row: Dictionary) -> PlayerData:
 	var player := PlayerData.new()
 	player.stats = _stats(row, rng)
 	player.play_style = _play_style(row.style)
-	player.appearance = _appearance(rng)
+	_set_look(player, int(row.height), rng)
 	return player
 
 
@@ -267,8 +304,54 @@ static func _play_style(style: String) -> AiPlayStyle:
 	return play_style
 
 
-static func _appearance(rng: RandomNumberGenerator) -> PlayerAppearance:
+## Gives a generated player of `height` (cm) a body and an appearance.
+static func _set_look(player: PlayerData, height: int, rng: RandomNumberGenerator) -> void:
+	var bodies: Array = GENERIC_BODIES.keys()
+	bodies.sort_custom(
+		func(a: String, b: String) -> bool:
+			return absi(GENERIC_BODIES[a].height - height) < absi(GENERIC_BODIES[b].height - height)
+	)
+	var body: String = bodies[rng.randi() % 2]
+	player.body = load(BODY_DIR + body + "/" + body + ".glb")
+	player.appearance = _appearance(GENERIC_BODIES[body].skins, rng)
+
+
+static func _appearance(skin_tones: Array, rng: RandomNumberGenerator) -> PlayerAppearance:
 	var appearance := PlayerAppearance.new()
-	appearance.shirt_color = SHIRT_COLORS[rng.randi() % SHIRT_COLORS.size()]
-	appearance.shorts_color = SHORTS_COLORS[rng.randi() % SHORTS_COLORS.size()]
+	appearance.skin_texture = load(SKIN_DIR + _pick(skin_tones, rng) + ".png")
+	appearance.eye_texture = load(EYE_DIR + _pick(EYE_COLORS, rng) + ".png")
+	appearance.hair_color = _pick(HAIR_COLORS, rng)
+	var kit := KitDesign.new()
+	var shirt: Color = _pick(SHIRT_COLORS, rng)
+	var shorts: Color = _pick(SHORTS_COLORS, rng)
+	var accent: Color = _pick(
+		SHIRT_COLORS.filter(func(color: Color) -> bool: return color != shirt), rng
+	)
+	kit.shirt_pattern = _kit_pattern("shirt", SHIRT_PATTERNS, rng)
+	kit.shirt_color = shirt
+	kit.shirt_second_color = accent
+	kit.shirt_trim_color = accent
+	kit.shorts_pattern = _kit_pattern("shorts", SHORTS_PATTERNS, rng)
+	kit.shorts_color = shorts
+	kit.shorts_second_color = accent
+	kit.shorts_trim_color = shirt
+	kit.socks_pattern = _kit_pattern("socks", SOCKS_PATTERNS, rng)
+	kit.socks_stripe_color = accent
+	kit.shoes_trim_color = accent
+	kit.headband = rng.randf() < 0.15
+	kit.wristbands = rng.randf() < 0.25
+	kit.accessory_color = shirt
+	appearance.kit = kit
 	return appearance
+
+
+static func _pick(values: Array, rng: RandomNumberGenerator) -> Variant:
+	return values[rng.randi() % values.size()]
+
+
+## A pattern of `garment` from `patterns`, none for a plain one.
+static func _kit_pattern(
+	garment: String, patterns: Array[String], rng: RandomNumberGenerator
+) -> Texture2D:
+	var pattern: String = _pick(patterns, rng)
+	return null if pattern.is_empty() else load(KIT_DIR + garment + "_" + pattern + ".png")

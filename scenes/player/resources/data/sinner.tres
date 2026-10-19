@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/sinner.ogg" id="2_u52eo"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/head_speed.tres" id="3_3i8a4"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/sinner.tres" id="3_09isn"]
+[ext_resource type="PackedScene" path="res://assets/models/players/sinner/sinner.glb" id="20_body"]
 
 [sub_resource type="Resource" id="Resource_sinner_stats"]
 script = ExtResource("2")
@@ -39,6 +40,7 @@ country_code = "ITA"
 height = 191
 play_style = ExtResource("3_09isn")
 stats = SubResource("Resource_sinner_stats")
+body = ExtResource("20_body")
 appearance = ExtResource("1_pv02q")
 racket = ExtResource("3_3i8a4")
 name_call = ExtResource("2_u52eo")

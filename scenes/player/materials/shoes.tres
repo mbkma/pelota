@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://scenes/player/materials/kit.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/kit/shoes_mask.png" id="2_mask"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/kit/shoes_detail.png" id="3_detail"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/pattern = ExtResource("2_mask")
+shader_parameter/detail_texture = ExtResource("3_detail")
+shader_parameter/detail_strength = 0.8
+shader_parameter/knit_strength = 0.0
+shader_parameter/roughness = 0.55
+shader_parameter/sheen = 0.1

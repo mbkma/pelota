@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://scenes/player/materials/skin.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/pores_normal.png" id="2_pores"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/pores_texture = ExtResource("2_pores")

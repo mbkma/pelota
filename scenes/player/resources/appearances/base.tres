@@ -1,17 +1,24 @@
 [gd_resource type="Resource" script_class="PlayerAppearance" format=3 uid="uid://dfcx5o2i6uloi"]
 
 [ext_resource type="Script" uid="uid://dg7ef54pw6mxq" path="res://scenes/player/player_appearance.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://c4ldg4u3iotg3" path="res://assets/models/players/textures/middleage_lightskinned_male_diffuse.png" id="7_skin"]
-[ext_resource type="Texture2D" uid="uid://cbxkgjn0iclc6" path="res://assets/models/players/textures/short01_diffuse.png" id="8_hair"]
-[ext_resource type="Texture2D" path="res://assets/models/players/textures/shoes_diffuse.png" id="9_shoes"]
+[ext_resource type="Script" uid="uid://cd0bttd1hdx0f" path="res://scenes/player/kit/kit_design.gd" id="2_kit"]
+[ext_resource type="Texture2D" uid="uid://c62f2lf7du1ci" path="res://assets/textures/players/skin/light.png" id="3_skin"]
+[ext_resource type="Texture2D" uid="uid://l5pga7tcd7iv" path="res://assets/textures/players/eyes/brown.png" id="4_eyes"]
+[ext_resource type="Texture2D" uid="uid://dbktltlco3i6g" path="res://assets/textures/players/kit/shirt_trims.png" id="5_shirt"]
+
+[sub_resource type="Resource" id="Resource_kit"]
+script = ExtResource("2_kit")
+shirt_pattern = ExtResource("5_shirt")
+shirt_second_color = Color(0.08, 0.1, 0.24, 1)
+shirt_trim_color = Color(0.08, 0.1, 0.24, 1)
+shorts_color = Color(0.08, 0.1, 0.24, 1)
+socks_stripe_color = Color(0.08, 0.1, 0.24, 1)
+shoes_trim_color = Color(0.08, 0.1, 0.24, 1)
 
 [resource]
 script = ExtResource("1_script")
-skin_texture = ExtResource("7_skin")
-skin_color = Color(1, 1, 1, 1)
-shirt_color = Color(1, 1, 1, 1)
-shorts_color = Color(0.1, 0.12, 0.25, 1)
-shoes_texture = ExtResource("9_shoes")
-shoes_color = Color(1, 1, 1, 1)
-hair_texture = ExtResource("8_hair")
+skin_texture = ExtResource("3_skin")
+skin_tint = Color(1, 1, 1, 1)
+eye_texture = ExtResource("4_eyes")
 hair_color = Color(0.12, 0.08, 0.05, 1)
+kit = SubResource("Resource_kit")

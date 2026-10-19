@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/zverev.ogg" id="2_0nh3o"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/zverev.tres" id="3_j2vlj"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/head_gravity.tres" id="3_vjol0"]
+[ext_resource type="PackedScene" path="res://assets/models/players/zverev/zverev.glb" id="20_body"]
 
 [sub_resource type="Resource" id="Resource_zverev_stats"]
 script = ExtResource("2")
@@ -40,6 +41,7 @@ height = 198
 rank = 2
 play_style = ExtResource("3_j2vlj")
 stats = SubResource("Resource_zverev_stats")
+body = ExtResource("20_body")
 appearance = ExtResource("1_28pbg")
 racket = ExtResource("3_vjol0")
 name_call = ExtResource("2_0nh3o")

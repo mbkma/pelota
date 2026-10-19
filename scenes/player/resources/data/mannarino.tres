@@ -1,16 +1,35 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://p7lek8kdrt0y"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_utrrj"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/eyes/brownlight.png" id="1_x6ks4"]
+[ext_resource type="Script" path="res://scenes/player/kit/kit_design.gd" id="2_gykfq"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/mannarino.ogg" id="2_ms6sw"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_nst88"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_ms6sw"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_nst88"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_8g24e"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/dark.png" id="4_rwxxv"]
+[ext_resource type="PackedScene" path="res://assets/models/players/generic_c/generic_c.glb" id="5_gykfq"]
 
-[sub_resource type="Resource" id="Resource_kam6r"]
+[sub_resource type="Resource" id="Resource_1mx4e"]
+script = ExtResource("2_gykfq")
+shirt_color = Color(0.4, 0.75, 0.75, 1)
+shirt_second_color = Color(0.5, 0.25, 0.6, 1)
+shirt_trim_color = Color(0.5, 0.25, 0.6, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+shorts_second_color = Color(0.5, 0.25, 0.6, 1)
+shorts_trim_color = Color(0.4, 0.75, 0.75, 1)
+socks_stripe_color = Color(0.5, 0.25, 0.6, 1)
+shoes_trim_color = Color(0.5, 0.25, 0.6, 1)
+wristbands = true
+accessory_color = Color(0.4, 0.75, 0.75, 1)
+
+[sub_resource type="Resource" id="Resource_vc2x8"]
 script = ExtResource("1_utrrj")
-shirt_color = Color(0.12, 0.12, 0.14, 1)
-shorts_color = Color(0.1, 0.12, 0.3, 1)
+skin_texture = ExtResource("4_rwxxv")
+eye_texture = ExtResource("1_x6ks4")
+hair_color = Color(0.12, 0.08, 0.05, 1)
+kit = SubResource("Resource_1mx4e")
 
 [sub_resource type="Resource" id="Resource_psqob"]
 script = ExtResource("2_nst88")
@@ -55,6 +74,7 @@ hand = "L"
 rank = 83
 play_style = SubResource("Resource_psqob")
 stats = SubResource("Resource_x6ks4")
-appearance = SubResource("Resource_kam6r")
+body = ExtResource("5_gykfq")
+appearance = SubResource("Resource_vc2x8")
 racket = ExtResource("3_nst88")
 name_call = ExtResource("2_ms6sw")

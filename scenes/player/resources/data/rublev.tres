@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/rublev.ogg" id="2_qii1l"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/head_gravity.tres" id="3_c860u"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/rublev.tres" id="3_t55ec"]
+[ext_resource type="PackedScene" path="res://assets/models/players/rublev/rublev.glb" id="20_body"]
 
 [sub_resource type="Resource" id="Resource_rublev_stats"]
 script = ExtResource("2")
@@ -40,6 +41,7 @@ height = 188
 rank = 23
 play_style = ExtResource("3_t55ec")
 stats = SubResource("Resource_rublev_stats")
+body = ExtResource("20_body")
 appearance = ExtResource("1_lksp7")
 racket = ExtResource("3_c860u")
 name_call = ExtResource("2_qii1l")

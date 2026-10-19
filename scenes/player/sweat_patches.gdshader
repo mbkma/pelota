@@ -1,8 +1,9 @@
 // Sweat soaking through a shirt: darker patches on the chest and back, under the arms and around
 // the collar, drawn over the shirt (as the next pass of its material). They have their full size
-// from the start and soak through more and more with `sweat`, and they have uneven edges. Positions are in the shirt mesh's space in its rest pose (meters, y up),
-// which the model stores per vertex in CUSTOM0, so the patches stay on the cloth as the player
-// moves (the vertex position itself is already posed).
+// from the start and soak through more and more with `sweat`, and they have uneven edges.
+// Positions are in the shirt mesh's space in its rest pose (meters, y up, the front facing +z),
+// scaled to the default body's height, which the body importer stores per vertex in CUSTOM0, so
+// the patches stay on the cloth as the player moves (the vertex position itself is already posed).
 shader_type spatial;
 render_mode unshaded, blend_mul, depth_draw_never, cull_back, shadows_disabled;
 
@@ -26,12 +27,12 @@ float patch(vec3 position, vec3 center, vec3 radius) {
 void fragment() {
 	vec3 mirrored = vec3(abs(shirt_position.x), shirt_position.yz);
 	float soaked = max(
-		// Chest (the front faces -z) and the back along the spine
-		max(patch(shirt_position, vec3(0.0, 1.42, -0.1), vec3(0.13, 0.15, 0.13)),
-			patch(shirt_position, vec3(0.0, 1.34, 0.15), vec3(0.11, 0.22, 0.12))),
+		// Chest and the back along the spine
+		max(patch(shirt_position, vec3(0.0, 1.4, 0.14), vec3(0.13, 0.15, 0.13)),
+			patch(shirt_position, vec3(0.0, 1.32, -0.12), vec3(0.11, 0.22, 0.12))),
 		// A thin band around the collar, and under the arms
-		max(patch(shirt_position, vec3(0.0, 1.6, 0.03), vec3(0.14, 0.03, 0.18)),
-			patch(mirrored, vec3(0.17, 1.33, 0.03), vec3(0.07, 0.1, 0.13)))
+		max(patch(shirt_position, vec3(0.0, 1.57, 0.03), vec3(0.14, 0.03, 0.18)),
+			patch(mirrored, vec3(0.17, 1.31, 0.03), vec3(0.07, 0.1, 0.13)))
 	);
 	// Uneven edges where the wet cloth spreads
 	float wobble = sin(shirt_position.x * 47.0 + shirt_position.y * 13.0)

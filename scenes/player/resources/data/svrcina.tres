@@ -1,16 +1,35 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://d4jv7vlxrvtsl"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_t5qg2"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/eyes/blue.png" id="1_vxrpb"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/svrcina.ogg" id="2_0bs7n"]
+[ext_resource type="Script" path="res://scenes/player/kit/kit_design.gd" id="2_s4g54"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_vpp54"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_0bs7n"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/babolat_pure_aero.tres" id="3_vpp54"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_yqv7c"]
+[ext_resource type="PackedScene" path="res://assets/models/players/generic_b/generic_b.glb" id="5_s4g54"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/light_2.png" id="5_u47fk"]
 
-[sub_resource type="Resource" id="Resource_kospy"]
+[sub_resource type="Resource" id="Resource_gf2j6"]
+script = ExtResource("2_s4g54")
+shirt_color = Color(0.12, 0.12, 0.14, 1)
+shirt_second_color = Color(0.1, 0.25, 0.55, 1)
+shirt_trim_color = Color(0.1, 0.25, 0.55, 1)
+shorts_color = Color(0.1, 0.12, 0.3, 1)
+shorts_second_color = Color(0.1, 0.25, 0.55, 1)
+shorts_trim_color = Color(0.12, 0.12, 0.14, 1)
+socks_stripe_color = Color(0.1, 0.25, 0.55, 1)
+shoes_trim_color = Color(0.1, 0.25, 0.55, 1)
+headband = true
+accessory_color = Color(0.12, 0.12, 0.14, 1)
+
+[sub_resource type="Resource" id="Resource_u47fk"]
 script = ExtResource("1_t5qg2")
-shirt_color = Color(0.95, 0.5, 0.15, 1)
-shorts_color = Color(0.95, 0.95, 0.95, 1)
+skin_texture = ExtResource("5_u47fk")
+eye_texture = ExtResource("1_vxrpb")
+hair_color = Color(0.12, 0.08, 0.05, 1)
+kit = SubResource("Resource_gf2j6")
 
 [sub_resource type="Resource" id="Resource_cl2kk"]
 script = ExtResource("2_vpp54")
@@ -51,6 +70,7 @@ height = 183
 rank = 126
 play_style = SubResource("Resource_cl2kk")
 stats = SubResource("Resource_vxrpb")
-appearance = SubResource("Resource_kospy")
+body = ExtResource("5_s4g54")
+appearance = SubResource("Resource_u47fk")
 racket = ExtResource("3_vpp54")
 name_call = ExtResource("2_0bs7n")

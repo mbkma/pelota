@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/tsitsipas.ogg" id="2_lfh2n"]
 [ext_resource type="Resource" path="res://scenes/player/resources/play_styles/tsitsipas.tres" id="3_07l03"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_blade.tres" id="3_8b0w5"]
+[ext_resource type="PackedScene" path="res://assets/models/players/tsitsipas/tsitsipas.glb" id="20_body"]
 
 [sub_resource type="Resource" id="Resource_tsitsipas_stats"]
 script = ExtResource("2")
@@ -40,6 +41,7 @@ backhand = 1
 rank = 43
 play_style = ExtResource("3_07l03")
 stats = SubResource("Resource_tsitsipas_stats")
+body = ExtResource("20_body")
 appearance = ExtResource("1_2gm7t")
 racket = ExtResource("3_8b0w5")
 name_call = ExtResource("2_lfh2n")

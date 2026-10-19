@@ -1,16 +1,34 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://bp0i0atevqvj7"]
 
 [ext_resource type="Script" path="res://scenes/player/player_appearance.gd" id="1_2taoi"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/eyes/brown.png" id="1_pil5i"]
+[ext_resource type="Script" path="res://scenes/player/kit/kit_design.gd" id="2_10m4b"]
 [ext_resource type="Script" path="res://scenes/player/resources/ai_play_style.gd" id="2_rkx4q"]
 [ext_resource type="AudioStream" path="res://assets/sounds/effects/umpire/names/wong.ogg" id="2_t8td7"]
 [ext_resource type="Resource" path="res://scenes/player/racket/designs/wilson_ultra.tres" id="3_rkx4q"]
 [ext_resource type="Script" path="res://scenes/player/player_data.gd" id="3_t8td7"]
+[ext_resource type="Texture2D" path="res://assets/textures/players/skin/olive.png" id="4_10m4b"]
 [ext_resource type="Script" path="res://scenes/player/player_stats_profile.gd" id="4_swa3e"]
+[ext_resource type="PackedScene" path="res://assets/models/players/generic_e/generic_e.glb" id="5_cy6n5"]
 
-[sub_resource type="Resource" id="Resource_icpui"]
-script = ExtResource("1_2taoi")
+[sub_resource type="Resource" id="Resource_uy8g5"]
+script = ExtResource("2_10m4b")
 shirt_color = Color(0.2, 0.55, 0.85, 1)
-shorts_color = Color(0.1, 0.12, 0.3, 1)
+shirt_second_color = Color(0.95, 0.95, 0.95, 1)
+shirt_trim_color = Color(0.95, 0.95, 0.95, 1)
+shorts_color = Color(0.35, 0.35, 0.38, 1)
+shorts_second_color = Color(0.95, 0.95, 0.95, 1)
+shorts_trim_color = Color(0.2, 0.55, 0.85, 1)
+socks_stripe_color = Color(0.95, 0.95, 0.95, 1)
+shoes_trim_color = Color(0.95, 0.95, 0.95, 1)
+accessory_color = Color(0.2, 0.55, 0.85, 1)
+
+[sub_resource type="Resource" id="Resource_5p320"]
+script = ExtResource("1_2taoi")
+skin_texture = ExtResource("4_10m4b")
+eye_texture = ExtResource("1_pil5i")
+hair_color = Color(0.25, 0.17, 0.1, 1)
+kit = SubResource("Resource_uy8g5")
 
 [sub_resource type="Resource" id="Resource_p40m3"]
 script = ExtResource("2_rkx4q")
@@ -53,6 +71,7 @@ height = 188
 rank = 101
 play_style = SubResource("Resource_p40m3")
 stats = SubResource("Resource_pil5i")
-appearance = SubResource("Resource_icpui")
+body = ExtResource("5_cy6n5")
+appearance = SubResource("Resource_5p320")
 racket = ExtResource("3_rkx4q")
 name_call = ExtResource("2_t8td7")
